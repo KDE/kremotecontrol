@@ -6,7 +6,7 @@ general:
 
 kdmlirc:
 * Edit action?
-* Advanced (non-wizard) Add action? (save for 2.0, if ever)
+* Advanced (non-wizard) Add action?
 * Fix bools bug.
 * Implement multi-type editing for options.
 
