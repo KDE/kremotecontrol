@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>723</width>
-            <height>587</height>
+            <width>704</width>
+            <height>589</height>
         </rect>
     </property>
     <property name="caption">
@@ -1555,6 +1555,36 @@
         <signal>currentChanged(QListViewItem*)</signal>
         <receiver>AddActionBase</receiver>
         <slot>updateOptions()</slot>
+    </connection>
+    <connection>
+        <sender>theProfiles</sender>
+        <signal>doubleClicked(QListViewItem*)</signal>
+        <receiver>AddActionBase</receiver>
+        <slot>next()</slot>
+    </connection>
+    <connection>
+        <sender>theButtons</sender>
+        <signal>doubleClicked(QListViewItem*)</signal>
+        <receiver>AddActionBase</receiver>
+        <slot>next()</slot>
+    </connection>
+    <connection>
+        <sender>theFunctions</sender>
+        <signal>doubleClicked(QListViewItem*)</signal>
+        <receiver>AddActionBase</receiver>
+        <slot>next()</slot>
+    </connection>
+    <connection>
+        <sender>theProfileFunctions</sender>
+        <signal>doubleClicked(QListViewItem*)</signal>
+        <receiver>AddActionBase</receiver>
+        <slot>next()</slot>
+    </connection>
+    <connection>
+        <sender>theModes</sender>
+        <signal>doubleClicked(QListViewItem*)</signal>
+        <receiver>AddActionBase</receiver>
+        <slot>accept()</slot>
     </connection>
 </connections>
 <slots>

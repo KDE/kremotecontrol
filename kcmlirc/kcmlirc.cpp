@@ -78,6 +78,7 @@ KCMLirc::KCMLirc(QWidget *parent, const char *name, QStringList /*args*/) : KCMo
 	connect((QObject *)(theKCMLircBase->theAddActions), SIGNAL( clicked() ), this, SLOT( slotAddActions() ));
 	connect((QObject *)(theKCMLircBase->theAddAction), SIGNAL( clicked() ), this, SLOT( slotAddAction() ));
 	connect((QObject *)(theKCMLircBase->theEditAction), SIGNAL( clicked() ), this, SLOT( slotEditAction() ));
+	connect((QObject *)(theKCMLircBase->theActions), SIGNAL( doubleClicked(QListViewItem *) ), this, SLOT( slotEditAction() ));
 	connect((QObject *)(theKCMLircBase->theRemoveAction), SIGNAL( clicked() ), this, SLOT( slotRemoveAction() ));
 	connect((QObject *)(theKCMLircBase->theAddMode), SIGNAL( clicked() ), this, SLOT( slotAddMode() ));
 	connect((QObject *)(theKCMLircBase->theEditMode), SIGNAL( clicked() ), this, SLOT( slotEditMode() ));
@@ -161,6 +162,8 @@ void KCMLirc::slotAddAction()
 	// populate the modes list box
 	QListViewItem *item = theKCMLircBase->theModes->selectedItem();
 	if(item->parent()) item = item->parent();
+	theDialog.theModes->setEnabled(item->firstChild());
+	theDialog.theSwitchMode->setEnabled(item->firstChild());
 	for(item = item->firstChild(); item; item = item->nextSibling())
 	{	KListViewItem *a = new KListViewItem(theDialog.theModes, item->text(0));
 		if(item->isSelected()) { a->setSelected(true); theDialog.theModes->setCurrentItem(a); }

@@ -145,10 +145,8 @@ void IRKick::updateModeIcons()
 		{	if(!currentModeIcons[i.key()])
 			{	currentModeIcons[i.key()] = new KSystemTray();
 				currentModeIcons[i.key()]->show();
-#if KDE_IS_VERSION(3, 1, 90)
 				currentModeIcons[i.key()]->contextMenu()->changeTitle(0, mode.remoteName());
 				currentModeIcons[i.key()]->actionCollection()->action("file_quit")->setEnabled(false);
-#endif
 			}
 			currentModeIcons[i.key()]->setPixmap(KIconLoader().loadIcon(mode.iconFile(), KIcon::Panel));
 			QToolTip::add(currentModeIcons[i.key()], mode.remoteName() + ": <b>" + mode.name() + "</b>");

@@ -58,7 +58,6 @@ void EditAction::readFrom()
 	theSendToBottom->setChecked((*theAction).ifMulti() == IM_SENDTOBOTTOM);
 	theSendToAll->setChecked((*theAction).ifMulti() == IM_SENDTOALL);
 
-	arguments = (*theAction).arguments();
 	if((*theAction).isModeChange())
 	{	// change mode
 		theChangeMode->setChecked(true);
@@ -83,6 +82,7 @@ void EditAction::readFrom()
 		theApplications->setCurrentText(a->profile()->name());
 		updateFunctions();
 		theFunctions->setCurrentText(a->name());
+		arguments = (*theAction).arguments();
 		updateArguments();
 		theNotJustStart->setChecked(true);
 	}
@@ -94,6 +94,7 @@ void EditAction::readFrom()
 		theDCOPObjects->setCurrentText((*theAction).object());
 		updateDCOPFunctions();
 		theDCOPFunctions->setCurrentText((*theAction).method().prototype());
+		arguments = (*theAction).arguments();
 		updateArguments();
 	}
 	updateOptions();
