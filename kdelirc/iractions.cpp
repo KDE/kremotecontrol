@@ -72,11 +72,11 @@ IRAItList IRActions::findByMode(const Mode &mode)
 	return ret;
 }
 
-IRAItList IRActions::findByModeButton(const QString &remote, const QString &mode, const QString &button)
+IRAItList IRActions::findByModeButton(const Mode &mode, const QString &button)
 {
 	IRAItList ret;
 	for(iterator i = begin(); i != end(); i++)
-		if((*i).remote() == remote && (*i).mode() == mode && (*i).button() == button)
+		if((*i).remote() == mode.remote() && (*i).mode() == mode.name() && (*i).button() == button)
 			ret += i;
 	return ret;
 }

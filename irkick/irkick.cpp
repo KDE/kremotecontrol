@@ -72,29 +72,40 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int 
 	}
 	else
 	{
-		const IRAItList l = allActions.findByButton(theRemote, theButton);
+		if(currentModes[theRemote].isNull()) currentModes[theRemote] = "";
+
+		const IRAItList l = allActions.findByModeButton(Mode(theRemote, currentModes[theRemote]), theButton);
 		if(!l.isEmpty())
 			for(IRAItList::const_iterator i = l.begin(); i != l.end(); i++)
-				if((*(*i)).repeat() || !theRepeatCounter)
-				{	DCOPClient *theDC = KApplication::dcopClient();
-					if(theDC->isApplicationRegistered(QCString((**i).program())))
-					{	QByteArray data; QDataStream arg(data, IO_WriteOnly);
-						kdDebug() << "Sending data (" << QCString((**i).program()) << ", " << QCString((**i).object()) << ", " << QCString((**i).method().prototypeNR()) << endl;
-						for(Arguments::const_iterator j = (**i).arguments().begin(); j != (**i).arguments().end(); j++)
-						{	kdDebug() << "Got argument..." << endl;
-							switch((*j).type())
-							{	case QVariant::Int: arg << (*j).toInt(); break;
-								case QVariant::CString: arg << (*j).toCString(); break;
-								case QVariant::StringList: arg << (*j).toStringList(); break;
-								case QVariant::UInt: arg << (*j).toUInt(); break;
-								case QVariant::Bool: arg << (*j).toBool(); break;
-								case QVariant::Double: arg << (*j).toDouble(); break;
-								default: arg << (*j).toString(); break;
-							}
-						}
-						theDC->send(QCString((**i).program()), QCString((**i).object()), QCString((**i).method().prototypeNR()), data);
-					}
+				if((**i).program() == "")
+				{	// mode switch
+					currentModes[theRemote] = (**i).object();
+					if((**i).object() != "")
+						KPassivePopup::message("IRKick", "Switching mode on <b>" + theRemote + "</b> to <b>" + (**i).object() + "</b>.", SmallIcon("package_applications"), this);
+					else
+						KPassivePopup::message("IRKick", "Exiting mode on <b>" + theRemote + "</b>.", SmallIcon("package_applications"), this);
 				}
+				else
+					if((**i).repeat() || !theRepeatCounter)
+					{	DCOPClient *theDC = KApplication::dcopClient();
+						if(theDC->isApplicationRegistered(QCString((**i).program())))
+						{	QByteArray data; QDataStream arg(data, IO_WriteOnly);
+							kdDebug() << "Sending data (" << QCString((**i).program()) << ", " << QCString((**i).object()) << ", " << QCString((**i).method().prototypeNR()) << endl;
+							for(Arguments::const_iterator j = (**i).arguments().begin(); j != (**i).arguments().end(); j++)
+							{	kdDebug() << "Got argument..." << endl;
+								switch((*j).type())
+								{	case QVariant::Int: arg << (*j).toInt(); break;
+									case QVariant::CString: arg << (*j).toCString(); break;
+									case QVariant::StringList: arg << (*j).toStringList(); break;
+									case QVariant::UInt: arg << (*j).toUInt(); break;
+									case QVariant::Bool: arg << (*j).toBool(); break;
+									case QVariant::Double: arg << (*j).toDouble(); break;
+									default: arg << (*j).toString(); break;
+								}
+							}
+							theDC->send(QCString((**i).program()), QCString((**i).object()), QCString((**i).method().prototypeNR()), data);
+						}
+					}
 	}
 }
 

@@ -39,7 +39,7 @@ public:
 	IRAIt addAction(const IRAction &theAction);
 	IRAItList findByButton(const QString &remote, const QString &button);
 	IRAItList findByMode(const Mode &mode);
-	IRAItList findByModeButton(const QString &remote, const QString &mode, const QString &button);
+	IRAItList findByModeButton(const Mode &mode, const QString &button);
 
 	void erase(const IRAIt &action) { QValueList<IRAction>::erase(action); }
 
