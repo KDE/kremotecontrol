@@ -4,4 +4,3 @@ general:
 kcmlirc:
 
 irkick:
-* Change irkick to dcop service, not kded module

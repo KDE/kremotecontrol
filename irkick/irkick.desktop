@@ -1,20 +1,34 @@
 [Desktop Entry]
 Type=Service
 Name=KDE LIRC server
+Name[ca]=Servidor LIRC per a KDE
+Name[es]=KDE LIRC servidor
+Name[fr]=Serveur LIRC pour KDE
+Name[nl]=KDE LIRC-server
+Name[pt]=Servidor de LIRC do KDE
+Name[pt_BR]=Servidor LIRC do KDE
+Name[sv]=KDE LIRC-server
+Name[wa]=Sierveu LIRC KDE
 
-ServiceTypes=KDEDModule
-X-KDE-ModuleType=Library
+#ServiceTypes=KDEDModule
+#X-KDE-ModuleType=Library
 X-KDE-Library=irkick
-X-KDE-FactoryName=irkick
-X-KDE-Kded-autoload=true
-X-KDE-Kded-load-on-demand=false
+X-KDE-autostart-after=panel
+X-KDE-StartupNotify=false
+X-DCOP-ServiceType=Unique
+Categories=Qt;KDE;Utility
+X-KDE-autostart-condition=irkickrc:General:AutoStart:true
 
+Exec=irkick
 Icon=irkick
 MiniIcon=irkick
 DocPath=kcontrol/kdelirc.html
 Comment=KDE Linux infrared remote control server.
+Comment[ca]=Un servidor Linux de control remot per infraroigs per a KDE.
+Comment[es]=KDE Linux servidor de control remoto de infrarrojos.
+Comment[nl]=KDE Linux infraroodafstanbedieningsserver
+Comment[pt]=Servidor do comando à distância por infravermelhos do Linux para o KDE.
+Comment[pt_BR]=Servidor de controle remoto de infra-vermelho do KDE
+Comment[sv]=KDE Linux infraröd fjärrkontrollserver.
 Encoding=UTF-8
 
-#Exec=irkick
-#X-DCOP-ServiceType=Unique
-#X-KDE-StartupNotify=true

@@ -32,6 +32,7 @@
 #include <kpushbutton.h>
 
 #include <dcopclient.h>
+#include <dcopref.h>
 
 #include <irkick_stub.h>
 
@@ -51,11 +52,20 @@ K_EXPORT_COMPONENT_FACTORY(kcmlirc, theFactory("kcmlirc"));
 KCMLirc::KCMLirc(QWidget *parent, const char *name, QStringList /*args*/) : KCModule(parent, name), DCOPObject("KCMLirc")
 {
 	bool ok;
-	KApplication::kApplication()->dcopClient()->remoteInterfaces("kded", "irkick", &ok);
+	KApplication::kApplication()->dcopClient()->remoteInterfaces("irkick", "IRKick", &ok);
 	if(!ok)
-		if(KMessageBox::questionYesNo(this, i18n("The infrared cemote control software is not currently running. This configuration module will not work properly without it. Would you like to start it now?"), i18n("Software not running")) == KMessageBox::Yes)
-			DCOPRef("kded", "kded").call("loadModule", "irkick");
+		if(KMessageBox::questionYesNo(this, i18n("The Infrared Remote Control software is not currently running. This configuration module will not work properly without it. Would you like to start it now?"), i18n("Software not running")) == KMessageBox::Yes)
+		{	//DCOPRef("kded", "kded").call("loadModule", "irkick");
+			kdDebug() << "S" << KApplication::startServiceByName("KDE LIRC server") << endl;
+			KSimpleConfig theConfig("irkickrc");
+			theConfig.setGroup("General");
+			if(theConfig.readBoolEntry("AutoStart", true) == false)
+				if(KMessageBox::questionYesNo(this, i18n("Would you like the Infrared Remote Control software to start automatically when you begin KDE?"), i18n("Automatically start?")) == KMessageBox::Yes)
+					theConfig.writeEntry("AutoStart", true);
+		}
 
+	KApplication::kApplication()->dcopClient()->remoteInterfaces("irkick", "IRKick", &ok);
+	kdDebug() << "OK" << ok << endl;
 
 
 	(new QHBoxLayout(this))->setAutoAdd(true);
@@ -383,7 +393,7 @@ void KCMLirc::updateModes()
 	theKCMLircBase->theModes->clear();
 	modeMap.clear();
 
-	IRKick_stub IRKick("kded", "irkick");
+	IRKick_stub IRKick("irkick", "IRKick");
 	QStringList remotes = IRKick.remotes();
 	for(QStringList::iterator i = remotes.begin(); i != remotes.end(); i++)
 	{	Mode mode = allModes.getMode(*i, "");
@@ -475,7 +485,7 @@ void KCMLirc::load()
 	KSimpleConfig theConfig("irkickrc");
 	allActions.loadFromConfig(theConfig);
 	allModes.loadFromConfig(theConfig);
-	allModes.generateNulls(IRKick_stub("kded", "irkick").remotes());
+	allModes.generateNulls(IRKick_stub("irkick", "IRKick").remotes());
 
 	updateExtensions();
 	updateModes();
@@ -495,7 +505,7 @@ void KCMLirc::save()
 	allModes.saveToConfig(theConfig);
 
 	theConfig.sync();
-	IRKick_stub("kded", "irkick").reloadConfiguration();
+	IRKick_stub("irkick", "IRKick").reloadConfiguration();
 
 	emit changed(true);
 }

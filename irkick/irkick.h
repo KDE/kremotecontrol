@@ -26,7 +26,7 @@
 #include "iractions.h"
 #include "klircclient.h"
 
-class IRKick: public KDEDModule
+class IRKick: public QObject, public DCOPObject//KDEDModule
 {
 	Q_OBJECT
 	K_DCOP
@@ -52,11 +52,10 @@ protected:
 private slots:
 	void gotMessage(const QString &theRemote, const QString &theButton, int theRepeatCounter);
 	void resetModes();
+	void doQuit();
 
 	void slotConfigure();
 	void slotReloadConfiguration();
-	void slotShowAbout();
-	void slotShowAboutKDE();
 //MOC_SKIP_BEGIN
 k_dcop:
 //MOC_SKIP_END
@@ -115,7 +114,7 @@ private:
 
 public:
 	IRKick(const QCString &obj);
-	~IRKick();
+	virtual ~IRKick();
 };
 
 #endif

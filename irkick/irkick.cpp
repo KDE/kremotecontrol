@@ -29,6 +29,8 @@
 #include <kaboutkde.h>
 #include <kwinmodule.h>
 #include <kwin.h>
+#include <khelpmenu.h>
+#include <kglobal.h>
 
 #include <dcopclient.h>
 #include <dcopref.h>
@@ -36,15 +38,15 @@
 #include "profileserver.h"
 #include "irkick.h"
 
-extern "C"
+/*extern "C"
 {
 	KDEDModule *create_irkick(const QCString &name)
 	{
 		return new IRKick(name);
 	}
 }
-
-IRKick::IRKick(const QCString &obj) : KDEDModule(obj), npApp(QString::null)
+*/
+IRKick::IRKick(const QCString &obj) : /*KDEDModule*/QObject(), DCOPObject(obj), npApp(QString::null)
 {
 	theClient = new KLircClient();
 
@@ -59,16 +61,11 @@ IRKick::IRKick(const QCString &obj) : KDEDModule(obj), npApp(QString::null)
 
 #if KDE_IS_VERSION(3, 1, 90)
 	theTrayIcon->contextMenu()->changeTitle(0, "IRKick");
-	theTrayIcon->contextMenu()->insertItem(i18n("Configure..."), this, SLOT(slotConfigure()));
-//	theTrayIcon->contextMenu()->insertItem(i18n("Reload"), this, SLOT(slotReloadConfiguration()));
-	theTrayIcon->contextMenu()->insertItem(i18n("About IRKick..."), this, SLOT(slotShowAbout()));
-	theTrayIcon->contextMenu()->insertItem(i18n("About KDE..."), this, SLOT(slotShowAboutKDE()));
-	theTrayIcon->actionCollection()->action("file_quit")->setEnabled(false);
+	theTrayIcon->contextMenu()->insertItem(i18n("&Configure..."), this, SLOT(slotConfigure()));
+	theTrayIcon->contextMenu()->insertSeparator();
+	theTrayIcon->contextMenu()->insertItem(i18n("&Help"), (new KHelpMenu(theTrayIcon, KGlobal::instance()->aboutData()))->menu());
 #endif
-	aboutData = new KAboutData("irkick", I18N_NOOP("IRKick"), VERSION, I18N_NOOP("IRKick"), KAboutData::License_GPL, "(c) 2003, Gav Wood", 0, 0, "gav@kde.org");
-	aboutData->addAuthor("Gav Wood", i18n("Author"), "gav@kde.org", "http://www.indigoarchive.net/gav/");
-	aboutData->addAuthor("Dirk Ziegelmeier", i18n("Ideas, concept code"), "dirk@ziegelmeier.net");
-	aboutData->addAuthor("Antonio Larrosa Jiménez", i18n("Ideas"), "larrosa@kde.org");
+	connect(theTrayIcon->actionCollection()->action("file_quit"), SIGNAL(activated()), this, SLOT(doQuit()));
 	theTrayIcon->show();
 }
 
@@ -79,13 +76,22 @@ IRKick::~IRKick()
 		if(*i) delete *i;
 }
 
+void IRKick::doQuit()
+{
+	KSimpleConfig theConfig("irkickrc");
+	theConfig.setGroup("General");
+	if(theConfig.readBoolEntry("AutoStart", true) == true)
+		if(KMessageBox::questionYesNo(0, i18n("The Infrared Remote Control server is currently scheduled to automatically start every time you begin KDE. Would you like to reset this software so that it doesn't start automatically?"), i18n("Stop Permenantly?")) == KMessageBox::Yes)
+			theConfig.writeEntry("AutoStart", false);
+	KApplication::kApplication()->quit();
+}
+
 void IRKick::resetModes()
 {
 	if(theResetCount > 1)
 		KPassivePopup::message("IRKick", i18n("Resetting all modes."), SmallIcon("package_applications"), theTrayIcon);
 	if(!theResetCount)
 		allModes.generateNulls(theClient->remotes());
-
 
 	QStringList remotes = theClient->remotes();
 	for(QStringList::iterator i = remotes.begin(); i != remotes.end(); i++)
@@ -285,40 +291,5 @@ void IRKick::dontStealNextPress()
 {
 	npApp = QString::null;
 }
-
-void IRKick::slotShowAboutKDE()
-{
-	KAboutKDE *about = new KAboutKDE(theTrayIcon);
-	about->exec();
-	delete about;
-}
-
-void IRKick::slotShowAbout()
-{
-	KAboutDialog *about = new KAboutDialog(KAboutDialog::AbtAppStandard, "IRKick", KDialogBase::Close, KDialogBase::Close, theTrayIcon, "name", true);
-	about->setTitle(i18n("KDE Lirc Server"));
-	about->setProduct(i18n("IRKick"), VERSION, i18n("Gav Wood"), "2003");
-	KAboutContainer *c = about->addContainerPage(i18n("&About"), AlignCenter, AlignLeft);
-	if(c)
-	{	c->addWidget(new QLabel(i18n("IRKick: The KDE Linux Infrared Remote Control Server.\n\n"
-									"IRKick is made to be as simple, intuitive and user-centric\n"
-									"as possible. If you\n\n"
-									"1. have a suggestion for improvement\n"
-									"2. have found a bug\n"
-									"3. want to contribute with something\n\n"
-									"then feel free to send me a mail.\n"), theTrayIcon));
-		c->addPerson(QString::null, QString("gav@kde.org"), QString("http://www.indigoarchive.net/gav/"), QString::null, true);
-	}
-	c = about->addContainerPage(i18n("&Credits"), AlignCenter, AlignLeft);
-	if(c)
-	{	c->addWidget(new QLabel(i18n(	"<p align=left>Author:<br/><b>Gav Wood</b></p>"
-						"<p align=left>Ideas, concept code:<br/><b>Dirk Ziegelmeier</b></p>"
-						"<p align=left>Ideas:<br/><b>Antonio Larrosa Jiménez</b></p>"), theTrayIcon));
-	}
-	about->addLicensePage("&License Agreement", aboutData->license());
-	about->exec();
-	delete about;
-}
-
 
 #include "irkick.moc"
