@@ -31,7 +31,7 @@
 	<button id="VOL_UP" class="volumeup"><name>Volume Up</name></button>
 	<button id="VOL_DOWN" class="volumedown"><name>Volume Down</name></button>
 	<button id="FULLSCREEN" class="fullscreen"><name>Full Screen</name></button>
-	<button id="SLEEP" class="sleep"><name>Sleep</name></button>
+	<button id="SLEEP"><name>Sleep</name></button>
 	<button id="BOSS_KEY"><name>Boss key</name></button>
 	<button id="RED" class="red"><name>Red</name></button>
 	<button id="GREEN" class="green"><name>Green</name></button>

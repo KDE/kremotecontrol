@@ -3,8 +3,8 @@
 
 <remote id="Hauppauge">
 	<name>Hauppauge</name>
-	<information>Bundled with WinTV PCI, PVR</information>
 	<author>Dirk Ziegelmeier</author>
+	<information>Bundled with WinTV PCI, PVR</information>
 	<button id="0" class="number" parameter="0"/>
 	<button id="1" class="number" parameter="1"/>
 	<button id="2" class="number" parameter="2"/>
