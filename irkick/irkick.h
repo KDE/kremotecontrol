@@ -26,7 +26,17 @@
 #include "iractions.h"
 #include "klircclient.h"
 
-class IRKick: public QObject, public DCOPObject//KDEDModule
+class QMouseEvent;
+
+class IRKTrayIcon: public KSystemTray
+{
+	void mousePressEvent(QMouseEvent *e);
+
+public:
+	IRKTrayIcon(QWidget *parent = 0, const char *name = 0): KSystemTray(parent, name) {}
+};
+
+class IRKick: public QObject, public DCOPObject
 {
 	Q_OBJECT
 	K_DCOP
@@ -38,29 +48,16 @@ class IRKick: public QObject, public DCOPObject//KDEDModule
 	int theResetCount;
 	Modes allModes;
 
-	KSystemTray *theTrayIcon;
+	IRKTrayIcon *theTrayIcon;
 	KAboutData *aboutData;
 	QTimer *theFlashOff;
 
 	void updateModeIcons();
 
-signals:
-
 protected:
 	KLircClient *theClient;
 
-
-private slots:
-	void gotMessage(const QString &theRemote, const QString &theButton, int theRepeatCounter);
-	void resetModes();
-	void doQuit();
-	void flashOff();
-
-	void slotConfigure();
-	void slotReloadConfiguration();
-//MOC_SKIP_BEGIN
 k_dcop:
-//MOC_SKIP_END
 	/**
 	 * Query status of connection.
 	 *
@@ -110,6 +107,14 @@ k_dcop:
 	 */
 	virtual void reloadConfiguration() { slotReloadConfiguration(); }
 
+private slots:
+	void gotMessage(const QString &theRemote, const QString &theButton, int theRepeatCounter);
+	void resetModes();
+	void doQuit();
+	void flashOff();
+
+	void slotConfigure();
+	void slotReloadConfiguration();
 private:
 	void executeAction(const IRAction &action);
 	bool getPrograms(const IRAction &action, QStringList &populous);

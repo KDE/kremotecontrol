@@ -12,6 +12,7 @@
 #include <qtooltip.h>
 #include <qregexp.h>
 #include <qtimer.h>
+#include <qevent.h>
 
 #include <kapplication.h>
 #include <kaction.h>
@@ -37,19 +38,16 @@
 #include "profileserver.h"
 #include "irkick.h"
 
-/*extern "C"
+void IRKTrayIcon::mousePressEvent(QMouseEvent *e)
 {
-	KDEDModule *create_irkick(const QCString &name)
-	{
-		return new IRKick(name);
-	}
+	KSystemTray::mousePressEvent(new QMouseEvent(QEvent::MouseButtonPress, e->pos(), e->globalPos(), e->button() == LeftButton ? RightButton : e->button(), e->state()));
 }
-*/
-IRKick::IRKick(const QCString &obj) : /*KDEDModule*/QObject(), DCOPObject(obj), npApp(QString::null)
+
+IRKick::IRKick(const QCString &obj) : QObject(), DCOPObject(obj), npApp(QString::null)
 {
 	theClient = new KLircClient();
 
-	theTrayIcon = new KSystemTray();
+	theTrayIcon = new IRKTrayIcon();
 	if(theClient->isConnected())
 	{	theTrayIcon->setPixmap(SmallIcon("irkick"));
 		QToolTip::add(theTrayIcon, i18n("KDE Lirc Server: Ready."));
@@ -70,7 +68,8 @@ IRKick::IRKick(const QCString &obj) : /*KDEDModule*/QObject(), DCOPObject(obj), 
 	theTrayIcon->contextMenu()->insertItem(SmallIcon( "configure" ), i18n("&Configure..."), this, SLOT(slotConfigure()));
 	theTrayIcon->contextMenu()->insertSeparator();
 	theTrayIcon->contextMenu()->insertItem(SmallIcon( "help" ), i18n("&Help"), (new KHelpMenu(theTrayIcon, KGlobal::instance()->aboutData()))->menu());
-	connect(theTrayIcon->actionCollection()->action("file_quit"), SIGNAL(activated()), this, SLOT(doQuit()));
+	theTrayIcon->actionCollection()->action("file_quit")->disconnect(SIGNAL(activated()));
+	connect(theTrayIcon->actionCollection()->action("file_quit"), SIGNAL(activated()), SLOT(doQuit()));
 
 	theTrayIcon->show();
 }
@@ -91,11 +90,11 @@ void IRKick::doQuit()
 {
 	KSimpleConfig theConfig("irkickrc");
 	theConfig.setGroup("General");
-	if(theConfig.readBoolEntry("AutoStart", true) == true)
-		switch(KMessageBox::questionYesNoCancel(0, i18n("Should the Infrared Remote Control server start automatically when you begin KDE?"), i18n("Automatically Start?")))
-		{	case KMessageBox::No: theConfig.writeEntry("AutoStart", false); break;
-			case KMessageBox::Cancel: return;
-		}
+	switch(KMessageBox::questionYesNoCancel(0, i18n("Should the Infrared Remote Control server start automatically when you begin KDE?"), i18n("Automatically Start?")))
+	{	case KMessageBox::No: theConfig.writeEntry("AutoStart", false); break;
+		case KMessageBox::Yes: theConfig.writeEntry("AutoStart", true); break;
+		case KMessageBox::Cancel: return;
+	}
 	KApplication::kApplication()->quit();
 }
 
