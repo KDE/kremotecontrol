@@ -75,7 +75,6 @@ public:
 	virtual void save();
 	virtual void defaults();
 	virtual void configChanged();
-	virtual QString quickHelp() const;
 
 	KCMLirc(QWidget *parent = 0, const char *name = 0, QStringList args = QStringList());
 	~KCMLirc();
