@@ -48,6 +48,7 @@ void IRKTrayIcon::mousePressEvent(QMouseEvent *e)
 
 IRKick::IRKick(const QCString &obj) : QObject(), DCOPObject(obj), npApp(QString::null)
 {
+    kapp->dcopClient()->setDefaultObject(obj);
 	theClient = new KLircClient();
 
 	theTrayIcon = new IRKTrayIcon();
