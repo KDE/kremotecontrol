@@ -1,5 +1,6 @@
 <remote id="cimr100">
 	<name>Creative CIMR-100</name>
-	<button id="0"><name="0"></button>
-	<button id="deckplay"><name="Deck-Play"></button>
+	<author>Gav Wood</author>
+	<button id="0"/>	<!-- name defaults to id -->
+	<button id="play"><name>Play</name></button>
 </remote>

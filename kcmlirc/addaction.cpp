@@ -24,6 +24,7 @@
 #include "prototype.h"
 #include "addaction.h"
 #include "profileserver.h"
+#include "remoteserver.h"
 
 AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): AddActionBase(parent, name), theMode(mode)
 {
@@ -80,11 +81,12 @@ void AddAction::cancelRequest()
 void AddAction::updateButton(const QString &remote, const QString &button)
 {
 	if(theMode.remote() == remote)
-	{	theButtons->setCurrentItem(theButtons->findItem(button, 0));
-		theButtons->ensureItemVisible(theButtons->findItem(button, 0));
+	{	// note this isn't the "correct" way of doing it; really i should iterate throughg the items and try to find the item which when put through buttonMap[item] returns the current button name. but i cant be arsed.
+		theButtons->setCurrentItem(theButtons->findItem(RemoteServer::remoteServer()->getButtonName(remote, button), 0));
+		theButtons->ensureItemVisible(theButtons->findItem(RemoteServer::remoteServer()->getButtonName(remote, button), 0));
 	}
 	else
-		KMessageBox::error(this, "You did not select a mode of that remote control. Please use " + theMode.remote() + ", or revert back to select a different mode.", "Incorrect remote control detected");
+		KMessageBox::error(this, "You did not select a mode of that remote control. Please use " + theMode.remoteName() + ", or revert back to select a different mode.", "Incorrect remote control detected");
 
 	if(indexOf(currentPage()) == 1)
 		requestNextPress();
@@ -93,10 +95,11 @@ void AddAction::updateButton(const QString &remote, const QString &button)
 void AddAction::updateButtons()
 {
 	theButtons->clear();
+	buttonMap.clear();
 	IRKick_stub IRKick("irkick", "IRKick");
 	QStringList buttons = IRKick.buttons(theMode.remote());
 	for(QStringList::iterator j = buttons.begin(); j != buttons.end(); j++)
-		new QListViewItem(theButtons, *j);
+		buttonMap[new QListViewItem(theButtons, RemoteServer::remoteServer()->getButtonName(theMode.remote(), *j))] = *j;
 }
 
 void AddAction::updateForPageChange()
@@ -197,20 +200,16 @@ void AddAction::updateParameters()
 void AddAction::updateParameter()
 {
 	if(theParameters->currentItem())
-	{	theCurParameter->setText("");
+	{	theCurParameter->setText(theParameters->currentItem()->text(0));
 		theCurValue->setText(theParameters->currentItem()->text(1));
-		theCurComment->setText(theParameters->currentItem()->text(0));
 		theCurParameter->setEnabled(true);
 		theCurValue->setEnabled(true);
-		theCurComment->setEnabled(true);
 	}
 	else
 	{	theCurParameter->setText("");
 		theCurValue->setText("");
-		theCurComment->setText("");
 		theCurParameter->setEnabled(false);
 		theCurValue->setEnabled(false);
-		theCurComment->setEnabled(false);
 	}
 }
 

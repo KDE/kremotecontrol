@@ -15,6 +15,8 @@
 
 #include <qstring.h>
 
+#include "remoteserver.h"
+
 /**
 @author Gav Wood
 */
@@ -31,6 +33,7 @@ public:
 
 	const QString &name() const { return theName; }
 	const QString &remote() const { return theRemote; }
+	const QString &remoteName() const { return RemoteServer::remoteServer()->getRemoteName(theRemote); }
 
 	const Mode &loadFromConfig(KConfig &theConfig, int index);
 	void saveToConfig(KConfig &theConfig, int index);

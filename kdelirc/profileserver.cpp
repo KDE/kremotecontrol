@@ -25,7 +25,6 @@ ProfileServer *ProfileServer::theInstance = 0;
 ProfileServer::ProfileServer()
 {
 	loadProfiles();
-	theProfiles.setAutoDelete(true);
 }
 
 ProfileServer::~ProfileServer()

@@ -31,6 +31,7 @@
 #include "addaction.h"
 #include "newmode.h"
 #include "profileserver.h"
+#include "remoteserver.h"
 #include "kcmlirc.h"
 
 typedef KGenericFactory<KCMLirc, QWidget> theFactory;
@@ -71,7 +72,7 @@ void KCMLirc::slotAddAction()
 	{	IRAction a;
 		a.setRemote(m.remote());
 		a.setMode(m.name());
-		a.setButton(theDialog.theButtons->currentItem()->text(0));
+		a.setButton(theDialog.buttonMap[theDialog.theButtons->currentItem()]);
 		a.setRepeat(theDialog.theRepeat->isChecked());
 		Arguments args;
 		// change mode?
@@ -171,10 +172,10 @@ void KCMLirc::updateActions()
 	if(!theKCMLircBase->theModes->currentItem()) return;
 	Mode m = modeMap[theKCMLircBase->theModes->currentItem()];
 
-	theKCMLircBase->theModeLabel->setText(m.remote() + ": " + (m.name() == "" ? "<i>Always</i>" : ("<b>" + m.name() + "</b>")));
+	theKCMLircBase->theModeLabel->setText(m.remoteName() + ": " + (m.name() == "" ? "<i>Always</i>" : ("<b>" + m.name() + "</b>")));
 	IRAItList l = allActions.findByMode(m);
 	for(IRAItList::iterator i = l.begin(); i != l.end(); i++)
-		actionMap[new KListViewItem(theKCMLircBase->theActions, (**i).button(), (**i).application(), (**i).function(), (**i).arguments().toString(), (**i).repeatable())] = *i;
+		actionMap[new KListViewItem(theKCMLircBase->theActions, (**i).buttonName(), (**i).application(), (**i).function(), (**i).arguments().toString(), (**i).repeatable())] = *i;
 }
 
 void KCMLirc::gotButton(QString remote, QString button)
@@ -190,7 +191,7 @@ void KCMLirc::updateModes()
 	IRKick_stub IRKick("irkick", "IRKick");
 	QStringList remotes = IRKick.remotes();
 	for(QStringList::iterator i = remotes.begin(); i != remotes.end(); i++)
-	{	QListViewItem *a = new QListViewItem(theKCMLircBase->theModes, *i);		// TODO: make *i into nice name with wise singleton
+	{	QListViewItem *a = new QListViewItem(theKCMLircBase->theModes, RemoteServer::remoteServer()->getRemoteName(*i));
 		modeMap[a] = Mode(*i, "");	// the null mode
 		a->setOpen(true);
 		ModeList l = allModes.getModes(*i);
@@ -201,34 +202,63 @@ void KCMLirc::updateModes()
 
 void KCMLirc::updateExtensions()
 {
-	ProfileServer *theServer = ProfileServer::profileServer();
 	theKCMLircBase->theExtensions->clear();
-	QListViewItem *a = new QListViewItem(theKCMLircBase->theExtensions, "Applications");
-	a->setOpen(true);
 
-	extensionMap.clear();
-
-	QDict<Profile> dict = theServer->profiles();
-	QDictIterator<Profile> i(dict);
-	for(; i.current(); ++i)
-		extensionMap[new QListViewItem(a, i.current()->name())] = i.currentKey();
+	{	ProfileServer *theServer = ProfileServer::profileServer();
+		QListViewItem *a = new QListViewItem(theKCMLircBase->theExtensions, "Applications");
+		a->setOpen(true);
+		profileMap.clear();
+		QDict<Profile> dict = theServer->profiles();
+		QDictIterator<Profile> i(dict);
+		for(; i.current(); ++i)
+			profileMap[new QListViewItem(a, i.current()->name())] = i.currentKey();
+	}
+	{	RemoteServer *theServer = RemoteServer::remoteServer();
+		QListViewItem *a = new QListViewItem(theKCMLircBase->theExtensions, "Remote Controls");
+		a->setOpen(true);
+		remoteMap.clear();
+		QDict<Remote> dict = theServer->remotes();
+		QDictIterator<Remote> i(dict);
+		for(; i.current(); ++i)
+			remoteMap[new QListViewItem(a, i.current()->name())] = i.currentKey();
+	}
 }
 
 void KCMLirc::updateInformation()
 {
-	ProfileServer *theServer = ProfileServer::profileServer();
 	theKCMLircBase->theInformation->clear();
 	theKCMLircBase->theInformationLabel->setText("");
 
 	if(!theKCMLircBase->theExtensions->currentItem()) return;
-	if(!theKCMLircBase->theExtensions->currentItem()->parent()) return;
 
-	const Profile *p = theServer->profiles()[extensionMap[theKCMLircBase->theExtensions->currentItem()]];
-	new QListViewItem(theKCMLircBase->theInformation, "Extension Name", p->name());
-	new QListViewItem(theKCMLircBase->theInformation, "Extension Author", p->author());
-	new QListViewItem(theKCMLircBase->theInformation, "Application Identifier", p->id());
-	new QListViewItem(theKCMLircBase->theInformation, "Number of Actions", QString().setNum(p->actions().count()));
-	theKCMLircBase->theInformationLabel->setText("Information on <b>" + p->name() + "</b>:");
+	if(!theKCMLircBase->theExtensions->currentItem()->parent())
+	{
+		theKCMLircBase->theInformationLabel->setText("Information on <b>" + theKCMLircBase->theExtensions->currentItem()->text(0) + "</b>:");
+		if(theKCMLircBase->theExtensions->currentItem()->text(0) == "Applications")
+			new QListViewItem(theKCMLircBase->theInformation, "Number of Applications", QString().setNum(theKCMLircBase->theExtensions->currentItem()->childCount()));
+		else if(theKCMLircBase->theExtensions->currentItem()->text(0) == "Remote Controls")
+			new QListViewItem(theKCMLircBase->theInformation, "Number of Remote Controls", QString().setNum(theKCMLircBase->theExtensions->currentItem()->childCount()));
+	}
+	else if(theKCMLircBase->theExtensions->currentItem()->parent()->text(0) == "Applications")
+	{
+		ProfileServer *theServer = ProfileServer::profileServer();
+		const Profile *p = theServer->profiles()[profileMap[theKCMLircBase->theExtensions->currentItem()]];
+		new QListViewItem(theKCMLircBase->theInformation, "Extension Name", p->name());
+		new QListViewItem(theKCMLircBase->theInformation, "Extension Author", p->author());
+		new QListViewItem(theKCMLircBase->theInformation, "Application Identifier", p->id());
+		new QListViewItem(theKCMLircBase->theInformation, "Number of Actions", QString().setNum(p->actions().count()));
+		theKCMLircBase->theInformationLabel->setText("Information on <b>" + p->name() + "</b>:");
+	}
+	else if(theKCMLircBase->theExtensions->currentItem()->parent()->text(0) == "Remote Controls")
+	{
+		RemoteServer *theServer = RemoteServer::remoteServer();
+		const Remote *p = theServer->remotes()[remoteMap[theKCMLircBase->theExtensions->currentItem()]];
+		new QListViewItem(theKCMLircBase->theInformation, "Extension Name", p->name());
+		new QListViewItem(theKCMLircBase->theInformation, "Extension Author", p->author());
+		new QListViewItem(theKCMLircBase->theInformation, "Remote Control Identifier", p->id());
+		new QListViewItem(theKCMLircBase->theInformation, "Number of Buttons", QString().setNum(p->buttons().count()));
+		theKCMLircBase->theInformationLabel->setText("Information on <b>" + p->name() + "</b>:");
+	}
 }
 
 void KCMLirc::load()

@@ -17,6 +17,7 @@
 
 #include "iraction.h"
 #include "profileserver.h"
+#include "remoteserver.h"
 
 IRAction::IRAction(const QString &newProgram, const QString &newObject, const QString &newMethod, const Arguments &newArguments, const QString &newRemote, const QString &newMode, const QString &newButton, bool newRepeat)
 {
@@ -83,7 +84,6 @@ const QString IRAction::function() const
 			return "Switch to " + theObject;
 	else
 	{
-		// TODO: attempt to retrieve from profile
 		const ProfileAction *a = theServer->getAction(theProgram, theObject, theMethod.prototype());
 		if(a)
 			return a->name();
@@ -107,12 +107,21 @@ const QString IRAction::application() const
 		return "[KDE]";
 	else
 	{
-		// TODO: attempt to retrieve from profile
 		const ProfileAction *a = theServer->getAction(theProgram, theObject, theMethod.prototype());
 		if(a)
 			return a->profile()->name();
 		else
 			return theProgram;
 	}
+}
+
+const QString IRAction::remoteName() const
+{
+	return RemoteServer::remoteServer()->getRemoteName(theRemote);
+}
+
+const QString IRAction::buttonName() const
+{
+	return RemoteServer::remoteServer()->getButtonName(theRemote, theButton);
 }
 

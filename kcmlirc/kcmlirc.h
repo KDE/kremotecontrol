@@ -27,7 +27,7 @@ private:
 	Modes allModes;
 	QMap<QListViewItem *, QValueListIterator<IRAction> > actionMap;
 	QMap<QListViewItem *, Mode> modeMap;
-	QMap<QListViewItem *, QString> extensionMap;
+	QMap<QListViewItem *, QString> profileMap, remoteMap;
 
 public slots:
 	void configChanged();

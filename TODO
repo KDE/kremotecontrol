@@ -1,20 +1,17 @@
 general:
-*  Optimise data structures to use pointer-based structures to cut down on copying
+* Optimise data structures to use pointer-based structures to cut down on copying
+* Some linear seaches still around rather than key-based - fix it to improve speed
+* Design automatically starting application (try for 1.0)
+* Controllers/Profiles DTD (try for 1.0)
 
 kdmlirc:
-* Edit action!
+* Edit action?
 * Advanced (non-wizard) Add action?
-* Controllers/Profiles:
-	* XML reading of profiles
-	* DTD
-	* Scan all paths they could be
-	* Install to correct paths
-* Profiles:
-	* Update interface to hide DCOP specifics
-	* Update interface (wizard) for page at start to allow selection of profiled app
+* Implement automatically starting application option (try for 1.0)
+* Fix bools bug.
 
 irkick:
 * Fix QByteArray parameter bug...
-* Fix bools bug.
 * Better icon!
 * Other IPC mechanisms (save for 2.0!)
+* Implement automatically starting application (try for 1.0)

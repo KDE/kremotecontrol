@@ -41,6 +41,8 @@ public:
 	const QString function() const;
 	const QString application() const;
 	const QString repeatable() const;
+	const QString buttonName() const;
+	const QString remoteName() const;
 
 	// bog standard raw DCOP stuff
 	const QString &program() const { return theProgram; }
