@@ -35,6 +35,8 @@ private:
 public slots:
 	void configChanged();
 	void updateActions();
+	void updateModesStatus(QListViewItem *);
+	void updateActionsStatus(QListViewItem *);
 	void updateModes();
 	void updateExtensions();
 	void updateInformation();
@@ -45,6 +47,7 @@ public slots:
 	void slotEditAction();
 	void slotRemoveAction();
 	void slotDrop(KListView *, QDropEvent *, QListViewItem *, QListViewItem *after);
+	void slotRenamed(QListViewItem *item);
 
 // MOC_SKIP_BEGIN
 k_dcop:

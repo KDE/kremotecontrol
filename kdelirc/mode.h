@@ -38,6 +38,8 @@ public:
 	const Mode &loadFromConfig(KConfig &theConfig, int index);
 	void saveToConfig(KConfig &theConfig, int index);
 
+	bool operator==(const Mode &mode) const { return mode.theName == theName && mode.theRemote == theRemote; }
+
 	Mode();
 	Mode(const QString &remote, const QString &name);
 	~Mode();

@@ -34,7 +34,7 @@ class IRKick: public KDEDModule
 	QString npApp, npModule, npMethod;
 	QMap<QString, QString> currentModes;
 	IRActions allActions;
-	bool theResetCount;
+	int theResetCount;
 	Modes allModes;
 
 	KSystemTray *theTrayIcon;

@@ -64,6 +64,12 @@ IRAItList IRActions::findByButton(const QString &remote, const QString &button)
 	return ret;
 }
 
+void IRActions::renameMode(const Mode &mode, const QString &to)
+{
+	for(iterator i = begin(); i != end(); i++)
+		if((*i).remote() == mode.remote() && (*i).mode() == mode.name()) (*i).setMode(to);
+}
+
 IRAItList IRActions::findByMode(const Mode &mode)
 {
 	IRAItList ret;

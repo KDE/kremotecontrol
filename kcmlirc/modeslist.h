@@ -13,7 +13,7 @@
 #ifndef MODESLIST_H
 #define MODESLIST_H
 
-#include <qlistview.h>
+#include <klistview.h>
 
 #include <klistview.h>
 

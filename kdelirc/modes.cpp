@@ -107,8 +107,10 @@ void Modes::add(const Mode &mode)
 
 void Modes::rename(Mode &mode, const QString name)
 {
+	bool was = isDefault(mode);
 	erase(mode);
 	mode.setName(name);
+	if(was) setDefault(mode);
 	add(mode);
 }
 

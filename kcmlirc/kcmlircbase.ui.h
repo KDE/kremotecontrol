@@ -18,6 +18,7 @@ void KCMLircBase::init()
 	theModes->addColumn(tr2i18n("Default"));
 	theModes->setAcceptDrops(true);
 	theModes->setRootIsDecorated(true);
+	theModes->setItemsRenameable(true);
 	modeLayout->addWidget(theModes);
 	modeLayout->addLayout(modeButtonLayout);
 	modeLayout->invalidate();

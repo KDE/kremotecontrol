@@ -60,6 +60,56 @@
                                     <number>0</number>
                                 </property>
                                 <widget class="KListView">
+                                    <column>
+                                        <property name="text">
+                                            <string>New Column</string>
+                                        </property>
+                                        <property name="clickable">
+                                            <bool>true</bool>
+                                        </property>
+                                        <property name="resizable">
+                                            <bool>true</bool>
+                                        </property>
+                                    </column>
+                                    <column>
+                                        <property name="text">
+                                            <string>New Column</string>
+                                        </property>
+                                        <property name="clickable">
+                                            <bool>true</bool>
+                                        </property>
+                                        <property name="resizable">
+                                            <bool>true</bool>
+                                        </property>
+                                    </column>
+                                <item>
+                                    <property name="text">
+                                        <string>Item</string>
+                                    </property>
+                                    <property name="text">
+                                        <string>vjhgvjh</string>
+                                    </property>
+                                    <property name="pixmap">
+                                        <pixmap></pixmap>
+                                    </property>
+                                    <property name="pixmap">
+                                        <pixmap></pixmap>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>Item</string>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                    <property name="pixmap">
+                                        <pixmap></pixmap>
+                                    </property>
+                                    <property name="pixmap">
+                                        <pixmap></pixmap>
+                                    </property>
+                                </item>
                                     <property name="name">
                                         <cstring>theModes</cstring>
                                     </property>
@@ -67,6 +117,9 @@
                                         <bool>true</bool>
                                     </property>
                                     <property name="rootIsDecorated">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="itemsRenameable">
                                         <bool>true</bool>
                                     </property>
                                 </widget>
@@ -99,6 +152,9 @@
                                             <property name="name">
                                                 <cstring>theSetDefaultMode</cstring>
                                             </property>
+                                            <property name="enabled">
+                                                <bool>false</bool>
+                                            </property>
                                             <property name="text">
                                                 <string>&amp;Set Default</string>
                                             </property>
@@ -107,6 +163,9 @@
                                             <property name="name">
                                                 <cstring>theAddMode</cstring>
                                             </property>
+                                            <property name="enabled">
+                                                <bool>false</bool>
+                                            </property>
                                             <property name="text">
                                                 <string>&amp;Add Mode...</string>
                                             </property>
@@ -114,6 +173,9 @@
                                         <widget class="KPushButton">
                                             <property name="name">
                                                 <cstring>theRemoveMode</cstring>
+                                            </property>
+                                            <property name="enabled">
+                                                <bool>false</bool>
                                             </property>
                                             <property name="text">
                                                 <string>&amp;Remove Mode</string>
@@ -248,6 +310,9 @@
                                             <property name="name">
                                                 <cstring>theAddAction</cstring>
                                             </property>
+                                            <property name="enabled">
+                                                <bool>false</bool>
+                                            </property>
                                             <property name="text">
                                                 <string>A&amp;dd Action...</string>
                                             </property>
@@ -256,6 +321,9 @@
                                             <property name="name">
                                                 <cstring>theEditAction</cstring>
                                             </property>
+                                            <property name="enabled">
+                                                <bool>false</bool>
+                                            </property>
                                             <property name="text">
                                                 <string>&amp;Edit Action...</string>
                                             </property>
@@ -263,6 +331,9 @@
                                         <widget class="KPushButton">
                                             <property name="name">
                                                 <cstring>theRemoveAction</cstring>
+                                            </property>
+                                            <property name="enabled">
+                                                <bool>false</bool>
                                             </property>
                                             <property name="text">
                                                 <string>Re&amp;move Action</string>

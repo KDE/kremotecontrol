@@ -89,9 +89,9 @@ const QString IRAction::function() const
 	ProfileServer *theServer = ProfileServer::profileServer();
 	if(theProgram == "")
 		if(theObject == "")
-			return "Exit mode";
+			return i18n("Exit mode");
 		else
-			return "Switch to " + theObject;
+			return i18n("Switch to %1").arg(theObject);
 	else
 	{
 		const ProfileAction *a = theServer->getAction(theProgram, theObject, theMethod.prototype());

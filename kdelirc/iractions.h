@@ -42,6 +42,7 @@ public:
 	IRAItList findByModeButton(const Mode &mode, const QString &button);
 
 	void erase(const IRAIt &action) { QValueList<IRAction>::erase(action); }
+	void renameMode(const Mode &mode, const QString &to);
 
 	void loadFromConfig(KConfig &theConfig);
 	void saveToConfig(KConfig &theConfig);

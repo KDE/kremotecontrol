@@ -47,7 +47,7 @@ IRKick::IRKick(const QCString &obj) : KDEDModule(obj), npApp(QString::null)
 
 	theTrayIcon = new KSystemTray();
 	theTrayIcon->setPixmap(SmallIcon("irkick"));
-	QToolTip::add(theTrayIcon, "KDE Lirc Server: Ready.");
+	QToolTip::add(theTrayIcon, i18n("KDE Lirc Server: Ready."));
 
 	theResetCount = 0;
 	slotReloadConfiguration();
@@ -56,9 +56,9 @@ IRKick::IRKick(const QCString &obj) : KDEDModule(obj), npApp(QString::null)
 
 #if KDE_IS_VERSION(3, 1, 90)
 	theTrayIcon->contextMenu()->changeTitle(0, "IRKick");
-	theTrayIcon->contextMenu()->insertItem("Reload", this, SLOT(slotReloadConfiguration()));
-	theTrayIcon->contextMenu()->insertItem("About IRKick...", this, SLOT(slotShowAbout()));
-	theTrayIcon->contextMenu()->insertItem("About KDE...", this, SLOT(slotShowAboutKDE()));
+	theTrayIcon->contextMenu()->insertItem(i18n("Reload"), this, SLOT(slotReloadConfiguration()));
+	theTrayIcon->contextMenu()->insertItem(i18n("About IRKick..."), this, SLOT(slotShowAbout()));
+	theTrayIcon->contextMenu()->insertItem(i18n("About KDE..."), this, SLOT(slotShowAboutKDE()));
 	theTrayIcon->actionCollection()->action("file_quit")->setEnabled(false);
 #endif
 	aboutData = new KAboutData("irkick", I18N_NOOP("IRKick"), VERSION, I18N_NOOP("IRKick"), KAboutData::License_GPL, "(c) 2003, Gav Wood", 0, 0, "gav@kde.org");
@@ -73,8 +73,10 @@ IRKick::~IRKick()
 
 void IRKick::resetModes()
 {
-	if(theResetCount > 2)
-		KPassivePopup::message("IRKick", "Resetting all modes.", SmallIcon("package_applications"), theTrayIcon);
+	if(theResetCount > 1)
+	{	kdDebug() << "here" << endl;
+		KPassivePopup::message("IRKick", i18n("Resetting all modes."), SmallIcon("package_applications"), theTrayIcon);
+	}
 
 	QStringList remotes = theClient->remotes();
 	for(QStringList::iterator i = remotes.begin(); i != remotes.end(); i++)
@@ -88,7 +90,7 @@ void IRKick::slotReloadConfiguration()
 	KSimpleConfig theConfig("irkickrc");
 	allActions.loadFromConfig(theConfig);
 	allModes.loadFromConfig(theConfig);
-	if(currentModes.count() && theResetCount > 2)
+	if(currentModes.count())
 		resetModes();
 }
 
@@ -109,7 +111,7 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int 
 */
 // this code works, but i want to figure out why the code above which should be equivalent doesn't work
 		if(!DCOPRef(QCString(theApp), QCString(npModule)).call(QCString(npMethod), theRemote, theButton).isValid())
-			KPassivePopup::message("IRKick", "Error: Couldn't contact application " + theApp + " to send keypress.", SmallIcon("package_applications"), theTrayIcon);
+			KPassivePopup::message("IRKick", i18n("Error: Couldn't contact application %1 to send keypress.").arg(theApp), SmallIcon("package_applications"), theTrayIcon);
 	}
 	else
 	{
@@ -119,7 +121,7 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int 
 			l += allActions.findByModeButton(Mode(theRemote, ""), theButton);
 		bool doBefore = true, doAfter = false;
 		for(IRAItList::const_iterator i = l.begin(); i != l.end(); i++)
-			if((**i).isModeChange())
+			if((**i).isModeChange() && !theRepeatCounter)
 			{	// mode switch
 				currentModes[theRemote] = (**i).modeChange();
 /*				if((**i).modeChange() != "")
@@ -140,7 +142,7 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int 
 						{	QString sname = ProfileServer::profileServer()->getServiceName((**i).program());
 							if(sname != QString::null)
 							{
-								KPassivePopup::message("IRKick", "Starting <b>" + (**i).application() + "</b>...", SmallIcon("package_applications"), theTrayIcon);
+								KPassivePopup::message("IRKick", i18n("Starting <b>%1</b>...").arg((**i).application()), SmallIcon("package_applications"), theTrayIcon);
 								KApplication::startServiceByName(sname);
 							}
 						}

@@ -1,13 +1,9 @@
 general:
-* Some linear seaches still around rather than key-based - fix it to improve speed
+* Some linear seaches rather than key-based - fix it to improve speed
 * Take out kdedmodule_stub.h
-* Internationalise stuff
 
 kdmlirc:
 * Fix bools bug / multi-type editing for options.
-* Inline mode renaming
 
 irkick:
 * Fix QByteArray parameter bug...
-* Better icon!
-* Other IPC mechanisms (save for 2.0!)

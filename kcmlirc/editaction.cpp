@@ -54,7 +54,7 @@ void EditAction::readFrom()
 	{	// change mode
 		theChangeMode->setChecked(true);
 		if((*theAction).object() == "")
-			theModes->setCurrentText("[Exit current mode]");
+			theModes->setCurrentText(i18n("[Exit current mode]"));
 		else
 			theModes->setCurrentText((*theAction).object());
 	}
@@ -85,7 +85,7 @@ void EditAction::writeBack()
 	if(theChangeMode->isChecked())
 	{
 		(*theAction).setProgram("");
-		if(theModes->currentText() == "[Exit current mode]")
+		if(theModes->currentText() == i18n("[Exit current mode]"))
 			(*theAction).setObject("");
 		else
 			(*theAction).setObject(theModes->currentText());
