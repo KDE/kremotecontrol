@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE profile SYSTEM "profile.dtd">
 
-<profile id="konqueror" servicename="Konqueror">
+<profile id="konqueror" servicename="konqueror">
 	<name>Konqueror</name>
 	<author>Gav Wood</author>
 	<instances uniqueapp="0" ifmulti="sendtotop"/>
