@@ -15,7 +15,6 @@
 #include <qmap.h>
 
 #include <kcmodule.h>
-#include <kaboutdata.h>
 
 #include <dcopobject.h>
 
@@ -35,7 +34,6 @@ class KCMLirc: public KCModule, virtual public DCOPObject
 	K_DCOP
 
 private:
-	KAboutData *myAboutData;
 	KCMLircBase *theKCMLircBase;
 	IRActions allActions;
 	Modes allModes;
@@ -79,7 +77,6 @@ public:
 	virtual void defaults();
 	virtual int buttons();
 	virtual QString quickHelp() const;
-	virtual const KAboutData *aboutData() { return myAboutData; };
 
 	KCMLirc(QWidget *parent = 0, const char *name = 0, QStringList args = QStringList());
 	~KCMLirc();
