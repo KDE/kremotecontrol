@@ -20,7 +20,7 @@
 #include "profileserver.h"
 #include "remoteserver.h"
 
-IRAction::IRAction(const QString &newProgram, const QString &newObject, const QString &newMethod, const Arguments &newArguments, const QString &newRemote, const QString &newMode, const QString &newButton, bool newRepeat, bool newAutoStart, bool newDoBefore, bool newDoAfter)
+IRAction::IRAction(const QString &newProgram, const QString &newObject, const QString &newMethod, const Arguments &newArguments, const QString &newRemote, const QString &newMode, const QString &newButton, const bool newRepeat, const bool newAutoStart, const bool newDoBefore, const bool newDoAfter, const bool newUnique, const IfMulti newIfMulti)
 {
 	theProgram = newProgram;
 	theObject = newObject;
@@ -33,6 +33,8 @@ IRAction::IRAction(const QString &newProgram, const QString &newObject, const QS
 	theDoAfter = newDoAfter;
 	theDoBefore = newDoBefore;
 	theAutoStart = newAutoStart;
+	theUnique = newUnique;
+	theIfMulti = newIfMulti;
 }
 
 const IRAction &IRAction::loadFromConfig(KConfig &theConfig, int index)
@@ -56,6 +58,8 @@ const IRAction &IRAction::loadFromConfig(KConfig &theConfig, int index)
 	theDoBefore = theConfig.readBoolEntry(Binding + "DoBefore");
 	theDoAfter = theConfig.readBoolEntry(Binding + "DoAfter");
 	theAutoStart = theConfig.readBoolEntry(Binding + "AutoStart");
+	theUnique = theConfig.readBoolEntry(Binding + "Unique", true);
+	theIfMulti = (IfMulti)theConfig.readNumEntry(Binding + "IfMulti", IM_DONTSEND);
 
 	return *this;
 }
@@ -82,6 +86,8 @@ void IRAction::saveToConfig(KConfig &theConfig, int index) const
 	theConfig.writeEntry(Binding + "DoBefore", theDoBefore);
 	theConfig.writeEntry(Binding + "DoAfter", theDoAfter);
 	theConfig.writeEntry(Binding + "AutoStart", theAutoStart);
+	theConfig.writeEntry(Binding + "Unique", theUnique);
+	theConfig.writeEntry(Binding + "IfMulti", theIfMulti);
 }
 
 const QString IRAction::function() const
@@ -114,8 +120,11 @@ const QString IRAction::notes() const
 	else if(isJustStart())
 		return "";
 	else
-		return QString(theAutoStart ? i18n("Auto-start. ") : "") +
-			QString(theRepeat ? i18n("Repeatable. ") : "");
+		return QString(theAutoStart ? i18n("Auto-start. ") : "")
+			+ QString(theRepeat ? i18n("Repeatable. ") : "")
+			+ QString(!theUnique ? (theIfMulti == IM_DONTSEND ? "Do nothing if many instances"
+						: theIfMulti == IM_SENDTOONE ? "Only ever send to one instance" : "Send to all instances")
+						: "");
 }
 
 const QString IRAction::application() const

@@ -13,6 +13,7 @@
 #include <qradiobutton.h>
 #include <qwidgetstack.h>
 #include <qcheckbox.h>
+#include <qbuttongroup.h>
 
 #include <kdebug.h>
 #include <klineedit.h>
@@ -162,6 +163,46 @@ void AddAction::updateProfiles()
 		profileMap[new QListViewItem(theProfiles, i.current()->name())] = i.currentKey();
 }
 
+void AddAction::updateOptions()
+{
+	IfMulti im;
+	if(theUseProfile->isChecked())
+	{
+		ProfileServer *theServer = ProfileServer::profileServer();
+		if(!theProfiles->currentItem()) return;
+		const Profile *p = theServer->profiles()[profileMap[theProfiles->currentItem()]];
+		im = p->ifMulti();
+		isUnique = p->unique();
+	}
+	else if(theUseDCOP->isChecked())
+	{
+		if(!theObjects->selectedItem()) return;
+		if(!theObjects->selectedItem()->parent()) return;
+		program = theObjects->selectedItem()->parent()->text(0);
+		QRegExp r("(.*)-[0-9]+");
+		if(r.exactMatch(program))
+		{	program = r.cap(1);
+			isUnique = false;
+		}
+		im = IM_DONTSEND;
+	}
+	else return;
+
+	kdDebug() << im << ": " << IM_DONTSEND << IM_SENDTOONE << IM_SENDTOALL << endl;
+	theIMLabel->setEnabled(!isUnique);
+	theIMGroup->setEnabled(!isUnique);
+	theIMLine->setEnabled(!isUnique);
+	theIMTop->setEnabled(!isUnique);
+	theDontSend->setEnabled(!isUnique);
+	theSendToOne->setEnabled(!isUnique);
+	theSendToAll->setEnabled(!isUnique);
+	switch(im)
+	{	case IM_DONTSEND: theDontSend->setChecked(true); break;
+		case IM_SENDTOONE: theSendToOne->setChecked(true); break;
+		case IM_SENDTOALL: theSendToAll->setChecked(true); break;
+	}
+}
+
 void AddAction::updateProfileFunctions()
 {
 	ProfileServer *theServer = ProfileServer::profileServer();
@@ -173,6 +214,8 @@ void AddAction::updateProfileFunctions()
 	QDict<ProfileAction> dict = p->actions();
 	for(QDictIterator<ProfileAction> i(dict); i.current(); ++i)
 		profileFunctionMap[new QListViewItem(theProfileFunctions, i.current()->name(), QString().setNum(i.current()->arguments().count()), i.current()->comment())] = i.currentKey();
+	updateParameters();
+	updateOptions();
 }
 
 void AddAction::updateParameters()
@@ -191,9 +234,9 @@ void AddAction::updateParameters()
 	else if(theUseProfile->isChecked() && theProfiles->currentItem())
 	{
 		ProfileServer *theServer = ProfileServer::profileServer();
+
 		if(!theProfiles->currentItem()) return;
 		if(!theProfileFunctions->currentItem()) return;
-
 		const Profile *p = theServer->profiles()[profileMap[theProfiles->currentItem()]];
 		const ProfileAction *pa = p->actions()[profileFunctionMap[theProfileFunctions->currentItem()]];
 
@@ -310,6 +353,7 @@ void AddAction::updateFunctions()
 			new KListViewItem(theFunctions, p.name(), p.argumentList(), *i);
 		}
 	}
+	updateOptions();
 }
 
 

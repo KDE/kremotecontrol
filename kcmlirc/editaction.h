@@ -29,6 +29,8 @@ class EditAction : public EditActionBase
 	IRAIt theAction;
 	QMap<QString, QString> applicationMap, functionMap;
 	Arguments arguments;
+	QString program;
+	bool isUnique;
 
 public:
 	void writeBack();
@@ -39,6 +41,7 @@ public:
 	virtual void updateArguments();
 	virtual void updateApplications();
 	virtual void updateFunctions();
+	virtual void updateOptions();
 	virtual void updateDCOPApplications();
 	virtual void updateDCOPObjects();
 	virtual void updateDCOPFunctions();

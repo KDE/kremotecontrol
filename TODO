@@ -1,7 +1,10 @@
 general:
 * Take out kdedmodule_stub.h, install by default (KDE4)
+* Do a small installation README
 
 kcmlirc:
+* Check if irkick available; if not ask if they want to start it
+* Get rid of pid in non-KUniqueApplication DCOP stuff to make interface nicer (should be fairly easy).
 
 irkick:
 * Change irkick to dcop service, not kded module

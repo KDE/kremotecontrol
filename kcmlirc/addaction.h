@@ -48,9 +48,12 @@ public slots:
 	virtual void updateParameter();
 	virtual void updateProfiles();
 	virtual void updateProfileFunctions();
+	virtual void updateOptions();
 
 public:
 	Arguments theArguments;
+	QString program;
+	bool isUnique;
 
 	static const QStringList getFunctions(const QString app, const QString obj);
 	void updateArgument(QListViewItem *theItem);

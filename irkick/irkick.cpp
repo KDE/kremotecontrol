@@ -10,6 +10,7 @@
 #include <qwidget.h>
 #include <qdialog.h>
 #include <qtooltip.h>
+#include <qregexp.h>
 
 #include <kapplication.h>
 #include <kaction.h>
@@ -132,6 +133,72 @@ void IRKick::updateModeIcons()
 	}
 }
 
+bool IRKick::getPrograms(const IRAction &action, QCStringList &programs)
+{
+	DCOPClient *theDC = KApplication::dcopClient();
+	programs.clear();
+
+	if(action.unique())
+	{	if(theDC->isApplicationRegistered(QCString(action.program())))
+			programs += QCString(action.program());
+	}
+	else
+	{
+		QRegExp r = QRegExp("^" + action.program() + "-\\d+$");
+		// find all instances...
+		QCStringList buf = theDC->registeredApplications();
+		for(QCStringList::iterator i = buf.begin(); i != buf.end(); i++)
+			if((*i).contains(r)) programs += *i;
+		if(programs.size() > 1 && action.ifMulti() == IM_DONTSEND)
+			return false;
+		else if(programs.size() > 1 && action.ifMulti() == IM_SENDTOONE)
+			while(programs.size() > 1) programs.remove(programs.begin());
+	}
+	return true;
+}
+
+void IRKick::executeAction(const IRAction &action)
+{
+	DCOPClient *theDC = KApplication::dcopClient();
+	QCStringList programs;
+
+	if(!getPrograms(action, programs)) return;
+
+	// if programs.size()==0 here, then the app is definately not running.
+	if(action.autoStart() && !programs.size())
+	{	QString sname = ProfileServer::profileServer()->getServiceName(action.program());
+		if(sname != QString::null)
+		{
+			KPassivePopup::message("IRKick", i18n("Starting <b>%1</b>...").arg(action.application()), SmallIcon("package_applications"), theTrayIcon);
+			KApplication::startServiceByName(sname);
+		}
+	}
+	if(action.isJustStart()) return;
+
+	if(!getPrograms(action, programs)) return;
+
+	for(QCStringList::iterator i = programs.begin(); i != programs.end(); i++)
+	{	const QCString &program = *i;
+		if(theDC->isApplicationRegistered(program))
+		{	QByteArray data; QDataStream arg(data, IO_WriteOnly);
+			kdDebug() << "Sending data (" << QCString(program) << ", " << QCString(action.object()) << ", " << QCString(action.method().prototypeNR()) << endl;
+			for(Arguments::const_iterator j = action.arguments().begin(); j != action.arguments().end(); j++)
+			{	kdDebug() << "Got argument..." << endl;
+				switch((*j).type())
+				{	case QVariant::Int: arg << (*j).toInt(); break;
+					case QVariant::CString: arg << (*j).toCString(); break;
+					case QVariant::StringList: arg << (*j).toStringList(); break;
+					case QVariant::UInt: arg << (*j).toUInt(); break;
+					case QVariant::Bool: arg << (*j).toBool(); break;
+					case QVariant::Double: arg << (*j).toDouble(); break;
+					default: arg << (*j).toString(); break;
+				}
+			}
+			theDC->send(QCString(program), QCString(action.object()), QCString(action.method().prototypeNR()), data);
+		}
+	}
+}
+
 void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int theRepeatCounter)
 {
 	kdDebug() << "Got message: " << theRemote << ": " << theButton << " (" << theRepeatCounter << ")" << endl;
@@ -166,32 +233,7 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int 
 		{	if(doBefore && !after || doAfter && after)
 				for(IRAItList::const_iterator i = l.begin(); i != l.end(); i++)
 					if(!(**i).isModeChange() && ((**i).repeat() || !theRepeatCounter))
-					{	DCOPClient *theDC = KApplication::dcopClient();
-						if((**i).autoStart() && !theDC->isApplicationRegistered(QCString((**i).program())))
-						{	QString sname = ProfileServer::profileServer()->getServiceName((**i).program());
-							if(sname != QString::null)
-							{
-								KPassivePopup::message("IRKick", i18n("Starting <b>%1</b>...").arg((**i).application()), SmallIcon("package_applications"), theTrayIcon);
-								KApplication::startServiceByName(sname);
-							}
-						}
-						if(!(**i).isJustStart() && theDC->isApplicationRegistered(QCString((**i).program())))
-						{	QByteArray data; QDataStream arg(data, IO_WriteOnly);
-							kdDebug() << "Sending data (" << QCString((**i).program()) << ", " << QCString((**i).object()) << ", " << QCString((**i).method().prototypeNR()) << endl;
-							for(Arguments::const_iterator j = (**i).arguments().begin(); j != (**i).arguments().end(); j++)
-							{	kdDebug() << "Got argument..." << endl;
-								switch((*j).type())
-								{	case QVariant::Int: arg << (*j).toInt(); break;
-									case QVariant::CString: arg << (*j).toCString(); break;
-									case QVariant::StringList: arg << (*j).toStringList(); break;
-									case QVariant::UInt: arg << (*j).toUInt(); break;
-									case QVariant::Bool: arg << (*j).toBool(); break;
-									case QVariant::Double: arg << (*j).toDouble(); break;
-									default: arg << (*j).toString(); break;
-								}
-							}
-							theDC->send(QCString((**i).program()), QCString((**i).object()), QCString((**i).method().prototypeNR()), data);
-						}
+					{	executeAction(**i);
 					}
 			if(!after && doAfter)
 			{	l = allActions.findByModeButton(Mode(theRemote, currentModes[theRemote]), theButton);

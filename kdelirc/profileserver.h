@@ -24,6 +24,8 @@
 @author Gav Wood
 */
 
+enum IfMulti { IM_SENDTOONE, IM_SENDTOALL, IM_DONTSEND };
+
 typedef QPair<int,int> Range;
 
 class ProfileAction;
@@ -80,6 +82,8 @@ public:
 class Profile : public QXmlDefaultHandler
 {
 	QString theId, theName, theAuthor, theServiceName;
+	IfMulti theIfMulti;
+	bool theUnique;
 	QString charBuffer;
 
 	ProfileAction *curPA;
@@ -98,6 +102,10 @@ public:
 	void setName(const QString &a) { theName = a; }
 	const QString &author() const { return theAuthor; }
 	void setAuthor(const QString &a) { theAuthor = a; }
+	const bool unique() const { return theUnique; }
+	void setUnique(const bool a) { theUnique = a; }
+	const IfMulti ifMulti() const { return theIfMulti; }
+	void setIfMulti(const IfMulti a) { theIfMulti = a; }
 	const QString &serviceName() const { if(theServiceName != QString::null) return theServiceName; return theName; }
 	void setServiceName(const QString &a) { theServiceName = a; }
 	const QDict<ProfileAction> &actions() const { return theActions; }

@@ -16,6 +16,7 @@
 #include <qcombobox.h>
 #include <qcheckbox.h>
 #include <qwidgetstack.h>
+#include <qbuttongroup.h>
 
 #include <kdebug.h>
 #include <klineedit.h>
@@ -52,6 +53,11 @@ void EditAction::readFrom()
 	theAutoStart->setChecked((*theAction).autoStart());
 	theDoBefore->setChecked((*theAction).doBefore());
 	theDoAfter->setChecked((*theAction).doAfter());
+	theDontSend->setChecked((*theAction).ifMulti() == IM_DONTSEND);
+	theSendToOne->setChecked((*theAction).ifMulti() == IM_SENDTOONE);
+	theSendToAll->setChecked((*theAction).ifMulti() == IM_SENDTOALL);
+	// TODO: do something with unique() and program()???
+
 	arguments = (*theAction).arguments();
 	if((*theAction).isModeChange())
 	{	// change mode
@@ -90,7 +96,7 @@ void EditAction::readFrom()
 		theDCOPFunctions->setCurrentText((*theAction).method().prototype());
 		updateArguments();
 	}
-
+	updateOptions();
 }
 
 void EditAction::writeBack()
@@ -117,6 +123,7 @@ void EditAction::writeBack()
 		}
 		else
 		{	const ProfileAction *a = ProfileServer::profileServer()->getAction(applicationMap[theApplications->currentText()], functionMap[theFunctions->currentText()]);
+			(*theAction).setProgram(ProfileServer::profileServer()->profiles()[applicationMap[theApplications->currentText()]]->id());
 			(*theAction).setObject(a->objId());
 			(*theAction).setMethod(a->prototype());
 			(*theAction).setArguments(arguments);
@@ -124,13 +131,15 @@ void EditAction::writeBack()
 	}
 	else
 	{
-		(*theAction).setProgram(theDCOPApplications->currentText());
+		(*theAction).setProgram(program);//theDCOPApplications->currentText());
 		(*theAction).setObject(theDCOPObjects->currentText());
 		(*theAction).setMethod(theDCOPFunctions->currentText());
 		(*theAction).setArguments(arguments);
 	}
 	(*theAction).setRepeat(theRepeat->isChecked());
 	(*theAction).setAutoStart(theAutoStart->isChecked());
+	(*theAction).setUnique(isUnique);
+	(*theAction).setIfMulti(theDontSend->isChecked() ? IM_DONTSEND : theSendToOne->isChecked() ? IM_SENDTOONE : IM_SENDTOALL);
 }
 
 void EditAction::updateArguments()
@@ -169,6 +178,41 @@ void EditAction::updateArguments()
 		}
 		if(p.count()) updateArgument(0); else updateArgument(-1);
 	}
+}
+
+void EditAction::updateOptions()
+{
+	if (theUseProfile->isChecked())
+	{
+		ProfileServer *theServer = ProfileServer::profileServer();
+		if(!theApplications->currentItem()) return;
+		const Profile *p = theServer->profiles()[applicationMap[theApplications->currentText()]];
+		isUnique = p->unique();
+	}
+	else if (theUseDCOP->isChecked())
+	{
+		program = theDCOPApplications->currentText();
+		if (program == "") return;
+		QRegExp r("(.*)-[0-9]+");
+		if (r.exactMatch(program))
+		{	program = r.cap(1);
+			isUnique = false;
+		}
+		else
+			isUnique = true;
+		if (program == (*theAction).program()) isUnique = (*theAction).unique();
+
+	}
+	else
+		isUnique = true;
+
+	kdDebug() << k_funcinfo << ": " << program << ", " << isUnique << endl;
+
+	theIMLabel->setEnabled(!isUnique);
+	theIMGroup->setEnabled(!isUnique);
+	theDontSend->setEnabled(!isUnique);
+	theSendToOne->setEnabled(!isUnique);
+	theSendToAll->setEnabled(!isUnique);
 }
 
 // called when the textbox/checkbox/whatever changes value
@@ -269,7 +313,7 @@ void EditAction::updateFunctions()
 	{	theFunctions->insertItem(i.current()->name());
 		functionMap[i.current()->name()] = i.currentKey();
 	}
-
+	updateArguments();
 }
 
 void EditAction::updateDCOPApplications()
@@ -289,6 +333,7 @@ void EditAction::updateDCOPObjects()
 	DCOPClient *theClient = KApplication::kApplication()->dcopClient();
 	if(theDCOPApplications->currentText() == QString::null || theDCOPApplications->currentText() == "") return;
 	QCStringList theObjects = theClient->remoteObjects(QCString(theDCOPApplications->currentText()));
+	if(!theObjects.size() && theDCOPApplications->currentText() == (*theAction).program()) theDCOPObjects->insertItem((*theAction).object());
 	for(QCStringList::iterator j = theObjects.begin(); j != theObjects.end(); j++)
 		if(*j != "ksycoca" && *j != "qt" && AddAction::getFunctions(theDCOPApplications->currentText(), *j).count())
 			theDCOPObjects->insertItem(QString(*j));
@@ -300,8 +345,10 @@ void EditAction::updateDCOPFunctions()
 	theDCOPFunctions->clear();
 	if(theDCOPObjects->currentText() == QString::null || theDCOPObjects->currentText() == "") return;
 	QStringList functions = AddAction::getFunctions(theDCOPApplications->currentText(), theDCOPObjects->currentText());
+	if(!functions.size() && theDCOPApplications->currentText() == (*theAction).program()) theDCOPFunctions->insertItem((*theAction).method().prototype());
 	for(QStringList::iterator i = functions.begin(); i != functions.end(); i++)
 		theDCOPFunctions->insertItem(*i);
+	updateArguments();
 }
 
 

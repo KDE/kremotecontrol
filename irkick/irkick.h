@@ -109,6 +109,10 @@ k_dcop:
 	 */
 	virtual void reloadConfiguration() { slotReloadConfiguration(); }
 
+private:
+	void executeAction(const IRAction &action);
+	bool getPrograms(const IRAction &action, QCStringList &populous);
+
 public:
 	IRKick(const QCString &obj);
 	~IRKick();

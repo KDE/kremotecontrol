@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>AddActionBase</class>
 <author>Gav Wood</author>
 <widget class="QWizard">
@@ -10,7 +10,7 @@
             <x>0</x>
             <y>0</y>
             <width>704</width>
-            <height>577</height>
+            <height>581</height>
         </rect>
     </property>
     <property name="caption">
@@ -991,13 +991,18 @@
                 <property name="name">
                     <cstring>textLabel1</cstring>
                 </property>
+                <property name="font">
+                    <font>
+                        <bold>1</bold>
+                    </font>
+                </property>
                 <property name="text">
-                    <string>&lt;b&gt;Miscellaneous Options&lt;/b&gt;</string>
+                    <string>Miscellaneous Options</string>
                 </property>
             </widget>
             <widget class="Line">
                 <property name="name">
-                    <cstring>line1</cstring>
+                    <cstring>line1_2</cstring>
                 </property>
                 <property name="frameShape">
                     <enum>HLine</enum>
@@ -1024,9 +1029,146 @@
                 <property name="text">
                     <string>This action causes the application to &amp;start if not already running</string>
                 </property>
+                <property name="accel">
+                    <string>Alt+S</string>
+                </property>
                 <property name="checked">
                     <bool>true</bool>
                 </property>
+            </widget>
+            <spacer>
+                <property name="name">
+                    <cstring>spacer22</cstring>
+                </property>
+                <property name="orientation">
+                    <enum>Horizontal</enum>
+                </property>
+                <property name="sizeType">
+                    <enum>Expanding</enum>
+                </property>
+                <property name="sizeHint">
+                    <size>
+                        <width>670</width>
+                        <height>20</height>
+                    </size>
+                </property>
+            </spacer>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>theIMTop</cstring>
+                </property>
+                <property name="enabled">
+                    <bool>false</bool>
+                </property>
+                <property name="font">
+                    <font>
+                        <bold>1</bold>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>Multiple Instances</string>
+                </property>
+            </widget>
+            <widget class="Line">
+                <property name="name">
+                    <cstring>theIMLine</cstring>
+                </property>
+                <property name="enabled">
+                    <bool>false</bool>
+                </property>
+                <property name="frameShape">
+                    <enum>HLine</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Sunken</enum>
+                </property>
+                <property name="orientation">
+                    <enum>Horizontal</enum>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>theIMLabel</cstring>
+                </property>
+                <property name="enabled">
+                    <bool>false</bool>
+                </property>
+                <property name="text">
+                    <string>This application may have multiple instances. In the case of having multiple instances at once when this action should be executed, choose a course of action:</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+            <widget class="QButtonGroup">
+                <property name="name">
+                    <cstring>theIMGroup</cstring>
+                </property>
+                <property name="enabled">
+                    <bool>false</bool>
+                </property>
+                <property name="frameShape">
+                    <enum>NoFrame</enum>
+                </property>
+                <property name="lineWidth">
+                    <number>0</number>
+                </property>
+                <property name="title">
+                    <string></string>
+                </property>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>0</number>
+                    </property>
+                    <widget class="QRadioButton">
+                        <property name="name">
+                            <cstring>theDontSend</cstring>
+                        </property>
+                        <property name="enabled">
+                            <bool>false</bool>
+                        </property>
+                        <property name="text">
+                            <string>&amp;Ignore the action</string>
+                        </property>
+                        <property name="accel">
+                            <string>Alt+I</string>
+                        </property>
+                        <property name="checked">
+                            <bool>true</bool>
+                        </property>
+                    </widget>
+                    <widget class="QRadioButton">
+                        <property name="name">
+                            <cstring>theSendToOne</cstring>
+                        </property>
+                        <property name="enabled">
+                            <bool>false</bool>
+                        </property>
+                        <property name="text">
+                            <string>Send the action to only &amp;one of the instances</string>
+                        </property>
+                        <property name="accel">
+                            <string>Alt+O</string>
+                        </property>
+                    </widget>
+                    <widget class="QRadioButton">
+                        <property name="name">
+                            <cstring>theSendToAll</cstring>
+                        </property>
+                        <property name="enabled">
+                            <bool>false</bool>
+                        </property>
+                        <property name="text">
+                            <string>Send the action to &amp;all instances</string>
+                        </property>
+                        <property name="accel">
+                            <string>Alt+A</string>
+                        </property>
+                    </widget>
+                </vbox>
             </widget>
             <spacer>
                 <property name="name">
@@ -1041,7 +1183,7 @@
                 <property name="sizeHint">
                     <size>
                         <width>20</width>
-                        <height>270</height>
+                        <height>140</height>
                     </size>
                 </property>
             </spacer>
@@ -1245,6 +1387,8 @@
         </grid>
     </widget>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>theObjects</sender>
@@ -1396,6 +1540,18 @@
         <receiver>theRepeat</receiver>
         <slot>setChecked(bool)</slot>
     </connection>
+    <connection>
+        <sender>theProfileFunctions</sender>
+        <signal>currentChanged(QListViewItem*)</signal>
+        <receiver>AddActionBase</receiver>
+        <slot>updateOptions()</slot>
+    </connection>
+    <connection>
+        <sender>theFunctions</sender>
+        <signal>currentChanged(QListViewItem*)</signal>
+        <receiver>AddActionBase</receiver>
+        <slot>updateOptions()</slot>
+    </connection>
 </connections>
 <slots>
     <slot>updateFunctions()</slot>
@@ -1409,22 +1565,11 @@
     <slot>updateProfileFunctions()</slot>
     <slot>updateForPageChange()</slot>
     <slot>slotParameterChanged()</slot>
+    <slot>updateOptions()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>klistview.h</includehint>
-    <includehint>klistview.h</includehint>
-    <includehint>klistview.h</includehint>
-    <includehint>klistview.h</includehint>
-    <includehint>klistview.h</includehint>
-    <includehint>klistview.h</includehint>
-    <includehint>klineedit.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>knuminput.h</includehint>
-    <includehint>keditlistbox.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klistview.h</includehint>
 </includehints>
 </UI>

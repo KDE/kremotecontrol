@@ -158,6 +158,8 @@ void KCMLirc::slotAddAction()
 		a.setAutoStart(theDialog.theAutoStart->isChecked());
 		a.setDoBefore(theDialog.theDoBefore->isChecked());
 		a.setDoAfter(theDialog.theDoAfter->isChecked());
+		a.setUnique(theDialog.isUnique);
+		a.setIfMulti(theDialog.theDontSend->isChecked() ? IM_DONTSEND : theDialog.theSendToOne->isChecked() ? IM_SENDTOONE : IM_SENDTOALL);
 		// change mode?
 		if(theDialog.theChangeMode->isChecked())
 		{
@@ -177,7 +179,7 @@ void KCMLirc::slotAddAction()
 		// DCOP?
 		else if(theDialog.theUseDCOP->isChecked() && theDialog.theObjects->selectedItem() && theDialog.theObjects->selectedItem()->parent() && theDialog.theFunctions->selectedItem())
 		{
-			a.setProgram(theDialog.theObjects->selectedItem()->parent()->text(0));
+			a.setProgram(theDialog.program);
 			a.setObject(theDialog.theObjects->selectedItem()->text(0));
 			a.setMethod(theDialog.theFunctions->selectedItem()->text(2));
 			theDialog.theParameters->setSorting(3);

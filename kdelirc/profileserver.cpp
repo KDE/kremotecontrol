@@ -45,6 +45,10 @@ void ProfileServer::loadProfiles()
 
 Profile::Profile()
 {
+	// set up defaults
+	theUnique = true;
+	theIfMulti = IM_DONTSEND;
+
 	theActions.setAutoDelete(true);
 }
 
@@ -107,6 +111,11 @@ bool Profile::startElement(const QString &, const QString &, const QString &name
 		curPA->setClass(attributes.value("class"));
 		curPA->setRepeat(attributes.value("repeat") == "1");
 		curPA->setAutoStart(attributes.value("autostart") == "1");
+	}
+	else if(name == "instances")
+	{	theUnique = attributes.value("unique") == "1";
+		theIfMulti = attributes.value("ifmulti") == "sendtoone" ? IM_SENDTOONE : attributes.value("ifmulti") == "sendtoall" ? IM_SENDTOALL : IM_DONTSEND;
+		kdDebug() << theIfMulti << ": " << IM_DONTSEND << IM_SENDTOONE << IM_SENDTOALL << endl;
 	}
 	else if(name == "argument")
 	{	curPA->theArguments.append(ProfileActionArgument());

@@ -17,6 +17,7 @@
 
 #include "prototype.h"
 #include "arguments.h"
+#include "profileserver.h"
 
 /**
 @author Gav Wood
@@ -30,6 +31,8 @@ class IRAction
 	Prototype theMethod;
 	Arguments theArguments;
 	bool theRepeat, theAutoStart, theDoBefore, theDoAfter;
+	IfMulti theIfMulti;
+	bool theUnique;
 
 public:
 	// load/save convenience functions
@@ -53,6 +56,8 @@ public:
 	const Arguments arguments() const { if(theProgram != "" && theObject != "") return theArguments; return Arguments(); }
 	const bool repeat() const { return theRepeat; }
 	const bool autoStart() const { return theAutoStart; }
+	const IfMulti ifMulti() const { return theIfMulti; }
+	const bool unique() const { return theUnique; }
 
 	const QString &modeChange() const { return theObject; }
 	const bool doBefore() const { return theDoBefore; }
@@ -73,8 +78,10 @@ public:
 	void setDoAfter(bool a) { theDoAfter = a; }
 	void setAutoStart(bool newAutoStart) { theAutoStart = newAutoStart; }
 	void setModeChange(const QString &a) { theObject = a; }
+	void setIfMulti(const IfMulti a) { theIfMulti = a; }
+	void setUnique(const bool a) { theUnique = a; }
 
-	IRAction(const QString &newProgram, const QString &newObject, const QString &newMethod, const Arguments &newArguments, const QString &newRemote, const QString &newMode, const QString &newButton, bool newRepeat, bool newAutoStart, bool newDoBefore, bool newDoAfter);
+	IRAction(const QString &newProgram, const QString &newObject, const QString &newMethod, const Arguments &newArguments, const QString &newRemote, const QString &newMode, const QString &newButton, const bool newRepeat, const bool newAutoStart, const bool newDoBefore, const bool newDoAfter, const bool newUnique, const IfMulti newIfMulti);
 	IRAction() { theProgram = QString::null; };
 };
 
