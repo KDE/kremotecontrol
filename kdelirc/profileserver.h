@@ -64,7 +64,7 @@ public:
 	void setName(const QString &a) { theName = a; }
 	const QString &comment() const { return theComment; }
 	void setComment(const QString &a) { theComment = a; }
-	const QValueList<ProfileActionArgument> &arguments() { return theArguments; }
+	const QValueList<ProfileActionArgument> &arguments() const { return theArguments; }
 
 	const Profile *profile() const { return parent; }
 	void setProfile(const Profile *a) { parent = a; }
@@ -106,10 +106,9 @@ class ProfileServer
 
 public:
 	static ProfileServer *profileServer() { if(!theInstance) theInstance = new ProfileServer(); return theInstance; }
-
 	const QDict<Profile> profiles() const { return theProfiles; }
-
 	const ProfileAction *getAction(const QString &appId, const QString &objId, const QString &prototype) const;
+	const ProfileAction *getAction(const QString &appId, const QString &actionId) const;
 
 	ProfileServer();
 	~ProfileServer();

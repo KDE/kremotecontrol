@@ -111,6 +111,9 @@
                                         <verstretch>0</verstretch>
                                     </sizepolicy>
                                 </property>
+                                <property name="fullWidth">
+                                    <bool>true</bool>
+                                </property>
                             </widget>
                             <spacer>
                                 <property name="name">
@@ -226,12 +229,29 @@
             </widget>
             <widget class="QLayoutWidget">
                 <property name="name">
-                    <cstring>layout8</cstring>
+                    <cstring>layout6</cstring>
                 </property>
                 <hbox>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
+                    <spacer>
+                        <property name="name">
+                            <cstring>spacer12_2</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>110</width>
+                                <height>41</height>
+                            </size>
+                        </property>
+                    </spacer>
                     <widget class="KListView">
                         <column>
                             <property name="text">
@@ -246,6 +266,14 @@
                         </column>
                         <property name="name">
                             <cstring>theButtons</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>7</hsizetype>
+                                <vsizetype>7</vsizetype>
+                                <horstretch>2</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
                         </property>
                         <property name="fullWidth">
                             <bool>true</bool>
@@ -263,7 +291,7 @@
                         </property>
                         <property name="sizeHint">
                             <size>
-                                <width>241</width>
+                                <width>110</width>
                                 <height>31</height>
                             </size>
                         </property>
@@ -461,92 +489,52 @@
         <attribute name="title">
             <string>Select Program Function</string>
         </attribute>
-        <widget class="KListView">
-            <column>
-                <property name="text">
-                    <string>Function</string>
-                </property>
-                <property name="clickable">
-                    <bool>true</bool>
-                </property>
-                <property name="resizable">
-                    <bool>true</bool>
-                </property>
-            </column>
-            <column>
-                <property name="text">
-                    <string>Parameters</string>
-                </property>
-                <property name="clickable">
-                    <bool>true</bool>
-                </property>
-                <property name="resizable">
-                    <bool>true</bool>
-                </property>
-            </column>
-            <column>
-                <property name="text">
-                    <string>Description</string>
-                </property>
-                <property name="clickable">
-                    <bool>true</bool>
-                </property>
-                <property name="resizable">
-                    <bool>true</bool>
-                </property>
-            </column>
-        <item>
-            <property name="text">
-                <string>Test 1</string>
-            </property>
-            <property name="text">
-                <string>2</string>
-            </property>
-            <property name="text">
-                <string>test with parameters</string>
-            </property>
-            <property name="pixmap">
-                <pixmap></pixmap>
-            </property>
-            <property name="pixmap">
-                <pixmap></pixmap>
-            </property>
-            <property name="pixmap">
-                <pixmap></pixmap>
-            </property>
-        </item>
-        <item>
-            <property name="text">
-                <string>Test 2</string>
-            </property>
-            <property name="text">
-                <string>0</string>
-            </property>
-            <property name="text">
-                <string>test without parameters</string>
-            </property>
-            <property name="pixmap">
-                <pixmap></pixmap>
-            </property>
-            <property name="pixmap">
-                <pixmap></pixmap>
-            </property>
-            <property name="pixmap">
-                <pixmap></pixmap>
-            </property>
-        </item>
+        <vbox>
             <property name="name">
-                <cstring>theProfileFunctions</cstring>
+                <cstring>unnamed</cstring>
             </property>
-            <property name="geometry">
-                <rect>
-                    <x>0</x>
-                    <y>10</y>
-                    <width>581</width>
-                    <height>381</height>
-                </rect>
-            </property>
-        </widget>
+            <widget class="KListView">
+                <column>
+                    <property name="text">
+                        <string>Function</string>
+                    </property>
+                    <property name="clickable">
+                        <bool>true</bool>
+                    </property>
+                    <property name="resizable">
+                        <bool>true</bool>
+                    </property>
+                </column>
+                <column>
+                    <property name="text">
+                        <string>Options</string>
+                    </property>
+                    <property name="clickable">
+                        <bool>true</bool>
+                    </property>
+                    <property name="resizable">
+                        <bool>true</bool>
+                    </property>
+                </column>
+                <column>
+                    <property name="text">
+                        <string>Description</string>
+                    </property>
+                    <property name="clickable">
+                        <bool>true</bool>
+                    </property>
+                    <property name="resizable">
+                        <bool>true</bool>
+                    </property>
+                </column>
+                <property name="name">
+                    <cstring>theProfileFunctions</cstring>
+                </property>
+                <property name="fullWidth">
+                    <bool>true</bool>
+                </property>
+            </widget>
+        </vbox>
     </widget>
     <widget class="QWidget">
         <property name="name">
@@ -562,7 +550,18 @@
             <widget class="KListView">
                 <column>
                     <property name="text">
-                        <string>Place</string>
+                        <string>Option Description</string>
+                    </property>
+                    <property name="clickable">
+                        <bool>true</bool>
+                    </property>
+                    <property name="resizable">
+                        <bool>true</bool>
+                    </property>
+                </column>
+                <column>
+                    <property name="text">
+                        <string>Value</string>
                     </property>
                     <property name="clickable">
                         <bool>true</bool>
@@ -584,18 +583,7 @@
                 </column>
                 <column>
                     <property name="text">
-                        <string>Parameter</string>
-                    </property>
-                    <property name="clickable">
-                        <bool>true</bool>
-                    </property>
-                    <property name="resizable">
-                        <bool>true</bool>
-                    </property>
-                </column>
-                <column>
-                    <property name="text">
-                        <string>Value</string>
+                        <string>Place</string>
                     </property>
                     <property name="clickable">
                         <bool>true</bool>
@@ -957,6 +945,12 @@
         <receiver>AddActionBase</receiver>
         <slot>slotModeSelected()</slot>
     </connection>
+    <connection>
+        <sender>theUseProfile</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>theProfiles</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
 </connections>
 <slots>
     <slot>updateFunctions()</slot>
@@ -967,6 +961,8 @@
     <slot>slotNextParam()</slot>
     <slot>slotCorrectPage()</slot>
     <slot>slotModeSelected()</slot>
+    <slot>updateProfileFunctions()</slot>
+    <slot>updateForPageChange()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>

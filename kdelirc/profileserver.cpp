@@ -60,13 +60,17 @@ void Profile::loadFromFile(const QString &fileName)
 	reader.parse(source);
 }
 
+const ProfileAction *ProfileServer::getAction(const QString &appId, const QString &actionId) const
+{
+	if(theProfiles[appId])
+		if(theProfiles[appId]->theActions[actionId])
+			return theProfiles[appId]->theActions[actionId];
+	return 0;
+}
+
 const ProfileAction *ProfileServer::getAction(const QString &appId, const QString &objId, const QString &prototype) const
 {
-	kdDebug() << "getAction(" << appId << ", " << objId << ", " << prototype << ")" << endl;
-	if(theProfiles[appId])
-		if(theProfiles[appId]->theActions[objId + "::" + prototype])
-			return theProfiles[appId]->theActions[objId + "::" + prototype];
-	return 0;
+	return getAction(appId, objId + "::" + prototype);
 }
 
 bool Profile::characters(const QString &data)

@@ -23,13 +23,12 @@
 
 #include "prototype.h"
 #include "addaction.h"
+#include "profileserver.h"
 
 AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): AddActionBase(parent, name), theMode(mode)
 {
+	connect(this, SIGNAL( selected(const QString &) ), SLOT( updateForPageChange() ));
 	connect(this, SIGNAL( selected(const QString &) ), SLOT( slotCorrectPage() ));
-	connect(this, SIGNAL( selected(const QString &) ), SLOT( updateButtonStates() ));
-	updateObjects();
-	updateFunctions();
 	curPage = 0;
 }
 
@@ -37,6 +36,11 @@ AddAction::~AddAction()
 {
 }
 
+
+void AddAction::slotNextParam()
+{
+	// TODO: go on to next parameter
+}
 
 void AddAction::slotModeSelected()
 {
@@ -58,7 +62,7 @@ void AddAction::slotCorrectPage()
 
 	if(curPage == 4 && (
 	(theUseDCOP->isChecked() && theFunctions->currentItem() && !Prototype(theFunctions->currentItem()->text(2)).count()) ||
-	(theUseProfile->isChecked() && theProfileFunctions->currentItem() && !theFunctions->currentItem()->text(1).toInt())
+	(theUseProfile->isChecked() && theProfileFunctions->currentItem() && !theProfileFunctions->currentItem()->text(1).toInt())
 	))
 		showPage(((QWizard *)this)->page(lastPage == 5 ? (theUseDCOP->isChecked() ? 2 : 3) : 5));
 }
@@ -95,15 +99,27 @@ void AddAction::updateButtons()
 		new QListViewItem(theButtons, *j);
 }
 
-void AddAction::updateButtonStates()
+void AddAction::updateForPageChange()
 {
 	if(indexOf(currentPage()) == 1) requestNextPress(); else cancelRequest();
 	switch(indexOf(currentPage()))
+	{	case 0: updateProfiles(); break;
+		case 1: updateButtons(); break;
+		case 2: updateObjects(); break;
+		case 3: updateProfileFunctions(); break;
+		case 4: updateParameters(); break;
+	}
+	updateButtonStates();
+}
+
+void AddAction::updateButtonStates()
+{
+	switch(indexOf(currentPage()))
 	{	case 0: setNextEnabled(currentPage(), theProfiles->currentItem() != 0 || !theUseProfile->isChecked()); break;
-		case 1: updateButtons(); setNextEnabled(currentPage(), theButtons->currentItem() != 0); break;
+		case 1: setNextEnabled(currentPage(), theButtons->currentItem() != 0); break;
 		case 2: setNextEnabled(currentPage(), theFunctions->currentItem() != 0); break;
 		case 3: setNextEnabled(currentPage(), theProfileFunctions->currentItem() != 0); break;
-		case 4: updateParameters(); setNextEnabled(currentPage(), true); break;
+		case 4: setNextEnabled(currentPage(), true); break;
 		case 5: setNextEnabled(currentPage(), false); setFinishEnabled(currentPage(), true); break;
 		case 6: setNextEnabled(currentPage(), false); setFinishEnabled(currentPage(), theModes->currentItem() || !theSwitchMode->isChecked()); break;
 	}
@@ -124,23 +140,66 @@ const QStringList AddAction::getFunctions(const QString app, const QString obj)
 
 }
 
+void AddAction::updateProfiles()
+{
+	ProfileServer *theServer = ProfileServer::profileServer();
+	theProfiles->clear();
+	profileMap.clear();
+
+	QDict<Profile> dict = theServer->profiles();
+	QDictIterator<Profile> i(dict);
+	for(; i.current(); ++i)
+		profileMap[new QListViewItem(theProfiles, i.current()->name())] = i.currentKey();
+}
+
+void AddAction::updateProfileFunctions()
+{
+	ProfileServer *theServer = ProfileServer::profileServer();
+	theProfileFunctions->clear();
+	profileFunctionMap.clear();
+	if(!theProfiles->currentItem()) return;
+
+	const Profile *p = theServer->profiles()[profileMap[theProfiles->currentItem()]];
+	QDict<ProfileAction> dict = p->actions();
+	for(QDictIterator<ProfileAction> i(dict); i.current(); ++i)
+		profileFunctionMap[new QListViewItem(theProfileFunctions, i.current()->name(), QString().setNum(i.current()->arguments().count()), i.current()->comment())] = i.currentKey();
+}
+
 void AddAction::updateParameters()
 {
 	theParameters->clear();
-	if(theFunctions->currentItem())
+	if(theUseDCOP->isChecked() && theFunctions->currentItem())
 	{	Prototype p(theFunctions->currentItem()->text(2));
 		for(unsigned k = 0; k < p.count(); k++)
-			new KListViewItem(theParameters, QString().setNum(k + 1), p.type(k), p.name(k) == "" ? "<anonymous>" : p.name(k), "");
+			new KListViewItem(theParameters, p.name(k) == "" ? "<anonymous>" : p.name(k), "", p.type(k), QString().setNum(k + 1));
 	}
+	else if(theUseProfile->isChecked() && theProfiles->currentItem())
+	{
+		ProfileServer *theServer = ProfileServer::profileServer();
+		if(!theProfiles->currentItem()) return;
+		if(!theProfileFunctions->currentItem()) return;
+
+		const Profile *p = theServer->profiles()[profileMap[theProfiles->currentItem()]];
+		const ProfileAction *pa = p->actions()[profileFunctionMap[theProfileFunctions->currentItem()]];
+
+		int index = 1;
+		for(QValueList<ProfileActionArgument>::const_iterator i = pa->arguments().begin(); i != pa->arguments().end(); i++, index++)
+		{	kdDebug() << index << endl;
+			kdDebug() << ": " << (*i).comment() << endl;
+			new QListViewItem(theParameters, (*i).comment(), "", (*i).type(), QString().setNum(index));
+		}
+
+	}
+
 	updateParameter();
 }
 
 void AddAction::updateParameter()
 {
 	if(theParameters->currentItem())
-	{	theCurParameter->setText(theParameters->currentItem()->text(2));
-		theCurValue->setText(theParameters->currentItem()->text(3));
-		theCurComment->setText("This field must be of type " + theParameters->currentItem()->text(1) + ".");
+	{	theCurParameter->setText("");
+		theCurValue->setText(theParameters->currentItem()->text(1));
+		theCurComment->setText(theParameters->currentItem()->text(0));
 		theCurParameter->setEnabled(true);
 		theCurValue->setEnabled(true);
 		theCurComment->setEnabled(true);
@@ -158,7 +217,7 @@ void AddAction::updateParameter()
 void AddAction::updateCurrentParam(const QString &newValue)
 {
 	if(theParameters->currentItem())
-		theParameters->currentItem()->setText(3, newValue);
+		theParameters->currentItem()->setText(1, newValue);
 }
 
 void AddAction::updateObjects()
@@ -175,6 +234,7 @@ void AddAction::updateObjects()
 					new KListViewItem(a, *j);
 		}
 	}
+	updateFunctions();
 }
 
 void AddAction::updateFunctions()

@@ -95,16 +95,27 @@ void KCMLirc::slotAddAction()
 			a.setProgram(theDialog.theObjects->currentItem()->parent()->text(0));
 			a.setObject(theDialog.theObjects->currentItem()->text(0));
 			a.setMethod(theDialog.theFunctions->currentItem()->text(2));
-			theDialog.theParameters->setSorting(0);
+			theDialog.theParameters->setSorting(3);
 			for(QListViewItem *i = theDialog.theParameters->firstChild(); i; i = i->nextSibling())
-			{	QVariant v(i->text(3));
-				v.cast(QVariant::nameToType(i->text(1)));
+			{	QVariant v(i->text(1));
+				v.cast(QVariant::nameToType(i->text(2)));
 				args += v;
 			}
 		}
 		// profile?
-		else if(theDialog.theUseProfile->isChecked())
+		else if(theDialog.theUseProfile->isChecked() && theDialog.theProfiles->currentItem() && theDialog.theProfileFunctions->currentItem())
 		{
+			ProfileServer *theServer = ProfileServer::profileServer();
+			const ProfileAction *theAction = theServer->getAction(theDialog.profileMap[theDialog.theProfiles->currentItem()], theDialog.profileFunctionMap[theDialog.theProfileFunctions->currentItem()]);
+			a.setProgram(theAction->profile()->id());
+			a.setObject(theAction->objId());
+			a.setMethod(theAction->prototype());
+			theDialog.theParameters->setSorting(3);
+			for(QListViewItem *i = theDialog.theParameters->firstChild(); i; i = i->nextSibling())
+			{	QVariant v(i->text(1));
+				v.cast(QVariant::nameToType(i->text(2)));
+				args += v;
+			}
 		}
 
 		// save our new action
@@ -193,6 +204,7 @@ void KCMLirc::updateExtensions()
 	ProfileServer *theServer = ProfileServer::profileServer();
 	theKCMLircBase->theExtensions->clear();
 	QListViewItem *a = new QListViewItem(theKCMLircBase->theExtensions, "Applications");
+	a->setOpen(true);
 
 	extensionMap.clear();
 
