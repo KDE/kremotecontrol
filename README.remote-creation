@@ -37,8 +37,8 @@ enclosed between optional information tags:
 
 	<remote id="myremote">
 		<name>My Remote Control</name>
-		<information>As bundled with ACME LinTV</information>
 		<author>Me</author>
+		<information>As bundled with ACME LinTV</information>
 	</remote>
 
 This would compliment a "lircd.conf" file:
@@ -67,7 +67,7 @@ case that this is not what you want, simply define it to be null (class="").
 	<remote id="myremote">
 		<name>My Remote Control</name>
 		<author>Me</author>
-		<button id="0" class="number" parameter="0">
+		<button id="num0" class="number" parameter="0">
 		</button>
 		<button id="rec" class="record">
 		</button>
@@ -99,7 +99,7 @@ button "Record".
 	<remote id="myremote">
 		<name>My Remote Control</name>
 		<author>Me</author>
-		<button id="0" class="number" parameter="0">
+		<button id="num0" class="number" parameter="0">
 			<name>0</name>
 		</button>
 		<button id="rec" class="record">
@@ -111,13 +111,13 @@ button "Record".
 save yourself some time and effort with buttons which share the same name and id
 by changing
 
-		<button id="0" class="number" parameter="0">
+		<button id="num0" class="number" parameter="0">
 			<name>0</name>
 		</button>
 
 to the far less cluttered and simpler:
 
-		<button id="0" class="number" parameter="0"/>
+		<button id="num0" class="number" parameter="0"/>
 
 That's it - just save it as <id>.remote.xml, where <id> is the ID of the remote
 control (*not* its name but the LIRC id!) and copy it to your KDE remotes data

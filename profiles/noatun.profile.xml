@@ -36,7 +36,7 @@
 		<name>Remove Current</name>
 		<comment>Removes only the current track from the play list.</comment>
 	</action>
-	<action objid="Noatun" prototype="void setVolume()">
+	<action objid="Noatun" prototype="void setVolume(int volume)">
 		<name>Set Volume</name>
 		<comment>Sets the volume to a configurable amount.</comment>
 		<argument type="int">

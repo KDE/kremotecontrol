@@ -339,7 +339,7 @@ void AddAction::updateObjects()
 	QCStringList theApps = theClient->registeredApplications();
 	for(QCStringList::iterator i = theApps.begin(); i != theApps.end(); i++)
 	{
-		if(!QString(*i).find(i18n( "<anonymous>" ))) continue;
+		if(!QString(*i).find(i18n( "anonymous" ))) continue;
 		QRegExp r("(.*)-[0-9]+");
 		QString name = r.exactMatch(QString(*i)) ? r.cap(1) : *i;
 		if(names.contains(name)) continue;
