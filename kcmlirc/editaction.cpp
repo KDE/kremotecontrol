@@ -54,9 +54,9 @@ void EditAction::readFrom()
 	theDoBefore->setChecked((*theAction).doBefore());
 	theDoAfter->setChecked((*theAction).doAfter());
 	theDontSend->setChecked((*theAction).ifMulti() == IM_DONTSEND);
-	theSendToOne->setChecked((*theAction).ifMulti() == IM_SENDTOONE);
+	theSendToTop->setChecked((*theAction).ifMulti() == IM_SENDTOTOP);
+	theSendToBottom->setChecked((*theAction).ifMulti() == IM_SENDTOBOTTOM);
 	theSendToAll->setChecked((*theAction).ifMulti() == IM_SENDTOALL);
-	// TODO: do something with unique() and program()???
 
 	arguments = (*theAction).arguments();
 	if((*theAction).isModeChange())
@@ -139,11 +139,12 @@ void EditAction::writeBack()
 	(*theAction).setRepeat(theRepeat->isChecked());
 	(*theAction).setAutoStart(theAutoStart->isChecked());
 	(*theAction).setUnique(isUnique);
-	(*theAction).setIfMulti(theDontSend->isChecked() ? IM_DONTSEND : theSendToOne->isChecked() ? IM_SENDTOONE : IM_SENDTOALL);
+	(*theAction).setIfMulti(theDontSend->isChecked() ? IM_DONTSEND : theSendToTop->isChecked() ? IM_SENDTOTOP : theSendToBottom->isChecked() ? IM_SENDTOBOTTOM : IM_SENDTOALL);
 }
 
 void EditAction::updateArguments()
 {
+	kdDebug() << k_funcinfo << endl;
 	if(theUseProfile->isChecked())
 	{
 		theArguments->clear();
@@ -201,7 +202,8 @@ void EditAction::updateOptions()
 	theIMLabel->setEnabled(!isUnique);
 	theIMGroup->setEnabled(!isUnique);
 	theDontSend->setEnabled(!isUnique);
-	theSendToOne->setEnabled(!isUnique);
+	theSendToTop->setEnabled(!isUnique);
+	theSendToBottom->setEnabled(!isUnique);
 	theSendToAll->setEnabled(!isUnique);
 }
 
@@ -235,6 +237,7 @@ void EditAction::slotParameterChanged()
 
 void EditAction::updateArgument(int index)
 {
+	kdDebug() << k_funcinfo << " i: " << index << endl;
 	if(index >= 0)
 	{	switch(arguments[index].type())
 		{

@@ -109,13 +109,13 @@ bool Profile::startElement(const QString &, const QString &, const QString &name
 		curPA->setObjId(attributes.value("objid"));
 		curPA->setPrototype(attributes.value("prototype"));
 		curPA->setClass(attributes.value("class"));
+		curPA->setMultiplier(attributes.value("multiplier") == "" ? 1.0 : attributes.value("multiplier").toFloat());
 		curPA->setRepeat(attributes.value("repeat") == "1");
 		curPA->setAutoStart(attributes.value("autostart") == "1");
 	}
 	else if(name == "instances")
 	{	theUnique = attributes.value("unique") == "1";
-		theIfMulti = attributes.value("ifmulti") == "sendtoone" ? IM_SENDTOONE : attributes.value("ifmulti") == "sendtoall" ? IM_SENDTOALL : IM_DONTSEND;
-		kdDebug() << theIfMulti << ": " << IM_DONTSEND << IM_SENDTOONE << IM_SENDTOALL << endl;
+		theIfMulti = attributes.value("ifmulti") == "sendtotop" ? IM_SENDTOTOP : attributes.value("ifmulti") == "sendtobottom" ? IM_SENDTOBOTTOM : attributes.value("ifmulti") == "sendtoall" ? IM_SENDTOALL : IM_DONTSEND;
 	}
 	else if(name == "argument")
 	{	curPA->theArguments.append(ProfileActionArgument());

@@ -24,7 +24,7 @@
 @author Gav Wood
 */
 
-enum IfMulti { IM_SENDTOONE, IM_SENDTOALL, IM_DONTSEND };
+enum IfMulti {IM_DONTSEND, IM_SENDTOALL, IM_SENDTOTOP, IM_SENDTOBOTTOM};
 
 typedef QPair<int,int> Range;
 
@@ -53,6 +53,7 @@ public:
 class ProfileAction
 {
 	QString theObjId, thePrototype, theName, theComment, theClass;
+	float theMultiplier;
 	const Profile *parent;
 	bool theRepeat, theAutoStart;
 	QValueList<ProfileActionArgument> theArguments;
@@ -69,6 +70,8 @@ public:
 	void setComment(const QString &a) { theComment = a; }
 	const QString &getClass() const { return theClass; }
 	void setClass(const QString &a) { theClass = a; }
+	const float multiplier() const { return theMultiplier; }
+	void setMultiplier(const float a) { theMultiplier = a; }
 	bool repeat() const { return theRepeat; }
 	void setRepeat(bool a) { theRepeat = a; }
 	bool autoStart() const { return theAutoStart; }

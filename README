@@ -7,6 +7,7 @@ two aims:
 1. Provide a control center module for configuration of:
 	a) Application bindings to remote control buttons.
 	b) Actual remote controls installed (i.e. lirc configuration).
+
 2. Provide a system-tray applet to act as a proxy between the LIRC system and
 	KDE (applications), in order to launch DCOP requests (and potentially
 	other IPC signals) to applications (and potentially collect/display

@@ -53,7 +53,7 @@ KCMLirc::KCMLirc(QWidget *parent, const char *name, QStringList /*args*/) : KCMo
 	bool ok;
 	KApplication::kApplication()->dcopClient()->remoteInterfaces("kded", "irkick", &ok);
 	if(!ok)
-		if(KMessageBox::questionYesNo(this, "The infrared cemote control software is not currently running. This configuration module will not work properly without it. Would you like to start it now?", "Software not running") == KMessageBox::Yes)
+		if(KMessageBox::questionYesNo(this, i18n("The infrared cemote control software is not currently running. This configuration module will not work properly without it. Would you like to start it now?"), i18n("Software not running")) == KMessageBox::Yes)
 			DCOPRef("kded", "kded").call("loadModule", "irkick");
 
 
@@ -167,7 +167,7 @@ void KCMLirc::slotAddAction()
 		a.setDoBefore(theDialog.theDoBefore->isChecked());
 		a.setDoAfter(theDialog.theDoAfter->isChecked());
 		a.setUnique(theDialog.isUnique);
-		a.setIfMulti(theDialog.theDontSend->isChecked() ? IM_DONTSEND : theDialog.theSendToOne->isChecked() ? IM_SENDTOONE : IM_SENDTOALL);
+		a.setIfMulti(theDialog.theDontSend->isChecked() ? IM_DONTSEND : theDialog.theSendToTop->isChecked() ? IM_SENDTOTOP : theDialog.theSendToBottom->isChecked() ? IM_SENDTOBOTTOM : IM_SENDTOALL);
 		// change mode?
 		if(theDialog.theChangeMode->isChecked())
 		{
@@ -248,7 +248,7 @@ void KCMLirc::autoPopulate(const Profile &profile, const Remote &remote, const Q
 			Arguments l;
 			// argument count should be either 0 or 1. undefined if > 1.
 			if(Prototype(pa->prototype()).argumentCount() == 1)
-			{	l.append(i.current()->parameter());
+			{	l.append(QString().setNum(i.current()->parameter().toFloat() * pa->multiplier()));
 				l.back().cast(QVariant::nameToType(Prototype(pa->prototype()).type(0)));
 			}
 			a.setArguments(l);

@@ -184,17 +184,18 @@ void AddAction::updateOptions()
 	}
 	else return;
 
-	kdDebug() << im << ": " << IM_DONTSEND << IM_SENDTOONE << IM_SENDTOALL << endl;
 	theIMLabel->setEnabled(!isUnique);
 	theIMGroup->setEnabled(!isUnique);
 	theIMLine->setEnabled(!isUnique);
 	theIMTop->setEnabled(!isUnique);
 	theDontSend->setEnabled(!isUnique);
-	theSendToOne->setEnabled(!isUnique);
+	theSendToBottom->setEnabled(!isUnique);
+	theSendToTop->setEnabled(!isUnique);
 	theSendToAll->setEnabled(!isUnique);
 	switch(im)
 	{	case IM_DONTSEND: theDontSend->setChecked(true); break;
-		case IM_SENDTOONE: theSendToOne->setChecked(true); break;
+		case IM_SENDTOTOP: theSendToTop->setChecked(true); break;
+		case IM_SENDTOBOTTOM: theSendToBottom->setChecked(true); break;
 		case IM_SENDTOALL: theSendToAll->setChecked(true); break;
 	}
 }

@@ -10,7 +10,7 @@
             <x>0</x>
             <y>0</y>
             <width>704</width>
-            <height>583</height>
+            <height>587</height>
         </rect>
     </property>
     <property name="caption">
@@ -1134,16 +1134,30 @@
                     </widget>
                     <widget class="QRadioButton">
                         <property name="name">
-                            <cstring>theSendToOne</cstring>
+                            <cstring>theSendToTop</cstring>
                         </property>
                         <property name="enabled">
                             <bool>false</bool>
                         </property>
                         <property name="text">
-                            <string>Send the action to only &amp;one of the instances</string>
+                            <string>Send the action to the instance hi&amp;ghest in the window stacking order</string>
                         </property>
                         <property name="accel">
-                            <string>Alt+O</string>
+                            <string>Alt+G</string>
+                        </property>
+                    </widget>
+                    <widget class="QRadioButton">
+                        <property name="name">
+                            <cstring>theSendToBottom</cstring>
+                        </property>
+                        <property name="enabled">
+                            <bool>false</bool>
+                        </property>
+                        <property name="text">
+                            <string>Send the action to the instance &amp;lowest in window stacking order</string>
+                        </property>
+                        <property name="accel">
+                            <string>Alt+L</string>
                         </property>
                     </widget>
                     <widget class="QRadioButton">
@@ -1175,7 +1189,7 @@
                 <property name="sizeHint">
                     <size>
                         <width>20</width>
-                        <height>140</height>
+                        <height>170</height>
                     </size>
                 </property>
             </spacer>

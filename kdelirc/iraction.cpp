@@ -122,8 +122,9 @@ const QString IRAction::notes() const
 	else
 		return QString(theAutoStart ? i18n("Auto-start. ") : "")
 			+ QString(theRepeat ? i18n("Repeatable. ") : "")
-			+ QString(!theUnique ? (theIfMulti == IM_DONTSEND ? "Do nothing if many instances. "
-						: theIfMulti == IM_SENDTOONE ? "Only ever send to one instance. " : "Send to all instances. ")
+			+ QString(!theUnique ? (theIfMulti == IM_DONTSEND ? i18n("Do nothing if many instances. ")
+						: theIfMulti == IM_SENDTOTOP ? i18n("Send to top instance. ")
+						: theIfMulti == IM_SENDTOBOTTOM ? i18n("Send to bottom instance. ") : i18n("Send to all instances. "))
 						: "");
 }
 

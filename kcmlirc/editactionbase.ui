@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>521</width>
-            <height>672</height>
+            <height>680</height>
         </rect>
     </property>
     <property name="caption">
@@ -82,6 +82,9 @@
                                         <property name="name">
                                             <cstring>textLabel4_3</cstring>
                                         </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
                                         <property name="text">
                                             <string>O&amp;bject:</string>
                                         </property>
@@ -152,6 +155,9 @@
                                         <property name="name">
                                             <cstring>textLabel4_2</cstring>
                                         </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
                                         <property name="text">
                                             <string>Fu&amp;nction:</string>
                                         </property>
@@ -205,6 +211,9 @@
                                     <widget class="QLabel" row="2" column="1" rowspan="1" colspan="2">
                                         <property name="name">
                                             <cstring>textLabel5_2</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
                                         </property>
                                         <property name="text">
                                             <string>App&amp;lication:</string>
@@ -433,6 +442,14 @@
                                                     <property name="name">
                                                         <cstring>theValueEditListBox</cstring>
                                                     </property>
+                                                    <property name="sizePolicy">
+                                                        <sizepolicy>
+                                                            <hsizetype>3</hsizetype>
+                                                            <vsizetype>3</vsizetype>
+                                                            <horstretch>0</horstretch>
+                                                            <verstretch>0</verstretch>
+                                                        </sizepolicy>
+                                                    </property>
                                                     <property name="title">
                                                         <string></string>
                                                     </property>
@@ -463,7 +480,7 @@
                                         </property>
                                         <property name="sizePolicy">
                                             <sizepolicy>
-                                                <hsizetype>1</hsizetype>
+                                                <hsizetype>3</hsizetype>
                                                 <vsizetype>0</vsizetype>
                                                 <horstretch>0</horstretch>
                                                 <verstretch>0</verstretch>
@@ -797,16 +814,30 @@
                             </widget>
                             <widget class="QRadioButton">
                                 <property name="name">
-                                    <cstring>theSendToOne</cstring>
+                                    <cstring>theSendToTop</cstring>
                                 </property>
                                 <property name="enabled">
                                     <bool>false</bool>
                                 </property>
                                 <property name="text">
-                                    <string>Send the action to only &amp;one of the instances</string>
+                                    <string>Send the action to the instance hi&amp;ghest in window stacking order</string>
                                 </property>
                                 <property name="accel">
-                                    <string>Alt+O</string>
+                                    <string>Alt+G</string>
+                                </property>
+                            </widget>
+                            <widget class="QRadioButton">
+                                <property name="name">
+                                    <cstring>theSendToBottom</cstring>
+                                </property>
+                                <property name="enabled">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="text">
+                                    <string>Send the action to the instance &amp;lowest in window stacking order</string>
+                                </property>
+                                <property name="accel">
+                                    <string>Alt+L</string>
                                 </property>
                             </widget>
                             <widget class="QRadioButton">
@@ -817,10 +848,10 @@
                                     <bool>false</bool>
                                 </property>
                                 <property name="text">
-                                    <string>Send the action to &amp;all instances</string>
+                                    <string>Send the action to all i&amp;nstances</string>
                                 </property>
                                 <property name="accel">
-                                    <string>Alt+A</string>
+                                    <string>Alt+N</string>
                                 </property>
                             </widget>
                         </vbox>
@@ -838,7 +869,7 @@
                         <property name="sizeHint">
                             <size>
                                 <width>20</width>
-                                <height>120</height>
+                                <height>150</height>
                             </size>
                         </property>
                     </spacer>
@@ -1203,6 +1234,36 @@
         <signal>toggled(bool)</signal>
         <receiver>EditActionBase</receiver>
         <slot>updateOptions()</slot>
+    </connection>
+    <connection>
+        <sender>theUseProfile</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>textLabel5</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>theUseDCOP</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>textLabel5_2</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>theUseDCOP</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>textLabel4_3</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>theUseDCOP</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>textLabel4_2</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>theChangeMode</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>textLabel8</receiver>
+        <slot>setDisabled(bool)</slot>
     </connection>
 </connections>
 <tabstops>

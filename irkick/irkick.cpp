@@ -27,6 +27,8 @@
 #include <klocale.h>
 #include <kaboutdialog.h>
 #include <kaboutkde.h>
+#include <kwinmodule.h>
+#include <kwin.h>
 
 #include <dcopclient.h>
 #include <dcopref.h>
@@ -64,7 +66,9 @@ IRKick::IRKick(const QCString &obj) : KDEDModule(obj), npApp(QString::null)
 	theTrayIcon->actionCollection()->action("file_quit")->setEnabled(false);
 #endif
 	aboutData = new KAboutData("irkick", I18N_NOOP("IRKick"), VERSION, I18N_NOOP("IRKick"), KAboutData::License_GPL, "(c) 2003, Gav Wood", 0, 0, "gav@kde.org");
-	aboutData->addAuthor("Gav Wood", 0, "gav@kde.org");
+	aboutData->addAuthor("Gav Wood", i18n("Author"), "gav@kde.org", "http://www.indigoarchive.net/gav/");
+	aboutData->addAuthor("Dirk Ziegelmeier", i18n("Ideas, concept code"), "dirk@ziegelmeier.net");
+	aboutData->addAuthor("Antonio Larrosa Jiménez", i18n("Ideas"), "larrosa@kde.org");
 	theTrayIcon->show();
 }
 
@@ -144,15 +148,41 @@ bool IRKick::getPrograms(const IRAction &action, QCStringList &programs)
 	}
 	else
 	{
-		QRegExp r = QRegExp("^" + action.program() + "-\\d+$");
+		QRegExp r = QRegExp("^" + action.program() + "-(\\d+)$");
 		// find all instances...
 		QCStringList buf = theDC->registeredApplications();
 		for(QCStringList::iterator i = buf.begin(); i != buf.end(); i++)
 			if((*i).contains(r)) programs += *i;
 		if(programs.size() > 1 && action.ifMulti() == IM_DONTSEND)
 			return false;
-		else if(programs.size() > 1 && action.ifMulti() == IM_SENDTOONE)
+		else if(programs.size() > 1 && action.ifMulti() == IM_SENDTOTOP)
+		{	QValueList<WId> s = KWinModule().stackingOrder();
+			// go through all the (ordered) window pids
+			for(QValueList<WId>::iterator i = s.fromLast(); i != s.end(); i--)
+			{	int p = KWin::info(*i).pid;
+				QString id = action.program() + "-" + QString().setNum(p);
+				if(programs.contains(QCString(id)))
+				{	programs.clear();
+					programs += QCString(id);
+					break;
+				}
+			}
 			while(programs.size() > 1) programs.remove(programs.begin());
+		}
+		else if(programs.size() > 1 && action.ifMulti() == IM_SENDTOBOTTOM)
+		{	QValueList<WId> s = KWinModule().stackingOrder();
+			// go through all the (ordered) window pids
+			for(QValueList<WId>::iterator i = s.begin(); i != s.end(); i++)
+			{	int p = KWin::info(*i).pid;
+				QString id = action.program() + "-" + QString().setNum(p);
+				if(programs.contains(QCString(id)))
+				{	programs.clear();
+					programs += QCString(id);
+					break;
+				}
+			}
+			while(programs.size() > 1) programs.remove(programs.begin());
+		}
 	}
 	return true;
 }
