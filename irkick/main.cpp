@@ -11,6 +11,7 @@
 #include <kcmdlineargs.h>
 #include <kwin.h>
 #include <kaboutdata.h>
+#include <kglobal.h>
 #include <kdebug.h>
 #include <kuniqueapplication.h>
 
@@ -28,7 +29,7 @@ extern "C" int kdemain(int argc, char *argv[])
 	KCmdLineArgs::init( argc, argv, aboutData );
 	KUniqueApplication::addCmdLineOptions();
 	KUniqueApplication app;
-    KGlobal::locale()->insertCatalogue( "kdelirc" );
+	KGlobal::locale()->insertCatalogue( "kdelirc" );
 	app.disableSessionManagement();
 	IRKick *theIRKick = new IRKick("IRKick");
 
