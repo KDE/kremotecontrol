@@ -51,9 +51,11 @@ K_EXPORT_COMPONENT_FACTORY(kcmlirc, theFactory("kcmlirc"))
 
 KCMLirc::KCMLirc(QWidget *parent, const char *name, QStringList /*args*/) : DCOPObject("KCMLirc"), KCModule(parent, name)
 {
-    setButtons( KCModule::Help );
-
-    KGlobal::locale()->insertCatalogue( "kdelirc" );
+	KGlobal::locale()->insertCatalogue( "kcmlirc" );
+#if !(KDE_VERSION_MINOR<=3 && KDE_VERSION_RELEASE<=5)
+	setAboutData(new KAboutData("kcmlirc", I18N_NOOP("KDE Lirc"), VERSION, I18N_NOOP("The KDE IR Remote Control System"), KAboutData::License_GPL_V2, "Copyright (c)2003 Gav Wood", I18N_NOOP("Use this to configure KDE's infrared remote control system in order to control any KDE application with your infrared remote control."), "http://www.kde.org"));
+#endif
+	setButtons( KCModule::Help );
 	bool ok;
 	KApplication::kApplication()->dcopClient()->remoteInterfaces("irkick", "IRKick", &ok);
 	if(!ok)
@@ -403,6 +405,10 @@ void KCMLirc::updateModes()
 
 	IRKick_stub IRKick("irkick", "IRKick");
 	QStringList remotes = IRKick.remotes();
+	if(remotes.begin() == remotes.end())
+		theKCMLircBase->theMainLabel->setMaximumSize(32767, 32767);
+	else
+		theKCMLircBase->theMainLabel->setMaximumSize(0, 0);
 	for(QStringList::iterator i = remotes.begin(); i != remotes.end(); i++)
 	{	Mode mode = allModes.getMode(*i, "");
 		QListViewItem *a = new KListViewItem(theKCMLircBase->theModes, RemoteServer::remoteServer()->getRemoteName(*i), allModes.isDefault(mode) ? "Default" : "", mode.iconFile() == QString::null ? "" : "");
@@ -517,6 +523,22 @@ void KCMLirc::save()
 	IRKick_stub("irkick", "IRKick").reloadConfiguration();
 
 	emit changed(true);
+}
+
+int KCMLirc::buttons()
+{
+    return KCModule::Help;
+}
+
+void KCMLirc::configChanged()
+{
+ // insert your saving code here...
+    emit changed(true);
+}
+
+QString KCMLirc::quickHelp() const
+{
+    return i18n("<h1>Remote Controls</h1><p>This module allows you to configure bindings between your remote controls and KDE applications. Simply select your remote control and click Add under the Actions/Buttons list. If you want KDE to attempt to automatically assign buttons to a supported application's actions, try clicking the Auto-Populate button.</p><p>To view the recognised applications and remote controls, simply select the <em>Loaded Extensions</em> tab.</p>");
 }
 
 // TODO: Take this out when I know how
