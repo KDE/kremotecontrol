@@ -1,0 +1,31 @@
+kdelirc
+-------
+
+KDELIRC is a KDE frontend for the Linux Infrared Remote Control system. It has two
+aims:
+
+1. Provide a control center module for configuration of:
+	a) Application bindings to remote control buttons.
+	b) Actual remote controls installed (i.e. lirc configuration).
+2. Provide a system-tray applet to act as a proxy between the LIRC system and KDE
+	(applications), in order to launch DCOP requests (and potentially other IPC
+	signals) to applications (and potentially collect/display results).
+
+The design of the system is really quite simple---a control center module modifies a
+centralised configuration file to determine what action(s) should be taken on a remote
+control's button press.
+
+The same(?) module also provides a front-end for the input of /etc/lircd.conf, necessary to
+specify remote controls to the LIRC system. An extra (standard-format XML-based) may be
+provided with the remote control description to give less-sucky Unix-like (lower case, no
+spaces/symbols) names, and perhaps other metadata like a clickable image map of the remote
+control itself.
+
+The system tray applet interfaces with LIRC in order to catch key presses on remote
+controls. It is then able to communicate with and potentially start applications through
+DCOP.
+
+So far most of the groundwork is completed. The code works, but needs a bit of an
+overhaul. It also needs the more advanced features implementing and the UI polishing.
+
+Gav Wood.

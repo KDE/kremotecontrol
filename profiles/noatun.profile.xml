@@ -1,0 +1,20 @@
+<profile id="noatun">
+	<name>Noatun</name>
+	<author>Gav Wood</author>
+	<action appid="noatun" objid="Noatun" prototype="void playpause()">
+		<name>Play/Pause</name>
+		<comment>Toggles the current track between playing and pausing.</comment>
+		<arguments/>
+	</action>
+	<action appid="noatun" objid="Noatun" prototype="void skipto(int)">
+		<name>Skip To</name>
+		<comment>Skips to a configurable point in the current track.</comment>
+		<arguments count="1">
+			<argument place="0">
+				<comment>The percentage of the track to move through.</comment>
+				<type>int</type>
+				<range min="0" max="100"/>
+			</argument>
+		</arguments>
+	</action>
+</profile>

@@ -1,0 +1,12 @@
+# KDE Config File  
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+Exec=irkick -caption "%c" %i %m  
+Icon=irkick.png
+DocPath=irkick/index.html
+Comment=
+Comment[de]=
+Terminal=0
+Name=IRKick
+Name[de]=IRKick

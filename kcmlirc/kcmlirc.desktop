@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Comment=Configure your remote controls for use with applications
+Exec=kcmshell kcmlirc
+Keywords=KCMLirc,kcmlirc
+Name=Remote Controls
+Terminal=false
+Type=Application
+X-KDE-FactoryName=kcmlirc
+X-KDE-Library=kcmlirc
+X-KDE-ModuleType=Library
