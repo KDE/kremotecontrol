@@ -34,6 +34,7 @@
 #include <kwin.h>
 #include <khelpmenu.h>
 #include <kglobal.h>
+#include <kstdguiitem.h>
 
 #include <dcopclient.h>
 #include <dcopref.h>
@@ -73,7 +74,7 @@ IRKick::IRKick(const QCString &obj) : QObject(), DCOPObject(obj), npApp(QString:
 	theTrayIcon->contextMenu()->changeTitle(0, "IRKick");
 	theTrayIcon->contextMenu()->insertItem(SmallIcon( "configure" ), i18n("&Configure..."), this, SLOT(slotConfigure()));
 	theTrayIcon->contextMenu()->insertSeparator();
-	theTrayIcon->contextMenu()->insertItem(SmallIcon( "help" ), i18n("&Help"), (new KHelpMenu(theTrayIcon, KGlobal::instance()->aboutData()))->menu());
+	theTrayIcon->contextMenu()->insertItem(SmallIcon( "help" ), KStdGuiItem::help().text(), (new KHelpMenu(theTrayIcon, KGlobal::instance()->aboutData()))->menu());
 	theTrayIcon->actionCollection()->action("file_quit")->disconnect(SIGNAL(activated()));
 	connect(theTrayIcon->actionCollection()->action("file_quit"), SIGNAL(activated()), SLOT(doQuit()));
 
