@@ -46,28 +46,9 @@ IRKick::~IRKick()
 
 void IRKick::slotReloadConfiguration()
 {
-	// clear configuration
-	allActions.clear();
-
 	// load configuration from config file
 	KSimpleConfig theConfig("irkickrc");
-	int numBindings = theConfig.readNumEntry("Bindings");
-	for(int i = 0; i < numBindings; i++)
-	{	QString Binding = "Binding" + QString().setNum(i);
-
-		int numArguments = theConfig.readNumEntry(Binding + "Arguments");
-		QValueList<QVariant> Arguments;
-		for(int j = 0; j < numArguments; j++)
-		{	QVariant::Type theType = (QVariant::Type)theConfig.readNumEntry(Binding + "ArgumentType" + QString().setNum(j), QVariant::String);
-			Arguments += theConfig.readPropertyEntry(Binding + "Argument" + QString().setNum(j), theType == QVariant::CString ? QVariant::String : theType);
-			Arguments.last().cast(theType);
-		}
-
-		allActions[qMakePair(theConfig.readEntry(Binding + "Remote"), theConfig.readEntry(Binding + "Button"))] +=
-					IRAction( theConfig.readEntry(Binding + "Program"), theConfig.readEntry(Binding + "Object"),
-					theConfig.readEntry(Binding + "Method"), Arguments, theConfig.readEntry(Binding + "Remote"),
-					theConfig.readEntry(Binding + "Button"), theConfig.readBoolEntry(Binding + "Repeat"));
-	}
+	allActions.loadFromConfig(theConfig);
 }
 
 void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int theRepeatCounter)
@@ -75,8 +56,17 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int 
 	if(npApp != QString::null)
 	{
 		// send notifier by DCOP to npApp/npModule/npMethod(theRemote, theButton);
-		if(!DCOPRef(QCString(npApp), QCString(npModule)).call(QCString(npMethod), theRemote, theButton).isValid())
-			KPassivePopup::message("IRKick", "Error: Couldn't contact application " + npApp + " to send keypress.", SmallIcon("package_applications"), this);
+		QByteArray data; QDataStream arg(data, IO_WriteOnly);
+		arg << QString(theRemote) << QString(theButton);
+		QCString rType; QByteArray rData;
+		if(!KApplication::dcopClient()->call(QCString(npApp), QCString(npModule), QCString(npMethod), data, rType, rData))
+		{	kdDebug() << "ERROR!!!" << endl;
+			// BUT WHY?!?!?!
+		}
+
+// this code works, but i want to figure out why the code above which should be equivalent doesn't work
+//		if(!DCOPRef(QCString(npApp), QCString(npModule)).call(QCString(npMethod), theRemote, theButton).isValid())
+//			KPassivePopup::message("IRKick", "Error: Couldn't contact application " + npApp + " to send keypress.", SmallIcon("package_applications"), this);
 		npApp = QString::null;
 	}
 	else
@@ -84,11 +74,13 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int 
 		const QValueList<IRAction> &l = allActions[qMakePair(theRemote, theButton)];
 		if(!l.isEmpty())
 			for(QValueList<IRAction>::const_iterator i = l.begin(); i != l.end(); i++)
-				if((*i).Repeat || !theRepeatCounter)
+				if((*i).repeat() || !theRepeatCounter)
 				{	DCOPClient *theDC = KApplication::dcopClient();
-					if(theDC->isApplicationRegistered(QCString((*i).Program)))
+					if(theDC->isApplicationRegistered(QCString((*i).program())))
 					{	QByteArray data; QDataStream arg(data, IO_WriteOnly);
-						for(QValueList<QVariant>::const_iterator j = (*i).Arguments.begin(); j != (*i).Arguments.end(); j++)
+						kdDebug() << "Sending data (" << QCString((*i).program()) << ", " << QCString((*i).object()) << ", " << QCString((*i).method().prototypeNR()) << endl;
+						for(Arguments::const_iterator j = (*i).arguments().begin(); j != (*i).arguments().end(); j++)
+						{	kdDebug() << "Got argument..." << endl;
 							switch((*j).type())
 							{	case QVariant::Int: arg << (*j).toInt(); break;
 								case QVariant::CString: arg << (*j).toCString(); break;
@@ -98,7 +90,8 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int 
 								case QVariant::Double: arg << (*j).toDouble(); break;
 								default: arg << (*j).toString(); break;
 							}
-						theDC->send(QCString((*i).Program), QCString((*i).Object), QCString((*i).MethodMinusReturn()), data);
+						}
+						theDC->send(QCString((*i).program()), QCString((*i).object()), QCString((*i).method().prototypeNR()), data);
 					}
 				}
 	}

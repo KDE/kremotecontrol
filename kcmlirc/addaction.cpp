@@ -17,6 +17,7 @@
 
 #include <dcopclient.h>
 
+#include "prototype.h"
 #include "addaction.h"
 
 AddAction::AddAction(QWidget *parent, const char *name): AddActionBase(parent, name)
@@ -32,28 +33,11 @@ AddAction::~AddAction()
 {
 }
 
-QValueList< QPair<QString, QString> > AddAction::extractParameters(const QString &prototype)
-{
-	QRegExp main("^(.*) (\\w[\\d\\w]*)\\((.*)\\)");
-	QValueList< QPair<QString, QString> > ret;
-	if(main.search(prototype) == -1)
-		return ret;
-	ret += qMakePair(main.cap(1), main.cap(2));
-	QRegExp parameters("^\\s*([^,\\s]+)(\\s+(\\w[\\d\\w]*))?(,(.*))?$");
-	QString args = main.cap(3);
-	while(parameters.search(args) != -1)
-	{	ret += qMakePair(parameters.cap(1), parameters.cap(3));
-		args = parameters.cap(5);
-	}
-
-	return ret;
-}
-
 void AddAction::updateButtonStates()
 {
 	int lastPage = curPage;
 	curPage = indexOf(currentPage());
-	if(curPage == 1 && theFunctions->currentItem() && extractParameters(theFunctions->currentItem()->text(2)).count() == 1)
+	if(curPage == 1 && theFunctions->currentItem() && !Prototype(theFunctions->currentItem()->text(2)).count())
 		showPage(((QWizard *)this)->page(lastPage ? 0 : 2));
 	switch(curPage)
 	{	case 0: setNextEnabled(currentPage(), theFunctions->currentItem() != 0); break;
@@ -82,9 +66,9 @@ void AddAction::updateParameters()
 {
 	theParameters->clear();
 	if(theFunctions->currentItem())
-	{	QValueList<QPair<QString, QString> > l = extractParameters(theFunctions->currentItem()->text(2));
-		for(unsigned k = 1; k < l.count(); k++)
-			new KListViewItem(theParameters, QString().setNum(k), l[k].first, l[k].second == "" ? "<anonymous>" : l[k].second, "");
+	{	Prototype p(theFunctions->currentItem()->text(2));
+		for(unsigned k = 0; k < p.count(); k++)
+			new KListViewItem(theParameters, QString().setNum(k + 1), p.type(k), p.name(k) == "" ? "<anonymous>" : p.name(k), "");
 	}
 	updateParameter();
 }
@@ -137,14 +121,8 @@ void AddAction::updateFunctions()
 	if(theObjects->currentItem() && theObjects->currentItem()->parent())
 	{	QStringList functions = getFunctions(theObjects->currentItem()->parent()->text(0), theObjects->currentItem()->text(0));
 		for(QStringList::iterator i = functions.begin(); i != functions.end(); i++)
-		{	QValueList<QPair<QString, QString> > l = extractParameters(QString(*i));
-			QString params;
-			for(unsigned k = 1; k < l.count(); k++)
-			{	if(k > 1) params += ", ";
-				params += l[k].first + (l[k].second != "" ? (" " + l[k].second) : "");
-			}
-			new KListViewItem(theFunctions, l[0].second, params, *i);
-
+		{	Prototype p((QString)(*i));
+			new KListViewItem(theFunctions, p.name(), p.argumentList(), *i);
 		}
 	}
 }

@@ -28,6 +28,7 @@ private:
 public slots:
 	void configChanged();
 	void updateActions();
+	void updateRemotes();
 	void slotStartListen();
 	void slotAddAction();
 	void slotRemoveAction();
