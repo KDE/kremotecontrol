@@ -32,6 +32,7 @@ public slots:
 	void configChanged();
 	void updateActions();
 	void updateModes();
+	void updateExtensions();
 	void slotAddMode();
 	void slotRemoveMode();
 	void slotAddAction();

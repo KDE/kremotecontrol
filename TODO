@@ -9,9 +9,9 @@ kdmlirc:
 * Profiles:
 	* Update interface to hide DCOP specifics
 	* Update interface (wizard) for page at start to allow selection of profiled app
-* Modes:
-	* Update interface to allow mode changing actions visible
 
 irkick:
+* Fix QByteArray parameter bug...
+* Fix bools bug.
 * Better icon!
 * Other IPC mechanisms (save for 2.0!)

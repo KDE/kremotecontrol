@@ -1,3 +1,3 @@
 
-SUBDIRS = kdelirc irkick kcmlirc po doc
+SUBDIRS = kdelirc irkick kcmlirc profiles po doc
 

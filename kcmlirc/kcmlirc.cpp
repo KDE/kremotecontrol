@@ -30,6 +30,7 @@
 
 #include "addaction.h"
 #include "newmode.h"
+#include "profileserver.h"
 #include "kcmlirc.h"
 
 typedef KGenericFactory<KCMLirc, QWidget> theFactory;
@@ -186,12 +187,24 @@ void KCMLirc::updateModes()
 	}
 }
 
+void KCMLirc::updateExtensions()
+{
+	ProfileServer *theServer = ProfileServer::profileServer();
+	theKCMLircBase->theExtensions->clear();
+	QListViewItem *a = new QListViewItem(theKCMLircBase->theExtensions, "Applications");
+
+	QMap<QString, Profile> profiles = theServer->profiles();
+	for(QMap<QString, Profile>::iterator i = profiles.begin(); i != profiles.end(); i++)
+		new QListViewItem(a, (*i).name());
+}
+
 void KCMLirc::load()
 {
 	KSimpleConfig theConfig("irkickrc");
 	allActions.loadFromConfig(theConfig);
 	allModes.loadFromConfig(theConfig);
 
+	updateExtensions();
 	updateModes();
 	updateActions();
 }
