@@ -58,7 +58,12 @@ bool KLircClient::connectToLirc()
 	strcpy(addr.sun_path, "/dev/lircd");
 	if(::connect(sock, (struct sockaddr *)(&addr), sizeof(addr)) == -1)
 	{	::close(sock);
-		return false;
+		// in case of mandrake...
+		strcpy(addr.sun_path, "/tmp/.lircd");
+		if(::connect(sock, (struct sockaddr *)(&addr), sizeof(addr)) == -1)
+		{	::close(sock);
+			return false;
+		}
 	}
 
 	theSocket = new QSocket;
