@@ -1,4 +1,4 @@
-INCLUDES    = $(all_includes) -I../irkick -I$(srcdir)/../irkick -I$(srcdir)/../kdelirc
+INCLUDES    = -I../irkick -I$(srcdir)/../irkick -I$(srcdir)/../kdelirc $(all_includes)
 METASOURCES = AUTO
 
 # Install this plugin in the KDE modules directory

@@ -35,7 +35,7 @@ dummy.cpp:
 
 noinst_HEADERS = irkick.h klircclient.h irkick_stub.h
 
-INCLUDES = $(all_includes) -I$(srcdir)/../kdelirc
+INCLUDES = -I$(srcdir)/../kdelirc $(all_includes)
 
 KDE_ICON = AUTO
 METASOURCES = AUTO
