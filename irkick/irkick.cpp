@@ -242,7 +242,7 @@ void IRKick::executeAction(const IRAction &action)
 	// if programs.size()==0 here, then the app is definately not running.
 	if(action.autoStart() && !programs.size())
 	{	QString sname = ProfileServer::profileServer()->getServiceName(action.program());
-		if(sname != QString::null)
+		if(!sname.isNull())
 		{
 			KPassivePopup::message("IRKick", i18n("Starting <b>%1</b>...").arg(action.application()), SmallIcon("irkick"), theTrayIcon);
 			KApplication::startServiceByDesktopName(sname);
@@ -279,7 +279,7 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int 
 	kdDebug() << "Got message: " << theRemote << ": " << theButton << " (" << theRepeatCounter << ")" << endl;
 	theTrayIcon->setPixmap(SmallIcon("irkickflash"));
 	theFlashOff->start(200, true);
-	if(npApp != QString::null)
+	if(!npApp.isNull())
 	{
 		QString theApp = npApp;
 		npApp = QString::null;
