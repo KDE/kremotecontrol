@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
-Name=KDE LIRC Server
+Name=IRKick
+GenericName=KDE LIRC Server
 Name[bg]=Сървър LIRC
 Name[br]=Servijer KDE LIRC
 Name[bs]=KDE LIRC server
@@ -18,12 +19,14 @@ Name[is]=KDE LIRC þjónn
 Name[it]=Server LIRC di KDE
 Name[ja]=KDE LIRC サーバ
 Name[mk]=KDE LIRC сервер
+Name[nb]=KDE LIRC-tjener
 Name[nl]=KDE LIRC-server
 Name[nn]=KDE LIRC-tenar
 Name[pa]=KDE LIRC ਸਰਵਰ
 Name[pl]=Serwer LIRC dla KDE
 Name[pt]=Servidor de LIRC do KDE
 Name[pt_BR]=servidor LIRC do KDE
+Name[ro]=Server LIRC KDE
 Name[ru]=Сервер KDE LIRC
 Name[sk]=KDE LIRC server
 Name[sl]=Strežnik KDE LIRC
