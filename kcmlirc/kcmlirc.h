@@ -74,7 +74,6 @@ public:
 	virtual void load();
 	virtual void save();
 	virtual void defaults();
-	virtual int buttons();
 	virtual void configChanged();
 	virtual QString quickHelp() const;
 

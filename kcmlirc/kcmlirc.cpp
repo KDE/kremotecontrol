@@ -525,11 +525,6 @@ void KCMLirc::save()
 	emit changed(true);
 }
 
-int KCMLirc::buttons()
-{
-    return KCModule::Help;
-}
-
 void KCMLirc::configChanged()
 {
  // insert your saving code here...
