@@ -16,6 +16,7 @@
 #include <kconfig.h>
 
 #include "iraction.h"
+#include "profileserver.h"
 
 IRAction::IRAction(const QString &newProgram, const QString &newObject, const QString &newMethod, const Arguments &newArguments, const QString &newRemote, const QString &newMode, const QString &newButton, bool newRepeat)
 {
@@ -74,6 +75,7 @@ void IRAction::saveToConfig(KConfig &theConfig, int index) const
 
 const QString IRAction::function() const
 {
+	ProfileServer *theServer = ProfileServer::profileServer();
 	if(theProgram == "")
 		if(theObject == "")
 			return "Exit mode";
@@ -82,7 +84,11 @@ const QString IRAction::function() const
 	else
 	{
 		// TODO: attempt to retrieve from profile
-		return theObject + "::" + theMethod.name();
+		const ProfileAction *a = theServer->getAction(theProgram, theObject, theMethod.prototype());
+		if(a)
+			return a->name();
+		else
+			return theObject + "::" + theMethod.name();
 	}
 }
 
@@ -96,12 +102,17 @@ const QString IRAction::repeatable() const
 
 const QString IRAction::application() const
 {
+	ProfileServer *theServer = ProfileServer::profileServer();
 	if(theProgram == "")
 		return "[KDE]";
 	else
 	{
 		// TODO: attempt to retrieve from profile
-		return theProgram;
+		const ProfileAction *a = theServer->getAction(theProgram, theObject, theMethod.prototype());
+		if(a)
+			return a->profile()->name();
+		else
+			return theProgram;
 	}
 }
 

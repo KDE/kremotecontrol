@@ -25,6 +25,7 @@ ProfileServer *ProfileServer::theInstance = 0;
 ProfileServer::ProfileServer()
 {
 	loadProfiles();
+	theProfiles.setAutoDelete(true);
 }
 
 ProfileServer::~ProfileServer()
@@ -36,8 +37,9 @@ void ProfileServer::loadProfiles()
 	QStringList theFiles = KGlobal::dirs()->findAllResources("data", "profiles/*.profile.xml");
 	for(QStringList::iterator i = theFiles.begin(); i != theFiles.end(); i++)
 	{	kdDebug() << "Found data file: " << *i << endl;
-		Profile p(*i);
-		theProfiles[p.id()] = p;
+		Profile *p = new Profile();
+		p->loadFromFile(*i);
+		theProfiles.insert(p->id(), p);
 	}
 }
 
@@ -45,7 +47,7 @@ Profile::Profile()
 {
 }
 
-Profile::Profile(const QString &fileName)
+void Profile::loadFromFile(const QString &fileName)
 {
 	charBuffer = "";
 	curPA = 0;
@@ -58,6 +60,15 @@ Profile::Profile(const QString &fileName)
 	reader.parse(source);
 }
 
+const ProfileAction *ProfileServer::getAction(const QString &appId, const QString &objId, const QString &prototype) const
+{
+	kdDebug() << "getAction(" << appId << ", " << objId << ", " << prototype << ")" << endl;
+	if(theProfiles[appId])
+		if(theProfiles[appId]->theActions[objId + "::" + prototype])
+			return theProfiles[appId]->theActions[objId + "::" + prototype];
+	return 0;
+}
+
 bool Profile::characters(const QString &data)
 {
 	charBuffer += data;
@@ -67,15 +78,22 @@ bool Profile::characters(const QString &data)
 bool Profile::startElement(const QString &, const QString &, const QString &name, const QXmlAttributes &attributes)
 {
 	if(name == "profile")
-	{	theId = attributes.value("id");
-	}
+		theId = attributes.value("id");
 	else if(name == "action")
 	{
 		curPA = new ProfileAction;
-		curPA->setAppId(attributes.value("appid"));
 		curPA->setObjId(attributes.value("objid"));
 		curPA->setPrototype(attributes.value("prototype"));
 	}
+	else if(name == "arguments")
+		for(int i = 0; i < attributes.value("count").toInt(); i++)
+		{	curPA->theArguments.append(ProfileActionArgument());
+			curPA->theArguments.last().setAction(curPA);
+		}
+	else if(name == "argument")
+		curPAA = &(curPA->theArguments[attributes.value("place").toInt()]);
+	else if(name == "range" && curPAA)
+		curPAA->setRange(qMakePair(attributes.value("min").toInt(), attributes.value("max").toInt()));
 
 	charBuffer = "";
 	return true;
@@ -90,14 +108,20 @@ bool Profile::endElement(const QString &, const QString &, const QString &name)
 			theName = charBuffer;
 	else if(name == "author")
 		theAuthor = charBuffer;
-	else if(name == "comment" && curPA)
+	else if(name == "type" && curPAA)
+		curPAA->setType(charBuffer);
+	else if(name == "comment" && curPA && !curPAA)
 		curPA->setComment(charBuffer);
+	else if(name == "comment" && curPA && curPAA)
+		curPAA->setComment(charBuffer);
 	else if(name == "action")
 	{
-		theActions[curPA->name()] = *curPA;
-		delete curPA;
+		curPA->setProfile(this);
+		theActions.insert(curPA->objId() + "::" + curPA->prototype(), curPA);
 		curPA = 0;
 	}
+	else if(name == "argument")
+		curPAA = 0;
 
 	charBuffer = "";
 	return true;

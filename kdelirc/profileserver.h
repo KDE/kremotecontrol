@@ -18,6 +18,7 @@
 #include <qvaluelist.h>
 #include <qmap.h>
 #include <qxml.h>
+#include <qdict.h>
 
 /**
 @author Gav Wood
@@ -25,10 +26,14 @@
 
 typedef QPair<int,int> Range;
 
+class ProfileAction;
+class Profile;
+
 class ProfileActionArgument
 {
 	QString theComment, theType;
 	Range theRange;
+	const ProfileAction *parent;
 
 public:
 	const QString &comment() const { return theComment; }
@@ -37,17 +42,19 @@ public:
 	void setType(const QString &a) { theType = a; }
 	const Range &range() const { return theRange; }
 	void setRange(const Range &a) { theRange = a; }
+
+	const ProfileAction *action() const { return parent; }
+	void setAction(const ProfileAction *a) { parent = a; }
 };
 
 class ProfileAction
 {
-	QString theAppId, theObjId, thePrototype, theName, theComment;
+	QString theObjId, thePrototype, theName, theComment;
+	const Profile *parent;
 public:
 	QValueList<ProfileActionArgument> theArguments;
 
 public:
-	const QString &appId() const { return theAppId; }
-	void setAppId(const QString &a) { theAppId = a; }
 	const QString &objId() const { return theObjId; }
 	void setObjId(const QString &a) { theObjId = a; }
 	const QString &prototype() const { return thePrototype; }
@@ -57,6 +64,9 @@ public:
 	const QString &comment() const { return theComment; }
 	void setComment(const QString &a) { theComment = a; }
 	const QValueList<ProfileActionArgument> &arguments() { return theArguments; }
+
+	const Profile *profile() const { return parent; }
+	void setProfile(const Profile *a) { parent = a; }
 };
 
 class Profile : public QXmlDefaultHandler
@@ -67,7 +77,7 @@ class Profile : public QXmlDefaultHandler
 	ProfileAction *curPA;
 	ProfileActionArgument *curPAA;
 public:
-	QMap<QString, ProfileAction> theActions;
+	QDict<ProfileAction> theActions;		// objid+"::"+prototype => ProfileAction
 
 public:
 	bool characters(const QString &data);
@@ -79,9 +89,10 @@ public:
 	void setId(const QString &a) { theId = a; }
 	QString name() const { return theName; }
 	void setName(const QString &a) { theName = a; }
-	const QMap<QString, ProfileAction> &actions() const { return theActions; }
+	const QDict<ProfileAction> &actions() const { return theActions; }
 
-	Profile(const QString &fileName);
+	void loadFromFile(const QString &fileName);
+
 	Profile();
 };
 
@@ -89,12 +100,14 @@ class ProfileServer
 {
 	static ProfileServer *theInstance;
 	void loadProfiles();
-	QMap<QString, Profile> theProfiles;
+	QDict<Profile> theProfiles;			// id => Profile
 
 public:
 	static ProfileServer *profileServer() { if(!theInstance) theInstance = new ProfileServer(); return theInstance; }
 
-	const QMap<QString, Profile> profiles() const { return theProfiles; }
+	const QDict<Profile> profiles() const { return theProfiles; }
+
+	const ProfileAction *getAction(const QString &appId, const QString &objId, const QString &prototype) const;
 
 	ProfileServer();
 	~ProfileServer();

@@ -279,16 +279,16 @@
                 <attribute name="title">
                     <string>Loaded Extensions</string>
                 </attribute>
-                <vbox>
+                <grid>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QSplitter">
+                    <widget class="QSplitter" row="0" column="0">
                         <property name="name">
-                            <cstring>splitter4</cstring>
+                            <cstring>splitter8</cstring>
                         </property>
                         <property name="orientation">
-                            <enum>Vertical</enum>
+                            <enum>Horizontal</enum>
                         </property>
                         <widget class="KListView">
                             <column>
@@ -413,7 +413,7 @@
                             </vbox>
                         </widget>
                     </widget>
-                </vbox>
+                </grid>
             </widget>
         </widget>
     </grid>

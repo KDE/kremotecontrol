@@ -1,12 +1,12 @@
 <profile id="noatun">
 	<name>Noatun</name>
 	<author>Gav Wood</author>
-	<action appid="noatun" objid="Noatun" prototype="void playpause()">
+	<action objid="Noatun" prototype="void playpause()">
 		<name>Play/Pause</name>
 		<comment>Toggles the current track between playing and pausing.</comment>
 		<arguments/>
 	</action>
-	<action appid="noatun" objid="Noatun" prototype="void skipto(int)">
+	<action objid="Noatun" prototype="void skipto(int)">
 		<name>Skip To</name>
 		<comment>Skips to a configurable point in the current track.</comment>
 		<arguments count="1">

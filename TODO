@@ -1,3 +1,6 @@
+general:
+*  Optimise data structures to use pointer-based structures to cut down on copying
+
 kdmlirc:
 * Edit action!
 * Advanced (non-wizard) Add action?

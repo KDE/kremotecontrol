@@ -193,9 +193,10 @@ void KCMLirc::updateExtensions()
 	theKCMLircBase->theExtensions->clear();
 	QListViewItem *a = new QListViewItem(theKCMLircBase->theExtensions, "Applications");
 
-	QMap<QString, Profile> profiles = theServer->profiles();
-	for(QMap<QString, Profile>::iterator i = profiles.begin(); i != profiles.end(); i++)
-		new QListViewItem(a, (*i).name());
+	QDict<Profile> dict = theServer->profiles();
+	QDictIterator<Profile> i(dict);
+	for(; i.current(); ++i)
+		new QListViewItem(a, i.current()->name());
 }
 
 void KCMLirc::load()
