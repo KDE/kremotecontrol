@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>EditModeBase</class>
 <widget class="QDialog">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>461</width>
-            <height>332</height>
+            <height>334</height>
         </rect>
     </property>
     <property name="caption">
@@ -54,7 +54,7 @@
                         <cstring>textLabel4</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Icon to be displayed in system tray:</string>
+                        <string>&amp;Icon for system tray:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>theIcon</cstring>
@@ -157,7 +157,7 @@
                 <cstring>textLabel2</cstring>
             </property>
             <property name="text">
-                <string>&lt;b&gt;Behaviour&lt;/b&gt;</string>
+                <string>&lt;b&gt;Behavior&lt;/b&gt;</string>
             </property>
         </widget>
         <widget class="Line">
@@ -180,6 +180,9 @@
             </property>
             <property name="text">
                 <string>Mo&amp;de is the default for its remote control</string>
+            </property>
+            <property name="accel">
+                <string>Alt+D</string>
             </property>
         </widget>
         <spacer>
