@@ -292,7 +292,7 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int 
 	{
 		if(currentModes[theRemote].isNull()) currentModes[theRemote] = "";
 		IRAItList l = allActions.findByModeButton(Mode(theRemote, currentModes[theRemote]), theButton);
-		if(currentModes[theRemote] != "")
+		if(!currentModes[theRemote].isEmpty())
 			l += allActions.findByModeButton(Mode(theRemote, ""), theButton);
 		bool doBefore = true, doAfter = false;
 		for(IRAItList::const_iterator i = l.begin(); i != l.end(); ++i)
@@ -314,7 +314,7 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int 
 					}
 			if(!after && doAfter)
 			{	l = allActions.findByModeButton(Mode(theRemote, currentModes[theRemote]), theButton);
-				if(currentModes[theRemote] != "")
+				if(!currentModes[theRemote].isEmpty())
 					l += allActions.findByModeButton(Mode(theRemote, ""), theButton);
 			}
 		}

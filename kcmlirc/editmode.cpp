@@ -32,7 +32,7 @@ void EditMode::slotClearIcon()
 
 void EditMode::slotCheckText(const QString &newText)
 {
-	theOK->setEnabled(newText != "");
+	theOK->setEnabled(!newText.isEmpty());
 }
 
 #include "editmode.moc"
