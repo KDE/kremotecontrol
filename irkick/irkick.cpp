@@ -66,6 +66,10 @@ void IRKick::slotReloadConfiguration()
 	// load configuration from config file
 	KSimpleConfig theConfig("irkickrc");
 	allActions.loadFromConfig(theConfig);
+	if(currentModes.count())
+	{	currentModes.clear();
+		KPassivePopup::message("IRKick", "Resetting all modes.", SmallIcon("package_applications"), theTrayIcon);
+	}
 }
 
 void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int theRepeatCounter)
@@ -170,7 +174,7 @@ void IRKick::slotShowAbout()
 									"2. have found a bug\n"
 									"3. want to contribute with something\n\n"
 									"then feel free to send me a mail.\n"), theTrayIcon));
-		c->addPerson(QString::null, QString("gav@kde.org"), QString("http://irkick.sourceforge.net/"), QString::null, true);
+		c->addPerson(QString::null, QString("gav@kde.org"), QString("http://www.indigoarchive.net/gav/"), QString::null, true);
 	}
 	c = about->addContainerPage(i18n("&Credits"), AlignCenter, AlignLeft);
 	if( c != 0 )
