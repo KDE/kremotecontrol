@@ -34,7 +34,7 @@ public:
 	void writeBack();
 	void readFrom();
 
-	virtual void slotInputArgument(const QString &value);
+	virtual void slotParameterChanged();
 	virtual void updateArgument(int index);
 	virtual void updateArguments();
 	virtual void updateApplications();

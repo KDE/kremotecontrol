@@ -15,12 +15,15 @@
 #include <qradiobutton.h>
 #include <qcombobox.h>
 #include <qcheckbox.h>
+#include <qwidgetstack.h>
 
 #include <kdebug.h>
 #include <klineedit.h>
 #include <klistview.h>
 #include <kapplication.h>
 #include <kmessagebox.h>
+#include <knuminput.h>
+#include <keditlistbox.h>
 
 #include <dcopclient.h>
 #include <irkick_stub.h>
@@ -111,13 +114,6 @@ void EditAction::writeBack()
 	(*theAction).setAutoStart(theAutoStart->isChecked());
 }
 
-void EditAction::slotInputArgument(const QString &value)
-{
-	int type = arguments[theArguments->currentItem()].type();
-	arguments[theArguments->currentItem()].asString() = value;
-	arguments[theArguments->currentItem()].cast(QVariant::Type(type));
-}
-
 void EditAction::updateArguments()
 {
 	if(theUseProfile->isChecked())
@@ -132,11 +128,11 @@ void EditAction::updateArguments()
 				arguments.append(QVariant(""));
 		}
 		theArguments->setEnabled(p.count());
-		theArgument->setEnabled(p.count());
 		for(unsigned i = 0; i < p.count(); i++)
-			theArguments->insertItem(p[i].comment() + " (" + p[i].type() + ")");
-		for(unsigned i = 0; i < p.count(); i++) arguments[i].cast(QVariant::nameToType(p[i].type()));
-		if(p.count()) updateArgument(0);
+		{	theArguments->insertItem(p[i].comment() + " (" + p[i].type() + ")");
+			arguments[i].cast(QVariant::nameToType(p[i].type()));
+		}
+		if(p.count()) updateArgument(0); else updateArgument(-1);
 	}
 	else if(theUseDCOP->isChecked())
 	{
@@ -148,20 +144,81 @@ void EditAction::updateArguments()
 				arguments.append(QVariant(""));
 		}
 		theArguments->setEnabled(p.count());
-		theArgument->setEnabled(p.count());
 		for(unsigned i = 0; i < p.count(); i++)
-			theArguments->insertItem(QString().setNum(i + 1) + ": " + (p.name(i) == "" ? p.type(i) : p.name(i) + " (" + p.type(i) + ")"));
-		kdDebug() << "ud type was: " << arguments[0].type() << " (" << p.count() << QVariant::nameToType(p.type(0)) << ")" << endl;
-		for(unsigned i = 0; i < p.count(); i++) arguments[i].cast(QVariant::nameToType(p.type(i)));
-		kdDebug() << "ud type is: " << arguments[0].type();
-		if(p.count()) updateArgument(0);
-		kdDebug() << "ud type is now: " << arguments[0].type();
+		{	theArguments->insertItem(QString().setNum(i + 1) + ": " + (p.name(i) == "" ? p.type(i) : p.name(i) + " (" + p.type(i) + ")"));
+			arguments[i].cast(QVariant::nameToType(p.type(i)));
+		}
+		if(p.count()) updateArgument(0); else updateArgument(-1);
 	}
+}
+
+// called when the textbox/checkbox/whatever changes value
+void EditAction::slotParameterChanged()
+{
+	kdDebug() << "in: " << arguments[theArguments->currentItem()].toString() << endl;
+	int type = arguments[theArguments->currentItem()].type();
+	kdDebug() << type << endl;
+	switch(type)
+	{
+	case QVariant::Int: case QVariant::UInt:
+		arguments[theArguments->currentItem()].asInt() = theValueIntNumInput->value();
+		break;
+	case QVariant::Double:
+		arguments[theArguments->currentItem()].asDouble() = theValueDoubleNumInput->value();
+		break;
+	case QVariant::Bool:
+		arguments[theArguments->currentItem()].asBool() = theValueCheckBox->isChecked();
+		break;
+	case QVariant::StringList:
+		arguments[theArguments->currentItem()].asStringList() = theValueEditListBox->items();
+		break;
+	default:
+		arguments[theArguments->currentItem()].asString() = theValueLineEdit->text();
+	}
+	arguments[theArguments->currentItem()].cast(QVariant::Type(type));
+	kdDebug() << "out: " << arguments[theArguments->currentItem()].toString() << endl;
+
 }
 
 void EditAction::updateArgument(int index)
 {
-	theArgument->setText(arguments[index].toString());
+	if(index >= 0)
+	{	switch(arguments[index].type())
+		{
+		case QVariant::Int: case QVariant::UInt:
+			theValue->raiseWidget(2);
+			theValueIntNumInput->setValue(arguments[index].toInt());
+			break;
+		case QVariant::Double:
+			theValue->raiseWidget(3);
+			theValueDoubleNumInput->setValue(arguments[index].toDouble());
+			break;
+		case QVariant::Bool:
+			theValue->raiseWidget(1);
+			theValueCheckBox->setChecked(arguments[index].toBool());
+			break;
+		case QVariant::StringList:
+		{	theValue->raiseWidget(4);
+			QStringList backup = arguments[index].toStringList();
+			// backup needed because calling clear will kill what ever has been saved.
+			theValueEditListBox->clear();
+			theValueEditListBox->insertStringList(backup);
+			arguments[index].asStringList() = backup;
+			break;
+		}
+		default:
+			theValue->raiseWidget(0);
+			theValueLineEdit->setText(arguments[index].toString());
+		}
+		theValue->setEnabled(true);
+	}
+	else
+	{	theValueLineEdit->setText("");
+		theValueCheckBox->setChecked(false);
+		theValueIntNumInput->setValue(0);
+		theValueDoubleNumInput->setValue(0.0);
+		theValue->setEnabled(false);
+	}
 }
 
 void EditAction::updateApplications()

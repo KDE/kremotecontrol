@@ -20,6 +20,7 @@
 #include <kapplication.h>
 #include <kmessagebox.h>
 #include <knuminput.h>
+#include <keditlistbox.h>
 
 #include <dcopclient.h>
 #include <irkick_stub.h>
@@ -225,6 +226,14 @@ void AddAction::updateParameter()
 		{	theValue->raiseWidget(1);
 			theValueCheckBox->setChecked(theArguments[index].toBool());
 		}
+		else if(type.find("QStringList") != -1)
+		{	theValue->raiseWidget(4);
+			QStringList backup = theArguments[index].toStringList();
+			// backup needed because calling clear will kill what ever has been saved.
+			theValueEditListBox->clear();
+			theValueEditListBox->insertStringList(backup);
+			theArguments[index].asStringList() = backup;
+		}
 		else
 		{	theValue->raiseWidget(0);
 			theValueLineEdit->setText(theArguments[index].toString());
@@ -256,6 +265,8 @@ void AddAction::slotParameterChanged()
 		theArguments[index].asDouble() = theValueDoubleNumInput->value();
 	else if(type.find("bool") != -1)
 		theArguments[index].asBool() = theValueCheckBox->isChecked();
+	else if(type.find("QStringList") != -1)
+		theArguments[index].asStringList() = theValueEditListBox->items();
 	else
 		theArguments[index].asString() = theValueLineEdit->text();
 

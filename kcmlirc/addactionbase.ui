@@ -598,31 +598,75 @@
             </widget>
             <widget class="QLayoutWidget">
                 <property name="name">
-                    <cstring>layout8</cstring>
+                    <cstring>layout35</cstring>
                 </property>
                 <hbox>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QLabel">
+                    <widget class="QLayoutWidget">
                         <property name="name">
-                            <cstring>theCurParameter</cstring>
+                            <cstring>layout34</cstring>
                         </property>
-                        <property name="enabled">
-                            <bool>false</bool>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>7</hsizetype>
-                                <vsizetype>5</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="text">
-                            <string>Parameter:</string>
-                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>spacer32</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>21</width>
+                                        <height>111</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>theCurParameter</cstring>
+                                </property>
+                                <property name="enabled">
+                                    <bool>false</bool>
+                                </property>
+                                <property name="sizePolicy">
+                                    <sizepolicy>
+                                        <hsizetype>3</hsizetype>
+                                        <vsizetype>5</vsizetype>
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="text">
+                                    <string>Parameter:</string>
+                                </property>
+                            </widget>
+                        </vbox>
                     </widget>
+                    <spacer>
+                        <property name="name">
+                            <cstring>spacer27</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>146</width>
+                                <height>21</height>
+                            </size>
+                        </property>
+                    </spacer>
                     <widget class="QWidgetStack">
                         <property name="name">
                             <cstring>theValue</cstring>
@@ -645,14 +689,31 @@
                             <attribute name="id">
                                 <number>0</number>
                             </attribute>
-                            <grid>
+                            <vbox>
                                 <property name="name">
                                     <cstring>unnamed</cstring>
                                 </property>
                                 <property name="margin">
                                     <number>0</number>
                                 </property>
-                                <widget class="KLineEdit" row="0" column="0">
+                                <spacer>
+                                    <property name="name">
+                                        <cstring>spacer28</cstring>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Vertical</enum>
+                                    </property>
+                                    <property name="sizeType">
+                                        <enum>Expanding</enum>
+                                    </property>
+                                    <property name="sizeHint">
+                                        <size>
+                                            <width>21</width>
+                                            <height>61</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                                <widget class="KLineEdit">
                                     <property name="name">
                                         <cstring>theValueLineEdit</cstring>
                                     </property>
@@ -660,7 +721,7 @@
                                         <bool>true</bool>
                                     </property>
                                 </widget>
-                            </grid>
+                            </vbox>
                         </widget>
                         <widget class="QWidget">
                             <property name="name">
@@ -669,14 +730,31 @@
                             <attribute name="id">
                                 <number>1</number>
                             </attribute>
-                            <grid>
+                            <vbox>
                                 <property name="name">
                                     <cstring>unnamed</cstring>
                                 </property>
                                 <property name="margin">
                                     <number>0</number>
                                 </property>
-                                <widget class="QCheckBox" row="0" column="0">
+                                <spacer>
+                                    <property name="name">
+                                        <cstring>spacer29</cstring>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Vertical</enum>
+                                    </property>
+                                    <property name="sizeType">
+                                        <enum>Expanding</enum>
+                                    </property>
+                                    <property name="sizeHint">
+                                        <size>
+                                            <width>21</width>
+                                            <height>61</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                                <widget class="QCheckBox">
                                     <property name="name">
                                         <cstring>theValueCheckBox</cstring>
                                     </property>
@@ -687,7 +765,7 @@
                                         <string></string>
                                     </property>
                                 </widget>
-                            </grid>
+                            </vbox>
                         </widget>
                         <widget class="QWidget">
                             <property name="name">
@@ -696,19 +774,36 @@
                             <attribute name="id">
                                 <number>2</number>
                             </attribute>
-                            <grid>
+                            <vbox>
                                 <property name="name">
                                     <cstring>unnamed</cstring>
                                 </property>
                                 <property name="margin">
                                     <number>0</number>
                                 </property>
-                                <widget class="KIntNumInput" row="0" column="0">
+                                <spacer>
+                                    <property name="name">
+                                        <cstring>spacer30</cstring>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Vertical</enum>
+                                    </property>
+                                    <property name="sizeType">
+                                        <enum>Expanding</enum>
+                                    </property>
+                                    <property name="sizeHint">
+                                        <size>
+                                            <width>20</width>
+                                            <height>61</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                                <widget class="KIntNumInput">
                                     <property name="name">
                                         <cstring>theValueIntNumInput</cstring>
                                     </property>
                                 </widget>
-                            </grid>
+                            </vbox>
                         </widget>
                         <widget class="QWidget">
                             <property name="name">
@@ -717,6 +812,44 @@
                             <attribute name="id">
                                 <number>3</number>
                             </attribute>
+                            <vbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <property name="margin">
+                                    <number>0</number>
+                                </property>
+                                <spacer>
+                                    <property name="name">
+                                        <cstring>spacer31</cstring>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Vertical</enum>
+                                    </property>
+                                    <property name="sizeType">
+                                        <enum>Expanding</enum>
+                                    </property>
+                                    <property name="sizeHint">
+                                        <size>
+                                            <width>21</width>
+                                            <height>51</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                                <widget class="KDoubleNumInput">
+                                    <property name="name">
+                                        <cstring>theValueDoubleNumInput</cstring>
+                                    </property>
+                                </widget>
+                            </vbox>
+                        </widget>
+                        <widget class="QWidget">
+                            <property name="name">
+                                <cstring>page</cstring>
+                            </property>
+                            <attribute name="id">
+                                <number>4</number>
+                            </attribute>
                             <grid>
                                 <property name="name">
                                     <cstring>unnamed</cstring>
@@ -724,14 +857,34 @@
                                 <property name="margin">
                                     <number>0</number>
                                 </property>
-                                <widget class="KDoubleNumInput" row="0" column="0">
+                                <widget class="KEditListBox" row="0" column="0">
                                     <property name="name">
-                                        <cstring>theValueDoubleNumInput</cstring>
+                                        <cstring>theValueEditListBox</cstring>
+                                    </property>
+                                    <property name="title">
+                                        <string></string>
                                     </property>
                                 </widget>
                             </grid>
                         </widget>
                     </widget>
+                    <spacer>
+                        <property name="name">
+                            <cstring>spacer26</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>147</width>
+                                <height>21</height>
+                            </size>
+                        </property>
+                    </spacer>
                 </hbox>
             </widget>
         </vbox>
@@ -1120,6 +1273,12 @@
         <receiver>AddActionBase</receiver>
         <slot>updateProfileFunctions()</slot>
     </connection>
+    <connection>
+        <sender>theValueEditListBox</sender>
+        <signal>changed()</signal>
+        <receiver>AddActionBase</receiver>
+        <slot>slotParameterChanged()</slot>
+    </connection>
 </connections>
 <slots>
     <slot>updateFunctions()</slot>
@@ -1147,6 +1306,8 @@
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
+    <includehint>keditlistbox.h</includehint>
+    <includehint>klineedit.h</includehint>
     <includehint>klistview.h</includehint>
 </includehints>
 </UI>

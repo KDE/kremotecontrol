@@ -1,9 +1,8 @@
 general:
 * Take out kdedmodule_stub.h, install by default (KDE4)
 
-kdmlirc:
-* Put multitype editing into editaction
+kcmlirc:
+* Allow (just) starting of a KDE service/application
 
 irkick:
-* kcontrol shortcut on irkick
-* change irkick to dcop service, not kded module
+* Change irkick to dcop service, not kded module
