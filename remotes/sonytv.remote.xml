@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<!DOCTYPE remote SYSTEM "remote.dtd">
+
+<remote id="SONY-TV">
+	<name>SonyTV</name>
+	<information>Bundled with some Sony TVs</information>
+	<author>Dirk Ziegelmeier</author>
+	<button id="0" class="number" parameter="0"/>
+	<button id="1" class="number" parameter="1"/>
+	<button id="2" class="number" parameter="2"/>
+	<button id="3" class="number" parameter="3"/>
+	<button id="4" class="number" parameter="4"/>
+	<button id="5" class="number" parameter="5"/>
+	<button id="6" class="number" parameter="6"/>
+	<button id="7" class="number" parameter="7"/>
+	<button id="8" class="number" parameter="8"/>
+	<button id="9" class="number" parameter="9"/>
+	<button id="TV"><name>TV</name></button>
+	<button id="CHANNELDOWN" class="channeldown"><name>Channel Down</name></button>
+	<button id="CHANNELUP" class="channelup"><name>Channel Up</name></button>
+	<button id="VOLUMEDOWN" class="volumedown"><name>Volume Down</name></button>
+	<button id="VOLUMEUP" class="volumeup"><name>Volume Up</name></button>
+	<button id="MUTE" class="mute"><name>Mute</name></button>
+	<button id="EXT"><name>EXT</name></button>
+	<button id="-/--"><name>-/--</name></button>
+	<button id="RED"><name>Red</name></button>
+	<button id="YELLOW"><name>Yellow</name></button>
+	<button id="BLUE"><name>Blue</name></button>
+	<button id="GREEN"><name>Green</name></button>
+</remote>
