@@ -12,6 +12,7 @@
 #include <dcopstub.h>
 #include <qobject.h>
 #include <dcopobject.h>
+#include <dcopref.h>
 #include <ksharedptr.h>
 
 

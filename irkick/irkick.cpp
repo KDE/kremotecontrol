@@ -12,7 +12,10 @@
 #include <qtooltip.h>
 
 #include <kapplication.h>
+#include <kaction.h>
+#if KDE_IS_VERSION(3, 1, 90)
 #include <kactioncollection.h>
+#endif
 #include <ksimpleconfig.h>
 #include <ksystemtray.h>
 #include <kiconloader.h>
@@ -45,11 +48,13 @@ IRKick::IRKick(const QCString &obj) : KDEDModule(obj), npApp(QString::null)
 	theTrayIcon->setPixmap(SmallIcon("irkick"));
 //	QToolTip::add(this, "Ready.");
 	connect(theClient, SIGNAL(commandReceived(const QString &, const QString &, int)), this, SLOT(gotMessage(const QString &, const QString &, int)));
+#if KDE_IS_VERSION(3, 1, 90)
 	theTrayIcon->contextMenu()->changeTitle(0, "IRKick");
 	theTrayIcon->contextMenu()->insertItem("Reload", this, SLOT(slotReloadConfiguration()));
 	theTrayIcon->contextMenu()->insertItem("About IRKick...", this, SLOT(slotShowAbout()));
 	theTrayIcon->contextMenu()->insertItem("About KDE...", this, SLOT(slotShowAboutKDE()));
 	theTrayIcon->actionCollection()->action("file_quit")->setEnabled(false);
+#endif
 	slotReloadConfiguration();
 	aboutData = new KAboutData("irkick", I18N_NOOP("IRKick"), VERSION, I18N_NOOP("IRKick"), KAboutData::License_GPL, "(c) 2003, Gav Wood", 0, 0, "gav@kde.org");
 	aboutData->addAuthor("Gav Wood", 0, "gav@kde.org");
