@@ -10,7 +10,6 @@ CLEANFILES = dummy.cpp
 libirkick_common_la_LIBADD = $(LIB_KDECORE) $(LIB_KDEUI) $(LIB_KSYCOCA) ../kdelirc/libkdelirc.la
 libirkick_common_la_SOURCES = main.cpp irkick.cpp irkick.skel irkick.stub klircclient.cpp
 
-libirkick_common_la_METASOURCES = AUTO
 libirkick_common_la_LDFLAGS = $(all_libraries)
 
 irkick_la_LIBADD = libirkick_common.la
