@@ -19,6 +19,7 @@
 #include <qmap.h>
 
 #include "iraction.h"
+#include "mode.h"
 
 /**
 @author Gav Wood
@@ -37,10 +38,10 @@ private:
 public:
 	IRAIt addAction(const IRAction &theAction);
 	IRAItList findByButton(const QString &remote, const QString &button);
-	IRAItList findByMode(const QString &remote, const QString &mode);
+	IRAItList findByMode(const Mode &mode);
 	IRAItList findByModeButton(const QString &remote, const QString &mode, const QString &button);
 
-	void erase(QValueListIterator<IRAction> action) { erase(action); }
+	void erase(const IRAIt &action) { QValueList<IRAction>::erase(action); }
 
 	void loadFromConfig(KConfig &theConfig);
 	void saveToConfig(KConfig &theConfig);

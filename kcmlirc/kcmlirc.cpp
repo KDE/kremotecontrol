@@ -10,6 +10,7 @@
 
 #include <qcheckbox.h>
 #include <qlayout.h>
+#include <qlineedit.h>
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -27,6 +28,7 @@
 #include <irkick_stub.h>
 
 #include "addaction.h"
+#include "newmode.h"
 #include "kcmlirc.h"
 
 typedef KGenericFactory<KCMLirc, QWidget> theFactory;
@@ -34,13 +36,13 @@ K_EXPORT_COMPONENT_FACTORY(kcmlirc, theFactory("kcmlirc"));
 
 KCMLirc::KCMLirc(QWidget *parent, const char *name, QStringList /*args*/) : KCModule(parent, name), DCOPObject("KCMLirc")
 {
-	// place widgets here
 	(new QHBoxLayout(this))->setAutoAdd(true);
 	theKCMLircBase = new KCMLircBase(this);
-	connect(theKCMLircBase->theButtons, SIGNAL( currentChanged(QListViewItem *) ), this, SLOT( updateActions() ));
-	connect((QObject *)(theKCMLircBase->theListen), SIGNAL( clicked() ), this, SLOT( slotStartListen() ));
+	connect(theKCMLircBase->theModes, SIGNAL( currentChanged(QListViewItem *) ), this, SLOT( updateActions() ));
 	connect((QObject *)(theKCMLircBase->theAddAction), SIGNAL( clicked() ), this, SLOT( slotAddAction() ));
 	connect((QObject *)(theKCMLircBase->theRemoveAction), SIGNAL( clicked() ), this, SLOT( slotRemoveAction() ));
+	connect((QObject *)(theKCMLircBase->theAddMode), SIGNAL( clicked() ), this, SLOT( slotAddMode() ));
+	connect((QObject *)(theKCMLircBase->theRemoveMode), SIGNAL( clicked() ), this, SLOT( slotRemoveMode() ));
 	load();
 }
 
@@ -50,18 +52,20 @@ KCMLirc::~KCMLirc()
 
 void KCMLirc::slotAddAction()
 {
-	if(!theKCMLircBase->theActions->currentItem()) return;
-	AddAction theDialog(this, 0);
+	if(!theKCMLircBase->theModes->currentItem() || !theKCMLircBase->theModes->currentItem()->parent()) return;
+	Mode m = modeMap[theKCMLircBase->theModes->currentItem()];
+
+	AddAction theDialog(this, 0, m);
 	if(theDialog.exec() == QDialog::Accepted)
-		if(theKCMLircBase->theButtons->currentItem())
-		if(theKCMLircBase->theButtons->currentItem()->parent())
 		if(theDialog.theObjects->currentItem())
 		if(theDialog.theObjects->currentItem()->parent())
+		if(theDialog.theButtons->currentItem())
 		if(theDialog.theFunctions->currentItem())
 		{
 			IRAction a;
-			a.setRemote(theKCMLircBase->theButtons->currentItem()->parent()->text(0));
-			a.setButton(theKCMLircBase->theButtons->currentItem()->text(0));
+			a.setRemote(m.remote());
+			a.setMode(m.name());
+			a.setButton(theDialog.theButtons->currentItem()->text(0));
 			a.setProgram(theDialog.theObjects->currentItem()->parent()->text(0));
 			a.setObject(theDialog.theObjects->currentItem()->text(0));
 			a.setMethod(theDialog.theFunctions->currentItem()->text(2));
@@ -86,9 +90,31 @@ void KCMLirc::slotRemoveAction()
 {
 	if(!theKCMLircBase->theActions->currentItem()) return;
 
-	allActions.erase(actionMap[theKCMLircBase->theActions->currentItem()]);
-	emit changed(true);
+	IRAIt i = actionMap[theKCMLircBase->theActions->currentItem()];
+	kdDebug() << (*i).button() << endl;
+	allActions.erase(i);
 	updateActions();
+	emit changed(true);
+}
+
+void KCMLirc::slotAddMode()
+{
+	if(!theKCMLircBase->theModes->currentItem()) return;
+
+	NewMode theDialog(this, 0);
+	for(QListViewItem *i = theKCMLircBase->theModes->firstChild(); i; i = i->nextSibling())
+		new KListViewItem(theDialog.theRemotes, i->text(0));
+	if(theDialog.exec() == QDialog::Accepted && theDialog.theRemotes->currentItem() && theDialog.theName->text() != "")
+	{
+		allModes.add(Mode(theDialog.theRemotes->currentItem()->text(0), theDialog.theName->text()));
+		updateModes();
+		emit changed(true);
+	}
+}
+
+void KCMLirc::slotRemoveMode()
+{
+
 }
 
 void KCMLirc::slotStartListen()
@@ -101,45 +127,33 @@ void KCMLirc::updateActions()
 {
 	theKCMLircBase->theActions->clear();
 	actionMap.clear();
-	QListViewItem *current = theKCMLircBase->theButtons->currentItem();
-	if(current) if(current->parent())
-	{	QString button = current->text(0);
-		QString remote = current->parent()->text(0);
-		theKCMLircBase->theButtonLabel->setText(remote + ": <b>" + button + "</b>");
-		IRAItList l = allActions.findByButton(remote, button);
-		for(IRAItList::iterator i = l.begin(); i != l.end(); i++)
-			actionMap[new KListViewItem(theKCMLircBase->theActions, (**i).program(), (**i).function(), (**i).arguments().toString(), (**i).repeat() ? "Yes" : "No")] = *i;
-	}
+	if(!theKCMLircBase->theModes->currentItem()) return;
+	Mode m = modeMap[theKCMLircBase->theModes->currentItem()];
+
+	theKCMLircBase->theModeLabel->setText(m.remote() + ": " + (m.name() == "" ? "<i>Always</i>" : ("<b>" + m.name() + "</b>")));
+	IRAItList l = allActions.findByMode(m);
+	for(IRAItList::iterator i = l.begin(); i != l.end(); i++)
+		actionMap[new KListViewItem(theKCMLircBase->theActions, (**i).button(), (**i).program(), (**i).function(), (**i).arguments().toString(), (**i).repeat() ? "Yes" : "No")] = *i;
 }
 
 void KCMLirc::gotButton(QString remote, QString button)
 {
-	for(QListViewItem *i = theKCMLircBase->theButtons->firstChild(); i; i = i->nextSibling())
-		if(i->text(0) == remote)
-		{
-			for(i = i->firstChild(); i; i = i->nextSibling())
-				if(i->text(0) == button)
-				{
-					theKCMLircBase->theButtons->setCurrentItem(i);
-					theKCMLircBase->theButtons->ensureItemVisible(i);
-					break;
-				}
-			break;
-		}
+	emit haveButton(remote, button);
 }
 
-void KCMLirc::updateRemotes()
+void KCMLirc::updateModes()
 {
-	theKCMLircBase->theButtons->clear();
-	QListViewItem *a;
+	theKCMLircBase->theModes->clear();
+	modeMap.clear();
 
 	IRKick_stub IRKick("irkick", "IRKick");
 	QStringList remotes = IRKick.remotes();
 	for(QStringList::iterator i = remotes.begin(); i != remotes.end(); i++)
-	{	a = new QListViewItem(theKCMLircBase->theButtons, *i);
-		QStringList buttons = IRKick.buttons(*i);
-		for(QStringList::iterator j = buttons.begin(); j != buttons.end(); j++)
-			new QListViewItem(a, *j);
+	{	QListViewItem *a = new QListViewItem(theKCMLircBase->theModes, *i);		// TODO: make *i into nice name with wise singleton
+		modeMap[a] = Mode(*i, "");	// the null mode
+		ModeList l = allModes.getModes(*i);
+		for(ModeList::iterator j = l.begin(); j != l.end(); j++)
+			modeMap[new QListViewItem(a, (*j).name())] = *j;
 	}
 }
 
@@ -147,8 +161,9 @@ void KCMLirc::load()
 {
 	KSimpleConfig theConfig("irkickrc");
 	allActions.loadFromConfig(theConfig);
+	allModes.loadFromConfig(theConfig);
 
-	updateRemotes();
+	updateModes();
 	updateActions();
 }
 
@@ -162,6 +177,7 @@ void KCMLirc::save()
 {
 	KSimpleConfig theConfig("irkickrc");
 	allActions.saveToConfig(theConfig);
+	allModes.saveToConfig(theConfig);
 
 	theConfig.sync();
 	IRKick_stub("irkick", "IRKick").reloadConfiguration();

@@ -11,6 +11,7 @@
 //
 //
 #include <kconfig.h>
+#include <kdebug.h>
 
 #include "iractions.h"
 #include "iraction.h"
@@ -36,7 +37,7 @@ void IRActions::purgeAllBindings(KConfig &theConfig)
 		theConfig.deleteEntry(Binding + "Arguments"); theConfig.deleteEntry(Binding + "Program");
 		theConfig.deleteEntry(Binding + "Object"); theConfig.deleteEntry(Binding + "Method");
 		theConfig.deleteEntry(Binding + "Remote"); theConfig.deleteEntry(Binding + "Button");
-		theConfig.deleteEntry(Binding + "Repeat");
+		theConfig.deleteEntry(Binding + "Repeat"); theConfig.deleteEntry(Binding + "Mode");
 	}
 }
 
@@ -44,9 +45,9 @@ void IRActions::saveToConfig(KConfig &theConfig)
 {
 	int index = 0;
 	purgeAllBindings(theConfig);
-	for(iterator i = begin(); i != end(); i++)
+	for(iterator i = begin(); i != end(); i++,index++)
 		(*i).saveToConfig(theConfig, index);
-	theConfig.writeEntry("Bindings", index + 1);
+	theConfig.writeEntry("Bindings", index);
 }
 
 IRAIt IRActions::addAction(const IRAction &theAction)
@@ -63,13 +64,11 @@ IRAItList IRActions::findByButton(const QString &remote, const QString &button)
 	return ret;
 }
 
-IRAItList IRActions::findByMode(const QString &remote, const QString &mode)
+IRAItList IRActions::findByMode(const Mode &mode)
 {
 	IRAItList ret;
-
 	for(iterator i = begin(); i != end(); i++)
-		if((*i).remote() == remote && (*i).mode() == mode)
-			ret += i;
+		if((*i).remote() == mode.remote() && (*i).mode() == mode.name()) ret += i;
 	return ret;
 }
 

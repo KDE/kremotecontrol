@@ -38,7 +38,7 @@ public:
 	void saveToConfig(KConfig &theConfig, int index) const;
 
 	// may be changed to a profile-based representation in the future.
-	const QString function() const { return theObject + "::" + theMethod.prototype(); }
+	const QString function() const { return theObject + "::" + theMethod.name(); }
 	const QString application() const { return theProgram; }
 
 	// bog standard raw DCOP stuff

@@ -1,9 +1,9 @@
 ####### kdevelop will overwrite this part!!! (begin)##########
 noinst_LTLIBRARIES = libkdelirc.la
 
-noinst_HEADERS = iraction.h arguments.h iractions.h prototype.h
+noinst_HEADERS = iraction.h arguments.h iractions.h prototype.h modes.h mode.h
 
-libkdelirc_la_SOURCES = iraction.cpp arguments.cpp iractions.cpp prototype.cpp
+libkdelirc_la_SOURCES = iraction.cpp arguments.cpp iractions.cpp prototype.cpp modes.cpp mode.cpp
 libkdelirc_la_LIBADD = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) $(LIBSOCKET)
 
 ####### kdevelop will overwrite this part!!! (end)############

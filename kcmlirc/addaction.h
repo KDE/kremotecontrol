@@ -15,6 +15,8 @@
 
 #include <addactionbase.h>
 
+#include "mode.h"
+
 /**
 @author Gav Wood
 */
@@ -25,18 +27,22 @@ class AddAction : public AddActionBase
 
 	const QStringList getFunctions(const QString app, const QString obj);
 	int curPage;
+	Mode theMode;
 
 public slots:
 	virtual void slotCorrectPage();
 
+	// connected to KCMLirc class to receive DCOP calls to tell it what button has been pressed
+	virtual void updateButton(const QString &remote, const QString &button);
+	virtual void updateButtons();
 	virtual void updateFunctions();
 	virtual void updateObjects();
 	virtual void updateButtonStates();
 	virtual void updateParameters();
 	virtual void updateParameter();
 	virtual void updateCurrentParam(const QString &newValue);
-public:
-	AddAction(QWidget *parent, const char *name);
+
+	AddAction(QWidget *parent, const char *name, const Mode &mode);
 	~AddAction();
 };
 

@@ -11,6 +11,7 @@
 
 #include "kcmlircbase.h"
 #include "iractions.h"
+#include "modes.h"
 
 class QListViewItem;
 
@@ -23,20 +24,28 @@ private:
 	KAboutData *myAboutData;
 	KCMLircBase *theKCMLircBase;
 	IRActions allActions;
+	Modes allModes;
 	QMap<QListViewItem *, QValueListIterator<IRAction> > actionMap;
+	QMap<QListViewItem *, Mode > modeMap;
 
 public slots:
 	void configChanged();
 	void updateActions();
-	void updateRemotes();
+	void updateModes();
 	void slotStartListen();
+	void slotAddMode();
+	void slotRemoveMode();
 	void slotAddAction();
 	void slotRemoveAction();
 
 // MOC_SKIP_BEGIN
 k_dcop:
 // MOC_SKIP_END
+	// now just used as a proxy to AddAction class
 	virtual void gotButton(QString remote, QString button);
+
+signals:
+	void haveButton(const QString &remote, const QString &button);
 
 public:
 	virtual void load();

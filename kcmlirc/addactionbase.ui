@@ -145,6 +145,76 @@
             <cstring>page</cstring>
         </property>
         <attribute name="title">
+            <string>Select button to configure</string>
+        </attribute>
+        <vbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>theButtonText</cstring>
+                </property>
+                <property name="text">
+                    <string>You are attempting to configure an action for a button on [remote] (in mode [mode]). Press a button on this remote control or select from the list.</string>
+                </property>
+                <property name="alignment">
+                    <set>WordBreak|AlignVCenter</set>
+                </property>
+            </widget>
+            <widget class="QLayoutWidget">
+                <property name="name">
+                    <cstring>layout8</cstring>
+                </property>
+                <hbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="KListView">
+                        <column>
+                            <property name="text">
+                                <string>Button</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
+                        <property name="name">
+                            <cstring>theButtons</cstring>
+                        </property>
+                        <property name="fullWidth">
+                            <bool>true</bool>
+                        </property>
+                    </widget>
+                    <spacer>
+                        <property name="name">
+                            <cstring>spacer5</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>241</width>
+                                <height>31</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </hbox>
+            </widget>
+        </vbox>
+    </widget>
+    <widget class="QWidget">
+        <property name="name">
+            <cstring>page</cstring>
+        </property>
+        <attribute name="title">
             <string>Select Program Function</string>
         </attribute>
         <vbox>
@@ -594,7 +664,7 @@
             <cstring>page</cstring>
         </property>
         <attribute name="title">
-            <string>Page</string>
+            <string>Select how to change to mode</string>
         </attribute>
         <widget class="QButtonGroup">
             <property name="name">
@@ -602,9 +672,9 @@
             </property>
             <property name="geometry">
                 <rect>
-                    <x>14</x>
+                    <x>160</x>
                     <y>10</y>
-                    <width>371</width>
+                    <width>340</width>
                     <height>351</height>
                 </rect>
             </property>
@@ -750,6 +820,7 @@
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
+    <includehint>klistview.h</includehint>
     <includehint>klistview.h</includehint>
     <includehint>klistview.h</includehint>
     <includehint>klistview.h</includehint>

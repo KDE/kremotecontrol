@@ -18,11 +18,12 @@
 #include <kapplication.h>
 
 #include <dcopclient.h>
+#include <irkick_stub.h>
 
 #include "prototype.h"
 #include "addaction.h"
 
-AddAction::AddAction(QWidget *parent, const char *name): AddActionBase(parent, name)
+AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): AddActionBase(parent, name), theMode(mode)
 {
 	connect(this, SIGNAL( selected(const QString &) ), SLOT( slotCorrectPage() ));
 	connect(this, SIGNAL( selected(const QString &) ), SLOT( updateButtonStates() ));
@@ -40,30 +41,48 @@ void AddAction::slotCorrectPage()
 	int lastPage = curPage;
 	curPage = indexOf(currentPage());
 
-	if(curPage == 1 && theUseProfile->isChecked())
-		showPage(((QWizard *)this)->page(lastPage ? 0 : 2));
-	if((curPage == 1 || curPage == 4) && theChangeMode->isChecked())
-		showPage(((QWizard *)this)->page(lastPage ? 0 : 5));
+	if(curPage == 2 && theUseProfile->isChecked())
+		showPage(((QWizard *)this)->page(lastPage > 1 ? 1 : 3));
+	if((curPage == 2 || curPage == 5) && theChangeMode->isChecked())
+		showPage(((QWizard *)this)->page(lastPage > 1 ? 1 : 6));
 
-	if(curPage == 2 && theUseDCOP->isChecked())
-		showPage(((QWizard *)this)->page(lastPage == 3 ? 1 : 3));
+	if(curPage == 3 && theUseDCOP->isChecked())
+		showPage(((QWizard *)this)->page(lastPage == 4 ? 2 : 4));
 
-	if(curPage == 3 && (
+	if(curPage == 4 && (
 	(theUseDCOP->isChecked() && theFunctions->currentItem() && !Prototype(theFunctions->currentItem()->text(2)).count()) ||
 	(theUseProfile->isChecked() && theProfileFunctions->currentItem() && !theFunctions->currentItem()->text(1).toInt())
 	))
-		showPage(((QWizard *)this)->page(lastPage == 4 ? (theUseDCOP->isChecked() ? 1 : 2) : 4));
+		showPage(((QWizard *)this)->page(lastPage == 5 ? (theUseDCOP->isChecked() ? 2 : 3) : 5));
+}
+
+void AddAction::updateButton(const QString &remote, const QString &button)
+{
+	// TODO: actually highlight the relevant item, or display a message telling user they are stupid for using wrong remote
+	// TODO: renew next button press capture if current page = 1
+}
+
+void AddAction::updateButtons()
+{
+	theButtons->clear();
+	IRKick_stub IRKick("irkick", "IRKick");
+	QStringList buttons = IRKick.buttons(theMode.remote());
+	for(QStringList::iterator j = buttons.begin(); j != buttons.end(); j++)
+		new QListViewItem(theButtons, *j);
 }
 
 void AddAction::updateButtonStates()
 {
+	// TODO: capture next press if page = 1
+	// TODO: release capture if page != 1
 	switch(indexOf(currentPage()))
 	{	case 0: setNextEnabled(currentPage(), theProfiles->currentItem() != 0 || !theUseProfile->isChecked()); break;
-		case 1: setNextEnabled(currentPage(), theFunctions->currentItem() != 0); break;
-		case 2: setNextEnabled(currentPage(), theProfileFunctions->currentItem() != 0); break;
-		case 3: updateParameters(); setNextEnabled(currentPage(), true); break;
-		case 4: setNextEnabled(currentPage(), false); setFinishEnabled(currentPage(), true); break;
-		case 5: setNextEnabled(currentPage(), false); setFinishEnabled(currentPage(), theModes->currentItem() || !theSwitchMode->isChecked()); break;
+		case 1: updateButtons(); setNextEnabled(currentPage(), theButtons->currentItem() != 0); break;
+		case 2: setNextEnabled(currentPage(), theFunctions->currentItem() != 0); break;
+		case 3: setNextEnabled(currentPage(), theProfileFunctions->currentItem() != 0); break;
+		case 4: updateParameters(); setNextEnabled(currentPage(), true); break;
+		case 5: setNextEnabled(currentPage(), false); setFinishEnabled(currentPage(), true); break;
+		case 6: setNextEnabled(currentPage(), false); setFinishEnabled(currentPage(), theModes->currentItem() || !theSwitchMode->isChecked()); break;
 	}
 }
 
