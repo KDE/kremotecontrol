@@ -1,11 +1,23 @@
 [Desktop Entry]
 Encoding=UTF-8
 Comment=Configure your remote controls for use with applications
+Comment[ca]=Configura els teus controls remots per usar amb aplicacions
+Comment[de]=Einrichtung diverser Applikationen zur Bedienung mit einer Fernsteuerung
+Comment[hu]=Az infravörös távirányítók kezelésének beállításai
+Comment[ru]=Настройка удалённого управления приложениями
+Comment[sv]=Ställ in fjärrkontroller att använda med program
 Exec=kcmshell kcmlirc
 Keywords=KCMLirc,kcmlirc
 Name=Remote Controls
+Name[ca]=Controls remots
+Name[de]=Fernsteuerungen
+Name[hu]=Távirányítók
+Name[ru]=Удалённое управление
+Name[sv]=Fjärrkontroller
 Terminal=false
 Type=Application
 X-KDE-FactoryName=kcmlirc
 X-KDE-Library=kcmlirc
 X-KDE-ModuleType=Library
+
+Categories=Qt;KDE;Settings;X-KDE-settings-peripherals

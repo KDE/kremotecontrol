@@ -9,8 +9,7 @@ kcm_kcmlirc_la_SOURCES = selectprofile.ui newmode.ui kcmlircbase.ui kcmlirc.cpp 
 kcm_kcmlirc_la_LIBADD = $(LIB_KDEUI) $(LIB_KFILE) ../kdelirc/libkdelirc.la
 kcm_kcmlirc_la_LDFLAGS = -module -avoid-version $(all_libraries) -no-undefined
 
-kcmlirc_DATA = kcmlirc.desktop
-kcmlircdir = $(kde_appsdir)/Settings/Peripherals
+xdg_apps_DATA = kcmlirc.desktop
 
 messages: rc.cpp
 	$(XGETTEXT) *.cpp -o $(podir)/kcmlirc.pot
