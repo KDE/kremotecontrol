@@ -160,8 +160,10 @@ void KLircClient::slotRead()
 				for (int i = 0; i < count; ++i)
 				{
 					// <code> <name>
-					QString btn = readLine();
-					buttons.append(btn.mid(17));
+					QString btn = readLine().mid(17);
+					if(btn.startsWith("'") && btn.endsWith("'"))
+						btn = btn.mid(1, btn.length() - 2);
+					buttons.append(btn);
 				}
 				theRemotes.insert(remote, buttons);
 			}
@@ -184,6 +186,8 @@ void KLircClient::slotRead()
 			pos = line.find(' ');
 			if (pos < 0) return;
 			QString btn = line.left(pos);
+			if(btn.startsWith("'") && btn.endsWith("'"))
+				btn = btn.mid(1, btn.length() - 2);
 			line.remove(0, pos + 1);
 
 			emit commandReceived(line, btn, repeat);
