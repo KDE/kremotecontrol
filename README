@@ -25,7 +25,4 @@ The system tray applet interfaces with LIRC in order to catch key presses on rem
 controls. It is then able to communicate with and potentially start applications through
 DCOP.
 
-So far most of the groundwork is completed. The code works, but needs a bit of an
-overhaul. It also needs the more advanced features implementing and the UI polishing.
-
-Gav Wood.
+Gav Wood, 2003 (gav at kde dot org).
