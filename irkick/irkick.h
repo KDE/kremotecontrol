@@ -29,6 +29,7 @@
 class IRKick: public KDEDModule
 {
 	Q_OBJECT
+	K_DCOP
 
 	QString npApp, npModule, npMethod;
 	QMap<QString, QString> currentModes;
