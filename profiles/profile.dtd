@@ -1,0 +1,22 @@
+<!DOCTYPE profile [
+
+<!ELEMENT profile (action+, name, author)>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT author (#PCDATA)>
+<!ELEMENT action (name, comment, arguments)>
+<!ELEMENT arguments (argument*)>
+<!ELEMENT argument (type, comment, range?)>
+<!ELEMENT comment (#PCDATA)>
+<!ELEMENT type (#PCDATA)>
+
+<!ATTLIST profile id CDATA #REQUIRED>
+<!ATTLIST action objid CDATA #REQUIRED>
+<!ATTLIST action prototype CDATA #REQUIRED>
+<!ATTLIST arguments count CDATA #REQUIRED>
+<!ATTLIST argument place CDATA #REQUIRED>
+<!ATTLIST range min CDATA #REQUIRED>
+<!ATTLIST range max CDATA #REQUIRED>
+
+]>
+
+

@@ -1,14 +1,10 @@
 general:
-* Optimise data structures to use pointer-based structures to cut down on copying
 * Some linear seaches still around rather than key-based - fix it to improve speed
-* Controllers/Profiles DTD (try for 1.0)
-* TAKE OUT kdedmodule_stub.h WHEN KDE INSTALLS IT IN DISTRIBUTION
+* Take out kdedmodule_stub.h
 
 kdmlirc:
-* Edit action?
-* Advanced (non-wizard) Add action?
-* Fix bools bug.
-* Implement multi-type editing for options.
+* Edit action / advanced (non-wizard) Add action?
+* Fix bools bug / multi-type editing for options.
 
 irkick:
 * Fix QByteArray parameter bug...

@@ -1,0 +1,12 @@
+<!DOCTYPE remote [
+
+<!ELEMENT remote (button+, name, author)>
+<!ELEMENT button (name)>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT author (#PCDATA)>
+
+<!ATTLIST remote id CDATA #REQUIRED>
+<!ATTLIST button id CDATA #REQUIRED>
+
+]>
+
