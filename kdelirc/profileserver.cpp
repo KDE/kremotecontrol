@@ -141,6 +141,8 @@ bool Profile::endElement(const QString &, const QString &, const QString &name)
 		theAuthor = charBuffer;
 	else if(name == "comment" && curPA && !curPAA)
 		curPA->setComment(charBuffer);
+	else if(name == "default" && curPA && curPAA)
+		curPAA->setDefault(charBuffer);
 	else if(name == "comment" && curPA && curPAA)
 		curPAA->setComment(charBuffer);
 	else if(name == "action")

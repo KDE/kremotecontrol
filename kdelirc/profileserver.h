@@ -35,6 +35,7 @@ class ProfileActionArgument
 {
 	QString theComment, theType;
 	Range theRange;
+	QString theDefault;		// should be QVariant?
 	const ProfileAction *parent;
 
 	friend class Profile;
@@ -43,6 +44,8 @@ public:
 	void setComment(const QString &a) { theComment = a; }
 	const QString &type() const { return theType; }
 	void setType(const QString &a) { theType = a; }
+	const QString &getDefault() const { return theDefault; }
+	void setDefault(const QString &a) { theDefault = a; }
 	const Range &range() const { return theRange; }
 	void setRange(const Range &a) { theRange = a; }
 

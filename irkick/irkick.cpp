@@ -299,7 +299,7 @@ void IRKick::slotShowAbout()
 	about->setTitle(i18n("KDE Lirc Server"));
 	about->setProduct(i18n("IRKick"), VERSION, i18n("Gav Wood"), "2003");
 	KAboutContainer *c = about->addContainerPage(i18n("&About"), AlignCenter, AlignLeft);
-	if( c != 0 )
+	if(c)
 	{	c->addWidget(new QLabel(i18n("IRKick: The KDE Linux Infrared Remote Control Server.\n\n"
 									"IRKick is made to be as simple, intuitive and user-centric\n"
 									"as possible. If you\n\n"
@@ -310,8 +310,11 @@ void IRKick::slotShowAbout()
 		c->addPerson(QString::null, QString("gav@kde.org"), QString("http://www.indigoarchive.net/gav/"), QString::null, true);
 	}
 	c = about->addContainerPage(i18n("&Credits"), AlignCenter, AlignLeft);
-	if( c != 0 )
-		c->addWidget(new QLabel(i18n("<p align=left>Author:<br/><b>Gav Wood</b></p>"), theTrayIcon));
+	if(c)
+	{	c->addWidget(new QLabel(i18n(	"<p align=left>Author:<br/><b>Gav Wood</b></p>"
+						"<p align=left>Ideas, concept code:<br/><b>Dirk Ziegelmeier</b></p>"
+						"<p align=left>Ideas:<br/><b>Antonio Larrosa Jiménez</b></p>"), theTrayIcon));
+	}
 	about->addLicensePage("&License Agreement", aboutData->license());
 	about->exec();
 	delete about;

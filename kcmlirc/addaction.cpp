@@ -239,7 +239,7 @@ void AddAction::updateParameters()
 
 		int index = 1;
 		for(QValueList<ProfileActionArgument>::const_iterator i = pa->arguments().begin(); i != pa->arguments().end(); i++, index++)
-		{	theArguments.append(QVariant(""));
+		{	theArguments.append(QVariant((*i).getDefault()));
 			theArguments.back().cast(QVariant::nameToType((*i).type()));
 			new QListViewItem(theParameters, (*i).comment(), theArguments.back().toString(), (*i).type(), QString().setNum(index));
 		}

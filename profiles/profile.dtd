@@ -4,10 +4,11 @@
 <!ELEMENT name (#PCDATA)>
 <!ELEMENT author (#PCDATA)>
 <!ELEMENT action (name, comment, argument*)>
-<!ELEMENT argument (comment, range?)>
+<!ELEMENT argument (comment, range?, default?)>
 <!ELEMENT comment (#PCDATA)>
 <!ELEMENT type (#PCDATA)>
 <!ELEMENT instances>
+<!ELEMENT default (#PCDATA)>
 
 <!ATTLIST profile id CDATA #REQUIRED>
 <!ATTLIST profile servicename CDATA #REQUIRED>

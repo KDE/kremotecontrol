@@ -102,8 +102,9 @@ d) Give the action a name and comment:
 	</profile>
 
 e) Describe each argument with a comment and type attribute. Valid types are
-found in the profile.dtd file. If you can find the exact type, just use one that
-is silently castable:
+found in the profile.dtd file. If you cant find the exact type, just use one
+that is silently castable. You should declare a default value between the
+default tags:
 
 	<?xml version="1.0" ?>
 	<!DOCTYPE profile SYSTEM "profile.dtd">
@@ -116,6 +117,7 @@ is silently castable:
 			<name>Show Integers</name>
 			<comment>Shows a configurable integer</comment>
 			<argument type="int">
+				<default>5</default>
 				<comment>The integer to be shown</comment>
 			</argument>
 		</action>
