@@ -49,11 +49,11 @@
 	<button id="video2"><name>Input - Video 2</name></button>
 	<button id="video3"><name>Input - Video 3</name></button>
 	<button id="disc"><name>CD Select</name></button>
-	<button id="discplay"><name>CD - Play</name></button>
-	<button id="discstop"><name>CD - Stop</name></button>
-	<button id="discback"><name>CD - Back</name></button>
-	<button id="discnext"><name>CD - Next</name></button>
-	<button id="discpause"><name>CD - Pause</name></button>
+	<button id="discplay" class="play"><name>CD - Play</name></button>
+	<button id="discstop" class="stop"><name>CD - Stop</name></button>
+	<button id="discback" class="back"><name>CD - Back</name></button>
+	<button id="discnext" class="next"><name>CD - Next</name></button>
+	<button id="discpause" class="pause"><name>CD - Pause</name></button>
 	<button id="discrepeat"><name>CD - Repeat</name></button>
 	<button id="discintro"><name>CD - Intro</name></button>
 </remote>

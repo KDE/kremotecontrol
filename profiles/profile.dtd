@@ -10,6 +10,7 @@
 <!ELEMENT type (#PCDATA)>
 
 <!ATTLIST profile id CDATA #REQUIRED>
+<!ATTLIST profile servicename CDATA #REQUIRED>
 <!ATTLIST action objid CDATA #REQUIRED>
 <!ATTLIST action prototype CDATA #REQUIRED>
 <!ATTLIST arguments count CDATA #REQUIRED>

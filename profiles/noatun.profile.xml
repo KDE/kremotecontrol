@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<profile id="noatun">
+<profile id="noatun" serivename="Noatun">
 	<name>Noatun</name>
 	<author>Gav Wood</author>
 	<action objid="Noatun" prototype="void playpause()">
