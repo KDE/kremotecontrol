@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>AddActionBase</class>
 <author>Gav Wood</author>
 <widget class="QWizard">
@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>704</width>
-            <height>589</height>
+            <width>723</width>
+            <height>593</height>
         </rect>
     </property>
     <property name="caption">
@@ -21,7 +21,7 @@
             <cstring>page</cstring>
         </property>
         <attribute name="title">
-            <string>Select action to carry out on button press</string>
+            <string>Select Action to Carry Out on Button Press</string>
         </attribute>
         <grid>
             <property name="name">
@@ -1200,7 +1200,7 @@
             <cstring>page</cstring>
         </property>
         <attribute name="title">
-            <string>Select required mode change</string>
+            <string>Select Required Mode Change</string>
         </attribute>
         <grid>
             <property name="name">
@@ -1393,6 +1393,8 @@
         </grid>
     </widget>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>theObjects</sender>
@@ -1612,7 +1614,8 @@
     <includehint>klineedit.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
-    <includehint>kdoublenuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
     <includehint>keditlistbox.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>klistview.h</includehint>

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>SelectProfile</class>
 <widget class="QDialog">
     <property name="name">
@@ -9,11 +9,11 @@
             <x>0</x>
             <y>0</y>
             <width>263</width>
-            <height>326</height>
+            <height>328</height>
         </rect>
     </property>
     <property name="caption">
-        <string>Select A Profile To Add</string>
+        <string>Select Profile to Add</string>
     </property>
     <vbox>
         <property name="name">
@@ -103,6 +103,8 @@
         </widget>
     </vbox>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>kPushButton12</sender>

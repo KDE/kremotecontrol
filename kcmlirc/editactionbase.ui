@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>EditActionBase</class>
 <widget class="QDialog">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>754</width>
-            <height>713</height>
+            <height>715</height>
         </rect>
     </property>
     <property name="caption">
@@ -146,7 +146,7 @@
                                                     <cstring>theJustStart</cstring>
                                                 </property>
                                                 <property name="text">
-                                                    <string>Just start application.</string>
+                                                    <string>Just start application</string>
                                                 </property>
                                             </widget>
                                         </grid>
@@ -956,6 +956,8 @@
         </widget>
     </vbox>
 </widget>
+<customwidgets>
+</customwidgets>
 <connections>
     <connection>
         <sender>buttonOk</sender>
@@ -1295,7 +1297,8 @@
     <includehint>klineedit.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
-    <includehint>kdoublenuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
+    <includehint>knuminput.h</includehint>
     <includehint>keditlistbox.h</includehint>
     <includehint>klineedit.h</includehint>
 </includehints>
