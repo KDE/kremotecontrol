@@ -10,7 +10,7 @@
             <x>0</x>
             <y>0</y>
             <width>704</width>
-            <height>581</height>
+            <height>583</height>
         </rect>
     </property>
     <property name="caption">
@@ -423,14 +423,6 @@
                         <property name="margin">
                             <number>0</number>
                         </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>theFunctionsLabel</cstring>
-                            </property>
-                            <property name="text">
-                                <string></string>
-                            </property>
-                        </widget>
                         <widget class="KListView">
                             <column>
                                 <property name="text">

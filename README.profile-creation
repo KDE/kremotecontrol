@@ -14,7 +14,7 @@ you create a profile for it.
 A profile tells KDELirc (and the user!) what the various DCOP calls do.
 Essentially this is a kind of documentation for the DCOP calls. You don't have
 to include all DCOP calls - just the ones that you feel would benefit end-users
-the most (usually interface adjusting calls rather the information gathering
+the most (usually "interface adjusting" calls rather the "information gathering"
 calls).
 
 
@@ -53,10 +53,10 @@ b) Inside populate with name and author information. If your application is not 
 KUniqueApplication, you **must** declare this with an "instances" tag, giving the
 attribute "unique" a value of "0" (it defaults to "1", a KUniqueApplication). You
 may optionally describe the default behaviour KDELirc should take should there be
-more than one instance of the application with the attribute "ifmulti", which may
-take one of "dontsend" (do nothing if >1 instance), "sendtoone" (send to only one
+more than one instance of the application, with the attribute "ifmulti" which may
+take one of "dontsend" (do nothing if >1 instance), "sendtoone" (send call to one
 arbitrarily chosen instance) and "sendtoall" (send to all instances). The default
-is "dontsend".
+is "dontsend", however, "sendtoone" may be the most useful in many circumstances.
 
 	<?xml version="1.0" ?>
 	<!DOCTYPE profile SYSTEM "profile.dtd">
@@ -69,11 +69,11 @@ is "dontsend".
 c) Populate the profile with action tags, for each DCOP action you want to be
 available to the user. Each action tag should have DCOP object name and function
 prototype.
-   Several optional attrubutes to specify are the key-class (an identifier to act
-as an abstract binding between remote controls and applications). There are
+   Several optional attrubutes to specify are the key-class (an identifier to
+act as an abstract binding between remote controls and applications). There are
 several defined; see the DTD files for a current list. The other options, repeat
-and autostart are boolean specificers to tell whether the action should repeat or
-automatically start the program by default.
+and autostart are boolean specificers to tell whether the action should repeat
+or automatically start the program by default.
 
 	<?xml version="1.0" ?>
 	<!DOCTYPE profile SYSTEM "profile.dtd">
@@ -81,8 +81,8 @@ automatically start the program by default.
 		<name>My Application</name>
 		<author>Me</author>
 		<instances unique="0" ifmulti="sendtoone"/>
-		<action objid="MyApp" prototype="void showint(short int)" class="number"
-							repeat="0" autostart="0">
+		<action objid="MyApp" prototype="void showint(short int)"
+				class="number" repeat="0" autostart="0">
 		</action>
 	</profile>
 
@@ -94,16 +94,16 @@ d) Give the action a name and comment:
 		<name>My Application</name>
 		<author>Me</author>
 		<instances unique="0" ifmulti="sendtoone"/>
-		<action objid="MyApp" prototype="void showints(short int)" class="number"
-							repeat="0" autostart="0">
+		<action objid="MyApp" prototype="void showints(short int)"
+				class="number" repeat="0" autostart="0">
 			<name>Show Integers</name>
 			<comment>Shows a configurable integer</comment>
 		</action>
 	</profile>
 
-e) Describe each argument with a comment and type attribute. Valid types are found
-in the profile.dtd file. If you can find the exact type, just use one that is
-silently castable:
+e) Describe each argument with a comment and type attribute. Valid types are
+found in the profile.dtd file. If you can find the exact type, just use one that
+is silently castable:
 
 	<?xml version="1.0" ?>
 	<!DOCTYPE profile SYSTEM "profile.dtd">
@@ -111,12 +111,12 @@ silently castable:
 		<name>My Application</name>
 		<author>Me</author>
 		<instances unique="0" ifmulti="sendtoone"/>
-		<action objid="MyApp" prototype="void showints(short int)" class="number"
-							repeat="0" autostart="0">
+		<action objid="MyApp" prototype="void showints(short int)"
+				class="number" repeat="0" autostart="0">
 			<name>Show Integers</name>
 			<comment>Shows a configurable integer</comment>
 			<argument type="int">
-				<comment>First integer</comment>
+				<comment>The integer to be shown</comment>
 			</argument>
 		</action>
 	</profile>

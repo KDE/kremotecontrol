@@ -178,12 +178,8 @@ void AddAction::updateOptions()
 	{
 		if(!theObjects->selectedItem()) return;
 		if(!theObjects->selectedItem()->parent()) return;
-		program = theObjects->selectedItem()->parent()->text(0);
-		QRegExp r("(.*)-[0-9]+");
-		if(r.exactMatch(program))
-		{	program = r.cap(1);
-			isUnique = false;
-		}
+		program = nameProgramMap[theObjects->selectedItem()->parent()];
+		isUnique = uniqueProgramMap[theObjects->selectedItem()->parent()];
 		im = IM_DONTSEND;
 	}
 	else return;
@@ -328,17 +324,29 @@ void AddAction::updateArgument(QListViewItem *theItem)
 
 void AddAction::updateObjects()
 {
+	QStringList names;
 	theObjects->clear();
+	uniqueProgramMap.clear();
+	nameProgramMap.clear();
+
 	DCOPClient *theClient = KApplication::kApplication()->dcopClient();
 	QCStringList theApps = theClient->registeredApplications();
 	for(QCStringList::iterator i = theApps.begin(); i != theApps.end(); i++)
-	{	if(QString(*i).find("anonymous"))
-		{	KListViewItem *a = new KListViewItem(theObjects, *i);
-			QCStringList theObjects = theClient->remoteObjects(*i);
-			for(QCStringList::iterator j = theObjects.begin(); j != theObjects.end(); j++)
-				if(*j != "ksycoca" && *j != "qt")// && getFunctions(*i, *j).count())
-					new KListViewItem(a, *j);
-		}
+	{
+		if(!QString(*i).find("anonymous")) continue;
+		QRegExp r("(.*)-[0-9]+");
+		QString name = r.exactMatch(QString(*i)) ? r.cap(1) : *i;
+		if(names.contains(name)) continue;
+		names += name;
+
+		KListViewItem *a = new KListViewItem(theObjects, name);
+		uniqueProgramMap[a] = name == QString(*i);
+		nameProgramMap[a] = *i;
+
+		QCStringList theObjects = theClient->remoteObjects(*i);
+		for(QCStringList::iterator j = theObjects.begin(); j != theObjects.end(); j++)
+			if(*j != "ksycoca" && *j != "qt")// && getFunctions(*i, *j).count())
+				new KListViewItem(a, *j);
 	}
 	updateFunctions();
 }
@@ -347,7 +355,7 @@ void AddAction::updateFunctions()
 {
 	theFunctions->clear();
 	if(theObjects->currentItem() && theObjects->currentItem()->parent())
-	{	QStringList functions = getFunctions(theObjects->currentItem()->parent()->text(0), theObjects->currentItem()->text(0));
+	{	QStringList functions = getFunctions(nameProgramMap[theObjects->currentItem()->parent()], theObjects->currentItem()->text(0));
 		for(QStringList::iterator i = functions.begin(); i != functions.end(); i++)
 		{	Prototype p((QString)(*i));
 			new KListViewItem(theFunctions, p.name(), p.argumentList(), *i);

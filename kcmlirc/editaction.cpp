@@ -191,22 +191,12 @@ void EditAction::updateOptions()
 	}
 	else if (theUseDCOP->isChecked())
 	{
+		if(theDCOPApplications->currentText().isNull() || theDCOPApplications->currentText().isEmpty()) return;
 		program = theDCOPApplications->currentText();
-		if (program == "") return;
-		QRegExp r("(.*)-[0-9]+");
-		if (r.exactMatch(program))
-		{	program = r.cap(1);
-			isUnique = false;
-		}
-		else
-			isUnique = true;
-		if (program == (*theAction).program()) isUnique = (*theAction).unique();
-
+		isUnique = uniqueProgramMap[theDCOPApplications->currentText()];
 	}
 	else
 		isUnique = true;
-
-	kdDebug() << k_funcinfo << ": " << program << ", " << isUnique << endl;
 
 	theIMLabel->setEnabled(!isUnique);
 	theIMGroup->setEnabled(!isUnique);
@@ -318,12 +308,25 @@ void EditAction::updateFunctions()
 
 void EditAction::updateDCOPApplications()
 {
+	QStringList names;
+
 	theDCOPApplications->clear();
 	DCOPClient *theClient = KApplication::kApplication()->dcopClient();
 	QCStringList theApps = theClient->registeredApplications();
 	for(QCStringList::iterator i = theApps.begin(); i != theApps.end(); i++)
-		if(QString(*i).find("anonymous"))
-			theDCOPApplications->insertItem(QString(*i));
+	{
+		if(!QString(*i).find("anonymous")) continue;
+		QRegExp r("(.*)-[0-9]+");
+		QString name = r.exactMatch(QString(*i)) ? r.cap(1) : *i;
+		if(names.contains(name)) continue;
+		names += name;
+
+		theDCOPApplications->insertItem(name);
+		uniqueProgramMap[name] = name == QString(*i);
+		nameProgramMap[name] = *i;
+
+
+	}
 	updateDCOPObjects();
 }
 
@@ -331,11 +334,11 @@ void EditAction::updateDCOPObjects()
 {
 	theDCOPObjects->clear();
 	DCOPClient *theClient = KApplication::kApplication()->dcopClient();
-	if(theDCOPApplications->currentText() == QString::null || theDCOPApplications->currentText() == "") return;
-	QCStringList theObjects = theClient->remoteObjects(QCString(theDCOPApplications->currentText()));
+	if(theDCOPApplications->currentText().isNull() || theDCOPApplications->currentText().isEmpty()) return;
+	QCStringList theObjects = theClient->remoteObjects(QCString(nameProgramMap[theDCOPApplications->currentText()]));
 	if(!theObjects.size() && theDCOPApplications->currentText() == (*theAction).program()) theDCOPObjects->insertItem((*theAction).object());
 	for(QCStringList::iterator j = theObjects.begin(); j != theObjects.end(); j++)
-		if(*j != "ksycoca" && *j != "qt" && AddAction::getFunctions(theDCOPApplications->currentText(), *j).count())
+		if(*j != "ksycoca" && *j != "qt" && AddAction::getFunctions(nameProgramMap[theDCOPApplications->currentText()], *j).count())
 			theDCOPObjects->insertItem(QString(*j));
 	updateDCOPFunctions();
 }
@@ -343,8 +346,8 @@ void EditAction::updateDCOPObjects()
 void EditAction::updateDCOPFunctions()
 {
 	theDCOPFunctions->clear();
-	if(theDCOPObjects->currentText() == QString::null || theDCOPObjects->currentText() == "") return;
-	QStringList functions = AddAction::getFunctions(theDCOPApplications->currentText(), theDCOPObjects->currentText());
+	if(theDCOPApplications->currentText().isNull() || theDCOPApplications->currentText().isEmpty()) return;
+	QStringList functions = AddAction::getFunctions(nameProgramMap[theDCOPApplications->currentText()], theDCOPObjects->currentText());
 	if(!functions.size() && theDCOPApplications->currentText() == (*theAction).program()) theDCOPFunctions->insertItem((*theAction).method().prototype());
 	for(QStringList::iterator i = functions.begin(); i != functions.end(); i++)
 		theDCOPFunctions->insertItem(*i);

@@ -19,8 +19,8 @@
 	<button id="auto"><name>Auto</name></button>
 	<button id="aux"><name>Input - Aux</name></button>
 	<button id="cd"><name>Input - CD</name></button>
-	<button id="chdown" class="volumedown"><name>Channel Down</name></button>
-	<button id="chup" class="volumedown"><name>Channel Up</name></button>
+	<button id="chdown" class="channeldown"><name>Channel Down</name></button>
+	<button id="chup" class="channelup"><name>Channel Up</name></button>
 	<button id="chsel"><name>Channel Select</name></button>
 	<button id="decka"><name>Deck A Select</name></button>
 	<button id="deckb"><name>Deck B Select</name></button>
@@ -50,7 +50,7 @@
 	<button id="video1"><name>Input - Video 1</name></button>
 	<button id="video2"><name>Input - Video 2</name></button>
 	<button id="video3"><name>Input - Video 3</name></button>
-	<button id="disc"><name>CD Select</name></button>
+	<button id="disc" class="eject"><name>CD Select</name></button>
 	<button id="discplay" class="play"><name>CD - Play</name></button>
 	<button id="discstop" class="stop"><name>CD - Stop</name></button>
 	<button id="discback" class="previous"><name>CD - Back</name></button>

@@ -63,6 +63,8 @@ public:
 	QMap<QListViewItem *, QString> profileMap;
 	QMap<QListViewItem *, QString> profileFunctionMap;
 	QMap<QListViewItem *, QString> buttonMap;
+	QMap<QListViewItem *, bool> uniqueProgramMap;
+	QMap<QListViewItem *, QString> nameProgramMap;
 
 	AddAction(QWidget *parent, const char *name, const Mode &mode);
 	~AddAction();

@@ -122,8 +122,8 @@ const QString IRAction::notes() const
 	else
 		return QString(theAutoStart ? i18n("Auto-start. ") : "")
 			+ QString(theRepeat ? i18n("Repeatable. ") : "")
-			+ QString(!theUnique ? (theIfMulti == IM_DONTSEND ? "Do nothing if many instances"
-						: theIfMulti == IM_SENDTOONE ? "Only ever send to one instance" : "Send to all instances")
+			+ QString(!theUnique ? (theIfMulti == IM_DONTSEND ? "Do nothing if many instances. "
+						: theIfMulti == IM_SENDTOONE ? "Only ever send to one instance. " : "Send to all instances. ")
 						: "");
 }
 

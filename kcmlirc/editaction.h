@@ -28,6 +28,8 @@ class EditAction : public EditActionBase
 	Q_OBJECT
 	IRAIt theAction;
 	QMap<QString, QString> applicationMap, functionMap;
+	QMap<QString, QString> nameProgramMap;
+	QMap<QString, bool> uniqueProgramMap;
 	Arguments arguments;
 	QString program;
 	bool isUnique;
