@@ -2,7 +2,7 @@ general:
 * Take out kdedmodule_stub.h, install by default (KDE4)
 
 kcmlirc:
-* Allow (just) starting of a KDE service/application
+* Allow use of default bindings
 
 irkick:
 * Change irkick to dcop service, not kded module

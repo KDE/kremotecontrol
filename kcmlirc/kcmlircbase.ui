@@ -43,7 +43,7 @@
                     </property>
                     <widget class="QSplitter" row="0" column="0">
                         <property name="name">
-                            <cstring>splitter6</cstring>
+                            <cstring>splitter8</cstring>
                         </property>
                         <property name="orientation">
                             <enum>Horizontal</enum>
@@ -156,7 +156,7 @@
                         </widget>
                         <widget class="QLayoutWidget">
                             <property name="name">
-                                <cstring>layout8</cstring>
+                                <cstring>layout46</cstring>
                             </property>
                             <vbox>
                                 <property name="name">
@@ -249,7 +249,7 @@
                                 </widget>
                                 <widget class="QLayoutWidget">
                                     <property name="name">
-                                        <cstring>layout10</cstring>
+                                        <cstring>layout45</cstring>
                                     </property>
                                     <hbox>
                                         <property name="name">
@@ -272,6 +272,17 @@
                                                 </size>
                                             </property>
                                         </spacer>
+                                        <widget class="KPushButton">
+                                            <property name="name">
+                                                <cstring>theAddActions</cstring>
+                                            </property>
+                                            <property name="enabled">
+                                                <bool>false</bool>
+                                            </property>
+                                            <property name="text">
+                                                <string>Add Ac&amp;tions...</string>
+                                            </property>
+                                        </widget>
                                         <widget class="KPushButton">
                                             <property name="name">
                                                 <cstring>theAddAction</cstring>
@@ -419,6 +430,7 @@
     <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>klistview.h</includehint>
+    <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>klistview.h</includehint>

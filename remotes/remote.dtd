@@ -7,6 +7,7 @@
 
 <!ATTLIST remote id CDATA #REQUIRED>
 <!ATTLIST button id CDATA #REQUIRED>
-
+<!ATTLIST button class (number|play|stop|pause|previous|next|rewind|forward|eject|mute|volumedown|volumeup|channeldown|channelup|red|yellow|green|blue) #IMPLIED>
+<!ATTLIST button option (0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20) #IMPLIED>
 ]>
 

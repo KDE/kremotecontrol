@@ -16,6 +16,8 @@
 class QListViewItem;
 class KListView;
 class QDropEvent;
+class Profile;
+class Remote;
 
 class KCMLirc: public KCModule, virtual public DCOPObject
 {
@@ -31,6 +33,7 @@ private:
 	QMap<QListViewItem *, Mode> modeMap;
 	QMap<QListViewItem *, QString> profileMap, remoteMap;
 
+	void autoPopulate(const Profile &profile, const Remote &remote, const QString &mode);
 
 public slots:
 	void configChanged();
@@ -44,6 +47,7 @@ public slots:
 	void slotRemoveMode();
 	void slotSetDefaultMode();
 	void slotAddAction();
+	void slotAddActions();
 	void slotEditAction();
 	void slotRemoveAction();
 	void slotDrop(KListView *, QDropEvent *, QListViewItem *, QListViewItem *after);

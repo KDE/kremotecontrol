@@ -1,28 +1,30 @@
 <?xml version="1.0" ?>
+<!DOCTYPE profile SYSTEM "profile.dtd">
+
 <profile id="noatun" serivename="Noatun">
 	<name>Noatun</name>
 	<author>Gav Wood</author>
-	<action objid="Noatun" prototype="void playpause()">
+	<action objid="Noatun" prototype="void playpause()" class="pause">
 		<name>Play/Pause</name>
 		<comment>Toggles the current track between playing and pausing.</comment>
 		<arguments/>
 	</action>
-	<action objid="Noatun" prototype="void stop()">
+	<action objid="Noatun" prototype="void stop()" class="stop">
 		<name>Stop</name>
 		<comment>Stops current playback, if any.</comment>
 		<arguments/>
 	</action>
-	<action objid="Noatun" prototype="void clear()">
+	<action objid="Noatun" prototype="void clear()" class="eject">
 		<name>Clear Playlist</name>
 		<comment>Clears the playlist of all items.</comment>
 		<arguments/>
 	</action>
-	<action objid="Noatun" prototype="void back()">
+	<action objid="Noatun" prototype="void back()" class="previous">
 		<name>Back</name>
 		<comment>Skips to the start of the last track.</comment>
 		<arguments/>
 	</action>
-	<action objid="Noatun" prototype="void forward()">
+	<action objid="Noatun" prototype="void forward()" class="next">
 		<name>Forward</name>
 		<comment>Skips to the start of the next track.</comment>
 		<arguments/>
@@ -32,7 +34,7 @@
 		<comment>Cycles through the playback modes of Noatun.</comment>
 		<arguments/>
 	</action>
-	<action objid="Noatun" prototype="void play()">
+	<action objid="Noatun" prototype="void play()" class="play">
 		<name>Play</name>
 		<comment>Starts playback.</comment>
 		<arguments/>

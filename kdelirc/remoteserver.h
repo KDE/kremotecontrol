@@ -24,12 +24,16 @@
 
 class RemoteButton
 {
-	QString theName, theId;
+	QString theName, theId, theClass, theParameter;
 
 	friend class Remote;
 public:
 	void setName(const QString &a) { theName = a; }
 	const QString &name(void) const { return theName; }
+	void setClass(const QString &a) { theClass = a; }
+	const QString &getClass(void) const { return theClass; }
+	void setParameter(const QString &a) { theParameter = a; }
+	const QString &parameter(void) const { return theParameter; }
 	void setId(const QString &a) { theId = a; }
 	const QString &id(void) const { return theId; }
 };

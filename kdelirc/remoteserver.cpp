@@ -78,6 +78,10 @@ bool Remote::startElement(const QString &, const QString &, const QString &name,
 	{
 		curRB = new RemoteButton();
 		curRB->setId(attributes.value("id"));
+		curRB->setClass(attributes.value("id"));
+		if(attributes.index("class") > -1)
+			curRB->setClass(attributes.value("class"));
+		curRB->setParameter(attributes.value("parameter"));
 		curRB->setName(attributes.value("id"));
 	}
 

@@ -42,6 +42,7 @@
 #include "editaction.h"
 #include "editmode.h"
 #include "modeslist.h"
+#include "selectprofile.h"
 
 typedef KGenericFactory<KCMLirc, QWidget> theFactory;
 K_EXPORT_COMPONENT_FACTORY(kcmlirc, theFactory("kcmlirc"));
@@ -56,6 +57,7 @@ KCMLirc::KCMLirc(QWidget *parent, const char *name, QStringList /*args*/) : KCMo
 	connect(theKCMLircBase->theExtensions, SIGNAL( selectionChanged(QListViewItem *) ), this, SLOT( updateInformation() ));
 	connect(theKCMLircBase->theModes, SIGNAL( itemRenamed(QListViewItem *) ), this, SLOT( slotRenamed(QListViewItem *) ));
 	connect(theKCMLircBase->theModes, SIGNAL(dropped(KListView*, QDropEvent*, QListViewItem*, QListViewItem*)), this, SLOT(slotDrop(KListView*, QDropEvent*, QListViewItem*, QListViewItem*)));
+	connect((QObject *)(theKCMLircBase->theAddActions), SIGNAL( clicked() ), this, SLOT( slotAddActions() ));
 	connect((QObject *)(theKCMLircBase->theAddAction), SIGNAL( clicked() ), this, SLOT( slotAddAction() ));
 	connect((QObject *)(theKCMLircBase->theEditAction), SIGNAL( clicked() ), this, SLOT( slotEditAction() ));
 	connect((QObject *)(theKCMLircBase->theRemoveAction), SIGNAL( clicked() ), this, SLOT( slotRemoveAction() ));
@@ -72,6 +74,7 @@ KCMLirc::~KCMLirc()
 void KCMLirc::updateModesStatus(QListViewItem *item)
 {
 	theKCMLircBase->theModes->setItemsRenameable(item && item->parent());
+	theKCMLircBase->theAddActions->setEnabled(ProfileServer::profileServer()->profiles().count() && theKCMLircBase->theModes->selectedItem() && RemoteServer::remoteServer()->remotes()[modeMap[theKCMLircBase->theModes->selectedItem()].remote()]);
 	theKCMLircBase->theAddAction->setEnabled(item);
 	theKCMLircBase->theAddMode->setEnabled(item);
 	theKCMLircBase->theRemoveMode->setEnabled(item && item->parent());
@@ -108,6 +111,25 @@ void KCMLirc::slotEditAction()
 		theDialog.theModes->insertItem(item->text(0));
 	theDialog.readFrom();
 	if(theDialog.exec() == QDialog::Accepted) { theDialog.writeBack(); emit changed(true); updateActions(); }
+}
+
+void KCMLirc::slotAddActions()
+{
+	if(!theKCMLircBase->theModes->selectedItem()) return;
+	Mode m = modeMap[theKCMLircBase->theModes->selectedItem()];
+	if(!RemoteServer::remoteServer()->remotes()[m.remote()]) return;
+
+	SelectProfile theDialog(this, 0);
+
+	QMap<QListViewItem *, Profile *> profileMap;
+	QDict<Profile> dict = ProfileServer::profileServer()->profiles();
+	for(QDictIterator<Profile> i(dict); i.current(); ++i) profileMap[new QListViewItem(theDialog.theProfiles, i.current()->name())] = i.current();
+
+	if(theDialog.exec() == QDialog::Accepted && theDialog.theProfiles->currentItem())
+	{	autoPopulate(*(profileMap[theDialog.theProfiles->currentItem()]), *(RemoteServer::remoteServer()->remotes()[m.remote()]), m.name());
+		updateActions();
+		emit changed(true);
+	}
 }
 
 void KCMLirc::slotAddAction()
@@ -165,7 +187,6 @@ void KCMLirc::slotAddAction()
 		{
 			ProfileServer *theServer = ProfileServer::profileServer();
 
-
 			if(theDialog.theNotJustStart->isChecked())
 			{	const ProfileAction *theAction = theServer->getAction(theDialog.profileMap[theDialog.theProfiles->selectedItem()], theDialog.profileFunctionMap[theDialog.theProfileFunctions->selectedItem()]);
 				a.setProgram(theAction->profile()->id());
@@ -195,6 +216,34 @@ void KCMLirc::slotRemoveAction()
 	allActions.erase(i);
 	updateActions();
 	emit changed(true);
+}
+
+void KCMLirc::autoPopulate(const Profile &profile, const Remote &remote, const QString &mode)
+{
+	QDict<RemoteButton> d = remote.buttons();
+	for(QDictIterator<RemoteButton> i(d); i.current(); ++i)
+	{	const ProfileAction *pa = profile.searchClass(i.current()->getClass());
+		if(pa)
+		{
+			IRAction a;
+			a.setRemote(remote.id());
+			a.setMode(mode);
+			a.setButton(i.current()->id());
+			a.setRepeat(pa->repeat());
+			a.setAutoStart(pa->autoStart());
+			a.setProgram(pa->profile()->id());
+			a.setObject(pa->objId());
+			a.setMethod(pa->prototype());
+			Arguments l;
+			// argument count should be either 0 or 1. undefined if > 1.
+			if(Prototype(pa->prototype()).argumentCount() == 1)
+			{	l.append(i.current()->parameter());
+				l.back().cast(QVariant::nameToType(Prototype(pa->prototype()).type(0)));
+			}
+			a.setArguments(l);
+			allActions.addAction(a);
+		}
+	}
 }
 
 void KCMLirc::slotAddMode()

@@ -204,6 +204,9 @@ void AddAction::updateParameters()
 			new QListViewItem(theParameters, (*i).comment(), theArguments.back().toString(), (*i).type(), QString().setNum(index));
 		}
 
+		// quicky update options too...
+		theRepeat->setChecked(pa->repeat());
+		theAutoStart->setChecked(pa->autoStart());
 	}
 
 	updateParameter();

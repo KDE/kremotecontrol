@@ -1,29 +1,31 @@
 <?xml version="1.0" ?>
+<!DOCTYPE remote SYSTEM "remote.dtd">
+
 <remote id="cimr100">
 	<name>Creative CIMR-100</name>
 	<author>Gav Wood</author>
-	<button id="0"/>
-	<button id="1"/>
-	<button id="2"/>
-	<button id="3"/>
-	<button id="4"/>
-	<button id="5"/>
-	<button id="6"/>
-	<button id="7"/>
-	<button id="8"/>
-	<button id="9"/>
-	<button id="back"><name>Back</name></button>
-	<button id="eject"><name>Eject</name></button>
-	<button id="fastforward"><name>Fast Forward</name></button>
+	<button id="0" class="number" parameter="0"/>
+	<button id="1" class="number" parameter="1"/>
+	<button id="2" class="number" parameter="2"/>
+	<button id="3" class="number" parameter="3"/>
+	<button id="4" class="number" parameter="4"/>
+	<button id="5" class="number" parameter="5"/>
+	<button id="6" class="number" parameter="6"/>
+	<button id="7" class="number" parameter="7"/>
+	<button id="8" class="number" parameter="8"/>
+	<button id="9" class="number" parameter="9"/>
+	<button id="back" class="previous"><name>Back</name></button>
+	<button id="eject" class="eject"><name>Eject</name></button>
+	<button id="fastforward" class="forward"><name>Fast Forward</name></button>
 	<button id="mouse"><name>Mouse</name></button>
-	<button id="mute"><name>Mute</name></button>
-	<button id="pause"><name>Pause</name></button>
-	<button id="play"><name>Play</name></button>
-	<button id="next"><name>Next</name></button>
-	<button id="rewind"><name>Rewind</name></button>
+	<button id="mute" class="mute"><name>Mute</name></button>
+	<button id="pause" class="pause"><name>Pause</name></button>
+	<button id="play" class="play"><name>Play</name></button>
+	<button id="next" class="next"><name>Next</name></button>
+	<button id="rewind" class="rewind"><name>Rewind</name></button>
 	<button id="shift"><name>Shift</name></button>
 	<button id="start"><name>Start</name></button>
-	<button id="stop"><name>Stop</name></button>
-	<button id="voldown"><name>Volume Down</name></button>
-	<button id="volup"><name>Volume Up</name></button>
+	<button id="stop" class="stop"><name>Stop</name></button>
+	<button id="voldown" class="volumedown"><name>Volume Down</name></button>
+	<button id="volup" class="volumeup"><name>Volume Up</name></button>
 </remote>

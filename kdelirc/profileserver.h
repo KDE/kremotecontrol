@@ -50,8 +50,9 @@ public:
 
 class ProfileAction
 {
-	QString theObjId, thePrototype, theName, theComment;
+	QString theObjId, thePrototype, theName, theComment, theClass;
 	const Profile *parent;
+	bool theRepeat, theAutoStart;
 	QValueList<ProfileActionArgument> theArguments;
 
 	friend class Profile;
@@ -64,6 +65,12 @@ public:
 	void setName(const QString &a) { theName = a; }
 	const QString &comment() const { return theComment; }
 	void setComment(const QString &a) { theComment = a; }
+	const QString &getClass() const { return theClass; }
+	void setClass(const QString &a) { theClass = a; }
+	bool repeat() const { return theRepeat; }
+	void setRepeat(bool a) { theRepeat = a; }
+	bool autoStart() const { return theAutoStart; }
+	void setAutoStart(bool a) { theAutoStart = a; }
 	const QValueList<ProfileActionArgument> &arguments() const { return theArguments; }
 
 	const Profile *profile() const { return parent; }
@@ -94,6 +101,7 @@ public:
 	const QString &serviceName() const { if(theServiceName != QString::null) return theServiceName; return theName; }
 	void setServiceName(const QString &a) { theServiceName = a; }
 	const QDict<ProfileAction> &actions() const { return theActions; }
+	const ProfileAction *searchClass(const QString &c) const;
 
 	void loadFromFile(const QString &fileName);
 

@@ -48,6 +48,13 @@ Profile::Profile()
 	theActions.setAutoDelete(true);
 }
 
+const ProfileAction *Profile::searchClass(const QString &c) const
+{
+	for(QDictIterator<ProfileAction> i(theActions); i.current(); ++i)
+		if(i.current()->getClass() == c) return i;
+	return 0;
+}
+
 void Profile::loadFromFile(const QString &fileName)
 {
 	charBuffer = "";
@@ -94,10 +101,12 @@ bool Profile::startElement(const QString &, const QString &, const QString &name
 		theServiceName = attributes.value("servicename");
 	}
 	else if(name == "action")
-	{
-		curPA = new ProfileAction;
+	{	curPA = new ProfileAction;
 		curPA->setObjId(attributes.value("objid"));
 		curPA->setPrototype(attributes.value("prototype"));
+		curPA->setClass(attributes.value("class"));
+		curPA->setRepeat(attributes.value("repeat") == "1");
+		curPA->setAutoStart(attributes.value("autostart") == "1");
 	}
 	else if(name == "arguments")
 		for(int i = 0; i < attributes.value("count").toInt(); i++)
