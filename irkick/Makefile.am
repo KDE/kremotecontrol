@@ -18,7 +18,7 @@ irkick_la_LDFLAGS = $(all_libraries) -module -avoid-version
 
 xdg_apps_DATA = irkick.desktop
 
-autostartdir = $(prefix)/share/autostart
+autostartdir = $(datadir)/autostart
 autostart_DATA = irkick.desktop
 
 messages:
