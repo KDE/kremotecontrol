@@ -96,10 +96,10 @@ void KCMLirc::slotRenamed(QListViewItem *item)
 
 void KCMLirc::slotEditAction()
 {
-	if(!theKCMLircBase->theActions->selectedItem()) return;
+	if(!theKCMLircBase->theActions->currentItem()) return;
 
-	EditAction theDialog(actionMap[theKCMLircBase->theActions->selectedItem()], this);
-	QListViewItem *item = theKCMLircBase->theModes->selectedItem();
+	EditAction theDialog(actionMap[theKCMLircBase->theActions->currentItem()], this);
+	QListViewItem *item = theKCMLircBase->theModes->currentItem();
 	if(item->parent()) item = item->parent();
 	theDialog.theModes->insertItem(i18n("[Exit current mode]"));
 	for(item = item->firstChild(); item; item = item->nextSibling())
@@ -189,9 +189,9 @@ void KCMLirc::slotAddAction()
 
 void KCMLirc::slotRemoveAction()
 {
-	if(!theKCMLircBase->theActions->selectedItem()) return;
+	if(!theKCMLircBase->theActions->currentItem()) return;
 
-	IRAIt i = actionMap[theKCMLircBase->theActions->selectedItem()];
+	IRAIt i = actionMap[theKCMLircBase->theActions->currentItem()];
 	allActions.erase(i);
 	updateActions();
 	emit changed(true);
