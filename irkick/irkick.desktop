@@ -1,20 +1,21 @@
 [Desktop Entry]
 Type=Service
 Name=KDE LIRC server
-Name[ca]=Servidor LIRC per a KDE
-Name[es]=KDE LIRC servidor
-Name[fr]=Serveur LIRC pour KDE
-Name[nl]=KDE LIRC-server
-Name[pt]=Servidor de LIRC do KDE
-Name[pt_BR]=Servidor LIRC do KDE
-Name[sv]=KDE LIRC-server
+Name[bg]=Сървър LIRC
+Name[ca]=Servidor LIRC de KDE
+Name[da]=KDE LIRC-server
+Name[de]=KDE LIRC Server
+Name[es]=Servidor LIRC de KDE
+Name[hu]=KDE LIRC-kiszolgáló
+Name[ru]=Сервер LIRC
+Name[sv]=KDE:s LIRC-server
 Name[wa]=Sierveu LIRC KDE
 
 X-KDE-Library=irkick
 X-KDE-autostart-after=panel
 X-KDE-StartupNotify=false
 X-DCOP-ServiceType=Unique
-Categories=Qt;KDE;Utility
+Categories=Qt;KDE;Utility;X-KDE-More
 X-KDE-autostart-condition=irkickrc:General:AutoStart:true
 
 Exec=irkick
@@ -22,11 +23,13 @@ Icon=irkick
 MiniIcon=irkick
 DocPath=kcontrol/kdelirc.html
 Comment=KDE Linux infrared remote control server.
-Comment[ca]=Un servidor Linux de control remot per infraroigs per a KDE.
-Comment[es]=KDE Linux servidor de control remoto de infrarrojos.
-Comment[nl]=KDE Linux infraroodafstanbedieningsserver
-Comment[pt]=Servidor do comando à distância por infravermelhos do Linux para o KDE.
-Comment[pt_BR]=Servidor de controle remoto de infra-vermelho do KDE
-Comment[sv]=KDE Linux infraröd fjärrkontrollserver.
+Comment[bg]=Сървър за управление на дистанционно устройство с инфрачервени лъчи
+Comment[ca]=Servidor de control remot per infrarojos de Linux KDE.
+Comment[da]=KDE Linux infrarød fjernbetjeningsserver.
+Comment[de]=KDE Linux Infrarot Fernsteuerungsserver.
+Comment[es]=Servidor de control remoto por infrarrojos de KDE
+Comment[hu]=KDE Linux szolgáltatás infravörös távirányítók kezeléséhez
+Comment[ru]=Сервер управления KDE через инфракрасный порт.
+Comment[sv]=Infraröd fjärrkontrollserver
 Encoding=UTF-8
 
