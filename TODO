@@ -1,10 +1,12 @@
 general:
 * Some linear seaches still around rather than key-based - fix it to improve speed
 * Take out kdedmodule_stub.h
+* Internationalise stuff
 
 kdmlirc:
-* Edit action / advanced (non-wizard) Add action?
 * Fix bools bug / multi-type editing for options.
+* Inline mode renaming
+* Set default modes
 
 irkick:
 * Fix QByteArray parameter bug...

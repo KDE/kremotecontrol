@@ -140,7 +140,6 @@ const QStringList AddAction::getFunctions(const QString app, const QString obj)
 			QString(*i) != "QCStringList find(QCString)" )
 			ret += *i;
 	return ret;
-
 }
 
 void AddAction::updateProfiles()

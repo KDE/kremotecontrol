@@ -25,7 +25,6 @@ class AddAction : public AddActionBase
 {
 	Q_OBJECT
 
-	const QStringList getFunctions(const QString app, const QString obj);
 	int curPage;
 	Mode theMode;
 
@@ -48,6 +47,8 @@ public slots:
 	virtual void updateProfileFunctions();
 
 public:
+	static const QStringList getFunctions(const QString app, const QString obj);
+
 	void requestNextPress();
 	void cancelRequest();
 

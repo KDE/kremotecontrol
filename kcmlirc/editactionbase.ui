@@ -1,0 +1,605 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>EditActionBase</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>EditActionBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>535</width>
+            <height>487</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Edit Action</string>
+    </property>
+    <property name="sizeGripEnabled">
+        <bool>true</bool>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QTabWidget">
+            <property name="name">
+                <cstring>tabWidget3</cstring>
+            </property>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Function</string>
+                </attribute>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QButtonGroup">
+                        <property name="name">
+                            <cstring>buttonGroup3</cstring>
+                        </property>
+                        <property name="frameShape">
+                            <enum>NoFrame</enum>
+                        </property>
+                        <property name="title">
+                            <string></string>
+                        </property>
+                        <vbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>0</number>
+                            </property>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>layout18</cstring>
+                                </property>
+                                <grid>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QLabel" row="3" column="1">
+                                        <property name="name">
+                                            <cstring>textLabel4_3</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>O&amp;bject:</string>
+                                        </property>
+                                        <property name="buddy" stdset="0">
+                                            <cstring>theDCOPObjects</cstring>
+                                        </property>
+                                    </widget>
+                                    <widget class="QComboBox" row="2" column="2">
+                                        <property name="name">
+                                            <cstring>theDCOPApplications</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>5</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLabel" row="4" column="1">
+                                        <property name="name">
+                                            <cstring>textLabel4_2</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Fu&amp;nction:</string>
+                                        </property>
+                                        <property name="buddy" stdset="0">
+                                            <cstring>theDCOPFunctions</cstring>
+                                        </property>
+                                    </widget>
+                                    <widget class="QComboBox" row="1" column="2">
+                                        <property name="name">
+                                            <cstring>theFunctions</cstring>
+                                        </property>
+                                    </widget>
+                                    <widget class="QRadioButton" row="0" column="0">
+                                        <property name="name">
+                                            <cstring>theUseProfile</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Use application.</string>
+                                        </property>
+                                        <property name="checked">
+                                            <bool>true</bool>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLabel" row="0" column="1">
+                                        <property name="name">
+                                            <cstring>textLabel5</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Application:</string>
+                                        </property>
+                                        <property name="buddy" stdset="0">
+                                            <cstring>theApplications</cstring>
+                                        </property>
+                                    </widget>
+                                    <widget class="QComboBox" row="0" column="2">
+                                        <property name="name">
+                                            <cstring>theApplications</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>5</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                    </widget>
+                                    <widget class="QComboBox" row="3" column="2">
+                                        <property name="name">
+                                            <cstring>theDCOPObjects</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLabel" row="1" column="1">
+                                        <property name="name">
+                                            <cstring>textLabel4</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Function:</string>
+                                        </property>
+                                        <property name="buddy" stdset="0">
+                                            <cstring>theFunctions</cstring>
+                                        </property>
+                                    </widget>
+                                    <widget class="QComboBox" row="4" column="2">
+                                        <property name="name">
+                                            <cstring>theDCOPFunctions</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLabel" row="2" column="1">
+                                        <property name="name">
+                                            <cstring>textLabel5_2</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>App&amp;lication:</string>
+                                        </property>
+                                        <property name="buddy" stdset="0">
+                                            <cstring>theDCOPApplications</cstring>
+                                        </property>
+                                    </widget>
+                                    <widget class="QRadioButton" row="2" column="0">
+                                        <property name="name">
+                                            <cstring>theUseDCOP</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Use &amp;DCOP.</string>
+                                        </property>
+                                    </widget>
+                                </grid>
+                            </widget>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>layout16</cstring>
+                                </property>
+                                <grid>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QLabel" row="0" column="0">
+                                        <property name="name">
+                                            <cstring>textLabel8</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>A&amp;pplication/DCOP options:</string>
+                                        </property>
+                                        <property name="buddy" stdset="0">
+                                            <cstring>theArguments</cstring>
+                                        </property>
+                                    </widget>
+                                    <widget class="QComboBox" row="0" column="1">
+                                        <property name="name">
+                                            <cstring>theArguments</cstring>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>1</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <property name="minimumSize">
+                                            <size>
+                                                <width>106</width>
+                                                <height>0</height>
+                                            </size>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLineEdit" row="0" column="2">
+                                        <property name="name">
+                                            <cstring>theArgument</cstring>
+                                        </property>
+                                        <property name="minimumSize">
+                                            <size>
+                                                <width>0</width>
+                                                <height>0</height>
+                                            </size>
+                                        </property>
+                                    </widget>
+                                </grid>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>spacer14</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>481</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>layout17</cstring>
+                                </property>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QRadioButton">
+                                        <property name="name">
+                                            <cstring>theChangeMode</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Change &amp;mode to:</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QComboBox">
+                                        <property name="name">
+                                            <cstring>theModes</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="sizePolicy">
+                                            <sizepolicy>
+                                                <hsizetype>7</hsizetype>
+                                                <vsizetype>0</vsizetype>
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                    </widget>
+                                </hbox>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>spacer15</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>21</width>
+                                        <height>30</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </vbox>
+                    </widget>
+                </vbox>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>tab</cstring>
+                </property>
+                <attribute name="title">
+                    <string>Options</string>
+                </attribute>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QLabel">
+                        <property name="name">
+                            <cstring>textLabel3</cstring>
+                        </property>
+                        <property name="text">
+                            <string>&lt;b&gt;Miscellaneous Options&lt;/b&gt;</string>
+                        </property>
+                    </widget>
+                    <widget class="Line">
+                        <property name="name">
+                            <cstring>line2</cstring>
+                        </property>
+                        <property name="frameShape">
+                            <enum>HLine</enum>
+                        </property>
+                        <property name="frameShadow">
+                            <enum>Sunken</enum>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>theRepeat</cstring>
+                        </property>
+                        <property name="text">
+                            <string>&amp;Action repeats if button is held down</string>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>theAutoStart</cstring>
+                        </property>
+                        <property name="text">
+                            <string>&amp;Start program/service if not already running</string>
+                        </property>
+                    </widget>
+                    <spacer>
+                        <property name="name">
+                            <cstring>spacer3</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>100</height>
+                            </size>
+                        </property>
+                    </spacer>
+                </vbox>
+            </widget>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>Layout1</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonHelp</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Help</string>
+                    </property>
+                    <property name="accel">
+                        <string>F1</string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>Horizontal Spacing2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonOk</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;OK</string>
+                    </property>
+                    <property name="accel">
+                        <string></string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonCancel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Cancel</string>
+                    </property>
+                    <property name="accel">
+                        <string></string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+    </vbox>
+</widget>
+<connections>
+    <connection>
+        <sender>buttonOk</sender>
+        <signal>clicked()</signal>
+        <receiver>EditActionBase</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>buttonCancel</sender>
+        <signal>clicked()</signal>
+        <receiver>EditActionBase</receiver>
+        <slot>reject()</slot>
+    </connection>
+    <connection>
+        <sender>theUseProfile</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>theApplications</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>theUseProfile</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>theFunctions</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>theUseDCOP</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>theDCOPApplications</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>theUseDCOP</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>theDCOPObjects</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>theUseDCOP</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>theDCOPFunctions</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>theChangeMode</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>theModes</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>theApplications</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>EditActionBase</receiver>
+        <slot>updateFunctions()</slot>
+    </connection>
+    <connection>
+        <sender>theDCOPApplications</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>EditActionBase</receiver>
+        <slot>updateDCOPObjects()</slot>
+    </connection>
+    <connection>
+        <sender>theDCOPObjects</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>EditActionBase</receiver>
+        <slot>updateDCOPFunctions()</slot>
+    </connection>
+    <connection>
+        <sender>theFunctions</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>EditActionBase</receiver>
+        <slot>updateArguments()</slot>
+    </connection>
+    <connection>
+        <sender>theDCOPFunctions</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>EditActionBase</receiver>
+        <slot>updateArguments()</slot>
+    </connection>
+    <connection>
+        <sender>theUseProfile</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>theArguments</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>theUseDCOP</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>theArguments</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>theArgument</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>EditActionBase</receiver>
+        <slot>slotInputArgument(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>theArguments</sender>
+        <signal>activated(int)</signal>
+        <receiver>EditActionBase</receiver>
+        <slot>updateArgument(int)</slot>
+    </connection>
+    <connection>
+        <sender>theUseProfile</sender>
+        <signal>clicked()</signal>
+        <receiver>EditActionBase</receiver>
+        <slot>updateArguments()</slot>
+    </connection>
+    <connection>
+        <sender>theUseDCOP</sender>
+        <signal>clicked()</signal>
+        <receiver>EditActionBase</receiver>
+        <slot>updateArguments()</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>tabWidget3</tabstop>
+    <tabstop>theUseProfile</tabstop>
+    <tabstop>theApplications</tabstop>
+    <tabstop>theFunctions</tabstop>
+    <tabstop>theDCOPApplications</tabstop>
+    <tabstop>theDCOPObjects</tabstop>
+    <tabstop>theDCOPFunctions</tabstop>
+    <tabstop>theModes</tabstop>
+    <tabstop>theRepeat</tabstop>
+    <tabstop>theAutoStart</tabstop>
+    <tabstop>buttonHelp</tabstop>
+    <tabstop>buttonOk</tabstop>
+    <tabstop>buttonCancel</tabstop>
+</tabstops>
+<slots>
+    <slot>updateFunctions()</slot>
+    <slot>updateApplications()</slot>
+    <slot>updateDCOPApplications()</slot>
+    <slot>updateDCOPObjects()</slot>
+    <slot>updateDCOPFunctions()</slot>
+    <slot>updateArguments()</slot>
+    <slot>updateArgument(int)</slot>
+    <slot>slotInputArgument(const QString &amp;)</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

@@ -37,20 +37,20 @@
                 <attribute name="title">
                     <string>Controller Functions</string>
                 </attribute>
-                <vbox>
+                <grid>
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QSplitter">
+                    <widget class="QSplitter" row="0" column="0">
                         <property name="name">
-                            <cstring>splitter7</cstring>
+                            <cstring>splitter3</cstring>
                         </property>
                         <property name="orientation">
                             <enum>Horizontal</enum>
                         </property>
                         <widget class="QLayoutWidget">
                             <property name="name">
-                                <cstring>layout10</cstring>
+                                <cstring>leftLayout</cstring>
                             </property>
                             <vbox>
                                 <property name="name">
@@ -60,30 +60,11 @@
                                     <number>0</number>
                                 </property>
                                 <widget class="KListView">
-                                    <column>
-                                        <property name="text">
-                                            <string>Remote Control</string>
-                                        </property>
-                                        <property name="clickable">
-                                            <bool>true</bool>
-                                        </property>
-                                        <property name="resizable">
-                                            <bool>true</bool>
-                                        </property>
-                                    </column>
-                                    <column>
-                                        <property name="text">
-                                            <string>Actions</string>
-                                        </property>
-                                        <property name="clickable">
-                                            <bool>true</bool>
-                                        </property>
-                                        <property name="resizable">
-                                            <bool>true</bool>
-                                        </property>
-                                    </column>
                                     <property name="name">
                                         <cstring>theModes</cstring>
+                                    </property>
+                                    <property name="acceptDrops">
+                                        <bool>true</bool>
                                     </property>
                                     <property name="rootIsDecorated">
                                         <bool>true</bool>
@@ -122,7 +103,7 @@
                                                 <cstring>theAddMode</cstring>
                                             </property>
                                             <property name="text">
-                                                <string>Add Mode...</string>
+                                                <string>&amp;Add Mode...</string>
                                             </property>
                                         </widget>
                                         <widget class="KPushButton">
@@ -130,7 +111,7 @@
                                                 <cstring>theRemoveMode</cstring>
                                             </property>
                                             <property name="text">
-                                                <string>Remove Mode</string>
+                                                <string>&amp;Remove Mode</string>
                                             </property>
                                         </widget>
                                     </hbox>
@@ -139,7 +120,7 @@
                         </widget>
                         <widget class="QLayoutWidget">
                             <property name="name">
-                                <cstring>layout5</cstring>
+                                <cstring>layout11</cstring>
                             </property>
                             <vbox>
                                 <property name="name">
@@ -223,6 +204,158 @@
                                             <bool>true</bool>
                                         </property>
                                     </column>
+                                <item>
+                                    <property name="text">
+                                        <string>Item</string>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                    <property name="pixmap">
+                                        <pixmap></pixmap>
+                                    </property>
+                                    <property name="pixmap">
+                                        <pixmap></pixmap>
+                                    </property>
+                                    <property name="pixmap">
+                                        <pixmap></pixmap>
+                                    </property>
+                                    <property name="pixmap">
+                                        <pixmap></pixmap>
+                                    </property>
+                                    <property name="pixmap">
+                                        <pixmap></pixmap>
+                                    </property>
+                                    <property name="pixmap">
+                                        <pixmap></pixmap>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>Item</string>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                    <property name="pixmap">
+                                        <pixmap></pixmap>
+                                    </property>
+                                    <property name="pixmap">
+                                        <pixmap></pixmap>
+                                    </property>
+                                    <property name="pixmap">
+                                        <pixmap></pixmap>
+                                    </property>
+                                    <property name="pixmap">
+                                        <pixmap></pixmap>
+                                    </property>
+                                    <property name="pixmap">
+                                        <pixmap></pixmap>
+                                    </property>
+                                    <property name="pixmap">
+                                        <pixmap></pixmap>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>Item</string>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                    <property name="pixmap">
+                                        <pixmap></pixmap>
+                                    </property>
+                                    <property name="pixmap">
+                                        <pixmap></pixmap>
+                                    </property>
+                                    <property name="pixmap">
+                                        <pixmap></pixmap>
+                                    </property>
+                                    <property name="pixmap">
+                                        <pixmap></pixmap>
+                                    </property>
+                                    <property name="pixmap">
+                                        <pixmap></pixmap>
+                                    </property>
+                                    <property name="pixmap">
+                                        <pixmap></pixmap>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>Item</string>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                    <property name="pixmap">
+                                        <pixmap></pixmap>
+                                    </property>
+                                    <property name="pixmap">
+                                        <pixmap></pixmap>
+                                    </property>
+                                    <property name="pixmap">
+                                        <pixmap></pixmap>
+                                    </property>
+                                    <property name="pixmap">
+                                        <pixmap></pixmap>
+                                    </property>
+                                    <property name="pixmap">
+                                        <pixmap></pixmap>
+                                    </property>
+                                    <property name="pixmap">
+                                        <pixmap></pixmap>
+                                    </property>
+                                </item>
                                     <property name="name">
                                         <cstring>theActions</cstring>
                                     </property>
@@ -234,10 +367,19 @@
                                             <verstretch>0</verstretch>
                                         </sizepolicy>
                                     </property>
+                                    <property name="dragAutoScroll">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="selectionMode" stdset="0">
+                                        <enum>FileManager</enum>
+                                    </property>
+                                    <property name="dragEnabled">
+                                        <bool>true</bool>
+                                    </property>
                                 </widget>
                                 <widget class="QLayoutWidget">
                                     <property name="name">
-                                        <cstring>layout1</cstring>
+                                        <cstring>layout10</cstring>
                                     </property>
                                     <hbox>
                                         <property name="name">
@@ -255,7 +397,7 @@
                                             </property>
                                             <property name="sizeHint">
                                                 <size>
-                                                    <width>211</width>
+                                                    <width>110</width>
                                                     <height>21</height>
                                                 </size>
                                             </property>
@@ -265,7 +407,15 @@
                                                 <cstring>theAddAction</cstring>
                                             </property>
                                             <property name="text">
-                                                <string>Add Action...</string>
+                                                <string>A&amp;dd Action...</string>
+                                            </property>
+                                        </widget>
+                                        <widget class="QPushButton">
+                                            <property name="name">
+                                                <cstring>theEditAction</cstring>
+                                            </property>
+                                            <property name="text">
+                                                <string>&amp;Edit Action...</string>
                                             </property>
                                         </widget>
                                         <widget class="KPushButton">
@@ -273,7 +423,7 @@
                                                 <cstring>theRemoveAction</cstring>
                                             </property>
                                             <property name="text">
-                                                <string>Remove Action</string>
+                                                <string>Re&amp;move Action</string>
                                             </property>
                                         </widget>
                                     </hbox>
@@ -281,7 +431,7 @@
                             </vbox>
                         </widget>
                     </widget>
-                </vbox>
+                </grid>
             </widget>
             <widget class="QWidget">
                 <property name="name">
@@ -380,6 +530,12 @@
         </widget>
     </grid>
 </widget>
+<includes>
+    <include location="local" impldecl="in implementation">kcmlircbase.ui.h</include>
+</includes>
+<functions>
+    <function access="private" specifier="non virtual">init()</function>
+</functions>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>klistview.h</includehint>

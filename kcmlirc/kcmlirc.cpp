@@ -12,6 +12,9 @@
 #include <qlayout.h>
 #include <qlineedit.h>
 #include <qradiobutton.h>
+#include <qcombobox.h>
+#include <qevent.h>
+#include <qlistview.h>
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -33,6 +36,8 @@
 #include "profileserver.h"
 #include "remoteserver.h"
 #include "kcmlirc.h"
+#include "editaction.h"
+#include "modeslist.h"
 
 typedef KGenericFactory<KCMLirc, QWidget> theFactory;
 K_EXPORT_COMPONENT_FACTORY(kcmlirc, theFactory("kcmlirc"));
@@ -43,7 +48,9 @@ KCMLirc::KCMLirc(QWidget *parent, const char *name, QStringList /*args*/) : KCMo
 	theKCMLircBase = new KCMLircBase(this);
 	connect(theKCMLircBase->theModes, SIGNAL( currentChanged(QListViewItem *) ), this, SLOT( updateActions() ));
 	connect(theKCMLircBase->theExtensions, SIGNAL( currentChanged(QListViewItem *) ), this, SLOT( updateInformation() ));
+	connect(theKCMLircBase->theModes, SIGNAL(dropped(KListView*, QDropEvent*, QListViewItem*, QListViewItem*)), this, SLOT(slotDrop(KListView*, QDropEvent*, QListViewItem*, QListViewItem*)));
 	connect((QObject *)(theKCMLircBase->theAddAction), SIGNAL( clicked() ), this, SLOT( slotAddAction() ));
+	connect((QObject *)(theKCMLircBase->theEditAction), SIGNAL( clicked() ), this, SLOT( slotEditAction() ));
 	connect((QObject *)(theKCMLircBase->theRemoveAction), SIGNAL( clicked() ), this, SLOT( slotRemoveAction() ));
 	connect((QObject *)(theKCMLircBase->theAddMode), SIGNAL( clicked() ), this, SLOT( slotAddMode() ));
 	connect((QObject *)(theKCMLircBase->theRemoveMode), SIGNAL( clicked() ), this, SLOT( slotRemoveMode() ));
@@ -52,6 +59,20 @@ KCMLirc::KCMLirc(QWidget *parent, const char *name, QStringList /*args*/) : KCMo
 
 KCMLirc::~KCMLirc()
 {
+}
+
+void KCMLirc::slotEditAction()
+{
+	if(!theKCMLircBase->theActions->currentItem()) return;
+
+	EditAction theDialog(actionMap[theKCMLircBase->theActions->currentItem()], this);
+	QListViewItem *item = theKCMLircBase->theModes->currentItem();
+	if(item->parent()) item = item->parent();
+	theDialog.theModes->insertItem("[Exit current mode]");
+	for(item = item->firstChild(); item; item = item->nextSibling())
+		theDialog.theModes->insertItem(item->text(0));
+	theDialog.readFrom();
+	if(theDialog.exec() == QDialog::Accepted) { theDialog.writeBack(); emit changed(true); updateActions(); }
 }
 
 void KCMLirc::slotAddAction()
@@ -143,11 +164,12 @@ void KCMLirc::slotAddMode()
 	if(!theKCMLircBase->theModes->currentItem()) return;
 
 	NewMode theDialog(this, 0);
+	QMap<QListViewItem *, QString> remoteMap;
 	for(QListViewItem *i = theKCMLircBase->theModes->firstChild(); i; i = i->nextSibling())
-		new KListViewItem(theDialog.theRemotes, i->text(0));
+		remoteMap[new KListViewItem(theDialog.theRemotes, i->text(0))] = modeMap[i].remote();
 	if(theDialog.exec() == QDialog::Accepted && theDialog.theRemotes->currentItem() && theDialog.theName->text() != "")
 	{
-		allModes.add(Mode(theDialog.theRemotes->currentItem()->text(0), theDialog.theName->text()));
+		allModes.add(Mode(remoteMap[theDialog.theRemotes->currentItem()], theDialog.theName->text()));
 		updateModes();
 		emit changed(true);
 	}
@@ -166,8 +188,27 @@ void KCMLirc::slotRemoveMode()
 	}
 }
 
+void KCMLirc::slotDrop(KListView *, QDropEvent *, QListViewItem *, QListViewItem *after)
+{
+	Mode m = modeMap[after];
+
+	if(modeMap[theKCMLircBase->theModes->currentItem()].remote() != m.remote())
+	{
+		KMessageBox::error(this, i18n("You may only drag the selected items onto a mode of the same remote control"), i18n("You may not drag here"));
+		return;
+	}
+	for(QListViewItem *i = theKCMLircBase->theActions->firstChild(); i; i = i->nextSibling())
+		if(i->isSelected())
+			(*(actionMap[i])).setMode(m.name());
+
+	updateActions();
+	emit changed(true);
+}
+
 void KCMLirc::updateActions()
 {
+	// TODO: remember current/selected items.
+
 	theKCMLircBase->theActions->clear();
 	actionMap.clear();
 	if(!theKCMLircBase->theModes->currentItem()) return;
@@ -186,18 +227,20 @@ void KCMLirc::gotButton(QString remote, QString button)
 
 void KCMLirc::updateModes()
 {
+	// TODO: remember current/selected items.
+
 	theKCMLircBase->theModes->clear();
 	modeMap.clear();
 
 	IRKick_stub IRKick("kded", "irkick");
 	QStringList remotes = IRKick.remotes();
 	for(QStringList::iterator i = remotes.begin(); i != remotes.end(); i++)
-	{	QListViewItem *a = new QListViewItem(theKCMLircBase->theModes, RemoteServer::remoteServer()->getRemoteName(*i));
+	{	QListViewItem *a = new KListViewItem(theKCMLircBase->theModes, RemoteServer::remoteServer()->getRemoteName(*i));
 		modeMap[a] = Mode(*i, "");	// the null mode
 		a->setOpen(true);
 		ModeList l = allModes.getModes(*i);
 		for(ModeList::iterator j = l.begin(); j != l.end(); j++)
-			modeMap[new QListViewItem(a, (*j).name())] = *j;
+			modeMap[new KListViewItem(a, (*j).name())] = *j;
 	}
 }
 

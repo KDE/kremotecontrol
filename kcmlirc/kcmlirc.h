@@ -14,6 +14,8 @@
 #include "modes.h"
 
 class QListViewItem;
+class KListView;
+class QDropEvent;
 
 class KCMLirc: public KCModule, virtual public DCOPObject
 {
@@ -25,7 +27,7 @@ private:
 	KCMLircBase *theKCMLircBase;
 	IRActions allActions;
 	Modes allModes;
-	QMap<QListViewItem *, QValueListIterator<IRAction> > actionMap;
+	QMap<QListViewItem *, IRAIt > actionMap;
 	QMap<QListViewItem *, Mode> modeMap;
 	QMap<QListViewItem *, QString> profileMap, remoteMap;
 
@@ -38,7 +40,9 @@ public slots:
 	void slotAddMode();
 	void slotRemoveMode();
 	void slotAddAction();
+	void slotEditAction();
 	void slotRemoveAction();
+	void slotDrop(KListView *, QDropEvent *, QListViewItem *, QListViewItem *after);
 
 // MOC_SKIP_BEGIN
 k_dcop:
