@@ -7,68 +7,53 @@
 	<action objid="Noatun" prototype="void playpause()" class="pause">
 		<name>Play/Pause</name>
 		<comment>Toggles the current track between playing and pausing.</comment>
-		<arguments/>
 	</action>
 	<action objid="Noatun" prototype="void stop()" class="stop">
 		<name>Stop</name>
 		<comment>Stops current playback, if any.</comment>
-		<arguments/>
 	</action>
 	<action objid="Noatun" prototype="void clear()" class="eject">
 		<name>Clear Playlist</name>
 		<comment>Clears the playlist of all items.</comment>
-		<arguments/>
 	</action>
 	<action objid="Noatun" prototype="void back()" class="previous">
 		<name>Back</name>
 		<comment>Skips to the start of the last track.</comment>
-		<arguments/>
 	</action>
 	<action objid="Noatun" prototype="void forward()" class="next">
 		<name>Forward</name>
 		<comment>Skips to the start of the next track.</comment>
-		<arguments/>
 	</action>
 	<action objid="Noatun" prototype="void loop()">
 		<name>Playback Mode</name>
 		<comment>Cycles through the playback modes of Noatun.</comment>
-		<arguments/>
 	</action>
 	<action objid="Noatun" prototype="void play()" class="play">
 		<name>Play</name>
 		<comment>Starts playback.</comment>
-		<arguments/>
 	</action>
 	<action objid="Noatun" prototype="void removeCurrent()">
 		<name>Remove Current</name>
 		<comment>Removes only the current track from the play list.</comment>
-		<arguments/>
 	</action>
 	<action objid="Noatun" prototype="void setVolume()">
 		<name>Set Volume</name>
 		<comment>Sets the volume to a configurable amount.</comment>
-		<arguments count="1">
-			<argument place="0">
-				<comment>The required percentage of the volume.</comment>
-				<type>int</type>
-				<range min="0" max="100"/>
-			</argument>
-		</arguments>
+		<argument type="int">
+			<comment>The required percentage of the volume.</comment>
+			<range min="0" max="100"/>
+		</argument>
 	</action>
 	<action objid="Noatun" prototype="void toggleListView()">
 		<name>Toggle Playlist View</name>
 		<comment>Toggles the visiblility of the playlist window.</comment>
-		<arguments/>
 	</action>
 	<action objid="Noatun" prototype="void skipto(int)">
 		<name>Skip To</name>
 		<comment>Skips to a configurable point in the current track.</comment>
-		<arguments count="1">
-			<argument place="0">
-				<comment>The percentage of the track to move through.</comment>
-				<type>int</type>
-				<range min="0" max="100"/>
-			</argument>
-		</arguments>
+		<argument type="int">
+			<comment>The percentage of the track to move through.</comment>
+			<range min="0" max="100"/>
+		</argument>
 	</action>
 </profile>

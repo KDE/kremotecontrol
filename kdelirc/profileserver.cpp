@@ -108,13 +108,12 @@ bool Profile::startElement(const QString &, const QString &, const QString &name
 		curPA->setRepeat(attributes.value("repeat") == "1");
 		curPA->setAutoStart(attributes.value("autostart") == "1");
 	}
-	else if(name == "arguments")
-		for(int i = 0; i < attributes.value("count").toInt(); i++)
-		{	curPA->theArguments.append(ProfileActionArgument());
-			curPA->theArguments.last().setAction(curPA);
-		}
 	else if(name == "argument")
-		curPAA = &(curPA->theArguments[attributes.value("place").toInt()]);
+	{	curPA->theArguments.append(ProfileActionArgument());
+		curPAA = &(curPA->theArguments.last());
+		curPAA->setAction(curPA);
+		curPAA->setType(attributes.value("type"));
+	}
 	else if(name == "range" && curPAA)
 		curPAA->setRange(qMakePair(attributes.value("min").toInt(), attributes.value("max").toInt()));
 
@@ -131,8 +130,6 @@ bool Profile::endElement(const QString &, const QString &, const QString &name)
 			theName = charBuffer;
 	else if(name == "author")
 		theAuthor = charBuffer;
-	else if(name == "type" && curPAA)
-		curPAA->setType(charBuffer);
 	else if(name == "comment" && curPA && !curPAA)
 		curPA->setComment(charBuffer);
 	else if(name == "comment" && curPA && curPAA)
