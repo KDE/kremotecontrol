@@ -113,7 +113,9 @@ void EditAction::writeBack()
 
 void EditAction::slotInputArgument(const QString &value)
 {
-	arguments[theArguments->currentItem()] = value;
+	int type = arguments[theArguments->currentItem()].type();
+	arguments[theArguments->currentItem()].asString() = value;
+	arguments[theArguments->currentItem()].cast(QVariant::Type(type));
 }
 
 void EditAction::updateArguments()
@@ -121,7 +123,6 @@ void EditAction::updateArguments()
 	if(theUseProfile->isChecked())
 	{
 		theArguments->clear();
-		// TODO: arguments.resize(count);
 		const ProfileAction *a = ProfileServer::profileServer()->getAction(applicationMap[theApplications->currentText()], functionMap[theFunctions->currentText()]);
 		if(!a) { arguments.clear(); return; }
 		const QValueList<ProfileActionArgument> &p = a->arguments();
@@ -134,8 +135,8 @@ void EditAction::updateArguments()
 		theArgument->setEnabled(p.count());
 		for(unsigned i = 0; i < p.count(); i++)
 			theArguments->insertItem(p[i].comment() + " (" + p[i].type() + ")");
-		if(p.count())
-			updateArgument(0);
+		for(unsigned i = 0; i < p.count(); i++) arguments[i].cast(QVariant::nameToType(p[i].type()));
+		if(p.count()) updateArgument(0);
 	}
 	else if(theUseDCOP->isChecked())
 	{
@@ -150,8 +151,11 @@ void EditAction::updateArguments()
 		theArgument->setEnabled(p.count());
 		for(unsigned i = 0; i < p.count(); i++)
 			theArguments->insertItem(QString().setNum(i + 1) + ": " + (p.name(i) == "" ? p.type(i) : p.name(i) + " (" + p.type(i) + ")"));
-		if(p.count())
-			updateArgument(0);
+		kdDebug() << "ud type was: " << arguments[0].type() << " (" << p.count() << QVariant::nameToType(p.type(0)) << ")" << endl;
+		for(unsigned i = 0; i < p.count(); i++) arguments[i].cast(QVariant::nameToType(p.type(i)));
+		kdDebug() << "ud type is: " << arguments[0].type();
+		if(p.count()) updateArgument(0);
+		kdDebug() << "ud type is now: " << arguments[0].type();
 	}
 }
 

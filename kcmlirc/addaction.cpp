@@ -184,6 +184,7 @@ void AddAction::updateParameters()
 		for(unsigned k = 0; k < p.count(); k++)
 		{	new KListViewItem(theParameters, p.name(k) == "" ? "<anonymous>" : p.name(k), "", p.type(k), QString().setNum(k + 1));
 			theArguments.append(QVariant(""));
+			theArguments.back().cast(QVariant::nameToType(p.type(k)));
 		}
 	}
 	else if(theUseProfile->isChecked() && theProfiles->currentItem())
@@ -200,7 +201,6 @@ void AddAction::updateParameters()
 		{	theArguments.append(QVariant(""));
 			theArguments.back().cast(QVariant::nameToType((*i).type()));
 			new QListViewItem(theParameters, (*i).comment(), theArguments.back().toString(), (*i).type(), QString().setNum(index));
-
 		}
 
 	}

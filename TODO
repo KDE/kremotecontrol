@@ -3,7 +3,12 @@ general:
 * Take out kdedmodule_stub.h
 
 kdmlirc:
-* Fix bools bug / multi-type editing for options.
+* Put multitype editing into editaction
+* Configure an icon for each remote control, a different one for each mode;
+  * if one mode has an icon, all on remote control must have one
 
 irkick:
 * Fix QByteArray parameter bug...
+* Icons for each remote control, change on mode
+* kcontrol shortcut on irkick
+* change irkick to dcop service, not kded module
