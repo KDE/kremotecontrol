@@ -57,7 +57,6 @@ void AddAction::slotCorrectPage()
 
 void AddAction::updateButtonStates()
 {
-	kdDebug() << "Updating states" << endl;
 	switch(indexOf(currentPage()))
 	{	case 0: setNextEnabled(currentPage(), theProfiles->currentItem() != 0 || !theUseProfile->isChecked()); break;
 		case 1: setNextEnabled(currentPage(), theFunctions->currentItem() != 0); break;
@@ -66,7 +65,6 @@ void AddAction::updateButtonStates()
 		case 4: setNextEnabled(currentPage(), false); setFinishEnabled(currentPage(), true); break;
 		case 5: setNextEnabled(currentPage(), false); setFinishEnabled(currentPage(), theModes->currentItem() || !theSwitchMode->isChecked()); break;
 	}
-	kdDebug() << "(" << (indexOf(currentPage())) << ") " << theProfiles->currentItem() << " " << theUseProfile->isChecked() << endl;
 }
 
 const QStringList AddAction::getFunctions(const QString app, const QString obj)

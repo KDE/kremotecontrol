@@ -26,13 +26,21 @@
 
 class KConfig;
 
-class IRActions: public QMap<QPair<QString, QString>, QValueList<IRAction> >
+typedef QValueListIterator<IRAction> IRAIt;
+typedef QValueList<IRAIt> IRAItList;
+
+class IRActions: protected QValueList<IRAction>
 {
 private:
 	void purgeAllBindings(KConfig &theConfig);
 
 public:
-	void addAction(const IRAction &theAction) { operator[](qMakePair(theAction.remote(), theAction.button())) += theAction; }
+	IRAIt addAction(const IRAction &theAction);
+	IRAItList findByButton(const QString &remote, const QString &button);
+	IRAItList findByMode(const QString &remote, const QString &mode);
+	IRAItList findByModeButton(const QString &remote, const QString &mode, const QString &button);
+
+	void erase(QValueListIterator<IRAction> action) { erase(action); }
 
 	void loadFromConfig(KConfig &theConfig);
 	void saveToConfig(KConfig &theConfig);

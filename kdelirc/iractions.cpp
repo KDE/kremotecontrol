@@ -44,8 +44,40 @@ void IRActions::saveToConfig(KConfig &theConfig)
 {
 	int index = 0;
 	purgeAllBindings(theConfig);
-	for(IRActions::iterator k = begin(); k != end(); k++)
-		for(QValueList<IRAction>::iterator i = k.data().begin(); i != k.data().end(); i++,index++)
-			(*i).saveToConfig(theConfig, index);
+	for(iterator i = begin(); i != end(); i++)
+		(*i).saveToConfig(theConfig, index);
 	theConfig.writeEntry("Bindings", index + 1);
+}
+
+IRAIt IRActions::addAction(const IRAction &theAction)
+{
+	return append(theAction);
+}
+
+IRAItList IRActions::findByButton(const QString &remote, const QString &button)
+{
+	IRAItList ret;
+	for(iterator i = begin(); i != end(); i++)
+		if((*i).remote() == remote && (*i).button() == button)
+			ret += i;
+	return ret;
+}
+
+IRAItList IRActions::findByMode(const QString &remote, const QString &mode)
+{
+	IRAItList ret;
+
+	for(iterator i = begin(); i != end(); i++)
+		if((*i).remote() == remote && (*i).mode() == mode)
+			ret += i;
+	return ret;
+}
+
+IRAItList IRActions::findByModeButton(const QString &remote, const QString &mode, const QString &button)
+{
+	IRAItList ret;
+	for(iterator i = begin(); i != end(); i++)
+		if((*i).remote() == remote && (*i).mode() == mode && (*i).button() == button)
+			ret += i;
+	return ret;
 }

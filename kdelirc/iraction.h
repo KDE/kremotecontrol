@@ -27,7 +27,7 @@ class KConfig;
 class IRAction
 {
 private:
-	QString theProgram, theObject, theRemote, theButton;
+	QString theProgram, theObject, theRemote, theButton, theMode;
 	Prototype theMethod;
 	Arguments theArguments;
 	bool theRepeat;
@@ -46,6 +46,7 @@ public:
 	const QString &object() const { return theObject; }
 	const Prototype &method() const { return theMethod; }
 	const QString &remote() const { return theRemote; }
+	const QString &mode() const { return theMode; }
 	const QString &button() const { return theButton; }
 	const Arguments &arguments() const { return theArguments; }
 	const bool repeat() const { return theRepeat; }
@@ -54,11 +55,12 @@ public:
 	void setObject(const QString &newObject) { theObject = newObject; }
 	void setMethod(const Prototype &newMethod) { theMethod = newMethod; }
 	void setRemote(const QString &newRemote) { theRemote = newRemote; }
+	void setMode(const QString &newMode) { theMode = newMode; }
 	void setButton(const QString &newButton) { theButton = newButton; }
 	void setArguments(const Arguments &newArguments) { theArguments = newArguments; }
 	void setRepeat(bool newRepeat) { theRepeat = newRepeat; }
 
-	IRAction(const QString &newProgram, const QString &newObject, const QString &newMethod, const Arguments &newArguments, const QString &newRemote, const QString &newButton, bool newRepeat);
+	IRAction(const QString &newProgram, const QString &newObject, const QString &newMethod, const Arguments &newArguments, const QString &newRemote, const QString &newMode, const QString &newButton, bool newRepeat);
 	IRAction() { theProgram = QString::null; };
 };
 

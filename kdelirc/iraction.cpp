@@ -17,13 +17,14 @@
 
 #include "iraction.h"
 
-IRAction::IRAction(const QString &newProgram, const QString &newObject, const QString &newMethod, const Arguments &newArguments, const QString &newRemote, const QString &newButton, bool newRepeat)
+IRAction::IRAction(const QString &newProgram, const QString &newObject, const QString &newMethod, const Arguments &newArguments, const QString &newRemote, const QString &newMode, const QString &newButton, bool newRepeat)
 {
 	theProgram = newProgram;
 	theObject = newObject;
 	theMethod = newMethod;
 	theArguments = newArguments;
 	theRemote = newRemote;
+	theMode = newMode;
 	theButton = newButton;
 	theRepeat = newRepeat;
 }
@@ -43,6 +44,7 @@ const IRAction &IRAction::loadFromConfig(KConfig &theConfig, int index)
 	theObject = theConfig.readEntry(Binding + "Object");
 	theMethod.setPrototype(theConfig.readEntry(Binding + "Method"));
 	theRemote = theConfig.readEntry(Binding + "Remote");
+	theMode = theConfig.readEntry(Binding + "Mode");
 	theButton = theConfig.readEntry(Binding + "Button");
 	theRepeat = theConfig.readBoolEntry(Binding + "Repeat");
 
@@ -65,6 +67,7 @@ void IRAction::saveToConfig(KConfig &theConfig, int index) const
 	theConfig.writeEntry(Binding + "Object", theObject);
 	theConfig.writeEntry(Binding + "Method", theMethod.prototype());
 	theConfig.writeEntry(Binding + "Remote", theRemote);
+	theConfig.writeEntry(Binding + "Mode", theMode);
 	theConfig.writeEntry(Binding + "Button", theButton);
 	theConfig.writeEntry(Binding + "Repeat", theRepeat);
 }

@@ -18,6 +18,7 @@
 /**
 @author Gav Wood
 */
+
 class AddAction : public AddActionBase
 {
 	Q_OBJECT

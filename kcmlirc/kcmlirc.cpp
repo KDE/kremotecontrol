@@ -50,6 +50,7 @@ KCMLirc::~KCMLirc()
 
 void KCMLirc::slotAddAction()
 {
+	if(!theKCMLircBase->theActions->currentItem()) return;
 	AddAction theDialog(this, 0);
 	if(theDialog.exec() == QDialog::Accepted)
 		if(theKCMLircBase->theButtons->currentItem())
@@ -83,10 +84,9 @@ void KCMLirc::slotAddAction()
 
 void KCMLirc::slotRemoveAction()
 {
-	// TODO: need guards
-	allActions[qMakePair(theKCMLircBase->theButtons->currentItem()->parent()->text(0),
-				theKCMLircBase->theButtons->currentItem()->text(0))].erase
-				(actionMap[theKCMLircBase->theActions->currentItem()]);
+	if(!theKCMLircBase->theActions->currentItem()) return;
+
+	allActions.erase(actionMap[theKCMLircBase->theActions->currentItem()]);
 	emit changed(true);
 	updateActions();
 }
@@ -106,8 +106,9 @@ void KCMLirc::updateActions()
 	{	QString button = current->text(0);
 		QString remote = current->parent()->text(0);
 		theKCMLircBase->theButtonLabel->setText(remote + ": <b>" + button + "</b>");
-		for(QValueList<IRAction>::iterator i = allActions[qMakePair(remote, button)].begin(); i != allActions[qMakePair(remote, button)].end(); i++)
-			actionMap[new KListViewItem(theKCMLircBase->theActions, (*i).program(), (*i).function(), (*i).arguments().toString(), (*i).repeat() ? "Yes" : "No")] = i;
+		IRAItList l = allActions.findByButton(remote, button);
+		for(IRAItList::iterator i = l.begin(); i != l.end(); i++)
+			actionMap[new KListViewItem(theKCMLircBase->theActions, (**i).program(), (**i).function(), (**i).arguments().toString(), (**i).repeat() ? "Yes" : "No")] = *i;
 	}
 }
 

@@ -71,15 +71,15 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int 
 	}
 	else
 	{
-		const QValueList<IRAction> &l = allActions[qMakePair(theRemote, theButton)];
+		const IRAItList l = allActions.findByButton(theRemote, theButton);
 		if(!l.isEmpty())
-			for(QValueList<IRAction>::const_iterator i = l.begin(); i != l.end(); i++)
-				if((*i).repeat() || !theRepeatCounter)
+			for(IRAItList::const_iterator i = l.begin(); i != l.end(); i++)
+				if((*(*i)).repeat() || !theRepeatCounter)
 				{	DCOPClient *theDC = KApplication::dcopClient();
-					if(theDC->isApplicationRegistered(QCString((*i).program())))
+					if(theDC->isApplicationRegistered(QCString((**i).program())))
 					{	QByteArray data; QDataStream arg(data, IO_WriteOnly);
-						kdDebug() << "Sending data (" << QCString((*i).program()) << ", " << QCString((*i).object()) << ", " << QCString((*i).method().prototypeNR()) << endl;
-						for(Arguments::const_iterator j = (*i).arguments().begin(); j != (*i).arguments().end(); j++)
+						kdDebug() << "Sending data (" << QCString((**i).program()) << ", " << QCString((**i).object()) << ", " << QCString((**i).method().prototypeNR()) << endl;
+						for(Arguments::const_iterator j = (**i).arguments().begin(); j != (**i).arguments().end(); j++)
 						{	kdDebug() << "Got argument..." << endl;
 							switch((*j).type())
 							{	case QVariant::Int: arg << (*j).toInt(); break;
@@ -91,7 +91,7 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int 
 								default: arg << (*j).toString(); break;
 							}
 						}
-						theDC->send(QCString((*i).program()), QCString((*i).object()), QCString((*i).method().prototypeNR()), data);
+						theDC->send(QCString((**i).program()), QCString((**i).object()), QCString((**i).method().prototypeNR()), data);
 					}
 				}
 	}
