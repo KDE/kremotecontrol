@@ -11,12 +11,15 @@
 #include <qregexp.h>
 #include <qlabel.h>
 #include <qradiobutton.h>
+#include <qwidgetstack.h>
+#include <qcheckbox.h>
 
 #include <kdebug.h>
 #include <klineedit.h>
 #include <klistview.h>
 #include <kapplication.h>
 #include <kmessagebox.h>
+#include <knuminput.h>
 
 #include <dcopclient.h>
 #include <irkick_stub.h>
@@ -31,6 +34,10 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): AddAc
 	connect(this, SIGNAL( selected(const QString &) ), SLOT( updateForPageChange() ));
 	connect(this, SIGNAL( selected(const QString &) ), SLOT( slotCorrectPage() ));
 	curPage = 0;
+	updateProfiles();
+	updateButtons();
+	updateObjects();
+	updateProfileFunctions();
 }
 
 AddAction::~AddAction()
@@ -106,11 +113,11 @@ void AddAction::updateForPageChange()
 {
 	if(indexOf(currentPage()) == 1) requestNextPress(); else cancelRequest();
 	switch(indexOf(currentPage()))
-	{	case 0: updateProfiles(); break;
-		case 1: updateButtons(); break;
-		case 2: updateObjects(); break;
-		case 3: updateProfileFunctions(); break;
-		case 4: updateParameters(); break;
+	{	case 0: break;
+		case 1: break;
+		case 2: break;
+		case 3: break;
+		case 4: break;
 	}
 	updateButtonStates();
 }
@@ -170,10 +177,14 @@ void AddAction::updateProfileFunctions()
 void AddAction::updateParameters()
 {
 	theParameters->clear();
+	theArguments.clear();
 	if(theUseDCOP->isChecked() && theFunctions->currentItem())
-	{	Prototype p(theFunctions->currentItem()->text(2));
+	{
+		Prototype p(theFunctions->currentItem()->text(2));
 		for(unsigned k = 0; k < p.count(); k++)
-			new KListViewItem(theParameters, p.name(k) == "" ? "<anonymous>" : p.name(k), "", p.type(k), QString().setNum(k + 1));
+		{	new KListViewItem(theParameters, p.name(k) == "" ? "<anonymous>" : p.name(k), "", p.type(k), QString().setNum(k + 1));
+			theArguments.append(QVariant(""));
+		}
 	}
 	else if(theUseProfile->isChecked() && theProfiles->currentItem())
 	{
@@ -186,9 +197,10 @@ void AddAction::updateParameters()
 
 		int index = 1;
 		for(QValueList<ProfileActionArgument>::const_iterator i = pa->arguments().begin(); i != pa->arguments().end(); i++, index++)
-		{	kdDebug() << index << endl;
-			kdDebug() << ": " << (*i).comment() << endl;
-			new QListViewItem(theParameters, (*i).comment(), "", (*i).type(), QString().setNum(index));
+		{	theArguments.append(QVariant(""));
+			theArguments.back().cast(QVariant::nameToType((*i).type()));
+			new QListViewItem(theParameters, (*i).comment(), theArguments.back().toString(), (*i).type(), QString().setNum(index));
+
 		}
 
 	}
@@ -199,23 +211,62 @@ void AddAction::updateParameters()
 void AddAction::updateParameter()
 {
 	if(theParameters->currentItem())
-	{	theCurParameter->setText(theParameters->currentItem()->text(0));
-		theCurValue->setText(theParameters->currentItem()->text(1));
+	{	QString type = theParameters->currentItem()->text(2);
+		int index = theParameters->currentItem()->text(3).toInt() - 1;
+		if(type.find("int") != -1 || type.find("short") != -1 || type.find("long") != -1)
+		{	theValue->raiseWidget(2);
+			theValueIntNumInput->setValue(theArguments[index].toInt());
+		}
+		else if(type.find("double") != -1 || type.find("float") != -1)
+		{	theValue->raiseWidget(3);
+			theValueDoubleNumInput->setValue(theArguments[index].toDouble());
+		}
+		else if(type.find("bool") != -1)
+		{	theValue->raiseWidget(1);
+			theValueCheckBox->setChecked(theArguments[index].toBool());
+		}
+		else
+		{	theValue->raiseWidget(0);
+			theValueLineEdit->setText(theArguments[index].toString());
+		}
+		theCurParameter->setText(theParameters->currentItem()->text(0));
 		theCurParameter->setEnabled(true);
-		theCurValue->setEnabled(true);
+		theValue->setEnabled(true);
 	}
 	else
 	{	theCurParameter->setText("");
-		theCurValue->setText("");
+		theValueLineEdit->setText("");
+		theValueCheckBox->setChecked(false);
+		theValueIntNumInput->setValue(0);
+		theValueDoubleNumInput->setValue(0.0);
 		theCurParameter->setEnabled(false);
-		theCurValue->setEnabled(false);
+		theValue->setEnabled(false);
 	}
 }
 
-void AddAction::updateCurrentParam(const QString &newValue)
+// called when the textbox/checkbox/whatever changes value
+void AddAction::slotParameterChanged()
 {
-	if(theParameters->currentItem())
-		theParameters->currentItem()->setText(1, newValue);
+	if(!theParameters->currentItem()) return;
+	int index = theParameters->currentItem()->text(3).toInt() - 1;
+	QString type = theParameters->currentItem()->text(2);
+	if(type.find("int") != -1 || type.find("short") != -1 || type.find("long") != -1)
+		theArguments[index].asInt() = theValueIntNumInput->value();
+	else if(type.find("double") != -1 || type.find("float") != -1)
+		theArguments[index].asDouble() = theValueDoubleNumInput->value();
+	else if(type.find("bool") != -1)
+		theArguments[index].asBool() = theValueCheckBox->isChecked();
+	else
+		theArguments[index].asString() = theValueLineEdit->text();
+
+	theArguments[theParameters->currentItem()->text(3).toInt() - 1].cast(QVariant::nameToType(theParameters->currentItem()->text(2)));
+	updateArgument(theParameters->currentItem());
+}
+
+// takes theArguments[theIndex] and puts it into theItem
+void AddAction::updateArgument(QListViewItem *theItem)
+{
+	theItem->setText(1, theArguments[theItem->text(3).toInt() - 1].toString());
 }
 
 void AddAction::updateObjects()

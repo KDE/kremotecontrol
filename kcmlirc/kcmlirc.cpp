@@ -133,7 +133,6 @@ void KCMLirc::slotAddAction()
 		a.setAutoStart(theDialog.theAutoStart->isChecked());
 		a.setDoBefore(theDialog.theDoBefore->isChecked());
 		a.setDoAfter(theDialog.theDoAfter->isChecked());
-		Arguments args;
 		// change mode?
 		if(theDialog.theChangeMode->isChecked())
 		{
@@ -157,11 +156,7 @@ void KCMLirc::slotAddAction()
 			a.setObject(theDialog.theObjects->selectedItem()->text(0));
 			a.setMethod(theDialog.theFunctions->selectedItem()->text(2));
 			theDialog.theParameters->setSorting(3);
-			for(QListViewItem *i = theDialog.theParameters->firstChild(); i; i = i->nextSibling())
-			{	QVariant v(i->text(1));
-				v.cast(QVariant::nameToType(i->text(2)));
-				args += v;
-			}
+			a.setArguments(theDialog.theArguments);
 		}
 		// profile?
 		else if(theDialog.theUseProfile->isChecked() && theDialog.theProfiles->selectedItem() && theDialog.theProfileFunctions->selectedItem())
@@ -172,15 +167,10 @@ void KCMLirc::slotAddAction()
 			a.setObject(theAction->objId());
 			a.setMethod(theAction->prototype());
 			theDialog.theParameters->setSorting(3);
-			for(QListViewItem *i = theDialog.theParameters->firstChild(); i; i = i->nextSibling())
-			{	QVariant v(i->text(1));
-				v.cast(QVariant::nameToType(i->text(2)));
-				args += v;
-			}
+			a.setArguments(theDialog.theArguments);
 		}
 
 		// save our new action
-		a.setArguments(args);
 		allActions.addAction(a);
 		updateActions();
 		emit changed(true);

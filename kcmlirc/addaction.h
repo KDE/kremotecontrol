@@ -16,10 +16,13 @@
 #include <addactionbase.h>
 
 #include "mode.h"
+#include "arguments.h"
 
 /**
 @author Gav Wood
 */
+
+class QListViewItem;
 
 class AddAction : public AddActionBase
 {
@@ -32,6 +35,7 @@ public slots:
 	virtual void slotCorrectPage();
 	virtual void slotModeSelected();
 	virtual void slotNextParam();
+	virtual void slotParameterChanged();
 
 	// connected to KCMLirc class to receive DCOP calls to tell it what button has been pressed
 	virtual void updateForPageChange();
@@ -42,13 +46,14 @@ public slots:
 	virtual void updateButtonStates();
 	virtual void updateParameters();
 	virtual void updateParameter();
-	virtual void updateCurrentParam(const QString &newValue);
 	virtual void updateProfiles();
 	virtual void updateProfileFunctions();
 
 public:
-	static const QStringList getFunctions(const QString app, const QString obj);
+	Arguments theArguments;
 
+	static const QStringList getFunctions(const QString app, const QString obj);
+	void updateArgument(QListViewItem *theItem);
 	void requestNextPress();
 	void cancelRequest();
 
