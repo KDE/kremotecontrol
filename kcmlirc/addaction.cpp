@@ -77,7 +77,7 @@ void AddAction::slotCorrectPage()
 
 void AddAction::requestNextPress()
 {
-	IRKick_stub("kded", "irkick").stealNextPress(DCOPClient::mainClient()->appId(), "KCMLirc", "gotButton");
+	IRKick_stub("kded", "irkick").stealNextPress(DCOPClient::mainClient()->appId(), "KCMLirc", "gotButton(QString, QString)");
 }
 
 void AddAction::cancelRequest()

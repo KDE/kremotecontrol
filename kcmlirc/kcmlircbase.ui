@@ -9,8 +9,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>724</width>
-            <height>470</height>
+            <width>854</width>
+            <height>538</height>
         </rect>
     </property>
     <property name="caption">
@@ -43,7 +43,7 @@
                     </property>
                     <widget class="QSplitter" row="0" column="0">
                         <property name="name">
-                            <cstring>splitter3</cstring>
+                            <cstring>splitter6</cstring>
                         </property>
                         <property name="orientation">
                             <enum>Horizontal</enum>
@@ -55,9 +55,6 @@
                             <vbox>
                                 <property name="name">
                                     <cstring>unnamed</cstring>
-                                </property>
-                                <property name="margin">
-                                    <number>0</number>
                                 </property>
                                 <widget class="KListView">
                                     <column>
@@ -82,34 +79,6 @@
                                             <bool>true</bool>
                                         </property>
                                     </column>
-                                <item>
-                                    <property name="text">
-                                        <string>Item</string>
-                                    </property>
-                                    <property name="text">
-                                        <string>vjhgvjh</string>
-                                    </property>
-                                    <property name="pixmap">
-                                        <pixmap></pixmap>
-                                    </property>
-                                    <property name="pixmap">
-                                        <pixmap></pixmap>
-                                    </property>
-                                </item>
-                                <item>
-                                    <property name="text">
-                                        <string>Item</string>
-                                    </property>
-                                    <property name="text">
-                                        <string></string>
-                                    </property>
-                                    <property name="pixmap">
-                                        <pixmap></pixmap>
-                                    </property>
-                                    <property name="pixmap">
-                                        <pixmap></pixmap>
-                                    </property>
-                                </item>
                                     <property name="name">
                                         <cstring>theModes</cstring>
                                     </property>
@@ -143,22 +112,11 @@
                                             </property>
                                             <property name="sizeHint">
                                                 <size>
-                                                    <width>20</width>
+                                                    <width>17</width>
                                                     <height>20</height>
                                                 </size>
                                             </property>
                                         </spacer>
-                                        <widget class="QPushButton">
-                                            <property name="name">
-                                                <cstring>theSetDefaultMode</cstring>
-                                            </property>
-                                            <property name="enabled">
-                                                <bool>false</bool>
-                                            </property>
-                                            <property name="text">
-                                                <string>&amp;Set Default</string>
-                                            </property>
-                                        </widget>
                                         <widget class="KPushButton">
                                             <property name="name">
                                                 <cstring>theAddMode</cstring>
@@ -168,6 +126,17 @@
                                             </property>
                                             <property name="text">
                                                 <string>&amp;Add Mode...</string>
+                                            </property>
+                                        </widget>
+                                        <widget class="KPushButton">
+                                            <property name="name">
+                                                <cstring>theEditMode</cstring>
+                                            </property>
+                                            <property name="enabled">
+                                                <bool>false</bool>
+                                            </property>
+                                            <property name="text">
+                                                <string>E&amp;dit Mode</string>
                                             </property>
                                         </widget>
                                         <widget class="KPushButton">
@@ -187,21 +156,18 @@
                         </widget>
                         <widget class="QLayoutWidget">
                             <property name="name">
-                                <cstring>layout11</cstring>
+                                <cstring>layout8</cstring>
                             </property>
                             <vbox>
                                 <property name="name">
                                     <cstring>unnamed</cstring>
                                 </property>
-                                <property name="margin">
-                                    <number>0</number>
-                                </property>
-                                <widget class="KSqueezedTextLabel">
+                                <widget class="QLabel">
                                     <property name="name">
                                         <cstring>theModeLabel</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>Nothing selected.</string>
+                                        <string>textLabel2</string>
                                     </property>
                                 </widget>
                                 <widget class="KListView">
@@ -359,7 +325,7 @@
                     </property>
                     <widget class="QSplitter" row="0" column="0">
                         <property name="name">
-                            <cstring>splitter8</cstring>
+                            <cstring>splitter5</cstring>
                         </property>
                         <property name="orientation">
                             <enum>Horizontal</enum>
@@ -388,21 +354,18 @@
                         </widget>
                         <widget class="QLayoutWidget">
                             <property name="name">
-                                <cstring>layout6</cstring>
+                                <cstring>layout9</cstring>
                             </property>
                             <vbox>
                                 <property name="name">
                                     <cstring>unnamed</cstring>
                                 </property>
-                                <property name="margin">
-                                    <number>0</number>
-                                </property>
-                                <widget class="KSqueezedTextLabel">
+                                <widget class="QLabel">
                                     <property name="name">
                                         <cstring>theInformationLabel</cstring>
                                     </property>
                                     <property name="text">
-                                        <string></string>
+                                        <string>textLabel3</string>
                                     </property>
                                 </widget>
                                 <widget class="KListView">
@@ -454,12 +417,11 @@
     <includehint>klistview.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
-    <includehint>ksqueezedtextlabel.h</includehint>
+    <includehint>kpushbutton.h</includehint>
     <includehint>klistview.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>kpushbutton.h</includehint>
     <includehint>klistview.h</includehint>
-    <includehint>ksqueezedtextlabel.h</includehint>
     <includehint>klistview.h</includehint>
 </includehints>
 </UI>

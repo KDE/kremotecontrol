@@ -37,6 +37,14 @@ const QString Prototype::argumentList() const
 	return ret;
 }
 
+const QString Prototype::argumentListNN() const
+{
+	QString ret = "";
+	for(unsigned i = 0; i < theTypes.count(); i++)
+		ret += (i ? ", " : "") + theTypes[i];
+	return ret;
+}
+
 void Prototype::parse()
 {
 	theNames.clear();

@@ -11,6 +11,7 @@
 //
 //
 #include <kconfig.h>
+#include <kdebug.h>
 
 #include "modes.h"
 #include "mode.h"
@@ -29,25 +30,35 @@ void Modes::loadFromConfig(KConfig &theConfig)
 	clear();
 	int numModes = theConfig.readNumEntry("Modes");
 	for(int i = 0; i < numModes; i++)
+	{
 		add(Mode().loadFromConfig(theConfig, i));
+	}
 
 	for(iterator i = begin(); i != end(); i++)
 		theDefaults[i.key()] = theConfig.readEntry("Default" + i.key());
+}
+
+void Modes::generateNulls(const QStringList &theRemotes)
+{
+	for(QStringList::const_iterator i = theRemotes.begin(); i != theRemotes.end(); i++)
+	{	if(!contains(*i) || !operator[](*i).contains("")) operator[](*i)[""] = Mode(*i, "");
+		if(!theDefaults.contains(*i)) theDefaults[*i] = "";
+	}
 }
 
 bool Modes::isDefault(const Mode &mode) const
 {
 	if(theDefaults[mode.remote()] == mode.name())
 		return true;
-	if(theDefaults[mode.remote()] == "" || theDefaults[mode.remote()] == QString::null)
-		return mode.name() == "";
+//	if(theDefaults[mode.remote()] == "" || theDefaults[mode.remote()] == QString::null)
+//		return mode.name() == "";
 	return false;
 }
 
 const Mode Modes::getDefault(const QString &remote) const
 {
-	if(theDefaults[remote] == QString())
-		return Mode(remote, "");
+//	if(theDefaults[remote] == QString())
+//		return Mode(remote, "");
 	if(contains(remote))
 		if(operator[](remote).contains(theDefaults[remote]))
 			return operator[](remote)[theDefaults[remote]];
@@ -102,6 +113,7 @@ void Modes::erase(const Mode &mode)
 
 void Modes::add(const Mode &mode)
 {
+	kdDebug() << "adding a mode " << mode.name() << " to remote " << mode.remote() << endl;
 	operator[](mode.remote())[mode.name()] = mode;
 }
 

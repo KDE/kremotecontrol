@@ -37,7 +37,8 @@ public:
 	const QString &name() const { return theName; }
 	const QString &prototype() const { return original; }
 	const QString argumentList() const;
-	const QString prototypeNR() const { return theName + "(" + argumentList() + ")"; }
+	const QString argumentListNN() const;
+	const QString prototypeNR() const { return theName + "(" + argumentListNN() + ")"; }
 
 	void setPrototype(const QString &source) { original = source; parse(); }
 

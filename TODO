@@ -1,14 +1,9 @@
 general:
-* Some linear seaches rather than key-based - fix it to improve speed
-* Take out kdedmodule_stub.h
+* Take out kdedmodule_stub.h, install by default (KDE4)
 
 kdmlirc:
 * Put multitype editing into editaction
-* Configure an icon for each remote control, a different one for each mode;
-  * if one mode has an icon, all on remote control must have one
 
 irkick:
-* Fix QByteArray parameter bug...
-* Icons for each remote control, change on mode
 * kcontrol shortcut on irkick
 * change irkick to dcop service, not kded module

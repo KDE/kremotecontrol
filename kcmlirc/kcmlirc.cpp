@@ -21,12 +21,14 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kconfig.h>
+#include <kicondialog.h>
+#include <kiconloader.h>
 #include <kdebug.h>
 #include <ksimpleconfig.h>
 #include <kgenericfactory.h>
 #include <klistview.h>
-#include <ksqueezedtextlabel.h>
 #include <kmessagebox.h>
+#include <kpushbutton.h>
 
 #include <dcopclient.h>
 
@@ -38,6 +40,7 @@
 #include "remoteserver.h"
 #include "kcmlirc.h"
 #include "editaction.h"
+#include "editmode.h"
 #include "modeslist.h"
 
 typedef KGenericFactory<KCMLirc, QWidget> theFactory;
@@ -57,8 +60,8 @@ KCMLirc::KCMLirc(QWidget *parent, const char *name, QStringList /*args*/) : KCMo
 	connect((QObject *)(theKCMLircBase->theEditAction), SIGNAL( clicked() ), this, SLOT( slotEditAction() ));
 	connect((QObject *)(theKCMLircBase->theRemoveAction), SIGNAL( clicked() ), this, SLOT( slotRemoveAction() ));
 	connect((QObject *)(theKCMLircBase->theAddMode), SIGNAL( clicked() ), this, SLOT( slotAddMode() ));
+	connect((QObject *)(theKCMLircBase->theEditMode), SIGNAL( clicked() ), this, SLOT( slotEditMode() ));
 	connect((QObject *)(theKCMLircBase->theRemoveMode), SIGNAL( clicked() ), this, SLOT( slotRemoveMode() ));
-	connect((QObject *)(theKCMLircBase->theSetDefaultMode), SIGNAL( clicked() ), this, SLOT( slotSetDefaultMode() ));
 	load();
 }
 
@@ -72,7 +75,7 @@ void KCMLirc::updateModesStatus(QListViewItem *item)
 	theKCMLircBase->theAddAction->setEnabled(item);
 	theKCMLircBase->theAddMode->setEnabled(item);
 	theKCMLircBase->theRemoveMode->setEnabled(item && item->parent());
-	theKCMLircBase->theSetDefaultMode->setEnabled(item);
+	theKCMLircBase->theEditMode->setEnabled(item);
 }
 
 void KCMLirc::updateActionsStatus(QListViewItem *item)
@@ -89,9 +92,8 @@ void KCMLirc::slotRenamed(QListViewItem *item)
 	{	allActions.renameMode(modeMap[item], item->text(0));
 		allModes.rename(modeMap[item], item->text(0));
 		emit changed(true);
+		updateModes();
 	}
-
-	updateModes();
 }
 
 void KCMLirc::slotEditAction()
@@ -208,6 +210,36 @@ void KCMLirc::slotAddMode()
 	}
 }
 
+void KCMLirc::slotEditMode()
+{
+	if(!theKCMLircBase->theModes->selectedItem()) return;
+
+	EditMode theDialog(this, 0);
+
+	Mode &mode = modeMap[theKCMLircBase->theModes->selectedItem()];
+	theDialog.theName->setEnabled(theKCMLircBase->theModes->selectedItem()->parent());
+	theDialog.theName->setText(mode.name() == "" ? mode.remoteName() : mode.name());
+	if(mode.iconFile() != QString::null)
+		theDialog.theIcon->setIcon(mode.iconFile());
+	else
+		theDialog.theIcon->resetIcon();
+	theDialog.theDefault->setChecked(allModes.isDefault(mode));
+	theDialog.theDefault->setEnabled(!allModes.isDefault(mode));
+
+	if(theDialog.exec() == QDialog::Accepted)
+	{	kdDebug() << "Setting icon : " << theDialog.theIcon->icon() << endl;
+		mode.setIconFile(theDialog.theIcon->icon() == "" ? QString::null : theDialog.theIcon->icon());
+		allModes.updateMode(mode);
+		if(mode.name() != "")
+		{	allActions.renameMode(mode, theDialog.theName->text());
+			allModes.rename(mode, theDialog.theName->text());
+		}
+		if(theDialog.theDefault->isChecked()) allModes.setDefault(mode);
+		emit changed(true);
+		updateModes();
+	}
+}
+
 void KCMLirc::slotRemoveMode()
 {
 	if(!theKCMLircBase->theModes->selectedItem()) return;
@@ -286,16 +318,22 @@ void KCMLirc::updateModes()
 	IRKick_stub IRKick("kded", "irkick");
 	QStringList remotes = IRKick.remotes();
 	for(QStringList::iterator i = remotes.begin(); i != remotes.end(); i++)
-	{	QListViewItem *a = new KListViewItem(theKCMLircBase->theModes, RemoteServer::remoteServer()->getRemoteName(*i), allModes.isDefault(Mode(*i, "")) ? "Default" : "");
-		modeMap[a] = Mode(*i, "");	// the null mode
+	{	Mode mode = allModes.getMode(*i, "");
+		QListViewItem *a = new KListViewItem(theKCMLircBase->theModes, RemoteServer::remoteServer()->getRemoteName(*i), allModes.isDefault(mode) ? "Default" : "", mode.iconFile() == QString::null ? "" : "");
+		if(mode.iconFile() != QString::null)
+			a->setPixmap(2, KIconLoader().loadIcon(mode.iconFile(), KIcon::Panel));
+		modeMap[a] = mode;	// the null mode
 		if(modeMap[a] == oldCurrent) { a->setSelected(true); theKCMLircBase->theModes->setCurrentItem(a); }
 		a->setOpen(true);
 		ModeList l = allModes.getModes(*i);
 		for(ModeList::iterator j = l.begin(); j != l.end(); j++)
-		{	QListViewItem *b = new KListViewItem(a, (*j).name(), allModes.isDefault(*j) ? i18n("Default") : "");
-			modeMap[b] = *j;
-			if(*j == oldCurrent) { b->setSelected(true); theKCMLircBase->theModes->setCurrentItem(b); }
-		}
+			if((*j).name() != "")
+			{	QListViewItem *b = new KListViewItem(a, (*j).name(), allModes.isDefault(*j) ? i18n("Default") : "", (*j).iconFile() == QString::null ? "" : "");
+				if((*j).iconFile() != QString::null)
+					b->setPixmap(2, KIconLoader().loadIcon((*j).iconFile(), KIcon::Panel));
+				modeMap[b] = *j;
+				if(*j == oldCurrent) { b->setSelected(true); theKCMLircBase->theModes->setCurrentItem(b); }
+			}
 	}
 	if(theKCMLircBase->theModes->currentItem())
 		theKCMLircBase->theModes->currentItem()->setSelected(true);
@@ -369,6 +407,7 @@ void KCMLirc::load()
 	KSimpleConfig theConfig("irkickrc");
 	allActions.loadFromConfig(theConfig);
 	allModes.loadFromConfig(theConfig);
+	allModes.generateNulls(IRKick_stub("kded", "irkick").remotes());
 
 	updateExtensions();
 	updateModes();

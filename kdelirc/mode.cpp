@@ -20,10 +20,11 @@ Mode::Mode() : theName(QString::null)
 {
 }
 
-Mode::Mode(const QString &remote, const QString &name)
+Mode::Mode(const QString &remote, const QString &name, const QString &iconFile)
 {
 	theRemote = remote;
 	theName = name;
+	theIconFile = iconFile;
 }
 
 Mode::~Mode()
@@ -35,6 +36,8 @@ const Mode &Mode::loadFromConfig(KConfig &theConfig, int index)
 	QString Prefix = "Mode" + QString().setNum(index);
 	theName = theConfig.readEntry(Prefix + "Name");
 	theRemote = theConfig.readEntry(Prefix + "Remote");
+	theIconFile = theConfig.readEntry(Prefix + "IconFile");
+	if(theIconFile == "") theIconFile = QString::null;
 	return *this;
 }
 
@@ -43,5 +46,6 @@ void Mode::saveToConfig(KConfig &theConfig, int index)
 	QString Prefix = "Mode" + QString().setNum(index);
 	theConfig.writeEntry(Prefix + "Name", theName);
 	theConfig.writeEntry(Prefix + "Remote", theRemote);
+	theConfig.writeEntry(Prefix + "IconFile", theIconFile);
 }
 

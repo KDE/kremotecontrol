@@ -36,12 +36,18 @@ class Modes : protected QMap<QString, QMap<QString, Mode> >
 public:
 	void loadFromConfig(KConfig &theConfig);
 	void saveToConfig(KConfig &theConfig);
+	void generateNulls(const QStringList &theRemotes);
 
 	const Mode &getMode(const QString &remote, const QString &mode) const;
 	ModeList getModes(const QString &remote) const;
 	const Mode getDefault(const QString &remote) const;
 	bool isDefault(const Mode &mode) const;
 
+	/**
+	 * Call when you've changed a previously getMode'd mode and you want the changes
+	 *   to be recorded
+	 **/
+	void updateMode(const Mode &mode) { operator[](mode.remote())[mode.name()] = mode; }
 	void setDefault(const Mode &mode) { theDefaults[mode.remote()] = mode.name(); }
 	void erase(const Mode &mode);
 	void add(const Mode &mode);

@@ -33,12 +33,15 @@ class IRKick: public KDEDModule
 
 	QString npApp, npModule, npMethod;
 	QMap<QString, QString> currentModes;
+	QMap<QString, KSystemTray *> currentModeIcons;
 	IRActions allActions;
 	int theResetCount;
 	Modes allModes;
 
 	KSystemTray *theTrayIcon;
 	KAboutData *aboutData;
+
+	void updateModeIcons();
 
 signals:
 
@@ -50,6 +53,7 @@ private slots:
 	void gotMessage(const QString &theRemote, const QString &theButton, int theRepeatCounter);
 	void resetModes();
 
+	void slotConfigure();
 	void slotReloadConfiguration();
 	void slotShowAbout();
 	void slotShowAboutKDE();

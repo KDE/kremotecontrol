@@ -71,6 +71,7 @@ public:
 	void setDoBefore(bool a) { theDoBefore = a; }
 	void setDoAfter(bool a) { theDoAfter = a; }
 	void setAutoStart(bool newAutoStart) { theAutoStart = newAutoStart; }
+	void setModeChange(const QString &a) { theObject = a; }
 
 	IRAction(const QString &newProgram, const QString &newObject, const QString &newMethod, const Arguments &newArguments, const QString &newRemote, const QString &newMode, const QString &newButton, bool newRepeat, bool newAutoStart, bool newDoBefore, bool newDoAfter);
 	IRAction() { theProgram = QString::null; };

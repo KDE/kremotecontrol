@@ -48,6 +48,8 @@ public slots:
 	void slotRemoveAction();
 	void slotDrop(KListView *, QDropEvent *, QListViewItem *, QListViewItem *after);
 	void slotRenamed(QListViewItem *item);
+	void slotEditMode();
+
 
 // MOC_SKIP_BEGIN
 k_dcop:

@@ -25,14 +25,16 @@ class KConfig;
 
 class Mode
 {
-	QString theName, theRemote;
+	QString theName, theRemote, theIconFile;
 
 public:
-	void setName(const QString &newName) { theName = newName; }
-	void setRemote(const QString &newRemote) { theRemote = newRemote; }
+	void setName(const QString &a) { theName = a; }
+	void setRemote(const QString &a) { theRemote = a; }
+	void setIconFile(const QString &a) { theIconFile = a; }
 
 	const QString &name() const { return theName; }
 	const QString &remote() const { return theRemote; }
+	const QString &iconFile() const { return theIconFile; }
 	const QString &remoteName() const { return RemoteServer::remoteServer()->getRemoteName(theRemote); }
 
 	const Mode &loadFromConfig(KConfig &theConfig, int index);
@@ -41,7 +43,7 @@ public:
 	bool operator==(const Mode &mode) const { return mode.theName == theName && mode.theRemote == theRemote; }
 
 	Mode();
-	Mode(const QString &remote, const QString &name);
+	Mode(const QString &remote, const QString &name, const QString &iconFile = QString::null);
 	~Mode();
 };
 
