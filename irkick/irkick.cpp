@@ -150,7 +150,7 @@ void IRKick::slotReloadConfiguration()
 
 void IRKick::slotConfigure()
 {
-	KApplication::startServiceByName("Remote Controls");
+	KApplication::startServiceByDesktopName("kcmlirc");
 }
 
 void IRKick::updateModeIcons()
@@ -243,7 +243,7 @@ void IRKick::executeAction(const IRAction &action)
 		if(sname != QString::null)
 		{
 			KPassivePopup::message("IRKick", i18n("Starting <b>%1</b>...").arg(action.application()), SmallIcon("irkick"), theTrayIcon);
-			KApplication::startServiceByName(sname);
+			KApplication::startServiceByDesktopName(sname);
 		}
 	}
 	if(action.isJustStart()) return;
