@@ -180,9 +180,11 @@ void AddAction::updateOptions()
 	else if(theUseDCOP->isChecked())
 	{
 		if(!theObjects->selectedItem()) return;
-		if(!theObjects->selectedItem()->parent()) return;
-		program = nameProgramMap[theObjects->selectedItem()->parent()];
-		isUnique = uniqueProgramMap[theObjects->selectedItem()->parent()];
+		QListViewItem* i = theObjects->selectedItem()->parent();
+		if(!i) return;
+		isUnique = uniqueProgramMap[i];
+		QRegExp r("(.*)-[0-9]+");
+		program = r.exactMatch(nameProgramMap[i]) ? r.cap(1) : nameProgramMap[i];
 		im = IM_DONTSEND;
 	}
 	else return;
