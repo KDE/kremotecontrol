@@ -68,4 +68,8 @@
 			<range min="0" max="100"/>
 		</argument>
 	</action>
+	<action objid="MainApplication-Interface" prototype="void quit()" class="off">
+		<name>Quit</name>
+		<comment>Exit Noatun</comment>
+	</action>
 </profile>
