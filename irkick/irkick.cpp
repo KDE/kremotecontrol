@@ -92,7 +92,7 @@ void IRKick::doQuit()
 	KSimpleConfig theConfig("irkickrc");
 	theConfig.setGroup("General");
 	if(theConfig.readBoolEntry("AutoStart", true) == true)
-		switch(KMessageBox::questionYesNoCancel(0, i18n("Should the Infrared Remote Control server start automatically when you begin KDE?"), i18n("Automatically start??")))
+		switch(KMessageBox::questionYesNoCancel(0, i18n("Should the Infrared Remote Control server start automatically when you begin KDE?"), i18n("Automatically Start?")))
 		{	case KMessageBox::No: theConfig.writeEntry("AutoStart", false); break;
 			case KMessageBox::Cancel: return;
 		}

@@ -54,12 +54,12 @@ KCMLirc::KCMLirc(QWidget *parent, const char *name, QStringList /*args*/) : KCMo
 	bool ok;
 	KApplication::kApplication()->dcopClient()->remoteInterfaces("irkick", "IRKick", &ok);
 	if(!ok)
-		if(KMessageBox::questionYesNo(this, i18n("The Infrared Remote Control software is not currently running. This configuration module will not work properly without it. Would you like to start it now?"), i18n("Software not running")) == KMessageBox::Yes)
+		if(KMessageBox::questionYesNo(this, i18n("The Infrared Remote Control software is not currently running. This configuration module will not work properly without it. Would you like to start it now?"), i18n("Software Not Running")) == KMessageBox::Yes)
 		{	kdDebug() << "S" << KApplication::startServiceByName("KDE LIRC server") << endl;
 			KSimpleConfig theConfig("irkickrc");
 			theConfig.setGroup("General");
 			if(theConfig.readBoolEntry("AutoStart", true) == false)
-				if(KMessageBox::questionYesNo(this, i18n("Would you like the Infrared Remote Control software to start automatically when you begin KDE?"), i18n("Automatically start?")) == KMessageBox::Yes)
+				if(KMessageBox::questionYesNo(this, i18n("Would you like the infrared remote control software to start automatically when you begin KDE?"), i18n("Automatically Start?")) == KMessageBox::Yes)
 					theConfig.writeEntry("AutoStart", true);
 		}
 
@@ -324,7 +324,7 @@ void KCMLirc::slotRemoveMode()
 	if(!theKCMLircBase->theModes->selectedItem()) return;
 	if(!theKCMLircBase->theModes->selectedItem()->parent()) return;
 
-	if(KMessageBox::warningContinueCancel(this, i18n("Are you sure you want to remove %1 and all its actions?").arg(theKCMLircBase->theModes->selectedItem()->text(0)), i18n("Erase actions?")) == KMessageBox::Continue)
+	if(KMessageBox::warningContinueCancel(this, i18n("Are you sure you want to remove %1 and all its actions?").arg(theKCMLircBase->theModes->selectedItem()->text(0)), i18n("Erase Actions?")) == KMessageBox::Continue)
 	{
 		allModes.erase(modeMap[theKCMLircBase->theModes->selectedItem()]);
 		updateModes();
@@ -346,7 +346,7 @@ void KCMLirc::slotDrop(KListView *, QDropEvent *, QListViewItem *, QListViewItem
 
 	if(modeMap[theKCMLircBase->theModes->selectedItem()].remote() != m.remote())
 	{
-		KMessageBox::error(this, i18n("You may only drag the selected items onto a mode of the same remote control"), i18n("You may not drag here"));
+		KMessageBox::error(this, i18n("You may only drag the selected items onto a mode of the same remote control"), i18n("You May Not Drag Here"));
 		return;
 	}
 	for(QListViewItem *i = theKCMLircBase->theActions->firstChild(); i; i = i->nextSibling())

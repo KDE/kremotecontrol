@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>AddActionBase</class>
 <author>Gav Wood</author>
 <widget class="QWizard">
@@ -9,7 +9,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>704</width>
+            <width>723</width>
             <height>587</height>
         </rect>
     </property>
@@ -210,7 +210,7 @@
             <cstring>page</cstring>
         </property>
         <attribute name="title">
-            <string>Select button to configure</string>
+            <string>Select Button to Configure</string>
         </attribute>
         <vbox>
             <property name="name">
@@ -321,7 +321,7 @@
                 <widget class="KListView">
                     <column>
                         <property name="text">
-                            <string>Programs</string>
+                            <string>Program</string>
                         </property>
                         <property name="clickable">
                             <bool>true</bool>
@@ -437,7 +437,7 @@
                             </column>
                             <column>
                                 <property name="text">
-                                    <string>Parameters</string>
+                                    <string>Parameter</string>
                                 </property>
                                 <property name="clickable">
                                     <bool>true</bool>
@@ -1259,7 +1259,7 @@
                             <widget class="KListView">
                                 <column>
                                     <property name="text">
-                                        <string>Modes</string>
+                                        <string>Mode</string>
                                     </property>
                                     <property name="clickable">
                                         <bool>true</bool>
@@ -1393,8 +1393,6 @@
         </grid>
     </widget>
 </widget>
-<customwidgets>
-</customwidgets>
 <connections>
     <connection>
         <sender>theObjects</sender>
@@ -1575,7 +1573,18 @@
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
+    <includehint>klistview.h</includehint>
+    <includehint>klistview.h</includehint>
+    <includehint>klistview.h</includehint>
+    <includehint>klistview.h</includehint>
+    <includehint>klistview.h</includehint>
+    <includehint>klistview.h</includehint>
+    <includehint>klineedit.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
+    <includehint>kdoublenuminput.h</includehint>
+    <includehint>keditlistbox.h</includehint>
+    <includehint>klineedit.h</includehint>
+    <includehint>klistview.h</includehint>
 </includehints>
 </UI>
