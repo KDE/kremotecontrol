@@ -134,6 +134,7 @@ void IRKick::updateModeIcons()
 
 void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int theRepeatCounter)
 {
+	kdDebug() << "Got message: " << theRemote << ": " << theButton << " (" << theRepeatCounter << ")" << endl;
 	if(npApp != QString::null)
 	{
 		QString theApp = npApp;

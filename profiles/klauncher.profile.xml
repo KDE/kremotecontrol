@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<!DOCTYPE profile SYSTEM "profile.dtd">
+<profile id="klauncher">
+	<name>KDE Program Launcher</name>
+	<author>Gav Wood</author>
+	<action objid="default" prototype="void kdeinit_exec(QString, QStringList)" repeat="0" autostart="0">
+		<name>Execute</name>
+		<comment>Runs a program or script</comment>
+		<argument type="QString"><comment>The executable name and path of the program or script to run</comment></argument>
+		<argument type="QStringList"><comment>Parameters for the program or script</comment></argument>
+	</action>
+	<action objid="default" prototype="void kdeinit_exec_wait(QString, QStringList)" repeat="0" autostart="0">
+		<name>Execute and Wait</name>
+		<comment>Runs a program or script and waits for it to finish</comment>
+		<argument type="QString"><comment>The executable name and path of the program or script to run</comment></argument>
+		<argument type="QStringList"><comment>Parameters for the program or script</comment></argument>
+	</action>
+</profile>

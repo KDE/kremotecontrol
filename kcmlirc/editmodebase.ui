@@ -19,6 +19,28 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="text">
+                <string>&lt;b&gt;Description&lt;/b&gt;</string>
+            </property>
+        </widget>
+        <widget class="Line">
+            <property name="name">
+                <cstring>line3_2</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>HLine</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+        </widget>
         <widget class="QLayoutWidget">
             <property name="name">
                 <cstring>layout25</cstring>
@@ -36,14 +58,6 @@
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>theIcon</cstring>
-                    </property>
-                </widget>
-                <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="2">
-                    <property name="name">
-                        <cstring>theDefault</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Default mode</string>
                     </property>
                 </widget>
                 <widget class="QLayoutWidget" row="1" column="1">
@@ -123,6 +137,53 @@
         </widget>
         <spacer>
             <property name="name">
+                <cstring>spacer4</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>410</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel2</cstring>
+            </property>
+            <property name="text">
+                <string>&lt;b&gt;Behaviour&lt;/b&gt;</string>
+            </property>
+        </widget>
+        <widget class="Line">
+            <property name="name">
+                <cstring>line2</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>HLine</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>theDefault</cstring>
+            </property>
+            <property name="text">
+                <string>Mo&amp;de is the default for its remote control</string>
+            </property>
+        </widget>
+        <spacer>
+            <property name="name">
                 <cstring>spacer9</cstring>
             </property>
             <property name="orientation">
@@ -134,7 +195,7 @@
             <property name="sizeHint">
                 <size>
                     <width>20</width>
-                    <height>160</height>
+                    <height>90</height>
                 </size>
             </property>
         </spacer>
@@ -199,7 +260,7 @@
 </widget>
 <images>
     <image name="image0">
-        <data format="XPM.GZ" length="665">789c7dd0cd6a84301405e0bd4f117427654647234ae923b47459285de4dee8e8187f3b5d94d2776fee55c3d8428f26e43b0a093986e2e5f9518447effdaaae0d0aacd52c42fdd1759faf6f0f5f9e1f67c2bea748c4fe9de71f048aa7a12f690d761d441c62b0a7da13f79c89714e0f712226711225bccb484ce3344a9903512aa9a522f6c44c6545c66c8939e4450ec48e58a4852c52e2858996483c1321850cf86bcdd4969a58ad540bcb95e5424d4409254a6243d4529f34d3102b0e5fd4afb82e70515b07e812ac1da02eabb3aeabb2d93ac04b6b4cdbd1b476807d3f1863782c1de0683319ca342e1dce1cb4955d2e9d59f6e3ffdcbe66ad786cfb1aeed6693b9fc1bf67be2d5d77302ef0efbddc76dff7de0f06dea60b</data>
+        <data format="XPM.GZ" length="620">789c7dd0cd4e84301405e03d4fd17077c438201421c647d0b834312efa03c31d0648745c18e3bbcbb905fc8d0768fa1d202dec12757f77a3925df47c322776ca75e64925fe65185e1f1eafdfa2382b15ce4b95c567517cae9cba9dc606739ae7944ac009cc2a1ce008e6599ee6f2e20016599116c223a88df6da803d589ab22e851d58d9aaae2c7800eba2d67501ee856ea6033d680b5b5ab9db08fd4c0fba8526d02e6c020de8b46d9c065bd06b7fe1850cb612f9f61fd93afaccdad1ef8ec858e74de36cbb7644fb8eb93b60583aa2be3f32b35ca1231ae68c8c8cc3d24d129aab791a3a0ecbc973dbbabc5414cab02e4bb70ecbfef88f3d7f2bb7efe52df4ef7ff9dabd5f451f45248a2d</data>
     </image>
 </images>
 <connections>

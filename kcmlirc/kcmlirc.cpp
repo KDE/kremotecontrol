@@ -9,6 +9,7 @@
  ***************************************************************************/
 
 #include <qcheckbox.h>
+#include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
 #include <qradiobutton.h>
@@ -346,7 +347,7 @@ void KCMLirc::updateActions()
 	if(!theKCMLircBase->theModes->selectedItem()) { updateActionsStatus(0); return; }
 
 	Mode m = modeMap[theKCMLircBase->theModes->selectedItem()];
-	theKCMLircBase->theModeLabel->setText(m.remoteName() + ": " + (m.name() == "" ? i18n("<i>Always</i>") : ("<b>" + m.name() + "</b>")));
+	theKCMLircBase->theModeLabel->setText(m.remoteName() + ": " + (m.name() == "" ? i18n("Actions <i>always</i> available") : i18n("Actions available only in mode <b>%1</b>").arg(m.name())));
 	IRAItList l = allActions.findByMode(m);
 	for(IRAItList::iterator i = l.begin(); i != l.end(); i++)
 	{	QListViewItem *b = new KListViewItem(theKCMLircBase->theActions, (**i).buttonName(), (**i).application(), (**i).function(), (**i).arguments().toString(), (**i).notes());

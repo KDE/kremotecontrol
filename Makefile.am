@@ -1,3 +1,3 @@
 
-SUBDIRS = kdelirc irkick kcmlirc profiles remotes po doc
+SUBDIRS = icons kdelirc irkick kcmlirc profiles remotes po doc
 
