@@ -44,7 +44,6 @@ private:
 	void autoPopulate(const Profile &profile, const Remote &remote, const QString &mode);
 
 public slots:
-	void configChanged();
 	void updateActions();
 	void updateModesStatus(QListViewItem *);
 	void updateActionsStatus(QListViewItem *);
@@ -75,8 +74,6 @@ public:
 	virtual void load();
 	virtual void save();
 	virtual void defaults();
-	virtual int buttons();
-	virtual QString quickHelp() const;
 
 	KCMLirc(QWidget *parent = 0, const char *name = 0, QStringList args = QStringList());
 	~KCMLirc();

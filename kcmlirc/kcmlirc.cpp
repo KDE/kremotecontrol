@@ -51,6 +51,8 @@ K_EXPORT_COMPONENT_FACTORY(kcmlirc, theFactory("kcmlirc"))
 
 KCMLirc::KCMLirc(QWidget *parent, const char *name, QStringList /*args*/) : DCOPObject("KCMLirc"), KCModule(parent, name)
 {
+    setButtons( KCModule::Help );
+
     KGlobal::locale()->insertCatalogue( "kdelirc" );
 	bool ok;
 	KApplication::kApplication()->dcopClient()->remoteInterfaces("irkick", "IRKick", &ok);
@@ -515,22 +517,6 @@ void KCMLirc::save()
 	IRKick_stub("irkick", "IRKick").reloadConfiguration();
 
 	emit changed(true);
-}
-
-int KCMLirc::buttons()
-{
-    return KCModule::Help;
-}
-
-void KCMLirc::configChanged()
-{
- // insert your saving code here...
-    emit changed(true);
-}
-
-QString KCMLirc::quickHelp() const
-{
-    return i18n("Helpful information about the kcmlirc module.");
 }
 
 // TODO: Take this out when I know how
