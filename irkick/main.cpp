@@ -20,7 +20,9 @@ extern "C" int kdemain(int argc, char *argv[])
 {
 	KAboutData *aboutData = new KAboutData("irkick", I18N_NOOP("IRKick"), VERSION, I18N_NOOP("The KDE Infrared Remote Control Server"), KAboutData::License_GPL, "(c) 2003, Gav Wood", 0, 0, "gav@kde.org");
 	aboutData->addAuthor("Gav Wood", I18N_NOOP("Author"), "gav@kde.org", "http://www.indigoarchive.net/gav/");
+	aboutData->addCredit("Malte Starostik", I18N_NOOP("Original LIRC interface code"), "malte.starostik@t-online.de");
 	aboutData->addCredit("Dirk Ziegelmeier", I18N_NOOP("Ideas, concept code"), "dirk@ziegelmeier.net");
+	aboutData->addCredit("Zsolt Rizsanyi", I18N_NOOP("Random patches"), "rizsanyi@myrealbox.com");
 	aboutData->addCredit("Antonio Larrosa Jiménez", I18N_NOOP("Ideas"), "larrosa@kde.org");
 
 	KCmdLineArgs::init( argc, argv, aboutData );

@@ -5,7 +5,7 @@
 // Description:
 //
 //
-// Author: (C) 2002 by Malte Starostic
+// Author: (C) 2002 by Malte Starostik
 // Adaption : Gav Wood <gav@kde.org>, (C) 2003
 //
 // Copyright: See COPYING file that comes with this distribution

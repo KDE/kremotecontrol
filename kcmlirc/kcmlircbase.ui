@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>KCMLircBase</class>
 <author>Gav Wood</author>
 <widget class="QWidget">
@@ -10,7 +10,7 @@
             <x>0</x>
             <y>0</y>
             <width>854</width>
-            <height>538</height>
+            <height>540</height>
         </rect>
     </property>
     <property name="caption">
@@ -377,6 +377,9 @@
                                 <property name="name">
                                     <cstring>unnamed</cstring>
                                 </property>
+                                <property name="margin">
+                                    <number>0</number>
+                                </property>
                                 <widget class="QLabel">
                                     <property name="name">
                                         <cstring>theInformationLabel</cstring>
@@ -430,16 +433,4 @@
     <function access="private" specifier="non virtual">init()</function>
 </functions>
 <layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>klistview.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>klistview.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>klistview.h</includehint>
-    <includehint>klistview.h</includehint>
-</includehints>
 </UI>

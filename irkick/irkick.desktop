@@ -10,8 +10,6 @@ Name[pt_BR]=Servidor LIRC do KDE
 Name[sv]=KDE LIRC-server
 Name[wa]=Sierveu LIRC KDE
 
-#ServiceTypes=KDEDModule
-#X-KDE-ModuleType=Library
 X-KDE-Library=irkick
 X-KDE-autostart-after=panel
 X-KDE-StartupNotify=false

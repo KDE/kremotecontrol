@@ -254,6 +254,8 @@ void KCMLirc::autoPopulate(const Profile &profile, const Remote &remote, const Q
 			a.setProgram(pa->profile()->id());
 			a.setObject(pa->objId());
 			a.setMethod(pa->prototype());
+			a.setUnique(pa->profile()->unique());
+			a.setIfMulti(pa->profile()->ifMulti());
 			Arguments l;
 			// argument count should be either 0 or 1. undefined if > 1.
 			if(Prototype(pa->prototype()).argumentCount() == 1)
@@ -440,6 +442,7 @@ void KCMLirc::updateExtensions()
 		for(; i.current(); ++i)
 			remoteMap[new QListViewItem(a, i.current()->name())] = i.currentKey();
 	}
+	updateInformation();
 }
 
 void KCMLirc::updateInformation()
