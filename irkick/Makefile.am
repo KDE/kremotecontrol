@@ -57,7 +57,7 @@ uninstall-local:
 # kde_designerdir     Where Qt Designer plugins should go to (new in KDE 3).
 
 # set the include path for X, qt and KDE
-INCLUDES = $(all_includes) -I../kdelirc
+INCLUDES = $(all_includes) -I$(srcdir)/../kdelirc
 
 METASOURCES = AUTO
 
