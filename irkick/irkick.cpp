@@ -256,7 +256,7 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int 
 {
 	kdDebug() << "Got message: " << theRemote << ": " << theButton << " (" << theRepeatCounter << ")" << endl;
 	theTrayIcon->setPixmap(SmallIcon("irkickflash"));
-	theFlashOff->start(200);
+	theFlashOff->start(200, true);
 	if(npApp != QString::null)
 	{
 		QString theApp = npApp;
