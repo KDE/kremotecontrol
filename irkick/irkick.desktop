@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=KDE LIRC Server
+Name[ar]=KDE LIRC خادم
 Name[bg]=Сървър LIRC
 Name[br]=Servijer KDE LIRC
 Name[bs]=KDE LIRC server
@@ -13,6 +14,7 @@ Name[es]=Servidor LIRC de KDE
 Name[et]=KDE LIRC server
 Name[eu]=KDE LIRC Zerbitzaria
 Name[fr]=Serveur KDE LIRC
+Name[ga]=Freastalaí LIRC KDE
 Name[hu]=KDE LIRC szolgáltatás
 Name[is]=KDE LIRC þjónn
 Name[it]=Server LIRC di KDE
@@ -63,6 +65,7 @@ Comment[et]=KDE Linuxi infrapuna kaugjuhtimise server.
 Comment[eu]=KDE Linux infrasare urruneko aginte zerbitzaria.
 Comment[fi]=KDE:n Linux infrapunalla toimivien kauko-ohjainten ohjauspalvelin.
 Comment[fr]=Serveur de contrôle distant infrarouge sous Linux pour KDE.
+Comment[ga]=Freastalaí KDE cianrialaithe infridheirg Linux
 Comment[hi]=केडीई लिनक्स इन्फ्रारेड रिमोट नियंत्रण सर्वर.
 Comment[hu]=KDE Linux szolgáltatás infravörös távirányítók kezeléséhez
 Comment[is]=KDE Linux innrauða fjarstýringarstjórnborðið
