@@ -10,7 +10,9 @@
 
 #include <qregexp.h>
 #include <qlabel.h>
+#include <qradiobutton.h>
 
+#include <kdebug.h>
 #include <klineedit.h>
 #include <klistview.h>
 #include <kapplication.h>
@@ -22,8 +24,8 @@
 
 AddAction::AddAction(QWidget *parent, const char *name): AddActionBase(parent, name)
 {
+	connect(this, SIGNAL( selected(const QString &) ), SLOT( slotCorrectPage() ));
 	connect(this, SIGNAL( selected(const QString &) ), SLOT( updateButtonStates() ));
-	updateButtonStates();
 	updateObjects();
 	updateFunctions();
 	curPage = 0;
@@ -33,20 +35,40 @@ AddAction::~AddAction()
 {
 }
 
-void AddAction::updateButtonStates()
+void AddAction::slotCorrectPage()
 {
 	int lastPage = curPage;
 	curPage = indexOf(currentPage());
-	if(curPage == 1 && theFunctions->currentItem() && !Prototype(theFunctions->currentItem()->text(2)).count())
+
+	if(curPage == 1 && theUseProfile->isChecked())
 		showPage(((QWizard *)this)->page(lastPage ? 0 : 2));
-	switch(curPage)
-	{	case 0: setNextEnabled(currentPage(), theFunctions->currentItem() != 0); break;
-		case 1: if(lastPage == 0) updateParameters(); setNextEnabled(currentPage(), true); break;
-		case 2: setFinishEnabled(currentPage(), true); break;
-	}
+	if((curPage == 1 || curPage == 4) && theChangeMode->isChecked())
+		showPage(((QWizard *)this)->page(lastPage ? 0 : 5));
+
+	if(curPage == 2 && theUseDCOP->isChecked())
+		showPage(((QWizard *)this)->page(lastPage == 3 ? 1 : 3));
+
+	if(curPage == 3 && (
+	(theUseDCOP->isChecked() && theFunctions->currentItem() && !Prototype(theFunctions->currentItem()->text(2)).count()) ||
+	(theUseProfile->isChecked() && theProfileFunctions->currentItem() && !theFunctions->currentItem()->text(1).toInt())
+	))
+		showPage(((QWizard *)this)->page(lastPage == 4 ? (theUseDCOP->isChecked() ? 1 : 2) : 4));
 }
 
-// TODO: consolidate this (and stringising code from updateFunctions) into a class to desctribe function prototype.
+void AddAction::updateButtonStates()
+{
+	kdDebug() << "Updating states" << endl;
+	switch(indexOf(currentPage()))
+	{	case 0: setNextEnabled(currentPage(), theProfiles->currentItem() != 0 || !theUseProfile->isChecked()); break;
+		case 1: setNextEnabled(currentPage(), theFunctions->currentItem() != 0); break;
+		case 2: setNextEnabled(currentPage(), theProfileFunctions->currentItem() != 0); break;
+		case 3: updateParameters(); setNextEnabled(currentPage(), true); break;
+		case 4: setNextEnabled(currentPage(), false); setFinishEnabled(currentPage(), true); break;
+		case 5: setNextEnabled(currentPage(), false); setFinishEnabled(currentPage(), theModes->currentItem() || !theSwitchMode->isChecked()); break;
+	}
+	kdDebug() << "(" << (indexOf(currentPage())) << ") " << theProfiles->currentItem() << " " << theUseProfile->isChecked() << endl;
+}
+
 const QStringList AddAction::getFunctions(const QString app, const QString obj)
 {
 	QStringList ret;

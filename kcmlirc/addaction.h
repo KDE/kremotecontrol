@@ -26,6 +26,8 @@ class AddAction : public AddActionBase
 	int curPage;
 
 public slots:
+	virtual void slotCorrectPage();
+
 	virtual void updateFunctions();
 	virtual void updateObjects();
 	virtual void updateButtonStates();

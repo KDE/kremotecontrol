@@ -21,6 +21,130 @@
             <cstring>page</cstring>
         </property>
         <attribute name="title">
+            <string>Select action to carry out on button press</string>
+        </attribute>
+        <spacer>
+            <property name="name">
+                <cstring>spacer4</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>21</width>
+                    <height>70</height>
+                </size>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>283</x>
+                    <y>325</y>
+                    <width>21</width>
+                    <height>70</height>
+                </rect>
+            </property>
+        </spacer>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>buttonGroup1</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>11</x>
+                    <y>11</y>
+                    <width>566</width>
+                    <height>260</height>
+                </rect>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>1</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
+            </property>
+            <property name="title">
+                <string></string>
+            </property>
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>theUseDCOP</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>11</x>
+                        <y>199</y>
+                        <width>544</width>
+                        <height>17</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>I wish to manually select a function from a running program</string>
+                </property>
+            </widget>
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>theChangeMode</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>220</y>
+                        <width>281</width>
+                        <height>31</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>I wish to change the remote control's mode</string>
+                </property>
+            </widget>
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>theUseProfile</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>11</x>
+                        <y>11</y>
+                        <width>544</width>
+                        <height>17</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>I wish to select an application below for usage</string>
+                </property>
+                <property name="checked">
+                    <bool>true</bool>
+                </property>
+            </widget>
+            <widget class="KListView">
+                <property name="name">
+                    <cstring>theProfiles</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>11</x>
+                        <y>34</y>
+                        <width>544</width>
+                        <height>159</height>
+                    </rect>
+                </property>
+            </widget>
+        </widget>
+    </widget>
+    <widget class="QWidget">
+        <property name="name">
+            <cstring>page</cstring>
+        </property>
+        <attribute name="title">
             <string>Select Program Function</string>
         </attribute>
         <vbox>
@@ -203,6 +327,100 @@
             <cstring>page</cstring>
         </property>
         <attribute name="title">
+            <string>Select Program Function</string>
+        </attribute>
+        <widget class="KListView">
+            <column>
+                <property name="text">
+                    <string>Function</string>
+                </property>
+                <property name="clickable">
+                    <bool>true</bool>
+                </property>
+                <property name="resizable">
+                    <bool>true</bool>
+                </property>
+            </column>
+            <column>
+                <property name="text">
+                    <string>Parameters</string>
+                </property>
+                <property name="clickable">
+                    <bool>true</bool>
+                </property>
+                <property name="resizable">
+                    <bool>true</bool>
+                </property>
+            </column>
+            <column>
+                <property name="text">
+                    <string>Description</string>
+                </property>
+                <property name="clickable">
+                    <bool>true</bool>
+                </property>
+                <property name="resizable">
+                    <bool>true</bool>
+                </property>
+            </column>
+        <item>
+            <property name="text">
+                <string>Test 1</string>
+            </property>
+            <property name="text">
+                <string>2</string>
+            </property>
+            <property name="text">
+                <string>test with parameters</string>
+            </property>
+            <property name="pixmap">
+                <pixmap></pixmap>
+            </property>
+            <property name="pixmap">
+                <pixmap></pixmap>
+            </property>
+            <property name="pixmap">
+                <pixmap></pixmap>
+            </property>
+        </item>
+        <item>
+            <property name="text">
+                <string>Test 2</string>
+            </property>
+            <property name="text">
+                <string>0</string>
+            </property>
+            <property name="text">
+                <string>test without parameters</string>
+            </property>
+            <property name="pixmap">
+                <pixmap></pixmap>
+            </property>
+            <property name="pixmap">
+                <pixmap></pixmap>
+            </property>
+            <property name="pixmap">
+                <pixmap></pixmap>
+            </property>
+        </item>
+            <property name="name">
+                <cstring>theProfileFunctions</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>0</x>
+                    <y>10</y>
+                    <width>581</width>
+                    <height>381</height>
+                </rect>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QWidget">
+        <property name="name">
+            <cstring>page</cstring>
+        </property>
+        <attribute name="title">
             <string>Populate Parameters</string>
         </attribute>
         <vbox>
@@ -371,6 +589,81 @@
             </spacer>
         </vbox>
     </widget>
+    <widget class="QWidget">
+        <property name="name">
+            <cstring>page</cstring>
+        </property>
+        <attribute name="title">
+            <string>Page</string>
+        </attribute>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>buttonGroup3</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>14</x>
+                    <y>10</y>
+                    <width>371</width>
+                    <height>351</height>
+                </rect>
+            </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
+            </property>
+            <property name="title">
+                <string></string>
+            </property>
+            <widget class="KListView">
+                <property name="name">
+                    <cstring>theModes</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>30</x>
+                        <y>30</y>
+                        <width>291</width>
+                        <height>241</height>
+                    </rect>
+                </property>
+            </widget>
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>theSwitchMode</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>0</y>
+                        <width>221</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Change to mode:</string>
+                </property>
+            </widget>
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>theExitMode</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>280</y>
+                        <width>181</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Exit current mode</string>
+                </property>
+                <property name="checked">
+                    <bool>true</bool>
+                </property>
+            </widget>
+        </widget>
+    </widget>
 </widget>
 <connections>
     <connection>
@@ -403,6 +696,48 @@
         <receiver>AddActionBase</receiver>
         <slot>slotNextParam()</slot>
     </connection>
+    <connection>
+        <sender>theSwitchMode</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>AddActionBase</receiver>
+        <slot>updateButtonStates()</slot>
+    </connection>
+    <connection>
+        <sender>theExitMode</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>AddActionBase</receiver>
+        <slot>updateButtonStates()</slot>
+    </connection>
+    <connection>
+        <sender>theChangeMode</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>AddActionBase</receiver>
+        <slot>updateButtonStates()</slot>
+    </connection>
+    <connection>
+        <sender>theUseDCOP</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>AddActionBase</receiver>
+        <slot>updateButtonStates()</slot>
+    </connection>
+    <connection>
+        <sender>theUseProfile</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>AddActionBase</receiver>
+        <slot>updateButtonStates()</slot>
+    </connection>
+    <connection>
+        <sender>theProfiles</sender>
+        <signal>currentChanged(QListViewItem*)</signal>
+        <receiver>AddActionBase</receiver>
+        <slot>updateButtonStates()</slot>
+    </connection>
+    <connection>
+        <sender>theModes</sender>
+        <signal>currentChanged(QListViewItem*)</signal>
+        <receiver>AddActionBase</receiver>
+        <slot>updateButtonStates()</slot>
+    </connection>
 </connections>
 <slots>
     <slot>updateFunctions()</slot>
@@ -411,12 +746,16 @@
     <slot>updateButtonStates()</slot>
     <slot>updateCurrentParam(const QString &amp;)</slot>
     <slot>slotNextParam()</slot>
+    <slot>slotCorrectPage()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>klistview.h</includehint>
     <includehint>klistview.h</includehint>
     <includehint>klistview.h</includehint>
+    <includehint>klistview.h</includehint>
+    <includehint>klistview.h</includehint>
     <includehint>klineedit.h</includehint>
+    <includehint>klistview.h</includehint>
 </includehints>
 </UI>
