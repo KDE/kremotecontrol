@@ -55,19 +55,20 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int 
 {
 	if(npApp != QString::null)
 	{
+		QString theApp = npApp;
+		npApp = QString::null;
 		// send notifier by DCOP to npApp/npModule/npMethod(theRemote, theButton);
-		QByteArray data; QDataStream arg(data, IO_WriteOnly);
+/*		QByteArray data; QDataStream arg(data, IO_WriteOnly);
 		arg << QString(theRemote) << QString(theButton);
 		QCString rType; QByteArray rData;
 		if(!KApplication::dcopClient()->call(QCString(npApp), QCString(npModule), QCString(npMethod), data, rType, rData))
 		{	kdDebug() << "ERROR!!!" << endl;
 			// BUT WHY?!?!?!
 		}
-
+*/
 // this code works, but i want to figure out why the code above which should be equivalent doesn't work
-//		if(!DCOPRef(QCString(npApp), QCString(npModule)).call(QCString(npMethod), theRemote, theButton).isValid())
-//			KPassivePopup::message("IRKick", "Error: Couldn't contact application " + npApp + " to send keypress.", SmallIcon("package_applications"), this);
-		npApp = QString::null;
+		if(!DCOPRef(QCString(theApp), QCString(npModule)).call(QCString(npMethod), theRemote, theButton).isValid())
+			KPassivePopup::message("IRKick", "Error: Couldn't contact application " + theApp + " to send keypress.", SmallIcon("package_applications"), this);
 	}
 	else
 	{
@@ -102,6 +103,11 @@ void IRKick::stealNextPress(QString app, QString module, QString method)
 	npApp = app;
 	npModule = module;
 	npMethod = method;
+}
+
+void IRKick::dontStealNextPress()
+{
+	npApp = QString::null;
 }
 
 void IRKick::slotShowAboutKDE()

@@ -71,3 +71,37 @@ void IRAction::saveToConfig(KConfig &theConfig, int index) const
 	theConfig.writeEntry(Binding + "Button", theButton);
 	theConfig.writeEntry(Binding + "Repeat", theRepeat);
 }
+
+const QString IRAction::function() const
+{
+	if(theProgram == "")
+		if(theObject == "")
+			return "Exit mode";
+		else
+			return "Switch to " + theObject;
+	else
+	{
+		// TODO: attempt to retrieve from profile
+		return theObject + "::" + theMethod.name();
+	}
+}
+
+const QString IRAction::repeatable() const
+{
+	if(theProgram == "")
+		return "";
+	else
+		return theRepeat ? "Yes" : "No";
+}
+
+const QString IRAction::application() const
+{
+	if(theProgram == "")
+		return "[KDE]";
+	else
+	{
+		// TODO: attempt to retrieve from profile
+		return theProgram;
+	}
+}
+

@@ -16,6 +16,7 @@
 #include <klineedit.h>
 #include <klistview.h>
 #include <kapplication.h>
+#include <kmessagebox.h>
 
 #include <dcopclient.h>
 #include <irkick_stub.h>
@@ -34,6 +35,12 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): AddAc
 
 AddAction::~AddAction()
 {
+}
+
+
+void AddAction::slotModeSelected()
+{
+	theSwitchMode->setChecked(true);
 }
 
 void AddAction::slotCorrectPage()
@@ -56,10 +63,27 @@ void AddAction::slotCorrectPage()
 		showPage(((QWizard *)this)->page(lastPage == 5 ? (theUseDCOP->isChecked() ? 2 : 3) : 5));
 }
 
+void AddAction::requestNextPress()
+{
+	IRKick_stub("irkick", "IRKick").stealNextPress(DCOPClient::mainClient()->appId(), "KCMLirc", "gotButton");
+}
+
+void AddAction::cancelRequest()
+{
+	IRKick_stub("irkick", "IRKick").dontStealNextPress();
+}
+
 void AddAction::updateButton(const QString &remote, const QString &button)
 {
-	// TODO: actually highlight the relevant item, or display a message telling user they are stupid for using wrong remote
-	// TODO: renew next button press capture if current page = 1
+	if(theMode.remote() == remote)
+	{	theButtons->setCurrentItem(theButtons->findItem(button, 0));
+		theButtons->ensureItemVisible(theButtons->findItem(button, 0));
+	}
+	else
+		KMessageBox::error(this, "You did not select a mode of that remote control. Please use " + theMode.remote() + ", or revert back to select a different mode.", "Incorrect remote control detected");
+
+	if(indexOf(currentPage()) == 1)
+		requestNextPress();
 }
 
 void AddAction::updateButtons()
@@ -73,8 +97,7 @@ void AddAction::updateButtons()
 
 void AddAction::updateButtonStates()
 {
-	// TODO: capture next press if page = 1
-	// TODO: release capture if page != 1
+	if(indexOf(currentPage()) == 1) requestNextPress(); else cancelRequest();
 	switch(indexOf(currentPage()))
 	{	case 0: setNextEnabled(currentPage(), theProfiles->currentItem() != 0 || !theUseProfile->isChecked()); break;
 		case 1: updateButtons(); setNextEnabled(currentPage(), theButtons->currentItem() != 0); break;

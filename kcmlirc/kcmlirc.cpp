@@ -11,6 +11,7 @@
 #include <qcheckbox.h>
 #include <qlayout.h>
 #include <qlineedit.h>
+#include <qradiobutton.h>
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -52,38 +53,64 @@ KCMLirc::~KCMLirc()
 
 void KCMLirc::slotAddAction()
 {
-	if(!theKCMLircBase->theModes->currentItem() || !theKCMLircBase->theModes->currentItem()->parent()) return;
+	if(!theKCMLircBase->theModes->currentItem()) return;
 	Mode m = modeMap[theKCMLircBase->theModes->currentItem()];
 
 	AddAction theDialog(this, 0, m);
-	if(theDialog.exec() == QDialog::Accepted)
-		if(theDialog.theObjects->currentItem())
-		if(theDialog.theObjects->currentItem()->parent())
-		if(theDialog.theButtons->currentItem())
-		if(theDialog.theFunctions->currentItem())
+	connect(this, SIGNAL(haveButton(const QString &, const QString &)), &theDialog, SLOT(updateButton(const QString &, const QString &)));
+
+	// populate the modes list box
+	QListViewItem *item = theKCMLircBase->theModes->currentItem();
+	if(item->parent()) item = item->parent();
+	for(item = item->firstChild(); item; item = item->nextSibling())
+		new KListViewItem(theDialog.theModes, item->text(0));
+
+	if(theDialog.exec() == QDialog::Accepted && theDialog.theButtons->currentItem())
+	{	IRAction a;
+		a.setRemote(m.remote());
+		a.setMode(m.name());
+		a.setButton(theDialog.theButtons->currentItem()->text(0));
+		a.setRepeat(theDialog.theRepeat->isChecked());
+		Arguments args;
+		// change mode?
+		if(theDialog.theChangeMode->isChecked())
 		{
-			IRAction a;
-			a.setRemote(m.remote());
-			a.setMode(m.name());
-			a.setButton(theDialog.theButtons->currentItem()->text(0));
+			if(theDialog.theSwitchMode->isChecked() && theDialog.theModes->currentItem())
+			{
+				a.setProgram("");
+				a.setObject(theDialog.theModes->currentItem()->text(0));
+			}
+			else if(theDialog.theExitMode->isChecked())
+			{
+				a.setProgram("");
+				a.setObject("");
+			}
+			a.setRepeat(false);
+		}
+		// DCOP?
+		else if(theDialog.theUseDCOP->isChecked() && theDialog.theObjects->currentItem() && theDialog.theObjects->currentItem()->parent() && theDialog.theFunctions->currentItem())
+		{
 			a.setProgram(theDialog.theObjects->currentItem()->parent()->text(0));
 			a.setObject(theDialog.theObjects->currentItem()->text(0));
 			a.setMethod(theDialog.theFunctions->currentItem()->text(2));
-			a.setRepeat(theDialog.theRepeat->isChecked());
-			Arguments args;
 			theDialog.theParameters->setSorting(0);
 			for(QListViewItem *i = theDialog.theParameters->firstChild(); i; i = i->nextSibling())
-			{	kdDebug() << "Got arg" << i->text(2) << ":: " << i->text(3) << endl;
-				QVariant v(i->text(3));
+			{	QVariant v(i->text(3));
 				v.cast(QVariant::nameToType(i->text(1)));
 				args += v;
 			}
-			a.setArguments(args);
-			allActions.addAction(a);
-			updateActions();
-			// NEED TO IMPLEMENT set...() methods!!!!
-			emit changed(true);
 		}
+		// profile?
+		else if(theDialog.theUseProfile->isChecked())
+		{
+		}
+
+		// save our new action
+		a.setArguments(args);
+		allActions.addAction(a);
+		updateActions();
+		emit changed(true);
+	}
 }
 
 void KCMLirc::slotRemoveAction()
@@ -91,7 +118,6 @@ void KCMLirc::slotRemoveAction()
 	if(!theKCMLircBase->theActions->currentItem()) return;
 
 	IRAIt i = actionMap[theKCMLircBase->theActions->currentItem()];
-	kdDebug() << (*i).button() << endl;
 	allActions.erase(i);
 	updateActions();
 	emit changed(true);
@@ -114,13 +140,15 @@ void KCMLirc::slotAddMode()
 
 void KCMLirc::slotRemoveMode()
 {
+	if(!theKCMLircBase->theModes->currentItem()) return;
+	if(!theKCMLircBase->theModes->currentItem()->parent()) return;
 
-}
-
-void KCMLirc::slotStartListen()
-{
-	IRKick_stub IRKick("irkick", "IRKick");
-	IRKick.stealNextPress(DCOPClient::mainClient()->appId(), "KCMLirc", "gotButton");
+	if(KMessageBox::warningContinueCancel(this, "Are you sure you want to remove " + theKCMLircBase->theModes->currentItem()->text(0) + " and all its actions?", "Erase actions?") == KMessageBox::Continue)
+	{
+		allModes.erase(modeMap[theKCMLircBase->theModes->currentItem()]);
+		updateModes();
+		emit changed(true);
+	}
 }
 
 void KCMLirc::updateActions()
@@ -133,7 +161,7 @@ void KCMLirc::updateActions()
 	theKCMLircBase->theModeLabel->setText(m.remote() + ": " + (m.name() == "" ? "<i>Always</i>" : ("<b>" + m.name() + "</b>")));
 	IRAItList l = allActions.findByMode(m);
 	for(IRAItList::iterator i = l.begin(); i != l.end(); i++)
-		actionMap[new KListViewItem(theKCMLircBase->theActions, (**i).button(), (**i).program(), (**i).function(), (**i).arguments().toString(), (**i).repeat() ? "Yes" : "No")] = *i;
+		actionMap[new KListViewItem(theKCMLircBase->theActions, (**i).button(), (**i).application(), (**i).function(), (**i).arguments().toString(), (**i).repeatable())] = *i;
 }
 
 void KCMLirc::gotButton(QString remote, QString button)
@@ -151,6 +179,7 @@ void KCMLirc::updateModes()
 	for(QStringList::iterator i = remotes.begin(); i != remotes.end(); i++)
 	{	QListViewItem *a = new QListViewItem(theKCMLircBase->theModes, *i);		// TODO: make *i into nice name with wise singleton
 		modeMap[a] = Mode(*i, "");	// the null mode
+		a->setOpen(true);
 		ModeList l = allModes.getModes(*i);
 		for(ModeList::iterator j = l.begin(); j != l.end(); j++)
 			modeMap[new QListViewItem(a, (*j).name())] = *j;

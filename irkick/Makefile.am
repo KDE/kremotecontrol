@@ -3,8 +3,7 @@ bin_PROGRAMS = irkick
 
 ## INCLUDES were found outside kdevelop specific part
 
-noinst_HEADERS = irkick.h main.h klircclient.h
-include_HEADERS = irkick_stub.cpp irkick_stub.h
+noinst_HEADERS = irkick.h main.h klircclient.h irkick_stub.h
 
 irkick_SOURCES = main.cpp irkick.cpp irkick.skel irkick.stub klircclient.cpp
 irkick_LDADD = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) $(LIBSOCKET) ../kdelirc/libkdelirc.la

@@ -70,11 +70,6 @@ void Modes::erase(const Mode &mode)
 	operator[](mode.remote()).erase(mode.name());
 }
 
-void Modes::erase(const QString &remote, const QString &mode)
-{
-	operator[](remote).erase(mode);
-}
-
 void Modes::add(const Mode &mode)
 {
 	operator[](mode.remote())[mode.name()] = mode;

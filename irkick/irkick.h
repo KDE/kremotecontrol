@@ -29,8 +29,9 @@ class IRKick: public KSystemTray, virtual public DCOPObject
 	K_DCOP
 
 	QString npApp, npModule, npMethod;
-
+	QMap<QString, QString> currentModes;
 	IRActions allActions;
+
 
 signals:
 
@@ -85,6 +86,11 @@ k_dcop:
 	 * @param The method name. Must have two QString parameters.
 	 */
 	virtual void stealNextPress(QString app, QString module, QString method);
+
+	/**
+	 * Cancels the proceedings of the previous stealNextPress call, if any.
+	 */
+	virtual void dontStealNextPress();
 
 	/**
 	 * Reloads configuration from file(s)

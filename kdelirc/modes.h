@@ -40,7 +40,6 @@ public:
 	ModeList getModes(const QString &remote) const;
 
 	void erase(const Mode &mode);
-	void erase(const QString &remote, const QString &mode);
 	void add(const Mode &mode);
 
 	// dont use this without renaming all the modes in the actions!!!

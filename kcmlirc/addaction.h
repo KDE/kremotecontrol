@@ -31,6 +31,7 @@ class AddAction : public AddActionBase
 
 public slots:
 	virtual void slotCorrectPage();
+	virtual void slotModeSelected();
 
 	// connected to KCMLirc class to receive DCOP calls to tell it what button has been pressed
 	virtual void updateButton(const QString &remote, const QString &button);
@@ -41,6 +42,10 @@ public slots:
 	virtual void updateParameters();
 	virtual void updateParameter();
 	virtual void updateCurrentParam(const QString &newValue);
+
+public:
+	void requestNextPress();
+	void cancelRequest();
 
 	AddAction(QWidget *parent, const char *name, const Mode &mode);
 	~AddAction();

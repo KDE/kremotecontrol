@@ -192,7 +192,7 @@
                                     </column>
                                     <column>
                                         <property name="text">
-                                            <string>Arguments</string>
+                                            <string>Options</string>
                                         </property>
                                         <property name="clickable">
                                             <bool>true</bool>

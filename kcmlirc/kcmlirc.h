@@ -32,7 +32,6 @@ public slots:
 	void configChanged();
 	void updateActions();
 	void updateModes();
-	void slotStartListen();
 	void slotAddMode();
 	void slotRemoveMode();
 	void slotAddAction();
@@ -43,7 +42,6 @@ k_dcop:
 // MOC_SKIP_END
 	// now just used as a proxy to AddAction class
 	virtual void gotButton(QString remote, QString button);
-
 signals:
 	void haveButton(const QString &remote, const QString &button);
 
