@@ -317,7 +317,7 @@ void EditAction::updateDCOPApplications()
 	theDCOPApplications->clear();
 	DCOPClient *theClient = KApplication::kApplication()->dcopClient();
 	QCStringList theApps = theClient->registeredApplications();
-	for(QCStringList::iterator i = theApps.begin(); i != theApps.end(); i++)
+	for(QCStringList::iterator i = theApps.begin(); i != theApps.end(); ++i)
 	{
 		if(!QString(*i).find("anonymous")) continue;
 		QRegExp r("(.*)-[0-9]+");
@@ -341,7 +341,7 @@ void EditAction::updateDCOPObjects()
 	if(theDCOPApplications->currentText().isNull() || theDCOPApplications->currentText().isEmpty()) return;
 	QCStringList theObjects = theClient->remoteObjects(nameProgramMap[theDCOPApplications->currentText()].utf8());
 	if(!theObjects.size() && theDCOPApplications->currentText() == (*theAction).program()) theDCOPObjects->insertItem((*theAction).object());
-	for(QCStringList::iterator j = theObjects.begin(); j != theObjects.end(); j++)
+	for(QCStringList::iterator j = theObjects.begin(); j != theObjects.end(); ++j)
 		if(*j != "ksycoca" && *j != "qt" && AddAction::getFunctions(nameProgramMap[theDCOPApplications->currentText()], *j).count())
 			theDCOPObjects->insertItem(QString::fromUtf8(*j));
 	updateDCOPFunctions();
@@ -353,7 +353,7 @@ void EditAction::updateDCOPFunctions()
 	if(theDCOPApplications->currentText().isNull() || theDCOPApplications->currentText().isEmpty()) return;
 	QStringList functions = AddAction::getFunctions(nameProgramMap[theDCOPApplications->currentText()], theDCOPObjects->currentText());
 	if(!functions.size() && theDCOPApplications->currentText() == (*theAction).program()) theDCOPFunctions->insertItem((*theAction).method().prototype());
-	for(QStringList::iterator i = functions.begin(); i != functions.end(); i++)
+	for(QStringList::iterator i = functions.begin(); i != functions.end(); ++i)
 		theDCOPFunctions->insertItem(*i);
 	updateArguments();
 }

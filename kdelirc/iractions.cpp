@@ -45,7 +45,7 @@ void IRActions::saveToConfig(KConfig &theConfig)
 {
 	int index = 0;
 	purgeAllBindings(theConfig);
-	for(iterator i = begin(); i != end(); i++,index++)
+	for(iterator i = begin(); i != end(); ++i,index++)
 		(*i).saveToConfig(theConfig, index);
 	theConfig.writeEntry("Bindings", index);
 }
@@ -58,7 +58,7 @@ IRAIt IRActions::addAction(const IRAction &theAction)
 IRAItList IRActions::findByButton(const QString &remote, const QString &button)
 {
 	IRAItList ret;
-	for(iterator i = begin(); i != end(); i++)
+	for(iterator i = begin(); i != end(); ++i)
 		if((*i).remote() == remote && (*i).button() == button)
 			ret += i;
 	return ret;
@@ -66,7 +66,7 @@ IRAItList IRActions::findByButton(const QString &remote, const QString &button)
 
 void IRActions::renameMode(const Mode &mode, const QString &to)
 {
-	for(iterator i = begin(); i != end(); i++)
+	for(iterator i = begin(); i != end(); ++i)
 	{	if((*i).remote() == mode.remote() && (*i).mode() == mode.name()) (*i).setMode(to);
 		if((*i).isModeChange() && (*i).modeChange() == mode.name()) (*i).setModeChange(to);
 	}
@@ -75,7 +75,7 @@ void IRActions::renameMode(const Mode &mode, const QString &to)
 IRAItList IRActions::findByMode(const Mode &mode)
 {
 	IRAItList ret;
-	for(iterator i = begin(); i != end(); i++)
+	for(iterator i = begin(); i != end(); ++i)
 		if((*i).remote() == mode.remote() && (*i).mode() == mode.name()) ret += i;
 	return ret;
 }
@@ -83,7 +83,7 @@ IRAItList IRActions::findByMode(const Mode &mode)
 IRAItList IRActions::findByModeButton(const Mode &mode, const QString &button)
 {
 	IRAItList ret;
-	for(iterator i = begin(); i != end(); i++)
+	for(iterator i = begin(); i != end(); ++i)
 		if((*i).remote() == mode.remote() && (*i).mode() == mode.name() && (*i).button() == button)
 			ret += i;
 	return ret;

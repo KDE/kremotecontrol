@@ -90,7 +90,7 @@ void KLircClient::slotClosed()
 const QStringList KLircClient::remotes() const
 {
 	QStringList remotes;
-	for(QMap<QString, QStringList>::ConstIterator i = theRemotes.begin(); i != theRemotes.end(); i++)
+	for(QMap<QString, QStringList>::ConstIterator i = theRemotes.begin(); i != theRemotes.end(); ++i)
 		remotes.append(i.key());
 	remotes.sort();
 	return remotes;

@@ -378,7 +378,7 @@ void KCMLirc::updateActions()
 	Mode m = modeMap[theKCMLircBase->theModes->selectedItem()];
 	theKCMLircBase->theModeLabel->setText(m.remoteName() + ": " + (m.name().isEmpty() ? i18n("Actions <i>always</i> available") : i18n("Actions available only in mode <b>%1</b>").arg(m.name())));
 	IRAItList l = allActions.findByMode(m);
-	for(IRAItList::iterator i = l.begin(); i != l.end(); i++)
+	for(IRAItList::iterator i = l.begin(); i != l.end(); ++i)
 	{	QListViewItem *b = new KListViewItem(theKCMLircBase->theActions, (**i).buttonName(), (**i).application(), (**i).function(), (**i).arguments().toString(), (**i).notes());
 		actionMap[b] = *i;
 		if(*i == oldCurrent) { b->setSelected(true); theKCMLircBase->theActions->setCurrentItem(b); }
@@ -408,7 +408,7 @@ void KCMLirc::updateModes()
 		theKCMLircBase->theMainLabel->setMaximumSize(32767, 32767);
 	else
 		theKCMLircBase->theMainLabel->setMaximumSize(0, 0);
-	for(QStringList::iterator i = remotes.begin(); i != remotes.end(); i++)
+	for(QStringList::iterator i = remotes.begin(); i != remotes.end(); ++i)
 	{	Mode mode = allModes.getMode(*i, "");
 		QListViewItem *a = new KListViewItem(theKCMLircBase->theModes, RemoteServer::remoteServer()->getRemoteName(*i), allModes.isDefault(mode) ? "Default" : "", mode.iconFile().isNull() ? "" : "");
 		if(!mode.iconFile().isNull())
@@ -417,7 +417,7 @@ void KCMLirc::updateModes()
 		if(modeMap[a] == oldCurrent) { a->setSelected(true); theKCMLircBase->theModes->setCurrentItem(a); }
 		a->setOpen(true);
 		ModeList l = allModes.getModes(*i);
-		for(ModeList::iterator j = l.begin(); j != l.end(); j++)
+		for(ModeList::iterator j = l.begin(); j != l.end(); ++j)
 			if(!(*j).name().isEmpty())
 			{	QListViewItem *b = new KListViewItem(a, (*j).name(), allModes.isDefault(*j) ? i18n("Default") : "", (*j).iconFile().isNull() ? "" : "");
 				if(!(*j).iconFile().isNull())

@@ -34,13 +34,13 @@ void Modes::loadFromConfig(KConfig &theConfig)
 		add(Mode().loadFromConfig(theConfig, i));
 	}
 
-	for(iterator i = begin(); i != end(); i++)
+	for(iterator i = begin(); i != end(); ++i)
 		theDefaults[i.key()] = theConfig.readEntry("Default" + i.key());
 }
 
 void Modes::generateNulls(const QStringList &theRemotes)
 {
-	for(QStringList::const_iterator i = theRemotes.begin(); i != theRemotes.end(); i++)
+	for(QStringList::const_iterator i = theRemotes.begin(); i != theRemotes.end(); ++i)
 	{	if(!contains(*i) || !operator[](*i).contains("")) operator[](*i)[""] = Mode(*i, "");
 		if(!theDefaults.contains(*i)) theDefaults[*i].isEmpty();
 	}
@@ -81,12 +81,12 @@ void Modes::saveToConfig(KConfig &theConfig)
 {
 	int index = 0;
 	purgeAllModes(theConfig);
-	for(iterator i = begin(); i != end(); i++)
-		for(QMap<QString, Mode>::iterator j = (*i).begin(); j != (*i).end(); j++,index++)
+	for(iterator i = begin(); i != end(); ++i)
+		for(QMap<QString, Mode>::iterator j = (*i).begin(); j != (*i).end(); ++j,index++)
 			(*j).saveToConfig(theConfig, index);
 	theConfig.writeEntry("Modes", index);
 
-	for(iterator i = begin(); i != end(); i++)
+	for(iterator i = begin(); i != end(); ++i)
 		if(theDefaults[i.key()] == QString())
 			theConfig.writeEntry("Default" + i.key(), "");
 		else
@@ -101,7 +101,7 @@ const Mode &Modes::getMode(const QString &remote, const QString &mode) const
 ModeList Modes::getModes(const QString &remote) const
 {
 	ModeList ret;
-	for(QMap<QString, Mode>::const_iterator i = operator[](remote).begin(); i != operator[](remote).end(); i++)
+	for(QMap<QString, Mode>::const_iterator i = operator[](remote).begin(); i != operator[](remote).end(); ++i)
 		ret += *i;
 	return ret;
 }

@@ -84,7 +84,7 @@ IRKick::IRKick(const QCString &obj) : QObject(), DCOPObject(obj), npApp(QString:
 IRKick::~IRKick()
 {
 	delete theTrayIcon;
-	for(QMap<QString,IRKTrayIcon *>::iterator i = currentModeIcons.begin(); i != currentModeIcons.end(); i++)
+	for(QMap<QString,IRKTrayIcon *>::iterator i = currentModeIcons.begin(); i != currentModeIcons.end(); ++i)
 		if(*i) delete *i;
 }
 
@@ -131,7 +131,7 @@ void IRKick::resetModes()
 		allModes.generateNulls(theClient->remotes());
 
 	QStringList remotes = theClient->remotes();
-	for(QStringList::iterator i = remotes.begin(); i != remotes.end(); i++)
+	for(QStringList::iterator i = remotes.begin(); i != remotes.end(); ++i)
 	{	currentModes[*i] = allModes.getDefault(*i).name();
 		if(theResetCount && currentModeIcons[*i]) delete currentModeIcons[*i];
 		currentModeIcons[*i] = 0;
@@ -157,7 +157,7 @@ void IRKick::slotConfigure()
 
 void IRKick::updateModeIcons()
 {
-	for(QMap<QString,QString>::iterator i = currentModes.begin(); i != currentModes.end(); i++)
+	for(QMap<QString,QString>::iterator i = currentModes.begin(); i != currentModes.end(); ++i)
 	{	Mode mode = allModes.getMode(i.key(), i.data());
 		if(mode.iconFile().isNull() || mode.iconFile().isEmpty())
 		{	if(currentModeIcons[i.key()])
@@ -192,7 +192,7 @@ bool IRKick::getPrograms(const IRAction &action, QStringList &programs)
 		QRegExp r = QRegExp("^" + action.program() + "-(\\d+)$");
 		// find all instances...
 		QCStringList buf = theDC->registeredApplications();
-		for(QCStringList::iterator i = buf.begin(); i != buf.end(); i++)
+		for(QCStringList::iterator i = buf.begin(); i != buf.end(); ++i)
 		{
 			QString program = QString::fromUtf8(*i);
 			if(program.contains(r))
@@ -217,7 +217,7 @@ bool IRKick::getPrograms(const IRAction &action, QStringList &programs)
 		else if(programs.size() > 1 && action.ifMulti() == IM_SENDTOBOTTOM)
 		{	QValueList<WId> s = KWinModule().stackingOrder();
 			// go through all the (ordered) window pids
-			for(QValueList<WId>::iterator i = s.begin(); i != s.end(); i++)
+			for(QValueList<WId>::iterator i = s.begin(); i != s.end(); ++i)
 			{	int p = KWin::info(*i).pid;
 				QString id = action.program() + "-" + QString().setNum(p);
 				if(programs.contains(id))
@@ -252,12 +252,12 @@ void IRKick::executeAction(const IRAction &action)
 
 	if(!getPrograms(action, programs)) return;
 
-	for(QStringList::iterator i = programs.begin(); i != programs.end(); i++)
+	for(QStringList::iterator i = programs.begin(); i != programs.end(); ++i)
 	{	const QString &program = *i;
 		if(theDC->isApplicationRegistered(program.utf8()))
 		{	QByteArray data; QDataStream arg(data, IO_WriteOnly);
 			kdDebug() << "Sending data (" << program << ", " << action.object() << ", " << action.method().prototypeNR() << endl;
-			for(Arguments::const_iterator j = action.arguments().begin(); j != action.arguments().end(); j++)
+			for(Arguments::const_iterator j = action.arguments().begin(); j != action.arguments().end(); ++j)
 			{	kdDebug() << "Got argument..." << endl;
 				switch((*j).type())
 				{	case QVariant::Int: arg << (*j).toInt(); break;
@@ -295,7 +295,7 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int 
 		if(currentModes[theRemote] != "")
 			l += allActions.findByModeButton(Mode(theRemote, ""), theButton);
 		bool doBefore = true, doAfter = false;
-		for(IRAItList::const_iterator i = l.begin(); i != l.end(); i++)
+		for(IRAItList::const_iterator i = l.begin(); i != l.end(); ++i)
 			if((**i).isModeChange() && !theRepeatCounter)
 			{	// mode switch
 				currentModes[theRemote] = (**i).modeChange();
@@ -308,7 +308,7 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int 
 
 		for(int after = 0; after < 2; after++)
 		{	if(doBefore && !after || doAfter && after)
-				for(IRAItList::const_iterator i = l.begin(); i != l.end(); i++)
+				for(IRAItList::const_iterator i = l.begin(); i != l.end(); ++i)
 					if(!(**i).isModeChange() && ((**i).repeat() || !theRepeatCounter))
 					{	executeAction(**i);
 					}

@@ -25,7 +25,7 @@ Arguments::~Arguments()
 const QString Arguments::toString() const
 {
 	QString ret = "";
-	for(Arguments::const_iterator i = begin(); i != end(); i++)
+	for(Arguments::const_iterator i = begin(); i != end(); ++i)
 	{	QString s = (*i).toString();
 		if(s.isNull()) s = "...";
 		if(i != begin()) ret += ", ";

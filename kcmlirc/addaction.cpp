@@ -110,7 +110,7 @@ void AddAction::updateButtons()
 	buttonMap.clear();
 	IRKick_stub IRKick("irkick", "IRKick");
 	QStringList buttons = IRKick.buttons(theMode.remote());
-	for(QStringList::iterator j = buttons.begin(); j != buttons.end(); j++)
+	for(QStringList::iterator j = buttons.begin(); j != buttons.end(); ++j)
 		buttonMap[new QListViewItem(theButtons, RemoteServer::remoteServer()->getButtonName(theMode.remote(), *j))] = *j;
 }
 
@@ -145,7 +145,7 @@ const QStringList AddAction::getFunctions(const QString app, const QString obj)
 	QStringList ret;
 	DCOPClient *theClient = KApplication::kApplication()->dcopClient();
 	QCStringList theApps = theClient->remoteFunctions(app.utf8(), obj.utf8());
-	for(QCStringList::iterator i = theApps.begin(); i != theApps.end(); i++)
+	for(QCStringList::iterator i = theApps.begin(); i != theApps.end(); ++i)
 		if(	*i != "QCStringList interfaces()" &&
 			*i != "QCStringList functions()" &&
 			*i != "QCStringList objects()" &&
@@ -243,7 +243,7 @@ void AddAction::updateParameters()
 		const ProfileAction *pa = p->actions()[profileFunctionMap[theProfileFunctions->currentItem()]];
 
 		int index = 1;
-		for(QValueList<ProfileActionArgument>::const_iterator i = pa->arguments().begin(); i != pa->arguments().end(); i++, index++)
+		for(QValueList<ProfileActionArgument>::const_iterator i = pa->arguments().begin(); i != pa->arguments().end(); ++i, index++)
 		{	theArguments.append(QVariant((*i).getDefault()));
 			theArguments.back().cast(QVariant::nameToType((*i).type().utf8()));
 			new QListViewItem(theParameters, (*i).comment(), theArguments.back().toString(), (*i).type(), QString().setNum(index));
@@ -337,7 +337,7 @@ void AddAction::updateObjects()
 
 	DCOPClient *theClient = KApplication::kApplication()->dcopClient();
 	QCStringList theApps = theClient->registeredApplications();
-	for(QCStringList::iterator i = theApps.begin(); i != theApps.end(); i++)
+	for(QCStringList::iterator i = theApps.begin(); i != theApps.end(); ++i)
 	{
 		if(!QString(*i).find(i18n( "anonymous" ))) continue;
 		QRegExp r("(.*)-[0-9]+");
@@ -350,7 +350,7 @@ void AddAction::updateObjects()
 		nameProgramMap[a] = *i;
 
 		QCStringList theObjects = theClient->remoteObjects(*i);
-		for(QCStringList::iterator j = theObjects.begin(); j != theObjects.end(); j++)
+		for(QCStringList::iterator j = theObjects.begin(); j != theObjects.end(); ++j)
 			if(*j != "ksycoca" && *j != "qt")// && getFunctions(*i, *j).count())
 				new KListViewItem(a, *j);
 	}
@@ -362,7 +362,7 @@ void AddAction::updateFunctions()
 	theFunctions->clear();
 	if(theObjects->currentItem() && theObjects->currentItem()->parent())
 	{	QStringList functions = getFunctions(nameProgramMap[theObjects->currentItem()->parent()], theObjects->currentItem()->text(0));
-		for(QStringList::iterator i = functions.begin(); i != functions.end(); i++)
+		for(QStringList::iterator i = functions.begin(); i != functions.end(); ++i)
 		{	Prototype p((QString)(*i));
 			new KListViewItem(theFunctions, p.name(), p.argumentList(), *i);
 		}

@@ -35,7 +35,7 @@ RemoteServer::~RemoteServer()
 void RemoteServer::loadRemotes()
 {
 	QStringList theFiles = KGlobal::dirs()->findAllResources("data", "remotes/*.remote.xml");
-	for(QStringList::iterator i = theFiles.begin(); i != theFiles.end(); i++)
+	for(QStringList::iterator i = theFiles.begin(); i != theFiles.end(); ++i)
 	{	kdDebug() << "Found data file: " << *i << endl;
 		Remote *p = new Remote();
 		p->loadFromFile(*i);
