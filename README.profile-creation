@@ -52,7 +52,7 @@ service name (found in the .desktop file) as attributes of them:
 b) Inside populate with name and author information. If your application is not a
 KUniqueApplication, you **must** declare this with an "instances" tag, giving the
 attribute "unique" a value of "0" (it defaults to "1", a KUniqueApplication). You
-may optionally describe the default behaviour KDELirc should take should there be
+may optionally describe the default behavior KDELirc should take should there be
 more than one instance of the application, with the attribute "ifmulti" which may
 take one of "dontsend" (do nothing if >1 instance), "sendtoone" (send call to one
 arbitrarily chosen instance) and "sendtoall" (send to all instances). The default

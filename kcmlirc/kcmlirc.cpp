@@ -47,7 +47,7 @@
 #include "selectprofile.h"
 
 typedef KGenericFactory<KCMLirc, QWidget> theFactory;
-K_EXPORT_COMPONENT_FACTORY(kcmlirc, theFactory("kcmlirc"));
+K_EXPORT_COMPONENT_FACTORY(kcmlirc, theFactory("kcmlirc"))
 
 KCMLirc::KCMLirc(QWidget *parent, const char *name, QStringList /*args*/) : KCModule(parent, name), DCOPObject("KCMLirc")
 {

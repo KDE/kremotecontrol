@@ -89,7 +89,7 @@ This would compliment a "lircd.conf" file:
 c) The last thing to define in each of your buttons is the "nice" name. This may
 be descriptive and use spaces, symbols and mixed case text, in a similar fashion
 to the remote control's name. There is no need to copy the remote control's label
-verbatim. If neccessary expand the description to provide a readable, aethetically
+verbatim. If necessary expand the description to provide a readable, aethetically
 pleasing label e.g. you should name the "CC" button "Closed Captions" or the "Rec"
 button "Record".
 
@@ -123,7 +123,7 @@ That's it - just save it as <id>.remote.xml, where <id> is the ID of the remote
 control (*not* its name but the LIRC id!) and copy it to your KDE remotes data
 directory (~/.kde/share/apps/remotes).
 
-   You'll probably need to restart control centre before the remote definition
+   You'll probably need to restart control center before the remote definition
 is recognised.
 
 Gav Wood <gav at kde dot org>
