@@ -40,6 +40,7 @@ class IRKick: public QObject, public DCOPObject//KDEDModule
 
 	KSystemTray *theTrayIcon;
 	KAboutData *aboutData;
+	QTimer *theFlashOff;
 
 	void updateModeIcons();
 
@@ -53,6 +54,7 @@ private slots:
 	void gotMessage(const QString &theRemote, const QString &theButton, int theRepeatCounter);
 	void resetModes();
 	void doQuit();
+	void flashOff();
 
 	void slotConfigure();
 	void slotReloadConfiguration();

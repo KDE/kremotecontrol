@@ -46,7 +46,6 @@ KLircClient::KLircClient(QWidget *parent, const char *name) : QObject(parent, na
 	int sock = ::socket(PF_UNIX, SOCK_STREAM, 0);
 	if(sock == -1)
 	{
-		KMessageBox::sorry(0, i18n("Could not create a socket to receive infrared signals. The error is:\n") + strerror(errno));
 		return;
 	}
 	sockaddr_un addr;
@@ -54,7 +53,6 @@ KLircClient::KLircClient(QWidget *parent, const char *name) : QObject(parent, na
 	strcpy(addr.sun_path, "/dev/lircd");
 	if(::connect(sock, (struct sockaddr *)(&addr), sizeof(addr)) == -1)
 	{
-		KMessageBox::sorry(0, i18n("Could not establish a connection to receive infrared signals. The error is:\n") + strerror(errno));
 		::close(sock);
 		return;
 	}
@@ -67,8 +65,8 @@ KLircClient::KLircClient(QWidget *parent, const char *name) : QObject(parent, na
 
 KLircClient::~KLircClient()
 {
-	if(theSocket)
-		delete [] theSocket;
+//	if(theSocket)
+		delete theSocket;
 }
 
 const QStringList KLircClient::remotes() const
@@ -184,6 +182,7 @@ void KLircClient::updateRemotes()
 
 bool KLircClient::isConnected() const
 {
+	if(!theSocket) return false;
 	return theSocket->state() == QSocket::Connected;
 }
 

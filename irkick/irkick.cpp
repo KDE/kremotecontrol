@@ -11,12 +11,11 @@
 #include <qdialog.h>
 #include <qtooltip.h>
 #include <qregexp.h>
+#include <qtimer.h>
 
 #include <kapplication.h>
 #include <kaction.h>
-#if KDE_IS_VERSION(3, 1, 90)
 #include <kactioncollection.h>
-#endif
 #include <ksimpleconfig.h>
 #include <ksystemtray.h>
 #include <kiconloader.h>
@@ -51,21 +50,28 @@ IRKick::IRKick(const QCString &obj) : /*KDEDModule*/QObject(), DCOPObject(obj), 
 	theClient = new KLircClient();
 
 	theTrayIcon = new KSystemTray();
-	theTrayIcon->setPixmap(SmallIcon("irkick"));
-	QToolTip::add(theTrayIcon, i18n("KDE Lirc Server: Ready."));
+	if(theClient->isConnected())
+	{	theTrayIcon->setPixmap(SmallIcon("irkick"));
+		QToolTip::add(theTrayIcon, i18n("KDE Lirc Server: Ready."));
+	}
+	else
+	{	theTrayIcon->setPixmap(SmallIcon("irkickoff"));
+		QToolTip::add(theTrayIcon, i18n("KDE Lirc Server: No infra-red remote controls found."));
+	}
+	theFlashOff = new QTimer(theTrayIcon);
+	connect(theFlashOff, SIGNAL(timeout()), SLOT(flashOff()));
 
 	theResetCount = 0;
 	slotReloadConfiguration();
 	connect(theClient, SIGNAL(remotesRead()), this, SLOT(resetModes()));
 	connect(theClient, SIGNAL(commandReceived(const QString &, const QString &, int)), this, SLOT(gotMessage(const QString &, const QString &, int)));
 
-#if KDE_IS_VERSION(3, 1, 90)
 	theTrayIcon->contextMenu()->changeTitle(0, "IRKick");
 	theTrayIcon->contextMenu()->insertItem(i18n("&Configure..."), this, SLOT(slotConfigure()));
 	theTrayIcon->contextMenu()->insertSeparator();
 	theTrayIcon->contextMenu()->insertItem(i18n("&Help"), (new KHelpMenu(theTrayIcon, KGlobal::instance()->aboutData()))->menu());
 	connect(theTrayIcon->actionCollection()->action("file_quit"), SIGNAL(activated()), this, SLOT(doQuit()));
-#endif
+
 	theTrayIcon->show();
 }
 
@@ -76,12 +82,17 @@ IRKick::~IRKick()
 		if(*i) delete *i;
 }
 
+void IRKick::flashOff()
+{
+	theTrayIcon->setPixmap(SmallIcon("irkick"));
+}
+
 void IRKick::doQuit()
 {
 	KSimpleConfig theConfig("irkickrc");
 	theConfig.setGroup("General");
 	if(theConfig.readBoolEntry("AutoStart", true) == true)
-		switch(KMessageBox::questionYesNoCancel(0, i18n("Should the Infrared Remote Control server start automatically when you login?"), i18n("Automatically start?")))
+		switch(KMessageBox::questionYesNoCancel(0, i18n("Should the Infrared Remote Control server start automatically when you begin KDE?"), i18n("Automatically start??")))
 		{	case KMessageBox::No: theConfig.writeEntry("AutoStart", false); break;
 			case KMessageBox::Cancel: return;
 		}
@@ -244,6 +255,8 @@ void IRKick::executeAction(const IRAction &action)
 void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int theRepeatCounter)
 {
 	kdDebug() << "Got message: " << theRemote << ": " << theButton << " (" << theRepeatCounter << ")" << endl;
+	theTrayIcon->setPixmap(SmallIcon("irkickflash"));
+	theFlashOff->start(200);
 	if(npApp != QString::null)
 	{
 		QString theApp = npApp;
