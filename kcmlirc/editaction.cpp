@@ -159,7 +159,7 @@ void EditAction::updateArguments()
 		theArguments->setEnabled(p.count());
 		for(unsigned i = 0; i < p.count(); i++)
 		{	theArguments->insertItem(p[i].comment() + " (" + p[i].type() + ")");
-			arguments[i].cast(QVariant::nameToType(p[i].type()));
+			arguments[i].cast(QVariant::nameToType(p[i].type().utf8()));
 		}
 		if(p.count()) updateArgument(0); else updateArgument(-1);
 	}
@@ -175,7 +175,7 @@ void EditAction::updateArguments()
 		theArguments->setEnabled(p.count());
 		for(unsigned i = 0; i < p.count(); i++)
 		{	theArguments->insertItem(QString().setNum(i + 1) + ": " + (p.name(i) == "" ? p.type(i) : p.name(i) + " (" + p.type(i) + ")"));
-			arguments[i].cast(QVariant::nameToType(p.type(i)));
+			arguments[i].cast(QVariant::nameToType(p.type(i).utf8()));
 		}
 		if(p.count()) updateArgument(0); else updateArgument(-1);
 	}
@@ -338,11 +338,11 @@ void EditAction::updateDCOPObjects()
 	theDCOPObjects->clear();
 	DCOPClient *theClient = KApplication::kApplication()->dcopClient();
 	if(theDCOPApplications->currentText().isNull() || theDCOPApplications->currentText().isEmpty()) return;
-	QCStringList theObjects = theClient->remoteObjects(QCString(nameProgramMap[theDCOPApplications->currentText()]));
+	QCStringList theObjects = theClient->remoteObjects(nameProgramMap[theDCOPApplications->currentText()].utf8());
 	if(!theObjects.size() && theDCOPApplications->currentText() == (*theAction).program()) theDCOPObjects->insertItem((*theAction).object());
 	for(QCStringList::iterator j = theObjects.begin(); j != theObjects.end(); j++)
 		if(*j != "ksycoca" && *j != "qt" && AddAction::getFunctions(nameProgramMap[theDCOPApplications->currentText()], *j).count())
-			theDCOPObjects->insertItem(QString(*j));
+			theDCOPObjects->insertItem(QString::fromUtf8(*j));
 	updateDCOPFunctions();
 }
 

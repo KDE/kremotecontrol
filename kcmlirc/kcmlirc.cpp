@@ -260,7 +260,7 @@ void KCMLirc::autoPopulate(const Profile &profile, const Remote &remote, const Q
 			// argument count should be either 0 or 1. undefined if > 1.
 			if(Prototype(pa->prototype()).argumentCount() == 1)
 			{	l.append(QString().setNum(i.current()->parameter().toFloat() * pa->multiplier()));
-				l.back().cast(QVariant::nameToType(Prototype(pa->prototype()).type(0)));
+				l.back().cast(QVariant::nameToType(Prototype(pa->prototype()).type(0).utf8()));
 			}
 			a.setArguments(l);
 			allActions.addAction(a);

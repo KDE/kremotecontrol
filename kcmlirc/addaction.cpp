@@ -141,13 +141,13 @@ const QStringList AddAction::getFunctions(const QString app, const QString obj)
 {
 	QStringList ret;
 	DCOPClient *theClient = KApplication::kApplication()->dcopClient();
-	QCStringList theApps = theClient->remoteFunctions(QCString(app), QCString(obj));
+	QCStringList theApps = theClient->remoteFunctions(app.utf8(), obj.utf8());
 	for(QCStringList::iterator i = theApps.begin(); i != theApps.end(); i++)
-		if(	QString(*i) != "QCStringList interfaces()" &&
-			QString(*i) != "QCStringList functions()" &&
-			QString(*i) != "QCStringList objects()" &&
-			QString(*i) != "QCStringList find(QCString)" )
-			ret += *i;
+		if(	*i != "QCStringList interfaces()" &&
+			*i != "QCStringList functions()" &&
+			*i != "QCStringList objects()" &&
+			*i != "QCStringList find(QCString)" )
+			ret += QString::fromUtf8(*i);
 	return ret;
 }
 
@@ -225,7 +225,7 @@ void AddAction::updateParameters()
 		for(unsigned k = 0; k < p.count(); k++)
 		{	new KListViewItem(theParameters, p.name(k) == "" ? "<anonymous>" : p.name(k), "", p.type(k), QString().setNum(k + 1));
 			theArguments.append(QVariant(""));
-			theArguments.back().cast(QVariant::nameToType(p.type(k)));
+			theArguments.back().cast(QVariant::nameToType(p.type(k).utf8()));
 		}
 	}
 	else if(theUseProfile->isChecked() && theProfiles->currentItem())
@@ -240,7 +240,7 @@ void AddAction::updateParameters()
 		int index = 1;
 		for(QValueList<ProfileActionArgument>::const_iterator i = pa->arguments().begin(); i != pa->arguments().end(); i++, index++)
 		{	theArguments.append(QVariant((*i).getDefault()));
-			theArguments.back().cast(QVariant::nameToType((*i).type()));
+			theArguments.back().cast(QVariant::nameToType((*i).type().utf8()));
 			new QListViewItem(theParameters, (*i).comment(), theArguments.back().toString(), (*i).type(), QString().setNum(index));
 		}
 
@@ -313,7 +313,7 @@ void AddAction::slotParameterChanged()
 	else
 		theArguments[index].asString() = theValueLineEdit->text();
 
-	theArguments[theParameters->currentItem()->text(3).toInt() - 1].cast(QVariant::nameToType(theParameters->currentItem()->text(2)));
+	theArguments[theParameters->currentItem()->text(3).toInt() - 1].cast(QVariant::nameToType(theParameters->currentItem()->text(2).utf8()));
 	updateArgument(theParameters->currentItem());
 }
 
