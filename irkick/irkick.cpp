@@ -67,9 +67,9 @@ IRKick::IRKick(const QCString &obj) : /*KDEDModule*/QObject(), DCOPObject(obj), 
 	connect(theClient, SIGNAL(commandReceived(const QString &, const QString &, int)), this, SLOT(gotMessage(const QString &, const QString &, int)));
 
 	theTrayIcon->contextMenu()->changeTitle(0, "IRKick");
-	theTrayIcon->contextMenu()->insertItem(i18n("&Configure..."), this, SLOT(slotConfigure()));
+	theTrayIcon->contextMenu()->insertItem(SmallIcon( "configure" ), i18n("&Configure..."), this, SLOT(slotConfigure()));
 	theTrayIcon->contextMenu()->insertSeparator();
-	theTrayIcon->contextMenu()->insertItem(i18n("&Help"), (new KHelpMenu(theTrayIcon, KGlobal::instance()->aboutData()))->menu());
+	theTrayIcon->contextMenu()->insertItem(SmallIcon( "help" ), i18n("&Help"), (new KHelpMenu(theTrayIcon, KGlobal::instance()->aboutData()))->menu());
 	connect(theTrayIcon->actionCollection()->action("file_quit"), SIGNAL(activated()), this, SLOT(doQuit()));
 
 	theTrayIcon->show();
