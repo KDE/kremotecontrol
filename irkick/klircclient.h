@@ -43,6 +43,7 @@ private:
 
 private slots:
 	void slotRead();
+	void slotClosed();
 
 signals:
 	/**
@@ -62,6 +63,11 @@ signals:
 	 * every time this signal is emitted.
 	 */
 	void commandReceived(const QString &remote, const QString &button, int repeatCounter);
+
+	/**
+	 * Emitted when the Lirc connection is closed.
+	 */
+	void connectionClosed();
 
 public:
 	/**
@@ -93,6 +99,13 @@ public:
 	 * @returns said list.
 	 */
 	const QStringList buttons(const QString &theRemote) const;
+
+	/**
+	 * Connects to lirc.
+	 *
+	 * @returns true if connection is made.
+	 */
+	bool connectToLirc();
 
 	KLircClient(QWidget *parent = 0, const char *name = 0);
 	~KLircClient();

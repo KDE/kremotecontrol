@@ -14,9 +14,12 @@
 #include <qtimer.h>
 #include <qevent.h>
 
+#include <kdeversion.h>
 #include <kapplication.h>
 #include <kaction.h>
+#if !(KDE_VERSION_MINOR<=1 && KDE_VERSION_RELEASE<=5)
 #include <kactioncollection.h>
+#endif
 #include <ksimpleconfig.h>
 #include <ksystemtray.h>
 #include <kiconloader.h>
@@ -55,12 +58,14 @@ IRKick::IRKick(const QCString &obj) : QObject(), DCOPObject(obj), npApp(QString:
 	else
 	{	theTrayIcon->setPixmap(SmallIcon("irkickoff"));
 		QToolTip::add(theTrayIcon, i18n("KDE Lirc Server: No infra-red remote controls found."));
+		QTimer::singleShot(10000, this, SLOT(checkLirc()));
 	}
 	theFlashOff = new QTimer(theTrayIcon);
 	connect(theFlashOff, SIGNAL(timeout()), SLOT(flashOff()));
 
 	theResetCount = 0;
 	slotReloadConfiguration();
+	connect(theClient, SIGNAL(connectionClosed()), this, SLOT(slotClosed()));
 	connect(theClient, SIGNAL(remotesRead()), this, SLOT(resetModes()));
 	connect(theClient, SIGNAL(commandReceived(const QString &, const QString &, int)), this, SLOT(gotMessage(const QString &, const QString &, int)));
 
@@ -77,8 +82,26 @@ IRKick::IRKick(const QCString &obj) : QObject(), DCOPObject(obj), npApp(QString:
 IRKick::~IRKick()
 {
 	delete theTrayIcon;
-	for(QMap<QString,KSystemTray *>::iterator i = currentModeIcons.begin(); i != currentModeIcons.end(); i++)
+	for(QMap<QString,IRKTrayIcon *>::iterator i = currentModeIcons.begin(); i != currentModeIcons.end(); i++)
 		if(*i) delete *i;
+}
+
+void IRKick::slotClosed()
+{
+	theTrayIcon->setPixmap(SmallIcon("irkickoff"));
+	KPassivePopup::message("IRKick", i18n("The infrared system has severed its connection. Remote controls are no longer available."), SmallIcon("irkick"), theTrayIcon);
+	QTimer::singleShot(1000, this, SLOT(checkLirc()));
+}
+
+void IRKick::checkLirc()
+{
+	if(!theClient->isConnected())
+		if(theClient->connectToLirc())
+		{	KPassivePopup::message("IRKick", i18n("A connection to the infrared system has been made. Remote controls may now be available."), SmallIcon("irkick"), theTrayIcon);
+			theTrayIcon->setPixmap(SmallIcon("irkick"));
+		}
+		else
+			QTimer::singleShot(10000, this, SLOT(checkLirc()));
 }
 
 void IRKick::flashOff()
@@ -101,7 +124,7 @@ void IRKick::doQuit()
 void IRKick::resetModes()
 {
 	if(theResetCount > 1)
-		KPassivePopup::message("IRKick", i18n("Resetting all modes."), SmallIcon("package_applications"), theTrayIcon);
+		KPassivePopup::message("IRKick", i18n("Resetting all modes."), SmallIcon("irkick"), theTrayIcon);
 	if(!theResetCount)
 		allModes.generateNulls(theClient->remotes());
 
@@ -142,7 +165,7 @@ void IRKick::updateModeIcons()
 		}
 		else
 		{	if(!currentModeIcons[i.key()])
-			{	currentModeIcons[i.key()] = new KSystemTray();
+			{	currentModeIcons[i.key()] = new IRKTrayIcon();
 				currentModeIcons[i.key()]->show();
 				currentModeIcons[i.key()]->contextMenu()->changeTitle(0, mode.remoteName());
 				currentModeIcons[i.key()]->actionCollection()->action("file_quit")->setEnabled(false);
@@ -219,7 +242,7 @@ void IRKick::executeAction(const IRAction &action)
 	{	QString sname = ProfileServer::profileServer()->getServiceName(action.program());
 		if(sname != QString::null)
 		{
-			KPassivePopup::message("IRKick", i18n("Starting <b>%1</b>...").arg(action.application()), SmallIcon("package_applications"), theTrayIcon);
+			KPassivePopup::message("IRKick", i18n("Starting <b>%1</b>...").arg(action.application()), SmallIcon("irkick"), theTrayIcon);
 			KApplication::startServiceByName(sname);
 		}
 	}

@@ -43,30 +43,41 @@
 
 KLircClient::KLircClient(QWidget *parent, const char *name) : QObject(parent, name), theSocket(0), listIsUpToDate(false)
 {
+	connectToLirc();
+}
+
+bool KLircClient::connectToLirc()
+{
 	int sock = ::socket(PF_UNIX, SOCK_STREAM, 0);
-	if(sock == -1)
-	{
-		return;
-	}
+	if(sock == -1) return false;
+
 	sockaddr_un addr;
 	addr.sun_family = AF_UNIX;
 	strcpy(addr.sun_path, "/dev/lircd");
 	if(::connect(sock, (struct sockaddr *)(&addr), sizeof(addr)) == -1)
-	{
-		::close(sock);
-		return;
+	{	::close(sock);
+		return false;
 	}
 
 	theSocket = new QSocket;
 	theSocket->setSocket(sock);
 	connect(theSocket, SIGNAL(readyRead()), SLOT(slotRead()));
+	connect(theSocket, SIGNAL(connectionClosed()), SLOT(slotClosed()));
 	updateRemotes();
+	return true;
 }
 
 KLircClient::~KLircClient()
 {
 //	if(theSocket)
 		delete theSocket;
+}
+
+void KLircClient::slotClosed()
+{
+	delete theSocket;
+	theSocket = 0;
+	emit connectionClosed();
 }
 
 const QStringList KLircClient::remotes() const

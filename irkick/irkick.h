@@ -33,6 +33,9 @@ class IRKTrayIcon: public KSystemTray
 	void mousePressEvent(QMouseEvent *e);
 
 public:
+	KPopupMenu* contextMenu() const { return KSystemTray::contextMenu(); }
+	KActionCollection* actionCollection() { return KSystemTray::actionCollection(); }
+
 	IRKTrayIcon(QWidget *parent = 0, const char *name = 0): KSystemTray(parent, name) {}
 };
 
@@ -43,7 +46,7 @@ class IRKick: public QObject, public DCOPObject
 
 	QString npApp, npModule, npMethod;
 	QMap<QString, QString> currentModes;
-	QMap<QString, KSystemTray *> currentModeIcons;
+	QMap<QString, IRKTrayIcon *> currentModeIcons;
 	IRActions allActions;
 	int theResetCount;
 	Modes allModes;
@@ -112,9 +115,11 @@ private slots:
 	void resetModes();
 	void doQuit();
 	void flashOff();
+	void checkLirc();
 
 	void slotConfigure();
 	void slotReloadConfiguration();
+	void slotClosed();
 private:
 	void executeAction(const IRAction &action);
 	bool getPrograms(const IRAction &action, QStringList &populous);
