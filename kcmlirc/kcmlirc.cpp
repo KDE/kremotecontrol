@@ -74,6 +74,7 @@ void KCMLirc::slotAddAction()
 		a.setMode(m.name());
 		a.setButton(theDialog.buttonMap[theDialog.theButtons->currentItem()]);
 		a.setRepeat(theDialog.theRepeat->isChecked());
+		a.setAutoStart(theDialog.theAutoStart->isChecked());
 		Arguments args;
 		// change mode?
 		if(theDialog.theChangeMode->isChecked())
@@ -175,7 +176,7 @@ void KCMLirc::updateActions()
 	theKCMLircBase->theModeLabel->setText(m.remoteName() + ": " + (m.name() == "" ? "<i>Always</i>" : ("<b>" + m.name() + "</b>")));
 	IRAItList l = allActions.findByMode(m);
 	for(IRAItList::iterator i = l.begin(); i != l.end(); i++)
-		actionMap[new KListViewItem(theKCMLircBase->theActions, (**i).buttonName(), (**i).application(), (**i).function(), (**i).arguments().toString(), (**i).repeatable())] = *i;
+		actionMap[new KListViewItem(theKCMLircBase->theActions, (**i).buttonName(), (**i).application(), (**i).function(), (**i).arguments().toString(), (**i).repeatable(), (**i).autoStartable())] = *i;
 }
 
 void KCMLirc::gotButton(QString remote, QString button)
@@ -188,7 +189,7 @@ void KCMLirc::updateModes()
 	theKCMLircBase->theModes->clear();
 	modeMap.clear();
 
-	IRKick_stub IRKick("irkick", "IRKick");
+	IRKick_stub IRKick("kded", "irkick");
 	QStringList remotes = IRKick.remotes();
 	for(QStringList::iterator i = remotes.begin(); i != remotes.end(); i++)
 	{	QListViewItem *a = new QListViewItem(theKCMLircBase->theModes, RemoteServer::remoteServer()->getRemoteName(*i));
@@ -285,7 +286,7 @@ void KCMLirc::save()
 	allModes.saveToConfig(theConfig);
 
 	theConfig.sync();
-	IRKick_stub("irkick", "IRKick").reloadConfiguration();
+	IRKick_stub("kded", "irkick").reloadConfiguration();
 
 	emit changed(true);
 }

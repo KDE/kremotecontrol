@@ -69,6 +69,13 @@ const ProfileAction *ProfileServer::getAction(const QString &appId, const QStrin
 	return 0;
 }
 
+const QString &ProfileServer::getServiceName(const QString &appId) const
+{
+	if(theProfiles[appId])
+		return theProfiles[appId]->serviceName();
+	return QString::null;
+}
+
 const ProfileAction *ProfileServer::getAction(const QString &appId, const QString &objId, const QString &prototype) const
 {
 	return getAction(appId, objId + "::" + prototype);
@@ -83,7 +90,9 @@ bool Profile::characters(const QString &data)
 bool Profile::startElement(const QString &, const QString &, const QString &name, const QXmlAttributes &attributes)
 {
 	if(name == "profile")
-		theId = attributes.value("id");
+	{	theId = attributes.value("id");
+		theServiceName = attributes.value("servicename");
+	}
 	else if(name == "action")
 	{
 		curPA = new ProfileAction;

@@ -70,12 +70,12 @@ void AddAction::slotCorrectPage()
 
 void AddAction::requestNextPress()
 {
-	IRKick_stub("irkick", "IRKick").stealNextPress(DCOPClient::mainClient()->appId(), "KCMLirc", "gotButton");
+	IRKick_stub("kded", "irkick").stealNextPress(DCOPClient::mainClient()->appId(), "KCMLirc", "gotButton");
 }
 
 void AddAction::cancelRequest()
 {
-	IRKick_stub("irkick", "IRKick").dontStealNextPress();
+	IRKick_stub("kded", "irkick").dontStealNextPress();
 }
 
 void AddAction::updateButton(const QString &remote, const QString &button)
@@ -96,7 +96,7 @@ void AddAction::updateButtons()
 {
 	theButtons->clear();
 	buttonMap.clear();
-	IRKick_stub IRKick("irkick", "IRKick");
+	IRKick_stub IRKick("kded", "irkick");
 	QStringList buttons = IRKick.buttons(theMode.remote());
 	for(QStringList::iterator j = buttons.begin(); j != buttons.end(); j++)
 		buttonMap[new QListViewItem(theButtons, RemoteServer::remoteServer()->getButtonName(theMode.remote(), *j))] = *j;

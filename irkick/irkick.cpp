@@ -12,6 +12,8 @@
 #include <qtooltip.h>
 
 #include <kapplication.h>
+#include <kactioncollection.h>
+#include <ksimpleconfig.h>
 #include <ksystemtray.h>
 #include <kiconloader.h>
 #include <kpassivepopup.h>
@@ -25,23 +27,38 @@
 #include <dcopclient.h>
 #include <dcopref.h>
 
-#include "main.h"
+#include "profileserver.h"
 #include "irkick.h"
 
-IRKick::IRKick(QWidget *parent, const char *name) : KSystemTray(parent, name), DCOPObject("IRKick"), npApp(QString::null)
+extern "C"
 {
-	setPixmap(SmallIcon("irkick"));
-	QToolTip::add(this, "Ready.");
-	theClient = new KLircClient(this);
+	KDEDModule *create_irkick(const QCString &name)
+	{
+		return new IRKick(name);
+	}
+}
+
+IRKick::IRKick(const QCString &obj) : KDEDModule(obj), npApp(QString::null)
+{
+	theClient = new KLircClient();
+	theTrayIcon = new KSystemTray();
+	theTrayIcon->setPixmap(SmallIcon("irkick"));
+//	QToolTip::add(this, "Ready.");
 	connect(theClient, SIGNAL(commandReceived(const QString &, const QString &, int)), this, SLOT(gotMessage(const QString &, const QString &, int)));
-	contextMenu()->insertItem("Reload", this, SLOT(slotReloadConfiguration()));
-	contextMenu()->insertItem("About IRKick...", this, SLOT(slotShowAbout()));
-	contextMenu()->insertItem("About KDE...", this, SLOT(slotShowAboutKDE()));
+	theTrayIcon->contextMenu()->changeTitle(0, "IRKick");
+	theTrayIcon->contextMenu()->insertItem("Reload", this, SLOT(slotReloadConfiguration()));
+	theTrayIcon->contextMenu()->insertItem("About IRKick...", this, SLOT(slotShowAbout()));
+	theTrayIcon->contextMenu()->insertItem("About KDE...", this, SLOT(slotShowAboutKDE()));
+	theTrayIcon->actionCollection()->action("file_quit")->setEnabled(false);
 	slotReloadConfiguration();
+	aboutData = new KAboutData("irkick", I18N_NOOP("IRKick"), VERSION, I18N_NOOP("IRKick"), KAboutData::License_GPL, "(c) 2003, Gav Wood", 0, 0, "gav@kde.org");
+	aboutData->addAuthor("Gav Wood", 0, "gav@kde.org");
+	theTrayIcon->show();
 }
 
 IRKick::~IRKick()
 {
+	delete theTrayIcon;
 }
 
 void IRKick::slotReloadConfiguration()
@@ -59,7 +76,7 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int 
 		npApp = QString::null;
 		// send notifier by DCOP to npApp/npModule/npMethod(theRemote, theButton);
 /*		QByteArray data; QDataStream arg(data, IO_WriteOnly);
-		arg << QString(theRemote) << QString(theButton);
+		arg << theRemote << theButton;
 		QCString rType; QByteArray rData;
 		if(!KApplication::dcopClient()->call(QCString(npApp), QCString(npModule), QCString(npMethod), data, rType, rData))
 		{	kdDebug() << "ERROR!!!" << endl;
@@ -68,7 +85,7 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int 
 */
 // this code works, but i want to figure out why the code above which should be equivalent doesn't work
 		if(!DCOPRef(QCString(theApp), QCString(npModule)).call(QCString(npMethod), theRemote, theButton).isValid())
-			KPassivePopup::message("IRKick", "Error: Couldn't contact application " + theApp + " to send keypress.", SmallIcon("package_applications"), this);
+			KPassivePopup::message("IRKick", "Error: Couldn't contact application " + theApp + " to send keypress.", SmallIcon("package_applications"), theTrayIcon);
 	}
 	else
 	{
@@ -82,13 +99,23 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int 
 				{	// mode switch
 					currentModes[theRemote] = (**i).object();
 					if((**i).object() != "")
-						KPassivePopup::message("IRKick", "Switching mode on <b>" + theRemote + "</b> to <b>" + (**i).object() + "</b>.", SmallIcon("package_applications"), this);
+						KPassivePopup::message("IRKick", "Switching mode on <b>" + theRemote + "</b> to <b>" + (**i).object() + "</b>.", SmallIcon("package_applications"), theTrayIcon);
 					else
-						KPassivePopup::message("IRKick", "Exiting mode on <b>" + theRemote + "</b>.", SmallIcon("package_applications"), this);
+						KPassivePopup::message("IRKick", "Exiting mode on <b>" + theRemote + "</b>.", SmallIcon("package_applications"), theTrayIcon);
 				}
 				else
 					if((**i).repeat() || !theRepeatCounter)
 					{	DCOPClient *theDC = KApplication::dcopClient();
+						if((**i).autoStart() && !theDC->isApplicationRegistered(QCString((**i).program())))
+						{	// start it up, and wait for it to become available
+							QString sname = ProfileServer::profileServer()->getServiceName((**i).program());
+							if(sname != QString::null)
+							{
+								KPassivePopup::message("IRKick", "Starting <b>" + (**i).application() + "</b>...", SmallIcon("package_applications"), theTrayIcon);
+								KApplication::startServiceByName(sname);
+							}
+						}
+
 						if(theDC->isApplicationRegistered(QCString((**i).program())))
 						{	QByteArray data; QDataStream arg(data, IO_WriteOnly);
 							kdDebug() << "Sending data (" << QCString((**i).program()) << ", " << QCString((**i).object()) << ", " << QCString((**i).method().prototypeNR()) << endl;
@@ -124,14 +151,14 @@ void IRKick::dontStealNextPress()
 
 void IRKick::slotShowAboutKDE()
 {
-	KAboutKDE *about = new KAboutKDE(this);
+	KAboutKDE *about = new KAboutKDE(theTrayIcon);
 	about->exec();
 	delete about;
 }
 
 void IRKick::slotShowAbout()
 {
-	KAboutDialog *about = new KAboutDialog(KAboutDialog::AbtAppStandard, "IRKick", KDialogBase::Close, KDialogBase::Close, this, "name", true);
+	KAboutDialog *about = new KAboutDialog(KAboutDialog::AbtAppStandard, "IRKick", KDialogBase::Close, KDialogBase::Close, theTrayIcon, "name", true);
 	about->setTitle(i18n("KDE Lirc Server"));
 	about->setProduct(i18n("IRKick"), VERSION, i18n("Gav Wood"), "2003");
 	KAboutContainer *c = about->addContainerPage(i18n("&About"), AlignCenter, AlignLeft);
@@ -142,12 +169,12 @@ void IRKick::slotShowAbout()
 									"1. have a suggestion for improvement\n"
 									"2. have found a bug\n"
 									"3. want to contribute with something\n\n"
-									"then feel free to send me a mail.\n"), this));
+									"then feel free to send me a mail.\n"), theTrayIcon));
 		c->addPerson(QString::null, QString("gav@kde.org"), QString("http://irkick.sourceforge.net/"), QString::null, true);
 	}
 	c = about->addContainerPage(i18n("&Credits"), AlignCenter, AlignLeft);
 	if( c != 0 )
-		c->addWidget(new QLabel(i18n("<p align=left>Author:<br/><b>Gav Wood</b></p>"), this));
+		c->addWidget(new QLabel(i18n("<p align=left>Author:<br/><b>Gav Wood</b></p>"), theTrayIcon));
 	about->addLicensePage("&License Agreement", aboutData->license());
 	about->exec();
 	delete about;

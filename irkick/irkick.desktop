@@ -1,10 +1,20 @@
-# KDE Config File  
 [Desktop Entry]
-Type=Application
-Exec=irkick -caption "%c" %i %m  
-Icon=irkick.png
-MiniIcon=irkick.png
-DocPath=remote/index.html
-Comment=The KDE LIRC background client.
-Terminal=0
-Name=IRKick
+Type=Service
+Name=KDE LIRC server
+
+ServiceTypes=KDEDModule
+X-KDE-ModuleType=Library
+X-KDE-Library=irkick
+X-KDE-FactoryName=irkick
+X-KDE-Kded-autoload=true
+X-KDE-Kded-load-on-demand=false
+
+Icon=irkick
+MiniIcon=irkick
+DocPath=kcontrol/kdelirc.html
+Comment=KDE Linux infrared remote control server.
+Encoding=UTF-8
+
+#Exec=irkick
+#X-DCOP-ServiceType=Unique
+#X-KDE-StartupNotify=true

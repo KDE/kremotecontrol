@@ -1,12 +1,17 @@
-####### kdevelop will overwrite this part!!! (begin)##########
-bin_PROGRAMS = irkick
+desktop_DATA = irkick.desktop
+desktopdir = $(kde_servicesdir)/kded
+
+lib_LTLIBRARIES = libkded_irkick.la
+
+libkded_irkick_la_SOURCES = irkick.cpp irkick.skel irkick.stub klircclient.cpp
+libkded_irkick_la_METASOURCES = AUTO
+libkded_irkick_la_LDFLAGS = $(all_libraries) -module -avoid-version
+libkded_irkick_la_LIBADD = $(LIB_KDECORE) ../kdelirc/libkdelirc.la
+
 
 ## INCLUDES were found outside kdevelop specific part
 
-noinst_HEADERS = irkick.h main.h klircclient.h irkick_stub.h
-
-irkick_SOURCES = main.cpp irkick.cpp irkick.skel irkick.stub klircclient.cpp
-irkick_LDADD = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) $(LIBSOCKET) ../kdelirc/libkdelirc.la
+noinst_HEADERS = irkick.h klircclient.h irkick_stub.h
 
 EXTRA_DIST = main.cpp irkick.desktop hi32-app-irkick.png hi16-app-irkick.png lo32-app-irkick.png lo16-app-irkick.png
 
@@ -56,8 +61,7 @@ INCLUDES = $(all_includes) -I../kdelirc
 
 METASOURCES = AUTO
 
-# the library search path. 
-irkick_LDFLAGS = $(all_libraries) $(KDE_RPATH)
+# the library search path.
 
 # Uncomment the following two lines if you add a ui.rc file for your application to make use of
 # KDE´s XML GUI builing
@@ -68,11 +72,11 @@ irkick_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 # messages: rc.cpp
 
-# instead of 
+# instead of
 
 # messages:
 
-messages: 
+messages:
 	LIST=`find . -name \*.h -o -name \*.hh -o -name \*.H -o -name \*.hxx -o -name \*.hpp -o -name \*.cpp -o -name \*.cc -o -name \*.cxx -o -name \*.ecpp -o -name \*.C`; \
 	if test -n "$$LIST"; then \
 	 $(XGETTEXT) $$LIST -o $(podir)/irkick.pot; \

@@ -1,18 +1,16 @@
 general:
 * Optimise data structures to use pointer-based structures to cut down on copying
 * Some linear seaches still around rather than key-based - fix it to improve speed
-* Design automatically starting application (try for 1.0)
 * Controllers/Profiles DTD (try for 1.0)
-* Start IRKick automatically (need for 1.0)
+* TAKE OUT kdedmodule_stub.h WHEN KDE INSTALLS IT IN DISTRIBUTION
 
 kdmlirc:
 * Edit action?
-* Advanced (non-wizard) Add action?
-* Implement automatically starting application option (try for 1.0)
+* Advanced (non-wizard) Add action? (save for 2.0, if ever)
 * Fix bools bug.
+* Implement multi-type editing for options.
 
 irkick:
 * Fix QByteArray parameter bug...
 * Better icon!
 * Other IPC mechanisms (save for 2.0!)
-* Implement automatically starting application (try for 1.0)

@@ -26,11 +26,10 @@ class KConfig;
 
 class IRAction
 {
-private:
 	QString theProgram, theObject, theRemote, theButton, theMode;
 	Prototype theMethod;
 	Arguments theArguments;
-	bool theRepeat;
+	bool theRepeat, theAutoStart;
 
 public:
 	// load/save convenience functions
@@ -41,6 +40,7 @@ public:
 	const QString function() const;
 	const QString application() const;
 	const QString repeatable() const;
+	const QString autoStartable() const;
 	const QString buttonName() const;
 	const QString remoteName() const;
 
@@ -53,6 +53,7 @@ public:
 	const QString &button() const { return theButton; }
 	const Arguments &arguments() const { return theArguments; }
 	const bool repeat() const { return theRepeat; }
+	const bool autoStart() const { return theAutoStart; }
 
 	void setProgram(const QString &newProgram) { theProgram = newProgram; }
 	void setObject(const QString &newObject) { theObject = newObject; }
@@ -62,8 +63,9 @@ public:
 	void setButton(const QString &newButton) { theButton = newButton; }
 	void setArguments(const Arguments &newArguments) { theArguments = newArguments; }
 	void setRepeat(bool newRepeat) { theRepeat = newRepeat; }
+	void setAutoStart(bool newAutoStart) { theAutoStart = newAutoStart; }
 
-	IRAction(const QString &newProgram, const QString &newObject, const QString &newMethod, const Arguments &newArguments, const QString &newRemote, const QString &newMode, const QString &newButton, bool newRepeat);
+	IRAction(const QString &newProgram, const QString &newObject, const QString &newMethod, const Arguments &newArguments, const QString &newRemote, const QString &newMode, const QString &newButton, bool newRepeat, bool newAutoStart);
 	IRAction() { theProgram = QString::null; };
 };
 

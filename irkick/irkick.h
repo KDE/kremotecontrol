@@ -17,13 +17,15 @@
 #include <qstring.h>
 
 #include <ksystemtray.h>
+#include <kdedmodule.h>
+#include <kaboutdata.h>
 
 #include <dcopobject.h>
 
 #include "iractions.h"
 #include "klircclient.h"
 
-class IRKick: public KSystemTray, virtual public DCOPObject
+class IRKick: public KDEDModule
 {
 	Q_OBJECT
 	K_DCOP
@@ -32,6 +34,8 @@ class IRKick: public KSystemTray, virtual public DCOPObject
 	QMap<QString, QString> currentModes;
 	IRActions allActions;
 
+	KSystemTray *theTrayIcon;
+	KAboutData *aboutData;
 
 signals:
 
@@ -44,7 +48,6 @@ private slots:
 	void slotReloadConfiguration();
 	void slotShowAbout();
 	void slotShowAboutKDE();
-
 //MOC_SKIP_BEGIN
 k_dcop:
 //MOC_SKIP_END
@@ -98,7 +101,7 @@ k_dcop:
 	virtual void reloadConfiguration() { slotReloadConfiguration(); }
 
 public:
-	IRKick(QWidget *parent = 0, const char *name = 0);
+	IRKick(const QCString &obj);
 	~IRKick();
 };
 

@@ -19,7 +19,7 @@
 #include "profileserver.h"
 #include "remoteserver.h"
 
-IRAction::IRAction(const QString &newProgram, const QString &newObject, const QString &newMethod, const Arguments &newArguments, const QString &newRemote, const QString &newMode, const QString &newButton, bool newRepeat)
+IRAction::IRAction(const QString &newProgram, const QString &newObject, const QString &newMethod, const Arguments &newArguments, const QString &newRemote, const QString &newMode, const QString &newButton, bool newRepeat, bool newAutoStart)
 {
 	theProgram = newProgram;
 	theObject = newObject;
@@ -29,6 +29,7 @@ IRAction::IRAction(const QString &newProgram, const QString &newObject, const QS
 	theMode = newMode;
 	theButton = newButton;
 	theRepeat = newRepeat;
+	theAutoStart = newAutoStart;
 }
 
 const IRAction &IRAction::loadFromConfig(KConfig &theConfig, int index)
@@ -49,6 +50,7 @@ const IRAction &IRAction::loadFromConfig(KConfig &theConfig, int index)
 	theMode = theConfig.readEntry(Binding + "Mode");
 	theButton = theConfig.readEntry(Binding + "Button");
 	theRepeat = theConfig.readBoolEntry(Binding + "Repeat");
+	theAutoStart = theConfig.readBoolEntry(Binding + "AutoStart");
 
 	return *this;
 }
@@ -72,6 +74,7 @@ void IRAction::saveToConfig(KConfig &theConfig, int index) const
 	theConfig.writeEntry(Binding + "Mode", theMode);
 	theConfig.writeEntry(Binding + "Button", theButton);
 	theConfig.writeEntry(Binding + "Repeat", theRepeat);
+	theConfig.writeEntry(Binding + "AutoStart", theAutoStart);
 }
 
 const QString IRAction::function() const
@@ -100,11 +103,19 @@ const QString IRAction::repeatable() const
 		return theRepeat ? "Yes" : "No";
 }
 
+const QString IRAction::autoStartable() const
+{
+	if(theProgram == "")
+		return "";
+	else
+		return theAutoStart ? "Yes" : "No";
+}
+
 const QString IRAction::application() const
 {
 	ProfileServer *theServer = ProfileServer::profileServer();
 	if(theProgram == "")
-		return "[KDE]";
+		return "";
 	else
 	{
 		const ProfileAction *a = theServer->getAction(theProgram, theObject, theMethod.prototype());

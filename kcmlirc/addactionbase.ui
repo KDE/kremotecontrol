@@ -673,7 +673,18 @@
                     <cstring>theRepeat</cstring>
                 </property>
                 <property name="text">
-                    <string>&amp;This action is repeatable if the button is held down</string>
+                    <string>This action is &amp;repeatable if the button is held down</string>
+                </property>
+            </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>theAutoStart</cstring>
+                </property>
+                <property name="text">
+                    <string>This action causes the application to &amp;start if not already running</string>
+                </property>
+                <property name="checked">
+                    <bool>true</bool>
                 </property>
             </widget>
             <spacer>
@@ -689,7 +700,7 @@
                 <property name="sizeHint">
                     <size>
                         <width>20</width>
-                        <height>111</height>
+                        <height>270</height>
                     </size>
                 </property>
             </spacer>

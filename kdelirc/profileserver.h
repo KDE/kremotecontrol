@@ -72,7 +72,7 @@ public:
 
 class Profile : public QXmlDefaultHandler
 {
-	QString theId, theName, theAuthor;
+	QString theId, theName, theAuthor, theServiceName;
 	QString charBuffer;
 
 	ProfileAction *curPA;
@@ -85,12 +85,14 @@ public:
 	bool startElement(const QString &, const QString &, const QString &name, const QXmlAttributes &attributes);
 	bool endElement(const QString &, const QString &, const QString &name);
 
-	QString id() const { return theId; }
+	const QString &id() const { return theId; }
 	void setId(const QString &a) { theId = a; }
-	QString name() const { return theName; }
+	const QString &name() const { return theName; }
 	void setName(const QString &a) { theName = a; }
-	QString author() const { return theAuthor; }
+	const QString &author() const { return theAuthor; }
 	void setAuthor(const QString &a) { theAuthor = a; }
+	const QString &serviceName() const { if(theServiceName != QString::null) return theServiceName; return theName; }
+	void setServiceName(const QString &a) { theServiceName = a; }
 	const QDict<ProfileAction> &actions() const { return theActions; }
 
 	void loadFromFile(const QString &fileName);
@@ -109,6 +111,7 @@ public:
 	const QDict<Profile> profiles() const { return theProfiles; }
 	const ProfileAction *getAction(const QString &appId, const QString &objId, const QString &prototype) const;
 	const ProfileAction *getAction(const QString &appId, const QString &actionId) const;
+	const QString &getServiceName(const QString &appId) const;
 
 	ProfileServer();
 	~ProfileServer();
