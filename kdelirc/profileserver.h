@@ -35,6 +35,7 @@ class ProfileActionArgument
 	Range theRange;
 	const ProfileAction *parent;
 
+	friend class Profile;
 public:
 	const QString &comment() const { return theComment; }
 	void setComment(const QString &a) { theComment = a; }
@@ -51,9 +52,9 @@ class ProfileAction
 {
 	QString theObjId, thePrototype, theName, theComment;
 	const Profile *parent;
-public:
 	QValueList<ProfileActionArgument> theArguments;
 
+	friend class Profile;
 public:
 	const QString &objId() const { return theObjId; }
 	void setObjId(const QString &a) { theObjId = a; }
@@ -76,19 +77,20 @@ class Profile : public QXmlDefaultHandler
 
 	ProfileAction *curPA;
 	ProfileActionArgument *curPAA;
-public:
 	QDict<ProfileAction> theActions;		// objid+"::"+prototype => ProfileAction
 
+	friend class ProfileServer;
 public:
 	bool characters(const QString &data);
 	bool startElement(const QString &, const QString &, const QString &name, const QXmlAttributes &attributes);
 	bool endElement(const QString &, const QString &, const QString &name);
 
-public:
 	QString id() const { return theId; }
 	void setId(const QString &a) { theId = a; }
 	QString name() const { return theName; }
 	void setName(const QString &a) { theName = a; }
+	QString author() const { return theAuthor; }
+	void setAuthor(const QString &a) { theAuthor = a; }
 	const QDict<ProfileAction> &actions() const { return theActions; }
 
 	void loadFromFile(const QString &fileName);

@@ -73,8 +73,9 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int 
 	else
 	{
 		if(currentModes[theRemote].isNull()) currentModes[theRemote] = "";
-
-		const IRAItList l = allActions.findByModeButton(Mode(theRemote, currentModes[theRemote]), theButton);
+		IRAItList l = allActions.findByModeButton(Mode(theRemote, currentModes[theRemote]), theButton);
+		if(currentModes[theRemote] != "")
+			l += allActions.findByModeButton(Mode(theRemote, ""), theButton);
 		if(!l.isEmpty())
 			for(IRAItList::const_iterator i = l.begin(); i != l.end(); i++)
 				if((**i).program() == "")

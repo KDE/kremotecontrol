@@ -26,13 +26,15 @@ private:
 	IRActions allActions;
 	Modes allModes;
 	QMap<QListViewItem *, QValueListIterator<IRAction> > actionMap;
-	QMap<QListViewItem *, Mode > modeMap;
+	QMap<QListViewItem *, Mode> modeMap;
+	QMap<QListViewItem *, QString> extensionMap;
 
 public slots:
 	void configChanged();
 	void updateActions();
 	void updateModes();
 	void updateExtensions();
+	void updateInformation();
 	void slotAddMode();
 	void slotRemoveMode();
 	void slotAddAction();

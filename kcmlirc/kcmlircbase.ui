@@ -302,30 +302,6 @@
                                     <bool>true</bool>
                                 </property>
                             </column>
-                        <item>
-                            <property name="text">
-                                <string>Contollers</string>
-                            </property>
-                            <property name="pixmap">
-                                <pixmap></pixmap>
-                            </property>
-                        </item>
-                        <item>
-                            <property name="text">
-                                <string>Programs</string>
-                            </property>
-                            <property name="pixmap">
-                                <pixmap></pixmap>
-                            </property>
-                            <item>
-                                <property name="text">
-                                    <string>IR Kick</string>
-                                </property>
-                                <property name="pixmap">
-                                    <pixmap></pixmap>
-                                </property>
-                            </item>
-                        </item>
                             <property name="name">
                                 <cstring>theExtensions</cstring>
                             </property>
@@ -349,10 +325,10 @@
                                 </property>
                                 <widget class="KSqueezedTextLabel">
                                     <property name="name">
-                                        <cstring>theLoadedLabel</cstring>
+                                        <cstring>theInformationLabel</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>Information on &lt;b&gt;IR Kick&lt;/b&gt;:</string>
+                                        <string></string>
                                     </property>
                                 </widget>
                                 <widget class="KListView">
@@ -378,36 +354,11 @@
                                             <bool>true</bool>
                                         </property>
                                     </column>
-                                <item>
-                                    <property name="text">
-                                        <string>Actions</string>
-                                    </property>
-                                    <property name="text">
-                                        <string>10</string>
-                                    </property>
-                                    <property name="pixmap">
-                                        <pixmap></pixmap>
-                                    </property>
-                                    <property name="pixmap">
-                                        <pixmap></pixmap>
-                                    </property>
-                                </item>
-                                <item>
-                                    <property name="text">
-                                        <string>Plugin Author</string>
-                                    </property>
-                                    <property name="text">
-                                        <string>Gav Wood</string>
-                                    </property>
-                                    <property name="pixmap">
-                                        <pixmap></pixmap>
-                                    </property>
-                                    <property name="pixmap">
-                                        <pixmap></pixmap>
-                                    </property>
-                                </item>
                                     <property name="name">
                                         <cstring>theInformation</cstring>
+                                    </property>
+                                    <property name="fullWidth">
+                                        <bool>true</bool>
                                     </property>
                                 </widget>
                             </vbox>

@@ -41,6 +41,7 @@ KCMLirc::KCMLirc(QWidget *parent, const char *name, QStringList /*args*/) : KCMo
 	(new QHBoxLayout(this))->setAutoAdd(true);
 	theKCMLircBase = new KCMLircBase(this);
 	connect(theKCMLircBase->theModes, SIGNAL( currentChanged(QListViewItem *) ), this, SLOT( updateActions() ));
+	connect(theKCMLircBase->theExtensions, SIGNAL( currentChanged(QListViewItem *) ), this, SLOT( updateInformation() ));
 	connect((QObject *)(theKCMLircBase->theAddAction), SIGNAL( clicked() ), this, SLOT( slotAddAction() ));
 	connect((QObject *)(theKCMLircBase->theRemoveAction), SIGNAL( clicked() ), this, SLOT( slotRemoveAction() ));
 	connect((QObject *)(theKCMLircBase->theAddMode), SIGNAL( clicked() ), this, SLOT( slotAddMode() ));
@@ -193,10 +194,29 @@ void KCMLirc::updateExtensions()
 	theKCMLircBase->theExtensions->clear();
 	QListViewItem *a = new QListViewItem(theKCMLircBase->theExtensions, "Applications");
 
+	extensionMap.clear();
+
 	QDict<Profile> dict = theServer->profiles();
 	QDictIterator<Profile> i(dict);
 	for(; i.current(); ++i)
-		new QListViewItem(a, i.current()->name());
+		extensionMap[new QListViewItem(a, i.current()->name())] = i.currentKey();
+}
+
+void KCMLirc::updateInformation()
+{
+	ProfileServer *theServer = ProfileServer::profileServer();
+	theKCMLircBase->theInformation->clear();
+	theKCMLircBase->theInformationLabel->setText("");
+
+	if(!theKCMLircBase->theExtensions->currentItem()) return;
+	if(!theKCMLircBase->theExtensions->currentItem()->parent()) return;
+
+	const Profile *p = theServer->profiles()[extensionMap[theKCMLircBase->theExtensions->currentItem()]];
+	new QListViewItem(theKCMLircBase->theInformation, "Extension Name", p->name());
+	new QListViewItem(theKCMLircBase->theInformation, "Extension Author", p->author());
+	new QListViewItem(theKCMLircBase->theInformation, "Application Identifier", p->id());
+	new QListViewItem(theKCMLircBase->theInformation, "Number of Actions", QString().setNum(p->actions().count()));
+	theKCMLircBase->theInformationLabel->setText("Information on <b>" + p->name() + "</b>:");
 }
 
 void KCMLirc::load()
