@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!DOCTYPE profile SYSTEM "profile.dtd">
 
-<profile id="noatun" serivename="noatun">
+<profile id="noatun" servicename="noatun">
 	<name>Noatun</name>
 	<author>Gav Wood</author>
 	<action objid="Noatun" prototype="void playpause()" class="pause">
