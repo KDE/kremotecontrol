@@ -24,6 +24,7 @@ ProfileServer *ProfileServer::theInstance = 0;
 
 ProfileServer::ProfileServer()
 {
+	theProfiles.setAutoDelete(true);
 	loadProfiles();
 }
 
@@ -44,6 +45,7 @@ void ProfileServer::loadProfiles()
 
 Profile::Profile()
 {
+	theActions.setAutoDelete(true);
 }
 
 void Profile::loadFromFile(const QString &fileName)

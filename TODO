@@ -3,6 +3,7 @@ general:
 * Some linear seaches still around rather than key-based - fix it to improve speed
 * Design automatically starting application (try for 1.0)
 * Controllers/Profiles DTD (try for 1.0)
+* Start IRKick automatically (need for 1.0)
 
 kdmlirc:
 * Edit action?

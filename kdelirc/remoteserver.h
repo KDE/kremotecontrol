@@ -59,6 +59,9 @@ public:
 	void loadFromFile(const QString &fileName);
 
 	const QString &getButtonName(const QString &id) const { if(theButtons[id]) return theButtons[id]->name(); return id; }
+
+	Remote();
+	~Remote();
 };
 
 class RemoteServer

@@ -24,6 +24,7 @@ RemoteServer *RemoteServer::theInstance = 0;
 
 RemoteServer::RemoteServer()
 {
+	theRemotes.setAutoDelete(true);
 	loadRemotes();
 }
 
@@ -40,6 +41,15 @@ void RemoteServer::loadRemotes()
 		p->loadFromFile(*i);
 		theRemotes.insert(p->id(), p);
 	}
+}
+
+Remote::Remote()
+{
+	theButtons.setAutoDelete(true);
+}
+
+Remote::~Remote()
+{
 }
 
 void Remote::loadFromFile(const QString &fileName)
