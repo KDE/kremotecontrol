@@ -533,7 +533,7 @@ void KCMLirc::configChanged()
 // TODO: Take this out when I know how
 extern "C"
 {
-	KCModule *create_kcmlirc(QWidget *parent, const char *)
+	KDE_EXPORT KCModule *create_kcmlirc(QWidget *parent, const char *)
 	{	KGlobal::locale()->insertCatalogue("kcmlirc");
 		return new KCMLirc(parent, "KCMLirc");
 	}

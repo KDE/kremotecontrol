@@ -17,7 +17,7 @@
 
 #include "irkick.h"
 
-extern "C" int kdemain(int argc, char *argv[])
+extern "C" KDE_EXPORT int kdemain(int argc, char *argv[])
 {
 	KAboutData *aboutData = new KAboutData("irkick", I18N_NOOP("IRKick"), VERSION, I18N_NOOP("The KDE Infrared Remote Control Server"), KAboutData::License_GPL, "(c) 2003, Gav Wood", 0, 0, "gav@kde.org");
 	aboutData->addAuthor("Gav Wood", I18N_NOOP("Author"), "gav@kde.org", "http://www.indigoarchive.net/gav/");
