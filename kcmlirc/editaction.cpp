@@ -61,7 +61,7 @@ void EditAction::readFrom()
 	if((*theAction).isModeChange())
 	{	// change mode
 		theChangeMode->setChecked(true);
-		if((*theAction).object() == "")
+		if((*theAction).object().isEmpty())
 			theModes->setCurrentText(i18n("[Exit current mode]"));
 		else
 			theModes->setCurrentText((*theAction).object());
@@ -175,7 +175,7 @@ void EditAction::updateArguments()
 		}
 		theArguments->setEnabled(p.count());
 		for(unsigned i = 0; i < p.count(); i++)
-		{	theArguments->insertItem(QString().setNum(i + 1) + ": " + (p.name(i) == "" ? p.type(i) : p.name(i) + " (" + p.type(i) + ")"));
+		{	theArguments->insertItem(QString().setNum(i + 1) + ": " + (p.name(i).isEmpty() ? p.type(i) : p.name(i) + " (" + p.type(i) + ")"));
 			arguments[i].cast(QVariant::nameToType(p.type(i).utf8()));
 		}
 		if(p.count()) updateArgument(0); else updateArgument(-1);
@@ -298,7 +298,7 @@ void EditAction::updateFunctions()
 	ProfileServer *theServer = ProfileServer::profileServer();
 	theFunctions->clear();
 	functionMap.clear();
-	if(theApplications->currentText() == QString::null || theApplications->currentText() == "") return;
+	if(theApplications->currentText().isNull() || theApplications->currentText().isEmpty()) return;
 
 	const Profile *p = theServer->profiles()[applicationMap[theApplications->currentText()]];
 

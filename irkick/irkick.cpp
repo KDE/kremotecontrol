@@ -159,7 +159,7 @@ void IRKick::updateModeIcons()
 {
 	for(QMap<QString,QString>::iterator i = currentModes.begin(); i != currentModes.end(); i++)
 	{	Mode mode = allModes.getMode(i.key(), i.data());
-		if(mode.iconFile() == QString::null || mode.iconFile() == "")
+		if(mode.iconFile().isNull() || mode.iconFile().isEmpty())
 		{	if(currentModeIcons[i.key()])
 			{	delete currentModeIcons[i.key()];
 				currentModeIcons[i.key()] = 0;

@@ -37,7 +37,7 @@ const Mode &Mode::loadFromConfig(KConfig &theConfig, int index)
 	theName = theConfig.readEntry(Prefix + "Name");
 	theRemote = theConfig.readEntry(Prefix + "Remote");
 	theIconFile = theConfig.readEntry(Prefix + "IconFile");
-	if(theIconFile == "") theIconFile = QString::null;
+	if(theIconFile.isEmpty()) theIconFile = QString::null;
 	return *this;
 }
 

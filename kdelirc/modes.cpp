@@ -42,7 +42,7 @@ void Modes::generateNulls(const QStringList &theRemotes)
 {
 	for(QStringList::const_iterator i = theRemotes.begin(); i != theRemotes.end(); i++)
 	{	if(!contains(*i) || !operator[](*i).contains("")) operator[](*i)[""] = Mode(*i, "");
-		if(!theDefaults.contains(*i)) theDefaults[*i] = "";
+		if(!theDefaults.contains(*i)) theDefaults[*i].isEmpty();
 	}
 }
 
@@ -50,8 +50,8 @@ bool Modes::isDefault(const Mode &mode) const
 {
 	if(theDefaults[mode.remote()] == mode.name())
 		return true;
-//	if(theDefaults[mode.remote()] == "" || theDefaults[mode.remote()] == QString::null)
-//		return mode.name() == "";
+//	if(theDefaults[mode.remote()].isEmpty() || theDefaults[mode.remote()].isNull())
+//		return mode.name().isEmpty();
 	return false;
 }
 

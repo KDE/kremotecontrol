@@ -289,7 +289,7 @@ void KCMLirc::slotAddMode()
 		remoteMap[a] = modeMap[i].remote();
 		if(i == tr) { a->setSelected(true); theDialog.theRemotes->setCurrentItem(a); }
 	}
-	if(theDialog.exec() == QDialog::Accepted && theDialog.theRemotes->selectedItem() && theDialog.theName->text() != "")
+	if(theDialog.exec() == QDialog::Accepted && theDialog.theRemotes->selectedItem() && !theDialog.theName->text().isEmpty())
 	{
 		allModes.add(Mode(remoteMap[theDialog.theRemotes->selectedItem()], theDialog.theName->text()));
 		updateModes();
@@ -305,8 +305,8 @@ void KCMLirc::slotEditMode()
 
 	Mode &mode = modeMap[theKCMLircBase->theModes->selectedItem()];
 	theDialog.theName->setEnabled(theKCMLircBase->theModes->selectedItem()->parent());
-	theDialog.theName->setText(mode.name() == "" ? mode.remoteName() : mode.name());
-	if(mode.iconFile() != QString::null)
+	theDialog.theName->setText(mode.name().isEmpty() ? mode.remoteName() : mode.name());
+	if(!mode.iconFile().isNull())
 		theDialog.theIcon->setIcon(mode.iconFile());
 	else
 		theDialog.theIcon->resetIcon();
@@ -315,9 +315,9 @@ void KCMLirc::slotEditMode()
 
 	if(theDialog.exec() == QDialog::Accepted)
 	{	kdDebug() << "Setting icon : " << theDialog.theIcon->icon() << endl;
-		mode.setIconFile(theDialog.theIcon->icon() == "" ? QString::null : theDialog.theIcon->icon());
+		mode.setIconFile(theDialog.theIcon->icon().isEmpty() ? QString::null : theDialog.theIcon->icon());
 		allModes.updateMode(mode);
-		if(mode.name() != "")
+		if(!mode.name().isEmpty())
 		{	allActions.renameMode(mode, theDialog.theName->text());
 			allModes.rename(mode, theDialog.theName->text());
 		}
@@ -376,7 +376,7 @@ void KCMLirc::updateActions()
 	if(!theKCMLircBase->theModes->selectedItem()) { updateActionsStatus(0); return; }
 
 	Mode m = modeMap[theKCMLircBase->theModes->selectedItem()];
-	theKCMLircBase->theModeLabel->setText(m.remoteName() + ": " + (m.name() == "" ? i18n("Actions <i>always</i> available") : i18n("Actions available only in mode <b>%1</b>").arg(m.name())));
+	theKCMLircBase->theModeLabel->setText(m.remoteName() + ": " + (m.name().isEmpty() ? i18n("Actions <i>always</i> available") : i18n("Actions available only in mode <b>%1</b>").arg(m.name())));
 	IRAItList l = allActions.findByMode(m);
 	for(IRAItList::iterator i = l.begin(); i != l.end(); i++)
 	{	QListViewItem *b = new KListViewItem(theKCMLircBase->theActions, (**i).buttonName(), (**i).application(), (**i).function(), (**i).arguments().toString(), (**i).notes());
@@ -410,17 +410,17 @@ void KCMLirc::updateModes()
 		theKCMLircBase->theMainLabel->setMaximumSize(0, 0);
 	for(QStringList::iterator i = remotes.begin(); i != remotes.end(); i++)
 	{	Mode mode = allModes.getMode(*i, "");
-		QListViewItem *a = new KListViewItem(theKCMLircBase->theModes, RemoteServer::remoteServer()->getRemoteName(*i), allModes.isDefault(mode) ? "Default" : "", mode.iconFile() == QString::null ? "" : "");
-		if(mode.iconFile() != QString::null)
+		QListViewItem *a = new KListViewItem(theKCMLircBase->theModes, RemoteServer::remoteServer()->getRemoteName(*i), allModes.isDefault(mode) ? "Default" : "", mode.iconFile().isNull() ? "" : "");
+		if(!mode.iconFile().isNull())
 			a->setPixmap(2, KIconLoader().loadIcon(mode.iconFile(), KIcon::Panel));
 		modeMap[a] = mode;	// the null mode
 		if(modeMap[a] == oldCurrent) { a->setSelected(true); theKCMLircBase->theModes->setCurrentItem(a); }
 		a->setOpen(true);
 		ModeList l = allModes.getModes(*i);
 		for(ModeList::iterator j = l.begin(); j != l.end(); j++)
-			if((*j).name() != "")
-			{	QListViewItem *b = new KListViewItem(a, (*j).name(), allModes.isDefault(*j) ? i18n("Default") : "", (*j).iconFile() == QString::null ? "" : "");
-				if((*j).iconFile() != QString::null)
+			if(!(*j).name().isEmpty())
+			{	QListViewItem *b = new KListViewItem(a, (*j).name(), allModes.isDefault(*j) ? i18n("Default") : "", (*j).iconFile().isNull() ? "" : "");
+				if(!(*j).iconFile().isNull())
 					b->setPixmap(2, KIconLoader().loadIcon((*j).iconFile(), KIcon::Panel));
 				modeMap[b] = *j;
 				if(*j == oldCurrent) { b->setSelected(true); theKCMLircBase->theModes->setCurrentItem(b); }
