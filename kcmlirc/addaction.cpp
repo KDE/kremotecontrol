@@ -25,6 +25,7 @@ AddAction::AddAction(QWidget *parent, const char *name): AddActionBase(parent, n
 	updateButtonStates();
 	updateObjects();
 	updateFunctions();
+	curPage = 0;
 }
 
 AddAction::~AddAction()
@@ -50,10 +51,15 @@ QValueList< QPair<QString, QString> > AddAction::extractParameters(const QString
 
 void AddAction::updateButtonStates()
 {
-	if(indexOf(currentPage()) == 0)
-		setNextEnabled(currentPage(), theFunctions->currentItem() != 0);
-	else
-		setFinishEnabled(currentPage(), true);
+	int lastPage = curPage;
+	curPage = indexOf(currentPage());
+	if(curPage == 1 && theFunctions->currentItem() && extractParameters(theFunctions->currentItem()->text(2)).count() == 1)
+		showPage(((QWizard *)this)->page(lastPage ? 0 : 2));
+	switch(curPage)
+	{	case 0: setNextEnabled(currentPage(), theFunctions->currentItem() != 0); break;
+		case 1: if(lastPage == 0) updateParameters(); setNextEnabled(currentPage(), true); break;
+		case 2: setFinishEnabled(currentPage(), true); break;
+	}
 }
 
 // TODO: consolidate this (and stringising code from updateFunctions) into a class to desctribe function prototype.
@@ -80,6 +86,7 @@ void AddAction::updateParameters()
 		for(unsigned k = 1; k < l.count(); k++)
 			new KListViewItem(theParameters, QString().setNum(k), l[k].first, l[k].second == "" ? "<anonymous>" : l[k].second, "");
 	}
+	updateParameter();
 }
 
 void AddAction::updateParameter()

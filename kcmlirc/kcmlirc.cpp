@@ -1,9 +1,21 @@
+/***************************************************************************
+ *   Copyright (C) 2003 by Gav Wood                                        *
+ *   gav@indigoarchive.net                                                 *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ ***************************************************************************/
+
+#include <qcheckbox.h>
 #include <qlayout.h>
 
 #include <kapplication.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kconfig.h>
+#include <kdebug.h>
 #include <ksimpleconfig.h>
 #include <kgenericfactory.h>
 #include <klistview.h>
@@ -71,15 +83,16 @@ void KCMLirc::slotAddAction()
 		a.Program = theDialog.theObjects->currentItem()->parent()->text(0);
 		a.Object = theDialog.theObjects->currentItem()->text(0);
 		a.Method = theDialog.theFunctions->currentItem()->text(2);
-		a.Repeat = true;
+		a.Repeat = theDialog.theRepeat->isChecked();
 		a.Arguments.clear();
 		theDialog.theParameters->setSorting(0);
 		for(QListViewItem *i = theDialog.theParameters->firstChild(); i; i = i->nextSibling())
-		{	QVariant v(i->text(3));
+		{	kdDebug() << "Got arg" << i->text(2) << ":: " << i->text(3) << endl;
+			QVariant v(i->text(3));
 			v.cast(QVariant::nameToType(i->text(1)));
 			a.Arguments += v;
 		}
-		allActions += a;
+		allActions[qMakePair(a.Remote, a.Button)] += a;
 		updateActions();
 		emit changed(true);
 	}
@@ -88,15 +101,31 @@ void KCMLirc::slotAddAction()
 void KCMLirc::slotRemoveAction()
 {
 	// TODO: need guards
-	for(QValueList<IRAction>::iterator i = allActions.begin(); i != allActions.end(); i++)
-		if(	(*i).Remote == theKCMLircBase->theButtons->currentItem()->parent()->text(0) &&
-			(*i).Button == theKCMLircBase->theButtons->currentItem()->text(0) &&
-			(*i).Item == theKCMLircBase->theActions->currentItem() )
-		{	allActions.erase(i);
-			break;
-		}
+	allActions[qMakePair(theKCMLircBase->theButtons->currentItem()->parent()->text(0),
+				theKCMLircBase->theButtons->currentItem()->text(0))].erase
+				(actionMap[theKCMLircBase->theActions->currentItem()]);
 	emit changed(true);
 	updateActions();
+}
+
+void KCMLirc::slotStartListen()
+{
+	IRKick_stub IRKick("irkick", "IRKick");
+	IRKick.stealNextPress(DCOPClient::mainClient()->appId(), "KCMLirc", "gotButton");
+}
+
+void KCMLirc::updateActions()
+{
+	theKCMLircBase->theActions->clear();
+	actionMap.clear();
+	QListViewItem *current = theKCMLircBase->theButtons->currentItem();
+	if(current) if(current->parent())
+	{	QString button = current->text(0);
+		QString remote = current->parent()->text(0);
+		theKCMLircBase->theButtonLabel->setText(remote + ": <b>" + button + "</b>");
+		for(QValueList<IRAction>::iterator i = allActions[qMakePair(remote, button)].begin(); i != allActions[qMakePair(remote, button)].end(); i++)
+			actionMap[new KListViewItem(theKCMLircBase->theActions, (*i).Program, (*i).Object + "::" + (*i).Method, (*i).ArgumentString(), (*i).Repeat ? "Yes" : "No")] = i;
+	}
 }
 
 void KCMLirc::gotButton(QString remote, QString button)
@@ -130,7 +159,8 @@ void KCMLirc::load()
 			Arguments.last().cast(theType);
 		}
 
-		allActions += IRAction( theConfig.readEntry(Binding + "Program"), theConfig.readEntry(Binding + "Object"),
+		allActions[qMakePair(theConfig.readEntry(Binding + "Remote"), theConfig.readEntry(Binding + "Button"))]
+			 += IRAction( theConfig.readEntry(Binding + "Program"), theConfig.readEntry(Binding + "Object"),
 					theConfig.readEntry(Binding + "Method"), Arguments, theConfig.readEntry(Binding + "Remote"),
 					theConfig.readEntry(Binding + "Button"), theConfig.readBoolEntry(Binding + "Repeat"));
 	}
@@ -150,28 +180,6 @@ void KCMLirc::load()
 	updateActions();
 }
 
-void KCMLirc::slotStartListen()
-{
-	IRKick_stub IRKick("irkick", "IRKick");
-	IRKick.stealNextPress(DCOPClient::mainClient()->appId(), "KCMLirc", "gotButton");
-}
-
-void KCMLirc::updateActions()
-{
-	theKCMLircBase->theActions->clear();
-	QListViewItem *current = theKCMLircBase->theButtons->currentItem();
-	if(current) if(current->parent())
-	{	QString button = current->text(0);
-		QString remote = current->parent()->text(0);
-		theKCMLircBase->theButtonLabel->setText(remote + ": <b>" + button + "</b>");
-		for(QValueList<IRAction>::iterator i = allActions.begin(); i != allActions.end(); i++)
-			if((*i).Button == button && (*i).Remote == remote)
-				(*i).Item = new KListViewItem(theKCMLircBase->theActions, (*i).Program, (*i).Object + "::" + (*i).Method, (*i).ArgumentString(), (*i).Repeat ? "Yes" : "No");
-	}
-}
-
-// TODO: implement add/remove action
-
 void KCMLirc::defaults()
 {
 	// insert your default settings code here...
@@ -188,7 +196,9 @@ void KCMLirc::save()
 	{	QString Binding = "Binding" + QString().setNum(i);
 		int numArguments = theConfig.readNumEntry(Binding + "Arguments");
 		for(int j = 0; j < numArguments; j++)
-			theConfig.deleteEntry(Binding + "Argument" + QString().setNum(j));
+		{	theConfig.deleteEntry(Binding + "Argument" + QString().setNum(j));
+			theConfig.deleteEntry(Binding + "ArgumentType" + QString().setNum(j));
+		}
 		theConfig.deleteEntry(Binding + "Arguments"); theConfig.deleteEntry(Binding + "Program");
 		theConfig.deleteEntry(Binding + "Object"); theConfig.deleteEntry(Binding + "Method");
 		theConfig.deleteEntry(Binding + "Remote"); theConfig.deleteEntry(Binding + "Button");
@@ -196,24 +206,31 @@ void KCMLirc::save()
 	}
 
 	// save the new ones
-	theConfig.writeEntry("Bindings", allActions.count());
-	for(unsigned i = 0; i < allActions.count(); i++)
-	{	QString Binding = "Binding" + QString().setNum(i);
-		theConfig.writeEntry(Binding + "Arguments", allActions[i].Arguments.count());
-		for(unsigned j = 0; j < allActions[i].Arguments.count(); j++)
-		{	QVariant::Type preType = allActions[i].Arguments[j].type();
-			if(preType == QVariant::CString) allActions[i].Arguments[j].cast(QVariant::String);
-			theConfig.writeEntry(Binding + "Argument" + QString().setNum(j), allActions[i].Arguments[j]);
-			theConfig.writeEntry(Binding + "ArgumentType" + QString().setNum(j), preType);
+	int index = 0;
+	for(IRActions::iterator k = allActions.begin(); k != allActions.end(); k++)
+	{	QValueList<IRAction> &theActions = k.data();
+		for(QValueList<IRAction>::iterator i = theActions.begin(); i != theActions.end(); i++,index++)
+		{	QString Binding = "Binding" + QString().setNum(index);
+			theConfig.writeEntry(Binding + "Arguments", (*i).Arguments.count());
+			for(unsigned j = 0; j < (*i).Arguments.count(); j++)
+			{	QVariant::Type preType = (*i).Arguments[j].type();
+				if(preType == QVariant::CString) (*i).Arguments[j].cast(QVariant::String);
+				theConfig.writeEntry(Binding + "Argument" + QString().setNum(j), (*i).Arguments[j]);
+				theConfig.writeEntry(Binding + "ArgumentType" + QString().setNum(j), preType);
+			}
+			theConfig.writeEntry(Binding + "Program", (*i).Program);
+			theConfig.writeEntry(Binding + "Object", (*i).Object);
+			theConfig.writeEntry(Binding + "Method", (*i).Method);
+			theConfig.writeEntry(Binding + "Remote", (*i).Remote);
+			theConfig.writeEntry(Binding + "Button", (*i).Button);
+			theConfig.writeEntry(Binding + "Repeat", (*i).Repeat);
 		}
-		theConfig.writeEntry(Binding + "Program", allActions[i].Program);
-		theConfig.writeEntry(Binding + "Object", allActions[i].Object);
-		theConfig.writeEntry(Binding + "Method", allActions[i].Method);
-		theConfig.writeEntry(Binding + "Remote", allActions[i].Remote);
-		theConfig.writeEntry(Binding + "Button", allActions[i].Button);
-		theConfig.writeEntry(Binding + "Repeat", allActions[i].Repeat);
 	}
+	theConfig.writeEntry("Bindings", index + 1);
 
+	theConfig.sync();
+
+	IRKick_stub("irkick", "IRKick").reloadConfiguration();
 	emit changed(true);
 }
 

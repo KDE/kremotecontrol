@@ -2,6 +2,7 @@
 #define _KCMLIRC_H_
 
 #include <qstringlist.h>
+#include <qmap.h>
 
 #include <kcmodule.h>
 #include <kaboutdata.h>
@@ -9,23 +10,9 @@
 #include <dcopobject.h>
 
 #include "kcmlircbase.h"
+#include "iractions.h"
 
 class QListViewItem;
-
-class IRAction
-{
-public:
-	QString Program, Object, Method, Remote, Button;
-	QValueList<QVariant> Arguments;
-	bool Repeat;
-
-	QListViewItem *Item;
-public:
-	const QString ArgumentString() const;
-
-	IRAction(const QString &theProgram, const QString &theObject, const QString &theMethod, const QValueList<QVariant> &theArguments, const QString &theRemote, const QString &theButton, bool theRepeat);
-	IRAction() { Program = QString::null; };
-};
 
 class KCMLirc: public KCModule, virtual public DCOPObject
 {
@@ -35,7 +22,8 @@ class KCMLirc: public KCModule, virtual public DCOPObject
 private:
 	KAboutData *myAboutData;
 	KCMLircBase *theKCMLircBase;
-	QValueList<IRAction> allActions;
+	IRActions allActions;
+	QMap<QListViewItem *, QValueListIterator<IRAction> > actionMap;
 
 public slots:
 	void configChanged();

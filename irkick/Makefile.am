@@ -3,10 +3,10 @@ bin_PROGRAMS = irkick
 
 ## INCLUDES were found outside kdevelop specific part
 
-noinst_HEADERS = irkick.h main.h
+noinst_HEADERS = irkick.h main.h iraction.h arguments.h iractions.h prototype.h klircclient.h
 include_HEADERS = irkick_stub.cpp irkick_stub.h
 
-irkick_SOURCES = main.cpp irkick.cpp irkick.skel irkick.stub
+irkick_SOURCES = main.cpp irkick.cpp irkick.skel irkick.stub iraction.cpp arguments.cpp iractions.cpp prototype.cpp klircclient.cpp
 irkick_LDADD = $(LIB_QT) $(LIB_KDECORE) $(LIB_KDEUI) $(LIBSOCKET)
 
 EXTRA_DIST = main.cpp irkick.desktop hi32-app-irkick.png hi16-app-irkick.png lo32-app-irkick.png lo16-app-irkick.png
@@ -53,7 +53,7 @@ uninstall-local:
 # kde_designerdir     Where Qt Designer plugins should go to (new in KDE 3).
 
 # set the include path for X, qt and KDE
-INCLUDES= $(all_includes)
+INCLUDES = $(all_includes)
 
 METASOURCES = AUTO
 

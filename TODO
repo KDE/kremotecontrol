@@ -1,3 +1,17 @@
-Code overhaul.
-More advanced features implementing.
+kdmlirc:
+* Edit action!
+* Advanced (non-wizard) Add action?
+* Controllers/Profiles:
+	* XML reading of profiles
+	* DTD
+	* Scan all paths they could be
+	* Install to correct paths
+* Profiles:
+	* Update interface to hide DCOP specifics
+	* Update interface (wizard) for page at start to allow selection of profiled app
+* Modes:
+	* Update interface to allow mode changing actions visible
 
+irkick:
+* Better icon!
+* Other IPC mechanisms (save for 2.0!)

@@ -24,6 +24,7 @@ class AddAction : public AddActionBase
 
 	const QStringList getFunctions(const QString app, const QString obj);
 	QValueList< QPair<QString, QString> > extractParameters(const QString &prototype);
+	int curPage;
 
 public slots:
 	virtual void updateFunctions();

@@ -87,7 +87,7 @@
                     </property>
                     <item>
                         <property name="text">
-                            <string>Noatun</string>
+                            <string>Marquis</string>
                         </property>
                         <property name="pixmap">
                             <pixmap></pixmap>
@@ -95,7 +95,7 @@
                     </item>
                     <item>
                         <property name="text">
-                            <string>Marquis</string>
+                            <string>Noatun</string>
                         </property>
                         <property name="pixmap">
                             <pixmap></pixmap>
@@ -311,6 +311,66 @@
             </widget>
         </vbox>
     </widget>
+    <widget class="QWidget">
+        <property name="name">
+            <cstring>page</cstring>
+        </property>
+        <attribute name="title">
+            <string>Finishing Up</string>
+        </attribute>
+        <vbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel1</cstring>
+                </property>
+                <property name="text">
+                    <string>&lt;b&gt;Miscellaneous Options&lt;/b&gt;</string>
+                </property>
+            </widget>
+            <widget class="Line">
+                <property name="name">
+                    <cstring>line1</cstring>
+                </property>
+                <property name="frameShape">
+                    <enum>HLine</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Sunken</enum>
+                </property>
+                <property name="orientation">
+                    <enum>Horizontal</enum>
+                </property>
+            </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>theRepeat</cstring>
+                </property>
+                <property name="text">
+                    <string>&amp;This action is repeatable if the button is held down</string>
+                </property>
+            </widget>
+            <spacer>
+                <property name="name">
+                    <cstring>spacer1</cstring>
+                </property>
+                <property name="orientation">
+                    <enum>Vertical</enum>
+                </property>
+                <property name="sizeType">
+                    <enum>Expanding</enum>
+                </property>
+                <property name="sizeHint">
+                    <size>
+                        <width>20</width>
+                        <height>111</height>
+                    </size>
+                </property>
+            </spacer>
+        </vbox>
+    </widget>
 </widget>
 <connections>
     <connection>
@@ -330,18 +390,6 @@
         <signal>currentChanged(QListViewItem*)</signal>
         <receiver>AddActionBase</receiver>
         <slot>updateButtonStates()</slot>
-    </connection>
-    <connection>
-        <sender>AddActionBase</sender>
-        <signal>selected(const QString&amp;)</signal>
-        <receiver>AddActionBase</receiver>
-        <slot>updateParameters()</slot>
-    </connection>
-    <connection>
-        <sender>AddActionBase</sender>
-        <signal>selected(const QString&amp;)</signal>
-        <receiver>AddActionBase</receiver>
-        <slot>updateParameter()</slot>
     </connection>
     <connection>
         <sender>theCurValue</sender>
