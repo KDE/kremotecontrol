@@ -805,9 +805,6 @@
                                 <property name="text">
                                     <string>&amp;Ignore the action</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+I</string>
-                                </property>
                                 <property name="checked">
                                     <bool>true</bool>
                                 </property>
@@ -822,9 +819,6 @@
                                 <property name="text">
                                     <string>Send the action to the instance hi&amp;ghest in window stacking order</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+G</string>
-                                </property>
                             </widget>
                             <widget class="QRadioButton">
                                 <property name="name">
@@ -836,9 +830,6 @@
                                 <property name="text">
                                     <string>Send the action to the instance &amp;lowest in window stacking order</string>
                                 </property>
-                                <property name="accel">
-                                    <string>Alt+L</string>
-                                </property>
                             </widget>
                             <widget class="QRadioButton">
                                 <property name="name">
@@ -849,9 +840,6 @@
                                 </property>
                                 <property name="text">
                                     <string>Send the action to all i&amp;nstances</string>
-                                </property>
-                                <property name="accel">
-                                    <string>Alt+N</string>
                                 </property>
                             </widget>
                         </vbox>
@@ -928,9 +916,6 @@
                     <property name="text">
                         <string>&amp;OK</string>
                     </property>
-                    <property name="accel">
-                        <string></string>
-                    </property>
                     <property name="autoDefault">
                         <bool>true</bool>
                     </property>
@@ -944,9 +929,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;Cancel</string>
-                    </property>
-                    <property name="accel">
-                        <string></string>
                     </property>
                     <property name="autoDefault">
                         <bool>true</bool>

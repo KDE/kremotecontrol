@@ -1021,9 +1021,6 @@
                 <property name="text">
                     <string>This action causes the application to &amp;start if not already running</string>
                 </property>
-                <property name="accel">
-                    <string>Alt+S</string>
-                </property>
                 <property name="checked">
                     <bool>true</bool>
                 </property>
@@ -1125,9 +1122,6 @@
                         <property name="text">
                             <string>&amp;Ignore the action</string>
                         </property>
-                        <property name="accel">
-                            <string>Alt+I</string>
-                        </property>
                         <property name="checked">
                             <bool>true</bool>
                         </property>
@@ -1142,9 +1136,6 @@
                         <property name="text">
                             <string>Send the action to the instance hi&amp;ghest in the window stacking order</string>
                         </property>
-                        <property name="accel">
-                            <string>Alt+G</string>
-                        </property>
                     </widget>
                     <widget class="QRadioButton">
                         <property name="name">
@@ -1156,9 +1147,6 @@
                         <property name="text">
                             <string>Send the action to the instance &amp;lowest in window stacking order</string>
                         </property>
-                        <property name="accel">
-                            <string>Alt+L</string>
-                        </property>
                     </widget>
                     <widget class="QRadioButton">
                         <property name="name">
@@ -1169,9 +1157,6 @@
                         </property>
                         <property name="text">
                             <string>Send the action to &amp;all instances</string>
-                        </property>
-                        <property name="accel">
-                            <string>Alt+A</string>
                         </property>
                     </widget>
                 </vbox>

@@ -181,9 +181,6 @@
             <property name="text">
                 <string>Mo&amp;de is the default for its remote control</string>
             </property>
-            <property name="accel">
-                <string>Alt+D</string>
-            </property>
         </widget>
         <spacer>
             <property name="name">
