@@ -228,7 +228,7 @@ void AddAction::updateParameters()
 	{
 		Prototype p(theFunctions->currentItem()->text(2));
 		for(unsigned k = 0; k < p.count(); k++)
-		{	new KListViewItem(theParameters, p.name(k) == "" ? i18n( "<anonymous>" ) : p.name(k), "", p.type(k), QString().setNum(k + 1));
+		{	new KListViewItem(theParameters, p.name(k).isEmpty() ? i18n( "<anonymous>" ) : p.name(k), "", p.type(k), QString().setNum(k + 1));
 			theArguments.append(QVariant(""));
 			theArguments.back().cast(QVariant::nameToType(p.type(k).utf8()));
 		}

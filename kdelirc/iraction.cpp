@@ -93,13 +93,13 @@ void IRAction::saveToConfig(KConfig &theConfig, int index) const
 const QString IRAction::function() const
 {
 	ProfileServer *theServer = ProfileServer::profileServer();
-	if(theProgram == "")
-		if(theObject == "")
+	if(theProgram.isEmpty())
+		if(theObject.isEmpty())
 			return i18n("Exit mode");
 		else
 			return i18n("Switch to %1").arg(theObject);
 	else
-		if(theObject == "")
+		if(theObject.isEmpty())
 			return i18n("Just start");
 		else
 		{
@@ -131,7 +131,7 @@ const QString IRAction::notes() const
 const QString IRAction::application() const
 {
 	ProfileServer *theServer = ProfileServer::profileServer();
-	if(theProgram == "")
+	if(theProgram.isEmpty())
 		return "";
 	else
 	{
