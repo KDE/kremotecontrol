@@ -1,0 +1,131 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
+  <!ENTITY irkick "<application>IRKick</application>">
+  <!ENTITY kdelirc "<application>KDE LIRC</application>">
+  <!ENTITY kappname "&irkick;">
+  <!ENTITY package "kdeutils">
+  <!ENTITY % English "INCLUDE" > <!-- change language only here -->
+  <!ENTITY % addindex "IGNORE">
+]>
+
+<book lang="&language;">
+<bookinfo>
+
+<title>&irkick;: The KDE LIRC Server Handbook</title>
+
+<authorgroup>
+<author>
+<firstname>Gav</firstname>
+<surname>Wood</surname>
+<affiliation>
+	<address><email>gav@kde.org</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+
+<date>2004-01-02</date>
+<releaseinfo>1.0</releaseinfo>
+
+<copyright>
+<year>2004</year>
+<holder>Gav Wood</holder>
+</copyright>
+
+<legalnotice>&FDLNotice;</legalnotice>
+
+<abstract><para>&kdelirc; is the infrastructure for the KDE's
+Infrared Remote Control functionality; &irkick; is the server
+component of that infrastructure.</para></abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>irkick</keyword>
+<keyword>kdelirc</keyword>
+<keyword>kcmlirc</keyword>
+<keyword>lirc</keyword>
+</keywordset>
+
+</bookinfo>
+
+<chapter id="introduction">
+<title>Introduction</title>
+
+<para>
+&irkick; is a background server that provides the 'glue' between
+the operating system and your KDE applications for the purpose of
+controlling KDE applications with your infrared remote controls.
+</para>
+
+<para>
+It has a configuration tool, which may be accessed either by the
+KDE Control Center or directly from the menu of &irkick;.
+</para>
+
+<sect1 id="requirements">
+<title>Requirements</title>
+
+<para>
+For the KDELirc framework to be utilised you must have setup a LIRC
+on your KDE machine. If it is properly set up, the &irkick; icon in
+the system tray will light up red. If not, it will be grey and crossed
+out.
+</para>
+
+<para>
+For more information about LIRC, visit their website at http://www.lirc.org.
+</para>
+
+</sect1>
+</chapter>
+
+<chapter id="using-irkick">
+<title>Using &irkick;</title>
+
+<para>
+&irkick; provides one main function: When a button on a remote control is
+pressed, it will temporarily become lit up. Aside from this &irkick; does
+little for the user directly aside from telling them of the activity of their
+remote controls.
+</para>
+
+<para>
+Using the right-mouse-button menu, you can configure the KDE infrared remote
+control framework.
+</para>
+
+</chapter>
+
+<chapter id="credits">
+<title>Credits and Licenses</title>
+
+<para>&kdelirc;: The KDE LIRC Framework Copyright (c) 2004 Gav Wood
+<email>gav@kde.org</email>.</para>
+
+<!-- TRANS:CREDIT_FOR_TRANSLATORS -->
+
+&underFDL;
+&underGPL;
+
+</chapter>
+
+<appendix id="installation">
+<title>Installation</title>
+
+&install.intro.documentation;
+&install.compile.documentation;
+
+</appendix>
+</book>
+
+<!--
+Local Variables:
+mode: sgml
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+
+// vim:ts=2:sw=2:tw=78:noet
+-->
