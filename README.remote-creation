@@ -28,13 +28,16 @@ The LIRC ID is most important, and must be the identifier (look for the line
 "name <...>" after the "begin remote" line). put the text after "name" into "id"
 attribute of the "remote" tag in the "lircd.conf" file ("/etc/lircd.conf").
    In addition to this, fill in the author and name tags with your name and the
-"nice" name of the remote control:
+"nice" name of the remote control. Any extra information you may wish to give it
+(such as alternate names, multimedia bundles/system is comes with etc) may be
+enclosed between optional information tags:
 
 	<?xml version="1.0" ?>
 	<!DOCTYPE remote SYSTEM "remote.dtd">
 
 	<remote id="myremote">
 		<name>My Remote Control</name>
+		<information>As bundled with ACME LinTV</information>
 		<author>Me</author>
 	</remote>
 
@@ -66,7 +69,7 @@ case that this is not what you want, simply define it to be null (class="").
 		<author>Me</author>
 		<button id="0" class="number" parameter="0">
 		</button>
-		<button id="play" class="play">
+		<button id="rec" class="record">
 		</button>
 	</remote>
 
@@ -78,14 +81,17 @@ This would compliment a "lircd.conf" file:
 	  begin raw_codes
 	    name num0
 	    ...
-	    name play
+	    name rec
 	    ...
 	  end raw_codes
 	end remote
 
 c) The last thing to define in each of your buttons is the "nice" name. This may
 be descriptive and use spaces, symbols and mixed case text, in a similar fashion
-to the remote control's name.
+to the remote control's name. There is no need to copy the remote control's label
+verbatim. If neccessary expand the description to provide a readable, aethetically
+pleasing label e.g. you should name the "CC" button "Closed Captions" or the "Rec"
+button "Record".
 
 	<?xml version="1.0" ?>
 	<!DOCTYPE remote SYSTEM "remote.dtd">
@@ -96,8 +102,8 @@ to the remote control's name.
 		<button id="0" class="number" parameter="0">
 			<name>0</name>
 		</button>
-		<button id="play" class="play">
-			<name>Play</name>
+		<button id="rec" class="record">
+			<name>Record</name>
 		</button>
 	</remote>
 

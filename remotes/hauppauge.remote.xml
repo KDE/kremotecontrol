@@ -2,7 +2,8 @@
 <!DOCTYPE remote SYSTEM "remote.dtd">
 
 <remote id="Hauppauge">
-	<name>Hauppauge (WinTV pci, PVR and others)</name>
+	<name>Hauppauge</name>
+	<information>Bundled with WinTV PCI, PVR</information>
 	<author>Dirk Ziegelmeier</author>
 	<button id="0" class="number" parameter="0"/>
 	<button id="1" class="number" parameter="1"/>
