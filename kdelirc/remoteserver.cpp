@@ -73,8 +73,7 @@ bool Remote::characters(const QString &data)
 bool Remote::startElement(const QString &, const QString &, const QString &name, const QXmlAttributes &attributes)
 {
 	if(name == "remote")
-	{	theId = theName = attributes.value("id");
-	}
+		theId = theName = attributes.value("id");
 	else if(name == "button")
 	{
 		curRB = new RemoteButton();

@@ -1,6 +1,28 @@
 <remote id="cimr100">
 	<name>Creative CIMR-100</name>
 	<author>Gav Wood</author>
-	<button id="0"/>	<!-- name defaults to id -->
+	<button id="0"/>
+	<button id="1"/>
+	<button id="2"/>
+	<button id="3"/>
+	<button id="4"/>
+	<button id="5"/>
+	<button id="6"/>
+	<button id="7"/>
+	<button id="8"/>
+	<button id="9"/>
+	<button id="back"><name>Back</name></button>
+	<button id="eject"><name>Eject</name></button>
+	<button id="fastforward"><name>Fast Forward</name></button>
+	<button id="mouse"><name>Mouse</name></button>
+	<button id="mute"><name>Mute</name></button>
+	<button id="pause"><name>Pause</name></button>
 	<button id="play"><name>Play</name></button>
+	<button id="next"><name>Next</name></button>
+	<button id="rewind"><name>Rewind</name></button>
+	<button id="shift"><name>Shift</name></button>
+	<button id="start"><name>Start</name></button>
+	<button id="stop"><name>Stop</name></button>
+	<button id="voldown"><name>Volume Down</name></button>
+	<button id="volup"><name>Volume Up</name></button>
 </remote>
