@@ -51,6 +51,7 @@ K_EXPORT_COMPONENT_FACTORY(kcmlirc, theFactory("kcmlirc"));
 
 KCMLirc::KCMLirc(QWidget *parent, const char *name, QStringList /*args*/) : KCModule(parent, name), DCOPObject("KCMLirc")
 {
+    KGlobal::locale()->insertCatalogue( "kdelirc" );
 	bool ok;
 	KApplication::kApplication()->dcopClient()->remoteInterfaces("irkick", "IRKick", &ok);
 	if(!ok)

@@ -23,11 +23,12 @@ extern "C" int kdemain(int argc, char *argv[])
 	aboutData->addCredit("Malte Starostik", I18N_NOOP("Original LIRC interface code"), "malte.starostik@t-online.de");
 	aboutData->addCredit("Dirk Ziegelmeier", I18N_NOOP("Ideas, concept code"), "dirk@ziegelmeier.net");
 	aboutData->addCredit("Zsolt Rizsanyi", I18N_NOOP("Random patches"), "rizsanyi@myrealbox.com");
-	aboutData->addCredit("Antonio Larrosa Jiménez", I18N_NOOP("Ideas"), "larrosa@kde.org");
+	aboutData->addCredit("Antonio Larrosa JimÃ©nez", I18N_NOOP("Ideas"), "larrosa@kde.org");
 
 	KCmdLineArgs::init( argc, argv, aboutData );
 	KUniqueApplication::addCmdLineOptions();
 	KUniqueApplication app;
+    KGlobal::locale()->insertCatalogue( "kdelirc" );
 	app.disableSessionManagement();
 	IRKick *theIRKick = new IRKick("IRKick");
 

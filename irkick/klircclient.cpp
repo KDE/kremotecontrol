@@ -24,6 +24,7 @@
 #include <qtooltip.h>
 #include <qsocket.h>
 #include <qsocketnotifier.h>
+#include <qfile.h>
 
 #include <kapplication.h>
 #include <ksystemtray.h>
@@ -40,6 +41,7 @@
 #include <dcopref.h>
 
 #include "klircclient.h"
+
 
 KLircClient::KLircClient(QWidget *parent, const char *name) : QObject(parent, name), theSocket(0), listIsUpToDate(false)
 {
@@ -218,7 +220,7 @@ const QString KLircClient::readLine()
 void KLircClient::sendCommand(const QString &command)
 {
 	QString cmd = command + "\n";
-	theSocket->writeBlock(cmd.latin1(), cmd.length());
+	theSocket->writeBlock(QFile::encodeName( cmd ), cmd.length());
 }
 
 

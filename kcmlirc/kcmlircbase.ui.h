@@ -14,9 +14,9 @@ void KCMLircBase::init()
 	delete theModes;
 	modeLayout->removeItem(modeButtonLayout);
 	theModes = new ModesList(dynamic_cast<QWidget *>(modeLayout->parent()), "theModes");
-	theModes->addColumn(tr2i18n("Remote Control"));
-	theModes->addColumn(tr2i18n("Default"));
-	theModes->addColumn(tr2i18n("Icon"));
+	theModes->addColumn(i18n("Remote Control"));
+	theModes->addColumn(i18n("Default"));
+	theModes->addColumn(i18n("Icon"));
 	theModes->setAcceptDrops(true);
 	theModes->setRootIsDecorated(true);
 	theModes->setItemsRenameable(true);

@@ -21,8 +21,8 @@ xdg_apps_DATA = irkick.desktop
 autostartdir = $(prefix)/share/autostart
 autostart_DATA = irkick.desktop
 
-#messages:
-#	$(XGETTEXT) *.cpp -o $(podir)/irkick.pot
+messages:
+	$(XGETTEXT) *.cpp -o $(podir)/irkick.pot
 
 dummy.cpp:
 	echo > dummy.cpp

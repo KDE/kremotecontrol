@@ -22,6 +22,7 @@
 #include <kmessagebox.h>
 #include <knuminput.h>
 #include <keditlistbox.h>
+#include <klocale.h>
 
 #include <dcopclient.h>
 #include <irkick_stub.h>
@@ -95,7 +96,9 @@ void AddAction::updateButton(const QString &remote, const QString &button)
 		theButtons->ensureItemVisible(theButtons->findItem(RemoteServer::remoteServer()->getButtonName(remote, button), 0));
 	}
 	else
-		KMessageBox::error(this, "You did not select a mode of that remote control. Please use " + theMode.remoteName() + ", or revert back to select a different mode.", "Incorrect remote control detected");
+		KMessageBox::error(this, i18n( "You did not select a mode of that remote control. Please use %1, "
+                                       "or revert back to select a different mode." ).arg( theMode.remoteName() ),
+                                       i18n( "Incorrect remote control detected" ));
 
 	if(indexOf(currentPage()) == 1)
 		requestNextPress();
@@ -223,7 +226,7 @@ void AddAction::updateParameters()
 	{
 		Prototype p(theFunctions->currentItem()->text(2));
 		for(unsigned k = 0; k < p.count(); k++)
-		{	new KListViewItem(theParameters, p.name(k) == "" ? "<anonymous>" : p.name(k), "", p.type(k), QString().setNum(k + 1));
+		{	new KListViewItem(theParameters, p.name(k) == "" ? i18n( "<anonymous>" ) : p.name(k), "", p.type(k), QString().setNum(k + 1));
 			theArguments.append(QVariant(""));
 			theArguments.back().cast(QVariant::nameToType(p.type(k).utf8()));
 		}
@@ -334,7 +337,7 @@ void AddAction::updateObjects()
 	QCStringList theApps = theClient->registeredApplications();
 	for(QCStringList::iterator i = theApps.begin(); i != theApps.end(); i++)
 	{
-		if(!QString(*i).find("anonymous")) continue;
+		if(!QString(*i).find(i18n( "<anonymous>" ))) continue;
 		QRegExp r("(.*)-[0-9]+");
 		QString name = r.exactMatch(QString(*i)) ? r.cap(1) : *i;
 		if(names.contains(name)) continue;
