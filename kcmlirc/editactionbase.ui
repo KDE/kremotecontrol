@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>535</width>
-            <height>487</height>
+            <width>508</width>
+            <height>666</height>
         </rect>
     </property>
     <property name="caption">
@@ -56,24 +56,13 @@
                             </property>
                             <widget class="QLayoutWidget">
                                 <property name="name">
-                                    <cstring>layout18</cstring>
+                                    <cstring>layout40</cstring>
                                 </property>
                                 <grid>
                                     <property name="name">
                                         <cstring>unnamed</cstring>
                                     </property>
-                                    <widget class="QLabel" row="3" column="1">
-                                        <property name="name">
-                                            <cstring>textLabel4_3</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>O&amp;bject:</string>
-                                        </property>
-                                        <property name="buddy" stdset="0">
-                                            <cstring>theDCOPObjects</cstring>
-                                        </property>
-                                    </widget>
-                                    <widget class="QComboBox" row="2" column="2">
+                                    <widget class="QComboBox" row="2" column="3">
                                         <property name="name">
                                             <cstring>theDCOPApplications</cstring>
                                         </property>
@@ -89,7 +78,77 @@
                                             </sizepolicy>
                                         </property>
                                     </widget>
-                                    <widget class="QLabel" row="4" column="1">
+                                    <widget class="QLabel" row="3" column="1" rowspan="1" colspan="2">
+                                        <property name="name">
+                                            <cstring>textLabel4_3</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>O&amp;bject:</string>
+                                        </property>
+                                        <property name="buddy" stdset="0">
+                                            <cstring>theDCOPObjects</cstring>
+                                        </property>
+                                    </widget>
+                                    <widget class="QButtonGroup" row="1" column="1" rowspan="1" colspan="3">
+                                        <property name="name">
+                                            <cstring>buttonGroup5</cstring>
+                                        </property>
+                                        <property name="frameShape">
+                                            <enum>NoFrame</enum>
+                                        </property>
+                                        <property name="title">
+                                            <string></string>
+                                        </property>
+                                        <grid>
+                                            <property name="name">
+                                                <cstring>unnamed</cstring>
+                                            </property>
+                                            <property name="margin">
+                                                <number>0</number>
+                                            </property>
+                                            <widget class="QRadioButton" row="0" column="0">
+                                                <property name="name">
+                                                    <cstring>theNotJustStart</cstring>
+                                                </property>
+                                                <property name="sizePolicy">
+                                                    <sizepolicy>
+                                                        <hsizetype>3</hsizetype>
+                                                        <vsizetype>0</vsizetype>
+                                                        <horstretch>0</horstretch>
+                                                        <verstretch>0</verstretch>
+                                                    </sizepolicy>
+                                                </property>
+                                                <property name="text">
+                                                    <string>&amp;Perform Function:</string>
+                                                </property>
+                                                <property name="checked">
+                                                    <bool>true</bool>
+                                                </property>
+                                            </widget>
+                                            <widget class="QComboBox" row="0" column="1">
+                                                <property name="name">
+                                                    <cstring>theFunctions</cstring>
+                                                </property>
+                                                <property name="sizePolicy">
+                                                    <sizepolicy>
+                                                        <hsizetype>3</hsizetype>
+                                                        <vsizetype>0</vsizetype>
+                                                        <horstretch>0</horstretch>
+                                                        <verstretch>0</verstretch>
+                                                    </sizepolicy>
+                                                </property>
+                                            </widget>
+                                            <widget class="QRadioButton" row="1" column="0" rowspan="1" colspan="3">
+                                                <property name="name">
+                                                    <cstring>theJustStart</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>Just start application.</string>
+                                                </property>
+                                            </widget>
+                                        </grid>
+                                    </widget>
+                                    <widget class="QLabel" row="4" column="1" rowspan="1" colspan="2">
                                         <property name="name">
                                             <cstring>textLabel4_2</cstring>
                                         </property>
@@ -98,22 +157,6 @@
                                         </property>
                                         <property name="buddy" stdset="0">
                                             <cstring>theDCOPFunctions</cstring>
-                                        </property>
-                                    </widget>
-                                    <widget class="QComboBox" row="1" column="2">
-                                        <property name="name">
-                                            <cstring>theFunctions</cstring>
-                                        </property>
-                                    </widget>
-                                    <widget class="QRadioButton" row="0" column="0">
-                                        <property name="name">
-                                            <cstring>theUseProfile</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>&amp;Use application.</string>
-                                        </property>
-                                        <property name="checked">
-                                            <bool>true</bool>
                                         </property>
                                     </widget>
                                     <widget class="QLabel" row="0" column="1">
@@ -127,7 +170,7 @@
                                             <cstring>theApplications</cstring>
                                         </property>
                                     </widget>
-                                    <widget class="QComboBox" row="0" column="2">
+                                    <widget class="QComboBox" row="0" column="2" rowspan="1" colspan="2">
                                         <property name="name">
                                             <cstring>theApplications</cstring>
                                         </property>
@@ -140,26 +183,7 @@
                                             </sizepolicy>
                                         </property>
                                     </widget>
-                                    <widget class="QComboBox" row="3" column="2">
-                                        <property name="name">
-                                            <cstring>theDCOPObjects</cstring>
-                                        </property>
-                                        <property name="enabled">
-                                            <bool>false</bool>
-                                        </property>
-                                    </widget>
-                                    <widget class="QLabel" row="1" column="1">
-                                        <property name="name">
-                                            <cstring>textLabel4</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>&amp;Function:</string>
-                                        </property>
-                                        <property name="buddy" stdset="0">
-                                            <cstring>theFunctions</cstring>
-                                        </property>
-                                    </widget>
-                                    <widget class="QComboBox" row="4" column="2">
+                                    <widget class="QComboBox" row="4" column="3">
                                         <property name="name">
                                             <cstring>theDCOPFunctions</cstring>
                                         </property>
@@ -167,7 +191,18 @@
                                             <bool>false</bool>
                                         </property>
                                     </widget>
-                                    <widget class="QLabel" row="2" column="1">
+                                    <widget class="QRadioButton" row="0" column="0">
+                                        <property name="name">
+                                            <cstring>theUseProfile</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&amp;Use application.</string>
+                                        </property>
+                                        <property name="checked">
+                                            <bool>true</bool>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLabel" row="2" column="1" rowspan="1" colspan="2">
                                         <property name="name">
                                             <cstring>textLabel5_2</cstring>
                                         </property>
@@ -184,6 +219,14 @@
                                         </property>
                                         <property name="text">
                                             <string>Use &amp;DCOP.</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QComboBox" row="3" column="3">
+                                        <property name="name">
+                                            <cstring>theDCOPObjects</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
                                         </property>
                                     </widget>
                                 </grid>
@@ -922,6 +965,66 @@
         <signal>changed()</signal>
         <receiver>EditActionBase</receiver>
         <slot>slotParameterChanged()</slot>
+    </connection>
+    <connection>
+        <sender>theNotJustStart</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>theFunctions</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>theJustStart</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>theAutoStart</receiver>
+        <slot>setChecked(bool)</slot>
+    </connection>
+    <connection>
+        <sender>theNotJustStart</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>theRepeat</receiver>
+        <slot>setChecked(bool)</slot>
+    </connection>
+    <connection>
+        <sender>theNotJustStart</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>theAutoStart</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>theNotJustStart</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>theRepeat</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>theNotJustStart</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>theArguments</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>theNotJustStart</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>theValue</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>theUseProfile</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>theNotJustStart</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>theUseProfile</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>theJustStart</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>theUseProfile</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>theNotJustStart</receiver>
+        <slot>setChecked(bool)</slot>
     </connection>
 </connections>
 <tabstops>

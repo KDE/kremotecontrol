@@ -53,13 +53,22 @@ void EditAction::readFrom()
 	theDoBefore->setChecked((*theAction).doBefore());
 	theDoAfter->setChecked((*theAction).doAfter());
 	arguments = (*theAction).arguments();
-	if((*theAction).program() == "")
+	if((*theAction).isModeChange())
 	{	// change mode
 		theChangeMode->setChecked(true);
 		if((*theAction).object() == "")
 			theModes->setCurrentText(i18n("[Exit current mode]"));
 		else
 			theModes->setCurrentText((*theAction).object());
+	}
+	else if((*theAction).isJustStart())
+	{	// profile action
+		theUseProfile->setChecked(true);
+		const Profile *p = ProfileServer::profileServer()->profiles()[(*theAction).program()];
+		theApplications->setCurrentText(p->name());
+		updateFunctions();
+		updateArguments();
+		theJustStart->setChecked(true);
 	}
 	else if(ProfileServer::profileServer()->getAction((*theAction).program(), (*theAction).object(), (*theAction).method().prototype()))
 	{	// profile action
@@ -69,6 +78,7 @@ void EditAction::readFrom()
 		updateFunctions();
 		theFunctions->setCurrentText(a->name());
 		updateArguments();
+		theNotJustStart->setChecked(true);
 	}
 	else
 	{	// dcop action
@@ -95,13 +105,22 @@ void EditAction::writeBack()
 		(*theAction).setDoBefore(theDoBefore->isChecked());
 		(*theAction).setDoAfter(theDoAfter->isChecked());
 	}
-	else if(theUseProfile->isChecked() && ProfileServer::profileServer()->getAction(applicationMap[theApplications->currentText()], functionMap[theFunctions->currentText()]))
-	{
-		const ProfileAction *a = ProfileServer::profileServer()->getAction(applicationMap[theApplications->currentText()], functionMap[theFunctions->currentText()]);
-		(*theAction).setProgram(a->profile()->id());
-		(*theAction).setObject(a->objId());
-		(*theAction).setMethod(a->prototype());
-		(*theAction).setArguments(arguments);
+	else if(theUseProfile->isChecked() && (
+						ProfileServer::profileServer()->getAction(applicationMap[theApplications->currentText()], functionMap[theFunctions->currentText()])
+						||
+						theJustStart->isChecked() && ProfileServer::profileServer()->profiles()[theApplications->currentText()]
+						)
+		)
+	{	if(theJustStart->isChecked())
+		{	(*theAction).setProgram(ProfileServer::profileServer()->profiles()[applicationMap[theApplications->currentText()]]->id());
+			(*theAction).setObject("");
+		}
+		else
+		{	const ProfileAction *a = ProfileServer::profileServer()->getAction(applicationMap[theApplications->currentText()], functionMap[theFunctions->currentText()]);
+			(*theAction).setObject(a->objId());
+			(*theAction).setMethod(a->prototype());
+			(*theAction).setArguments(arguments);
+		}
 	}
 	else
 	{

@@ -71,7 +71,7 @@ void AddAction::slotCorrectPage()
 
 	if(curPage == 4 && (
 	(theUseDCOP->isChecked() && theFunctions->currentItem() && !Prototype(theFunctions->currentItem()->text(2)).count()) ||
-	(theUseProfile->isChecked() && theProfileFunctions->currentItem() && !theProfileFunctions->currentItem()->text(1).toInt())
+	(theUseProfile->isChecked() && (theProfileFunctions->currentItem() && !theProfileFunctions->currentItem()->text(1).toInt() || theJustStart->isChecked()))
 	))
 		showPage(((QWizard *)this)->page(lastPage == 5 ? (theUseDCOP->isChecked() ? 2 : 3) : 5));
 }
@@ -129,7 +129,7 @@ void AddAction::updateButtonStates()
 	{	case 0: setNextEnabled(currentPage(), theProfiles->currentItem() != 0 || !theUseProfile->isChecked()); break;
 		case 1: setNextEnabled(currentPage(), theButtons->currentItem() != 0); break;
 		case 2: setNextEnabled(currentPage(), theFunctions->currentItem() != 0); break;
-		case 3: setNextEnabled(currentPage(), theProfileFunctions->currentItem() != 0); break;
+		case 3: setNextEnabled(currentPage(), theProfileFunctions->currentItem() != 0 || theJustStart->isChecked()); break;
 		case 4: setNextEnabled(currentPage(), true); break;
 		case 5: setNextEnabled(currentPage(), false); setFinishEnabled(currentPage(), true); break;
 		case 6: setNextEnabled(currentPage(), false); setFinishEnabled(currentPage(), theModes->currentItem() || !theSwitchMode->isChecked()); break;

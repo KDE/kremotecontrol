@@ -93,13 +93,16 @@ const QString IRAction::function() const
 		else
 			return i18n("Switch to %1").arg(theObject);
 	else
-	{
-		const ProfileAction *a = theServer->getAction(theProgram, theObject, theMethod.prototype());
-		if(a)
-			return a->name();
+		if(theObject == "")
+			return i18n("Just start");
 		else
-			return theObject + "::" + theMethod.name();
-	}
+		{
+			const ProfileAction *a = theServer->getAction(theProgram, theObject, theMethod.prototype());
+			if(a)
+				return a->name();
+			else
+				return theObject + "::" + theMethod.name();
+		}
 }
 
 const QString IRAction::notes() const
@@ -108,6 +111,8 @@ const QString IRAction::notes() const
 	if(isModeChange())
 		return QString(theDoBefore ? i18n("Do actions before. ") : "") +
 			QString(theDoAfter ? i18n("Do actions after. ") : "");
+	else if(isJustStart())
+		return "";
 	else
 		return QString(theAutoStart ? i18n("Auto-start. ") : "") +
 			QString(theRepeat ? i18n("Repeatable. ") : "");
@@ -120,9 +125,9 @@ const QString IRAction::application() const
 		return "";
 	else
 	{
-		const ProfileAction *a = theServer->getAction(theProgram, theObject, theMethod.prototype());
+		const Profile *a = theServer->profiles()[theProgram];
 		if(a)
-			return a->profile()->name();
+			return a->name();
 		else
 			return theProgram;
 	}

@@ -156,11 +156,7 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int 
 				currentModes[theRemote] = (**i).modeChange();
 				Mode mode = allModes.getMode(theRemote, (**i).modeChange());
 				updateModeIcons();
-/*				if((**i).modeChange() != "")
-					KPassivePopup::message("IRKick", "Switching mode on <b>" + theRemote + "</b> to <b>" + (**i).modeChange() + "</b>.", SmallIcon("package_applications"), theTrayIcon);
-				else
-					KPassivePopup::message("IRKick", "Exiting mode on <b>" + theRemote + "</b>.", SmallIcon("package_applications"), theTrayIcon);
-*/				doBefore = (**i).doBefore();
+				doBefore = (**i).doBefore();
 				doAfter = (**i).doAfter();
 				break;
 			}
@@ -178,7 +174,7 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int 
 								KApplication::startServiceByName(sname);
 							}
 						}
-						if(theDC->isApplicationRegistered(QCString((**i).program())))
+						if(!(**i).isJustStart() && theDC->isApplicationRegistered(QCString((**i).program())))
 						{	QByteArray data; QDataStream arg(data, IO_WriteOnly);
 							kdDebug() << "Sending data (" << QCString((**i).program()) << ", " << QCString((**i).object()) << ", " << QCString((**i).method().prototypeNR()) << endl;
 							for(Arguments::const_iterator j = (**i).arguments().begin(); j != (**i).arguments().end(); j++)

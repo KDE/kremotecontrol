@@ -161,15 +161,23 @@ void KCMLirc::slotAddAction()
 			a.setArguments(theDialog.theArguments);
 		}
 		// profile?
-		else if(theDialog.theUseProfile->isChecked() && theDialog.theProfiles->selectedItem() && theDialog.theProfileFunctions->selectedItem())
+		else if(theDialog.theUseProfile->isChecked() && theDialog.theProfiles->selectedItem() && (theDialog.theProfileFunctions->selectedItem() || theDialog.theJustStart->isChecked()))
 		{
 			ProfileServer *theServer = ProfileServer::profileServer();
-			const ProfileAction *theAction = theServer->getAction(theDialog.profileMap[theDialog.theProfiles->selectedItem()], theDialog.profileFunctionMap[theDialog.theProfileFunctions->selectedItem()]);
-			a.setProgram(theAction->profile()->id());
-			a.setObject(theAction->objId());
-			a.setMethod(theAction->prototype());
-			theDialog.theParameters->setSorting(3);
-			a.setArguments(theDialog.theArguments);
+
+
+			if(theDialog.theNotJustStart->isChecked())
+			{	const ProfileAction *theAction = theServer->getAction(theDialog.profileMap[theDialog.theProfiles->selectedItem()], theDialog.profileFunctionMap[theDialog.theProfileFunctions->selectedItem()]);
+				a.setProgram(theAction->profile()->id());
+				a.setObject(theAction->objId());
+				a.setMethod(theAction->prototype());
+				theDialog.theParameters->setSorting(3);
+				a.setArguments(theDialog.theArguments);
+			}
+			else
+			{	a.setProgram(theServer->profiles()[theDialog.profileMap[theDialog.theProfiles->selectedItem()]]->id());
+				a.setObject("");
+			}
 		}
 
 		// save our new action

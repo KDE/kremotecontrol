@@ -50,7 +50,7 @@ public:
 	const QString &remote() const { return theRemote; }
 	const QString &mode() const { return theMode; }
 	const QString &button() const { return theButton; }
-	const Arguments &arguments() const { return theArguments; }
+	const Arguments arguments() const { if(theProgram != "" && theObject != "") return theArguments; return Arguments(); }
 	const bool repeat() const { return theRepeat; }
 	const bool autoStart() const { return theAutoStart; }
 
@@ -59,6 +59,7 @@ public:
 	const bool doAfter() const { return theDoAfter; }
 
 	bool isModeChange() const { return theProgram == ""; }
+	bool isJustStart() const { return theProgram != "" && theObject == ""; }
 
 	void setProgram(const QString &newProgram) { theProgram = newProgram; }
 	void setObject(const QString &newObject) { theObject = newObject; }
