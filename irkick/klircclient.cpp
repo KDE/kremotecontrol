@@ -211,3 +211,5 @@ void KLircClient::sendCommand(const QString &command)
 	theSocket->writeBlock(cmd.latin1(), cmd.length());
 }
 
+
+#include "klircclient.moc"

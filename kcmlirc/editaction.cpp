@@ -304,3 +304,5 @@ void EditAction::updateDCOPFunctions()
 		theDCOPFunctions->insertItem(*i);
 }
 
+
+#include "editaction.moc"

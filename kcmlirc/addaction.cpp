@@ -312,3 +312,5 @@ void AddAction::updateFunctions()
 	}
 }
 
+
+#include "addaction.moc"

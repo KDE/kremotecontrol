@@ -34,3 +34,5 @@ void EditMode::slotCheckText(const QString &newText)
 {
 	theOK->setEnabled(newText != "");
 }
+
+#include "editmode.moc"

@@ -30,3 +30,4 @@ bool ModesList::acceptDrag(QDropEvent *) const
 	return true;
 }
 
+#include "modeslist.moc"

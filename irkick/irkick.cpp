@@ -244,3 +244,5 @@ void IRKick::slotShowAbout()
 	delete about;
 }
 
+
+#include "irkick.moc"
