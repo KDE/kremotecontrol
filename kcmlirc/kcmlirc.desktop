@@ -20,4 +20,4 @@ X-KDE-FactoryName=kcmlirc
 X-KDE-Library=kcmlirc
 X-KDE-ModuleType=Library
 
-Categories=Qt;KDE;Settings;X-KDE-settings-peripherals
+Categories=Qt;KDE;X-KDE-settings-peripherals
