@@ -1,3 +1,5 @@
+SUBDIRS = icons
+
 bin_PROGRAMS =
 lib_LTLIBRARIES =
 noinst_LTLIBRARIES = libirkick_common.la
