@@ -36,6 +36,18 @@
 		<name>Remove Current</name>
 		<comment>Removes only the current track from the play list.</comment>
 	</action>
+	<action objid="Noatun" prototype="void toggleMute()" class="mute">
+		<name>Mute</name>
+		<comment>Toggle sound muting</comment>
+	</action>
+	<action objid="Noatun" prototype="void volumeUp()" class="volumeup" repeat="1">
+		<name>Volume Up</name>
+		<comment>Increase volume</comment>
+	</action>
+	<action objid="Noatun" prototype="void volumeDown()" class="volumedown" repeat="1">
+		<name>Volume Down</name>
+		<comment>Decrease volume</comment>
+	</action>
 	<action objid="Noatun" prototype="void setVolume(int volume)">
 		<name>Set Volume</name>
 		<comment>Sets the volume to a configurable amount.</comment>
