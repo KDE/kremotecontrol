@@ -50,6 +50,14 @@ K_EXPORT_COMPONENT_FACTORY(kcmlirc, theFactory("kcmlirc"));
 
 KCMLirc::KCMLirc(QWidget *parent, const char *name, QStringList /*args*/) : KCModule(parent, name), DCOPObject("KCMLirc")
 {
+	bool ok;
+	KApplication::kApplication()->dcopClient()->remoteInterfaces("kded", "irkick", &ok);
+	if(!ok)
+		if(KMessageBox::questionYesNo(this, "The infrared cemote control software is not currently running. This configuration module will not work properly without it. Would you like to start it now?", "Software not running") == KMessageBox::Yes)
+			DCOPRef("kded", "kded").call("loadModule", "irkick");
+
+
+
 	(new QHBoxLayout(this))->setAutoAdd(true);
 	theKCMLircBase = new KCMLircBase(this);
 	connect(theKCMLircBase->theModes, SIGNAL( selectionChanged(QListViewItem *) ), this, SLOT( updateActions() ));
