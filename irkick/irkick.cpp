@@ -138,19 +138,19 @@ void IRKick::updateModeIcons()
 #endif
 			}
 			currentModeIcons[i.key()]->setPixmap(KIconLoader().loadIcon(mode.iconFile(), KIcon::Panel));
-			QToolTip::add(currentModeIcons[i.key()], i18n(mode.remoteName() + ": <b>" + mode.name() + "</b>"));
+			QToolTip::add(currentModeIcons[i.key()], mode.remoteName() + ": <b>" + mode.name() + "</b>");
 		}
 	}
 }
 
-bool IRKick::getPrograms(const IRAction &action, QCStringList &programs)
+bool IRKick::getPrograms(const IRAction &action, QStringList &programs)
 {
 	DCOPClient *theDC = KApplication::dcopClient();
 	programs.clear();
 
 	if(action.unique())
-	{	if(theDC->isApplicationRegistered(QCString(action.program())))
-			programs += QCString(action.program());
+	{	if(theDC->isApplicationRegistered(action.program().utf8()))
+			programs += action.program();
 	}
 	else
 	{
@@ -158,7 +158,11 @@ bool IRKick::getPrograms(const IRAction &action, QCStringList &programs)
 		// find all instances...
 		QCStringList buf = theDC->registeredApplications();
 		for(QCStringList::iterator i = buf.begin(); i != buf.end(); i++)
-			if((*i).contains(r)) programs += *i;
+		{
+			QString program = QString::fromUtf8(*i);
+			if(program.contains(r))
+				programs += program;
+		}
 		if(programs.size() > 1 && action.ifMulti() == IM_DONTSEND)
 			return false;
 		else if(programs.size() > 1 && action.ifMulti() == IM_SENDTOTOP)
@@ -167,9 +171,9 @@ bool IRKick::getPrograms(const IRAction &action, QCStringList &programs)
 			for(QValueList<WId>::iterator i = s.fromLast(); i != s.end(); i--)
 			{	int p = KWin::info(*i).pid;
 				QString id = action.program() + "-" + QString().setNum(p);
-				if(programs.contains(QCString(id)))
+				if(programs.contains(id))
 				{	programs.clear();
-					programs += QCString(id);
+					programs += id;
 					break;
 				}
 			}
@@ -181,9 +185,9 @@ bool IRKick::getPrograms(const IRAction &action, QCStringList &programs)
 			for(QValueList<WId>::iterator i = s.begin(); i != s.end(); i++)
 			{	int p = KWin::info(*i).pid;
 				QString id = action.program() + "-" + QString().setNum(p);
-				if(programs.contains(QCString(id)))
+				if(programs.contains(id))
 				{	programs.clear();
-					programs += QCString(id);
+					programs += id;
 					break;
 				}
 			}
@@ -196,7 +200,7 @@ bool IRKick::getPrograms(const IRAction &action, QCStringList &programs)
 void IRKick::executeAction(const IRAction &action)
 {
 	DCOPClient *theDC = KApplication::dcopClient();
-	QCStringList programs;
+	QStringList programs;
 
 	if(!getPrograms(action, programs)) return;
 
@@ -213,11 +217,11 @@ void IRKick::executeAction(const IRAction &action)
 
 	if(!getPrograms(action, programs)) return;
 
-	for(QCStringList::iterator i = programs.begin(); i != programs.end(); i++)
-	{	const QCString &program = *i;
-		if(theDC->isApplicationRegistered(program))
+	for(QStringList::iterator i = programs.begin(); i != programs.end(); i++)
+	{	const QString &program = *i;
+		if(theDC->isApplicationRegistered(program.utf8()))
 		{	QByteArray data; QDataStream arg(data, IO_WriteOnly);
-			kdDebug() << "Sending data (" << QCString(program) << ", " << QCString(action.object()) << ", " << QCString(action.method().prototypeNR()) << endl;
+			kdDebug() << "Sending data (" << program << ", " << action.object() << ", " << action.method().prototypeNR() << endl;
 			for(Arguments::const_iterator j = action.arguments().begin(); j != action.arguments().end(); j++)
 			{	kdDebug() << "Got argument..." << endl;
 				switch((*j).type())
@@ -230,7 +234,7 @@ void IRKick::executeAction(const IRAction &action)
 					default: arg << (*j).toString(); break;
 				}
 			}
-			theDC->send(QCString(program), QCString(action.object()), QCString(action.method().prototypeNR()), data);
+			theDC->send(program.utf8(), action.object().utf8(), action.method().prototypeNR().utf8(), data);
 		}
 	}
 }
@@ -245,7 +249,7 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int 
 		// send notifier by DCOP to npApp/npModule/npMethod(theRemote, theButton);
 		QByteArray data; QDataStream arg(data, IO_WriteOnly);
 		arg << theRemote << theButton;
-		KApplication::dcopClient()->send(QCString(theApp), QCString(npModule), QCString(npMethod), data);
+		KApplication::dcopClient()->send(theApp.utf8(), npModule.utf8(), npMethod.utf8(), data);
 	}
 	else
 	{

@@ -110,7 +110,7 @@ k_dcop:
 
 private:
 	void executeAction(const IRAction &action);
-	bool getPrograms(const IRAction &action, QCStringList &populous);
+	bool getPrograms(const IRAction &action, QStringList &populous);
 
 public:
 	IRKick(const QCString &obj);
