@@ -16,7 +16,7 @@ noinst_HEADERS = irkick.h klircclient.h irkick_stub.h
 EXTRA_DIST = main.cpp irkick.desktop hi32-app-irkick.png hi22-app-irkick.png hi16-app-irkick.png lo32-app-irkick.png lo16-app-irkick.png
 
 install-data-local:
-	$(mkinstalldirs) $(kde_appsdir)/Applications/
+	$(mkinstalldirs) $(kde_servicesdir)/kded/
 	$(INSTALL_DATA) $(srcdir)/irkick.desktop $(kde_appsdir)/Applications/irkick.desktop
 	$(mkinstalldirs) $(kde_icondir)/hicolor/22x22/apps/
 	$(INSTALL_DATA) $(srcdir)/hi22-app-irkick.png $(kde_icondir)/hicolor/22x22/apps/irkick.png
@@ -30,7 +30,7 @@ install-data-local:
 	$(INSTALL_DATA) $(srcdir)/lo16-app-irkick.png $(kde_icondir)/locolor/16x16/apps/irkick.png
 
 uninstall-local:
-	-rm -f $(kde_appsdir)/Applications/irkick.desktop
+	-rm -f $(kde_servicesdir)/kded/irkick.desktop
 	-rm -f $(kde_icondir)/hicolor/32x32/apps/irkick.png
 	-rm -f $(kde_icondir)/hicolor/22x22/apps/irkick.png
 	-rm -f $(kde_icondir)/hicolor/16x16/apps/irkick.png
