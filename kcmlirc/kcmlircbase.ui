@@ -10,7 +10,7 @@
             <x>0</x>
             <y>0</y>
             <width>854</width>
-            <height>540</height>
+            <height>542</height>
         </rect>
     </property>
     <property name="caption">
@@ -173,7 +173,7 @@
                                         <cstring>theModeLabel</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>textLabel2</string>
+                                        <string></string>
                                     </property>
                                 </widget>
                                 <widget class="KListView">
@@ -385,7 +385,7 @@
                                         <cstring>theInformationLabel</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>textLabel3</string>
+                                        <string></string>
                                     </property>
                                 </widget>
                                 <widget class="KListView">
