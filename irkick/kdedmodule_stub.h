@@ -6,6 +6,10 @@
 **
 *****************************************************************************/
 
+/* This is a machine-generated file, and may be distributed under the GPL
+   licence, as described in kdelibs/COPYING.
+*/
+
 #ifndef __KDEDMODULE_STUB__
 #define __KDEDMODULE_STUB__
 

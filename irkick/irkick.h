@@ -1,7 +1,7 @@
 /***************************************************************************
                           irkick.h  -  Interface of the main window
     copyright            : (C) 2002 by Gav Wood
-    email                : gav@indigoarchive.net
+    email                : gav@kde.org
 
 ***************************************************************************/
 

@@ -2,7 +2,7 @@
                           irkick.cpp  -  Implementation of the main window
                              -------------------
     copyright            : (C) 2002 by Gav Wood
-    email                : gav@indigoarchive.net
+    email                : gav@kde.org
 ***************************************************************************/
 
 // This program is free software.
