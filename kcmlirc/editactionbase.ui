@@ -327,7 +327,7 @@
                             <cstring>textLabel3</cstring>
                         </property>
                         <property name="text">
-                            <string>&lt;b&gt;Miscellaneous Options&lt;/b&gt;</string>
+                            <string>&lt;b&gt;DCOP/Application Action Options&lt;/b&gt;</string>
                         </property>
                     </widget>
                     <widget class="Line">
@@ -362,6 +362,70 @@
                     </widget>
                     <spacer>
                         <property name="name">
+                            <cstring>spacer20</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>491</width>
+                                <height>20</height>
+                            </size>
+                        </property>
+                    </spacer>
+                    <widget class="QLabel">
+                        <property name="name">
+                            <cstring>textLabel1_2</cstring>
+                        </property>
+                        <property name="text">
+                            <string>&lt;b&gt;Mode Change Options&lt;/b&gt;</string>
+                        </property>
+                    </widget>
+                    <widget class="Line">
+                        <property name="name">
+                            <cstring>line2_2</cstring>
+                        </property>
+                        <property name="frameShape">
+                            <enum>HLine</enum>
+                        </property>
+                        <property name="frameShadow">
+                            <enum>Sunken</enum>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>theDoBefore</cstring>
+                        </property>
+                        <property name="enabled">
+                            <bool>false</bool>
+                        </property>
+                        <property name="text">
+                            <string>E&amp;xecute all other actions before mode change (in original mode)</string>
+                        </property>
+                        <property name="checked">
+                            <bool>true</bool>
+                        </property>
+                    </widget>
+                    <widget class="QCheckBox">
+                        <property name="name">
+                            <cstring>theDoAfter</cstring>
+                        </property>
+                        <property name="enabled">
+                            <bool>false</bool>
+                        </property>
+                        <property name="text">
+                            <string>Exec&amp;ute all actions after mode change (in new mode)</string>
+                        </property>
+                    </widget>
+                    <spacer>
+                        <property name="name">
                             <cstring>spacer3</cstring>
                         </property>
                         <property name="orientation">
@@ -373,7 +437,7 @@
                         <property name="sizeHint">
                             <size>
                                 <width>20</width>
-                                <height>100</height>
+                                <height>180</height>
                             </size>
                         </property>
                     </spacer>
@@ -574,6 +638,42 @@
         <signal>clicked()</signal>
         <receiver>EditActionBase</receiver>
         <slot>updateArguments()</slot>
+    </connection>
+    <connection>
+        <sender>theUseProfile</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>theAutoStart</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>theUseDCOP</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>theAutoStart</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>theUseProfile</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>theRepeat</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>theUseDCOP</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>theRepeat</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>theChangeMode</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>theDoAfter</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>theChangeMode</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>theDoBefore</receiver>
+        <slot>setEnabled(bool)</slot>
     </connection>
 </connections>
 <tabstops>

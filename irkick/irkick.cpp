@@ -44,10 +44,16 @@ extern "C"
 IRKick::IRKick(const QCString &obj) : KDEDModule(obj), npApp(QString::null)
 {
 	theClient = new KLircClient();
+
 	theTrayIcon = new KSystemTray();
 	theTrayIcon->setPixmap(SmallIcon("irkick"));
-//	QToolTip::add(this, "Ready.");
+	QToolTip::add(theTrayIcon, "KDE Lirc Server: Ready.");
+
+	theResetCount = 0;
+	slotReloadConfiguration();
+	connect(theClient, SIGNAL(remotesRead()), this, SLOT(resetModes()));
 	connect(theClient, SIGNAL(commandReceived(const QString &, const QString &, int)), this, SLOT(gotMessage(const QString &, const QString &, int)));
+
 #if KDE_IS_VERSION(3, 1, 90)
 	theTrayIcon->contextMenu()->changeTitle(0, "IRKick");
 	theTrayIcon->contextMenu()->insertItem("Reload", this, SLOT(slotReloadConfiguration()));
@@ -55,7 +61,6 @@ IRKick::IRKick(const QCString &obj) : KDEDModule(obj), npApp(QString::null)
 	theTrayIcon->contextMenu()->insertItem("About KDE...", this, SLOT(slotShowAboutKDE()));
 	theTrayIcon->actionCollection()->action("file_quit")->setEnabled(false);
 #endif
-	slotReloadConfiguration();
 	aboutData = new KAboutData("irkick", I18N_NOOP("IRKick"), VERSION, I18N_NOOP("IRKick"), KAboutData::License_GPL, "(c) 2003, Gav Wood", 0, 0, "gav@kde.org");
 	aboutData->addAuthor("Gav Wood", 0, "gav@kde.org");
 	theTrayIcon->show();
@@ -66,15 +71,25 @@ IRKick::~IRKick()
 	delete theTrayIcon;
 }
 
+void IRKick::resetModes()
+{
+	if(theResetCount > 2)
+		KPassivePopup::message("IRKick", "Resetting all modes.", SmallIcon("package_applications"), theTrayIcon);
+
+	QStringList remotes = theClient->remotes();
+	for(QStringList::iterator i = remotes.begin(); i != remotes.end(); i++)
+		currentModes[*i] = allModes.getDefault(*i).name();
+	theResetCount++;
+}
+
 void IRKick::slotReloadConfiguration()
 {
 	// load configuration from config file
 	KSimpleConfig theConfig("irkickrc");
 	allActions.loadFromConfig(theConfig);
-	if(currentModes.count())
-	{	currentModes.clear();
-		KPassivePopup::message("IRKick", "Resetting all modes.", SmallIcon("package_applications"), theTrayIcon);
-	}
+	allModes.loadFromConfig(theConfig);
+	if(currentModes.count() && theResetCount > 2)
+		resetModes();
 }
 
 void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int theRepeatCounter)
@@ -102,29 +117,33 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int 
 		IRAItList l = allActions.findByModeButton(Mode(theRemote, currentModes[theRemote]), theButton);
 		if(currentModes[theRemote] != "")
 			l += allActions.findByModeButton(Mode(theRemote, ""), theButton);
-		if(!l.isEmpty())
-			for(IRAItList::const_iterator i = l.begin(); i != l.end(); i++)
-				if((**i).program() == "")
-				{	// mode switch
-					currentModes[theRemote] = (**i).object();
-					if((**i).object() != "")
-						KPassivePopup::message("IRKick", "Switching mode on <b>" + theRemote + "</b> to <b>" + (**i).object() + "</b>.", SmallIcon("package_applications"), theTrayIcon);
-					else
-						KPassivePopup::message("IRKick", "Exiting mode on <b>" + theRemote + "</b>.", SmallIcon("package_applications"), theTrayIcon);
-				}
+		bool doBefore = true, doAfter = false;
+		for(IRAItList::const_iterator i = l.begin(); i != l.end(); i++)
+			if((**i).isModeChange())
+			{	// mode switch
+				currentModes[theRemote] = (**i).modeChange();
+/*				if((**i).modeChange() != "")
+					KPassivePopup::message("IRKick", "Switching mode on <b>" + theRemote + "</b> to <b>" + (**i).modeChange() + "</b>.", SmallIcon("package_applications"), theTrayIcon);
 				else
-					if((**i).repeat() || !theRepeatCounter)
+					KPassivePopup::message("IRKick", "Exiting mode on <b>" + theRemote + "</b>.", SmallIcon("package_applications"), theTrayIcon);
+*/				doBefore = (**i).doBefore();
+				doAfter = (**i).doAfter();
+				break;
+			}
+
+		for(int after = 0; after < 2; after++)
+		{	if(doBefore && !after || doAfter && after)
+				for(IRAItList::const_iterator i = l.begin(); i != l.end(); i++)
+					if(!(**i).isModeChange() && ((**i).repeat() || !theRepeatCounter))
 					{	DCOPClient *theDC = KApplication::dcopClient();
 						if((**i).autoStart() && !theDC->isApplicationRegistered(QCString((**i).program())))
-						{	// start it up, and wait for it to become available
-							QString sname = ProfileServer::profileServer()->getServiceName((**i).program());
+						{	QString sname = ProfileServer::profileServer()->getServiceName((**i).program());
 							if(sname != QString::null)
 							{
 								KPassivePopup::message("IRKick", "Starting <b>" + (**i).application() + "</b>...", SmallIcon("package_applications"), theTrayIcon);
 								KApplication::startServiceByName(sname);
 							}
 						}
-
 						if(theDC->isApplicationRegistered(QCString((**i).program())))
 						{	QByteArray data; QDataStream arg(data, IO_WriteOnly);
 							kdDebug() << "Sending data (" << QCString((**i).program()) << ", " << QCString((**i).object()) << ", " << QCString((**i).method().prototypeNR()) << endl;
@@ -143,6 +162,12 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int 
 							theDC->send(QCString((**i).program()), QCString((**i).object()), QCString((**i).method().prototypeNR()), data);
 						}
 					}
+			if(!after && doAfter)
+			{	l = allActions.findByModeButton(Mode(theRemote, currentModes[theRemote]), theButton);
+				if(currentModes[theRemote] != "")
+					l += allActions.findByModeButton(Mode(theRemote, ""), theButton);
+			}
+		}
 	}
 }
 

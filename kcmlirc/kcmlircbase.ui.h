@@ -12,14 +12,14 @@
 void KCMLircBase::init()
 {
 	delete theModes;
-	leftLayout->removeItem(layout9);
-	theModes = new ModesList(dynamic_cast<QWidget *>(leftLayout->parent()), "theModes");
+	modeLayout->removeItem(modeButtonLayout);
+	theModes = new ModesList(dynamic_cast<QWidget *>(modeLayout->parent()), "theModes");
 	theModes->addColumn(tr2i18n("Remote Control"));
-	theModes->addColumn(tr2i18n("Actions"));
+	theModes->addColumn(tr2i18n("Default"));
 	theModes->setAcceptDrops(true);
 	theModes->setRootIsDecorated(true);
-	leftLayout->addWidget(theModes);
-	leftLayout->addLayout(layout9);
-	leftLayout->invalidate();
-	leftLayout->activate();
+	modeLayout->addWidget(theModes);
+	modeLayout->addLayout(modeButtonLayout);
+	modeLayout->invalidate();
+	modeLayout->activate();
 }

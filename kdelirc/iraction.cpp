@@ -14,12 +14,13 @@
 #include <qvariant.h>
 
 #include <kconfig.h>
+#include <klocale.h>
 
 #include "iraction.h"
 #include "profileserver.h"
 #include "remoteserver.h"
 
-IRAction::IRAction(const QString &newProgram, const QString &newObject, const QString &newMethod, const Arguments &newArguments, const QString &newRemote, const QString &newMode, const QString &newButton, bool newRepeat, bool newAutoStart)
+IRAction::IRAction(const QString &newProgram, const QString &newObject, const QString &newMethod, const Arguments &newArguments, const QString &newRemote, const QString &newMode, const QString &newButton, bool newRepeat, bool newAutoStart, bool newDoBefore, bool newDoAfter)
 {
 	theProgram = newProgram;
 	theObject = newObject;
@@ -29,6 +30,8 @@ IRAction::IRAction(const QString &newProgram, const QString &newObject, const QS
 	theMode = newMode;
 	theButton = newButton;
 	theRepeat = newRepeat;
+	theDoAfter = newDoAfter;
+	theDoBefore = newDoBefore;
 	theAutoStart = newAutoStart;
 }
 
@@ -50,6 +53,8 @@ const IRAction &IRAction::loadFromConfig(KConfig &theConfig, int index)
 	theMode = theConfig.readEntry(Binding + "Mode");
 	theButton = theConfig.readEntry(Binding + "Button");
 	theRepeat = theConfig.readBoolEntry(Binding + "Repeat");
+	theDoBefore = theConfig.readBoolEntry(Binding + "DoBefore");
+	theDoAfter = theConfig.readBoolEntry(Binding + "DoAfter");
 	theAutoStart = theConfig.readBoolEntry(Binding + "AutoStart");
 
 	return *this;
@@ -74,6 +79,8 @@ void IRAction::saveToConfig(KConfig &theConfig, int index) const
 	theConfig.writeEntry(Binding + "Mode", theMode);
 	theConfig.writeEntry(Binding + "Button", theButton);
 	theConfig.writeEntry(Binding + "Repeat", theRepeat);
+	theConfig.writeEntry(Binding + "DoBefore", theDoBefore);
+	theConfig.writeEntry(Binding + "DoAfter", theDoAfter);
 	theConfig.writeEntry(Binding + "AutoStart", theAutoStart);
 }
 
@@ -95,20 +102,15 @@ const QString IRAction::function() const
 	}
 }
 
-const QString IRAction::repeatable() const
+const QString IRAction::notes() const
 {
-	if(theProgram == "")
-		return "";
-	else
-		return theRepeat ? "Yes" : "No";
-}
 
-const QString IRAction::autoStartable() const
-{
-	if(theProgram == "")
-		return "";
+	if(isModeChange())
+		return QString(theDoBefore ? i18n("Do actions before. ") : "") +
+			QString(theDoAfter ? i18n("Do actions after. ") : "");
 	else
-		return theAutoStart ? "Yes" : "No";
+		return QString(theAutoStart ? i18n("Auto-start. ") : "") +
+			QString(theRepeat ? i18n("Repeatable. ") : "");
 }
 
 const QString IRAction::application() const

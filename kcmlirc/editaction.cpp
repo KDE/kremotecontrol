@@ -47,6 +47,8 @@ void EditAction::readFrom()
 {
 	theRepeat->setChecked((*theAction).repeat());
 	theAutoStart->setChecked((*theAction).autoStart());
+	theDoBefore->setChecked((*theAction).doBefore());
+	theDoAfter->setChecked((*theAction).doAfter());
 	arguments = (*theAction).arguments();
 	if((*theAction).program() == "")
 	{	// change mode
@@ -87,6 +89,8 @@ void EditAction::writeBack()
 			(*theAction).setObject("");
 		else
 			(*theAction).setObject(theModes->currentText());
+		(*theAction).setDoBefore(theDoBefore->isChecked());
+		(*theAction).setDoAfter(theDoAfter->isChecked());
 	}
 	else if(theUseProfile->isChecked() && ProfileServer::profileServer()->getAction(applicationMap[theApplications->currentText()], functionMap[theFunctions->currentText()]))
 	{

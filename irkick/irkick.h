@@ -22,6 +22,7 @@
 
 #include <dcopobject.h>
 
+#include "modes.h"
 #include "iractions.h"
 #include "klircclient.h"
 
@@ -33,6 +34,8 @@ class IRKick: public KDEDModule
 	QString npApp, npModule, npMethod;
 	QMap<QString, QString> currentModes;
 	IRActions allActions;
+	bool theResetCount;
+	Modes allModes;
 
 	KSystemTray *theTrayIcon;
 	KAboutData *aboutData;
@@ -42,8 +45,10 @@ signals:
 protected:
 	KLircClient *theClient;
 
+
 private slots:
 	void gotMessage(const QString &theRemote, const QString &theButton, int theRepeatCounter);
+	void resetModes();
 
 	void slotReloadConfiguration();
 	void slotShowAbout();

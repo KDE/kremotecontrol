@@ -31,6 +31,7 @@ private:
 	QMap<QListViewItem *, Mode> modeMap;
 	QMap<QListViewItem *, QString> profileMap, remoteMap;
 
+
 public slots:
 	void configChanged();
 	void updateActions();
@@ -39,6 +40,7 @@ public slots:
 	void updateInformation();
 	void slotAddMode();
 	void slotRemoveMode();
+	void slotSetDefaultMode();
 	void slotAddAction();
 	void slotEditAction();
 	void slotRemoveAction();

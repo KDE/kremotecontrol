@@ -31,6 +31,7 @@ typedef QValueList<Mode> ModeList;
 class Modes : protected QMap<QString, QMap<QString, Mode> >
 {
 	void purgeAllModes(KConfig &theConfig);
+	QMap<QString, QString> theDefaults;
 
 public:
 	void loadFromConfig(KConfig &theConfig);
@@ -38,7 +39,10 @@ public:
 
 	const Mode &getMode(const QString &remote, const QString &mode) const;
 	ModeList getModes(const QString &remote) const;
+	const Mode getDefault(const QString &remote) const;
+	bool isDefault(const Mode &mode) const;
 
+	void setDefault(const Mode &mode) { theDefaults[mode.remote()] = mode.name(); }
 	void erase(const Mode &mode);
 	void add(const Mode &mode);
 

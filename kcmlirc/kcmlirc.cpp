@@ -54,6 +54,7 @@ KCMLirc::KCMLirc(QWidget *parent, const char *name, QStringList /*args*/) : KCMo
 	connect((QObject *)(theKCMLircBase->theRemoveAction), SIGNAL( clicked() ), this, SLOT( slotRemoveAction() ));
 	connect((QObject *)(theKCMLircBase->theAddMode), SIGNAL( clicked() ), this, SLOT( slotAddMode() ));
 	connect((QObject *)(theKCMLircBase->theRemoveMode), SIGNAL( clicked() ), this, SLOT( slotRemoveMode() ));
+	connect((QObject *)(theKCMLircBase->theSetDefaultMode), SIGNAL( clicked() ), this, SLOT( slotSetDefaultMode() ));
 	load();
 }
 
@@ -96,6 +97,8 @@ void KCMLirc::slotAddAction()
 		a.setButton(theDialog.buttonMap[theDialog.theButtons->currentItem()]);
 		a.setRepeat(theDialog.theRepeat->isChecked());
 		a.setAutoStart(theDialog.theAutoStart->isChecked());
+		a.setDoBefore(theDialog.theDoBefore->isChecked());
+		a.setDoAfter(theDialog.theDoAfter->isChecked());
 		Arguments args;
 		// change mode?
 		if(theDialog.theChangeMode->isChecked())
@@ -110,6 +113,7 @@ void KCMLirc::slotAddAction()
 				a.setProgram("");
 				a.setObject("");
 			}
+			a.setAutoStart(false);
 			a.setRepeat(false);
 		}
 		// DCOP?
@@ -188,6 +192,14 @@ void KCMLirc::slotRemoveMode()
 	}
 }
 
+void KCMLirc::slotSetDefaultMode()
+{
+	if(!theKCMLircBase->theModes->currentItem()) return;
+	allModes.setDefault(modeMap[theKCMLircBase->theModes->currentItem()]);
+	updateModes();
+	emit changed(true);
+}
+
 void KCMLirc::slotDrop(KListView *, QDropEvent *, QListViewItem *, QListViewItem *after)
 {
 	Mode m = modeMap[after];
@@ -217,7 +229,7 @@ void KCMLirc::updateActions()
 	theKCMLircBase->theModeLabel->setText(m.remoteName() + ": " + (m.name() == "" ? "<i>Always</i>" : ("<b>" + m.name() + "</b>")));
 	IRAItList l = allActions.findByMode(m);
 	for(IRAItList::iterator i = l.begin(); i != l.end(); i++)
-		actionMap[new KListViewItem(theKCMLircBase->theActions, (**i).buttonName(), (**i).application(), (**i).function(), (**i).arguments().toString(), (**i).repeatable(), (**i).autoStartable())] = *i;
+		actionMap[new KListViewItem(theKCMLircBase->theActions, (**i).buttonName(), (**i).application(), (**i).function(), (**i).arguments().toString(), (**i).notes())] = *i;
 }
 
 void KCMLirc::gotButton(QString remote, QString button)
@@ -235,12 +247,12 @@ void KCMLirc::updateModes()
 	IRKick_stub IRKick("kded", "irkick");
 	QStringList remotes = IRKick.remotes();
 	for(QStringList::iterator i = remotes.begin(); i != remotes.end(); i++)
-	{	QListViewItem *a = new KListViewItem(theKCMLircBase->theModes, RemoteServer::remoteServer()->getRemoteName(*i));
+	{	QListViewItem *a = new KListViewItem(theKCMLircBase->theModes, RemoteServer::remoteServer()->getRemoteName(*i), allModes.isDefault(Mode(*i, "")) ? "Default" : "");
 		modeMap[a] = Mode(*i, "");	// the null mode
 		a->setOpen(true);
 		ModeList l = allModes.getModes(*i);
 		for(ModeList::iterator j = l.begin(); j != l.end(); j++)
-			modeMap[new KListViewItem(a, (*j).name())] = *j;
+			modeMap[new KListViewItem(a, (*j).name(), allModes.isDefault(*j) ? "Default" : "")] = *j;
 	}
 }
 

@@ -6,7 +6,6 @@ general:
 kdmlirc:
 * Fix bools bug / multi-type editing for options.
 * Inline mode renaming
-* Set default modes
 
 irkick:
 * Fix QByteArray parameter bug...

@@ -29,7 +29,7 @@ class IRAction
 	QString theProgram, theObject, theRemote, theButton, theMode;
 	Prototype theMethod;
 	Arguments theArguments;
-	bool theRepeat, theAutoStart;
+	bool theRepeat, theAutoStart, theDoBefore, theDoAfter;
 
 public:
 	// load/save convenience functions
@@ -39,10 +39,9 @@ public:
 	// may be changed to a profile-based representation in the future.
 	const QString function() const;
 	const QString application() const;
-	const QString repeatable() const;
-	const QString autoStartable() const;
 	const QString buttonName() const;
 	const QString remoteName() const;
+	const QString notes() const;
 
 	// bog standard raw DCOP stuff
 	const QString &program() const { return theProgram; }
@@ -55,6 +54,12 @@ public:
 	const bool repeat() const { return theRepeat; }
 	const bool autoStart() const { return theAutoStart; }
 
+	const QString &modeChange() const { return theObject; }
+	const bool doBefore() const { return theDoBefore; }
+	const bool doAfter() const { return theDoAfter; }
+
+	bool isModeChange() const { return theProgram == ""; }
+
 	void setProgram(const QString &newProgram) { theProgram = newProgram; }
 	void setObject(const QString &newObject) { theObject = newObject; }
 	void setMethod(const Prototype &newMethod) { theMethod = newMethod; }
@@ -63,9 +68,11 @@ public:
 	void setButton(const QString &newButton) { theButton = newButton; }
 	void setArguments(const Arguments &newArguments) { theArguments = newArguments; }
 	void setRepeat(bool newRepeat) { theRepeat = newRepeat; }
+	void setDoBefore(bool a) { theDoBefore = a; }
+	void setDoAfter(bool a) { theDoAfter = a; }
 	void setAutoStart(bool newAutoStart) { theAutoStart = newAutoStart; }
 
-	IRAction(const QString &newProgram, const QString &newObject, const QString &newMethod, const Arguments &newArguments, const QString &newRemote, const QString &newMode, const QString &newButton, bool newRepeat, bool newAutoStart);
+	IRAction(const QString &newProgram, const QString &newObject, const QString &newMethod, const Arguments &newArguments, const QString &newRemote, const QString &newMode, const QString &newButton, bool newRepeat, bool newAutoStart, bool newDoBefore, bool newDoAfter);
 	IRAction() { theProgram = QString::null; };
 };
 
