@@ -161,19 +161,7 @@ void KLircClient::slotRead()
 				{
 					// <code> <name>
 					QString btn = readLine().mid(17);
-					if (btn.isNull())
-					{
-						// wait for 500 msecs to see if we receive more buttons
-						bool timeout;
-						theSocket->waitForMore(500, &timeout);
-						if (timeout)
-						{
-							// no more buttons break from the for loop
-							break;
-						}
-						btn = readLine().mid(17);
-					}
-
+					if(btn.isNull()) break;
 					if(btn.startsWith("'") && btn.endsWith("'"))
 						btn = btn.mid(1, btn.length() - 2);
 					buttons.append(btn);
@@ -228,14 +216,18 @@ bool KLircClient::haveFullList() const
 
 const QString KLircClient::readLine()
 {
-	if (!theSocket->bytesAvailable())
-		return QString::null;
-
+	if (!theSocket->canReadLine())
+	{	bool timeout;
+		// FIXME: possible race condition -
+		// more might have arrived between canReadLine and waitForMore
+		theSocket->waitForMore(500, &timeout);
+		if (timeout)
+		{	// something's wrong. there ain't no line comin!
+			return QString::null;
+		}
+	}
 	QString line = theSocket->readLine();
-	if (line.isEmpty())
-		return QString::null;
-
-	line.remove(line.length() - 1, 1);
+	line.truncate(line.length() - 1);
 	return line;
 }
 
