@@ -161,6 +161,19 @@ void KLircClient::slotRead()
 				{
 					// <code> <name>
 					QString btn = readLine();
+					if (btn.isNull())
+					{
+						// wait for 500 msecs to see if we receive more buttons
+						bool timeout;
+						theSocket->waitForMore(500, &timeout);
+						if (timeout)
+						{
+							// no more buttons break from the for loop
+							break;
+						}
+						btn = readLine();
+					}
+
 					buttons.append(btn.mid(17));
 				}
 				theRemotes.insert(remote, buttons);
