@@ -59,7 +59,7 @@ KCMLirc::KCMLirc(QWidget *parent, const char *name, QStringList /*args*/) : DCOP
 	KApplication::kApplication()->dcopClient()->remoteInterfaces("irkick", "IRKick", &ok);
 	if(!ok)
 		if(KMessageBox::questionYesNo(this, i18n("The Infrared Remote Control software is not currently running. This configuration module will not work properly without it. Would you like to start it now?"), i18n("Software Not Running")) == KMessageBox::Yes)
-		{	kdDebug() << "S" << KApplication::startServiceByName("KDE LIRC server") << endl;
+		{	kdDebug() << "S" << KApplication::startServiceByDesktopName("irkick") << endl;
 			KSimpleConfig theConfig("irkickrc");
 			theConfig.setGroup("General");
 			if(theConfig.readBoolEntry("AutoStart", true) == false)
