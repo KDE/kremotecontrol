@@ -15,8 +15,10 @@
 #include <qradiobutton.h>
 #include <qcombobox.h>
 #include <qcheckbox.h>
-#include <qwidgetstack.h>
-#include <qbuttongroup.h>
+#include <q3widgetstack.h>
+#include <q3buttongroup.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kdebug.h>
 #include <klineedit.h>
@@ -151,7 +153,7 @@ void EditAction::updateArguments()
 		theArguments->clear();
 		const ProfileAction *a = ProfileServer::profileServer()->getAction(applicationMap[theApplications->currentText()], functionMap[theFunctions->currentText()]);
 		if(!a) { arguments.clear(); return; }
-		const QValueList<ProfileActionArgument> &p = a->arguments();
+		const Q3ValueList<ProfileActionArgument> &p = a->arguments();
 		if(p.count() != arguments.count())
 		{	arguments.clear();
 			for(unsigned i = 0; i < p.count(); i++)
@@ -284,8 +286,8 @@ void EditAction::updateApplications()
 	theApplications->clear();
 	applicationMap.clear();
 
-	QDict<Profile> dict = theServer->profiles();
-	QDictIterator<Profile> i(dict);
+	Q3Dict<Profile> dict = theServer->profiles();
+	Q3DictIterator<Profile> i(dict);
 	for(; i.current(); ++i)
 	{	theApplications->insertItem(i.current()->name());
 		applicationMap[i.current()->name()] = i.currentKey();
@@ -302,8 +304,8 @@ void EditAction::updateFunctions()
 
 	const Profile *p = theServer->profiles()[applicationMap[theApplications->currentText()]];
 
-	QDict<ProfileAction> dict = p->actions();
-	for(QDictIterator<ProfileAction> i(dict); i.current(); ++i)
+	Q3Dict<ProfileAction> dict = p->actions();
+	for(Q3DictIterator<ProfileAction> i(dict); i.current(); ++i)
 	{	theFunctions->insertItem(i.current()->name());
 		functionMap[i.current()->name()] = i.currentKey();
 	}

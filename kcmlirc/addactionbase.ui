@@ -76,7 +76,7 @@
                                     <cstring>spacer13</cstring>
                                 </property>
                                 <property name="orientation">
-                                    <enum>Horizontal</enum>
+                                    <enum>Qt::Horizontal</enum>
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
@@ -120,7 +120,7 @@
                                     <cstring>spacer14</cstring>
                                 </property>
                                 <property name="orientation">
-                                    <enum>Horizontal</enum>
+                                    <enum>Qt::Horizontal</enum>
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
@@ -139,7 +139,7 @@
                             <cstring>spacer11</cstring>
                         </property>
                         <property name="orientation">
-                            <enum>Horizontal</enum>
+                            <enum>Qt::Horizontal</enum>
                         </property>
                         <property name="sizeType">
                             <enum>Expanding</enum>
@@ -164,7 +164,7 @@
                             <cstring>spacer12</cstring>
                         </property>
                         <property name="orientation">
-                            <enum>Horizontal</enum>
+                            <enum>Qt::Horizontal</enum>
                         </property>
                         <property name="sizeType">
                             <enum>Expanding</enum>
@@ -189,7 +189,7 @@
                             <cstring>spacer4</cstring>
                         </property>
                         <property name="orientation">
-                            <enum>Vertical</enum>
+                            <enum>Qt::Vertical</enum>
                         </property>
                         <property name="sizeType">
                             <enum>Expanding</enum>
@@ -224,7 +224,7 @@
                     <string>You are attempting to configure an action for a button on [remote] (in mode [mode]). Press a button on this remote control or select from the list.</string>
                 </property>
                 <property name="alignment">
-                    <set>WordBreak|AlignVCenter</set>
+                    <set>Qt::TextWordWrap|Qt::AlignVCenter</set>
                 </property>
             </widget>
             <widget class="QLayoutWidget">
@@ -240,7 +240,7 @@
                             <cstring>spacer12_2</cstring>
                         </property>
                         <property name="orientation">
-                            <enum>Horizontal</enum>
+                            <enum>Qt::Horizontal</enum>
                         </property>
                         <property name="sizeType">
                             <enum>Expanding</enum>
@@ -284,7 +284,7 @@
                             <cstring>spacer5</cstring>
                         </property>
                         <property name="orientation">
-                            <enum>Horizontal</enum>
+                            <enum>Qt::Horizontal</enum>
                         </property>
                         <property name="sizeType">
                             <enum>Expanding</enum>
@@ -316,7 +316,7 @@
                     <cstring>splitter8</cstring>
                 </property>
                 <property name="orientation">
-                    <enum>Horizontal</enum>
+                    <enum>Qt::Horizontal</enum>
                 </property>
                 <widget class="KListView">
                     <column>
@@ -523,7 +523,7 @@
                                     <cstring>spacer39</cstring>
                                 </property>
                                 <property name="orientation">
-                                    <enum>Horizontal</enum>
+                                    <enum>Qt::Horizontal</enum>
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
@@ -599,7 +599,7 @@
                             <cstring>spacer40</cstring>
                         </property>
                         <property name="orientation">
-                            <enum>Vertical</enum>
+                            <enum>Qt::Vertical</enum>
                         </property>
                         <property name="sizeType">
                             <enum>Expanding</enum>
@@ -696,7 +696,7 @@
                                     <cstring>spacer32</cstring>
                                 </property>
                                 <property name="orientation">
-                                    <enum>Vertical</enum>
+                                    <enum>Qt::Vertical</enum>
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
@@ -734,7 +734,7 @@
                             <cstring>spacer27</cstring>
                         </property>
                         <property name="orientation">
-                            <enum>Horizontal</enum>
+                            <enum>Qt::Horizontal</enum>
                         </property>
                         <property name="sizeType">
                             <enum>Expanding</enum>
@@ -780,7 +780,7 @@
                                         <cstring>spacer28</cstring>
                                     </property>
                                     <property name="orientation">
-                                        <enum>Vertical</enum>
+                                        <enum>Qt::Vertical</enum>
                                     </property>
                                     <property name="sizeType">
                                         <enum>Expanding</enum>
@@ -821,7 +821,7 @@
                                         <cstring>spacer29</cstring>
                                     </property>
                                     <property name="orientation">
-                                        <enum>Vertical</enum>
+                                        <enum>Qt::Vertical</enum>
                                     </property>
                                     <property name="sizeType">
                                         <enum>Expanding</enum>
@@ -865,7 +865,7 @@
                                         <cstring>spacer30</cstring>
                                     </property>
                                     <property name="orientation">
-                                        <enum>Vertical</enum>
+                                        <enum>Qt::Vertical</enum>
                                     </property>
                                     <property name="sizeType">
                                         <enum>Expanding</enum>
@@ -903,7 +903,7 @@
                                         <cstring>spacer31</cstring>
                                     </property>
                                     <property name="orientation">
-                                        <enum>Vertical</enum>
+                                        <enum>Qt::Vertical</enum>
                                     </property>
                                     <property name="sizeType">
                                         <enum>Expanding</enum>
@@ -952,7 +952,7 @@
                             <cstring>spacer26</cstring>
                         </property>
                         <property name="orientation">
-                            <enum>Horizontal</enum>
+                            <enum>Qt::Horizontal</enum>
                         </property>
                         <property name="sizeType">
                             <enum>Expanding</enum>
@@ -1003,7 +1003,7 @@
                     <enum>Sunken</enum>
                 </property>
                 <property name="orientation">
-                    <enum>Horizontal</enum>
+                    <enum>Qt::Horizontal</enum>
                 </property>
             </widget>
             <widget class="QCheckBox">
@@ -1030,7 +1030,7 @@
                     <cstring>spacer22</cstring>
                 </property>
                 <property name="orientation">
-                    <enum>Horizontal</enum>
+                    <enum>Qt::Horizontal</enum>
                 </property>
                 <property name="sizeType">
                     <enum>Expanding</enum>
@@ -1072,7 +1072,7 @@
                     <enum>Sunken</enum>
                 </property>
                 <property name="orientation">
-                    <enum>Horizontal</enum>
+                    <enum>Qt::Horizontal</enum>
                 </property>
             </widget>
             <widget class="QLabel">
@@ -1086,7 +1086,7 @@
                     <string>This application may have multiple instances. In the case of having multiple instances at once when this action should be executed, choose a course of action:</string>
                 </property>
                 <property name="alignment">
-                    <set>WordBreak|AlignVCenter</set>
+                    <set>Qt::TextWordWrap|Qt::AlignVCenter</set>
                 </property>
             </widget>
             <widget class="QButtonGroup">
@@ -1166,7 +1166,7 @@
                     <cstring>spacer1</cstring>
                 </property>
                 <property name="orientation">
-                    <enum>Vertical</enum>
+                    <enum>Qt::Vertical</enum>
                 </property>
                 <property name="sizeType">
                     <enum>Expanding</enum>
@@ -1229,7 +1229,7 @@
                                     <cstring>spacer8</cstring>
                                 </property>
                                 <property name="orientation">
-                                    <enum>Horizontal</enum>
+                                    <enum>Qt::Horizontal</enum>
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
@@ -1273,7 +1273,7 @@
                                     <cstring>spacer9</cstring>
                                 </property>
                                 <property name="orientation">
-                                    <enum>Horizontal</enum>
+                                    <enum>Qt::Horizontal</enum>
                                 </property>
                                 <property name="sizeType">
                                     <enum>Expanding</enum>
@@ -1303,7 +1303,7 @@
                             <cstring>spacer15_2</cstring>
                         </property>
                         <property name="orientation">
-                            <enum>Horizontal</enum>
+                            <enum>Qt::Horizontal</enum>
                         </property>
                         <property name="sizeType">
                             <enum>Expanding</enum>
@@ -1334,7 +1334,7 @@
                             <enum>Sunken</enum>
                         </property>
                         <property name="orientation">
-                            <enum>Horizontal</enum>
+                            <enum>Qt::Horizontal</enum>
                         </property>
                     </widget>
                     <widget class="QCheckBox">
@@ -1361,7 +1361,7 @@
                             <cstring>spacer10</cstring>
                         </property>
                         <property name="orientation">
-                            <enum>Vertical</enum>
+                            <enum>Qt::Vertical</enum>
                         </property>
                         <property name="sizeType">
                             <enum>Expanding</enum>
@@ -1383,19 +1383,19 @@
 <connections>
     <connection>
         <sender>theObjects</sender>
-        <signal>currentChanged(QListViewItem*)</signal>
+        <signal>currentChanged(Q3ListViewItem*)</signal>
         <receiver>AddActionBase</receiver>
         <slot>updateFunctions()</slot>
     </connection>
     <connection>
         <sender>theParameters</sender>
-        <signal>currentChanged(QListViewItem*)</signal>
+        <signal>currentChanged(Q3ListViewItem*)</signal>
         <receiver>AddActionBase</receiver>
         <slot>updateParameter()</slot>
     </connection>
     <connection>
         <sender>theFunctions</sender>
-        <signal>currentChanged(QListViewItem*)</signal>
+        <signal>currentChanged(Q3ListViewItem*)</signal>
         <receiver>AddActionBase</receiver>
         <slot>updateButtonStates()</slot>
     </connection>
@@ -1431,19 +1431,19 @@
     </connection>
     <connection>
         <sender>theProfiles</sender>
-        <signal>currentChanged(QListViewItem*)</signal>
+        <signal>currentChanged(Q3ListViewItem*)</signal>
         <receiver>AddActionBase</receiver>
         <slot>updateButtonStates()</slot>
     </connection>
     <connection>
         <sender>theModes</sender>
-        <signal>currentChanged(QListViewItem*)</signal>
+        <signal>currentChanged(Q3ListViewItem*)</signal>
         <receiver>AddActionBase</receiver>
         <slot>updateButtonStates()</slot>
     </connection>
     <connection>
         <sender>theModes</sender>
-        <signal>clicked(QListViewItem*)</signal>
+        <signal>clicked(Q3ListViewItem*)</signal>
         <receiver>AddActionBase</receiver>
         <slot>slotModeSelected()</slot>
     </connection>
@@ -1479,19 +1479,19 @@
     </connection>
     <connection>
         <sender>theProfileFunctions</sender>
-        <signal>currentChanged(QListViewItem*)</signal>
+        <signal>currentChanged(Q3ListViewItem*)</signal>
         <receiver>AddActionBase</receiver>
         <slot>updateParameters()</slot>
     </connection>
     <connection>
         <sender>theFunctions</sender>
-        <signal>currentChanged(QListViewItem*)</signal>
+        <signal>currentChanged(Q3ListViewItem*)</signal>
         <receiver>AddActionBase</receiver>
         <slot>updateParameters()</slot>
     </connection>
     <connection>
         <sender>theProfiles</sender>
-        <signal>currentChanged(QListViewItem*)</signal>
+        <signal>currentChanged(Q3ListViewItem*)</signal>
         <receiver>AddActionBase</receiver>
         <slot>updateProfileFunctions()</slot>
     </connection>
@@ -1533,43 +1533,43 @@
     </connection>
     <connection>
         <sender>theProfileFunctions</sender>
-        <signal>currentChanged(QListViewItem*)</signal>
+        <signal>currentChanged(Q3ListViewItem*)</signal>
         <receiver>AddActionBase</receiver>
         <slot>updateOptions()</slot>
     </connection>
     <connection>
         <sender>theFunctions</sender>
-        <signal>currentChanged(QListViewItem*)</signal>
+        <signal>currentChanged(Q3ListViewItem*)</signal>
         <receiver>AddActionBase</receiver>
         <slot>updateOptions()</slot>
     </connection>
     <connection>
         <sender>theProfiles</sender>
-        <signal>doubleClicked(QListViewItem*)</signal>
+        <signal>doubleClicked(Q3ListViewItem*)</signal>
         <receiver>AddActionBase</receiver>
         <slot>next()</slot>
     </connection>
     <connection>
         <sender>theButtons</sender>
-        <signal>doubleClicked(QListViewItem*)</signal>
+        <signal>doubleClicked(Q3ListViewItem*)</signal>
         <receiver>AddActionBase</receiver>
         <slot>next()</slot>
     </connection>
     <connection>
         <sender>theFunctions</sender>
-        <signal>doubleClicked(QListViewItem*)</signal>
+        <signal>doubleClicked(Q3ListViewItem*)</signal>
         <receiver>AddActionBase</receiver>
         <slot>next()</slot>
     </connection>
     <connection>
         <sender>theProfileFunctions</sender>
-        <signal>doubleClicked(QListViewItem*)</signal>
+        <signal>doubleClicked(Q3ListViewItem*)</signal>
         <receiver>AddActionBase</receiver>
         <slot>next()</slot>
     </connection>
     <connection>
         <sender>theModes</sender>
-        <signal>doubleClicked(QListViewItem*)</signal>
+        <signal>doubleClicked(Q3ListViewItem*)</signal>
         <receiver>AddActionBase</receiver>
         <slot>accept()</slot>
     </connection>
