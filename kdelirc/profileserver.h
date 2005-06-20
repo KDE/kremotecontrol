@@ -15,10 +15,10 @@
 
 #include <qpair.h>
 #include <qstring.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qmap.h>
 #include <qxml.h>
-#include <qdict.h>
+#include <q3dict.h>
 
 /**
 @author Gav Wood
@@ -59,7 +59,7 @@ class ProfileAction
 	float theMultiplier;
 	const Profile *parent;
 	bool theRepeat, theAutoStart;
-	QValueList<ProfileActionArgument> theArguments;
+	Q3ValueList<ProfileActionArgument> theArguments;
 
 	friend class Profile;
 public:
@@ -79,7 +79,7 @@ public:
 	void setRepeat(bool a) { theRepeat = a; }
 	bool autoStart() const { return theAutoStart; }
 	void setAutoStart(bool a) { theAutoStart = a; }
-	const QValueList<ProfileActionArgument> &arguments() const { return theArguments; }
+	const Q3ValueList<ProfileActionArgument> &arguments() const { return theArguments; }
 
 	const Profile *profile() const { return parent; }
 	void setProfile(const Profile *a) { parent = a; }
@@ -94,7 +94,7 @@ class Profile : public QXmlDefaultHandler
 
 	ProfileAction *curPA;
 	ProfileActionArgument *curPAA;
-	QDict<ProfileAction> theActions;		// objid+"::"+prototype => ProfileAction
+	Q3Dict<ProfileAction> theActions;		// objid+"::"+prototype => ProfileAction
 
 	friend class ProfileServer;
 public:
@@ -114,7 +114,7 @@ public:
 	void setIfMulti(const IfMulti a) { theIfMulti = a; }
 	const QString &serviceName() const { if(theServiceName != QString::null) return theServiceName; return theName; }
 	void setServiceName(const QString &a) { theServiceName = a; }
-	const QDict<ProfileAction> &actions() const { return theActions; }
+	const Q3Dict<ProfileAction> &actions() const { return theActions; }
 	const ProfileAction *searchClass(const QString &c) const;
 
 	void loadFromFile(const QString &fileName);
@@ -126,11 +126,11 @@ class ProfileServer
 {
 	static ProfileServer *theInstance;
 	void loadProfiles();
-	QDict<Profile> theProfiles;			// id => Profile
+	Q3Dict<Profile> theProfiles;			// id => Profile
 
 public:
 	static ProfileServer *profileServer() { if(!theInstance) theInstance = new ProfileServer(); return theInstance; }
-	const QDict<Profile> profiles() const { return theProfiles; }
+	const Q3Dict<Profile> profiles() const { return theProfiles; }
 	const ProfileAction *getAction(const QString &appId, const QString &objId, const QString &prototype) const;
 	const ProfileAction *getAction(const QString &appId, const QString &actionId) const;
 	const QString &getServiceName(const QString &appId) const;

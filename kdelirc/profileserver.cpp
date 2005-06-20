@@ -54,7 +54,7 @@ Profile::Profile()
 
 const ProfileAction *Profile::searchClass(const QString &c) const
 {
-	for(QDictIterator<ProfileAction> i(theActions); i.current(); ++i)
+	for(Q3DictIterator<ProfileAction> i(theActions); i.current(); ++i)
 		if(i.current()->getClass() == c) return i;
 	return 0;
 }

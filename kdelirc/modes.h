@@ -16,7 +16,7 @@
 #include <qstring.h>
 #include <qmap.h>
 #include <qpair.h>
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 
 #include "mode.h"
 
@@ -26,7 +26,7 @@
 
 class KConfig;
 
-typedef QValueList<Mode> ModeList;
+typedef Q3ValueList<Mode> ModeList;
 
 class Modes : protected QMap<QString, QMap<QString, Mode> >
 {

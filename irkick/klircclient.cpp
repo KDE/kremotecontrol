@@ -22,7 +22,7 @@
 #include <qwidget.h>
 #include <qdialog.h>
 #include <qtooltip.h>
-#include <qsocket.h>
+#include <q3socket.h>
 #include <qsocketnotifier.h>
 #include <qfile.h>
 
@@ -66,7 +66,7 @@ bool KLircClient::connectToLirc()
 		}
 	}
 
-	theSocket = new QSocket;
+	theSocket = new Q3Socket;
 	theSocket->setSocket(sock);
 	connect(theSocket, SIGNAL(readyRead()), SLOT(slotRead()));
 	connect(theSocket, SIGNAL(connectionClosed()), SLOT(slotClosed()));
@@ -206,7 +206,7 @@ void KLircClient::updateRemotes()
 bool KLircClient::isConnected() const
 {
 	if(!theSocket) return false;
-	return theSocket->state() == QSocket::Connected;
+	return theSocket->state() == Q3Socket::Connected;
 }
 
 bool KLircClient::haveFullList() const

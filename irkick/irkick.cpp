@@ -13,6 +13,10 @@
 #include <qregexp.h>
 #include <qtimer.h>
 #include <qevent.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <Q3ValueList>
+#include <Q3CString>
 
 #include <kdeversion.h>
 #include <kapplication.h>
@@ -44,10 +48,10 @@
 
 void IRKTrayIcon::mousePressEvent(QMouseEvent *e)
 {
-	KSystemTray::mousePressEvent(new QMouseEvent(QEvent::MouseButtonPress, e->pos(), e->globalPos(), e->button() == LeftButton ? RightButton : e->button(), e->state()));
+	KSystemTray::mousePressEvent(new QMouseEvent(QEvent::MouseButtonPress, e->pos(), e->globalPos(), e->button() == Qt::LeftButton ? Qt::RightButton : e->button(), e->state()));
 }
 
-IRKick::IRKick(const QCString &obj) : QObject(), DCOPObject(obj), npApp(QString::null)
+IRKick::IRKick(const Q3CString &obj) : QObject(), DCOPObject(obj), npApp(QString::null)
 {
     kapp->dcopClient()->setDefaultObject(obj);
 	theClient = new KLircClient();
@@ -201,9 +205,9 @@ bool IRKick::getPrograms(const IRAction &action, QStringList &programs)
 		if(programs.size() > 1 && action.ifMulti() == IM_DONTSEND)
 			return false;
 		else if(programs.size() > 1 && action.ifMulti() == IM_SENDTOTOP)
-		{	QValueList<WId> s = KWinModule().stackingOrder();
+		{	Q3ValueList<WId> s = KWinModule().stackingOrder();
 			// go through all the (ordered) window pids
-			for(QValueList<WId>::iterator i = s.fromLast(); i != s.end(); i--)
+			for(Q3ValueList<WId>::iterator i = s.fromLast(); i != s.end(); i--)
 			{	int p = KWin::info(*i).pid;
 				QString id = action.program() + "-" + QString().setNum(p);
 				if(programs.contains(id))
@@ -215,9 +219,9 @@ bool IRKick::getPrograms(const IRAction &action, QStringList &programs)
 			while(programs.size() > 1) programs.remove(programs.begin());
 		}
 		else if(programs.size() > 1 && action.ifMulti() == IM_SENDTOBOTTOM)
-		{	QValueList<WId> s = KWinModule().stackingOrder();
+		{	Q3ValueList<WId> s = KWinModule().stackingOrder();
 			// go through all the (ordered) window pids
-			for(QValueList<WId>::iterator i = s.begin(); i != s.end(); ++i)
+			for(Q3ValueList<WId>::iterator i = s.begin(); i != s.end(); ++i)
 			{	int p = KWin::info(*i).pid;
 				QString id = action.program() + "-" + QString().setNum(p);
 				if(programs.contains(id))
@@ -255,7 +259,7 @@ void IRKick::executeAction(const IRAction &action)
 	for(QStringList::iterator i = programs.begin(); i != programs.end(); ++i)
 	{	const QString &program = *i;
 		if(theDC->isApplicationRegistered(program.utf8()))
-		{	QByteArray data; QDataStream arg(data, IO_WriteOnly);
+		{	QByteArray data; QDataStream arg(&data, QIODevice::WriteOnly);
 			kdDebug() << "Sending data (" << program << ", " << action.object() << ", " << action.method().prototypeNR() << endl;
 			for(Arguments::const_iterator j = action.arguments().begin(); j != action.arguments().end(); ++j)
 			{	kdDebug() << "Got argument..." << endl;
@@ -284,7 +288,7 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int 
 		QString theApp = npApp;
 		npApp = QString::null;
 		// send notifier by DCOP to npApp/npModule/npMethod(theRemote, theButton);
-		QByteArray data; QDataStream arg(data, IO_WriteOnly);
+		QByteArray data; QDataStream arg(&data, QIODevice::WriteOnly);
 		arg << theRemote << theButton;
 		KApplication::dcopClient()->send(theApp.utf8(), npModule.utf8(), npMethod.utf8(), data);
 	}

@@ -15,6 +15,9 @@
 #define __IRKICK_H
 
 #include <qstring.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <Q3CString>
 
 #include <ksystemtray.h>
 #include <kdedmodule.h>
@@ -125,7 +128,7 @@ private:
 	bool getPrograms(const IRAction &action, QStringList &populous);
 
 public:
-	IRKick(const QCString &obj);
+	IRKick(const Q3CString &obj);
 	virtual ~IRKick();
 };
 
