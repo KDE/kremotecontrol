@@ -260,6 +260,7 @@ void IRKick::executeAction(const IRAction &action)
 	{	const QString &program = *i;
 		if(theDC->isApplicationRegistered(program.utf8()))
 		{	QByteArray data; QDataStream arg(&data, QIODevice::WriteOnly);
+ arg.setVersion(QDataStream::Qt_3_1);
 			kdDebug() << "Sending data (" << program << ", " << action.object() << ", " << action.method().prototypeNR() << endl;
 			for(Arguments::const_iterator j = action.arguments().begin(); j != action.arguments().end(); ++j)
 			{	kdDebug() << "Got argument..." << endl;
@@ -289,6 +290,7 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int 
 		npApp = QString::null;
 		// send notifier by DCOP to npApp/npModule/npMethod(theRemote, theButton);
 		QByteArray data; QDataStream arg(&data, QIODevice::WriteOnly);
+ arg.setVersion(QDataStream::Qt_3_1);
 		arg << theRemote << theButton;
 		KApplication::dcopClient()->send(theApp.utf8(), npModule.utf8(), npMethod.utf8(), data);
 	}
