@@ -13,6 +13,8 @@
 
 #include <qstringlist.h>
 #include <qmap.h>
+//Added by qt3to4:
+#include <QDropEvent>
 
 #include <kcmodule.h>
 
@@ -22,7 +24,7 @@
 #include "iractions.h"
 #include "modes.h"
 
-class QListViewItem;
+class Q3ListViewItem;
 class KListView;
 class QDropEvent;
 class Profile;
@@ -37,16 +39,16 @@ private:
 	KCMLircBase *theKCMLircBase;
 	IRActions allActions;
 	Modes allModes;
-	QMap<QListViewItem *, IRAIt > actionMap;
-	QMap<QListViewItem *, Mode> modeMap;
-	QMap<QListViewItem *, QString> profileMap, remoteMap;
+	QMap<Q3ListViewItem *, IRAIt > actionMap;
+	QMap<Q3ListViewItem *, Mode> modeMap;
+	QMap<Q3ListViewItem *, QString> profileMap, remoteMap;
 
 	void autoPopulate(const Profile &profile, const Remote &remote, const QString &mode);
 
 public slots:
 	void updateActions();
-	void updateModesStatus(QListViewItem *);
-	void updateActionsStatus(QListViewItem *);
+	void updateModesStatus(Q3ListViewItem *);
+	void updateActionsStatus(Q3ListViewItem *);
 	void updateModes();
 	void updateExtensions();
 	void updateInformation();
@@ -57,8 +59,8 @@ public slots:
 	void slotAddActions();
 	void slotEditAction();
 	void slotRemoveAction();
-	void slotDrop(KListView *, QDropEvent *, QListViewItem *, QListViewItem *after);
-	void slotRenamed(QListViewItem *item);
+	void slotDrop(KListView *, QDropEvent *, Q3ListViewItem *, Q3ListViewItem *after);
+	void slotRenamed(Q3ListViewItem *item);
 	void slotEditMode();
 
 

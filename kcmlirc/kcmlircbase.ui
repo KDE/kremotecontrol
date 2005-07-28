@@ -55,9 +55,9 @@
                         </property>
                         <property name="paletteForegroundColor">
                             <color>
-                                <red>138</red>
-                                <green>0</green>
-                                <blue>0</blue>
+                                <Qt::red>138</Qt::red>
+                                <Qt::green>0</Qt::green>
+                                <Qt::blue>0</Qt::blue>
                             </color>
                         </property>
                         <property name="font">
@@ -75,7 +75,7 @@
                             <string>There are currently no remote controls available. You must first set up LIRC correctly; see www.lirc.org for more information.</string>
                         </property>
                         <property name="alignment">
-                            <set>WordBreak|AlignTop</set>
+                            <set>Qt::TextWordWrap|Qt::AlignTop</set>
                         </property>
                     </widget>
                     <widget class="QSplitter">
@@ -83,7 +83,7 @@
                             <cstring>splitter4</cstring>
                         </property>
                         <property name="orientation">
-                            <enum>Horizontal</enum>
+                            <enum>Qt::Horizontal</enum>
                         </property>
                         <widget class="QLayoutWidget">
                             <property name="name">
@@ -153,7 +153,7 @@
                                                 <cstring>spacer6</cstring>
                                             </property>
                                             <property name="orientation">
-                                                <enum>Horizontal</enum>
+                                                <enum>Qt::Horizontal</enum>
                                             </property>
                                             <property name="sizeType">
                                                 <enum>Expanding</enum>
@@ -311,7 +311,7 @@
                                                 <cstring>spacer1</cstring>
                                             </property>
                                             <property name="orientation">
-                                                <enum>Horizontal</enum>
+                                                <enum>Qt::Horizontal</enum>
                                             </property>
                                             <property name="sizeType">
                                                 <enum>Expanding</enum>
@@ -403,7 +403,7 @@
                             <cstring>splitter5</cstring>
                         </property>
                         <property name="orientation">
-                            <enum>Horizontal</enum>
+                            <enum>Qt::Horizontal</enum>
                         </property>
                         <widget class="KListView">
                             <column>

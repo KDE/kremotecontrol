@@ -13,7 +13,7 @@
 #ifndef IRACTIONS_H
 #define IRACTIONS_H
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qpair.h>
 #include <qstring.h>
 #include <qmap.h>
@@ -27,10 +27,10 @@
 
 class KConfig;
 
-typedef QValueListIterator<IRAction> IRAIt;
-typedef QValueList<IRAIt> IRAItList;
+typedef Q3ValueListIterator<IRAction> IRAIt;
+typedef Q3ValueList<IRAIt> IRAItList;
 
-class IRActions: protected QValueList<IRAction>
+class IRActions: protected Q3ValueList<IRAction>
 {
 private:
 	void purgeAllBindings(KConfig &theConfig);
@@ -41,7 +41,7 @@ public:
 	IRAItList findByMode(const Mode &mode);
 	IRAItList findByModeButton(const Mode &mode, const QString &button);
 
-	void erase(const IRAIt &action) { QValueList<IRAction>::erase(action); }
+	void erase(const IRAIt &action) { Q3ValueList<IRAction>::erase(action); }
 	void renameMode(const Mode &mode, const QString &to);
 
 	void loadFromConfig(KConfig &theConfig);

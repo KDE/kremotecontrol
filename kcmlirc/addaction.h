@@ -10,7 +10,7 @@
 #ifndef ADDACTION_H
 #define ADDACTION_H
 
-#include <qvaluelist.h>
+#include <q3valuelist.h>
 #include <qpair.h>
 
 #include <addactionbase.h>
@@ -22,7 +22,7 @@
 @author Gav Wood
 */
 
-class QListViewItem;
+class Q3ListViewItem;
 
 class AddAction : public AddActionBase
 {
@@ -56,15 +56,15 @@ public:
 	bool isUnique;
 
 	static const QStringList getFunctions(const QString app, const QString obj);
-	void updateArgument(QListViewItem *theItem);
+	void updateArgument(Q3ListViewItem *theItem);
 	void requestNextPress();
 	void cancelRequest();
 
-	QMap<QListViewItem *, QString> profileMap;
-	QMap<QListViewItem *, QString> profileFunctionMap;
-	QMap<QListViewItem *, QString> buttonMap;
-	QMap<QListViewItem *, bool> uniqueProgramMap;
-	QMap<QListViewItem *, QString> nameProgramMap;
+	QMap<Q3ListViewItem *, QString> profileMap;
+	QMap<Q3ListViewItem *, QString> profileFunctionMap;
+	QMap<Q3ListViewItem *, QString> buttonMap;
+	QMap<Q3ListViewItem *, bool> uniqueProgramMap;
+	QMap<Q3ListViewItem *, QString> nameProgramMap;
 
 	AddAction(QWidget *parent, const char *name, const Mode &mode);
 	~AddAction();

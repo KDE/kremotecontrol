@@ -16,6 +16,8 @@
 #include <klistview.h>
 
 #include <klistview.h>
+//Added by qt3to4:
+#include <QDropEvent>
 
 /**
 

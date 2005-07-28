@@ -15,7 +15,7 @@
 
 #include <qstring.h>
 #include <qxml.h>
-#include <qdict.h>
+#include <q3dict.h>
 
 /**
 @author Gav Wood
@@ -41,7 +41,7 @@ public:
 class Remote : public QXmlDefaultHandler
 {
 	QString theName, theId, theAuthor;
-	QDict<RemoteButton> theButtons;
+	Q3Dict<RemoteButton> theButtons;
 
 	QString charBuffer;
 	RemoteButton *curRB;
@@ -58,7 +58,7 @@ public:
 	const QString &id(void) const { return theId; }
 	void setAuthor(const QString &a) { theAuthor = a; }
 	const QString &author(void) const { return theAuthor; }
-	const QDict<RemoteButton> &buttons() const { return theButtons; }
+	const Q3Dict<RemoteButton> &buttons() const { return theButtons; }
 
 	void loadFromFile(const QString &fileName);
 
@@ -72,12 +72,12 @@ class RemoteServer
 {
 	static RemoteServer *theInstance;
 	void loadRemotes();
-	QDict<Remote> theRemotes;
+	Q3Dict<Remote> theRemotes;
 
 public:
 	static RemoteServer *remoteServer() { if(!theInstance) theInstance = new RemoteServer(); return theInstance; }
 
-	const QDict<Remote> &remotes() const { return theRemotes; }
+	const Q3Dict<Remote> &remotes() const { return theRemotes; }
 
 	const QString &getRemoteName(const QString &id) const { if(theRemotes[id]) return theRemotes[id]->name(); return id; }
 	const QString &getButtonName(const QString &remote, const QString &button) const { if(theRemotes[remote]) return theRemotes[remote]->getButtonName(button); return button; }

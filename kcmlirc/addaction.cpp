@@ -11,9 +11,11 @@
 #include <qregexp.h>
 #include <qlabel.h>
 #include <qradiobutton.h>
-#include <qwidgetstack.h>
+#include <q3widgetstack.h>
 #include <qcheckbox.h>
-#include <qbuttongroup.h>
+#include <q3buttongroup.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 #include <kdebug.h>
 #include <klineedit.h>
@@ -64,18 +66,18 @@ void AddAction::slotCorrectPage()
 	curPage = indexOf(currentPage());
 
 	if(curPage == 2 && theUseProfile->isChecked())
-		showPage(((QWizard *)this)->page(lastPage > 1 ? 1 : 3));
+		showPage(((Q3Wizard *)this)->page(lastPage > 1 ? 1 : 3));
 	if((curPage == 2 || curPage == 5) && theChangeMode->isChecked())
-		showPage(((QWizard *)this)->page(lastPage > 1 ? 1 : 6));
+		showPage(((Q3Wizard *)this)->page(lastPage > 1 ? 1 : 6));
 
 	if(curPage == 3 && theUseDCOP->isChecked())
-		showPage(((QWizard *)this)->page(lastPage == 4 ? 2 : 4));
+		showPage(((Q3Wizard *)this)->page(lastPage == 4 ? 2 : 4));
 
 	if(curPage == 4 && (
 	(theUseDCOP->isChecked() && theFunctions->currentItem() && !Prototype(theFunctions->currentItem()->text(2)).count()) ||
 	(theUseProfile->isChecked() && (theProfileFunctions->currentItem() && !theProfileFunctions->currentItem()->text(1).toInt() || theJustStart->isChecked()))
 	))
-		showPage(((QWizard *)this)->page(lastPage == 5 ? (theUseDCOP->isChecked() ? 2 : 3) : 5));
+		showPage(((Q3Wizard *)this)->page(lastPage == 5 ? (theUseDCOP->isChecked() ? 2 : 3) : 5));
 }
 
 void AddAction::requestNextPress()
@@ -111,7 +113,7 @@ void AddAction::updateButtons()
 	IRKick_stub IRKick("irkick", "IRKick");
 	QStringList buttons = IRKick.buttons(theMode.remote());
 	for(QStringList::iterator j = buttons.begin(); j != buttons.end(); ++j)
-		buttonMap[new QListViewItem(theButtons, RemoteServer::remoteServer()->getButtonName(theMode.remote(), *j))] = *j;
+		buttonMap[new Q3ListViewItem(theButtons, RemoteServer::remoteServer()->getButtonName(theMode.remote(), *j))] = *j;
 }
 
 void AddAction::updateForPageChange()
@@ -160,10 +162,10 @@ void AddAction::updateProfiles()
 	theProfiles->clear();
 	profileMap.clear();
 
-	QDict<Profile> dict = theServer->profiles();
-	QDictIterator<Profile> i(dict);
+	Q3Dict<Profile> dict = theServer->profiles();
+	Q3DictIterator<Profile> i(dict);
 	for(; i.current(); ++i)
-		profileMap[new QListViewItem(theProfiles, i.current()->name())] = i.currentKey();
+		profileMap[new Q3ListViewItem(theProfiles, i.current()->name())] = i.currentKey();
 }
 
 void AddAction::updateOptions()
@@ -180,7 +182,7 @@ void AddAction::updateOptions()
 	else if(theUseDCOP->isChecked())
 	{
 		if(!theObjects->selectedItem()) return;
-		QListViewItem* i = theObjects->selectedItem()->parent();
+		Q3ListViewItem* i = theObjects->selectedItem()->parent();
 		if(!i) return;
 		isUnique = uniqueProgramMap[i];
 		QRegExp r("(.*)-[0-9]+");
@@ -213,9 +215,9 @@ void AddAction::updateProfileFunctions()
 	if(!theProfiles->currentItem()) return;
 
 	const Profile *p = theServer->profiles()[profileMap[theProfiles->currentItem()]];
-	QDict<ProfileAction> dict = p->actions();
-	for(QDictIterator<ProfileAction> i(dict); i.current(); ++i)
-		profileFunctionMap[new QListViewItem(theProfileFunctions, i.current()->name(), QString().setNum(i.current()->arguments().count()), i.current()->comment())] = i.currentKey();
+	Q3Dict<ProfileAction> dict = p->actions();
+	for(Q3DictIterator<ProfileAction> i(dict); i.current(); ++i)
+		profileFunctionMap[new Q3ListViewItem(theProfileFunctions, i.current()->name(), QString().setNum(i.current()->arguments().count()), i.current()->comment())] = i.currentKey();
 	updateParameters();
 	updateOptions();
 }
@@ -243,10 +245,10 @@ void AddAction::updateParameters()
 		const ProfileAction *pa = p->actions()[profileFunctionMap[theProfileFunctions->currentItem()]];
 
 		int index = 1;
-		for(QValueList<ProfileActionArgument>::const_iterator i = pa->arguments().begin(); i != pa->arguments().end(); ++i, index++)
+		for(Q3ValueList<ProfileActionArgument>::const_iterator i = pa->arguments().begin(); i != pa->arguments().end(); ++i, index++)
 		{	theArguments.append(QVariant((*i).getDefault()));
 			theArguments.back().cast(QVariant::nameToType((*i).type().utf8()));
-			new QListViewItem(theParameters, (*i).comment(), theArguments.back().toString(), (*i).type(), QString().setNum(index));
+			new Q3ListViewItem(theParameters, (*i).comment(), theArguments.back().toString(), (*i).type(), QString().setNum(index));
 		}
 
 		// quicky update options too...
@@ -323,7 +325,7 @@ void AddAction::slotParameterChanged()
 }
 
 // takes theArguments[theIndex] and puts it into theItem
-void AddAction::updateArgument(QListViewItem *theItem)
+void AddAction::updateArgument(Q3ListViewItem *theItem)
 {
 	theItem->setText(1, theArguments[theItem->text(3).toInt() - 1].toString());
 }
