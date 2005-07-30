@@ -101,7 +101,7 @@
                                         <cstring>theRemotesLabel</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>Remote controls and Modes:</string>
+                                        <string>Remote controls and modes:</string>
                                     </property>
                                 </widget>
                                 <widget class="KListView">
