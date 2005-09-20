@@ -17,7 +17,6 @@
 #include <QMouseEvent>
 #include <Q3ValueList>
 #include <Q3CString>
-
 #include <kdeversion.h>
 #include <kapplication.h>
 #include <kaction.h>
@@ -195,8 +194,8 @@ bool IRKick::getPrograms(const IRAction &action, QStringList &programs)
 	{
 		QRegExp r = QRegExp("^" + action.program() + "-(\\d+)$");
 		// find all instances...
-		QCStringList buf = theDC->registeredApplications();
-		for(QCStringList::iterator i = buf.begin(); i != buf.end(); ++i)
+		DCOPCStringList buf = theDC->registeredApplications();
+		for(DCOPCStringList::iterator i = buf.begin(); i != buf.end(); ++i)
 		{
 			QString program = QString::fromUtf8(*i);
 			if(program.contains(r))
@@ -208,7 +207,7 @@ bool IRKick::getPrograms(const IRAction &action, QStringList &programs)
 		{	Q3ValueList<WId> s = KWinModule().stackingOrder();
 			// go through all the (ordered) window pids
 			for(Q3ValueList<WId>::iterator i = s.fromLast(); i != s.end(); i--)
-			{	int p = KWin::info(*i).pid;
+			{	int p = KWin::windowInfo(*i,NET::WMPid).win();
 				QString id = action.program() + "-" + QString().setNum(p);
 				if(programs.contains(id))
 				{	programs.clear();
@@ -222,7 +221,7 @@ bool IRKick::getPrograms(const IRAction &action, QStringList &programs)
 		{	Q3ValueList<WId> s = KWinModule().stackingOrder();
 			// go through all the (ordered) window pids
 			for(Q3ValueList<WId>::iterator i = s.begin(); i != s.end(); ++i)
-			{	int p = KWin::info(*i).pid;
+			{	int p = KWin::windowInfo(*i,NET::WMPid).win();
 				QString id = action.program() + "-" + QString().setNum(p);
 				if(programs.contains(id))
 				{	programs.clear();
