@@ -36,7 +36,7 @@ class IRKTrayIcon: public KSystemTray
 	void mousePressEvent(QMouseEvent *e);
 
 public:
-	KPopupMenu* contextMenu() const { return KSystemTray::contextMenu(); }
+	KMenu* contextMenu() const { return KSystemTray::contextMenu(); }
 	KActionCollection* actionCollection() { return KSystemTray::actionCollection(); }
 
 	IRKTrayIcon(QWidget *parent = 0, const char *name = 0): KSystemTray(parent, name) {}

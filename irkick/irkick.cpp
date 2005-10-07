@@ -28,7 +28,7 @@
 #include <kiconloader.h>
 #include <kpassivepopup.h>
 #include <kmessagebox.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kaboutdialog.h>
@@ -41,6 +41,7 @@
 
 #include <dcopclient.h>
 #include <dcopref.h>
+#include <ktoolinvocation.h>
 
 #include "profileserver.h"
 #include "irkick.h"
@@ -155,7 +156,7 @@ void IRKick::slotReloadConfiguration()
 
 void IRKick::slotConfigure()
 {
-	KApplication::startServiceByDesktopName("kcmlirc");
+	KToolInvocation::startServiceByDesktopName("kcmlirc");
 }
 
 void IRKick::updateModeIcons()
@@ -248,7 +249,7 @@ void IRKick::executeAction(const IRAction &action)
 		if(!sname.isNull())
 		{
 			KPassivePopup::message("IRKick", i18n("Starting <b>%1</b>...").arg(action.application()), SmallIcon("irkick"), theTrayIcon);
-			KApplication::startServiceByDesktopName(sname);
+			KToolInvocation::startServiceByDesktopName(sname);
 		}
 	}
 	if(action.isJustStart()) return;

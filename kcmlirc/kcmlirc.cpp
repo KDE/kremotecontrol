@@ -54,7 +54,7 @@ K_EXPORT_COMPONENT_FACTORY(kcmlirc, theFactory("kcmlirc"))
 
 KCMLirc::KCMLirc(QWidget *parent, const char *name, QStringList /*args*/) : DCOPObject("KCMLirc"), KCModule(parent, name)
 {
-	KGlobal::locale()->insertCatalogue( "kcmlirc" );
+	KGlobal::locale()->insertCatalog( "kcmlirc" );
 	setAboutData(new KAboutData("kcmlirc", I18N_NOOP("KDE Lirc"), VERSION, I18N_NOOP("The KDE IR Remote Control System"), KAboutData::License_GPL_V2, "Copyright (c)2003 Gav Wood", I18N_NOOP("Use this to configure KDE's infrared remote control system in order to control any KDE application with your infrared remote control."), "http://www.kde.org"));
 	setButtons(KCModule::Help);
 	setQuickHelp(i18n("<h1>Remote Controls</h1><p>This module allows you to configure bindings between your remote controls and KDE applications. Simply select your remote control and click Add under the Actions/Buttons list. If you want KDE to attempt to automatically assign buttons to a supported application's actions, try clicking the Auto-Populate button.</p><p>To view the recognised applications and remote controls, simply select the <em>Loaded Extensions</em> tab.</p>"));
@@ -62,7 +62,7 @@ KCMLirc::KCMLirc(QWidget *parent, const char *name, QStringList /*args*/) : DCOP
 	KApplication::kApplication()->dcopClient()->remoteInterfaces("irkick", "IRKick", &ok);
 	if(!ok)
 		if(KMessageBox::questionYesNo(this, i18n("The Infrared Remote Control software is not currently running. This configuration module will not work properly without it. Would you like to start it now?"), i18n("Software Not Running"), i18n("Start"), i18n("Do Not Start")) == KMessageBox::Yes)
-		{	kdDebug() << "S" << KApplication::startServiceByDesktopName("irkick") << endl;
+		{	kdDebug() << "S" << KToolInvocation::startServiceByDesktopName("irkick") << endl;
 			KSimpleConfig theConfig("irkickrc");
 			theConfig.setGroup("General");
 			if(theConfig.readBoolEntry("AutoStart", true) == false)
@@ -537,11 +537,12 @@ void KCMLirc::configChanged()
 extern "C"
 {
 	KDE_EXPORT KCModule *create_kcmlirc(QWidget *parent, const char *)
-	{	KGlobal::locale()->insertCatalogue("kcmlirc");
+	{	KGlobal::locale()->insertCatalog("kcmlirc");
 		return new KCMLirc(parent, "KCMLirc");
 	}
 }
 
 #include <irkick_stub.cpp>
+#include <ktoolinvocation.h>
 
 #include "kcmlirc.moc"
