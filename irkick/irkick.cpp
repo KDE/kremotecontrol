@@ -75,7 +75,7 @@ IRKick::IRKick(const Q3CString &obj) : QObject(), DCOPObject(obj), npApp(QString
 	connect(theClient, SIGNAL(remotesRead()), this, SLOT(resetModes()));
 	connect(theClient, SIGNAL(commandReceived(const QString &, const QString &, int)), this, SLOT(gotMessage(const QString &, const QString &, int)));
 
-	theTrayIcon->contextMenu()->changeTitle(0, "IRKick");
+	theTrayIcon->contextMenu()->addTitle( "IRKick");
 	theTrayIcon->contextMenu()->insertItem(SmallIcon( "configure" ), i18n("&Configure..."), this, SLOT(slotConfigure()));
 	theTrayIcon->contextMenu()->insertSeparator();
 	theTrayIcon->contextMenu()->insertItem(SmallIcon( "help" ), KStdGuiItem::help().text(), (new KHelpMenu(theTrayIcon, KGlobal::instance()->aboutData()))->menu());
@@ -173,7 +173,7 @@ void IRKick::updateModeIcons()
 		{	if(!currentModeIcons[i.key()])
 			{	currentModeIcons[i.key()] = new IRKTrayIcon();
 				currentModeIcons[i.key()]->show();
-				currentModeIcons[i.key()]->contextMenu()->changeTitle(0, mode.remoteName());
+				currentModeIcons[i.key()]->contextMenu()->addTitle( mode.remoteName());
 				currentModeIcons[i.key()]->actionCollection()->action("file_quit")->setEnabled(false);
 			}
 			currentModeIcons[i.key()]->setPixmap(KIconLoader().loadIcon(mode.iconFile(), KIcon::Panel));

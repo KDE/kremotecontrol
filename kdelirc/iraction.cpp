@@ -69,7 +69,7 @@ void IRAction::saveToConfig(KConfig &theConfig, int index) const
 	QString Binding = "Binding" + QString().setNum(index);
 
 	theConfig.writeEntry(Binding + "Arguments", theArguments.count());
-	for(unsigned j = 0; j < theArguments.count(); j++)
+	for(int j = 0; j < theArguments.count(); j++)
 	{	QVariant arg = theArguments[j];
 		QVariant::Type preType = arg.type();
 		if(preType == QVariant::CString) arg.cast(QVariant::String);
