@@ -32,7 +32,7 @@ Prototype::~Prototype()
 const QString Prototype::argumentList() const
 {
 	QString ret = "";
-	for(unsigned i = 0; i < theTypes.count(); i++)
+	for(int i = 0; i < theTypes.count(); i++)
 		ret += (i ? ", " : "") + theTypes[i] + " " + theNames[i];
 	return ret;
 }
@@ -40,7 +40,7 @@ const QString Prototype::argumentList() const
 const QString Prototype::argumentListNN() const
 {
 	QString ret = "";
-	for(unsigned i = 0; i < theTypes.count(); i++)
+	for(int i = 0; i < theTypes.count(); i++)
 		ret += (i ? ", " : "") + theTypes[i];
 	return ret;
 }
