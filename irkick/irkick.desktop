@@ -2,7 +2,6 @@
 Type=Service
 Name=IRKick
 Name[sv]=IRkick
-Name[xx]=xxIRKickxx
 GenericName=KDE LIRC Server
 GenericName[bg]=Сървър LIRC
 GenericName[br]=Servijer LIRC KDE
@@ -37,7 +36,6 @@ GenericName[sr@Latn]=KDE-ov LIRC server
 GenericName[sv]=KDE:s LIRC-server
 GenericName[ta]=KDE LIRC சேவகன்
 GenericName[uk]=Сервер LIRC для KDE
-GenericName[xx]=xxKDE LIRC Serverxx
 GenericName[zh_CN]=KDE LIRC 服务器
 
 X-KDE-Library=irkick
@@ -91,7 +89,6 @@ Comment[tg]=Хидматрасони идоракунии дурдасти ин�
 Comment[tr]=KDE Linux kızılötesi uzaktan kontrol sunucusu.
 Comment[uk]=Сервер дистанційного керування інфрачервоними пристроями для Linux та KDE.
 Comment[uz]=Инфрақизил нур билан масофадан бошқариш сервери
-Comment[xx]=xxKDE Linux infrared remote control server.xx
 Comment[zh_CN]=KDE Linux 红外远程控制服务器。
 Encoding=UTF-8
 
