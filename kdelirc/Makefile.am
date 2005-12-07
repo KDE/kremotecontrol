@@ -37,7 +37,7 @@ METASOURCES = AUTO
 libkdelirc_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 
 # Uncomment the following two lines if you add a ui.rc file for your application to make use of
-# KDE´s XML GUI builing
+# KDE's XML GUI builing
 #rcdir = $(kde_datadir)/irkick
 #rc_DATA = irkickui.rc
 
