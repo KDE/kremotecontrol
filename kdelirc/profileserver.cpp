@@ -84,7 +84,7 @@ const QString &ProfileServer::getServiceName(const QString &appId) const
 {
 	if(theProfiles[appId])
 		return theProfiles[appId]->serviceName();
-	return QString::null;
+	return QString();
 }
 
 const ProfileAction *ProfileServer::getAction(const QString &appId, const QString &objId, const QString &prototype) const
