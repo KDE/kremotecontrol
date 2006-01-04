@@ -48,12 +48,12 @@ const IRAction &IRAction::loadFromConfig(KConfig &theConfig, int index)
 		theArguments.last().cast(theType);
 	}
 
-	theProgram = theConfig.readEntry(Binding + "Program");
-	theObject = theConfig.readEntry(Binding + "Object");
-	theMethod.setPrototype(theConfig.readEntry(Binding + "Method"));
-	theRemote = theConfig.readEntry(Binding + "Remote");
-	theMode = theConfig.readEntry(Binding + "Mode");
-	theButton = theConfig.readEntry(Binding + "Button");
+	theProgram = theConfig.readEntry(Binding + "Program",QString());
+	theObject = theConfig.readEntry(Binding + "Object",QString());
+	theMethod.setPrototype(theConfig.readEntry(Binding + "Method",QString()));
+	theRemote = theConfig.readEntry(Binding + "Remote",QString());
+	theMode = theConfig.readEntry(Binding + "Mode",QString());
+	theButton = theConfig.readEntry(Binding + "Button",QString());
 	theRepeat = theConfig.readBoolEntry(Binding + "Repeat");
 	theDoBefore = theConfig.readBoolEntry(Binding + "DoBefore");
 	theDoAfter = theConfig.readBoolEntry(Binding + "DoAfter");

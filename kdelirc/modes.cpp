@@ -35,7 +35,7 @@ void Modes::loadFromConfig(KConfig &theConfig)
 	}
 
 	for(iterator i = begin(); i != end(); ++i)
-		theDefaults[i.key()] = theConfig.readEntry("Default" + i.key());
+		theDefaults[i.key()] = theConfig.readEntry("Default" + i.key(),QString());
 }
 
 void Modes::generateNulls(const QStringList &theRemotes)
