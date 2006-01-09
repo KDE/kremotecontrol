@@ -64,11 +64,6 @@ public slots:
 	void slotEditMode();
 
 
-// MOC_SKIP_BEGIN
-k_dcop:
-// MOC_SKIP_END
-	// now just used as a proxy to AddAction class
-	virtual void gotButton(QString remote, QString button);
 signals:
 	void haveButton(const QString &remote, const QString &button);
 
@@ -80,6 +75,12 @@ public:
 
 	KCMLirc(QWidget *parent = 0, const char *name = 0, QStringList args = QStringList());
 	~KCMLirc();
+// MOC_SKIP_BEGIN
+k_dcop:
+// MOC_SKIP_END
+    // now just used as a proxy to AddAction class
+    virtual void gotButton(QString remote, QString button);
+
 };
 
 #endif
