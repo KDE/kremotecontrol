@@ -128,7 +128,7 @@ private:
 	bool getPrograms(const IRAction &action, QStringList &populous);
 
 public:
-	IRKick(const Q3CString &obj);
+	IRKick(const DCOPCString &obj);
 	virtual ~IRKick();
 };
 

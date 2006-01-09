@@ -51,7 +51,7 @@ void IRKTrayIcon::mousePressEvent(QMouseEvent *e)
 	KSystemTray::mousePressEvent(new QMouseEvent(QEvent::MouseButtonPress, e->pos(), e->globalPos(), e->button() == Qt::LeftButton ? Qt::RightButton : e->button(), e->state()));
 }
 
-IRKick::IRKick(const Q3CString &obj) : QObject(), DCOPObject(obj), npApp(QString::null)
+IRKick::IRKick(const DCOPCString &obj) : QObject(), DCOPObject(obj), npApp(QString::null)
 {
     kapp->dcopClient()->setDefaultObject(obj);
 	theClient = new KLircClient();
