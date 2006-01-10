@@ -17,7 +17,6 @@
 #include <qstring.h>
 //Added by qt3to4:
 #include <QMouseEvent>
-#include <Q3CString>
 
 #include <ksystemtray.h>
 #include <kdedmodule.h>
@@ -39,7 +38,7 @@ public:
 	KMenu* contextMenu() const { return KSystemTray::contextMenu(); }
 	KActionCollection* actionCollection() { return KSystemTray::actionCollection(); }
 
-	IRKTrayIcon(QWidget *parent = 0, const char *name = 0): KSystemTray(parent, name) {}
+	IRKTrayIcon(QWidget *parent = 0, const char *name = 0): KSystemTray(parent) {}
 };
 
 class IRKick: public QObject, public DCOPObject
