@@ -74,7 +74,7 @@ void IRAction::saveToConfig(KConfig &theConfig, int index) const
 		QVariant::Type preType = arg.type();
 		if(preType == QVariant::CString) arg.cast(QVariant::String);
 		theConfig.writeEntry(Binding + "Argument" + QString().setNum(j), arg);
-		theConfig.writeEntry(Binding + "ArgumentType" + QString().setNum(j), preType);
+		theConfig.writeEntry(Binding + "ArgumentType" + QString().setNum(j), int(preType));
 	}
 	theConfig.writeEntry(Binding + "Program", theProgram);
 	theConfig.writeEntry(Binding + "Object", theObject);
@@ -87,7 +87,7 @@ void IRAction::saveToConfig(KConfig &theConfig, int index) const
 	theConfig.writeEntry(Binding + "DoAfter", theDoAfter);
 	theConfig.writeEntry(Binding + "AutoStart", theAutoStart);
 	theConfig.writeEntry(Binding + "Unique", theUnique);
-	theConfig.writeEntry(Binding + "IfMulti", theIfMulti);
+	theConfig.writeEntry(Binding + "IfMulti", int(theIfMulti));
 }
 
 const QString IRAction::function() const
