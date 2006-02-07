@@ -36,7 +36,7 @@ void ProfileServer::loadProfiles()
 {
 	QStringList theFiles = KGlobal::dirs()->findAllResources("data", "profiles/*.profile.xml");
 	for(QStringList::iterator i = theFiles.begin(); i != theFiles.end(); ++i)
-	{	kdDebug() << "Found data file: " << *i << endl;
+	{	kDebug() << "Found data file: " << *i << endl;
 		Profile *p = new Profile();
 		p->loadFromFile(*i);
 		theProfiles.insert(p->id(), p);

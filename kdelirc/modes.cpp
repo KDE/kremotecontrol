@@ -113,7 +113,7 @@ void Modes::erase(const Mode &mode)
 
 void Modes::add(const Mode &mode)
 {
-	kdDebug() << "adding a mode " << mode.name() << " to remote " << mode.remote() << endl;
+	kDebug() << "adding a mode " << mode.name() << " to remote " << mode.remote() << endl;
 	operator[](mode.remote())[mode.name()] = mode;
 }
 

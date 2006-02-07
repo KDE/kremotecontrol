@@ -261,9 +261,9 @@ void IRKick::executeAction(const IRAction &action)
 		if(theDC->isApplicationRegistered(program.utf8()))
 		{	QByteArray data; QDataStream arg(&data, QIODevice::WriteOnly);
  arg.setVersion(QDataStream::Qt_3_1);
-			kdDebug() << "Sending data (" << program << ", " << action.object() << ", " << action.method().prototypeNR() << endl;
+			kDebug() << "Sending data (" << program << ", " << action.object() << ", " << action.method().prototypeNR() << endl;
 			for(Arguments::const_iterator j = action.arguments().begin(); j != action.arguments().end(); ++j)
-			{	kdDebug() << "Got argument..." << endl;
+			{	kDebug() << "Got argument..." << endl;
 				switch((*j).type())
 				{	case QVariant::Int: arg << (*j).toInt(); break;
 					case QVariant::CString: arg << (*j).toCString(); break;
@@ -281,7 +281,7 @@ void IRKick::executeAction(const IRAction &action)
 
 void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int theRepeatCounter)
 {
-	kdDebug() << "Got message: " << theRemote << ": " << theButton << " (" << theRepeatCounter << ")" << endl;
+	kDebug() << "Got message: " << theRemote << ": " << theButton << " (" << theRepeatCounter << ")" << endl;
 	theTrayIcon->setPixmap(SmallIcon("irkickflash"));
 	theFlashOff->start(200, true);
 	if(!npApp.isNull())
