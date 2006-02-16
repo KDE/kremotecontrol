@@ -13,7 +13,7 @@
             <height>326</height>
         </rect>
     </property>
-    <property name="caption">
+    <property name="windowTitle">
         <string>Linux Infrared Remote Control</string>
     </property>
     <grid>

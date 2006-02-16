@@ -12,7 +12,7 @@
             <height>334</height>
         </rect>
     </property>
-    <property name="caption">
+    <property name="windowTitle">
         <string>Edit Mode</string>
     </property>
     <vbox>

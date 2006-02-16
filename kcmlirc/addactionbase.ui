@@ -13,7 +13,7 @@
             <height>593</height>
         </rect>
     </property>
-    <property name="caption">
+    <property name="windowTitle">
         <string>Add Action</string>
     </property>
     <widget class="QWidget">

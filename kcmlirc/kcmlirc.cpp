@@ -33,7 +33,7 @@
 #include <klistview.h>
 #include <kmessagebox.h>
 #include <kpushbutton.h>
-
+#include <ktoolinvocation.h>
 #include <dcopclient.h>
 #include <dcopref.h>
 

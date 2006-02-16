@@ -12,7 +12,7 @@
             <height>715</height>
         </rect>
     </property>
-    <property name="caption">
+    <property name="windowTitle">
         <string>Edit Action</string>
     </property>
     <property name="sizeGripEnabled">
