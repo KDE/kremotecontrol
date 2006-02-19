@@ -3,6 +3,7 @@ Type=Service
 Name=IRKick
 Name[x-test]=xxIRKickxx
 GenericName=KDE LIRC Server
+GenericName[fr]=Serveur KDE LIRC
 GenericName[x-test]=xxKDE LIRC Serverxx
 
 X-KDE-Library=irkick
@@ -16,6 +17,7 @@ Exec=irkick
 Icon=irkick
 DocPath=kcontrol/kdelirc.html
 Comment=KDE Linux infrared remote control server.
+Comment[fr]=Serveur de contrôle distant infrarouge sous Linux pour KDE.
 Comment[x-test]=xxKDE Linux infrared remote control server.xx
 Encoding=UTF-8
 
