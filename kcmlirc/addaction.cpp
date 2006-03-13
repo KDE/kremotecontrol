@@ -19,7 +19,7 @@
 
 #include <kdebug.h>
 #include <klineedit.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <kapplication.h>
 #include <kmessagebox.h>
 #include <knuminput.h>
@@ -230,7 +230,7 @@ void AddAction::updateParameters()
 	{
 		Prototype p(theFunctions->currentItem()->text(2));
 		for(unsigned k = 0; k < p.count(); k++)
-		{	new KListViewItem(theParameters, p.name(k).isEmpty() ? i18n( "<anonymous>" ) : p.name(k), "", p.type(k), QString().setNum(k + 1));
+		{	new K3ListViewItem(theParameters, p.name(k).isEmpty() ? i18n( "<anonymous>" ) : p.name(k), "", p.type(k), QString().setNum(k + 1));
 			theArguments.append(QVariant(""));
 			theArguments.back().cast(QVariant::nameToType(p.type(k).utf8()));
 		}
@@ -347,14 +347,14 @@ void AddAction::updateObjects()
 		if(names.contains(name)) continue;
 		names += name;
 
-		KListViewItem *a = new KListViewItem(theObjects, name);
+		K3ListViewItem *a = new K3ListViewItem(theObjects, name);
 		uniqueProgramMap[a] = name == QString(*i);
 		nameProgramMap[a] = *i;
 
 		QCStringList theObjects = theClient->remoteObjects(*i);
 		for(QCStringList::iterator j = theObjects.begin(); j != theObjects.end(); ++j)
 			if(*j != "ksycoca" && *j != "qt")// && getFunctions(*i, *j).count())
-				new KListViewItem(a, *j);
+				new K3ListViewItem(a, *j);
 	}
 	updateFunctions();
 }
@@ -366,7 +366,7 @@ void AddAction::updateFunctions()
 	{	QStringList functions = getFunctions(nameProgramMap[theObjects->currentItem()->parent()], theObjects->currentItem()->text(0));
 		for(QStringList::iterator i = functions.begin(); i != functions.end(); ++i)
 		{	Prototype p((QString)(*i));
-			new KListViewItem(theFunctions, p.name(), p.argumentList(), *i);
+			new K3ListViewItem(theFunctions, p.name(), p.argumentList(), *i);
 		}
 	}
 	updateOptions();

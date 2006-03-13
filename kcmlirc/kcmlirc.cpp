@@ -30,7 +30,7 @@
 #include <kdebug.h>
 #include <ksimpleconfig.h>
 #include <kgenericfactory.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <kmessagebox.h>
 #include <kpushbutton.h>
 #include <ktoolinvocation.h>
@@ -81,7 +81,7 @@ KCMLirc::KCMLirc(QWidget *parent, const char *name, QStringList /*args*/) : DCOP
 	connect(theKCMLircBase->theActions, SIGNAL( currentChanged(Q3ListViewItem *) ), this, SLOT( updateActionsStatus(Q3ListViewItem *) ));
 	connect(theKCMLircBase->theExtensions, SIGNAL( selectionChanged(Q3ListViewItem *) ), this, SLOT( updateInformation() ));
 	connect(theKCMLircBase->theModes, SIGNAL( itemRenamed(Q3ListViewItem *) ), this, SLOT( slotRenamed(Q3ListViewItem *) ));
-	connect(theKCMLircBase->theModes, SIGNAL(dropped(KListView*, QDropEvent*, Q3ListViewItem*, Q3ListViewItem*)), this, SLOT(slotDrop(KListView*, QDropEvent*, Q3ListViewItem*, Q3ListViewItem*)));
+	connect(theKCMLircBase->theModes, SIGNAL(dropped(K3ListView*, QDropEvent*, Q3ListViewItem*, Q3ListViewItem*)), this, SLOT(slotDrop(K3ListView*, QDropEvent*, Q3ListViewItem*, Q3ListViewItem*)));
 	connect((QObject *)(theKCMLircBase->theAddActions), SIGNAL( clicked() ), this, SLOT( slotAddActions() ));
 	connect((QObject *)(theKCMLircBase->theAddAction), SIGNAL( clicked() ), this, SLOT( slotAddAction() ));
 	connect((QObject *)(theKCMLircBase->theEditAction), SIGNAL( clicked() ), this, SLOT( slotEditAction() ));
@@ -173,7 +173,7 @@ void KCMLirc::slotAddAction()
 	theDialog.theModes->setEnabled(item->firstChild());
 	theDialog.theSwitchMode->setEnabled(item->firstChild());
 	for(item = item->firstChild(); item; item = item->nextSibling())
-	{	KListViewItem *a = new KListViewItem(theDialog.theModes, item->text(0));
+	{	K3ListViewItem *a = new K3ListViewItem(theDialog.theModes, item->text(0));
 		if(item->isSelected()) { a->setSelected(true); theDialog.theModes->setCurrentItem(a); }
 	}
 
@@ -288,7 +288,7 @@ void KCMLirc::slotAddMode()
 	Q3ListViewItem *tr = theKCMLircBase->theModes->selectedItem();
 	if(tr) if(tr->parent()) tr = tr->parent();
 	for(Q3ListViewItem *i = theKCMLircBase->theModes->firstChild(); i; i = i->nextSibling())
-	{	KListViewItem *a = new KListViewItem(theDialog.theRemotes, i->text(0));
+	{	K3ListViewItem *a = new K3ListViewItem(theDialog.theRemotes, i->text(0));
 		remoteMap[a] = modeMap[i].remote();
 		if(i == tr) { a->setSelected(true); theDialog.theRemotes->setCurrentItem(a); }
 	}
@@ -351,7 +351,7 @@ void KCMLirc::slotSetDefaultMode()
 	emit changed(true);
 }
 
-void KCMLirc::slotDrop(KListView *, QDropEvent *, Q3ListViewItem *, Q3ListViewItem *after)
+void KCMLirc::slotDrop(K3ListView *, QDropEvent *, Q3ListViewItem *, Q3ListViewItem *after)
 {
 	Mode m = modeMap[after];
 
@@ -382,7 +382,7 @@ void KCMLirc::updateActions()
 	theKCMLircBase->theModeLabel->setText(m.remoteName() + ": " + (m.name().isEmpty() ? i18n("Actions <i>always</i> available") : i18n("Actions available only in mode <b>%1</b>").arg(m.name())));
 	IRAItList l = allActions.findByMode(m);
 	for(IRAItList::iterator i = l.begin(); i != l.end(); ++i)
-	{	Q3ListViewItem *b = new KListViewItem(theKCMLircBase->theActions, (**i).buttonName(), (**i).application(), (**i).function(), (**i).arguments().toString(), (**i).notes());
+	{	Q3ListViewItem *b = new K3ListViewItem(theKCMLircBase->theActions, (**i).buttonName(), (**i).application(), (**i).function(), (**i).arguments().toString(), (**i).notes());
 		actionMap[b] = *i;
 		if(*i == oldCurrent) { b->setSelected(true); theKCMLircBase->theActions->setCurrentItem(b); }
 	}
@@ -413,7 +413,7 @@ void KCMLirc::updateModes()
 		theKCMLircBase->theMainLabel->setMaximumSize(0, 0);
 	for(QStringList::iterator i = remotes.begin(); i != remotes.end(); ++i)
 	{	Mode mode = allModes.getMode(*i, "");
-		Q3ListViewItem *a = new KListViewItem(theKCMLircBase->theModes, RemoteServer::remoteServer()->getRemoteName(*i), allModes.isDefault(mode) ? "Default" : "", mode.iconFile().isNull() ? "" : "");
+		Q3ListViewItem *a = new K3ListViewItem(theKCMLircBase->theModes, RemoteServer::remoteServer()->getRemoteName(*i), allModes.isDefault(mode) ? "Default" : "", mode.iconFile().isNull() ? "" : "");
 		if(!mode.iconFile().isNull())
 			a->setPixmap(2, KIconLoader().loadIcon(mode.iconFile(), KIcon::Panel));
 		modeMap[a] = mode;	// the null mode
@@ -422,7 +422,7 @@ void KCMLirc::updateModes()
 		ModeList l = allModes.getModes(*i);
 		for(ModeList::iterator j = l.begin(); j != l.end(); ++j)
 			if(!(*j).name().isEmpty())
-			{	Q3ListViewItem *b = new KListViewItem(a, (*j).name(), allModes.isDefault(*j) ? i18n("Default") : "", (*j).iconFile().isNull() ? "" : "");
+			{	Q3ListViewItem *b = new K3ListViewItem(a, (*j).name(), allModes.isDefault(*j) ? i18n("Default") : "", (*j).iconFile().isNull() ? "" : "");
 				if(!(*j).iconFile().isNull())
 					b->setPixmap(2, KIconLoader().loadIcon((*j).iconFile(), KIcon::Panel));
 				modeMap[b] = *j;

@@ -88,7 +88,7 @@
                                     </size>
                                 </property>
                             </spacer>
-                            <widget class="KListView">
+                            <widget class="K3ListView">
                                 <column>
                                     <property name="text">
                                         <string>Applications</string>
@@ -252,7 +252,7 @@
                             </size>
                         </property>
                     </spacer>
-                    <widget class="KListView">
+                    <widget class="K3ListView">
                         <column>
                             <property name="text">
                                 <string>Button</string>
@@ -318,7 +318,7 @@
                 <property name="orientation">
                     <enum>Qt::Horizontal</enum>
                 </property>
-                <widget class="KListView">
+                <widget class="K3ListView">
                     <column>
                         <property name="text">
                             <string>Program</string>
@@ -423,7 +423,7 @@
                         <property name="margin">
                             <number>0</number>
                         </property>
-                        <widget class="KListView">
+                        <widget class="K3ListView">
                             <column>
                                 <property name="text">
                                     <string>Function</string>
@@ -535,7 +535,7 @@
                                     </size>
                                 </property>
                             </spacer>
-                            <widget class="KListView">
+                            <widget class="K3ListView">
                                 <column>
                                     <property name="text">
                                         <string>Function</string>
@@ -626,7 +626,7 @@
             <property name="name">
                 <cstring>unnamed</cstring>
             </property>
-            <widget class="KListView">
+            <widget class="K3ListView">
                 <column>
                     <property name="text">
                         <string>Option Description</string>
@@ -1241,7 +1241,7 @@
                                     </size>
                                 </property>
                             </spacer>
-                            <widget class="KListView">
+                            <widget class="K3ListView">
                                 <column>
                                     <property name="text">
                                         <string>Mode</string>

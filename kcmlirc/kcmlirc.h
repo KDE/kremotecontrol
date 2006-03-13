@@ -25,7 +25,7 @@
 #include "modes.h"
 
 class Q3ListViewItem;
-class KListView;
+class K3ListView;
 class QDropEvent;
 class Profile;
 class Remote;
@@ -59,7 +59,7 @@ public slots:
 	void slotAddActions();
 	void slotEditAction();
 	void slotRemoveAction();
-	void slotDrop(KListView *, QDropEvent *, Q3ListViewItem *, Q3ListViewItem *after);
+	void slotDrop(K3ListView *, QDropEvent *, Q3ListViewItem *, Q3ListViewItem *after);
 	void slotRenamed(Q3ListViewItem *item);
 	void slotEditMode();
 

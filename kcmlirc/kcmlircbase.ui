@@ -104,7 +104,7 @@
                                         <string>Remote controls and modes:</string>
                                     </property>
                                 </widget>
-                                <widget class="KListView">
+                                <widget class="K3ListView">
                                     <column>
                                         <property name="text">
                                             <string>New Column</string>
@@ -221,7 +221,7 @@
                                         <string></string>
                                     </property>
                                 </widget>
-                                <widget class="KListView">
+                                <widget class="K3ListView">
                                     <column>
                                         <property name="text">
                                             <string>Button</string>
@@ -405,7 +405,7 @@
                         <property name="orientation">
                             <enum>Qt::Horizontal</enum>
                         </property>
-                        <widget class="KListView">
+                        <widget class="K3ListView">
                             <column>
                                 <property name="text">
                                     <string>Name</string>
@@ -446,7 +446,7 @@
                                         <string></string>
                                     </property>
                                 </widget>
-                                <widget class="KListView">
+                                <widget class="K3ListView">
                                     <column>
                                         <property name="text">
                                             <string>Name</string>

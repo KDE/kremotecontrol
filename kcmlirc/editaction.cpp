@@ -22,7 +22,7 @@
 
 #include <kdebug.h>
 #include <klineedit.h>
-#include <klistview.h>
+#include <k3listview.h>
 #include <kapplication.h>
 #include <kmessagebox.h>
 #include <knuminput.h>
