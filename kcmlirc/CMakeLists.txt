@@ -14,7 +14,7 @@ set(kcm_kcmlirc_PART_SRCS
 
 kde4_automoc(${kcm_kcmlirc_PART_SRCS})
 
-kde4_add_ui_files(kcm_kcmlirc_PART_SRCS 
+kde4_add_ui3_files(kcm_kcmlirc_PART_SRCS 
    selectprofile.ui 
    newmode.ui 
    kcmlircbase.ui 
