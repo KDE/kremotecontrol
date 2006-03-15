@@ -1,7 +1,9 @@
 kde4_header()
 
-message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(AUTODIRS)")
 include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}  )
+
+add_subdirectory(irkick)
+add_subdirectory(kcmlirc)
 
 
 ########### install files ###############
