@@ -1,11 +1,11 @@
 kde4_header()
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}  )
+include_directories( ${CMAKE_SOURCE_DIR}/kdelirc/kdelirc/ ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}  )
 
 
 ########### next target ###############
 
-set(kcm_kcmlirc_PART_SRCS 
+set(kcm_kcmlirc_PART_SRCS ${libkdelirc_SRCS} 
    kcmlirc.cpp 
    addaction.cpp 
    editmode.cpp 
@@ -28,7 +28,7 @@ kde4_add_plugin(kcm_kcmlirc ${kcm_kcmlirc_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kcm_kcmlirc )
 
-target_link_libraries(kcm_kcmlirc  ${QT_AND_KDECORE_LIBS} kdeui kdelirc )
+target_link_libraries(kcm_kcmlirc  ${LIB_KDEUI} kdelirc )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 kcm_kcmlirc )
 
