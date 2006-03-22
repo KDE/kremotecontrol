@@ -18,7 +18,7 @@
 
 EditMode::EditMode(QWidget *parent, const char *name, bool modal, Qt::WFlags fl) : EditModeBase(parent, name, modal, fl)
 {
-	theIcon->setIconType(KIcon::Panel, KIcon::Any);
+	theIcon->setIconType(K3Icon::Panel, K3Icon::Any);
 }
 
 EditMode::~EditMode()

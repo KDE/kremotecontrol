@@ -176,7 +176,7 @@ void IRKick::updateModeIcons()
 				currentModeIcons[i.key()]->contextMenu()->addTitle( mode.remoteName());
 				currentModeIcons[i.key()]->actionCollection()->action("file_quit")->setEnabled(false);
 			}
-			currentModeIcons[i.key()]->setPixmap(KIconLoader().loadIcon(mode.iconFile(), KIcon::Panel));
+			currentModeIcons[i.key()]->setPixmap(KIconLoader().loadIcon(mode.iconFile(), K3Icon::Panel));
 			QToolTip::add(currentModeIcons[i.key()], mode.remoteName() + ": <b>" + mode.name() + "</b>");
 		}
 	}
