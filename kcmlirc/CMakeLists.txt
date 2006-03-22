@@ -28,7 +28,7 @@ kde4_add_plugin(kcm_kcmlirc ${kcm_kcmlirc_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kcm_kcmlirc )
 
-target_link_libraries(kcm_kcmlirc  ${KDE4_KDEUI_LIBRARIES} kdelirc )
+target_link_libraries(kcm_kcmlirc  ${KDE4_KDEUI_LIBS} kdelirc )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 kcm_kcmlirc )
 
