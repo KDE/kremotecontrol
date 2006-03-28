@@ -1590,12 +1590,12 @@
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
-    <includehint>klistview.h</includehint>
-    <includehint>klistview.h</includehint>
-    <includehint>klistview.h</includehint>
-    <includehint>klistview.h</includehint>
-    <includehint>klistview.h</includehint>
-    <includehint>klistview.h</includehint>
+    <includehint>k3listview.h</includehint>
+    <includehint>k3listview.h</includehint>
+    <includehint>k3listview.h</includehint>
+    <includehint>k3listview.h</includehint>
+    <includehint>k3listview.h</includehint>
+    <includehint>k3listview.h</includehint>
     <includehint>klineedit.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
@@ -1603,6 +1603,6 @@
     <includehint>knuminput.h</includehint>
     <includehint>keditlistbox.h</includehint>
     <includehint>klineedit.h</includehint>
-    <includehint>klistview.h</includehint>
+    <includehint>k3listview.h</includehint>
 </includehints>
 </UI>
