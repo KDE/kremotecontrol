@@ -11,7 +11,7 @@ include_directories(
 
 ########### next target ###############
 
-set(kcm_kcmlirc_PART_SRCS ${libkdelirc_SRCS} 
+set(kcm_kcmlirc_PART_SRCS ${libkdelirc_SRCS}
    kcmlirc.cpp 
    addaction.cpp 
    editmode.cpp 
@@ -39,7 +39,7 @@ kde4_add_plugin(kcm_kcmlirc ${kcm_kcmlirc_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kcm_kcmlirc )
 
-target_link_libraries(kcm_kcmlirc  ${KDE4_KDEUI_LIBS} kdelirc )
+target_link_libraries(kcm_kcmlirc  ${KDE4_KIO_LIBS} DCOP )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 kcm_kcmlirc )
 

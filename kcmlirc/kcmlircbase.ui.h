@@ -21,7 +21,9 @@
 
 void KCMLircBase::init()
 {
-	delete theModes;
+#warning "kde4 port it !!!!!!!!!"
+#if 0		
+		delete theModes;
 	modeLayout->removeItem(modeButtonLayout);
 	theModes = new ModesList(dynamic_cast<QWidget *>(modeLayout->parent()), "theModes");
 	theModes->addColumn(i18n("Remote Control"));
@@ -34,4 +36,5 @@ void KCMLircBase::init()
 	modeLayout->addLayout(modeButtonLayout);
 	modeLayout->invalidate();
 	modeLayout->activate();
+#endif	
 }
