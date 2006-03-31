@@ -18,7 +18,7 @@
 
 #include "modeslist.h"
 
-ModesList::ModesList(QWidget *parent, const char *name) : K3ListView(parent, name)
+ModesList::ModesList(QWidget *parent, const char *name) : K3ListView(parent)
 {
 	setAcceptDrops(true);
 	setDropVisualizer(false);

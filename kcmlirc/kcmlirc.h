@@ -73,7 +73,7 @@ public:
 	virtual void defaults();
 	virtual void configChanged();
 
-	KCMLirc(QWidget *parent = 0, const char *name = 0, QStringList args = QStringList());
+	KCMLirc(QWidget *parent = 0, const char *name = 0, const QStringList &args = QStringList());
 	~KCMLirc();
 // MOC_SKIP_BEGIN
 k_dcop:

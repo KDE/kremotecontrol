@@ -146,12 +146,12 @@ const QStringList AddAction::getFunctions(const QString app, const QString obj)
 {
 	QStringList ret;
 	DCOPClient *theClient = KApplication::kApplication()->dcopClient();
-	QCStringList theApps = theClient->remoteFunctions(app.utf8(), obj.utf8());
-	for(QCStringList::iterator i = theApps.begin(); i != theApps.end(); ++i)
-		if(	*i != "QCStringList interfaces()" &&
-			*i != "QCStringList functions()" &&
-			*i != "QCStringList objects()" &&
-			*i != "QCStringList find(QCString)" )
+	DCOPCStringList theApps = theClient->remoteFunctions(app.utf8(), obj.utf8());
+	for(DCOPCStringList::iterator i = theApps.begin(); i != theApps.end(); ++i)
+		if(	*i != "DCOPCStringList interfaces()" &&
+			*i != "DCOPCStringList functions()" &&
+			*i != "DCOPCStringList objects()" &&
+			*i != "DCOPCStringList find(QCString)" )
 			ret += QString::fromUtf8(*i);
 	return ret;
 }
@@ -338,8 +338,8 @@ void AddAction::updateObjects()
 	nameProgramMap.clear();
 
 	DCOPClient *theClient = KApplication::kApplication()->dcopClient();
-	QCStringList theApps = theClient->registeredApplications();
-	for(QCStringList::iterator i = theApps.begin(); i != theApps.end(); ++i)
+	DCOPCStringList theApps = theClient->registeredApplications();
+	for(DCOPCStringList::iterator i = theApps.begin(); i != theApps.end(); ++i)
 	{
 		if(!QString(*i).find(i18n( "anonymous" ))) continue;
 		QRegExp r("(.*)-[0-9]+");
@@ -351,8 +351,8 @@ void AddAction::updateObjects()
 		uniqueProgramMap[a] = name == QString(*i);
 		nameProgramMap[a] = *i;
 
-		QCStringList theObjects = theClient->remoteObjects(*i);
-		for(QCStringList::iterator j = theObjects.begin(); j != theObjects.end(); ++j)
+		DCOPCStringList theObjects = theClient->remoteObjects(*i);
+		for(DCOPCStringList::iterator j = theObjects.begin(); j != theObjects.end(); ++j)
 			if(*j != "ksycoca" && *j != "qt")// && getFunctions(*i, *j).count())
 				new K3ListViewItem(a, *j);
 	}

@@ -1,6 +1,12 @@
 kde4_header()
 
-include_directories( ${CMAKE_SOURCE_DIR}/kdelirc/kdelirc/ ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}  )
+include_directories( 
+	${CMAKE_SOURCE_DIR}/kdelirc/irkick/
+	${CMAKE_SOURCE_DIR}/kdelirc/kdelirc/ 
+	${KDE4_INCLUDE_DIR} 
+	${QT_INCLUDES} 
+	${CMAKE_CURRENT_SOURCE_DIR} 
+	${CMAKE_CURRENT_BINARY_DIR}  )
 
 
 ########### next target ###############
@@ -13,6 +19,11 @@ set(kcm_kcmlirc_PART_SRCS ${libkdelirc_SRCS}
    modeslist.cpp )
 
 kde4_automoc(${kcm_kcmlirc_PART_SRCS})
+
+KDE4_ADD_DCOP_STUBS(${kcm_kcmlirc_PART_SRCS} ${CMAKE_SOURCE_DIR}/kdelirc/irkick/irkick.h)
+
+kde4_add_dcop_skels(${kcm_kcmlirc_PART_SRCS} ${CMAKE_SOURCE_DIR}/kdelirc/irkick/irkick.h )
+
 
 kde4_add_ui3_files(kcm_kcmlirc_PART_SRCS 
    selectprofile.ui 
