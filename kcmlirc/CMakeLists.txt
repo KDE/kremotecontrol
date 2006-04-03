@@ -20,10 +20,9 @@ set(kcm_kcmlirc_PART_SRCS ${libkdelirc_SRCS}
 
 kde4_automoc(${kcm_kcmlirc_PART_SRCS})
 
-KDE4_ADD_DCOP_STUBS(${kcm_kcmlirc_PART_SRCS} ${CMAKE_SOURCE_DIR}/kdelirc/irkick/irkick.h)
+kde4_add_dcop_stubs(kcm_kcmlirc_PART_SRCS ${CMAKE_SOURCE_DIR}/kdelirc/irkick/irkick.h)
 
-kde4_add_dcop_skels(${kcm_kcmlirc_PART_SRCS} ${CMAKE_SOURCE_DIR}/kdelirc/irkick/irkick.h )
-
+kde4_add_dcop_skels(kcm_kcmlirc_PART_SRCS kcmlirc.h ${CMAKE_SOURCE_DIR}/kdelirc/irkick/irkick.h )
 
 kde4_add_ui3_files(kcm_kcmlirc_PART_SRCS 
    selectprofile.ui 
@@ -33,13 +32,11 @@ kde4_add_ui3_files(kcm_kcmlirc_PART_SRCS
    editactionbase.ui 
    editmodebase.ui )
 
-kde4_add_dcop_skels(kcm_kcmlirc_PART_SRCS kcmlirc.h )
-
 kde4_add_plugin(kcm_kcmlirc ${kcm_kcmlirc_PART_SRCS})
 
 kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kcm_kcmlirc )
 
-target_link_libraries(kcm_kcmlirc  ${KDE4_KIO_LIBS} DCOP )
+target_link_libraries(kcm_kcmlirc  ${KDE4_KIO_LIBS} )
 
 install_targets(${LIB_INSTALL_DIR}/kde4 kcm_kcmlirc )
 
