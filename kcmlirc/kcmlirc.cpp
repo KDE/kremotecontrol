@@ -40,7 +40,7 @@
 #include <irkick_stub.h>
 
 #include "addaction.h"
-#include "newmode.h"
+#include "newmodedialog.h"
 #include "profileserver.h"
 #include "remoteserver.h"
 #include "kcmlirc.h"
@@ -52,7 +52,7 @@
 typedef KGenericFactory<KCMLirc, QWidget> theFactory;
 K_EXPORT_COMPONENT_FACTORY(kcmlirc, theFactory("kcmlirc"))
 
-KCMLirc::KCMLirc(QWidget *parent, const char *name, const QStringList &/*args*/) 
+KCMLirc::KCMLirc(QWidget *parent, const char *name, const QStringList &/*args*/)
 	: DCOPObject("KCMLirc"), KCModule(theFactory::instance(),parent)
 {
 	KGlobal::locale()->insertCatalog( "kcmlirc" );
@@ -284,7 +284,7 @@ void KCMLirc::slotAddMode()
 {
 	if(!theKCMLircBase->theModes->selectedItem()) return;
 
-	NewMode theDialog(this, 0);
+	NewModeDialog theDialog(this);
 	QMap<Q3ListViewItem *, QString> remoteMap;
 	Q3ListViewItem *tr = theKCMLircBase->theModes->selectedItem();
 	if(tr) if(tr->parent()) tr = tr->parent();
