@@ -543,7 +543,6 @@ extern "C"
 	}
 }
 
-#include <irkick_stub.cpp>
 #include <ktoolinvocation.h>
 
 #include "kcmlirc.moc"
