@@ -248,7 +248,7 @@ void IRKick::executeAction(const IRAction &action)
 	{	QString sname = ProfileServer::profileServer()->getServiceName(action.program());
 		if(!sname.isNull())
 		{
-			KPassivePopup::message("IRKick", i18n("Starting <b>%1</b>...").arg(action.application()), SmallIcon("irkick"), theTrayIcon);
+			KPassivePopup::message("IRKick", i18n("Starting <b>%1</b>...", action.application()), SmallIcon("irkick"), theTrayIcon);
 			KToolInvocation::startServiceByDesktopName(sname);
 		}
 	}

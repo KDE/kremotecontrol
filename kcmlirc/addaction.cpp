@@ -99,7 +99,7 @@ void AddAction::updateButton(const QString &remote, const QString &button)
 	}
 	else
 		KMessageBox::error(this, i18n( "You did not select a mode of that remote control. Please use %1, "
-                                       "or revert back to select a different mode." ).arg( theMode.remoteName() ),
+                                       "or revert back to select a different mode.", theMode.remoteName() ),
                                        i18n( "Incorrect Remote Control Detected" ));
 
 	if(indexOf(currentPage()) == 1)
