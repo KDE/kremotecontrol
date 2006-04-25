@@ -59,11 +59,11 @@ IRKick::IRKick(const DCOPCString &obj) : QObject(), DCOPObject(obj), npApp(QStri
 	theTrayIcon = new IRKTrayIcon();
 	if(theClient->isConnected())
 	{	theTrayIcon->setPixmap(SmallIcon("irkick"));
-		QToolTip::add(theTrayIcon, i18n("KDE Lirc Server: Ready."));
+		theTrayIcon->setToolTip( i18n("KDE Lirc Server: Ready."));
 	}
 	else
 	{	theTrayIcon->setPixmap(SmallIcon("irkickoff"));
-		QToolTip::add(theTrayIcon, i18n("KDE Lirc Server: No infra-red remote controls found."));
+		theTrayIcon->setToolTip( i18n("KDE Lirc Server: No infra-red remote controls found."));
 		QTimer::singleShot(10000, this, SLOT(checkLirc()));
 	}
 	theFlashOff = new QTimer(theTrayIcon);
@@ -177,7 +177,7 @@ void IRKick::updateModeIcons()
 				currentModeIcons[i.key()]->actionCollection()->action("file_quit")->setEnabled(false);
 			}
 			currentModeIcons[i.key()]->setPixmap(KIconLoader().loadIcon(mode.iconFile(), K3Icon::Panel));
-			QToolTip::add(currentModeIcons[i.key()], mode.remoteName() + ": <b>" + mode.name() + "</b>");
+			currentModeIcons[i.key()]->setToolTip( mode.remoteName() + ": <b>" + mode.name() + "</b>");
 		}
 	}
 }
