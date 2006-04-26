@@ -12,7 +12,7 @@
 #define NEWMODEDIALOG_H
 
 #include <QDialog>
-#include "newmode.h"
+#include "ui_newmode.h"
 
 class NewModeDialog : public QDialog, public Ui_NewMode
 {
