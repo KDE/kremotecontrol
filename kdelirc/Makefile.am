@@ -41,5 +41,3 @@ libkdelirc_la_LDFLAGS = $(all_libraries) $(KDE_RPATH)
 #rcdir = $(kde_datadir)/irkick
 #rc_DATA = irkickui.rc
 
-messages:
-	$(XGETTEXT) *.cpp *.h -o $(podir)/kdelirc.pot

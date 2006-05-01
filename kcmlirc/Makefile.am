@@ -11,5 +11,3 @@ kcm_kcmlirc_la_LDFLAGS = -module -avoid-version $(all_libraries) -no-undefined
 
 xdg_apps_DATA = kcmlirc.desktop
 
-messages: rc.cpp
-	$(XGETTEXT) *.cpp *.h -o $(podir)/kcmlirc.pot
