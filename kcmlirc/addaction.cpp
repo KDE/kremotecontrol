@@ -264,19 +264,19 @@ void AddAction::updateParameter()
 	if(theParameters->currentItem())
 	{	QString type = theParameters->currentItem()->text(2);
 		int index = theParameters->currentItem()->text(3).toInt() - 1;
-		if(type.find("int") != -1 || type.find("short") != -1 || type.find("long") != -1)
+		if(type.contains("int") || type.contains("short") || type.contains("long"))
 		{	theValue->raiseWidget(2);
 			theValueIntNumInput->setValue(theArguments[index].toInt());
 		}
-		else if(type.find("double") != -1 || type.find("float") != -1)
+		else if(type.contains("double") || type.contains("float"))
 		{	theValue->raiseWidget(3);
 			theValueDoubleNumInput->setValue(theArguments[index].toDouble());
 		}
-		else if(type.find("bool") != -1)
+		else if(type.contains("bool"))
 		{	theValue->raiseWidget(1);
 			theValueCheckBox->setChecked(theArguments[index].toBool());
 		}
-		else if(type.find("QStringList") != -1)
+		else if(type.contains("QStringList"))
 		{	theValue->raiseWidget(4);
 			QStringList backup = theArguments[index].toStringList();
 			// backup needed because calling clear will kill what ever has been saved.
@@ -309,13 +309,13 @@ void AddAction::slotParameterChanged()
 	if(!theParameters->currentItem()) return;
 	int index = theParameters->currentItem()->text(3).toInt() - 1;
 	QString type = theParameters->currentItem()->text(2);
-	if(type.find("int") != -1 || type.find("short") != -1 || type.find("long") != -1)
+	if(type.contains("int") || type.contains("short") || type.contains("long"))
 		theArguments[index].asInt() = theValueIntNumInput->value();
-	else if(type.find("double") != -1 || type.find("float") != -1)
+	else if(type.contains("double") || type.contains("float"))
 		theArguments[index].asDouble() = theValueDoubleNumInput->value();
-	else if(type.find("bool") != -1)
+	else if(type.contains("bool"))
 		theArguments[index].asBool() = theValueCheckBox->isChecked();
-	else if(type.find("QStringList") != -1)
+	else if(type.contains("QStringList"))
 		theArguments[index].asStringList() = theValueEditListBox->items();
 	else
 		theArguments[index].asString() = theValueLineEdit->text();
@@ -341,7 +341,7 @@ void AddAction::updateObjects()
 	DCOPCStringList theApps = theClient->registeredApplications();
 	for(DCOPCStringList::iterator i = theApps.begin(); i != theApps.end(); ++i)
 	{
-		if(!QString(*i).find(i18n( "anonymous" ))) continue;
+		if(!QString(*i).indexOf(i18n( "anonymous" ))) continue;
 		QRegExp r("(.*)-[0-9]+");
 		QString name = r.exactMatch(QString(*i)) ? r.cap(1) : *i;
 		if(names.contains(name)) continue;
