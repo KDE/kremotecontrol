@@ -321,7 +321,7 @@ void EditAction::updateDCOPApplications()
 	DCOPCStringList theApps = theClient->registeredApplications();
 	for(DCOPCStringList::iterator i = theApps.begin(); i != theApps.end(); ++i)
 	{
-		if(!QString(*i).find("anonymous")) continue;
+		if(!QString(*i).contains("anonymous")) continue;
 		QRegExp r("(.*)-[0-9]+");
 		QString name = r.exactMatch(QString(*i)) ? r.cap(1) : *i;
 		if(names.contains(name)) continue;

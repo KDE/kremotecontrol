@@ -43,7 +43,7 @@
 #include "klircclient.h"
 
 
-KLircClient::KLircClient(QWidget *parent, const char *name) : QObject(parent, name), theSocket(0), listIsUpToDate(false)
+KLircClient::KLircClient(QWidget *parent) : QObject(parent), theSocket(0), listIsUpToDate(false)
 {
 	connectToLirc();
 }
@@ -177,14 +177,14 @@ void KLircClient::slotRead()
 		{
 			// <code> <repeat> <button name> <remote control name>
 			line.remove(0, 17); // strip code
-			int pos = line.find(' ');
+			int pos = line.indexOf(' ');
 			if (pos < 0) return;
 			bool ok;
 			int repeat = line.left(pos).toInt(&ok, 16);
 			if (!ok) return;
 			line.remove(0, pos + 1);
 
-			pos = line.find(' ');
+			pos = line.indexOf(' ');
 			if (pos < 0) return;
 			QString btn = line.left(pos);
 			if(btn.startsWith("'") && btn.endsWith("'"))
@@ -233,8 +233,8 @@ const QString KLircClient::readLine()
 
 void KLircClient::sendCommand(const QString &command)
 {
-	QString cmd = command + "\n";
-	theSocket->writeBlock(QFile::encodeName( cmd ), cmd.length());
+    QByteArray cmd = QFile::encodeName( command + "\n" );;
+    theSocket->write( cmd );
 }
 
 

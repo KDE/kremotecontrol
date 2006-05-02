@@ -107,7 +107,7 @@ public:
 	 */
 	bool connectToLirc();
 
-	KLircClient(QWidget *parent = 0, const char *name = 0);
+	KLircClient(QWidget *parent = 0);
 	~KLircClient();
 };
 
