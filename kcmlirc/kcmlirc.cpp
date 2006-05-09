@@ -52,7 +52,7 @@
 typedef KGenericFactory<KCMLirc, QWidget> theFactory;
 K_EXPORT_COMPONENT_FACTORY(kcmlirc, theFactory("kcmlirc"))
 
-KCMLirc::KCMLirc(QWidget *parent, const char *name, const QStringList &/*args*/)
+KCMLirc::KCMLirc(QWidget *parent, const QStringList &/*args*/)
 	: DCOPObject("KCMLirc"), KCModule(theFactory::instance(),parent)
 {
 	KGlobal::locale()->insertCatalog( "kcmlirc" );
@@ -539,7 +539,7 @@ extern "C"
 {
 	KDE_EXPORT KCModule *create_kcmlirc(QWidget *parent, const char *)
 	{	KGlobal::locale()->insertCatalog("kcmlirc");
-		return new KCMLirc(parent, "KCMLirc");
+		return new KCMLirc(parent);
 	}
 }
 
