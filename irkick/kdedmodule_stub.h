@@ -14,7 +14,7 @@
 #define __KDEDMODULE_STUB__
 
 #include <dcopstub.h>
-#include <qobject.h>
+#include <QObject>
 //Added by qt3to4:
 #include <Q3CString>
 #include <dcopobject.h>

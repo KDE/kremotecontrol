@@ -13,7 +13,7 @@
 #ifndef MODE_H
 #define MODE_H
 
-#include <qstring.h>
+#include <QString>
 
 #include "remoteserver.h"
 

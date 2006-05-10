@@ -10,7 +10,7 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 //
-#include <qwidget.h>
+#include <QWidget>
 //Added by qt3to4:
 #include <QDropEvent>
 

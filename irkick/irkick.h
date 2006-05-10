@@ -14,7 +14,7 @@
 #ifndef __IRKICK_H
 #define __IRKICK_H
 
-#include <qstring.h>
+#include <QString>
 //Added by qt3to4:
 #include <QMouseEvent>
 

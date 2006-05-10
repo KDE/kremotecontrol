@@ -13,9 +13,9 @@
 #ifndef KLIRCCLIENT_H
 #define KLIRCCLIENT_H
 
-#include <qobject.h>
-#include <qmap.h>
-#include <qstring.h>
+#include <QObject>
+#include <QMap>
+#include <QString>
 #include <qstringlist.h>
 
 class Q3Socket;

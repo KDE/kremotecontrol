@@ -8,11 +8,11 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#include <qregexp.h>
-#include <qlabel.h>
+#include <QRegExp>
+#include <QLabel>
 #include <qradiobutton.h>
 #include <q3widgetstack.h>
-#include <qcheckbox.h>
+#include <QCheckBox>
 #include <q3buttongroup.h>
 //Added by qt3to4:
 #include <Q3ValueList>

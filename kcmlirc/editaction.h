@@ -13,7 +13,7 @@
 #ifndef EDITACTION_H
 #define EDITACTION_H
 
-#include <qstring.h>
+#include <QString>
 
 #include "iractions.h"
 #include "editactionbase.h"

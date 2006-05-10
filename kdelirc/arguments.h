@@ -14,7 +14,7 @@
 #define ARGUMENTS_H
 
 #include <q3valuelist.h>
-#include <qvariant.h>
+#include <QVariant>
 
 /**
 @author Gav Wood

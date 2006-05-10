@@ -19,12 +19,12 @@
 #include <sys/socket.h>
 #include <errno.h>
 
-#include <qwidget.h>
+#include <QWidget>
 #include <qdialog.h>
-#include <qtooltip.h>
+#include <QToolTip>
 #include <q3socket.h>
 #include <qsocketnotifier.h>
-#include <qfile.h>
+#include <QFile>
 
 #include <kapplication.h>
 #include <ksystemtray.h>

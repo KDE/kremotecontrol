@@ -10,11 +10,11 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 //
-#include <qregexp.h>
-#include <qlabel.h>
+#include <QRegExp>
+#include <QLabel>
 #include <qradiobutton.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
+#include <QComboBox>
+#include <QCheckBox>
 #include <q3widgetstack.h>
 #include <q3buttongroup.h>
 //Added by qt3to4:

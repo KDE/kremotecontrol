@@ -8,12 +8,12 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#include <qcheckbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qlineedit.h>
+#include <QCheckBox>
+#include <QLabel>
+#include <QLayout>
+#include <QLineEdit>
 #include <qradiobutton.h>
-#include <qcombobox.h>
+#include <QComboBox>
 #include <qevent.h>
 #include <q3listview.h>
 //Added by qt3to4:

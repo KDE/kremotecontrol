@@ -14,9 +14,9 @@
 #define PROFILESERVER_H
 
 #include <qpair.h>
-#include <qstring.h>
+#include <QString>
 #include <q3valuelist.h>
-#include <qmap.h>
+#include <QMap>
 #include <qxml.h>
 #include <q3dict.h>
 

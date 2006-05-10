@@ -11,7 +11,7 @@
 //
 //
 
-#include <qvariant.h>
+#include <QVariant>
 
 #include <kconfig.h>
 #include <klocale.h>

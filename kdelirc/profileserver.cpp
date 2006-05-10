@@ -11,7 +11,7 @@
 //
 //
 
-#include <qfile.h>
+#include <QFile>
 #include <qxml.h>
 
 #include <kglobal.h>

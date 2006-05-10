@@ -7,11 +7,11 @@
 
 // This program is free software.
 
-#include <qwidget.h>
+#include <QWidget>
 #include <qdialog.h>
-#include <qtooltip.h>
-#include <qregexp.h>
-#include <qtimer.h>
+#include <QToolTip>
+#include <QRegExp>
+#include <QTimer>
 #include <qevent.h>
 //Added by qt3to4:
 #include <QMouseEvent>

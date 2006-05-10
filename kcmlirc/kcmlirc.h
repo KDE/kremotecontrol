@@ -12,7 +12,7 @@
 #define _KCMLIRC_H_
 
 #include <qstringlist.h>
-#include <qmap.h>
+#include <QMap>
 //Added by qt3to4:
 #include <QDropEvent>
 

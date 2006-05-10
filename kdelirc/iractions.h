@@ -15,8 +15,8 @@
 
 #include <q3valuelist.h>
 #include <qpair.h>
-#include <qstring.h>
-#include <qmap.h>
+#include <QString>
+#include <QMap>
 
 #include "iraction.h"
 #include "mode.h"
