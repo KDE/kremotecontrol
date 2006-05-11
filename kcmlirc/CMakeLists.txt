@@ -2,11 +2,7 @@ kde4_header()
 
 include_directories( 
 	${CMAKE_SOURCE_DIR}/kdelirc/irkick/
-	${CMAKE_SOURCE_DIR}/kdelirc/kdelirc/ 
-	${KDE4_INCLUDE_DIR} 
-	${QT_INCLUDES} 
-	${CMAKE_CURRENT_SOURCE_DIR} 
-	${CMAKE_CURRENT_BINARY_DIR}  )
+	${CMAKE_SOURCE_DIR}/kdelirc/kdelirc/ )
 
 
 ########### next target ###############
