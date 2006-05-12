@@ -1,4 +1,3 @@
-kde4_header()
 
 set(libkdelirc_SRCS
 	${CMAKE_SOURCE_DIR}/kdelirc/kdelirc/iraction.cpp 
@@ -19,7 +18,6 @@ add_subdirectory( kcmlirc )
 add_subdirectory( profiles )
 add_subdirectory( remotes )
 
-kde4_footer()
 
 
 

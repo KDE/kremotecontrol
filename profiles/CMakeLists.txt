@@ -1,4 +1,3 @@
-kde4_header()
 
 
 
@@ -7,7 +6,6 @@ kde4_header()
 
 install_files( ${DATA_INSTALL_DIR}/profiles FILES profile.dtd noatun.profile.xml klauncher.profile.xml konqueror.profile.xml )
 
-kde4_footer()
 
 
 

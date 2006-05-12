@@ -1,4 +1,3 @@
-kde4_header()
 
 
 
@@ -9,7 +8,6 @@ add_subdirectory(kcmlirc)
 ########### install files ###############
 
 
-kde4_footer()
 
 
 

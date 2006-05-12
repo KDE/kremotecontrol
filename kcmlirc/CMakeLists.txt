@@ -1,4 +1,3 @@
-kde4_header()
 
 include_directories( 
 	${CMAKE_SOURCE_DIR}/kdelirc/irkick/
@@ -43,7 +42,6 @@ install_targets(${PLUGIN_INSTALL_DIR} kcm_kcmlirc )
 
 install_files( ${XDG_APPS_DIR} FILES kcmlirc.desktop )
 
-kde4_footer()
 
 
 

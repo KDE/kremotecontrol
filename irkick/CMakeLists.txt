@@ -1,4 +1,3 @@
-kde4_header()
 
 add_subdirectory( icons ) 
 
@@ -41,7 +40,6 @@ install_files( /share/autostart FILES irkick.desktop )
 
 kde4_install_icons( ${ICON_INSTALL_DIR}  hicolor )
 
-kde4_footer()
 
 
 
