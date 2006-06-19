@@ -52,7 +52,7 @@ public:
 	void erase(const Mode &mode);
 	void add(const Mode &mode);
 
-	// dont use this without renaming all the modes in the actions!!!
+	// don't use this without renaming all the modes in the actions!!!
 	void rename(Mode &mode, const QString name);
 
 	Modes();
