@@ -22,7 +22,6 @@
 #include <kdedmodule.h>
 #include <kaboutdata.h>
 
-#include <dcopobject.h>
 
 #include "modes.h"
 #include "iractions.h"
@@ -41,10 +40,11 @@ public:
 	IRKTrayIcon(QWidget *parent = 0, const char *name = 0): KSystemTray(parent) {}
 };
 
-class IRKick: public QObject, public DCOPObject
+class IRKick: public QObject
 {
 	Q_OBJECT
-	K_DCOP
+	Q_CLASSINFO("D-Bus Interface", "org.kde.irkick");
+
 
 	QString npApp, npModule, npMethod;
 	QMap<QString, QString> currentModes;
@@ -62,13 +62,13 @@ class IRKick: public QObject, public DCOPObject
 protected:
 	KLircClient *theClient;
 
-k_dcop:
+public slots: //dbus slot
 	/**
 	 * Query status of connection.
 	 *
 	 * @returns true if connected to lircd.
 	 */
-	virtual bool isConnected() { return theClient->isConnected(); }
+	bool isConnected() { return theClient->isConnected(); }
 
 	/**
 	 * Query status of remote list.
@@ -77,21 +77,21 @@ k_dcop:
 	 *
 	 * @returns true if up to date.
 	 */
-	virtual bool haveFullList() { return theClient->haveFullList(); }
+	bool haveFullList() { return theClient->haveFullList(); }
 
 	/**
 	 * Retrieve list of remote controls.
 	 *
 	 * @returns said list.
 	 */
-	virtual const QStringList remotes() { return theClient->remotes(); }
+	const QStringList remotes() { return theClient->remotes(); }
 
 	/**
 	 * Retrieve list of buttons of a praticular remote control.
 	 *
 	 * @returns said list.
 	 */
-	virtual const QStringList buttons(QString theRemote) { return theClient->buttons(theRemote); }
+	const QStringList buttons(QString theRemote) { return theClient->buttons(theRemote); }
 
 	/**
 	 * Sends next keypress to given application by DCOP.
@@ -100,17 +100,17 @@ k_dcop:
 	 * @param The receiving application module.
 	 * @param The method name. Must have two QString parameters.
 	 */
-	virtual void stealNextPress(QString app, QString module, QString method);
+	void stealNextPress(QString app, QString module, QString method);
 
 	/**
 	 * Cancels the proceedings of the previous stealNextPress call, if any.
 	 */
-	virtual void dontStealNextPress();
+	void dontStealNextPress();
 
 	/**
 	 * Reloads configuration from file(s)
 	 */
-	virtual void reloadConfiguration() { slotReloadConfiguration(); }
+	void reloadConfiguration() { slotReloadConfiguration(); }
 
 private slots:
 	void gotMessage(const QString &theRemote, const QString &theButton, int theRepeatCounter);
@@ -127,7 +127,7 @@ private:
 	bool getPrograms(const IRAction &action, QStringList &populous);
 
 public:
-	IRKick(const DCOPCString &obj);
+	IRKick(const QString &obj);
 	virtual ~IRKick();
 };
 

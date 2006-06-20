@@ -20,9 +20,7 @@
 #include <kdeversion.h>
 #include <kapplication.h>
 #include <kaction.h>
-#if !(KDE_VERSION_MINOR<=1 && KDE_VERSION_RELEASE<=5)
 #include <kactioncollection.h>
-#endif
 #include <ksimpleconfig.h>
 #include <ksystemtray.h>
 #include <kiconloader.h>
@@ -39,21 +37,21 @@
 #include <kglobal.h>
 #include <kstdguiitem.h>
 
-#include <dcopclient.h>
-#include <dcopref.h>
 #include <ktoolinvocation.h>
 
 #include "profileserver.h"
 #include "irkick.h"
+#include <dbus/qdbusconnection.h>
 
 void IRKTrayIcon::mousePressEvent(QMouseEvent *e)
 {
 	KSystemTray::mousePressEvent(new QMouseEvent(QEvent::MouseButtonPress, e->pos(), e->globalPos(), e->button() == Qt::LeftButton ? Qt::RightButton : e->button(), e->state()));
 }
 
-IRKick::IRKick(const DCOPCString &obj) : QObject(), DCOPObject(obj), npApp(QString::null)
+IRKick::IRKick(const QString &obj)
+    : QObject(), DCOPObject(obj), npApp(QString::null)
 {
-    kapp->dcopClient()->setDefaultObject(obj);
+    QDBus::sessionBus().registerObject(obj, this, QDBusConnection::ExportSlots);
 	theClient = new KLircClient();
 
 	theTrayIcon = new IRKTrayIcon();

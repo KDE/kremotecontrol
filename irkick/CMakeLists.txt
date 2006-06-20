@@ -15,9 +15,6 @@ set(libirkick_common_SRCS
 	klircclient.cpp
 )
 
-KDE4_ADD_DCOP_STUBS(libirkick_common_SRCS irkick.h)
-
-kde4_add_dcop_skels(libirkick_common_SRCS irkick.h )
 
 set(irkick_KDEINIT_SRCS ${CMAKE_CURRENT_BINARY_DIR}/dummy.cpp ${libirkick_common_SRCS} ${libkdelirc_SRCS})
 
