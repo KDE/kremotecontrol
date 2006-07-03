@@ -49,7 +49,7 @@ void IRKTrayIcon::mousePressEvent(QMouseEvent *e)
 }
 
 IRKick::IRKick(const QString &obj)
-    : QObject(), DCOPObject(obj), npApp(QString::null)
+    : QObject(), npApp(QString::null)
 {
     QDBus::sessionBus().registerObject(obj, this, QDBusConnection::ExportSlots);
 	theClient = new KLircClient();
