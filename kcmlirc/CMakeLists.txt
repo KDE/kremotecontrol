@@ -16,9 +16,9 @@ set(kcm_kcmlirc_PART_SRCS ${libkdelirc_SRCS}
 
 kde4_automoc(${kcm_kcmlirc_PART_SRCS})
 
-kde4_add_dcop_stubs(kcm_kcmlirc_PART_SRCS ${CMAKE_SOURCE_DIR}/kdelirc/irkick/irkick.h)
+#kde4_add_dcop_stubs(kcm_kcmlirc_PART_SRCS ${CMAKE_SOURCE_DIR}/kdelirc/irkick/irkick.h)
 
-kde4_add_dcop_skels(kcm_kcmlirc_PART_SRCS kcmlirc.h ${CMAKE_SOURCE_DIR}/kdelirc/irkick/irkick.h )
+#kde4_add_dcop_skels(kcm_kcmlirc_PART_SRCS kcmlirc.h ${CMAKE_SOURCE_DIR}/kdelirc/irkick/irkick.h )
 
 kde4_add_ui_files(kcm_kcmlirc_PART_SRCS newmode.ui)
 
