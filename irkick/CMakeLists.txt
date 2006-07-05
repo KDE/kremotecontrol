@@ -25,15 +25,15 @@ kde4_add_kdeinit_executable( irkick ${irkick_KDEINIT_SRCS})
 
 target_link_libraries(kdeinit_irkick  ${KDE4_KDEUI_LIBS}  )
 
-install_targets(${LIB_INSTALL_DIR} kdeinit_irkick )
+install(TARGETS kdeinit_irkick  DESTINATION ${LIB_INSTALL_DIR})
 
 target_link_libraries( irkick kdeinit_irkick )
-install_targets(/bin irkick )
+install(TARGETS irkick  DESTINATION ${BIN_INSTALL_DIR} )
 
 ########### install files ###############
 
-install_files( ${XDG_APPS_DIR} FILES irkick.desktop )
-install_files( /share/autostart FILES irkick.desktop )
+install( FILES irkick.desktop  DESTINATION ${XDG_APPS_DIR})
+install( FILES irkick.desktop  DESTINATION /share/autostart)
 
 kde4_install_icons( ${ICON_INSTALL_DIR}  hicolor )
 

@@ -35,12 +35,12 @@ kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kcm_kcmlirc )
 
 target_link_libraries(kcm_kcmlirc  ${KDE4_KIO_LIBS} )
 
-install_targets(${PLUGIN_INSTALL_DIR} kcm_kcmlirc )
+install(TARGETS kcm_kcmlirc  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install_files( ${XDG_APPS_DIR} FILES kcmlirc.desktop )
+install( FILES kcmlirc.desktop  DESTINATION ${XDG_APPS_DIR})
 
 
 

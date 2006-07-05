@@ -4,7 +4,7 @@
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/profiles FILES profile.dtd noatun.profile.xml klauncher.profile.xml konqueror.profile.xml )
+install( FILES profile.dtd noatun.profile.xml klauncher.profile.xml konqueror.profile.xml  DESTINATION ${DATA_INSTALL_DIR}/profiles)
 
 
 
