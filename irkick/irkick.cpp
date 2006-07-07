@@ -41,7 +41,7 @@
 
 #include "profileserver.h"
 #include "irkick.h"
-#include <dbus/qdbusconnection.h>
+#include <QtDBus/qdbusconnection.h>
 
 void IRKTrayIcon::mousePressEvent(QMouseEvent *e)
 {
