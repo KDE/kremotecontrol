@@ -1,16 +1,2 @@
+kde4_install_icons( ${DATA_INSTALL_DIR}/irkick/icons hicolor )
 
-
-
-
-########### install files ###############
-
-install( FILES   DESTINATION ${DATA_INSTALL_DIR}/irkick/icons)
-
-
-
-
-#original Makefile.am contents follow:
-
-#irkickiconsdir = $(kde_datadir)/irkick/icons
-#irkickicons_ICON = AUTO
-#
