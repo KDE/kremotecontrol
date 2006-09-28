@@ -769,7 +769,10 @@
                             <string>This application may have multiple instances. In the case of having multiple instances at once when this action should be executed, choose a course of action:</string>
                         </property>
                         <property name="alignment">
-                            <set>Qt::TextWordWrap|Qt::AlignVCenter</set>
+                            <set>Qt::AlignVCenter</set>
+                        </property>
+                        <property name="wordWrap" >
+                            <bool>true</bool>
                         </property>
                     </widget>
                     <widget class="QButtonGroup">

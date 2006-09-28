@@ -75,7 +75,10 @@
                             <string>There are currently no remote controls available. You must first set up LIRC correctly; see www.lirc.org for more information.</string>
                         </property>
                         <property name="alignment">
-                            <set>Qt::TextWordWrap|Qt::AlignTop</set>
+                            <set>Qt::AlignTop</set>
+                        </property>
+                        <property name="wordWrap" >
+                            <bool>true</bool>
                         </property>
                     </widget>
                     <widget class="QSplitter">
