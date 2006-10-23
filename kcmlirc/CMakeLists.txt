@@ -14,7 +14,7 @@ set(kcm_kcmlirc_PART_SRCS ${libkdelirc_SRCS}
    modeslist.cpp
    newmodedialog.cpp )
 
-kde4_automoc(kcm_kcmlirc ${kcm_kcmlirc_PART_SRCS})
+kde4_automoc(${kcm_kcmlirc_PART_SRCS})
 
 #kde4_add_dcop_stubs(kcm_kcmlirc_PART_SRCS ${CMAKE_SOURCE_DIR}/kdelirc/irkick/irkick.h)
 
