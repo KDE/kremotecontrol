@@ -31,7 +31,6 @@ kde4_add_ui3_files(kcm_kcmlirc_PART_SRCS
 
 kde4_add_plugin(kcm_kcmlirc ${kcm_kcmlirc_PART_SRCS})
 
-kde4_install_libtool_file( ${PLUGIN_INSTALL_DIR} kcm_kcmlirc )
 
 target_link_libraries(kcm_kcmlirc  ${KDE4_KIO_LIBS} )
 
