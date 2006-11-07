@@ -21,7 +21,9 @@
 
 void KCMLircBase::init()
 {
+#ifdef __GNUC__
 #warning "kde4 port it !!!!!!!!!"
+#endif	
 #if 0		
 		delete theModes;
 	modeLayout->removeItem(modeButtonLayout);
