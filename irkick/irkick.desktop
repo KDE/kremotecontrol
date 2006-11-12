@@ -9,7 +9,7 @@ GenericName[x-test]=xxKDE LIRC Serverxx
 X-KDE-Library=irkick
 X-KDE-autostart-after=panel
 X-KDE-StartupNotify=false
-X-DCOP-ServiceType=Unique
+X-DBUS-StartupType=Unique
 Categories=Qt;KDE;Utility;X-KDE-Utilities-Peripherals;
 X-KDE-autostart-condition=irkickrc:General:AutoStart:false
 
