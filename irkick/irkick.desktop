@@ -3,6 +3,7 @@ Type=Service
 Name=IRKick
 Name[sv]=IRkick
 GenericName=KDE LIRC Server
+GenericName[ar]=خادم LIRC لكدى
 GenericName[bg]=Сървър LIRC
 GenericName[br]=Servijer LIRC KDE
 GenericName[bs]=KDE LIRC server
