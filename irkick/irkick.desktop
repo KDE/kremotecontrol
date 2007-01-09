@@ -15,7 +15,7 @@ X-KDE-autostart-condition=irkickrc:General:AutoStart:false
 
 Exec=irkick
 Icon=irkick
-DocPath=kcontrol/kdelirc.html
+DocPath=irkick/index.html
 Comment=KDE Linux infrared remote control server.
 Comment[fr]=Serveur de contrôle distant infrarouge sous Linux pour KDE.
 Comment[x-test]=xxKDE Linux infrared remote control server.xx
