@@ -2,12 +2,14 @@
 Encoding=UTF-8
 Icon=irkick
 Comment=Configure your remote controls for use with applications
+Comment[el]=Ρυθμίστε τα τηλεχειριστήρια σας για χρήση σε εφαρμογές
 Comment[fr]=Configurer vos contrôleurs distants pour l'utiliser avec vos applications
 Comment[x-test]=xxConfigure your remote controls for use with applicationsxx
 Exec=kcmshell kcmlirc
 Keywords=KCMLirc,kcmlirc
 Keywords[x-test]=xxKCMLirc,kcmlircxx
 Name=Remote Controls
+Name[el]=Τηλεχειριστήρια
 Name[fr]=Contrôleurs distants
 Name[x-test]=xxRemote Controlsxx
 Terminal=false
