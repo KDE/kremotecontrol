@@ -76,7 +76,7 @@ IRKick::IRKick(const QString &obj)
 	theTrayIcon->contextMenu()->addTitle( "IRKick");
 	theTrayIcon->contextMenu()->insertItem(SmallIcon( "configure" ), i18n("&Configure..."), this, SLOT(slotConfigure()));
 	theTrayIcon->contextMenu()->insertSeparator();
-	theTrayIcon->contextMenu()->insertItem(SmallIcon( "help" ), KStdGuiItem::help().text(), (new KHelpMenu(theTrayIcon, KGlobal::instance()->aboutData()))->menu());
+	theTrayIcon->contextMenu()->insertItem(SmallIcon( "help" ), KStdGuiItem::help().text(), (new KHelpMenu(theTrayIcon, KGlobal::mainComponent().aboutData()))->menu());
 	theTrayIcon->actionCollection()->action("file_quit")->disconnect(SIGNAL(activated()));
 	connect(theTrayIcon->actionCollection()->action("file_quit"), SIGNAL(activated()), SLOT(doQuit()));
 
