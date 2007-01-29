@@ -53,7 +53,7 @@ typedef KGenericFactory<KCMLirc, QWidget> theFactory;
 K_EXPORT_COMPONENT_FACTORY(kcmlirc, theFactory("kcmlirc"))
 
 KCMLirc::KCMLirc(QWidget *parent, const QStringList &/*args*/)
-	: DCOPObject("KCMLirc"), KCModule(theFactory::instance(),parent)
+	: DCOPObject("KCMLirc"), KCModule(theFactory::componentData(),parent)
 {
 	KGlobal::locale()->insertCatalog( "kcmlirc" );
 	setAboutData(new KAboutData("kcmlirc", I18N_NOOP("KDE Lirc"), VERSION, I18N_NOOP("The KDE IR Remote Control System"), KAboutData::License_GPL_V2, "Copyright (c)2003 Gav Wood", I18N_NOOP("Use this to configure KDE's infrared remote control system in order to control any KDE application with your infrared remote control."), "http://www.kde.org"));
