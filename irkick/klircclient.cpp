@@ -34,8 +34,6 @@
 #include <kmenu.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kaboutdialog.h>
-#include <kaboutkde.h>
 
 #include <dcopclient.h>
 #include <dcopref.h>

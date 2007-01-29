@@ -29,8 +29,6 @@
 #include <kmenu.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kaboutdialog.h>
-#include <kaboutkde.h>
 #include <kwinmodule.h>
 #include <kwin.h>
 #include <khelpmenu.h>
