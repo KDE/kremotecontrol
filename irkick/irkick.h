@@ -7,15 +7,10 @@
 
 // This program is free software.
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #ifndef __IRKICK_H
 #define __IRKICK_H
 
 #include <QString>
-//Added by qt3to4:
 #include <QMouseEvent>
 
 #include <ksystemtray.h>
