@@ -21,7 +21,7 @@
 
 #include <QWidget>
 #include <qdialog.h>
-#include <QToolTip>
+
 #include <q3socket.h>
 #include <qsocketnotifier.h>
 #include <QFile>

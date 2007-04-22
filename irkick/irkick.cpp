@@ -9,7 +9,7 @@
 
 #include <QWidget>
 #include <qdialog.h>
-#include <QToolTip>
+
 #include <QRegExp>
 #include <QTimer>
 #include <qevent.h>
