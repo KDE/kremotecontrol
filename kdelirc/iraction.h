@@ -13,7 +13,7 @@
 #ifndef IRACTION_H
 #define IRACTION_H
 
-#include <QString>
+
 
 #include "prototype.h"
 #include "arguments.h"

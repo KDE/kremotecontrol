@@ -13,7 +13,7 @@
 #ifndef REMOTESERVER_H
 #define REMOTESERVER_H
 
-#include <QString>
+
 #include <qxml.h>
 #include <q3dict.h>
 

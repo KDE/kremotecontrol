@@ -10,7 +10,7 @@
 #ifndef __IRKICK_H
 #define __IRKICK_H
 
-#include <QString>
+
 #include <QMouseEvent>
 
 #include <ksystemtray.h>

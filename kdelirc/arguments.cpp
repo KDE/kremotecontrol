@@ -10,7 +10,7 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 //
-#include <QString>
+
 
 #include "arguments.h"
 

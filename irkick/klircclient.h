@@ -15,7 +15,7 @@
 
 #include <QObject>
 #include <QMap>
-#include <QString>
+
 #include <qstringlist.h>
 
 class Q3Socket;

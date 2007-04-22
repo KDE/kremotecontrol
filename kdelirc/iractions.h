@@ -15,7 +15,7 @@
 
 #include <q3valuelist.h>
 #include <qpair.h>
-#include <QString>
+
 #include <QMap>
 
 #include "iraction.h"

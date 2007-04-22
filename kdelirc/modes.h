@@ -13,7 +13,7 @@
 #ifndef MODES_H
 #define MODES_H
 
-#include <QString>
+
 #include <QMap>
 #include <qpair.h>
 #include <q3valuelist.h>

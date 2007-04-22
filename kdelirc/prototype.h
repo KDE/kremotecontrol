@@ -15,7 +15,7 @@
 
 #include <qstringlist.h>
 #include <qpair.h>
-#include <QString>
+
 
 /**
 @author Gav Wood
