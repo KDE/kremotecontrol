@@ -54,8 +54,8 @@ X-KDE-Library=irkick
 X-KDE-autostart-after=panel
 X-KDE-StartupNotify=false
 X-DCOP-ServiceType=Unique
-Categories=Qt;KDE;Utility;X-KDE-Utilities-Peripherals;
 X-KDE-autostart-condition=irkickrc:General:AutoStart:false
+Categories=Qt;KDE;Utility;X-KDE-Utilities-Peripherals;
 
 Exec=irkick
 Icon=irkick
@@ -110,4 +110,3 @@ Comment[uz]=Инфрақизил нур билан масофадан бошқа
 Comment[zh_CN]=KDE Linux 红外远程控制服务器。
 Comment[zh_TW]=KDE Linux 紅外線遙控伺服器。
 Encoding=UTF-8
-
