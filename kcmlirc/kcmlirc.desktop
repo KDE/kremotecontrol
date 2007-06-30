@@ -2,7 +2,6 @@
 Encoding=UTF-8
 Icon=irkick
 Comment=Configure your remote controls for use with applications
-Comment[ar]=إعداد التحكّم عن بعد لاستخدامه في تطبيقاتك
 Comment[bg]=Comment=Настройване на дистанционно управление
 Comment[ca]=Configura els teus controls remots per usar amb aplicacions
 Comment[cs]=Nastavení dálkových ovladačů
@@ -55,7 +54,6 @@ Keywords[ta]= KCMLirc,kcmlirc
 Keywords[uz]=KCMLirc,kcmlirc,инфрақизил нур
 Keywords[x-test]=xxKCMLirc,kcmlircxx
 Name=Remote Controls
-Name[ar]=التحكّم عن بعد
 Name[ca]=Controls remots
 Name[cs]=Dálková ovládání
 Name[cy]=Rheolyddion Pell
