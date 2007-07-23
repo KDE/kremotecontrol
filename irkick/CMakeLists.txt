@@ -30,7 +30,7 @@ install(TARGETS irkick  DESTINATION ${BIN_INSTALL_DIR} )
 
 ########### install files ###############
 
-install( FILES irkick.desktop  DESTINATION ${XDG_APPS_DIR})
+install( FILES irkick.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES irkick.desktop  DESTINATION ${AUTOSTART_INSTALL_DIR})
 
 kde4_install_icons( ${ICON_INSTALL_DIR}   )

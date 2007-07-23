@@ -37,7 +37,7 @@ install(TARGETS kcm_kcmlirc  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES kcmlirc.desktop  DESTINATION ${XDG_APPS_DIR})
+install( FILES kcmlirc.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 
 
 
