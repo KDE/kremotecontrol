@@ -147,7 +147,7 @@ void EditAction::writeBack()
 
 void EditAction::updateArguments()
 {
-	kDebug() << k_funcinfo << endl;
+	kDebug() << k_funcinfo ;
 	if(theUseProfile->isChecked())
 	{
 		theArguments->clear();
@@ -213,9 +213,9 @@ void EditAction::updateOptions()
 // called when the textbox/checkbox/whatever changes value
 void EditAction::slotParameterChanged()
 {
-	kDebug() << "in: " << arguments[theArguments->currentItem()].toString() << endl;
+	kDebug() << "in: " << arguments[theArguments->currentItem()].toString() ;
 	int type = arguments[theArguments->currentItem()].type();
-	kDebug() << type << endl;
+	kDebug() << type ;
 	switch(type)
 	{
 	case QVariant::Int: case QVariant::UInt:
@@ -234,13 +234,13 @@ void EditAction::slotParameterChanged()
 		arguments[theArguments->currentItem()].asString() = theValueLineEdit->text();
 	}
 	arguments[theArguments->currentItem()].cast(QVariant::Type(type));
-	kDebug() << "out: " << arguments[theArguments->currentItem()].toString() << endl;
+	kDebug() << "out: " << arguments[theArguments->currentItem()].toString() ;
 
 }
 
 void EditAction::updateArgument(int index)
 {
-	kDebug() << k_funcinfo << " i: " << index << endl;
+	kDebug() << k_funcinfo << " i: " << index ;
 	if(index >= 0)
 	{	switch(arguments[index].type())
 		{

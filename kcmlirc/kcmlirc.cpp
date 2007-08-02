@@ -63,7 +63,7 @@ KCMLirc::KCMLirc(QWidget *parent, const QStringList &/*args*/)
 	KApplication::kApplication()->dcopClient()->remoteInterfaces("irkick", "IRKick", &ok);
 	if(!ok)
 		if(KMessageBox::questionYesNo(this, i18n("The Infrared Remote Control software is not currently running. This configuration module will not work properly without it. Would you like to start it now?"), i18n("Software Not Running"), i18n("Start"), i18n("Do Not Start")) == KMessageBox::Yes)
-		{	kDebug() << "S" << KToolInvocation::startServiceByDesktopName("irkick") << endl;
+		{	kDebug() << "S" << KToolInvocation::startServiceByDesktopName("irkick") ;
 			KSimpleConfig theConfig("irkickrc");
 			theConfig.setGroup("General");
 			if(theConfig.readBoolEntry("AutoStart", true) == false)
@@ -72,7 +72,7 @@ KCMLirc::KCMLirc(QWidget *parent, const QStringList &/*args*/)
 		}
 
 	KApplication::kApplication()->dcopClient()->remoteInterfaces("irkick", "IRKick", &ok);
-	kDebug() << "OK" << ok << endl;
+	kDebug() << "OK" << ok ;
 
 
 	(new QHBoxLayout(this))->setAutoAdd(true);
@@ -161,7 +161,7 @@ void KCMLirc::slotAddActions()
 
 void KCMLirc::slotAddAction()
 {
-	kDebug() << k_funcinfo << endl;
+	kDebug() << k_funcinfo ;
 	if(!theKCMLircBase->theModes->selectedItem()) return;
 	Mode m = modeMap[theKCMLircBase->theModes->selectedItem()];
 
@@ -318,7 +318,7 @@ void KCMLirc::slotEditMode()
 	theDialog.theDefault->setEnabled(!allModes.isDefault(mode));
 
 	if(theDialog.exec() == QDialog::Accepted)
-	{	kDebug() << "Setting icon : " << theDialog.theIcon->icon() << endl;
+	{	kDebug() << "Setting icon : " << theDialog.theIcon->icon() ;
 		mode.setIconFile(theDialog.theIcon->icon().isEmpty() ? QString::null : theDialog.theIcon->icon());
 		allModes.updateMode(mode);
 		if(!mode.name().isEmpty())
