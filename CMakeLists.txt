@@ -21,8 +21,3 @@ add_subdirectory( remotes )
 
 
 
-#original Makefile.am contents follow:
-
-#
-#SUBDIRS = icons kdelirc irkick kcmlirc profiles remotes
-#
