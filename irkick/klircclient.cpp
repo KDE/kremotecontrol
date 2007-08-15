@@ -221,7 +221,7 @@ const QString KLircClient::readLine()
 		theSocket->waitForMore(500, &timeout);
 		if (timeout)
 		{	// something's wrong. there ain't no line comin!
-			return QString::null;
+			return QString();
 		}
 	}
 	QString line = theSocket->readLine();
