@@ -43,7 +43,7 @@ public:
 	bool operator==(const Mode &mode) const { return mode.theName == theName && mode.theRemote == theRemote; }
 
 	Mode();
-	Mode(const QString &remote, const QString &name, const QString &iconFile = QString::null);	//krazy:exclude=nullstrassign for old broken gcc
+	Mode(const QString &remote, const QString &name, const QString &iconFile = QString());
 	~Mode();
 };
 

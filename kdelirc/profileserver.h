@@ -112,7 +112,7 @@ public:
 	void setUnique(const bool a) { theUnique = a; }
 	const IfMulti ifMulti() const { return theIfMulti; }
 	void setIfMulti(const IfMulti a) { theIfMulti = a; }
-	const QString &serviceName() const { if(theServiceName != QString::null) return theServiceName; return theName; }	//krazy:exclude=nullstrassign for old broken gcc
+	const QString &serviceName() const { if(theServiceName != QString()) return theServiceName; return theName; }
 	void setServiceName(const QString &a) { theServiceName = a; }
 	const Q3Dict<ProfileAction> &actions() const { return theActions; }
 	const ProfileAction *searchClass(const QString &c) const;
