@@ -319,7 +319,7 @@ void KCMLirc::slotEditMode()
 
 	if(theDialog.exec() == QDialog::Accepted)
 	{	kDebug() << "Setting icon : " << theDialog.theIcon->icon() ;
-		mode.setIconFile(theDialog.theIcon->icon().isEmpty() ? QString::null : theDialog.theIcon->icon());
+		mode.setIconFile(theDialog.theIcon->icon().isEmpty() ? QString::null : theDialog.theIcon->icon());	//krazy:exclude=nullstrassign for old broken gcc
 		allModes.updateMode(mode);
 		if(!mode.name().isEmpty())
 		{	allActions.renameMode(mode, theDialog.theName->text());

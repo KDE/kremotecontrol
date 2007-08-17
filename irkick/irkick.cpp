@@ -47,7 +47,7 @@ void IRKTrayIcon::mousePressEvent(QMouseEvent *e)
 }
 
 IRKick::IRKick(const QString &obj)
-    : QObject(), npApp(QString::null)
+    : QObject(), npApp(QString::null)	//krazy:exclude=nullstrassign for old broken gcc
 {
     QDBus::sessionBus().registerObject(obj, this, QDBusConnection::ExportSlots);
 	theClient = new KLircClient();
@@ -283,7 +283,7 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int 
 	if(!npApp.isNull())
 	{
 		QString theApp = npApp;
-		npApp = QString::null;
+		npApp = QString();
 		// send notifier by DCOP to npApp/npModule/npMethod(theRemote, theButton);
 		QByteArray data; QDataStream arg(&data, QIODevice::WriteOnly);
  arg.setVersion(QDataStream::Qt_3_1);
@@ -332,7 +332,7 @@ void IRKick::stealNextPress(QString app, QString module, QString method)
 
 void IRKick::dontStealNextPress()
 {
-	npApp = QString::null;
+	npApp = QString();
 }
 
 #include "irkick.moc"

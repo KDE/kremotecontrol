@@ -16,7 +16,7 @@
 #include "modes.h"
 #include "mode.h"
 
-Mode::Mode() : theName(QString::null)
+Mode::Mode() : theName(QString::null)	//krazy:exclude=nullstrassign for old broken gcc
 {
 }
 
@@ -37,7 +37,7 @@ const Mode &Mode::loadFromConfig(KConfig &theConfig, int index)
 	theName = theConfig.readEntry(Prefix + "Name",QString());
 	theRemote = theConfig.readEntry(Prefix + "Remote",QString());
 	theIconFile = theConfig.readEntry(Prefix + "IconFile",QString());
-	if(theIconFile.isEmpty()) theIconFile = QString::null;
+	if(theIconFile.isEmpty()) theIconFile = QString();
 	return *this;
 }
 
