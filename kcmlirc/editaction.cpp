@@ -147,7 +147,7 @@ void EditAction::writeBack()
 
 void EditAction::updateArguments()
 {
-	kDebug() << k_funcinfo ;
+	kDebug() ;
 	if(theUseProfile->isChecked())
 	{
 		theArguments->clear();
@@ -240,7 +240,7 @@ void EditAction::slotParameterChanged()
 
 void EditAction::updateArgument(int index)
 {
-	kDebug() << k_funcinfo << " i: " << index ;
+	kDebug() << " i: " << index ;
 	if(index >= 0)
 	{	switch(arguments[index].type())
 		{

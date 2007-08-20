@@ -161,7 +161,7 @@ void KCMLirc::slotAddActions()
 
 void KCMLirc::slotAddAction()
 {
-	kDebug() << k_funcinfo ;
+	kDebug() ;
 	if(!theKCMLircBase->theModes->selectedItem()) return;
 	Mode m = modeMap[theKCMLircBase->theModes->selectedItem()];
 
