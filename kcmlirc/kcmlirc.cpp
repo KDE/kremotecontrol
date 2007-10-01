@@ -416,7 +416,7 @@ void KCMLirc::updateModes()
 	{	Mode mode = allModes.getMode(*i, "");
 		Q3ListViewItem *a = new K3ListViewItem(theKCMLircBase->theModes, RemoteServer::remoteServer()->getRemoteName(*i), allModes.isDefault(mode) ? "Default" : "", mode.iconFile().isNull() ? "" : "");
 		if(!mode.iconFile().isNull())
-			a->setPixmap(2, KIconLoader().loadIcon(mode.iconFile(), K3Icon::Panel));
+			a->setPixmap(2, KIconLoader().loadIcon(mode.iconFile(), KIconLoader::Panel));
 		modeMap[a] = mode;	// the null mode
 		if(modeMap[a] == oldCurrent) { a->setSelected(true); theKCMLircBase->theModes->setCurrentItem(a); }
 		a->setOpen(true);
@@ -425,7 +425,7 @@ void KCMLirc::updateModes()
 			if(!(*j).name().isEmpty())
 			{	Q3ListViewItem *b = new K3ListViewItem(a, (*j).name(), allModes.isDefault(*j) ? i18n("Default") : "", (*j).iconFile().isNull() ? "" : "");
 				if(!(*j).iconFile().isNull())
-					b->setPixmap(2, KIconLoader().loadIcon((*j).iconFile(), K3Icon::Panel));
+					b->setPixmap(2, KIconLoader().loadIcon((*j).iconFile(), KIconLoader::Panel));
 				modeMap[b] = *j;
 				if(*j == oldCurrent) { b->setSelected(true); theKCMLircBase->theModes->setCurrentItem(b); }
 			}
