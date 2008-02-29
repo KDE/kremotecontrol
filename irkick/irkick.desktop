@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=IRKick
+Name[hi]=आईआर-किक
 Name[sv]=IRkick
 Name[x-test]=xxIRKickxx
 GenericName=KDE LIRC Server
@@ -22,6 +23,7 @@ GenericName[fr]=Serveur KDE LIRC
 GenericName[ga]=Freastalaí LIRC KDE
 GenericName[gl]=Servidor KIRC de KDE
 GenericName[he]=שרת ה-LIRC של KDE
+GenericName[hi]=केडीई एलआईआरसी सर्वर
 GenericName[hu]=KDE LIRC szolgáltatás
 GenericName[is]=KDE LIRC þjónn
 GenericName[it]=Server LIRC di KDE
@@ -81,6 +83,7 @@ Comment[fr]=Serveur de contrôle distant infrarouge sous Linux pour KDE.
 Comment[ga]=Freastalaí KDE cianrialaithe infridhearg Linux.
 Comment[gl]=Servidor do control remoto por infravermellos en Linux para KDE.
 Comment[he]=שרת לשלט רחוק עבור KDE.
+Comment[hi]=केडीई लिनक्स इन्फ्रारेड रिमोट नियंत्रण सर्वर.
 Comment[hu]=KDE Linux szolgáltatás infravörös távirányítók kezeléséhez
 Comment[is]=KDE Linux innrauða fjarstýringarstjórnborðið
 Comment[it]=Server KDE per i telecomandi ad infrarossi.
