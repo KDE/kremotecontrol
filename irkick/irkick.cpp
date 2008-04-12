@@ -55,11 +55,11 @@ IRKick::IRKick(const QString &obj)
 	theTrayIcon = new IRKTrayIcon();
 	if(theClient->isConnected())
 	{	theTrayIcon->setPixmap(SmallIcon("irkick"));
-		theTrayIcon->setToolTip( i18n("KDE Lirc Server: Ready."));
+		theTrayIcon->setToolTip( i18n("KDE LIRC Server: Ready."));
 	}
 	else
 	{	theTrayIcon->setPixmap(SmallIcon("irkickoff"));
-		theTrayIcon->setToolTip( i18n("KDE Lirc Server: No infra-red remote controls found."));
+		theTrayIcon->setToolTip( i18n("KDE LIRC Server: No infra-red remote controls found."));
 		QTimer::singleShot(10000, this, SLOT(checkLirc()));
 	}
 	theFlashOff = new QTimer(theTrayIcon);

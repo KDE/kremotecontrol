@@ -56,7 +56,7 @@ KCMLirc::KCMLirc(QWidget *parent, const QStringList &/*args*/)
 	: DCOPObject("KCMLirc"), KCModule(theFactory::componentData(),parent)
 {
 	KGlobal::locale()->insertCatalog( "kcmlirc" );
-	setAboutData(new KAboutData("kcmlirc", 0, ki18n("KDE Lirc"), VERSION, ki18n("The KDE IR Remote Control System"), KAboutData::License_GPL_V2, ki18n("Copyright (c)2003 Gav Wood"), ki18n("Use this to configure KDE's infrared remote control system in order to control any KDE application with your infrared remote control."), "http://www.kde.org"));
+	setAboutData(new KAboutData("kcmlirc", 0, ki18n("KDE LIRC"), VERSION, ki18n("The KDE IR Remote Control System"), KAboutData::License_GPL_V2, ki18n("Copyright (c)2003 Gav Wood"), ki18n("Use this to configure KDE's infrared remote control system in order to control any KDE application with your infrared remote control."), "http://www.kde.org"));
 	setButtons(KCModule::Help);
 	setQuickHelp(i18n("<h1>Remote Controls</h1><p>This module allows you to configure bindings between your remote controls and KDE applications. Simply select your remote control and click Add under the Actions/Buttons list. If you want KDE to attempt to automatically assign buttons to a supported application's actions, try clicking the Auto-Populate button.</p><p>To view the recognised applications and remote controls, simply select the <em>Loaded Extensions</em> tab.</p>"));
 	bool ok;
