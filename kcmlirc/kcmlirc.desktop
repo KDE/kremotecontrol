@@ -1,6 +1,8 @@
 [Desktop Entry]
 Icon=irkick
 Comment=Configure your remote controls for use with applications
+Comment[es]=Configura sus controles remotos para utilizarlos con las aplicaciones
+Comment[sv]=Anpassa fjärrkontroller för att använda med program
 Exec=kcmshell4 kcmlirc
 X-KDE-Keywords=KCMLirc,kcmlirc
 X-KDE-Keywords[nl]=kcmlirc,linux infrarood,infrarood,afstandsbediening
@@ -9,6 +11,8 @@ X-KDE-Keywords[ta]= KCMLirc,kcmlirc
 X-KDE-Keywords[uz]=KCMLirc,kcmlirc,инфрақизил нур
 X-KDE-Keywords[x-test]=xxKCMLirc,kcmlircxx
 Name=Remote Controls
+Name[es]=Controles remotos
+Name[sv]=Fjärrkontroller
 Terminal=false
 Type=Application
 X-KDE-FactoryName=kcmlirc
