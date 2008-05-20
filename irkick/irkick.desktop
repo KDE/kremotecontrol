@@ -4,6 +4,7 @@ Name=IRKick
 Name[sv]=IRkick
 GenericName=KDE LIRC Server
 GenericName[es]=Servidor LIRC para KDE
+GenericName[et]=KDE LIRC-server
 GenericName[sv]=KDE:s LIRC-server
 
 X-KDE-Library=irkick
@@ -18,5 +19,6 @@ Icon=irkick
 X-DocPath=irkick/index.html
 Comment=KDE Linux infrared remote control server.
 Comment[es]=Servidor de control remoto de infrarrojos de Linux para KDE.
+Comment[et]=KDE Linuxi infrapunajuhtimise server.
 Comment[sv]=KDE:s infraröda fjärrkontrollserver för Linux
 
