@@ -16,14 +16,14 @@
 
 
 #include "iractions.h"
-#include "editactionbase.h"
+#include "ui_editactionbase.h"
 #include "arguments.h"
 
 /**
 @author Gav Wood
 */
 
-class EditAction : public EditActionBase
+class EditAction : public QDialog, public Ui::EditActionBase
 {
 	Q_OBJECT
 	IRAIt theAction;
@@ -47,6 +47,7 @@ public:
 	virtual void updateDCOPApplications();
 	virtual void updateDCOPObjects();
 	virtual void updateDCOPFunctions();
+	virtual void addItem(QString item);
 
 	EditAction(IRAIt action, QWidget *parent = 0, const char *name = 0);
 	~EditAction();

@@ -1,310 +1,295 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
-<class>EditModeBase</class>
-<widget class="QDialog">
-    <property name="name">
-        <cstring>EditModeBase</cstring>
-    </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>461</width>
-            <height>334</height>
-        </rect>
-    </property>
-    <property name="windowTitle">
-        <string>Edit Mode</string>
-    </property>
-    <vbox>
-        <property name="name">
-            <cstring>unnamed</cstring>
-        </property>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>textLabel1</cstring>
-            </property>
-            <property name="text">
-                <string>&lt;b&gt;Description&lt;/b&gt;</string>
-            </property>
-        </widget>
-        <widget class="Line">
-            <property name="name">
-                <cstring>line3_2</cstring>
-            </property>
-            <property name="frameShape">
-                <enum>HLine</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Sunken</enum>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-            </property>
-        </widget>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout25</cstring>
-            </property>
-            <grid>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLabel" row="1" column="0">
-                    <property name="name">
-                        <cstring>textLabel4</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Icon for system tray:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>theIcon</cstring>
-                    </property>
-                </widget>
-                <widget class="QLayoutWidget" row="1" column="1">
-                    <property name="name">
-                        <cstring>layout24</cstring>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <spacer>
-                            <property name="name">
-                                <cstring>spacer11</cstring>
-                            </property>
-                            <property name="orientation">
-                                <enum>Qt::Horizontal</enum>
-                            </property>
-                            <property name="sizeType">
-                                <enum>Expanding</enum>
-                            </property>
-                            <property name="sizeHint">
-                                <size>
-                                    <width>110</width>
-                                    <height>21</height>
-                                </size>
-                            </property>
-                        </spacer>
-                        <widget class="KIconButton">
-                            <property name="name">
-                                <cstring>theIcon</cstring>
-                            </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>5</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
-                            <property name="text">
-                                <string></string>
-                            </property>
-                        </widget>
-                        <widget class="KPushButton">
-                            <property name="name">
-                                <cstring>kPushButton9</cstring>
-                            </property>
-                            <property name="text">
-                                <string></string>
-                            </property>
-                            <property name="pixmap">
-                                <pixmap>image0</pixmap>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="QLineEdit" row="0" column="1">
-                    <property name="name">
-                        <cstring>theName</cstring>
-                    </property>
-                    <property name="enabled">
-                        <bool>false</bool>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="0" column="0">
-                    <property name="name">
-                        <cstring>textLabel5</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Mode name:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>theName</cstring>
-                    </property>
-                </widget>
-            </grid>
-        </widget>
-        <spacer>
-            <property name="name">
-                <cstring>spacer4</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>410</width>
-                    <height>20</height>
-                </size>
-            </property>
+<ui version="4.0" >
+ <class>EditModeBase</class>
+ <widget class="QDialog" name="EditModeBase" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>461</width>
+    <height>347</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Edit Mode</string>
+  </property>
+  <layout class="QVBoxLayout" >
+   <item>
+    <widget class="QLabel" name="textLabel1" >
+     <property name="text" >
+      <string>&lt;b>Description&lt;/b></string>
+     </property>
+     <property name="wordWrap" >
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="Line" name="line3_2" >
+     <property name="frameShape" >
+      <enum>QFrame::HLine</enum>
+     </property>
+     <property name="frameShadow" >
+      <enum>QFrame::Sunken</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QGridLayout" >
+     <item row="1" column="0" >
+      <widget class="QLabel" name="textLabel4" >
+       <property name="text" >
+        <string>&amp;Icon for system tray:</string>
+       </property>
+       <property name="wordWrap" >
+        <bool>false</bool>
+       </property>
+       <property name="buddy" >
+        <cstring>theIcon</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1" >
+      <layout class="QHBoxLayout" >
+       <item>
+        <spacer name="spacer11" >
+         <property name="sizeType" >
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
+         <property name="sizeHint" stdset="0" >
+          <size>
+           <width>110</width>
+           <height>21</height>
+          </size>
+         </property>
         </spacer>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>textLabel2</cstring>
-            </property>
-            <property name="text">
-                <string>&lt;b&gt;Behavior&lt;/b&gt;</string>
-            </property>
+       </item>
+       <item>
+        <widget class="KIconButton" name="theIcon" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text" >
+          <string/>
+         </property>
         </widget>
-        <widget class="Line">
-            <property name="name">
-                <cstring>line2</cstring>
-            </property>
-            <property name="frameShape">
-                <enum>HLine</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Sunken</enum>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-            </property>
+       </item>
+       <item>
+        <widget class="KPushButton" name="kPushButton9" >
+         <property name="text" >
+          <string/>
+         </property>
+         <property name="pixmap" stdset="0" >
+          <pixmap>image0</pixmap>
+         </property>
         </widget>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>theDefault</cstring>
-            </property>
-            <property name="text">
-                <string>Mo&amp;de is the default for its remote control</string>
-            </property>
-        </widget>
-        <spacer>
-            <property name="name">
-                <cstring>spacer9</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>90</height>
-                </size>
-            </property>
-        </spacer>
-        <widget class="Line">
-            <property name="name">
-                <cstring>line3</cstring>
-            </property>
-            <property name="frameShape">
-                <enum>HLine</enum>
-            </property>
-            <property name="frameShadow">
-                <enum>Sunken</enum>
-            </property>
-            <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-            </property>
-        </widget>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout15</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <spacer>
-                    <property name="name">
-                        <cstring>spacer10</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>231</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="KPushButton">
-                    <property name="name">
-                        <cstring>theOK</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;OK</string>
-                    </property>
-                </widget>
-                <widget class="KPushButton">
-                    <property name="name">
-                        <cstring>kPushButton8</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Cancel</string>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-    </vbox>
-</widget>
-<images>
-    <image name="image0">
-        <data format="XPM.GZ" length="620">789c7dd0cd4e84301405e03d4fd17077c438201421c647d0b834312efa03c31d0648745c18e3bbcbb905fc8d0768fa1d202dec12757f77a3925df47c322776ca75e64925fe65185e1f1eafdfa2382b15ce4b95c567517cae9cba9dc606739ae7944ac009cc2a1ce008e6599ee6f2e20016599116c223a88df6da803d589ab22e851d58d9aaae2c7800eba2d67501ee856ea6033d680b5b5ab9db08fd4c0fba8526d02e6c020de8b46d9c065bd06b7fe1850cb612f9f61fd93afaccdad1ef8ec858e74de36cbb7644fb8eb93b60583aa2be3f32b35ca1231ae68c8c8cc3d24d129aab791a3a0ecbc973dbbabc5414cab02e4bb70ecbfef88f3d7f2bb7efe52df4ef7ff9dabd5f451f45248a2d</data>
-    </image>
-</images>
-<connections>
-    <connection>
-        <sender>theName</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>EditModeBase</receiver>
-        <slot>slotCheckText(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>theOK</sender>
-        <signal>clicked()</signal>
-        <receiver>EditModeBase</receiver>
-        <slot>accept()</slot>
-    </connection>
-    <connection>
-        <sender>kPushButton8</sender>
-        <signal>clicked()</signal>
-        <receiver>EditModeBase</receiver>
-        <slot>reject()</slot>
-    </connection>
-    <connection>
-        <sender>kPushButton9</sender>
-        <signal>clicked()</signal>
-        <receiver>EditModeBase</receiver>
-        <slot>slotClearIcon()</slot>
-    </connection>
-</connections>
-<slots>
-    <slot>slotCheckText(const QString &amp;)</slot>
-    <slot>slotClearIcon()</slot>
-</slots>
-<layoutdefaults spacing="6" margin="11"/>
-<customwidgets>
-    <customwidget>
-        <class>KIconButton</class>
-        <header location="global">kicondialog.h</header>
-        <container>0</container>
-    </customwidget>
-</customwidgets>
-<includehints>
-    <includehint>kicondialog.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-</includehints>
-</UI>
+       </item>
+      </layout>
+     </item>
+     <item row="0" column="1" >
+      <widget class="QLineEdit" name="theName" >
+       <property name="enabled" >
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" >
+      <widget class="QLabel" name="textLabel5" >
+       <property name="text" >
+        <string>&amp;Mode name:</string>
+       </property>
+       <property name="wordWrap" >
+        <bool>false</bool>
+       </property>
+       <property name="buddy" >
+        <cstring>theName</cstring>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <spacer name="spacer4" >
+     <property name="sizeType" >
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>410</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <widget class="QLabel" name="textLabel2" >
+     <property name="text" >
+      <string>&lt;b>Behavior&lt;/b></string>
+     </property>
+     <property name="wordWrap" >
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="Line" name="line2" >
+     <property name="frameShape" >
+      <enum>QFrame::HLine</enum>
+     </property>
+     <property name="frameShadow" >
+      <enum>QFrame::Sunken</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="theDefault" >
+     <property name="text" >
+      <string>Mo&amp;de is the default for its remote control</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <spacer name="spacer9" >
+     <property name="sizeType" >
+      <enum>QSizePolicy::Expanding</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>20</width>
+       <height>90</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <widget class="Line" name="line3" >
+     <property name="frameShape" >
+      <enum>QFrame::HLine</enum>
+     </property>
+     <property name="frameShadow" >
+      <enum>QFrame::Sunken</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" >
+     <item>
+      <spacer name="spacer10" >
+       <property name="sizeType" >
+        <enum>QSizePolicy::Expanding</enum>
+       </property>
+       <property name="sizeHint" stdset="0" >
+        <size>
+         <width>231</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="KPushButton" name="theOK" >
+       <property name="text" >
+        <string>&amp;OK</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KPushButton" name="kPushButton8" >
+       <property name="text" >
+        <string>&amp;Cancel</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <customwidgets>
+  <customwidget>
+   <class>KIconButton</class>
+   <extends>QPushButton</extends>
+   <header>kicondialog.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KPushButton</class>
+   <extends>QPushButton</extends>
+   <header>kpushbutton.h</header>
+  </customwidget>
+ </customwidgets>
+ <includes>
+  <include location="local" >kicondialog.h</include>
+  <include location="local" >kpushbutton.h</include>
+  <include location="local" >kpushbutton.h</include>
+  <include location="local" >kpushbutton.h</include>
+ </includes>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>theName</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>EditModeBase</receiver>
+   <slot>slotCheckText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>theOK</sender>
+   <signal>clicked()</signal>
+   <receiver>EditModeBase</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>kPushButton8</sender>
+   <signal>clicked()</signal>
+   <receiver>EditModeBase</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>kPushButton9</sender>
+   <signal>clicked()</signal>
+   <receiver>EditModeBase</receiver>
+   <slot>slotClearIcon()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

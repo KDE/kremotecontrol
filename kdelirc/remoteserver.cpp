@@ -24,7 +24,6 @@ RemoteServer *RemoteServer::theInstance = 0;
 
 RemoteServer::RemoteServer()
 {
-	theRemotes.setAutoDelete(true);
 	loadRemotes();
 }
 
@@ -45,7 +44,6 @@ void RemoteServer::loadRemotes()
 
 Remote::Remote()
 {
-	theButtons.setAutoDelete(true);
 }
 
 Remote::~Remote()

@@ -12,6 +12,7 @@
 //
 
 #include <kconfig.h>
+#include <kconfiggroup.h>
 
 #include "modes.h"
 #include "mode.h"
@@ -33,19 +34,21 @@ Mode::~Mode()
 
 const Mode &Mode::loadFromConfig(KConfig &theConfig, int index)
 {
+	KConfigGroup modesGroup = theConfig.group("Modes");
 	QString Prefix = "Mode" + QString().setNum(index);
-	theName = theConfig.readEntry(Prefix + "Name",QString());
-	theRemote = theConfig.readEntry(Prefix + "Remote",QString());
-	theIconFile = theConfig.readEntry(Prefix + "IconFile",QString());
+	theName = modesGroup.readEntry(Prefix + "Name",QString());
+	theRemote = modesGroup.readEntry(Prefix + "Remote",QString());
+	theIconFile = modesGroup.readEntry(Prefix + "IconFile",QString());
 	if(theIconFile.isEmpty()) theIconFile = QString();
 	return *this;
 }
 
 void Mode::saveToConfig(KConfig &theConfig, int index)
 {
+	KConfigGroup modesGroup = theConfig.group("Modes");
 	QString Prefix = "Mode" + QString().setNum(index);
-	theConfig.writeEntry(Prefix + "Name", theName);
-	theConfig.writeEntry(Prefix + "Remote", theRemote);
-	theConfig.writeEntry(Prefix + "IconFile", theIconFile);
+	modesGroup.writeEntry(Prefix + "Name", theName);
+	modesGroup.writeEntry(Prefix + "Remote", theRemote);
+	modesGroup.writeEntry(Prefix + "IconFile", theIconFile);
 }
 

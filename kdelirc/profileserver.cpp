@@ -24,7 +24,7 @@ ProfileServer *ProfileServer::theInstance = 0;
 
 ProfileServer::ProfileServer()
 {
-	theProfiles.setAutoDelete(true);
+//	theProfiles.setAutoDelete(true);
 	loadProfiles();
 }
 
@@ -49,13 +49,13 @@ Profile::Profile()
 	theUnique = true;
 	theIfMulti = IM_DONTSEND;
 
-	theActions.setAutoDelete(true);
+//	theActions.setAutoDelete(true);
 }
 
 const ProfileAction *Profile::searchClass(const QString &c) const
 {
-	for(Q3DictIterator<ProfileAction> i(theActions); i.current(); ++i)
-		if(i.current()->getClass() == c) return i;
+//	for(QHashIterator<QString, ProfileAction*> i(theActions); i.hasNext(); i.next())
+//		if(i.getClass() == c) return i;
 	return 0;
 }
 

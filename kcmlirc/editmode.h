@@ -13,12 +13,12 @@
 #ifndef EDITMODE_H
 #define EDITMODE_H
 
-#include "editmodebase.h"
+#include "ui_editmodebase.h"
 
 /**
 @author Gav Wood
 */
-class EditMode : public EditModeBase
+class EditMode : public QDialog, public Ui::EditModeBase
 {
 	Q_OBJECT
 

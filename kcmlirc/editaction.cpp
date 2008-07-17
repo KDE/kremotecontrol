@@ -28,8 +28,8 @@
 #include <knuminput.h>
 #include <keditlistbox.h>
 
-#include <dcopclient.h>
-#include <irkick_stub.h>
+//#include <dcopclient.h>
+//#include <irkick_stub.h>
 
 #include "prototype.h"
 #include "profileserver.h"
@@ -37,9 +37,12 @@
 #include "editaction.h"
 #include "addaction.h"
 
-EditAction::EditAction(IRAIt action, QWidget *parent, const char *name) : EditActionBase(parent, name)
+EditAction::EditAction(IRAIt action, QWidget *parent, const char *name) //: EditActionBase(parent, name)
 {
 	theAction = action;
+
+	//KWindowSystem::setState(widget->winId(), NET::StaysOnTop );
+	setupUi( this );
 
 	updateApplications();
 	updateDCOPApplications();
@@ -63,16 +66,16 @@ void EditAction::readFrom()
 	if((*theAction).isModeChange())
 	{	// change mode
 		theChangeMode->setChecked(true);
-		if((*theAction).object().isEmpty())
+/*		if((*theAction).object().isEmpty())
 			theModes->setCurrentText(i18n("[Exit current mode]"));
 		else
-			theModes->setCurrentText((*theAction).object());
+			theModes->setCurrentText((*theAction).object());*/
 	}
 	else if((*theAction).isJustStart())
 	{	// profile action
 		theUseProfile->setChecked(true);
 		const Profile *p = ProfileServer::profileServer()->profiles()[(*theAction).program()];
-		theApplications->setCurrentText(p->name());
+// 		theApplications->setCurrentText(p->name());
 		updateFunctions();
 		updateArguments();
 		theJustStart->setChecked(true);
@@ -81,9 +84,9 @@ void EditAction::readFrom()
 	{	// profile action
 		theUseProfile->setChecked(true);
 		const ProfileAction *a = ProfileServer::profileServer()->getAction((*theAction).program(), (*theAction).object(), (*theAction).method().prototype());
-		theApplications->setCurrentText(a->profile()->name());
+// 		theApplications->setCurrentText(a->profile()->name());
 		updateFunctions();
-		theFunctions->setCurrentText(a->name());
+// 		theFunctions->setCurrentText(a->name());
 		arguments = (*theAction).arguments();
 		updateArguments();
 		theNotJustStart->setChecked(true);
@@ -91,11 +94,11 @@ void EditAction::readFrom()
 	else
 	{	// dcop action
 		theUseDCOP->setChecked(true);
-		theDCOPApplications->setCurrentText((*theAction).program());
+// 		theDCOPApplications->setCurrentText((*theAction).program());
 		updateDCOPObjects();
-		theDCOPObjects->setCurrentText((*theAction).object());
+// 		theDCOPObjects->setCurrentText((*theAction).object());
 		updateDCOPFunctions();
-		theDCOPFunctions->setCurrentText((*theAction).method().prototype());
+// 		theDCOPFunctions->setCurrentText((*theAction).method().prototype());
 		arguments = (*theAction).arguments();
 		updateArguments();
 	}
@@ -161,8 +164,8 @@ void EditAction::updateArguments()
 		}
 		theArguments->setEnabled(p.count());
 		for(unsigned i = 0; i < p.count(); i++)
-		{	theArguments->insertItem(p[i].comment() + " (" + p[i].type() + ")");
-			arguments[i].cast(QVariant::nameToType(p[i].type().utf8()));
+		{	theArguments->addItem(p[i].comment() + " (" + p[i].type() + ")");
+			arguments[i].convert(QVariant::nameToType(p[i].type().toLocal8Bit()));
 		}
 		if(p.count()) updateArgument(0); else updateArgument(-1);
 	}
@@ -177,8 +180,8 @@ void EditAction::updateArguments()
 		}
 		theArguments->setEnabled(p.count());
 		for(unsigned i = 0; i < p.count(); i++)
-		{	theArguments->insertItem(QString().setNum(i + 1) + ": " + (p.name(i).isEmpty() ? p.type(i) : p.name(i) + " (" + p.type(i) + ")"));
-			arguments[i].cast(QVariant::nameToType(p.type(i).utf8()));
+		{	theArguments->addItem(QString().setNum(i + 1) + ": " + (p.name(i).isEmpty() ? p.type(i) : p.name(i) + " (" + p.type(i) + ")"));
+			arguments[i].convert(QVariant::nameToType(p.type(i).toLocal8Bit()));
 		}
 		if(p.count()) updateArgument(0); else updateArgument(-1);
 	}
@@ -189,7 +192,7 @@ void EditAction::updateOptions()
 	if (theUseProfile->isChecked())
 	{
 		ProfileServer *theServer = ProfileServer::profileServer();
-		if(!theApplications->currentItem()) return;
+		if(theApplications->currentIndex() == -1) return;
 		const Profile *p = theServer->profiles()[applicationMap[theApplications->currentText()]];
 		isUnique = p->unique();
 	}
@@ -213,28 +216,28 @@ void EditAction::updateOptions()
 // called when the textbox/checkbox/whatever changes value
 void EditAction::slotParameterChanged()
 {
-	kDebug() << "in: " << arguments[theArguments->currentItem()].toString() ;
-	int type = arguments[theArguments->currentItem()].type();
+	kDebug() << "in: " << arguments[theArguments->currentIndex()].toString() ;
+	int type = arguments[theArguments->currentIndex()].type();
 	kDebug() << type ;
 	switch(type)
 	{
 	case QVariant::Int: case QVariant::UInt:
-		arguments[theArguments->currentItem()].asInt() = theValueIntNumInput->value();
+		arguments[theArguments->currentIndex()] = theValueIntNumInput->value();
 		break;
 	case QVariant::Double:
-		arguments[theArguments->currentItem()].asDouble() = theValueDoubleNumInput->value();
+		arguments[theArguments->currentIndex()] = theValueDoubleNumInput->value();
 		break;
 	case QVariant::Bool:
-		arguments[theArguments->currentItem()].asBool() = theValueCheckBox->isChecked();
+		arguments[theArguments->currentIndex()] = theValueCheckBox->isChecked();
 		break;
 	case QVariant::StringList:
-		arguments[theArguments->currentItem()].asStringList() = theValueEditListBox->items();
+		arguments[theArguments->currentIndex()] = theValueEditListBox->items();
 		break;
 	default:
-		arguments[theArguments->currentItem()].asString() = theValueLineEdit->text();
+		arguments[theArguments->currentIndex()] = theValueLineEdit->text();
 	}
-	arguments[theArguments->currentItem()].cast(QVariant::Type(type));
-	kDebug() << "out: " << arguments[theArguments->currentItem()].toString() ;
+	arguments[theArguments->currentIndex()].convert(QVariant::Type(type));
+	kDebug() << "out: " << arguments[theArguments->currentIndex()].toString() ;
 
 }
 
@@ -262,7 +265,7 @@ void EditAction::updateArgument(int index)
 			// backup needed because calling clear will kill what ever has been saved.
 			theValueEditListBox->clear();
 			theValueEditListBox->insertStringList(backup);
-			arguments[index].asStringList() = backup;
+			arguments[index] = backup;
 			break;
 		}
 		default:
@@ -286,11 +289,11 @@ void EditAction::updateApplications()
 	theApplications->clear();
 	applicationMap.clear();
 
-	Q3Dict<Profile> dict = theServer->profiles();
-	Q3DictIterator<Profile> i(dict);
-	for(; i.current(); ++i)
-	{	theApplications->insertItem(i.current()->name());
-		applicationMap[i.current()->name()] = i.currentKey();
+	QHash<QString, Profile*> dict = theServer->profiles();
+	QHash<QString, Profile*>::const_iterator i;
+	for(i = dict.constBegin(); i != dict.constEnd(); ++i)
+	{	theApplications->addItem(i.value()->name());
+		applicationMap[i.value()->name()] = i.key();
 	}
 	updateFunctions();
 }
@@ -304,10 +307,11 @@ void EditAction::updateFunctions()
 
 	const Profile *p = theServer->profiles()[applicationMap[theApplications->currentText()]];
 
-	Q3Dict<ProfileAction> dict = p->actions();
-	for(Q3DictIterator<ProfileAction> i(dict); i.current(); ++i)
-	{	theFunctions->insertItem(i.current()->name());
-		functionMap[i.current()->name()] = i.currentKey();
+	QHash<QString, ProfileAction*> dict = p->actions();
+	QHash<QString, ProfileAction*>::const_iterator i;
+	for(i = dict.constBegin(); i != dict.constEnd(); ++i)
+	{	theFunctions->addItem(i.value()->name());
+		functionMap[i.value()->name()] = i.key();
 	}
 	updateArguments();
 }
@@ -317,7 +321,8 @@ void EditAction::updateDCOPApplications()
 	QStringList names;
 
 	theDCOPApplications->clear();
-	DCOPClient *theClient = KApplication::kApplication()->dcopClient();
+#warning Port me! DCOP -> DBUS
+/*	DCOPClient *theClient = KApplication::kApplication()->dcopClient();
 	DCOPCStringList theApps = theClient->registeredApplications();
 	for(DCOPCStringList::iterator i = theApps.begin(); i != theApps.end(); ++i)
 	{
@@ -333,32 +338,37 @@ void EditAction::updateDCOPApplications()
 
 
 	}
-	updateDCOPObjects();
+	updateDCOPObjects();*/
 }
 
 void EditAction::updateDCOPObjects()
 {
 	theDCOPObjects->clear();
-	DCOPClient *theClient = KApplication::kApplication()->dcopClient();
+#warning Port me! DCOP -> DBUS
+/*	DCOPClient *theClient = KApplication::kApplication()->dcopClient();
 	if(theDCOPApplications->currentText().isNull() || theDCOPApplications->currentText().isEmpty()) return;
 	DCOPCStringList theObjects = theClient->remoteObjects(nameProgramMap[theDCOPApplications->currentText()].utf8());
 	if(!theObjects.size() && theDCOPApplications->currentText() == (*theAction).program()) theDCOPObjects->insertItem((*theAction).object());
 	for(DCOPCStringList::iterator j = theObjects.begin(); j != theObjects.end(); ++j)
 		if(*j != "ksycoca" && *j != "qt" && AddAction::getFunctions(nameProgramMap[theDCOPApplications->currentText()], *j).count())
 			theDCOPObjects->insertItem(QString::fromUtf8(*j));
-	updateDCOPFunctions();
+	updateDCOPFunctions();*/
 }
 
 void EditAction::updateDCOPFunctions()
 {
 	theDCOPFunctions->clear();
-	if(theDCOPApplications->currentText().isNull() || theDCOPApplications->currentText().isEmpty()) return;
+#warning Port me! DCOP -> DBUS
+/*	if(theDCOPApplications->currentText().isNull() || theDCOPApplications->currentText().isEmpty()) return;
 	QStringList functions = AddAction::getFunctions(nameProgramMap[theDCOPApplications->currentText()], theDCOPObjects->currentText());
 	if(!functions.size() && theDCOPApplications->currentText() == (*theAction).program()) theDCOPFunctions->insertItem((*theAction).method().prototype());
 	for(QStringList::iterator i = functions.begin(); i != functions.end(); ++i)
 		theDCOPFunctions->insertItem(*i);
-	updateArguments();
+	updateArguments();*/
 }
 
+void EditAction::addItem(QString item){
+	theModes->addItem(item);
+}
 
 #include "editaction.moc"

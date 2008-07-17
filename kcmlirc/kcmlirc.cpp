@@ -8,6 +8,17 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
+#include "addaction.h"
+#include "newmodedialog.h"
+#include "profileserver.h"
+#include "remoteserver.h"
+#include "kcmlirc.h"
+#include "editaction.h"
+#include "editmode.h"
+#include "modeslist.h"
+#include "ui_selectprofile.h"
+#include "kcmlircadaptor.h"
+
 #include <QCheckBox>
 #include <QLabel>
 #include <QLayout>
@@ -15,10 +26,13 @@
 #include <qradiobutton.h>
 #include <QComboBox>
 #include <qevent.h>
-#include <q3listview.h>
+//#include <q3listview.h>
 //Added by qt3to4:
 #include <QHBoxLayout>
 #include <QDropEvent>
+#include <QWidget>
+#include <qdbusmessage.h>
+#include <qdbusconnection.h>
 
 #include <kpushbutton.h>
 #include <kapplication.h>
@@ -28,55 +42,68 @@
 #include <kicondialog.h>
 #include <kiconloader.h>
 #include <kdebug.h>
-#include <ksimpleconfig.h>
+#include <kconfiggroup.h>
 #include <kgenericfactory.h>
 #include <k3listview.h>
 #include <kmessagebox.h>
 #include <kpushbutton.h>
 #include <ktoolinvocation.h>
-#include <dcopclient.h>
-#include <dcopref.h>
+#include <kaboutdata.h>
+//#include <dcopclient.h>
+//#include <dcopref.h>
 
-#include <irkick_stub.h>
+//#include <irkick_stub.h>
 
-#include "addaction.h"
-#include "newmodedialog.h"
-#include "profileserver.h"
-#include "remoteserver.h"
-#include "kcmlirc.h"
-#include "editaction.h"
-#include "editmode.h"
-#include "modeslist.h"
-#include "selectprofile.h"
+
+#define VERSION "version name goes here"
 
 typedef KGenericFactory<KCMLirc, QWidget> theFactory;
-K_EXPORT_COMPONENT_FACTORY(kcmlirc, theFactory("kcmlirc"))
+K_EXPORT_COMPONENT_FACTORY(kcm_lirc, theFactory("kcmlirc"))
 
 KCMLirc::KCMLirc(QWidget *parent, const QStringList &/*args*/)
-	: DCOPObject("KCMLirc"), KCModule(theFactory::componentData(),parent)
+	: KCModule(theFactory::componentData(),parent)
 {
+	new KcmlircAdaptor(this);
+	QDBusConnection dBusConnection = QDBusConnection::sessionBus();
+	dBusConnection.registerObject("/KCMLirc", this, QDBusConnection::ExportAllSlots);
+
 	KGlobal::locale()->insertCatalog( "kcmlirc" );
-	setAboutData(new KAboutData("kcmlirc", 0, ki18n("KDE LIRC"), VERSION, ki18n("The KDE IR Remote Control System"), KAboutData::License_GPL_V2, ki18n("Copyright (c)2003 Gav Wood"), ki18n("Use this to configure KDE's infrared remote control system in order to control any KDE application with your infrared remote control."), "http://www.kde.org"));
+	setAboutData(new KAboutData("kcmlirc", 0, ki18n("KDE Lirc"), VERSION, ki18n("The KDE IR Remote Control System"), KAboutData::License_GPL_V2, ki18n("Copyright (c)2003 Gav Wood"), ki18n("Use this to configure KDE's infrared remote control system in order to control any KDE application with your infrared remote control."), "http://www.kde.org"));
 	setButtons(KCModule::Help);
 	setQuickHelp(i18n("<h1>Remote Controls</h1><p>This module allows you to configure bindings between your remote controls and KDE applications. Simply select your remote control and click Add under the Actions/Buttons list. If you want KDE to attempt to automatically assign buttons to a supported application's actions, try clicking the Auto-Populate button.</p><p>To view the recognised applications and remote controls, simply select the <em>Loaded Extensions</em> tab.</p>"));
 	bool ok;
-	KApplication::kApplication()->dcopClient()->remoteInterfaces("irkick", "IRKick", &ok);
-	if(!ok)
-		if(KMessageBox::questionYesNo(this, i18n("The Infrared Remote Control software is not currently running. This configuration module will not work properly without it. Would you like to start it now?"), i18n("Software Not Running"), i18n("Start"), i18n("Do Not Start")) == KMessageBox::Yes)
+
+#warning Port DCOP to DBUS
+	QDBusMessage m = QDBusMessage::createMethodCall("org.kde.irkick", "/IRKick", "", "remotes");
+	QDBusMessage response = QDBusConnection::sessionBus().call(m);
+	if( response.type() == QDBusMessage::ErrorMessage ){
+		kDebug() << response.errorMessage();
+		if(KMessageBox::questionYesNo(this, i18n("The Infrared Remote Control software is not currently running. This configuration module will not work properly without it. Would you like to start it now?"), i18n("Software Not Running"), KGuiItem("Start"), KGuiItem("Do Not Start")) == KMessageBox::Yes)
 		{	kDebug() << "S" << KToolInvocation::startServiceByDesktopName("irkick") ;
-			KSimpleConfig theConfig("irkickrc");
-			theConfig.setGroup("General");
-			if(theConfig.readBoolEntry("AutoStart", true) == false)
-				if(KMessageBox::questionYesNo(this, i18n("Would you like the infrared remote control software to start automatically when you begin KDE?"), i18n("Automatically Start?"), i18n("Start Automatically"), i18n("Do Not Start")) == KMessageBox::Yes)
-					theConfig.writeEntry("AutoStart", true);
+			KConfig theConfig("irkickrc");
+			KConfigGroup generalGroup = theConfig.group("General");
+			if(generalGroup.readEntry("AutoStart", true) == false)
+				if(KMessageBox::questionYesNo(this, i18n("Would you like the infrared remote control software to start automatically when you begin KDE?"), i18n("Automatically Start?"), KGuiItem("Start Automatically"), KGuiItem("Do Not Start")) == KMessageBox::Yes)
+					generalGroup.writeEntry("AutoStart", true);
 		}
-
-	KApplication::kApplication()->dcopClient()->remoteInterfaces("irkick", "IRKick", &ok);
-	kDebug() << "OK" << ok ;
+	}
 
 
-	(new QHBoxLayout(this))->setAutoAdd(true);
-	theKCMLircBase = new KCMLircBase(this);
+//	KApplication::kApplication()->dcopClient()->remoteInterfaces("irkick", "IRKick", &ok);
+//	ok = false;
+//	kDebug() << "OK" << ok ;
+
+
+	QHBoxLayout *layout = new QHBoxLayout(this);
+
+	QWidget *widget = new QWidget(this);
+	theKCMLircBase = new Ui::KCMLircBase();
+	theKCMLircBase->setupUi(widget);
+	layout->addWidget(widget);
+
+
+
+
 	connect(theKCMLircBase->theModes, SIGNAL( selectionChanged(Q3ListViewItem *) ), this, SLOT( updateActions() ));
 	connect(theKCMLircBase->theModes, SIGNAL( selectionChanged(Q3ListViewItem *) ), this, SLOT( updateModesStatus(Q3ListViewItem *) ));
 	connect(theKCMLircBase->theActions, SIGNAL( currentChanged(Q3ListViewItem *) ), this, SLOT( updateActionsStatus(Q3ListViewItem *) ));
@@ -130,13 +157,15 @@ void KCMLirc::slotEditAction()
 {
 	if(!theKCMLircBase->theActions->currentItem()) return;
 
+
 	EditAction theDialog(actionMap[theKCMLircBase->theActions->currentItem()], this);
 	Q3ListViewItem *item = theKCMLircBase->theModes->currentItem();
 	if(item->parent()) item = item->parent();
-	theDialog.theModes->insertItem(i18n("[Exit current mode]"));
+	theDialog.addItem(i18n("[Exit current mode]"));
 	for(item = item->firstChild(); item; item = item->nextSibling())
-		theDialog.theModes->insertItem(item->text(0));
+		theDialog.addItem(item->text(0));
 	theDialog.readFrom();
+
 	if(theDialog.exec() == QDialog::Accepted) { theDialog.writeBack(); emit changed(true); updateActions(); }
 }
 
@@ -146,14 +175,19 @@ void KCMLirc::slotAddActions()
 	Mode m = modeMap[theKCMLircBase->theModes->selectedItem()];
 	if(!RemoteServer::remoteServer()->remotes()[m.remote()]) return;
 
-	SelectProfile theDialog(this, 0);
+	QDialog *theDialog = new QDialog(this);
+	Ui::SelectProfile *ui = new Ui::SelectProfile();
+	ui->setupUi(theDialog);
 
 	QMap<Q3ListViewItem *, Profile *> profileMap;
-	Q3Dict<Profile> dict = ProfileServer::profileServer()->profiles();
-	for(Q3DictIterator<Profile> i(dict); i.current(); ++i) profileMap[new Q3ListViewItem(theDialog.theProfiles, i.current()->name())] = i.current();
+	QHash<QString, Profile*> dict = ProfileServer::profileServer()->profiles();
 
-	if(theDialog.exec() == QDialog::Accepted && theDialog.theProfiles->currentItem())
-	{	autoPopulate(*(profileMap[theDialog.theProfiles->currentItem()]), *(RemoteServer::remoteServer()->remotes()[m.remote()]), m.name());
+	QHash<QString, Profile*>::const_iterator i;
+	for (i = dict.constBegin(); i != dict.constEnd(); ++i)
+		 profileMap[new Q3ListViewItem(ui->theProfiles, i.value()->name())] = i.value();
+
+	if(theDialog->exec() == QDialog::Accepted && ui->theProfiles->currentItem())
+	{	autoPopulate(*(profileMap[ui->theProfiles->currentItem()]), *(RemoteServer::remoteServer()->remotes()[m.remote()]), m.name());
 		updateActions();
 		emit changed(true);
 	}
@@ -164,80 +198,83 @@ void KCMLirc::slotAddAction()
 	kDebug() ;
 	if(!theKCMLircBase->theModes->selectedItem()) return;
 	Mode m = modeMap[theKCMLircBase->theModes->selectedItem()];
-
+	kDebug() << "Calling AddAction with Mode: " << m.name();
 	AddAction theDialog(this, 0, m);
 	connect(this, SIGNAL(haveButton(const QString &, const QString &)), &theDialog, SLOT(updateButton(const QString &, const QString &)));
 
-	// populate the modes list box
-	Q3ListViewItem *item = theKCMLircBase->theModes->selectedItem();
-	if(item->parent()) item = item->parent();
-	theDialog.theModes->setEnabled(item->firstChild());
-	theDialog.theSwitchMode->setEnabled(item->firstChild());
-	for(item = item->firstChild(); item; item = item->nextSibling())
-	{	K3ListViewItem *a = new K3ListViewItem(theDialog.theModes, item->text(0));
-		if(item->isSelected()) { a->setSelected(true); theDialog.theModes->setCurrentItem(a); }
-	}
 
-	if(theDialog.exec() == QDialog::Accepted && theDialog.theButtons->selectedItem())
-	{	IRAction a;
-		a.setRemote(m.remote());
-		a.setMode(m.name());
-		a.setButton(theDialog.buttonMap[theDialog.theButtons->selectedItem()]);
-		a.setRepeat(theDialog.theRepeat->isChecked());
-		a.setAutoStart(theDialog.theAutoStart->isChecked());
-		a.setDoBefore(theDialog.theDoBefore->isChecked());
-		a.setDoAfter(theDialog.theDoAfter->isChecked());
-		a.setUnique(theDialog.isUnique);
-		a.setIfMulti(theDialog.theDontSend->isChecked() ? IM_DONTSEND : theDialog.theSendToTop->isChecked() ? IM_SENDTOTOP : theDialog.theSendToBottom->isChecked() ? IM_SENDTOBOTTOM : IM_SENDTOALL);
-		// change mode?
-		if(theDialog.theChangeMode->isChecked())
-		{
-			if(theDialog.theSwitchMode->isChecked() && theDialog.theModes->selectedItem())
-			{
-				a.setProgram("");
-				a.setObject(theDialog.theModes->selectedItem()->text(0));
-			}
-			else if(theDialog.theExitMode->isChecked())
-			{
-				a.setProgram("");
-				a.setObject("");
-			}
-			a.setAutoStart(false);
-			a.setRepeat(false);
-		}
-		// DCOP?
-		else if(theDialog.theUseDCOP->isChecked() && theDialog.theObjects->selectedItem() && theDialog.theObjects->selectedItem()->parent() && theDialog.theFunctions->selectedItem())
-		{
-			a.setProgram(theDialog.program);
-			a.setObject(theDialog.theObjects->selectedItem()->text(0));
-			a.setMethod(theDialog.theFunctions->selectedItem()->text(2));
-			theDialog.theParameters->setSorting(3);
-			a.setArguments(theDialog.theArguments);
-		}
-		// profile?
-		else if(theDialog.theUseProfile->isChecked() && theDialog.theProfiles->selectedItem() && (theDialog.theProfileFunctions->selectedItem() || theDialog.theJustStart->isChecked()))
-		{
-			ProfileServer *theServer = ProfileServer::profileServer();
+      // populate the modes list box
+        Q3ListViewItem *item = theKCMLircBase->theModes->selectedItem();
+        if(item->parent()) item = item->parent();
+        theDialog.theModes->setEnabled(item->firstChild());
+        theDialog.theSwitchMode->setEnabled(item->firstChild());
+        for(item = item->firstChild(); item; item = item->nextSibling())
+        {       K3ListViewItem *a = new K3ListViewItem(theDialog.theModes, item->text(0));
+                if(item->isSelected()) { a->setSelected(true); theDialog.theModes->setCurrentItem(a); }
+        }
 
-			if(theDialog.theNotJustStart->isChecked())
-			{	const ProfileAction *theAction = theServer->getAction(theDialog.profileMap[theDialog.theProfiles->selectedItem()], theDialog.profileFunctionMap[theDialog.theProfileFunctions->selectedItem()]);
-				a.setProgram(theAction->profile()->id());
-				a.setObject(theAction->objId());
-				a.setMethod(theAction->prototype());
-				theDialog.theParameters->setSorting(3);
-				a.setArguments(theDialog.theArguments);
-			}
-			else
-			{	a.setProgram(theServer->profiles()[theDialog.profileMap[theDialog.theProfiles->selectedItem()]]->id());
-				a.setObject("");
-			}
-		}
+        if(theDialog.exec() == QDialog::Accepted && theDialog.theButtons->selectedItem())
+        {       IRAction a;
+                a.setRemote(m.remote());
+                a.setMode(m.name());
+                kDebug() << "Saving action. Button is: " << theDialog.buttonMap[theDialog.theButtons->selectedItem()];
+                a.setButton(theDialog.buttonMap[theDialog.theButtons->selectedItem()]);
+                a.setRepeat(theDialog.theRepeat->isChecked());
+                a.setAutoStart(theDialog.theAutoStart->isChecked());
+                a.setDoBefore(theDialog.theDoBefore->isChecked());
+                a.setDoAfter(theDialog.theDoAfter->isChecked());
+                a.setUnique(theDialog.isUnique);
+                a.setIfMulti(theDialog.theDontSend->isChecked() ? IM_DONTSEND : theDialog.theSendToTop->isChecked() ? IM_SENDTOTOP : theDialog.theSendToBottom->isChecked() ? IM_SENDTOBOTTOM : IM_SENDTOALL);
+                // change mode?
+                if(theDialog.theChangeMode->isChecked())
+                {
+                        if(theDialog.theSwitchMode->isChecked() && theDialog.theModes->selectedItem())
+                        {
+                                a.setProgram("");
+                                a.setObject(theDialog.theModes->selectedItem()->text(0));
+                        }
+                        else if(theDialog.theExitMode->isChecked())
+                        {
+                                a.setProgram("");
+                                a.setObject("");
+                        }
+                        a.setAutoStart(false);
+                        a.setRepeat(false);
+                }
+                // DCOP?
+                else if(theDialog.theUseDCOP->isChecked() && theDialog.theObjects->selectedItem() && theDialog.theObjects->selectedItem()->parent() && theDialog.theFunctions->selectedItem())
+                {
+                        a.setProgram(theDialog.program);
+                        a.setObject(theDialog.theObjects->selectedItem()->text(0));
+                        a.setMethod(theDialog.theFunctions->selectedItem()->text(2));
+                        theDialog.theParameters->setSorting(3);
+                        a.setArguments(theDialog.theArguments);
+                        kDebug() << "Storing action with arguments:" << theDialog.theArguments[0].type() << theDialog.theArguments[1].type();
+                }
+                // profile?
+                else if(theDialog.theUseProfile->isChecked() && theDialog.theProfiles->selectedItem() && (theDialog.theProfileFunctions->selectedItem() || theDialog.theJustStart->isChecked()))
+                {
+                        ProfileServer *theServer = ProfileServer::profileServer();
 
-		// save our new action
-		allActions.addAction(a);
-		updateActions();
-		emit changed(true);
-	}
+                        if(theDialog.theNotJustStart->isChecked())
+                        {       const ProfileAction *theAction = theServer->getAction(theDialog.profileMap[theDialog.theProfiles->selectedItem()], theDialog.profileFunctionMap[theDialog.theProfileFunctions->selectedItem()]);
+                                a.setProgram(theAction->profile()->id());
+                                a.setObject(theAction->objId());
+                                a.setMethod(theAction->prototype());
+                                theDialog.theParameters->setSorting(3);
+                                a.setArguments(theDialog.theArguments);
+                        }
+                        else
+                        {       a.setProgram(theServer->profiles()[theDialog.profileMap[theDialog.theProfiles->selectedItem()]]->id());
+                                a.setObject("");
+                        }
+                }
+
+                // save our new action
+                allActions.addAction(a);
+                updateActions();
+                emit changed(true);
+        }
 }
 
 void KCMLirc::slotRemoveAction()
@@ -252,15 +289,16 @@ void KCMLirc::slotRemoveAction()
 
 void KCMLirc::autoPopulate(const Profile &profile, const Remote &remote, const QString &mode)
 {
-	Q3Dict<RemoteButton> d = remote.buttons();
-	for(Q3DictIterator<RemoteButton> i(d); i.current(); ++i)
-	{	const ProfileAction *pa = profile.searchClass(i.current()->getClass());
+	QHash<QString, RemoteButton*> d = remote.buttons();
+	QHash<QString, RemoteButton*>::const_iterator i;
+	for(i = d.constBegin(); i != d.constEnd(); ++i)
+	{	const ProfileAction *pa = profile.searchClass(i.value()->getClass());
 		if(pa)
 		{
 			IRAction a;
 			a.setRemote(remote.id());
 			a.setMode(mode);
-			a.setButton(i.current()->id());
+			a.setButton(i.value()->id());
 			a.setRepeat(pa->repeat());
 			a.setAutoStart(pa->autoStart());
 			a.setProgram(pa->profile()->id());
@@ -271,8 +309,8 @@ void KCMLirc::autoPopulate(const Profile &profile, const Remote &remote, const Q
 			Arguments l;
 			// argument count should be either 0 or 1. undefined if > 1.
 			if(Prototype(pa->prototype()).argumentCount() == 1)
-			{	l.append(QString().setNum(i.current()->parameter().toFloat() * pa->multiplier()));
-				l.back().cast(QVariant::nameToType(Prototype(pa->prototype()).type(0).utf8()));
+			{	l.append(QString().setNum(i.value()->parameter().toFloat() * pa->multiplier()));
+				l.back().convert(QVariant::nameToType(Prototype(pa->prototype()).type(0).toLocal8Bit()));
 			}
 			a.setArguments(l);
 			allActions.addAction(a);
@@ -308,14 +346,14 @@ void KCMLirc::slotEditMode()
 	EditMode theDialog(this, 0);
 
 	Mode &mode = modeMap[theKCMLircBase->theModes->selectedItem()];
-	theDialog.theName->setEnabled(theKCMLircBase->theModes->selectedItem()->parent());
-	theDialog.theName->setText(mode.name().isEmpty() ? mode.remoteName() : mode.name());
-	if(!mode.iconFile().isNull())
-		theDialog.theIcon->setIcon(mode.iconFile());
+ 	theDialog.theName->setEnabled(theKCMLircBase->theModes->selectedItem()->parent());
+ 	theDialog.theName->setText(mode.name().isEmpty() ? mode.remoteName() : mode.name());
+ 	if(!mode.iconFile().isNull())
+ 		theDialog.theIcon->setIcon(mode.iconFile());
 	else
 		theDialog.theIcon->resetIcon();
-	theDialog.theDefault->setChecked(allModes.isDefault(mode));
-	theDialog.theDefault->setEnabled(!allModes.isDefault(mode));
+ 	theDialog.theDefault->setChecked(allModes.isDefault(mode));
+ 	theDialog.theDefault->setEnabled(!allModes.isDefault(mode));
 
 	if(theDialog.exec() == QDialog::Accepted)
 	{	kDebug() << "Setting icon : " << theDialog.theIcon->icon() ;
@@ -382,8 +420,9 @@ void KCMLirc::updateActions()
 	Mode m = modeMap[theKCMLircBase->theModes->selectedItem()];
 	theKCMLircBase->theModeLabel->setText(m.remoteName() + ": " + (m.name().isEmpty() ? i18n("Actions <i>always</i> available") : i18n("Actions available only in mode <b>%1</b>", m.name())));
 	IRAItList l = allActions.findByMode(m);
-	for(IRAItList::iterator i = l.begin(); i != l.end(); ++i)
-	{	Q3ListViewItem *b = new K3ListViewItem(theKCMLircBase->theActions, (**i).buttonName(), (**i).application(), (**i).function(), (**i).arguments().toString(), (**i).notes());
+	for(IRAItList::iterator i = l.begin(); i != l.end(); ++i) {
+		kDebug() << "Adding action: " << (**i).buttonName() << (**i).application(), (**i).function();
+		Q3ListViewItem *b = new K3ListViewItem(theKCMLircBase->theActions, (**i).buttonName(), (**i).application(), (**i).function(), (**i).arguments().toString(), (**i).notes());
 		actionMap[b] = *i;
 		if(*i == oldCurrent) { b->setSelected(true); theKCMLircBase->theActions->setCurrentItem(b); }
 	}
@@ -406,8 +445,20 @@ void KCMLirc::updateModes()
 	theKCMLircBase->theModes->clear();
 	modeMap.clear();
 
-	IRKick_stub IRKick("irkick", "IRKick");
-	QStringList remotes = IRKick.remotes();
+	kDebug() << "updating Modes";
+
+	QDBusMessage m = QDBusMessage::createMethodCall("org.kde.irkick", "/IRKick", "", "remotes");
+	QDBusMessage response = QDBusConnection::sessionBus().call(m);
+	if( response.type() == QDBusMessage::ErrorMessage ){
+		kDebug() << response.errorMessage();
+	} 
+	
+	QStringList remotes;
+	for( int i = 0; i < response.arguments().size(); ++i){
+		kDebug() << "Reveiced remote: " << response.arguments().at(i).toString();
+		remotes << response.arguments().at(i).toString();
+	}
+
 	if(remotes.begin() == remotes.end())
 		theKCMLircBase->theMainLabel->setMaximumSize(32767, 32767);
 	else
@@ -444,19 +495,19 @@ void KCMLirc::updateExtensions()
 		Q3ListViewItem *a = new Q3ListViewItem(theKCMLircBase->theExtensions, i18n("Applications"));
 		a->setOpen(true);
 		profileMap.clear();
-		Q3Dict<Profile> dict = theServer->profiles();
-		Q3DictIterator<Profile> i(dict);
-		for(; i.current(); ++i)
-			profileMap[new Q3ListViewItem(a, i.current()->name())] = i.currentKey();
+		QHash<QString, Profile*> dict = theServer->profiles();
+		QHash<QString, Profile*>::const_iterator i;
+		for(i = dict.constBegin(); i != dict.constEnd(); ++i)
+			profileMap[new Q3ListViewItem(a, i.value()->name())] = i.key();
 	}
 	{	RemoteServer *theServer = RemoteServer::remoteServer();
 		Q3ListViewItem *a = new Q3ListViewItem(theKCMLircBase->theExtensions, i18n("Remote Controls"));
 		a->setOpen(true);
 		remoteMap.clear();
-		Q3Dict<Remote> dict = theServer->remotes();
-		Q3DictIterator<Remote> i(dict);
-		for(; i.current(); ++i)
-			remoteMap[new Q3ListViewItem(a, i.current()->name())] = i.currentKey();
+		QHash<QString, Remote*> dict = theServer->remotes();
+		QHash<QString, Remote*>::const_iterator i;
+		for(i = dict.constBegin(); i != dict.constEnd(); ++i)
+			remoteMap[new Q3ListViewItem(a, i.value()->name())] = i.key();
 	}
 	updateInformation();
 }
@@ -500,10 +551,23 @@ void KCMLirc::updateInformation()
 
 void KCMLirc::load()
 {
-	KSimpleConfig theConfig("irkickrc");
+	KConfig theConfig("irkickrc");
+//	KConfigGroup generalGroup = theConfig.group("General");
+
 	allActions.loadFromConfig(theConfig);
 	allModes.loadFromConfig(theConfig);
-	allModes.generateNulls(IRKick_stub("irkick", "IRKick").remotes());
+	QDBusMessage m = QDBusMessage::createMethodCall("org.kde.irkick", "/IRKick", "", "remotes");
+	QDBusMessage response = QDBusConnection::sessionBus().call(m);
+	if( response.type() == QDBusMessage::ErrorMessage ){
+		kDebug() << response.errorMessage();
+	} 
+	
+	QStringList remotes;
+	for( int i = 0; i < response.arguments().size(); ++i){
+		remotes << response.arguments().at(i).toString();
+	}
+
+	allModes.generateNulls(remotes);
 
 	updateExtensions();
 	updateModes();
@@ -518,13 +582,18 @@ void KCMLirc::defaults()
 
 void KCMLirc::save()
 {
-	KSimpleConfig theConfig("irkickrc");
+	KConfig theConfig("irkickrc");
 	allActions.saveToConfig(theConfig);
 	allModes.saveToConfig(theConfig);
 
 	theConfig.sync();
-	IRKick_stub("irkick", "IRKick").reloadConfiguration();
 
+	QDBusMessage m = QDBusMessage::createMethodCall("org.kde.irkick", "/IRKick", "", "reloadConfiguration");
+	QDBusMessage response = QDBusConnection::sessionBus().call(m);
+	if( response.type() == QDBusMessage::ErrorMessage ){
+		kDebug() << response.errorMessage();
+	} 
+	
 	emit changed(true);
 }
 
@@ -535,13 +604,13 @@ void KCMLirc::configChanged()
 }
 
 // TODO: Take this out when I know how
-extern "C"
-{
-	KDE_EXPORT KCModule *create_kcmlirc(QWidget *parent, const char *)
-	{	KGlobal::locale()->insertCatalog("kcmlirc");
-		return new KCMLirc(parent);
-	}
-}
+//extern "C"
+//{
+//	KDE_EXPORT KCModule *create_kcmlirc(QWidget *parent, const char *)
+//	KGlobal::locale()->insertCatalog("kcmlirc");
+//		return new KCMLirc(parent);
+//	}
+//}
 
 #include <ktoolinvocation.h>
 

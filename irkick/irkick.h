@@ -13,10 +13,10 @@
 
 #include <QMouseEvent>
 
-#include <ksystemtray.h>
+#include <ksystemtrayicon.h>
 #include <kdedmodule.h>
 #include <kaboutdata.h>
-
+#include <kmenu.h>
 
 #include "modes.h"
 #include "iractions.h"
@@ -24,15 +24,15 @@
 
 class QMouseEvent;
 
-class IRKTrayIcon: public KSystemTray
+class IRKTrayIcon: public KSystemTrayIcon
 {
 	void mousePressEvent(QMouseEvent *e);
 
 public:
-	KMenu* contextMenu() const { return KSystemTray::contextMenu(); }
-	KActionCollection* actionCollection() { return KSystemTray::actionCollection(); }
+	QMenu* contextMenu() const { return KSystemTrayIcon::contextMenu(); }
+	KActionCollection* actionCollection() { return KSystemTrayIcon::actionCollection(); }
 
-	IRKTrayIcon(QWidget *parent = 0, const char *name = 0): KSystemTray(parent) {}
+	IRKTrayIcon(QWidget *parent = 0, const char *name = 0): KSystemTrayIcon(parent) {}
 };
 
 class IRKick: public QObject
@@ -57,7 +57,7 @@ class IRKick: public QObject
 protected:
 	KLircClient *theClient;
 
-public slots: //dbus slot
+public Q_SLOTS: //dbus slot
 	/**
 	 * Query status of connection.
 	 *

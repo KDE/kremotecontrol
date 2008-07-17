@@ -22,12 +22,12 @@
 #include <QWidget>
 #include <qdialog.h>
 
-#include <q3socket.h>
+#include <qtcpsocket.h>
 #include <qsocketnotifier.h>
 #include <QFile>
 
 #include <kapplication.h>
-#include <ksystemtray.h>
+#include <ksystemtrayicon.h>
 #include <kiconloader.h>
 #include <kpassivepopup.h>
 #include <kmessagebox.h>
@@ -35,8 +35,8 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <dcopclient.h>
-#include <dcopref.h>
+//#include <dcopclient.h>
+//#include <dcopref.h>
 
 #include "klircclient.h"
 
@@ -64,7 +64,7 @@ bool KLircClient::connectToLirc()
 		}
 	}
 
-	theSocket = new Q3Socket;
+	theSocket = new QTcpSocket();
 	theSocket->setSocket(sock);
 	connect(theSocket, SIGNAL(readyRead()), SLOT(slotRead()));
 	connect(theSocket, SIGNAL(connectionClosed()), SLOT(slotClosed()));
@@ -74,7 +74,7 @@ bool KLircClient::connectToLirc()
 
 KLircClient::~KLircClient()
 {
-//	if(theSocket)
+	if(theSocket)
 		delete theSocket;
 }
 
@@ -87,9 +87,11 @@ void KLircClient::slotClosed()
 
 const QStringList KLircClient::remotes() const
 {
-	QStringList remotes;
-	for(QMap<QString, QStringList>::ConstIterator i = theRemotes.begin(); i != theRemotes.end(); ++i)
+	QStringList remotes; 
+	for(QMap<QString, QStringList>::ConstIterator i = theRemotes.begin(); i != theRemotes.end(); ++i){
+		kDebug() << "Remote: " << i.key();
 		remotes.append(i.key());
+	}
 	remotes.sort();
 	return remotes;
 }
@@ -106,13 +108,13 @@ void KLircClient::slotRead()
 		QString line = readLine();
 		if (line == "BEGIN")
 		{
-			// BEGIN
-			// <command>
-			// [SUCCESS|ERROR]
-			// [DATA
-			// n
-			// n lines of data]
-			// END
+                        // BEGIN
+                        // <command>
+                        // [SUCCESS|ERROR]
+                        // [DATA
+                        // n
+                        // n lines of data]
+                        // END
 			line = readLine();
 			if (line == "SIGHUP")
 			{
@@ -169,6 +171,7 @@ void KLircClient::slotRead()
 			do line = readLine();
 			while (!line.isEmpty() && line != "END");
 			listIsUpToDate = true;
+			kDebug() << "Remotes read!";
 			emit remotesRead();
 		}
 		else
@@ -188,9 +191,9 @@ void KLircClient::slotRead()
 			if(btn.startsWith("'") && btn.endsWith("'"))
 				btn = btn.mid(1, btn.length() - 2);
 			line.remove(0, pos + 1);
-
+			kDebug() << "Command received!";
 			emit commandReceived(line, btn, repeat);
-		}
+        	}
 	}
 }
 
@@ -204,7 +207,7 @@ void KLircClient::updateRemotes()
 bool KLircClient::isConnected() const
 {
 	if(!theSocket) return false;
-	return theSocket->state() == Q3Socket::Connected;
+	return theSocket->state() == QTcpSocket::Connected;
 }
 
 bool KLircClient::haveFullList() const

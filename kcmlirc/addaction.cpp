@@ -16,6 +16,11 @@
 #include <q3buttongroup.h>
 //Added by qt3to4:
 #include <Q3ValueList>
+#include <QDBusMessage>
+#include <QDBusConnection>
+#include <QDBusInterface>
+#include <QDBusConnectionInterface>
+#include <QDomDocument>
 
 #include <kdebug.h>
 #include <klineedit.h>
@@ -26,23 +31,25 @@
 #include <keditlistbox.h>
 #include <klocale.h>
 
-#include <dcopclient.h>
-#include <irkick_stub.h>
-
 #include "prototype.h"
 #include "addaction.h"
 #include "profileserver.h"
 #include "remoteserver.h"
 
-AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): AddActionBase(parent, name), theMode(mode)
+AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMode(mode)
 {
-	connect(this, SIGNAL( selected(const QString &) ), SLOT( updateForPageChange() ));
-	connect(this, SIGNAL( selected(const QString &) ), SLOT( slotCorrectPage() ));
+	setupUi(this);
+
+
+	connect(this, SIGNAL( currentIdChanged(int) ), SLOT( updateForPageChange() ));
+	connect(this, SIGNAL( currentIdChanged(int) ), SLOT( slotCorrectPage() ));
+	connect(theObjects, SIGNAL(currentChanged(Q3ListViewItem)), SLOT(updateFunctions()));
 	curPage = 0;
 	updateProfiles();
 	updateButtons();
 	updateObjects();
 	updateProfileFunctions();
+	
 }
 
 AddAction::~AddAction()
@@ -63,31 +70,75 @@ void AddAction::slotModeSelected()
 void AddAction::slotCorrectPage()
 {
 	int lastPage = curPage;
-	curPage = indexOf(currentPage());
+	curPage = this->currentId();
+
+	kDebug() << "lastPage:" << lastPage << "; curPage:" << curPage;
 
 	if(curPage == 2 && theUseProfile->isChecked())
-		showPage(((Q3Wizard *)this)->page(lastPage > 1 ? 1 : 3));
-	if((curPage == 2 || curPage == 5) && theChangeMode->isChecked())
-		showPage(((Q3Wizard *)this)->page(lastPage > 1 ? 1 : 6));
+		if(lastPage > 1)
+			back();
+		else
+			next();
+	if(curPage == 2  && theChangeMode->isChecked() && lastPage == 1){
+		next();
+		next();
+		next();
+		next();
+	}
+	
+	if(curPage == 5 && theChangeMode->isChecked() && lastPage == 6){
+		back();
+		back();
+		back();
+		back();
+	}
 
 	if(curPage == 3 && theUseDCOP->isChecked())
-		showPage(((Q3Wizard *)this)->page(lastPage == 4 ? 2 : 4));
+		if(lastPage == 4)
+			back();
+		else
+			next();
 
 	if(curPage == 4 && (
 	(theUseDCOP->isChecked() && theFunctions->currentItem() && !Prototype(theFunctions->currentItem()->text(2)).count()) ||
 	(theUseProfile->isChecked() && (theProfileFunctions->currentItem() && !theProfileFunctions->currentItem()->text(1).toInt() || theJustStart->isChecked()))
 	))
-		showPage(((Q3Wizard *)this)->page(lastPage == 5 ? (theUseDCOP->isChecked() ? 2 : 3) : 5));
+//		showPage(((QWizard *)this)->page(lastPage == 5 ? (theUseDCOP->isChecked() ? 2 : 3) : 5));
+
+		if(lastPage == 5){
+			if(theUseDCOP->isChecked()){
+				back();
+				back();
+			} else {
+				back();
+			}
+		} else {
+			next();
+		}
 }
 
 void AddAction::requestNextPress()
 {
-	IRKick_stub("irkick", "IRKick").stealNextPress(DCOPClient::mainClient()->appId(), "KCMLirc", "gotButton(QString, QString)");
+	kDebug() << "Requesting next press from irkick";
+	QDBusMessage m = QDBusMessage::createMethodCall("org.kde.irkick", "/IRKick", "", "stealNextPress");
+	m << "org.kde.kcmshell_kcmlirc";
+	m << "/KCMLirc";
+	m << "gotButton";
+	QDBusMessage response = QDBusConnection::sessionBus().call(m);
+	if(response.type() == QDBusMessage::ErrorMessage){
+		kDebug() << response.errorMessage();
+	}
 }
 
 void AddAction::cancelRequest()
 {
-	IRKick_stub("irkick", "IRKick").dontStealNextPress();
+	kDebug() << "Cancelling keypress request";
+	QDBusMessage m = QDBusMessage::createMethodCall("org.kde.irkick", "/IRKick", "", "dontStealNextPress");
+	QDBusMessage response = QDBusConnection::sessionBus().call(m);
+	if(response.type() == QDBusMessage::ErrorMessage){
+		kDebug() << response.errorMessage();
+	}
+	kDebug() << "done...";
 }
 
 void AddAction::updateButton(const QString &remote, const QString &button)
@@ -98,61 +149,146 @@ void AddAction::updateButton(const QString &remote, const QString &button)
 		theButtons->ensureItemVisible(theButtons->findItem(RemoteServer::remoteServer()->getButtonName(remote, button), 0));
 	}
 	else
-		KMessageBox::error(this, i18n( "You did not select a mode of that remote control. Please use %1, "
+		KMessageBox::error(0, i18n( "You did not select a mode of that remote control. Please use %1, "
                                        "or revert back to select a different mode.", theMode.remoteName() ),
                                        i18n( "Incorrect Remote Control Detected" ));
 
-	if(indexOf(currentPage()) == 1)
-		requestNextPress();
+	if(currentId() == 1)
+		next();
 }
 
 void AddAction::updateButtons()
 {
 	theButtons->clear();
 	buttonMap.clear();
-	IRKick_stub IRKick("irkick", "IRKick");
-	QStringList buttons = IRKick.buttons(theMode.remote());
+	QDBusMessage m = QDBusMessage::createMethodCall("org.kde.irkick", "/IRKick", "", "buttons");
+	m << theMode.remote();
+	QDBusMessage response = QDBusConnection::sessionBus().call(m);
+
+	if( response.type() == QDBusMessage::ErrorMessage ){
+		kDebug() << response.errorMessage();
+	}
+
+	kDebug() << "Got response: " << response.arguments();
+	
+	QStringList buttons = response.arguments().at(0).toStringList();
+	
 	for(QStringList::iterator j = buttons.begin(); j != buttons.end(); ++j)
 		buttonMap[new Q3ListViewItem(theButtons, RemoteServer::remoteServer()->getButtonName(theMode.remote(), *j))] = *j;
 }
 
 void AddAction::updateForPageChange()
 {
-	if(indexOf(currentPage()) == 1) requestNextPress(); else cancelRequest();
-	switch(indexOf(currentPage()))
-	{	case 0: break;
-		case 1: break;
-		case 2: break;
-		case 3: break;
-		case 4: break;
-	}
+	if(currentId() == 1) requestNextPress(); else cancelRequest();
 	updateButtonStates();
 }
 
 void AddAction::updateButtonStates()
 {
-	switch(indexOf(currentPage()))
-	{	case 0: setNextEnabled(currentPage(), theProfiles->currentItem() != 0 || !theUseProfile->isChecked()); break;
-		case 1: setNextEnabled(currentPage(), theButtons->currentItem() != 0); break;
-		case 2: setNextEnabled(currentPage(), theFunctions->currentItem() != 0); break;
-		case 3: setNextEnabled(currentPage(), theProfileFunctions->currentItem() != 0 || theJustStart->isChecked()); break;
-		case 4: setNextEnabled(currentPage(), true); break;
-		case 5: setNextEnabled(currentPage(), false); setFinishEnabled(currentPage(), true); break;
-		case 6: setNextEnabled(currentPage(), false); setFinishEnabled(currentPage(), theModes->currentItem() || !theSwitchMode->isChecked()); break;
+#warning Port me!
+	switch(currentId()){
+		case 0:
+			button(QWizard::NextButton)->setEnabled(theProfiles->currentItem() != 0 || !theUseProfile->isChecked());
+			break;
+		case 1:
+			button(QWizard::NextButton)->setEnabled(theButtons->currentItem() != 0);
+			break;
+		case 2:
+			button(QWizard::NextButton)->setEnabled(theFunctions->currentItem() != 0);
+			break;
+		case 3:
+			button(QWizard::NextButton)->setEnabled(theProfileFunctions->currentItem() != 0 || theJustStart->isChecked());
+			break;
+		case 4:
+			button(QWizard::NextButton)->setEnabled(true);
+			break;
+		case 5: 
+			button(QWizard::NextButton)->setEnabled(true);
+			button(QWizard::FinishButton)->setEnabled(true);
+			break;
+		case 6:
+			button(QWizard::NextButton)->setEnabled(false);
+			button(QWizard::FinishButton)->setEnabled(theModes->currentItem() || !theSwitchMode->isChecked());
+			break;
 	}
 }
 
 const QStringList AddAction::getFunctions(const QString app, const QString obj)
 {
+	kDebug() << "creating Interface with: " << app << "/" + obj << "org.freedesktop.DBus.Introspectable";
+	QDBusInterface *dBusIface = new QDBusInterface(app, "/" + obj, "org.freedesktop.DBus.Introspectable");
+	QDBusReply<QString> response = dBusIface->call("Introspect");
+	
+	kDebug() << response;
+	QDomDocument domDoc;
+	domDoc.setContent(response);	
+	
+	QDomElement node = domDoc.documentElement();
+	QDomElement child = node.firstChildElement();
+	
 	QStringList ret;
-	DCOPClient *theClient = KApplication::kApplication()->dcopClient();
-	DCOPCStringList theApps = theClient->remoteFunctions(app.utf8(), obj.utf8());
-	for(DCOPCStringList::iterator i = theApps.begin(); i != theApps.end(); ++i)
-		if(	*i != "DCOPCStringList interfaces()" &&
-			*i != "DCOPCStringList functions()" &&
-			*i != "DCOPCStringList objects()" &&
-			*i != "DCOPCStringList find(QCString)" )
-			ret += QString::fromUtf8(*i);
+	QString function;
+
+	while (!child.isNull()) {
+		if (child.tagName() == QLatin1String("interface")) {
+			if(child.attribute("name") == "org.freedesktop.DBus.Properties" || 
+			   child.attribute("name") == "org.freedesktop.DBus.Introspectable"){
+				child = child.nextSiblingElement();
+				continue;	
+			}
+			QDomElement subChild = child.firstChildElement();
+			while(!subChild.isNull()){
+				if(subChild.tagName() == QLatin1String("method")){
+					QString method = subChild.attribute(QLatin1String("name"));
+					kDebug() << "Method: " << method;
+					function = "QString " + method + "(";
+					QDomElement arg = subChild.firstChildElement();
+					QString argStr;
+					while(!arg.isNull()){
+						if(arg.tagName() == QLatin1String("arg")){
+							if(arg.attribute(QLatin1String("direction")) == "in"){
+								if(!argStr.isEmpty()){
+									argStr += ", ";
+								}
+								if(arg.attribute(QLatin1String("type")) == "i" ){
+									argStr += "int";
+								} else if(arg.attribute(QLatin1String("type")) == "u"){
+									argStr += "uint";
+								} else if(arg.attribute(QLatin1String("type")) == "s"){
+									argStr += "QString";
+								} else if(arg.attribute(QLatin1String("type")) == "b"){
+									argStr += "bool";
+								} else if(arg.attribute(QLatin1String("type")) == "d"){
+									argStr += "double";
+								} else if(arg.attribute(QLatin1String("type")) == "as"){
+									argStr += "QStringList";
+								} else if(arg.attribute(QLatin1String("type")) == "ay"){
+									argStr += "QByteArray";
+								} else if(arg.attribute(QLatin1String("type")) == "(iii)"){
+									kDebug() << "got a (iii) type";
+									QString helper = arg.attribute("name");
+									arg = arg.nextSiblingElement();
+									argStr += arg.attribute(QLatin1String("value"));
+									argStr += " " + helper;
+									arg = arg.nextSiblingElement();
+									continue;
+								} else {
+									argStr += arg.attribute(QLatin1String("type"));
+								}
+								argStr += " " + arg.attribute(QLatin1String("name"));
+								kDebug() << "Arg: " << argStr;
+							}
+						}
+						arg = arg.nextSiblingElement();
+					}
+					function +=  argStr + ")";
+					ret += function;
+				}
+				subChild = subChild.nextSiblingElement();
+			}
+		}
+		child = child.nextSiblingElement();
+	}	
 	return ret;
 }
 
@@ -162,10 +298,10 @@ void AddAction::updateProfiles()
 	theProfiles->clear();
 	profileMap.clear();
 
-	Q3Dict<Profile> dict = theServer->profiles();
-	Q3DictIterator<Profile> i(dict);
-	for(; i.current(); ++i)
-		profileMap[new Q3ListViewItem(theProfiles, i.current()->name())] = i.currentKey();
+	QHash<QString, Profile*> dict = theServer->profiles();
+	QHash<QString, Profile*>::const_iterator i;
+	for(i = dict.constBegin(); i != dict.constEnd(); ++i)
+		profileMap[new Q3ListViewItem(theProfiles, i.value()->name())] = i.key();
 }
 
 void AddAction::updateOptions()
@@ -215,9 +351,10 @@ void AddAction::updateProfileFunctions()
 	if(!theProfiles->currentItem()) return;
 
 	const Profile *p = theServer->profiles()[profileMap[theProfiles->currentItem()]];
-	Q3Dict<ProfileAction> dict = p->actions();
-	for(Q3DictIterator<ProfileAction> i(dict); i.current(); ++i)
-		profileFunctionMap[new Q3ListViewItem(theProfileFunctions, i.current()->name(), QString().setNum(i.current()->arguments().count()), i.current()->comment())] = i.currentKey();
+	QHash<QString, ProfileAction*> dict = p->actions();
+	QHash<QString, ProfileAction*>::const_iterator i;
+	for(i = dict.constBegin(); i != dict.constEnd(); ++i)
+		profileFunctionMap[new Q3ListViewItem(theProfileFunctions, i.value()->name(), QString().setNum(i.value()->arguments().count()), i.value()->comment())] = i.key();
 	updateParameters();
 	updateOptions();
 }
@@ -232,7 +369,8 @@ void AddAction::updateParameters()
 		for(unsigned k = 0; k < p.count(); k++)
 		{	new K3ListViewItem(theParameters, p.name(k).isEmpty() ? i18n( "<anonymous>" ) : p.name(k), "", p.type(k), QString().setNum(k + 1));
 			theArguments.append(QVariant(""));
-			theArguments.back().cast(QVariant::nameToType(p.type(k).utf8()));
+			kDebug() << "converting argument to:" << p.type(k).toLocal8Bit();
+			theArguments.back().convert(QVariant::nameToType(p.type(k).toLocal8Bit()));
 		}
 	}
 	else if(theUseProfile->isChecked() && theProfiles->currentItem())
@@ -247,7 +385,8 @@ void AddAction::updateParameters()
 		int index = 1;
 		for(Q3ValueList<ProfileActionArgument>::const_iterator i = pa->arguments().begin(); i != pa->arguments().end(); ++i, index++)
 		{	theArguments.append(QVariant((*i).getDefault()));
-			theArguments.back().cast(QVariant::nameToType((*i).type().utf8()));
+			kDebug() << "converting argument to:" << QVariant::nameToType((*i).type().toLocal8Bit());
+			theArguments.back().convert(QVariant::nameToType((*i).type().toLocal8Bit()));
 			new Q3ListViewItem(theParameters, (*i).comment(), theArguments.back().toString(), (*i).type(), QString().setNum(index));
 		}
 
@@ -261,10 +400,13 @@ void AddAction::updateParameters()
 
 void AddAction::updateParameter()
 {
+	kDebug() << "Update parameter called";
 	if(theParameters->currentItem())
 	{	QString type = theParameters->currentItem()->text(2);
 		int index = theParameters->currentItem()->text(3).toInt() - 1;
-		if(type.contains("int") || type.contains("short") || type.contains("long"))
+		kDebug() << "Parameter type:" << type;
+		if(type.contains("int") || type.contains("short") || type.contains("long") || type.contains("uint"))
+//		if(type.contains("i"))
 		{	theValue->raiseWidget(2);
 			theValueIntNumInput->setValue(theArguments[index].toInt());
 		}
@@ -282,7 +424,7 @@ void AddAction::updateParameter()
 			// backup needed because calling clear will kill what ever has been saved.
 			theValueEditListBox->clear();
 			theValueEditListBox->insertStringList(backup);
-			theArguments[index].asStringList() = backup;
+			theArguments[index].toStringList() = backup;
 		}
 		else
 		{	theValue->raiseWidget(0);
@@ -306,27 +448,32 @@ void AddAction::updateParameter()
 // called when the textbox/checkbox/whatever changes value
 void AddAction::slotParameterChanged()
 {
+	kDebug() << "slotParameterChanged() called";
 	if(!theParameters->currentItem()) return;
 	int index = theParameters->currentItem()->text(3).toInt() - 1;
 	QString type = theParameters->currentItem()->text(2);
-	if(type.contains("int") || type.contains("short") || type.contains("long"))
-		theArguments[index].asInt() = theValueIntNumInput->value();
-	else if(type.contains("double") || type.contains("float"))
-		theArguments[index].asDouble() = theValueDoubleNumInput->value();
-	else if(type.contains("bool"))
-		theArguments[index].asBool() = theValueCheckBox->isChecked();
-	else if(type.contains("QStringList"))
-		theArguments[index].asStringList() = theValueEditListBox->items();
-	else
-		theArguments[index].asString() = theValueLineEdit->text();
+	if(type.contains("int") || type.contains("short") || type.contains("long")) {
+		theArguments[index] = theValueIntNumInput->value();
+	} else if(type.contains("double") || type.contains("float")) {
+		theArguments[index] = theValueDoubleNumInput->value();
+	} else if(type.contains("bool")) {
+		theArguments[index] = theValueCheckBox->isChecked();
+	} else if(type.contains("QStringList")) {
+		theArguments[index] = theValueEditListBox->items();
+	} else {
+		theArguments[index] = theValueLineEdit->text();
+		kDebug() << "setting argument" << theArguments[index];
+	}
 
-	theArguments[theParameters->currentItem()->text(3).toInt() - 1].cast(QVariant::nameToType(theParameters->currentItem()->text(2).utf8()));
+//	kDebug() << "setting argument nr: " << index << " to:" << theValueLineEdit->text() << "type is:" << type;
+	theArguments[theParameters->currentItem()->text(3).toInt() - 1].convert(QVariant::nameToType(theParameters->currentItem()->text(2).toLocal8Bit()));
 	updateArgument(theParameters->currentItem());
 }
 
 // takes theArguments[theIndex] and puts it into theItem
 void AddAction::updateArgument(Q3ListViewItem *theItem)
 {
+	kDebug() << "theArgument:" << theArguments[theItem->text(3).toInt() - 1] << "index:" << theItem->text(3).toInt() - 1;
 	theItem->setText(1, theArguments[theItem->text(3).toInt() - 1].toString());
 }
 
@@ -337,33 +484,64 @@ void AddAction::updateObjects()
 	uniqueProgramMap.clear();
 	nameProgramMap.clear();
 
-	DCOPClient *theClient = KApplication::kApplication()->dcopClient();
-	DCOPCStringList theApps = theClient->registeredApplications();
-	for(DCOPCStringList::iterator i = theApps.begin(); i != theApps.end(); ++i)
+	QDBusConnectionInterface *dBusIface = QDBusConnection::sessionBus().interface();
+	QStringList allServices = dBusIface->registeredServiceNames();
+
+	QStringList kdeServices;
+
+	for(QStringList::iterator i = allServices.begin(); i != allServices.end(); ++i)
 	{
-		if(!QString(*i).indexOf(i18n( "anonymous" ))) continue;
-		QRegExp r("(.*)-[0-9]+");
-		QString name = r.exactMatch(QString(*i)) ? r.cap(1) : *i;
-		if(names.contains(name)) continue;
+		// Use only KDE-Apps
+		if(!(*i).contains("org.kde")){
+			continue;
+		}
+		
+		// Remove the "org.kde."
+		QString name = (*i);
+		name.remove(0, 8);
+		
+		// Remove "human unreadable" entries
+		QRegExp r("[a-zA-Z]*");
+		if(! r.exactMatch(name)){
+			continue;
+		}
+		
+		//remove duplicates
+		if(names.contains(name)){
+			continue;
+		}
 		names += name;
 
+		// insert service into theObjects
 		K3ListViewItem *a = new K3ListViewItem(theObjects, name);
 		uniqueProgramMap[a] = name == QString(*i);
 		nameProgramMap[a] = *i;
-
-		DCOPCStringList theObjects = theClient->remoteObjects(*i);
-		for(DCOPCStringList::iterator j = theObjects.begin(); j != theObjects.end(); ++j)
-			if(*j != "ksycoca" && *j != "qt")// && getFunctions(*i, *j).count())
-				new K3ListViewItem(a, *j);
+		
+		QDBusInterface *dBusIface = new QDBusInterface(*i, "/", "org.freedesktop.DBus.Introspectable");
+		QDBusReply<QString> response = dBusIface->call("Introspect");
+		
+		QDomDocument domDoc;
+		domDoc.setContent(response);
+		
+		QDomElement node = domDoc.documentElement();
+		QDomElement child = node.firstChildElement();
+		while (!child.isNull()) {
+			if (child.tagName() == QLatin1String("node")) {
+				QString path = child.attribute(QLatin1String("name"));
+				new K3ListViewItem(a, path);
+			}
+			child = child.nextSiblingElement();
+		}	
 	}
 	updateFunctions();
 }
 
 void AddAction::updateFunctions()
 {
+	kDebug() << "updateFunctions called";
 	theFunctions->clear();
-	if(theObjects->currentItem() && theObjects->currentItem()->parent())
-	{	QStringList functions = getFunctions(nameProgramMap[theObjects->currentItem()->parent()], theObjects->currentItem()->text(0));
+	if(theObjects->currentItem() && theObjects->currentItem()->parent()) {
+		QStringList functions = getFunctions(nameProgramMap[theObjects->currentItem()->parent()], theObjects->currentItem()->text(0));
 		for(QStringList::iterator i = functions.begin(); i != functions.end(); ++i)
 		{	Prototype p((QString)(*i));
 			new K3ListViewItem(theFunctions, p.name(), p.argumentList(), *i);

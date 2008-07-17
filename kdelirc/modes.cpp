@@ -11,6 +11,7 @@
 //
 //
 #include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kdebug.h>
 
 #include "modes.h"
@@ -27,15 +28,17 @@ Modes::~Modes()
 
 void Modes::loadFromConfig(KConfig &theConfig)
 {
+	KConfigGroup modesGroup = theConfig.group("Modes");
 	clear();
-	int numModes = theConfig.readNumEntry("Modes");
+	QString helperString = modesGroup.readEntry("Modes", QString());
+	int numModes = helperString.toInt();
 	for(int i = 0; i < numModes; i++)
 	{
 		add(Mode().loadFromConfig(theConfig, i));
 	}
 
 	for(iterator i = begin(); i != end(); ++i)
-		theDefaults[i.key()] = theConfig.readEntry("Default" + i.key(),QString());
+		theDefaults[i.key()] = modesGroup.readEntry("Default" + i.key(),QString());
 }
 
 void Modes::generateNulls(const QStringList &theRemotes)
@@ -50,15 +53,15 @@ bool Modes::isDefault(const Mode &mode) const
 {
 	if(theDefaults[mode.remote()] == mode.name())
 		return true;
-//	if(theDefaults[mode.remote()].isEmpty() || theDefaults[mode.remote()].isNull())
-//		return mode.name().isEmpty();
+	if(theDefaults[mode.remote()].isEmpty() || theDefaults[mode.remote()].isNull())
+		return mode.name().isEmpty();
 	return false;
 }
 
 const Mode Modes::getDefault(const QString &remote) const
 {
-//	if(theDefaults[remote] == QString())
-//		return Mode(remote, "");
+	if(theDefaults[remote] == QString())
+		return Mode(remote, "");
 	if(contains(remote))
 		if(operator[](remote).contains(theDefaults[remote]))
 			return operator[](remote)[theDefaults[remote]];
@@ -69,28 +72,31 @@ const Mode Modes::getDefault(const QString &remote) const
 
 void Modes::purgeAllModes(KConfig &theConfig)
 {
-	int numModes = theConfig.readNumEntry("Modes");
+	KConfigGroup modesGroup = theConfig.group("Modes");
+	QString helperString = modesGroup.readEntry("Modes", QString());
+	int numModes = helperString.toInt();
 	for(int i = 0; i < numModes; i++)
 	{	QString Prefix = "Mode" + QString().setNum(i);
-		theConfig.deleteEntry(Prefix + "Name");
-		theConfig.deleteEntry(Prefix + "Remote");
+		modesGroup.deleteEntry(Prefix + "Name");
+		modesGroup.deleteEntry(Prefix + "Remote");
 	}
 }
 
 void Modes::saveToConfig(KConfig &theConfig)
 {
+	KConfigGroup modesGroup = theConfig.group("Modes");
 	int index = 0;
 	purgeAllModes(theConfig);
 	for(iterator i = begin(); i != end(); ++i)
 		for(QMap<QString, Mode>::iterator j = (*i).begin(); j != (*i).end(); ++j,index++)
 			(*j).saveToConfig(theConfig, index);
-	theConfig.writeEntry("Modes", index);
+	modesGroup.writeEntry("Modes", index);
 
 	for(iterator i = begin(); i != end(); ++i)
 		if(theDefaults[i.key()] == QString())
-			theConfig.writeEntry("Default" + i.key(), "");
+			modesGroup.writeEntry("Default" + i.key(), "");
 		else
-			theConfig.writeEntry("Default" + i.key(), theDefaults[i.key()]);
+			modesGroup.writeEntry("Default" + i.key(), theDefaults[i.key()]);
 }
 
 const Mode &Modes::getMode(const QString &remote, const QString &mode) const
@@ -109,6 +115,7 @@ ModeList Modes::getModes(const QString &remote) const
 void Modes::erase(const Mode &mode)
 {
 	operator[](mode.remote()).erase(mode.name());
+	kDebug() << "should erease mode...";
 }
 
 void Modes::add(const Mode &mode)

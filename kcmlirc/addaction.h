@@ -10,10 +10,10 @@
 #ifndef ADDACTION_H
 #define ADDACTION_H
 
-#include <q3valuelist.h>
+//#include <q3valuelist.h>
 #include <qpair.h>
 
-#include <addactionbase.h>
+#include <ui_addactionbase.h>
 
 #include "mode.h"
 #include "arguments.h"
@@ -22,9 +22,9 @@
 @author Gav Wood
 */
 
-class Q3ListViewItem;
+//class Q3ListViewItem;
 
-class AddAction : public AddActionBase
+class AddAction : public QWizard, public Ui::AddActionBase
 {
 	Q_OBJECT
 

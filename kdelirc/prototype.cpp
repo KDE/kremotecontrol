@@ -53,12 +53,12 @@ void Prototype::parse()
 	QRegExp main("^(.*) (\\w[\\d\\w]*)\\((.*)\\)");
 	QRegExp parameters("^\\s*([^,\\s]+)(\\s+(\\w[\\d\\w]*))?(,(.*))?$");
 
-	if(main.search(original) == -1) return;
+	if(main.indexIn(original) == -1) return;
 	theReturn = main.cap(1);
 	theName = main.cap(2);
 
 	QString args = main.cap(3);
-	while(parameters.search(args) != -1)
+	while(parameters.indexIn(args) != -1)
 	{	theTypes += parameters.cap(1);
 		theNames += parameters.cap(3);
 		args = parameters.cap(5);

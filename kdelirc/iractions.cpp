@@ -11,6 +11,7 @@
 //
 //
 #include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kdebug.h>
 
 #include "iractions.h"
@@ -19,35 +20,42 @@
 void IRActions::loadFromConfig(KConfig &theConfig)
 {
 	clear();
-	int numBindings = theConfig.readNumEntry("Bindings");
+	KConfigGroup actionGroup = theConfig.group("Actions");
+	QString helperString = actionGroup.readEntry("Bindings", QString());
+	int numBindings = helperString.toInt();
+
 	for(int i = 0; i < numBindings; i++)
 		addAction(IRAction().loadFromConfig(theConfig, i));
 }
 
 void IRActions::purgeAllBindings(KConfig &theConfig)
 {
-	int numBindings = theConfig.readNumEntry("Bindings");
+	KConfigGroup actionGroup = theConfig.group("Actions");
+	QString helperString = actionGroup.readEntry("Bindings", QString());
+	int numBindings = helperString.toInt();
 	for(int i = 0; i < numBindings; i++)
 	{	QString Binding = "Binding" + QString().setNum(i);
-		int numArguments = theConfig.readNumEntry(Binding + "Arguments");
+		helperString = actionGroup.readEntry(Binding + "Arguments", QString());
+		int numArguments = helperString.toInt();
 		for(int j = 0; j < numArguments; j++)
-		{	theConfig.deleteEntry(Binding + "Argument" + QString().setNum(j));
-			theConfig.deleteEntry(Binding + "ArgumentType" + QString().setNum(j));
+		{	actionGroup.deleteEntry(Binding + "Argument" + QString().setNum(j));
+			actionGroup.deleteEntry(Binding + "ArgumentType" + QString().setNum(j));
 		}
-		theConfig.deleteEntry(Binding + "Arguments"); theConfig.deleteEntry(Binding + "Program");
-		theConfig.deleteEntry(Binding + "Object"); theConfig.deleteEntry(Binding + "Method");
-		theConfig.deleteEntry(Binding + "Remote"); theConfig.deleteEntry(Binding + "Button");
-		theConfig.deleteEntry(Binding + "Repeat"); theConfig.deleteEntry(Binding + "Mode");
+		actionGroup.deleteEntry(Binding + "Arguments"); actionGroup.deleteEntry(Binding + "Program");
+		actionGroup.deleteEntry(Binding + "Object"); actionGroup.deleteEntry(Binding + "Method");
+		actionGroup.deleteEntry(Binding + "Remote"); actionGroup.deleteEntry(Binding + "Button");
+		actionGroup.deleteEntry(Binding + "Repeat"); actionGroup.deleteEntry(Binding + "Mode");
 	}
 }
 
 void IRActions::saveToConfig(KConfig &theConfig)
 {
+	KConfigGroup actionGroup = theConfig.group("Actions");
 	int index = 0;
 	purgeAllBindings(theConfig);
 	for(iterator i = begin(); i != end(); ++i,index++)
 		(*i).saveToConfig(theConfig, index);
-	theConfig.writeEntry("Bindings", index);
+	actionGroup.writeEntry("Bindings", index);
 }
 
 IRAIt IRActions::addAction(const IRAction &theAction)
@@ -75,8 +83,13 @@ void IRActions::renameMode(const Mode &mode, const QString &to)
 IRAItList IRActions::findByMode(const Mode &mode)
 {
 	IRAItList ret;
-	for(iterator i = begin(); i != end(); ++i)
-		if((*i).remote() == mode.remote() && (*i).mode() == mode.name()) ret += i;
+	for(iterator i = begin(); i != end(); ++i){
+		kDebug() << "Searching action: " << (*i).remote() << (*i).button();
+		if((*i).remote() == mode.remote() && (*i).mode() == mode.name()){
+			kDebug() << "Action " << (*i).remote() << (*i).button() << "matches";
+			ret += i;
+		}
+	}
 	return ret;
 }
 

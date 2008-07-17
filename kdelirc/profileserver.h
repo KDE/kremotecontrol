@@ -18,7 +18,8 @@
 #include <q3valuelist.h>
 #include <QMap>
 #include <qxml.h>
-#include <q3dict.h>
+#include <QHash>
+//#include <q3dict.h>
 
 /**
 @author Gav Wood
@@ -94,7 +95,7 @@ class Profile : public QXmlDefaultHandler
 
 	ProfileAction *curPA;
 	ProfileActionArgument *curPAA;
-	Q3Dict<ProfileAction> theActions;		// objid+"::"+prototype => ProfileAction
+	QHash<QString, ProfileAction*> theActions;		// objid+"::"+prototype => ProfileAction
 
 	friend class ProfileServer;
 public:
@@ -114,7 +115,7 @@ public:
 	void setIfMulti(const IfMulti a) { theIfMulti = a; }
 	const QString &serviceName() const { if(theServiceName != QString()) return theServiceName; return theName; }
 	void setServiceName(const QString &a) { theServiceName = a; }
-	const Q3Dict<ProfileAction> &actions() const { return theActions; }
+	const QHash<QString, ProfileAction*> &actions() const { return theActions; }
 	const ProfileAction *searchClass(const QString &c) const;
 
 	void loadFromFile(const QString &fileName);
@@ -126,11 +127,11 @@ class ProfileServer
 {
 	static ProfileServer *theInstance;
 	void loadProfiles();
-	Q3Dict<Profile> theProfiles;			// id => Profile
+	QHash<QString, Profile*> theProfiles;			// id => Profile
 
 public:
 	static ProfileServer *profileServer() { if(!theInstance) theInstance = new ProfileServer(); return theInstance; }
-	const Q3Dict<Profile> profiles() const { return theProfiles; }
+	const QHash<QString, Profile*> profiles() const { return theProfiles; }
 	const ProfileAction *getAction(const QString &appId, const QString &objId, const QString &prototype) const;
 	const ProfileAction *getAction(const QString &appId, const QString &actionId) const;
 	const QString &getServiceName(const QString &appId) const;

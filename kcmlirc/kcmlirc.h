@@ -20,9 +20,8 @@
 #include <kcmodule.h>
 #undef KDE3_SUPPORT
 
-#include <dcopobject.h>
 
-#include "kcmlircbase.h"
+#include "ui_kcmlircbase.h"
 #include "iractions.h"
 #include "modes.h"
 
@@ -32,13 +31,13 @@ class QDropEvent;
 class Profile;
 class Remote;
 
-class KCMLirc: public KCModule, virtual public DCOPObject
+class KCMLirc: public KCModule
 {
 	Q_OBJECT
-	K_DCOP
+	Q_CLASSINFO("D-Bus Interface", "org.kde.kcmlirc")
 
 private:
-	KCMLircBase *theKCMLircBase;
+	Ui::KCMLircBase *theKCMLircBase;
 	IRActions allActions;
 	Modes allModes;
 	QMap<Q3ListViewItem *, IRAIt > actionMap;
@@ -77,11 +76,9 @@ public:
 
 	KCMLirc(QWidget *parent = 0, const QStringList &args = QStringList());
 	~KCMLirc();
-// MOC_SKIP_BEGIN
-k_dcop:
-// MOC_SKIP_END
-    // now just used as a proxy to AddAction class
-    virtual void gotButton(QString remote, QString button);
+
+public Q_SLOTS:
+	void gotButton(QString remote, QString button);
 
 };
 

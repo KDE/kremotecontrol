@@ -18,7 +18,7 @@
 
 #include <qstringlist.h>
 
-class Q3Socket;
+class QTcpSocket;
 class QSocketNotifier;
 
 /**
@@ -32,7 +32,7 @@ class KLircClient: public QObject
 
 private:
 	struct lirc_config *theConfig;
-	Q3Socket *theSocket;
+	QTcpSocket *theSocket;
 	QSocketNotifier *theNotifier;
 	QMap<QString, QStringList> theRemotes;
 	bool listIsUpToDate;
