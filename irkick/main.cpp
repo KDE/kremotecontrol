@@ -7,6 +7,7 @@
 
 // This program is free software.
 
+//#include <klocale.h>
 #include <kcmdlineargs.h>
 #include <kwinglobals.h>
 #include <kaboutdata.h>
