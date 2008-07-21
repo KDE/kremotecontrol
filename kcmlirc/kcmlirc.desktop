@@ -20,9 +20,11 @@ X-KDE-Keywords[x-test]=xxKCMLirc,kcmlircxx
 Name=Remote Controls
 Name[es]=Controles remotos
 Name[et]=Juhtimispult
+Name[pt_BR]=Controles remotos
 Name[sv]=Fjärrkontroller
 
 Comment=Configure your remote controls for use with applications
 Comment[es]=Configura sus controles remotos para utilizarlos con las aplicaciones
 Comment[et]=Juhtimispuldi seadistamine rakendustega kasutamiseks
+Comment[pt_BR]=Configura seus controles remotos para serem utilizados com os aplicativos
 Comment[sv]=Anpassa fjärrkontroller för att använda med program
