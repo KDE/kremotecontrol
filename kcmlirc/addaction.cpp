@@ -74,11 +74,19 @@ void AddAction::slotCorrectPage()
 
 	kDebug() << "lastPage:" << lastPage << "; curPage:" << curPage;
 
+	if(theUseProfile->isChecked() || theUseDCOP->isChecked()){
+		QWizard::page(5)->setFinalPage(true);
+	} else {
+		QWizard::page(5)->setFinalPage(false);
+	}	
+
+
 	if(curPage == 2 && theUseProfile->isChecked())
-		if(lastPage > 1)
+		if(lastPage > 1) {
 			back();
-		else
+		} else {
 			next();
+		}
 	if(curPage == 2  && theChangeMode->isChecked() && lastPage == 1){
 		next();
 		next();
@@ -99,6 +107,8 @@ void AddAction::slotCorrectPage()
 		else
 			next();
 
+
+
 	if(curPage == 4 && (
 	(theUseDCOP->isChecked() && theFunctions->currentItem() && !Prototype(theFunctions->currentItem()->text(2)).count()) ||
 	(theUseProfile->isChecked() && (theProfileFunctions->currentItem() && !theProfileFunctions->currentItem()->text(1).toInt() || theJustStart->isChecked()))
@@ -108,13 +118,20 @@ void AddAction::slotCorrectPage()
 		if(lastPage == 5){
 			if(theUseDCOP->isChecked()){
 				back();
-				back();
+//				back();
 			} else {
 				back();
 			}
+			// Restore the Wizard layout in case its modified
+			QList<QWizard::WizardButton> layout;
+			layout << QWizard::Stretch << QWizard::BackButton << QWizard::NextButton << QWizard::FinishButton << QWizard::CancelButton;
+			setButtonLayout(layout);			
 		} else {
 			next();
-		}
+			QList<QWizard::WizardButton> layout;
+			layout << QWizard::Stretch << QWizard::BackButton << QWizard::FinishButton << QWizard::CancelButton;
+			setButtonLayout(layout);
+                }
 }
 
 void AddAction::requestNextPress()
@@ -362,6 +379,7 @@ void AddAction::updateProfileFunctions()
 void AddAction::updateParameters()
 {
 	theParameters->clear();
+	kDebug() << "clearing arguments";
 	theArguments.clear();
 	if(theUseDCOP->isChecked() && theFunctions->currentItem())
 	{
@@ -382,7 +400,7 @@ void AddAction::updateParameters()
 		const Profile *p = theServer->profiles()[profileMap[theProfiles->currentItem()]];
 		const ProfileAction *pa = p->actions()[profileFunctionMap[theProfileFunctions->currentItem()]];
 
-		int index = 1;
+		int index = 1;		
 		for(Q3ValueList<ProfileActionArgument>::const_iterator i = pa->arguments().begin(); i != pa->arguments().end(); ++i, index++)
 		{	theArguments.append(QVariant((*i).getDefault()));
 			kDebug() << "converting argument to:" << QVariant::nameToType((*i).type().toLocal8Bit());
@@ -549,6 +567,5 @@ void AddAction::updateFunctions()
 	}
 	updateOptions();
 }
-
 
 #include "addaction.moc"

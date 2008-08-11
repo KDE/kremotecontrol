@@ -249,7 +249,6 @@ void KCMLirc::slotAddAction()
                         a.setMethod(theDialog.theFunctions->selectedItem()->text(2));
                         theDialog.theParameters->setSorting(3);
                         a.setArguments(theDialog.theArguments);
-                        kDebug() << "Storing action with arguments:" << theDialog.theArguments[0].type() << theDialog.theArguments[1].type();
                 }
                 // profile?
                 else if(theDialog.theUseProfile->isChecked() && theDialog.theProfiles->selectedItem() && (theDialog.theProfileFunctions->selectedItem() || theDialog.theJustStart->isChecked()))

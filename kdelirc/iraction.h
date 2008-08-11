@@ -74,7 +74,7 @@ public:
 	void setRemote(const QString &newRemote) { theRemote = newRemote; }
 	void setMode(const QString &newMode) { theMode = newMode; }
 	void setButton(const QString &newButton) { theButton = newButton; }
-	void setArguments(const Arguments &newArguments) { kDebug() << "storing Arguments with type:" << newArguments[0].type() << newArguments[1].type(); theArguments = newArguments; }
+	void setArguments(const Arguments &newArguments) { theArguments = newArguments; }
 	void setRepeat(bool newRepeat) { theRepeat = newRepeat; }
 	void setDoBefore(bool a) { theDoBefore = a; }
 	void setDoAfter(bool a) { theDoAfter = a; }
