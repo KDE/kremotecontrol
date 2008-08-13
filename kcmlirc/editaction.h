@@ -33,11 +33,17 @@ class EditAction : public QDialog, public Ui::EditActionBase
 	Arguments arguments;
 	QString program;
 	bool isUnique;
+	QButtonGroup mainGroup;
 
 public:
+	EditAction(IRAIt action, QWidget *parent = 0, const char *name = 0);
+	~EditAction();
+
+	
 	void writeBack();
 	void readFrom();
 
+public slots:
 	virtual void slotParameterChanged();
 	virtual void updateArgument(int index);
 	virtual void updateArguments();
@@ -49,8 +55,6 @@ public:
 	virtual void updateDCOPFunctions();
 	virtual void addItem(QString item);
 
-	EditAction(IRAIt action, QWidget *parent = 0, const char *name = 0);
-	~EditAction();
 };
 
 #endif

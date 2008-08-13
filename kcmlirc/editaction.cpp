@@ -19,6 +19,11 @@
 #include <q3buttongroup.h>
 //Added by qt3to4:
 #include <Q3ValueList>
+#include <QDBusConnectionInterface>
+#include <QDBusInterface>
+#include <QDomDocument>
+#include <QDomElement>
+
 
 #include <kdebug.h>
 #include <klineedit.h>
@@ -46,6 +51,12 @@ EditAction::EditAction(IRAIt action, QWidget *parent, const char *name) //: Edit
 
 	updateApplications();
 	updateDCOPApplications();
+	
+	mainGroup.addButton(theUseDCOP);
+	mainGroup.addButton(theUseProfile);
+	mainGroup.addButton(theChangeMode);
+	
+	
 }
 
 EditAction::~EditAction()
@@ -66,16 +77,16 @@ void EditAction::readFrom()
 	if((*theAction).isModeChange())
 	{	// change mode
 		theChangeMode->setChecked(true);
-/*		if((*theAction).object().isEmpty())
+		if((*theAction).object().isEmpty())
 			theModes->setCurrentText(i18n("[Exit current mode]"));
 		else
-			theModes->setCurrentText((*theAction).object());*/
+			theModes->setCurrentText((*theAction).object());
 	}
 	else if((*theAction).isJustStart())
 	{	// profile action
 		theUseProfile->setChecked(true);
 		const Profile *p = ProfileServer::profileServer()->profiles()[(*theAction).program()];
-// 		theApplications->setCurrentText(p->name());
+ 		theApplications->setCurrentText(p->name());
 		updateFunctions();
 		updateArguments();
 		theJustStart->setChecked(true);
@@ -84,9 +95,9 @@ void EditAction::readFrom()
 	{	// profile action
 		theUseProfile->setChecked(true);
 		const ProfileAction *a = ProfileServer::profileServer()->getAction((*theAction).program(), (*theAction).object(), (*theAction).method().prototype());
-// 		theApplications->setCurrentText(a->profile()->name());
+ 		theApplications->setCurrentText(a->profile()->name());
 		updateFunctions();
-// 		theFunctions->setCurrentText(a->name());
+ 		theFunctions->setCurrentText(a->name());
 		arguments = (*theAction).arguments();
 		updateArguments();
 		theNotJustStart->setChecked(true);
@@ -94,11 +105,11 @@ void EditAction::readFrom()
 	else
 	{	// dcop action
 		theUseDCOP->setChecked(true);
-// 		theDCOPApplications->setCurrentText((*theAction).program());
+ 		theDCOPApplications->setCurrentText((*theAction).program());
 		updateDCOPObjects();
-// 		theDCOPObjects->setCurrentText((*theAction).object());
+ 		theDCOPObjects->setCurrentText((*theAction).object());
 		updateDCOPFunctions();
-// 		theDCOPFunctions->setCurrentText((*theAction).method().prototype());
+ 		theDCOPFunctions->setCurrentText((*theAction).method().prototype());
 		arguments = (*theAction).arguments();
 		updateArguments();
 	}
@@ -137,7 +148,7 @@ void EditAction::writeBack()
 	}
 	else
 	{
-		(*theAction).setProgram(program);//theDCOPApplications->currentText());
+		(*theAction).setProgram(program);
 		(*theAction).setObject(theDCOPObjects->currentText());
 		(*theAction).setMethod(theDCOPFunctions->currentText());
 		(*theAction).setArguments(arguments);
@@ -321,50 +332,145 @@ void EditAction::updateDCOPApplications()
 	QStringList names;
 
 	theDCOPApplications->clear();
-#warning Port me! DCOP -> DBUS
-/*	DCOPClient *theClient = KApplication::kApplication()->dcopClient();
-	DCOPCStringList theApps = theClient->registeredApplications();
-	for(DCOPCStringList::iterator i = theApps.begin(); i != theApps.end(); ++i)
-	{
-		if(!QString(*i).contains("anonymous")) continue;
-		QRegExp r("(.*)-[0-9]+");
-		QString name = r.exactMatch(QString(*i)) ? r.cap(1) : *i;
-		if(names.contains(name)) continue;
-		names += name;
-
+	
+	QDBusConnectionInterface *dBusIface = QDBusConnection::sessionBus().interface();
+	QStringList allServices = dBusIface->registeredServiceNames();
+	
+	for(QStringList::const_iterator i = allServices.constBegin(); i != allServices.constEnd(); i++){
+		// Use only KDE-Apps
+		if(!(*i).contains("org.kde")){
+			continue;
+		}
+		
+		// Remove the "org.kde."
+		QString name = (*i);
+		name.remove(0, 8);
+		
+		// Remove "human unreadable" entries
+		QRegExp r("[a-zA-Z]*");
+		if(! r.exactMatch(name)){
+			continue;
+		}
+		
+		//remove duplicates
+		if(names.contains(name)){
+			continue;
+		}
+		
 		theDCOPApplications->insertItem(name);
-		uniqueProgramMap[name] = name == QString(*i);
 		nameProgramMap[name] = *i;
-
-
 	}
-	updateDCOPObjects();*/
+	
+	
+	updateDCOPObjects();
 }
 
 void EditAction::updateDCOPObjects()
 {
-	theDCOPObjects->clear();
-#warning Port me! DCOP -> DBUS
-/*	DCOPClient *theClient = KApplication::kApplication()->dcopClient();
-	if(theDCOPApplications->currentText().isNull() || theDCOPApplications->currentText().isEmpty()) return;
-	DCOPCStringList theObjects = theClient->remoteObjects(nameProgramMap[theDCOPApplications->currentText()].utf8());
-	if(!theObjects.size() && theDCOPApplications->currentText() == (*theAction).program()) theDCOPObjects->insertItem((*theAction).object());
-	for(DCOPCStringList::iterator j = theObjects.begin(); j != theObjects.end(); ++j)
-		if(*j != "ksycoca" && *j != "qt" && AddAction::getFunctions(nameProgramMap[theDCOPApplications->currentText()], *j).count())
-			theDCOPObjects->insertItem(QString::fromUtf8(*j));
-	updateDCOPFunctions();*/
+	theDCOPObjects->clear();	
+
+	kDebug() << "ProgramMap: " << nameProgramMap[theDCOPApplications->currentText()];
+
+	QDBusInterface *dBusIface = new QDBusInterface(nameProgramMap[theDCOPApplications->currentText()], "/", "org.freedesktop.DBus.Introspectable");
+	QDBusReply<QString> response = dBusIface->call("Introspect");
+	
+	QDomDocument domDoc;
+	domDoc.setContent(response);
+	
+	QDomElement node = domDoc.documentElement();
+	QDomElement child = node.firstChildElement();
+	while (!child.isNull()) {
+		kDebug() << child.tagName() << ":" << child.attribute(QLatin1String("name"));
+		if (child.tagName() == QLatin1String("node")) {
+			theDCOPObjects->insertItem(child.attribute(QLatin1String("name")));
+		}
+		child = child.nextSiblingElement();
+	}	
+
+
+	
+
+
+	updateDCOPFunctions();
 }
 
 void EditAction::updateDCOPFunctions()
 {
 	theDCOPFunctions->clear();
-#warning Port me! DCOP -> DBUS
-/*	if(theDCOPApplications->currentText().isNull() || theDCOPApplications->currentText().isEmpty()) return;
-	QStringList functions = AddAction::getFunctions(nameProgramMap[theDCOPApplications->currentText()], theDCOPObjects->currentText());
-	if(!functions.size() && theDCOPApplications->currentText() == (*theAction).program()) theDCOPFunctions->insertItem((*theAction).method().prototype());
-	for(QStringList::iterator i = functions.begin(); i != functions.end(); ++i)
-		theDCOPFunctions->insertItem(*i);
-	updateArguments();*/
+
+ 	QDBusInterface *dBusIface = new QDBusInterface(nameProgramMap[theDCOPApplications->currentText()], "/" + theDCOPObjects->currentText(), "org.freedesktop.DBus.Introspectable");
+ 	QDBusReply<QString> response = dBusIface->call("Introspect");
+ 	
+	QDomDocument domDoc;
+	domDoc.setContent(response);	
+
+	QDomElement node = domDoc.documentElement();
+ 	QDomElement child = node.firstChildElement();
+
+	QString function;
+ 
+	while (!child.isNull()) {
+		if (child.tagName() == QLatin1String("interface")) {
+			if(child.attribute("name") == "org.freedesktop.DBus.Properties" || 
+			   child.attribute("name") == "org.freedesktop.DBus.Introspectable"){
+				child = child.nextSiblingElement();
+				continue;	
+			}
+			QDomElement subChild = child.firstChildElement();
+			while(!subChild.isNull()){
+				if(subChild.tagName() == QLatin1String("method")){
+					QString method = subChild.attribute(QLatin1String("name"));
+					kDebug() << "Method: " << method;
+					function = "QString " + method + "(";
+					QDomElement arg = subChild.firstChildElement();
+					QString argStr;
+					while(!arg.isNull()){
+						if(arg.tagName() == QLatin1String("arg")){
+							if(arg.attribute(QLatin1String("direction")) == "in"){
+								if(!argStr.isEmpty()){
+									argStr += ", ";
+								}
+								if(arg.attribute(QLatin1String("type")) == "i" ){
+									argStr += "int";
+								} else if(arg.attribute(QLatin1String("type")) == "u"){
+									argStr += "uint";
+								} else if(arg.attribute(QLatin1String("type")) == "s"){
+									argStr += "QString";
+								} else if(arg.attribute(QLatin1String("type")) == "b"){
+									argStr += "bool";
+								} else if(arg.attribute(QLatin1String("type")) == "d"){
+									argStr += "double";
+								} else if(arg.attribute(QLatin1String("type")) == "as"){
+									argStr += "QStringList";
+								} else if(arg.attribute(QLatin1String("type")) == "ay"){
+									argStr += "QByteArray";
+								} else if(arg.attribute(QLatin1String("type")) == "(iii)"){
+									kDebug() << "got a (iii) type";
+									QString helper = arg.attribute("name");
+									arg = arg.nextSiblingElement();
+									argStr += arg.attribute(QLatin1String("value"));
+									argStr += " " + helper;
+									arg = arg.nextSiblingElement();
+									continue;
+								} else {
+									argStr += arg.attribute(QLatin1String("type"));
+								}
+								argStr += " " + arg.attribute(QLatin1String("name"));
+								kDebug() << "Arg: " << argStr;
+							}
+						}
+						arg = arg.nextSiblingElement();
+					}
+					function +=  argStr + ")";
+					theDCOPFunctions->insertItem(function);
+				}
+				subChild = subChild.nextSiblingElement();
+			}
+		}
+		child = child.nextSiblingElement();
+	}
+		
+	updateArguments();
 }
 
 void EditAction::addItem(QString item){
