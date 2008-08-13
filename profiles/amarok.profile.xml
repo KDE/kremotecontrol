@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<!DOCTYPE profile SYSTEM "profile.dtd">
+<profile id="org.kde.amarok" servicename="org.kde.amarok">
+    <name>Amarok</name>
+    <author>Dirk Ziegelmeier</author>
+    <instances unique="1"/>
+
+    <!-- Playback actions -->
+    <action objid="Player" prototype="void Play()" class="play">
+        <name>Start playing</name>
+        <comment></comment>
+    </action>
+    <action objid="Player" prototype="void Stop()" class="stop">
+        <name>Stop playing</name>
+        <comment></comment>
+    </action>
+    <action objid="Player" prototype="void Pause()" class="pause">
+        <name>Pause playing</name>
+        <comment></comment>
+    </action>
+    <action objid="Player" prototype="void Next()" class="next">
+        <name>Advance to next track</name>
+        <comment></comment>
+    </action>
+    <action objid="Player" prototype="void Prev()" class="previous">
+        <name>Go to previous track</name>
+        <comment></comment>
+    </action>
+    <action>
+</profile>

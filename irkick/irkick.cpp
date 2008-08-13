@@ -227,9 +227,9 @@ bool IRKick::getPrograms(const IRAction &action, QStringList &programs)
 			return false;
 		} else if(programs.size() > 1 && action.ifMulti() == IM_SENDTOTOP){ ;
 #warning Port me!
-/*			Q3ValueList<WId> s = KWinModule().stackingOrder();
+/*			QList<WId> s = KWinModule().stackingOrder();
 			// go through all the (ordered) window pids
-			for(Q3ValueList<WId>::iterator i = s.fromLast(); i != s.end(); i--)
+			for(QList<WId>::iterator i = s.fromLast(); i != s.end(); i--)
 			{	int p = KWin::windowInfo(*i,NET::WMPid).win();
 				QString id = action.program() + "-" + QString().setNum(p);
 				if(programs.contains(id))
@@ -295,6 +295,7 @@ void IRKick::executeAction(const IRAction &action)
 
 	for(QStringList::iterator i = programs.begin(); i != programs.end(); ++i)
 	{	const QString &program = *i;
+		kDebug() << "Searching DBus for program:" << program;
 		if(dBusIface->isServiceRegistered(program)){
 			kDebug() << "Sending data (" << program << ", " << "/" + action.object() << ", " << action.method().prototypeNR() ;
 			
