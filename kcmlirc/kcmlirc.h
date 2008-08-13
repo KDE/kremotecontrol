@@ -46,13 +46,14 @@ private:
 
 	void autoPopulate(const Profile &profile, const Remote &remote, const QString &mode);
 
-public slots:
+public:
 	void updateActions();
 	void updateModesStatus(Q3ListViewItem *);
 	void updateActionsStatus(Q3ListViewItem *);
 	void updateModes();
 	void updateExtensions();
 	void updateInformation();
+public slots:
 	void slotAddMode();
 	void slotRemoveMode();
 	void slotSetDefaultMode();
