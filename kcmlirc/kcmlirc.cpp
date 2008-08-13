@@ -290,8 +290,8 @@ void KCMLirc::autoPopulate(const Profile &profile, const Remote &remote, const Q
 {
 	QHash<QString, RemoteButton*> d = remote.buttons();
 	QHash<QString, RemoteButton*>::const_iterator i;
-	for(i = d.constBegin(); i != d.constEnd(); ++i)
-	{	const ProfileAction *pa = profile.searchClass(i.value()->getClass());
+	for(i = d.constBegin(); i != d.constEnd(); ++i)	{
+		const ProfileAction *pa = profile.searchClass(i.value()->getClass());
 		if(pa)
 		{
 			IRAction a;
