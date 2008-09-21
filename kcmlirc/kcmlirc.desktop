@@ -18,32 +18,13 @@ X-KDE-Keywords[x-test]=xxKCMLirc,kcmlircxx
 
 
 Name=Remote Controls
-Name[el]=Τηλεχειριστήρια
 Name[es]=Controles remotos
 Name[et]=Juhtimispult
-Name[fr]=Télécommandes
-Name[ga]=Cianrialtáin
-Name[gl]=Controis remotos
-Name[km]=កា​រត្រួតពិនិត្យ​ពី​ចម្ងាយ
-Name[ko]=리모콘
-Name[pt]=Comandos à Distância
-Name[pt_BR]=Comandos à Distância
+Name[pt_BR]=Controles remotos
 Name[sv]=Fjärrkontroller
-Name[tr]=Uzaktan Denetim
-Name[uk]=Елементи дистанційного керування
-Name[x-test]=xxRemote Controlsxx
 
 Comment=Configure your remote controls for use with applications
-Comment[el]=Ρυθμίστε τα τηλεχείριστηριά σας για χρήση τους με εφαρμογές
 Comment[es]=Configura sus controles remotos para utilizarlos con las aplicaciones
 Comment[et]=Juhtimispuldi seadistamine rakendustega kasutamiseks
-Comment[fr]=Configurez votre télécommande pour manipuler les applications
-Comment[ga]=Cumraigh do chuid cianrialtán chun iad a úsáid le feidhmchláir
-Comment[gl]=Configura os controis remotos para seren usados polos programas
-Comment[km]=កំណត់​រចនាសម្ព័ន្ធ​ការ​ត្រួតពិនិត្យ​ពី​ចម្ងាយ​សម្រាប់​ប្រើ​ជា​មួយ​កម្មវិធី
-Comment[ko]=프로그램에 사용할 리모콘을 설정합니다
-Comment[pt]=Configure os seus comandos à distância para usá-los nas aplicações
-Comment[pt_BR]=Configure os seus comandos à distância para usá-los nas aplicações
+Comment[pt_BR]=Configura seus controles remotos para serem utilizados com os aplicativos
 Comment[sv]=Anpassa fjärrkontroller för att använda med program
-Comment[uk]=Налаштування елементів дистанційного керування для використання з програмами
-Comment[x-test]=xxConfigure your remote controls for use with applicationsxx

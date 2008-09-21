@@ -1,22 +1,12 @@
 [Desktop Entry]
 Type=Service
 Name=IRKick
-Name[x-test]=xxIRKickxx
+Name[sv]=IRkick
 GenericName=KDE LIRC Server
-GenericName[el]=Εξυπηρετητής LIRC του KDE
-GenericName[es]=Servidor LIRC de KDE
-GenericName[et]=KDE LIRC server
-GenericName[fr]=Serveur LIRC pour KDE
-GenericName[ga]=Freastalaí LIRC KDE
-GenericName[gl]=Servidor LIRC de KDE
-GenericName[km]=ម៉ាស៊ីន​បម្រើ KDE LIRC
-GenericName[ko]=KDE LIRC 서버
-GenericName[pt]=Servidor de LIRC para o KDE
-GenericName[pt_BR]=Servidor de LIRC para o KDE
+GenericName[es]=Servidor LIRC para KDE
+GenericName[et]=KDE LIRC-server
+GenericName[pt_BR]=Servidor LIRC do KDE
 GenericName[sv]=KDE:s LIRC-server
-GenericName[tr]=KDE LIRC Sunucusu
-GenericName[uk]=Сервер LIRC для KDE
-GenericName[x-test]=xxKDE LIRC Serverxx
 
 X-KDE-Library=irkick
 X-KDE-autostart-after=panel
@@ -29,17 +19,8 @@ Exec=irkick
 Icon=irkick
 X-DocPath=irkick/index.html
 Comment=KDE Linux infrared remote control server.
-Comment[el]=Εξυπηρετητής υπέρυθρου τηλεχειριστηρίου για το KDE.
-Comment[es]=Servidor de control remoto de infrarrojo de Linux para KDE.
+Comment[es]=Servidor de control remoto de infrarrojos de Linux para KDE.
 Comment[et]=KDE Linuxi infrapunajuhtimise server.
-Comment[fr]=Serveur « Linux Infrared Remote Control » (LIRC) pour KDE
-Comment[ga]=Freastalaí cianrialaithe infridhearg Linux KDE.
-Comment[gl]=Servidor do control remoto por infravermellos en Linux para KDE.
-Comment[km]=ម៉ាស៊ីន​បម្រើ​ត្រួតពិនិត្យ​​ពី​ចម្ងាយ​អ៊ីនហ្វ្រារ៉េដ​របស់​លីនុច KDE ។
-Comment[ko]=KDE 리눅스 리모콘 제어 서버.
-Comment[pt]=Servidor de comandos à distância por infravermelhos do KDE.
-Comment[pt_BR]=Servidor de comandos à distância por infravermelhos do KDE.
+Comment[pt_BR]=Servidor do controle remoto infravermelho do KDE Linux.
 Comment[sv]=KDE:s infraröda fjärrkontrollserver för Linux
-Comment[uk]=Сервер дистанційного керування інфрачервоними пристроями для Linux та KDE.
-Comment[x-test]=xxKDE Linux infrared remote control server.xx
 
