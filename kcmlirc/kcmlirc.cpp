@@ -462,8 +462,14 @@ void KCMLirc::updateModes()
 		theKCMLircBase->theMainLabel->setMaximumSize(32767, 32767);
 	else
 		theKCMLircBase->theMainLabel->setMaximumSize(0, 0);
-	for(QStringList::iterator i = remotes.begin(); i != remotes.end(); ++i)
-	{	Mode mode = allModes.getMode(*i, "");
+
+	for(QStringList::iterator i = remotes.begin(); i != remotes.end(); ++i) {
+		Mode mode = allModes.getMode(*i, "");
+		kDebug() << "got mode.name" << mode.name() << "mode.remote" << mode.remote() << " for remote " << *i;
+		if(mode.remote().isEmpty()){
+			mode.setRemote(*i);
+			allModes.add(mode);
+		}
 		Q3ListViewItem *a = new K3ListViewItem(theKCMLircBase->theModes, RemoteServer::remoteServer()->getRemoteName(*i), allModes.isDefault(mode) ? "Default" : "", mode.iconFile().isNull() ? "" : "");
 		if(!mode.iconFile().isNull())
 			a->setPixmap(2, KIconLoader().loadIcon(mode.iconFile(), KIconLoader::Panel));

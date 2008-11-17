@@ -101,6 +101,7 @@ void Modes::saveToConfig(KConfig &theConfig)
 
 const Mode &Modes::getMode(const QString &remote, const QString &mode) const
 {
+	kDebug() << "found mode: " << operator[](remote)[mode].name() << operator[](remote)[mode].remote();
 	return operator[](remote)[mode];
 }
 
