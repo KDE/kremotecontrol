@@ -11,6 +11,7 @@ install( FILES
 	sherwood.remote.xml
 	hauppauge.remote.xml
 	sonytv.remote.xml
+	AsusDH.remote.xml
 	remote.dtd 
 	DESTINATION ${DATA_INSTALL_DIR}/remotes)
 

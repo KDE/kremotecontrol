@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<!DOCTYPE remote SYSTEM "remote.dtd">
+
+<remote id="AsusDH">
+        <name>Asus Digital Home</name>
+        <author>Gioacchino Mazzurco</author>
+        <information>Bundled with all Asus Digital Home motherboard series</information>
+        <button id="POWER" class="power"><name>Power</name></button>
+        <button id="QUICK_POWER" class="quickpower"><name>Quick Power</name></button>
+        <button id="NOISE_OFF" class="noiseoff"><name>Noise Off</name></button>
+        <button id="WIFI" class="wifi"><name>Wi Fi</name></button>
+        <button id="AP_LAUNCH" class="aplaunch"><name>Launch App</name></button>
+        <button id="MAXIMIZE" class="maximize"><name>Maximize</name></button>
+        <button id="PLUS" class="volup"><name>Volume +</name></button>
+        <button id="REV" class="rev"><name>Previous</name></button>
+        <button id="PLAY/PAUSE" class="playpause"><name>Play / Pause</name></button>
+        <button id="FWD" class="fwd"><name>Next</name></button>
+        <button id="MINUS" class="volumedown"><name>Volume -</name></button>
+</remote>
