@@ -209,16 +209,16 @@ void KCMLirc::slotAddAction()
         theDialog.theModes->setEnabled(item->firstChild());
         theDialog.theSwitchMode->setEnabled(item->firstChild());
         for(item = item->firstChild(); item; item = item->nextSibling())
-        {       K3ListViewItem *a = new K3ListViewItem(theDialog.theModes, item->text(0));
+        {       QListWidgetItem *a = new QListWidgetItem(item->text(0), theDialog.theModes);
                 if(item->isSelected()) { a->setSelected(true); theDialog.theModes->setCurrentItem(a); }
         }
 
-        if(theDialog.exec() == QDialog::Accepted && theDialog.theButtons->selectedItem())
+        if(theDialog.exec() == QDialog::Accepted && theDialog.theButtons->currentItem())
         {       IRAction a;
                 a.setRemote(m.remote());
                 a.setMode(m.name());
-                kDebug() << "Saving action. Button is: " << theDialog.buttonMap[theDialog.theButtons->selectedItem()];
-                a.setButton(theDialog.buttonMap[theDialog.theButtons->selectedItem()]);
+                kDebug() << "Saving action. Button is: " << theDialog.buttonMap[theDialog.theButtons->currentItem()];
+                a.setButton(theDialog.buttonMap[theDialog.theButtons->currentItem()]);
                 a.setRepeat(theDialog.theRepeat->isChecked());
                 a.setAutoStart(theDialog.theAutoStart->isChecked());
                 a.setDoBefore(theDialog.theDoBefore->isChecked());
@@ -228,10 +228,10 @@ void KCMLirc::slotAddAction()
                 // change mode?
                 if(theDialog.theChangeMode->isChecked())
                 {
-                        if(theDialog.theSwitchMode->isChecked() && theDialog.theModes->selectedItem())
+                        if(theDialog.theSwitchMode->isChecked() && !theDialog.theModes->selectedItems().isEmpty())
                         {
                                 a.setProgram("");
-                                a.setObject(theDialog.theModes->selectedItem()->text(0));
+                                a.setObject(theDialog.theModes->selectedItems().first()->text());
                         }
                         else if(theDialog.theExitMode->isChecked())
                         {
@@ -242,29 +242,29 @@ void KCMLirc::slotAddAction()
                         a.setRepeat(false);
                 }
                 // DCOP?
-                else if(theDialog.theUseDCOP->isChecked() && theDialog.theObjects->selectedItem() && theDialog.theObjects->selectedItem()->parent() && theDialog.theFunctions->selectedItem())
+                else if(theDialog.theUseDCOP->isChecked() && !theDialog.theObjects->selectedItems().isEmpty() && theDialog.theObjects->selectedItems().first()->parent() && !theDialog.theFunctions->selectedItems().isEmpty())
                 {
                         a.setProgram(theDialog.program);
-                        a.setObject(theDialog.theObjects->selectedItem()->text(0));
-                        a.setMethod(theDialog.theFunctions->selectedItem()->text(2));
-                        theDialog.theParameters->setSorting(3);
+                        a.setObject(theDialog.theObjects->selectedItems().first()->text(0));
+                        a.setMethod(theDialog.theFunctions->selectedItems().first()->text(2));
+                        theDialog.theParameters->sortItems(3, Qt::AscendingOrder);
                         a.setArguments(theDialog.theArguments);
                 }
                 // profile?
-                else if(theDialog.theUseProfile->isChecked() && theDialog.theProfiles->selectedItem() && (theDialog.theProfileFunctions->selectedItem() || theDialog.theJustStart->isChecked()))
+                else if(theDialog.theUseProfile->isChecked() && !theDialog.theProfiles->selectedItems().isEmpty() && (!theDialog.theProfileFunctions->selectedItems().isEmpty() || theDialog.theJustStart->isChecked()))
                 {
                         ProfileServer *theServer = ProfileServer::profileServer();
 
                         if(theDialog.theNotJustStart->isChecked())
-                        {       const ProfileAction *theAction = theServer->getAction(theDialog.profileMap[theDialog.theProfiles->selectedItem()], theDialog.profileFunctionMap[theDialog.theProfileFunctions->selectedItem()]);
+                        {       const ProfileAction *theAction = theServer->getAction(theDialog.profileMap[theDialog.theProfiles->selectedItems().first()], theDialog.profileFunctionMap[theDialog.theProfileFunctions->selectedItems().first()]);
                                 a.setProgram(theAction->profile()->id());
                                 a.setObject(theAction->objId());
                                 a.setMethod(theAction->prototype());
-                                theDialog.theParameters->setSorting(3);
+                                theDialog.theParameters->sortItems(3, Qt::AscendingOrder);
                                 a.setArguments(theDialog.theArguments);
                         }
                         else
-                        {       a.setProgram(theServer->profiles()[theDialog.profileMap[theDialog.theProfiles->selectedItem()]]->id());
+                        {       a.setProgram(theServer->profiles()[theDialog.profileMap[theDialog.theProfiles->selectedItems().first()]]->id());
                                 a.setObject("");
                         }
                 }

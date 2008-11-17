@@ -14,9 +14,6 @@
    <string>Add Action</string>
   </property>
   <widget class="QWizardPage" name="page" >
-   <attribute name="title" >
-    <string>Select Action to Carry Out on Button Press</string>
-   </attribute>
    <layout class="QGridLayout" >
     <item row="0" column="0" >
      <widget class="Q3ButtonGroup" name="buttonGroup1" >
@@ -65,15 +62,12 @@
           </spacer>
          </item>
          <item>
-          <widget class="K3ListView" name="theProfiles" >
+          <widget class="QListWidget" name="theProfiles" >
            <property name="sizePolicy" >
             <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
              <horstretch>3</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
-           </property>
-           <property name="fullWidth" >
-            <bool>true</bool>
            </property>
            <column>
             <property name="text" >
@@ -174,17 +168,6 @@
    </layout>
   </widget>
   <widget class="QWizardPage" name="page" >
-   <property name="geometry" >
-    <rect>
-     <x>6</x>
-     <y>36</y>
-     <width>1005</width>
-     <height>511</height>
-    </rect>
-   </property>
-   <attribute name="title" >
-    <string>Select Button to Configure</string>
-   </attribute>
    <layout class="QVBoxLayout" >
     <item>
      <widget class="QLabel" name="theButtonText" >
@@ -218,15 +201,12 @@
        </spacer>
       </item>
       <item>
-       <widget class="K3ListView" name="theButtons" >
+       <widget class="QListWidget" name="theButtons" >
         <property name="sizePolicy" >
          <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
           <horstretch>2</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
-        </property>
-        <property name="fullWidth" >
-         <bool>true</bool>
         </property>
         <column>
          <property name="text" >
@@ -262,24 +242,13 @@
    </layout>
   </widget>
   <widget class="QWizardPage" name="page" >
-   <property name="geometry" >
-    <rect>
-     <x>6</x>
-     <y>36</y>
-     <width>1005</width>
-     <height>511</height>
-    </rect>
-   </property>
-   <attribute name="title" >
-    <string>Select Program Function</string>
-   </attribute>
    <layout class="QVBoxLayout" >
     <item>
      <widget class="QSplitter" name="splitter8" >
       <property name="orientation" >
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="K3ListView" name="theObjects" >
+      <widget class="QTreeWidget" name="theObjects" >
        <property name="sizePolicy" >
         <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
          <horstretch>0</horstretch>
@@ -288,9 +257,6 @@
        </property>
        <property name="rootIsDecorated" >
         <bool>true</bool>
-       </property>
-       <property name="fullWidth" >
-        <bool>false</bool>
        </property>
        <column>
         <property name="text" >
@@ -350,7 +316,7 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="K3ListView" name="theFunctions" >
+         <widget class="QTreeWidget" name="theFunctions" >
           <property name="sizePolicy" >
            <sizepolicy vsizetype="Expanding" hsizetype="MinimumExpanding" >
             <horstretch>0</horstretch>
@@ -399,17 +365,6 @@
    </layout>
   </widget>
   <widget class="QWizardPage" name="page" >
-   <property name="geometry" >
-    <rect>
-     <x>6</x>
-     <y>36</y>
-     <width>1005</width>
-     <height>511</height>
-    </rect>
-   </property>
-   <attribute name="title" >
-    <string>Select Program Function</string>
-   </attribute>
    <layout class="QGridLayout" >
     <item row="0" column="0" >
      <widget class="Q3ButtonGroup" name="buttonGroup4" >
@@ -449,15 +404,12 @@
           </spacer>
          </item>
          <item>
-          <widget class="K3ListView" name="theProfileFunctions" >
+          <widget class="QTreeWidget" name="theProfileFunctions" >
            <property name="sizePolicy" >
             <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
              <horstretch>7</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
-           </property>
-           <property name="fullWidth" >
-            <bool>true</bool>
            </property>
            <column>
             <property name="text" >
@@ -525,20 +477,9 @@
    </layout>
   </widget>
   <widget class="QWizardPage" name="page" >
-   <property name="geometry" >
-    <rect>
-     <x>6</x>
-     <y>36</y>
-     <width>1005</width>
-     <height>511</height>
-    </rect>
-   </property>
-   <attribute name="title" >
-    <string>Populate Parameters</string>
-   </attribute>
    <layout class="QVBoxLayout" >
     <item>
-     <widget class="K3ListView" name="theParameters" >
+     <widget class="QTreeWidget" name="theParameters" >
       <column>
        <property name="text" >
         <string>Option Description</string>
@@ -653,7 +594,7 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <widget class="QWizardPage" name="page" >
+        <widget class="QWizardPage" name="pagexx" >
          <property name="geometry" >
           <rect>
            <x>0</x>
@@ -800,7 +741,7 @@
           </item>
          </layout>
         </widget>
-        <widget class="QWizardPage" name="page" >
+        <widget class="QWizardPage" name="pageyy" >
          <property name="geometry" >
           <rect>
            <x>0</x>
@@ -845,17 +786,6 @@
    </layout>
   </widget>
   <widget class="QWizardPage" name="page" >
-   <property name="geometry" >
-    <rect>
-     <x>6</x>
-     <y>36</y>
-     <width>1005</width>
-     <height>511</height>
-    </rect>
-   </property>
-   <attribute name="title" >
-    <string>Finishing Up</string>
-   </attribute>
    <layout class="QVBoxLayout" >
     <item>
      <widget class="QLabel" name="textLabel1" >
@@ -1047,17 +977,6 @@
    </layout>
   </widget>
   <widget class="QWizardPage" name="page" >
-   <property name="geometry" >
-    <rect>
-     <x>6</x>
-     <y>36</y>
-     <width>1005</width>
-     <height>511</height>
-    </rect>
-   </property>
-   <attribute name="title" >
-    <string>Select Required Mode Change</string>
-   </attribute>
    <layout class="QGridLayout" >
     <item row="0" column="0" >
      <widget class="Q3ButtonGroup" name="buttonGroup3" >
@@ -1097,15 +1016,12 @@
           </spacer>
          </item>
          <item>
-          <widget class="K3ListView" name="theModes" >
+          <widget class="QListWidget" name="theModes" >
            <property name="sizePolicy" >
             <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
              <horstretch>3</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
-           </property>
-           <property name="fullWidth" >
-            <bool>true</bool>
            </property>
            <column>
             <property name="text" >
@@ -1227,9 +1143,16 @@
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <customwidgets>
   <customwidget>
-   <class>K3ListView</class>
-   <extends>Q3ListView</extends>
-   <header>k3listview.h</header>
+   <class>Q3WidgetStack</class>
+   <extends>Q3WidgetStack</extends>
+   <header>q3widgetstack.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Q3ButtonGroup</class>
+   <extends>Q3GroupBox</extends>
+   <header>Qt3Support/Q3ButtonGroup</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>KDoubleNumInput</class>
@@ -1251,27 +1174,8 @@
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
   </customwidget>
-  <customwidget>
-   <class>QWizard</class>
-   <extends>QDialog</extends>
-   <header>qwizard.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Q3WidgetStack</class>
-   <extends>Q3WidgetStack</extends>
-   <header>q3widgetstack.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Q3ButtonGroup</class>
-   <extends>Q3GroupBox</extends>
-   <header>Qt3Support/Q3ButtonGroup</header>
-   <container>1</container>
-  </customwidget>
  </customwidgets>
  <includes>
-  <include location="local" >k3listview.h</include>
   <include location="local" >klineedit.h</include>
   <include location="local" >knuminput.h</include>
   <include location="local" >keditlistbox.h</include>

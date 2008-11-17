@@ -56,15 +56,15 @@ public:
 	bool isUnique;
 
 	static const QStringList getFunctions(const QString app, const QString obj);
-	void updateArgument(Q3ListViewItem *theItem);
+	void updateArgument(QTreeWidgetItem *theItem);
 	void requestNextPress();
 	void cancelRequest();
 
-	QMap<Q3ListViewItem *, QString> profileMap;
-	QMap<Q3ListViewItem *, QString> profileFunctionMap;
-	QMap<Q3ListViewItem *, QString> buttonMap;
-	QMap<Q3ListViewItem *, bool> uniqueProgramMap;
-	QMap<Q3ListViewItem *, QString> nameProgramMap;
+	QMap<QListWidgetItem *, QString> profileMap;
+	QMap<QTreeWidgetItem *, QString> profileFunctionMap;
+	QMap<QListWidgetItem *, QString> buttonMap;
+	QMap<QTreeWidgetItem *, bool> uniqueProgramMap;
+	QMap<QTreeWidgetItem *, QString> nameProgramMap;
 
 	AddAction(QWidget *parent, const char *name, const Mode &mode);
 	~AddAction();

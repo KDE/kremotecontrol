@@ -44,6 +44,22 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMo
 	connect(this, SIGNAL( currentIdChanged(int) ), SLOT( updateForPageChange() ));
 	connect(this, SIGNAL( currentIdChanged(int) ), SLOT( slotCorrectPage() ));
 	connect(theObjects, SIGNAL(currentChanged(Q3ListViewItem)), SLOT(updateFunctions()));
+	connect(theProfiles, SIGNAL(itemSelectionChanged()), this, SLOT(updateButtonStates()));
+	connect(theButtons, SIGNAL(itemSelectionChanged()), this, SLOT(updateButtonStates()));
+	connect(theProfileFunctions, SIGNAL(itemSelectionChanged()), this, SLOT(updateButtonStates()));
+
+	connect(theUseProfile, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
+	connect(theUseDCOP, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
+	connect(theChangeMode, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
+	connect(theJustStart, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
+	connect(theNotJustStart, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
+
+	connect(theObjects, SIGNAL(itemSelectionChanged()), this, SLOT(updateFunctions()));
+	connect(theObjects, SIGNAL(itemSelectionChanged()), this, SLOT(updateButtonStates()));
+	connect(theFunctions, SIGNAL(itemSelectionChanged()), this, SLOT(updateButtonStates()));
+	
+	connect(theParameters, SIGNAL(itemSelectionChanged()), this, SLOT(updateParameter()));
+
 	curPage = 0;
 	updateProfiles();
 	updateButtons();
@@ -107,12 +123,18 @@ void AddAction::slotCorrectPage()
 		else
 			next();
 
+	if(curPage == 3){
+		updateProfileFunctions();
+	}
 
+	if(curPage == 4){
+		updateParameters();
+	}
 
 	if(curPage == 4 && (
 	(theUseDCOP->isChecked() && theFunctions->currentItem() && !Prototype(theFunctions->currentItem()->text(2)).count()) ||
-	(theUseProfile->isChecked() && (theProfileFunctions->currentItem() && !theProfileFunctions->currentItem()->text(1).toInt() || theJustStart->isChecked()))
-	))
+	(theUseProfile->isChecked() && (theProfileFunctions->currentItem() && !theProfileFunctions->currentItem()->text(1).toInt())) || theJustStart->isChecked()
+	)){
 //		showPage(((QWizard *)this)->page(lastPage == 5 ? (theUseDCOP->isChecked() ? 2 : 3) : 5));
 
 		if(lastPage == 5){
@@ -132,6 +154,7 @@ void AddAction::slotCorrectPage()
 			layout << QWizard::Stretch << QWizard::BackButton << QWizard::FinishButton << QWizard::CancelButton;
 			setButtonLayout(layout);
                 }
+	}
 }
 
 void AddAction::requestNextPress()
@@ -162,16 +185,16 @@ void AddAction::updateButton(const QString &remote, const QString &button)
 {
 	if(theMode.remote() == remote)
 	{	// note this isn't the "correct" way of doing it; really i should iterate throughg the items and try to find the item which when put through buttonMap[item] returns the current button name. but i cant be arsed.
-		theButtons->setCurrentItem(theButtons->findItem(RemoteServer::remoteServer()->getButtonName(remote, button), 0));
-		theButtons->ensureItemVisible(theButtons->findItem(RemoteServer::remoteServer()->getButtonName(remote, button), 0));
+		theButtons->setCurrentItem(theButtons->findItems(RemoteServer::remoteServer()->getButtonName(remote, button), 0).first());
+		theButtons->scrollToItem(theButtons->findItems(RemoteServer::remoteServer()->getButtonName(remote, button), 0).first());
 	}
 	else
 		KMessageBox::error(0, i18n( "You did not select a mode of that remote control. Please use %1, "
                                        "or revert back to select a different mode.", theMode.remoteName() ),
                                        i18n( "Incorrect Remote Control Detected" ));
 
-	if(currentId() == 1)
-		next();
+	updateButtonStates();
+
 }
 
 void AddAction::updateButtons()
@@ -191,24 +214,25 @@ void AddAction::updateButtons()
 	QStringList buttons = response.arguments().at(0).toStringList();
 	
 	for(QStringList::iterator j = buttons.begin(); j != buttons.end(); ++j)
-		buttonMap[new Q3ListViewItem(theButtons, RemoteServer::remoteServer()->getButtonName(theMode.remote(), *j))] = *j;
+		buttonMap[new QListWidgetItem(RemoteServer::remoteServer()->getButtonName(theMode.remote(), *j), theButtons)] = *j;
 }
 
 void AddAction::updateForPageChange()
 {
-	if(currentId() == 1) requestNextPress(); else cancelRequest();
+	if(currentId() == 1) requestNextPress(); //else cancelRequest();
 	updateButtonStates();
 }
 
 void AddAction::updateButtonStates()
 {
 #warning Port me!
+	kDebug() << "Updating button states";
 	switch(currentId()){
 		case 0:
-			button(QWizard::NextButton)->setEnabled(theProfiles->currentItem() != 0 || !theUseProfile->isChecked());
+			button(QWizard::NextButton)->setEnabled(!theProfiles->selectedItems().isEmpty() || !theUseProfile->isChecked());
 			break;
 		case 1:
-			button(QWizard::NextButton)->setEnabled(theButtons->currentItem() != 0);
+			button(QWizard::NextButton)->setEnabled(!theButtons->selectedItems().isEmpty());
 			break;
 		case 2:
 			button(QWizard::NextButton)->setEnabled(theFunctions->currentItem() != 0);
@@ -318,7 +342,7 @@ void AddAction::updateProfiles()
 	QHash<QString, Profile*> dict = theServer->profiles();
 	QHash<QString, Profile*>::const_iterator i;
 	for(i = dict.constBegin(); i != dict.constEnd(); ++i)
-		profileMap[new Q3ListViewItem(theProfiles, i.value()->name())] = i.key();
+		profileMap[new QListWidgetItem(i.value()->name(), theProfiles)] = i.key();
 }
 
 void AddAction::updateOptions()
@@ -334,8 +358,8 @@ void AddAction::updateOptions()
 	}
 	else if(theUseDCOP->isChecked())
 	{
-		if(!theObjects->selectedItem()) return;
-		Q3ListViewItem* i = theObjects->selectedItem()->parent();
+		if(!theObjects->selectedItems().first()) return;
+		QTreeWidgetItem* i = theObjects->selectedItems().first()->parent();
 		if(!i) return;
 		isUnique = uniqueProgramMap[i];
 		QRegExp r("(.*)-[0-9]+");
@@ -362,16 +386,24 @@ void AddAction::updateOptions()
 
 void AddAction::updateProfileFunctions()
 {
+	kDebug() << "updateProfileFunctions called";
 	ProfileServer *theServer = ProfileServer::profileServer();
 	theProfileFunctions->clear();
 	profileFunctionMap.clear();
-	if(!theProfiles->currentItem()) return;
+	if(theProfiles->selectedItems().isEmpty()){
+		return;
+	}
 
 	const Profile *p = theServer->profiles()[profileMap[theProfiles->currentItem()]];
 	QHash<QString, ProfileAction*> dict = p->actions();
+	kDebug() << "actions: " << p->actions();
 	QHash<QString, ProfileAction*>::const_iterator i;
-	for(i = dict.constBegin(); i != dict.constEnd(); ++i)
-		profileFunctionMap[new Q3ListViewItem(theProfileFunctions, i.value()->name(), QString().setNum(i.value()->arguments().count()), i.value()->comment())] = i.key();
+	for(i = dict.constBegin(); i != dict.constEnd(); ++i){
+		kDebug() << "got function: " << i.value()->name();
+		QStringList parameters;
+		parameters << i.value()->name() << QString().setNum(i.value()->arguments().count()) << i.value()->comment();
+		profileFunctionMap[new QTreeWidgetItem(theProfileFunctions, parameters)] = i.key();
+	}
 	updateParameters();
 	updateOptions();
 }
@@ -384,8 +416,10 @@ void AddAction::updateParameters()
 	if(theUseDCOP->isChecked() && theFunctions->currentItem())
 	{
 		Prototype p(theFunctions->currentItem()->text(2));
-		for(unsigned k = 0; k < p.count(); k++)
-		{	new K3ListViewItem(theParameters, p.name(k).isEmpty() ? i18n( "<anonymous>" ) : p.name(k), "", p.type(k), QString().setNum(k + 1));
+		for(unsigned k = 0; k < p.count(); k++) {
+			QStringList parameters;
+			parameters << (p.name(k).isEmpty() ? i18n( "<anonymous>" ) : p.name(k)) << "" << p.type(k) << QString().setNum(k + 1);
+			new QTreeWidgetItem(theParameters, parameters);
 			theArguments.append(QVariant(""));
 			kDebug() << "converting argument to:" << p.type(k).toLocal8Bit();
 			theArguments.back().convert(QVariant::nameToType(p.type(k).toLocal8Bit()));
@@ -405,7 +439,9 @@ void AddAction::updateParameters()
 		{	theArguments.append(QVariant((*i).getDefault()));
 			kDebug() << "converting argument to:" << QVariant::nameToType((*i).type().toLocal8Bit());
 			theArguments.back().convert(QVariant::nameToType((*i).type().toLocal8Bit()));
-			new Q3ListViewItem(theParameters, (*i).comment(), theArguments.back().toString(), (*i).type(), QString().setNum(index));
+			QStringList parameters;
+			parameters << (*i).comment() << theArguments.back().toString() << (*i).type() << QString().setNum(index);
+			new QTreeWidgetItem(theParameters, parameters);
 		}
 
 		// quicky update options too...
@@ -419,7 +455,7 @@ void AddAction::updateParameters()
 void AddAction::updateParameter()
 {
 	kDebug() << "Update parameter called";
-	if(theParameters->currentItem())
+	if(!theParameters->selectedItems().isEmpty())
 	{	QString type = theParameters->currentItem()->text(2);
 		int index = theParameters->currentItem()->text(3).toInt() - 1;
 		kDebug() << "Parameter type:" << type;
@@ -489,7 +525,7 @@ void AddAction::slotParameterChanged()
 }
 
 // takes theArguments[theIndex] and puts it into theItem
-void AddAction::updateArgument(Q3ListViewItem *theItem)
+void AddAction::updateArgument(QTreeWidgetItem *theItem)
 {
 	kDebug() << "theArgument:" << theArguments[theItem->text(3).toInt() - 1] << "index:" << theItem->text(3).toInt() - 1;
 	theItem->setText(1, theArguments[theItem->text(3).toInt() - 1].toString());
@@ -515,7 +551,7 @@ void AddAction::updateObjects()
 		}
 		
 		// Remove the "org.kde."
-		QString name = (*i);
+		QString name = (*i); 
 		name.remove(0, 8);
 		
 		// Remove "human unreadable" entries
@@ -531,7 +567,9 @@ void AddAction::updateObjects()
 		names += name;
 
 		// insert service into theObjects
-		K3ListViewItem *a = new K3ListViewItem(theObjects, name);
+		QStringList tmpList;
+		tmpList << name;
+		QTreeWidgetItem *a = new QTreeWidgetItem(theObjects, tmpList);
 		uniqueProgramMap[a] = name == QString(*i);
 		nameProgramMap[a] = *i;
 		
@@ -545,8 +583,10 @@ void AddAction::updateObjects()
 		QDomElement child = node.firstChildElement();
 		while (!child.isNull()) {
 			if (child.tagName() == QLatin1String("node")) {
-				QString path = child.attribute(QLatin1String("name"));
-				new K3ListViewItem(a, path);
+				QStringList path;
+				path << child.attribute(QLatin1String("name"));
+				kDebug() << "path: " << path;
+				new QTreeWidgetItem(a, path);
 			}
 			child = child.nextSiblingElement();
 		}	
@@ -562,7 +602,9 @@ void AddAction::updateFunctions()
 		QStringList functions = getFunctions(nameProgramMap[theObjects->currentItem()->parent()], theObjects->currentItem()->text(0));
 		for(QStringList::iterator i = functions.begin(); i != functions.end(); ++i)
 		{	Prototype p((QString)(*i));
-			new K3ListViewItem(theFunctions, p.name(), p.argumentList(), *i);
+			QStringList parameters;
+			parameters << p.name() << p.argumentList() << *i;
+			new QTreeWidgetItem(theFunctions, parameters);
 		}
 	}
 	updateOptions();
