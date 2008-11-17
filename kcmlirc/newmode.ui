@@ -84,10 +84,17 @@
        <property name="enabled" >
         <bool>false</bool>
        </property>
+       <property name="text" >
+        <string>Add</string>
+       </property>
       </widget>
      </item>
      <item>
-      <widget class="KPushButton" name="kPushButton5" />
+      <widget class="KPushButton" name="kPushButton5" >
+       <property name="text" >
+        <string>Cancel</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
