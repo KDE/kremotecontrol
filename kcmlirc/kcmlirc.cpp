@@ -451,12 +451,12 @@ void KCMLirc::updateModes()
 	if( response.type() == QDBusMessage::ErrorMessage ){
 		kDebug() << response.errorMessage();
 	} 
-	
+
 	QStringList remotes;
-	for( int i = 0; i < response.arguments().size(); ++i){
-		kDebug() << "Reveiced remote: " << response.arguments().at(i).toString();
-		remotes << response.arguments().at(i).toString();
+	for( int i = 0; i < response.arguments().at(0).toStringList().size(); ++i){
+		kDebug() << "Reveiced remote: " << response.arguments().at(0).toStringList().at(i);
 	}
+	remotes = response.arguments().at(0).toStringList();
 
 	if(remotes.begin() == remotes.end())
 		theKCMLircBase->theMainLabel->setMaximumSize(32767, 32767);
