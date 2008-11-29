@@ -73,7 +73,6 @@ KCMLirc::KCMLirc(QWidget *parent, const QStringList &/*args*/)
 	setQuickHelp(i18n("<h1>Remote Controls</h1><p>This module allows you to configure bindings between your remote controls and KDE applications. Simply select your remote control and click Add under the Actions/Buttons list. If you want KDE to attempt to automatically assign buttons to a supported application's actions, try clicking the Auto-Populate button.</p><p>To view the recognised applications and remote controls, simply select the <em>Loaded Extensions</em> tab.</p>"));
 	bool ok;
 
-#warning Port DCOP to DBUS
 	QDBusMessage m = QDBusMessage::createMethodCall("org.kde.irkick", "/IRKick", "", "remotes");
 	QDBusMessage response = QDBusConnection::sessionBus().call(m);
 	if( response.type() == QDBusMessage::ErrorMessage ){
@@ -446,17 +445,19 @@ void KCMLirc::updateModes()
 
 	kDebug() << "updating Modes";
 
+	QStringList remotes;
+
 	QDBusMessage m = QDBusMessage::createMethodCall("org.kde.irkick", "/IRKick", "", "remotes");
 	QDBusMessage response = QDBusConnection::sessionBus().call(m);
 	if( response.type() == QDBusMessage::ErrorMessage ){
 		kDebug() << response.errorMessage();
-	} 
+	} else {
 
-	QStringList remotes;
-	for( int i = 0; i < response.arguments().at(0).toStringList().size(); ++i){
-		kDebug() << "Reveiced remote: " << response.arguments().at(0).toStringList().at(i);
+		for( int i = 0; i < response.arguments().at(0).toStringList().size(); ++i){
+			kDebug() << "Reveiced remote: " << response.arguments().at(0).toStringList().at(i);
+		}
+		remotes = response.arguments().at(0).toStringList();
 	}
-	remotes = response.arguments().at(0).toStringList();
 
 	if(remotes.begin() == remotes.end())
 		theKCMLircBase->theMainLabel->setMaximumSize(32767, 32767);
@@ -565,8 +566,8 @@ void KCMLirc::load()
 	QDBusMessage response = QDBusConnection::sessionBus().call(m);
 	if( response.type() == QDBusMessage::ErrorMessage ){
 		kDebug() << response.errorMessage();
-	} 
-	
+	}
+
 	QStringList remotes;
 	for( int i = 0; i < response.arguments().size(); ++i){
 		remotes << response.arguments().at(i).toString();
@@ -597,8 +598,8 @@ void KCMLirc::save()
 	QDBusMessage response = QDBusConnection::sessionBus().call(m);
 	if( response.type() == QDBusMessage::ErrorMessage ){
 		kDebug() << response.errorMessage();
-	} 
-	
+	}
+
 	emit changed(true);
 }
 
