@@ -20,7 +20,13 @@
     <number>11</number>
    </property>
    <item>
-    <widget class="K3ListView" name="theRemotes" />
+    <widget class="QTreeWidget" name="theRemotes" >
+     <column>
+      <property name="text" >
+       <string>Remotes</string>
+      </property>
+     </column>
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" >
@@ -103,11 +109,6 @@
  <layoutdefault spacing="6" margin="11" />
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <customwidgets>
-  <customwidget>
-   <class>K3ListView</class>
-   <extends>Q3ListView</extends>
-   <header>k3listview.h</header>
-  </customwidget>
   <customwidget>
    <class>KPushButton</class>
    <extends>QPushButton</extends>

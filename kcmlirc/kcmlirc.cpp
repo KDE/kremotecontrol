@@ -314,7 +314,7 @@ void KCMLirc::slotAddMode()
 	}
 
 	NewModeDialog theDialog(this);
-	QMap<Q3ListViewItem *, QString> remoteMap;
+	QMap<QTreeWidgetItem *, QString> remoteMap;
 	QTreeWidgetItem *tr = theKCMLircBase->theModes->selectedItems().first();
 	if(tr) if(tr->parent()) tr = tr->parent();
 /*	for(Q3ListViewItem *i = theKCMLircBase->theModes->firstChild(); i; i = i->nextSibling())
@@ -323,15 +323,17 @@ void KCMLirc::slotAddMode()
 		if(i == tr) { a->setSelected(true); theDialog.theRemotes->setCurrentItem(a); }
 	}*/
 	for(int i = 0; i < theKCMLircBase->theModes->topLevelItemCount(); i++) {
-		Q3ListViewItem *a = new Q3ListViewItem(theDialog.theRemotes, theKCMLircBase->theModes->topLevelItem(i)->text(0));
+		QStringList remotesList;
+		remotesList << theKCMLircBase->theModes->topLevelItem(i)->text(0);
+		QTreeWidgetItem *a = new QTreeWidgetItem(theDialog.theRemotes, remotesList);
 		remoteMap[a] = modeMap[theKCMLircBase->theModes->topLevelItem(i)].remote();
 		if(theKCMLircBase->theModes->topLevelItem(i) == tr) {
 			a->setSelected(true); theDialog.theRemotes->setCurrentItem(a);
 		}
 	}
-	if(theDialog.exec() == QDialog::Accepted && theDialog.theRemotes->selectedItem() && !theDialog.theName->text().isEmpty())
+	if(theDialog.exec() == QDialog::Accepted && !theDialog.theRemotes->selectedItems().isEmpty() && !theDialog.theName->text().isEmpty())
 	{
-		allModes.add(Mode(remoteMap[theDialog.theRemotes->selectedItem()], theDialog.theName->text()));
+		allModes.add(Mode(remoteMap[theDialog.theRemotes->selectedItems().first()], theDialog.theName->text()));
 		updateModes();
 		emit changed(true);
 	}

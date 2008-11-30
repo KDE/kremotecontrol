@@ -15,9 +15,6 @@ NewModeDialog::NewModeDialog( QWidget* parent )
 {
     setupUi(this);
 
-    theRemotes->addColumn( i18n( "Remote Controls" ) );
-    theRemotes->setFullWidth( true );
-
     // signals and slots connections
     connect(kPushButton6, SIGNAL(clicked()), this, SLOT(accept()));
     connect(kPushButton5, SIGNAL(clicked()), this, SLOT(reject()));
