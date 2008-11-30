@@ -16,7 +16,6 @@
 
 #include <qxml.h>
 #include <qhash.h>
-//#include <q3dict.h>
 
 #include <kdebug.h>
 

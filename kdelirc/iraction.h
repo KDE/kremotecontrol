@@ -38,7 +38,7 @@ class IRAction
 
 public:
 	// load/save convenience functions
-	const IRAction &loadFromConfig(KConfig &theConfig, int index);
+	static IRAction *loadFromConfig(KConfig &theConfig, int index);
 	void saveToConfig(KConfig &theConfig, int index) const;
 
 	// may be changed to a profile-based representation in the future.
@@ -85,6 +85,7 @@ public:
 
 	IRAction(const QString &newProgram, const QString &newObject, const QString &newMethod, const Arguments &newArguments, const QString &newRemote, const QString &newMode, const QString &newButton, const bool newRepeat, const bool newAutoStart, const bool newDoBefore, const bool newDoAfter, const bool newUnique, const IfMulti newIfMulti);
 	IRAction() { theProgram = QString(); };
+
 };
 
 #endif

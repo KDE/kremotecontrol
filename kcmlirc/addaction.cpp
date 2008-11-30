@@ -11,11 +11,7 @@
 #include <QRegExp>
 #include <QLabel>
 #include <qradiobutton.h>
-#include <q3widgetstack.h>
 #include <QCheckBox>
-#include <q3buttongroup.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 #include <QDBusMessage>
 #include <QDBusConnection>
 #include <QDBusInterface>
@@ -24,7 +20,6 @@
 
 #include <kdebug.h>
 #include <klineedit.h>
-#include <k3listview.h>
 #include <kapplication.h>
 #include <kmessagebox.h>
 #include <knuminput.h>
@@ -43,29 +38,54 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMo
 
 	connect(this, SIGNAL( currentIdChanged(int) ), SLOT( updateForPageChange() ));
 	connect(this, SIGNAL( currentIdChanged(int) ), SLOT( slotCorrectPage() ));
-	connect(theObjects, SIGNAL(currentChanged(Q3ListViewItem)), SLOT(updateFunctions()));
-	connect(theProfiles, SIGNAL(itemSelectionChanged()), this, SLOT(updateButtonStates()));
-	connect(theButtons, SIGNAL(itemSelectionChanged()), this, SLOT(updateButtonStates()));
-	connect(theProfileFunctions, SIGNAL(itemSelectionChanged()), this, SLOT(updateButtonStates()));
-
-	connect(theUseProfile, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
-	connect(theUseDCOP, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
-	connect(theChangeMode, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
-	connect(theJustStart, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
-	connect(theNotJustStart, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
 
 	connect(theObjects, SIGNAL(itemSelectionChanged()), this, SLOT(updateFunctions()));
+	connect(theObjects, SIGNAL(itemSelectionChanged()), this, SLOT(updateFunctions()));
 	connect(theObjects, SIGNAL(itemSelectionChanged()), this, SLOT(updateButtonStates()));
+
+	connect(theProfiles, SIGNAL(itemSelectionChanged()), this, SLOT(updateButtonStates()));
+	connect(theProfiles, SIGNAL(itemSelectionChanged()), this, SLOT(updateProfileFunctions()));
+	connect(theProfiles, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(next()));
+
+	connect(theModes, SIGNAL(itemSelectionChanged()), this, SLOT(updateButtonStates()));
+	connect(theModes, SIGNAL(itemSelectionChanged()), this, SLOT(slotModeSelected()));
+	connect(theModes, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(next()));
+
+	connect(theButtons, SIGNAL(itemSelectionChanged()), this, SLOT(updateButtonStates()));
+	connect(theButtons, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(next()));
+
+	connect(theProfileFunctions, SIGNAL(itemSelectionChanged()), this, SLOT(updateButtonStates()));
+	connect(theProfileFunctions, SIGNAL(itemSelectionChanged()), this, SLOT(updateParameter()));
+	connect(theProfileFunctions, SIGNAL(itemSelectionChanged()), this, SLOT(updateOptions()));
+	connect(theProfileFunctions, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(next()));
+
+	connect(theUseProfile, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
+
+	connect(theUseDCOP, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
+
+	connect(theChangeMode, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
+
+	connect(theJustStart, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
+
+	connect(theNotJustStart, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
+
 	connect(theFunctions, SIGNAL(itemSelectionChanged()), this, SLOT(updateButtonStates()));
-	
+	connect(theFunctions, SIGNAL(itemSelectionChanged()), this, SLOT(updateParameter()));
+	connect(theFunctions, SIGNAL(itemSelectionChanged()), this, SLOT(updateOptions()));
+	connect(theFunctions, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(next()));
+
 	connect(theParameters, SIGNAL(itemSelectionChanged()), this, SLOT(updateParameter()));
+
+	connect(theSwitchMode, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
+
+	connect(theExitMode, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
 
 	curPage = 0;
 	updateProfiles();
 	updateButtons();
 	updateObjects();
 	updateProfileFunctions();
-	
+
 }
 
 AddAction::~AddAction()
@@ -94,7 +114,7 @@ void AddAction::slotCorrectPage()
 		QWizard::page(5)->setFinalPage(true);
 	} else {
 		QWizard::page(5)->setFinalPage(false);
-	}	
+	}
 
 
 	if(curPage == 2 && theUseProfile->isChecked())
@@ -109,7 +129,7 @@ void AddAction::slotCorrectPage()
 		next();
 		next();
 	}
-	
+
 	if(curPage == 5 && theChangeMode->isChecked() && lastPage == 6){
 		back();
 		back();
@@ -147,7 +167,7 @@ void AddAction::slotCorrectPage()
 			// Restore the Wizard layout in case its modified
 			QList<QWizard::WizardButton> layout;
 			layout << QWizard::Stretch << QWizard::BackButton << QWizard::NextButton << QWizard::FinishButton << QWizard::CancelButton;
-			setButtonLayout(layout);			
+			setButtonLayout(layout);
 		} else {
 			next();
 			QList<QWizard::WizardButton> layout;
@@ -210,9 +230,9 @@ void AddAction::updateButtons()
 	}
 
 	kDebug() << "Got response: " << response.arguments();
-	
+
 	QStringList buttons = response.arguments().at(0).toStringList();
-	
+
 	for(QStringList::iterator j = buttons.begin(); j != buttons.end(); ++j)
 		buttonMap[new QListWidgetItem(RemoteServer::remoteServer()->getButtonName(theMode.remote(), *j), theButtons)] = *j;
 }
@@ -243,7 +263,7 @@ void AddAction::updateButtonStates()
 		case 4:
 			button(QWizard::NextButton)->setEnabled(true);
 			break;
-		case 5: 
+		case 5:
 			button(QWizard::NextButton)->setEnabled(true);
 			button(QWizard::FinishButton)->setEnabled(true);
 			break;
@@ -259,23 +279,23 @@ const QStringList AddAction::getFunctions(const QString app, const QString obj)
 	kDebug() << "creating Interface with: " << app << "/" + obj << "org.freedesktop.DBus.Introspectable";
 	QDBusInterface *dBusIface = new QDBusInterface(app, "/" + obj, "org.freedesktop.DBus.Introspectable");
 	QDBusReply<QString> response = dBusIface->call("Introspect");
-	
+
 	kDebug() << response;
 	QDomDocument domDoc;
-	domDoc.setContent(response);	
-	
+	domDoc.setContent(response);
+
 	QDomElement node = domDoc.documentElement();
 	QDomElement child = node.firstChildElement();
-	
+
 	QStringList ret;
 	QString function;
 
 	while (!child.isNull()) {
 		if (child.tagName() == QLatin1String("interface")) {
-			if(child.attribute("name") == "org.freedesktop.DBus.Properties" || 
+			if(child.attribute("name") == "org.freedesktop.DBus.Properties" ||
 			   child.attribute("name") == "org.freedesktop.DBus.Introspectable"){
 				child = child.nextSiblingElement();
-				continue;	
+				continue;
 			}
 			QDomElement subChild = child.firstChildElement();
 			while(!subChild.isNull()){
@@ -329,7 +349,7 @@ const QStringList AddAction::getFunctions(const QString app, const QString obj)
 			}
 		}
 		child = child.nextSiblingElement();
-	}	
+	}
 	return ret;
 }
 
@@ -369,7 +389,7 @@ void AddAction::updateOptions()
 	else return;
 
 	theIMLabel->setEnabled(!isUnique);
-	theIMGroup->setEnabled(!isUnique);
+//	theIMGroup->setEnabled(!isUnique);
 	theIMLine->setEnabled(!isUnique);
 	theIMTop->setEnabled(!isUnique);
 	theDontSend->setEnabled(!isUnique);
@@ -434,13 +454,13 @@ void AddAction::updateParameters()
 		const Profile *p = theServer->profiles()[profileMap[theProfiles->currentItem()]];
 		const ProfileAction *pa = p->actions()[profileFunctionMap[theProfileFunctions->currentItem()]];
 
-		int index = 1;		
-		for(Q3ValueList<ProfileActionArgument>::const_iterator i = pa->arguments().begin(); i != pa->arguments().end(); ++i, index++)
-		{	theArguments.append(QVariant((*i).getDefault()));
-			kDebug() << "converting argument to:" << QVariant::nameToType((*i).type().toLocal8Bit());
-			theArguments.back().convert(QVariant::nameToType((*i).type().toLocal8Bit()));
+		int index = 1;
+		for(int i = 0; i < pa->arguments().size(); ++i, index++)
+		{	theArguments.append(QVariant((pa->arguments().at(i)).getDefault()));
+			kDebug() << "converting argument to:" << QVariant::nameToType(pa->arguments().at(i).type().toLocal8Bit());
+			theArguments.back().convert(QVariant::nameToType(pa->arguments().at(i).type().toLocal8Bit()));
 			QStringList parameters;
-			parameters << (*i).comment() << theArguments.back().toString() << (*i).type() << QString().setNum(index);
+			parameters << pa->arguments().at(i).comment() << theArguments.back().toString() << pa->arguments().at(i).type() << QString().setNum(index);
 			new QTreeWidgetItem(theParameters, parameters);
 		}
 
@@ -461,19 +481,19 @@ void AddAction::updateParameter()
 		kDebug() << "Parameter type:" << type;
 		if(type.contains("int") || type.contains("short") || type.contains("long") || type.contains("uint"))
 //		if(type.contains("i"))
-		{	theValue->raiseWidget(2);
+		{	theValue->setCurrentIndex(2);
 			theValueIntNumInput->setValue(theArguments[index].toInt());
 		}
 		else if(type.contains("double") || type.contains("float"))
-		{	theValue->raiseWidget(3);
+		{	theValue->setCurrentIndex(3);
 			theValueDoubleNumInput->setValue(theArguments[index].toDouble());
 		}
 		else if(type.contains("bool"))
-		{	theValue->raiseWidget(1);
+		{	theValue->setCurrentIndex(1);
 			theValueCheckBox->setChecked(theArguments[index].toBool());
 		}
 		else if(type.contains("QStringList"))
-		{	theValue->raiseWidget(4);
+		{	theValue->setCurrentIndex(4);
 			QStringList backup = theArguments[index].toStringList();
 			// backup needed because calling clear will kill what ever has been saved.
 			theValueEditListBox->clear();
@@ -481,7 +501,7 @@ void AddAction::updateParameter()
 			theArguments[index].toStringList() = backup;
 		}
 		else
-		{	theValue->raiseWidget(0);
+		{	theValue->setCurrentIndex(0);
 			theValueLineEdit->setText(theArguments[index].toString());
 		}
 		theCurParameter->setText(theParameters->currentItem()->text(0));
@@ -549,17 +569,17 @@ void AddAction::updateObjects()
 		if(!(*i).contains("org.kde")){
 			continue;
 		}
-		
+
 		// Remove the "org.kde."
-		QString name = (*i); 
+		QString name = (*i);
 		name.remove(0, 8);
-		
+
 		// Remove "human unreadable" entries
 		QRegExp r("[a-zA-Z]*");
 		if(! r.exactMatch(name)){
 			continue;
 		}
-		
+
 		//remove duplicates
 		if(names.contains(name)){
 			continue;
@@ -572,13 +592,13 @@ void AddAction::updateObjects()
 		QTreeWidgetItem *a = new QTreeWidgetItem(theObjects, tmpList);
 		uniqueProgramMap[a] = name == QString(*i);
 		nameProgramMap[a] = *i;
-		
+
 		QDBusInterface *dBusIface = new QDBusInterface(*i, "/", "org.freedesktop.DBus.Introspectable");
 		QDBusReply<QString> response = dBusIface->call("Introspect");
-		
+
 		QDomDocument domDoc;
 		domDoc.setContent(response);
-		
+
 		QDomElement node = domDoc.documentElement();
 		QDomElement child = node.firstChildElement();
 		while (!child.isNull()) {
@@ -589,7 +609,7 @@ void AddAction::updateObjects()
 				new QTreeWidgetItem(a, path);
 			}
 			child = child.nextSiblingElement();
-		}	
+		}
 	}
 	updateFunctions();
 }

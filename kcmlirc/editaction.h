@@ -26,7 +26,7 @@
 class EditAction : public QDialog, public Ui::EditActionBase
 {
 	Q_OBJECT
-	IRAIt theAction;
+	IRAction *theAction;
 	QMap<QString, QString> applicationMap, functionMap;
 	QMap<QString, QString> nameProgramMap;
 	QMap<QString, bool> uniqueProgramMap;
@@ -36,10 +36,10 @@ class EditAction : public QDialog, public Ui::EditActionBase
 	QButtonGroup mainGroup;
 
 public:
-	EditAction(IRAIt action, QWidget *parent = 0, const char *name = 0);
+	EditAction(IRAction *action, QWidget *parent = 0, const char *name = 0);
 	~EditAction();
 
-	
+
 	void writeBack();
 	void readFrom();
 

@@ -16,17 +16,12 @@
 //Added by qt3to4:
 #include <QDropEvent>
 
-#define KDE3_SUPPORT
 #include <kcmodule.h>
-#undef KDE3_SUPPORT
-
 
 #include "ui_kcmlircbase.h"
 #include "iractions.h"
 #include "modes.h"
 
-class Q3ListViewItem;
-class K3ListView;
 class QDropEvent;
 class Profile;
 class Remote;
@@ -40,7 +35,7 @@ private:
 	Ui::KCMLircBase *theKCMLircBase;
 	IRActions allActions;
 	Modes allModes;
-	QMap<QTreeWidgetItem *, IRAIt > actionMap;
+	QMap<QTreeWidgetItem *, IRAction *> actionMap;
 	QMap<QTreeWidgetItem *, Mode> modeMap;
 	QMap<QTreeWidgetItem *, QString> profileMap, remoteMap;
 

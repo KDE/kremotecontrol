@@ -13,14 +13,13 @@
 #ifndef ARGUMENTS_H
 #define ARGUMENTS_H
 
-#include <q3valuelist.h>
 #include <QVariant>
 
 /**
 @author Gav Wood
 */
 
-class Arguments : public Q3ValueList<QVariant>
+class Arguments : public QList<QVariant>
 {
 public:
 	const QString toString() const;

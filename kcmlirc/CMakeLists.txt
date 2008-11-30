@@ -24,7 +24,8 @@ kde4_add_ui_files(kcm_lirc_PART_SRCS addactionbase.ui newmode.ui editactionbase.
 
 kde4_add_plugin(kcm_lirc ${kcm_lirc_PART_SRCS})
 
-target_link_libraries(kcm_lirc  ${KDE4_KIO_LIBS} ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KDE3SUPPORT_LIBRARY})
+#target_link_libraries(kcm_lirc  ${KDE4_KIO_LIBS} ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KDE3SUPPORT_LIBRARY})
+target_link_libraries(kcm_lirc  ${KDE4_KIO_LIBS})
 
 install(TARGETS kcm_lirc DESTINATION ${PLUGIN_INSTALL_DIR})
 

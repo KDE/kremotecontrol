@@ -115,7 +115,8 @@ ModeList Modes::getModes(const QString &remote) const
 
 void Modes::erase(const Mode &mode)
 {
-	operator[](mode.remote()).erase(mode.name());
+#warning DELETE Mode
+//	operator[](mode.remote()).erase(mode.name());
 	kDebug() << "should erease mode...";
 }
 

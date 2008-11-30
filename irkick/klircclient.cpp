@@ -65,7 +65,7 @@ bool KLircClient::connectToLirc()
 	}
 
 	theSocket = new QTcpSocket();
-	theSocket->setSocket(sock);
+	theSocket->setSocketDescriptor(sock);
 	connect(theSocket, SIGNAL(readyRead()), SLOT(slotRead()));
 	connect(theSocket, SIGNAL(connectionClosed()), SLOT(slotClosed()));
 	updateRemotes();
@@ -87,7 +87,7 @@ void KLircClient::slotClosed()
 
 const QStringList KLircClient::remotes() const
 {
-	QStringList remotes; 
+	QStringList remotes;
 	for(QMap<QString, QStringList>::ConstIterator i = theRemotes.begin(); i != theRemotes.end(); ++i){
 		kDebug() << "Remote: " << i.key();
 		remotes.append(i.key());
@@ -207,7 +207,7 @@ void KLircClient::updateRemotes()
 bool KLircClient::isConnected() const
 {
 	if(!theSocket) return false;
-	return theSocket->state() == QTcpSocket::Connected;
+	return theSocket->state() == QTcpSocket::ConnectedState;
 }
 
 bool KLircClient::haveFullList() const
@@ -217,13 +217,12 @@ bool KLircClient::haveFullList() const
 
 const QString KLircClient::readLine()
 {
-	if (!theSocket->canReadLine())
-	{	bool timeout;
+	if (!theSocket->canReadLine()) {
+		bool timeout;
 		// FIXME: possible race condition -
 		// more might have arrived between canReadLine and waitForMore
-		theSocket->waitForMore(500, &timeout);
-		if (timeout)
-		{	// something's wrong. there ain't no line comin!
+		theSocket->waitForReadyRead(500);
+		if (!theSocket->canReadLine()){ // Still nothing :(
 			return QString();
 		}
 	}

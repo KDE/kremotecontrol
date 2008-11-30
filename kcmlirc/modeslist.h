@@ -13,9 +13,8 @@
 #ifndef MODESLIST_H
 #define MODESLIST_H
 
-#include <k3listview.h>
+#include <QTreeWidget>
 
-#include <k3listview.h>
 //Added by qt3to4:
 #include <QDropEvent>
 
@@ -24,7 +23,7 @@
 @author Gav Wood
 */
 
-class ModesList : public K3ListView
+class ModesList : public QTreeWidget
 {
 	Q_OBJECT
 public:

@@ -21,6 +21,15 @@
    </property>
    <item>
     <widget class="QTreeWidget" name="theRemotes" >
+     <property name="showDropIndicator" stdset="0" >
+      <bool>false</bool>
+     </property>
+     <property name="rootIsDecorated" >
+      <bool>false</bool>
+     </property>
+     <property name="itemsExpandable" >
+      <bool>true</bool>
+     </property>
      <column>
       <property name="text" >
        <string>Remotes</string>

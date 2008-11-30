@@ -3,7 +3,8 @@ project(klirc)
 find_package(KDE4 REQUIRED)
 #find_package(QT REQUIRED)
 
-add_definitions( -DQT3_SUPPORT ${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
+#add_definitions( -DQT3_SUPPORT ${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
+add_definitions( ${QT4_DEFINITIONS} ${KDE4_DEFINITIONS})
 
 
 set(kdelirc_shared_SRCS

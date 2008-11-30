@@ -38,37 +38,38 @@ IRAction::IRAction(const QString &newProgram, const QString &newObject, const QS
 	theIfMulti = newIfMulti;
 }
 
-const IRAction &IRAction::loadFromConfig(KConfig &theConfig, int index)
+IRAction *IRAction::loadFromConfig(KConfig &theConfig, int index)
 {
+	IRAction *action = new IRAction();
 	KConfigGroup actionGroup = theConfig.group("Actions");
 	QString Binding = "Binding" + QString().setNum(index);
 	QString helperString= actionGroup.readEntry(Binding + "Arguments", QString());
 	int numArguments = helperString.toInt();
-	theArguments.clear();
+	action->theArguments.clear();
 	for(int j = 0; j < numArguments; j++)
-	{	
+	{
 		QVariant::Type theType = QVariant::nameToType(actionGroup.readEntry(Binding + "ArgumentType" + QString().setNum(j), QString().toLocal8Bit()));
 		kDebug() << "Readentry type is:" << actionGroup.readEntry(Binding + "ArgumentType" + QString().setNum(j), QString().toLocal8Bit());
 //		theArguments += actionGroup.readEntry(Binding + "Argument" + QString().setNum(j), theType == QVariant::CString ? QVariant::String : theType);
-		theArguments += actionGroup.readEntry(Binding + "Argument" + QString().setNum(j), QString());
-		theArguments.last().cast(theType);
+		action->theArguments += actionGroup.readEntry(Binding + "Argument" + QString().setNum(j), QString());
+		action->theArguments.last().convert(theType);
 	}
 
-	theProgram = actionGroup.readEntry(Binding + "Program",QString());
-	theObject = actionGroup.readEntry(Binding + "Object",QString());
-	theMethod.setPrototype(actionGroup.readEntry(Binding + "Method",QString()));
-	theRemote = actionGroup.readEntry(Binding + "Remote",QString());
-	theMode = actionGroup.readEntry(Binding + "Mode",QString());
-	theButton = actionGroup.readEntry(Binding + "Button",QString());
-	theRepeat = actionGroup.readEntry(Binding + "Repeat", QVariant(QVariant::Bool)).toBool();
-	theDoBefore = actionGroup.readEntry(Binding + "DoBefore", QVariant(QVariant::Bool)).toBool();
-	theDoAfter = actionGroup.readEntry(Binding + "DoAfter", QVariant(QVariant::Bool)).toBool();
-	theAutoStart = actionGroup.readEntry(Binding + "AutoStart", QVariant(QVariant::Bool)).toBool();
-	theUnique = actionGroup.readEntry(Binding + "Unique", QVariant(QVariant::Bool)).toBool();
+	action->theProgram = actionGroup.readEntry(Binding + "Program",QString());
+	action->theObject = actionGroup.readEntry(Binding + "Object",QString());
+	action->theMethod.setPrototype(actionGroup.readEntry(Binding + "Method",QString()));
+	action->theRemote = actionGroup.readEntry(Binding + "Remote",QString());
+	action->theMode = actionGroup.readEntry(Binding + "Mode",QString());
+	action->theButton = actionGroup.readEntry(Binding + "Button",QString());
+	action->theRepeat = actionGroup.readEntry(Binding + "Repeat", QVariant(QVariant::Bool)).toBool();
+	action->theDoBefore = actionGroup.readEntry(Binding + "DoBefore", QVariant(QVariant::Bool)).toBool();
+	action->theDoAfter = actionGroup.readEntry(Binding + "DoAfter", QVariant(QVariant::Bool)).toBool();
+	action->theAutoStart = actionGroup.readEntry(Binding + "AutoStart", QVariant(QVariant::Bool)).toBool();
+	action->theUnique = actionGroup.readEntry(Binding + "Unique", QVariant(QVariant::Bool)).toBool();
 	helperString = actionGroup.readEntry(Binding + "IfMulti", QString());
-	theIfMulti = (IfMulti)helperString.toInt();
+	action->theIfMulti = (IfMulti)helperString.toInt();
 
-	return *this;
+	return action;
 }
 
 void IRAction::saveToConfig(KConfig &theConfig, int index) const

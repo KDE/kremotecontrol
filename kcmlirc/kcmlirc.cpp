@@ -26,9 +26,6 @@
 #include <qradiobutton.h>
 #include <QComboBox>
 #include <qevent.h>
-//#include <q3listview.h>
-//Added by qt3to4:
-#include <k3listview.h>
 #include <QHBoxLayout>
 #include <QDropEvent>
 #include <QWidget>
@@ -45,15 +42,10 @@
 #include <kdebug.h>
 #include <kconfiggroup.h>
 #include <kgenericfactory.h>
-#include <k3listview.h>
 #include <kmessagebox.h>
 #include <kpushbutton.h>
 #include <ktoolinvocation.h>
 #include <kaboutdata.h>
-//#include <dcopclient.h>
-//#include <dcopref.h>
-
-//#include <irkick_stub.h>
 
 
 #define VERSION "version name goes here"
@@ -169,15 +161,18 @@ void KCMLirc::slotAddActions()
 	Ui::SelectProfile *ui = new Ui::SelectProfile();
 	ui->setupUi(theDialog);
 
-	QMap<Q3ListViewItem *, Profile *> profileMap;
+	QMap<QTreeWidgetItem *, Profile *> profileMap;
 	QHash<QString, Profile*> dict = ProfileServer::profileServer()->profiles();
 
 	QHash<QString, Profile*>::const_iterator i;
-	for (i = dict.constBegin(); i != dict.constEnd(); ++i)
-		 profileMap[new Q3ListViewItem(ui->theProfiles, i.value()->name())] = i.value();
+	for (i = dict.constBegin(); i != dict.constEnd(); ++i){
+		QStringList profileList;
+		profileList << i.value()->name();
+		profileMap[new QTreeWidgetItem(ui->theProfiles, profileList)] = i.value();
+	}
 
-	if(theDialog->exec() == QDialog::Accepted && ui->theProfiles->currentItem())
-	{	autoPopulate(*(profileMap[ui->theProfiles->currentItem()]), *(RemoteServer::remoteServer()->remotes()[m.remote()]), m.name());
+	if(theDialog->exec() == QDialog::Accepted && ui->theProfiles->currentItem()) {
+		autoPopulate(*(profileMap[ui->theProfiles->currentItem()]), *(RemoteServer::remoteServer()->remotes()[m.remote()]), m.name());
 		updateActions();
 		emit changed(true);
 	}
@@ -204,41 +199,41 @@ void KCMLirc::slotAddAction()
         }
 
         if(theDialog.exec() == QDialog::Accepted && theDialog.theButtons->currentItem())
-        {       IRAction a;
-                a.setRemote(m.remote());
-                a.setMode(m.name());
+        {       IRAction *a = new IRAction();
+                a->setRemote(m.remote());
+                a->setMode(m.name());
                 kDebug() << "Saving action. Button is: " << theDialog.buttonMap[theDialog.theButtons->currentItem()];
-                a.setButton(theDialog.buttonMap[theDialog.theButtons->currentItem()]);
-                a.setRepeat(theDialog.theRepeat->isChecked());
-                a.setAutoStart(theDialog.theAutoStart->isChecked());
-                a.setDoBefore(theDialog.theDoBefore->isChecked());
-                a.setDoAfter(theDialog.theDoAfter->isChecked());
-                a.setUnique(theDialog.isUnique);
-                a.setIfMulti(theDialog.theDontSend->isChecked() ? IM_DONTSEND : theDialog.theSendToTop->isChecked() ? IM_SENDTOTOP : theDialog.theSendToBottom->isChecked() ? IM_SENDTOBOTTOM : IM_SENDTOALL);
+                a->setButton(theDialog.buttonMap[theDialog.theButtons->currentItem()]);
+                a->setRepeat(theDialog.theRepeat->isChecked());
+                a->setAutoStart(theDialog.theAutoStart->isChecked());
+                a->setDoBefore(theDialog.theDoBefore->isChecked());
+                a->setDoAfter(theDialog.theDoAfter->isChecked());
+                a->setUnique(theDialog.isUnique);
+                a->setIfMulti(theDialog.theDontSend->isChecked() ? IM_DONTSEND : theDialog.theSendToTop->isChecked() ? IM_SENDTOTOP : theDialog.theSendToBottom->isChecked() ? IM_SENDTOBOTTOM : IM_SENDTOALL);
                 // change mode?
                 if(theDialog.theChangeMode->isChecked())
                 {
                         if(theDialog.theSwitchMode->isChecked() && !theDialog.theModes->selectedItems().isEmpty())
                         {
-                                a.setProgram("");
-                                a.setObject(theDialog.theModes->selectedItems().first()->text());
+                                a->setProgram("");
+                                a->setObject(theDialog.theModes->selectedItems().first()->text());
                         }
                         else if(theDialog.theExitMode->isChecked())
                         {
-                                a.setProgram("");
-                                a.setObject("");
+                                a->setProgram("");
+                                a->setObject("");
                         }
-                        a.setAutoStart(false);
-                        a.setRepeat(false);
+                        a->setAutoStart(false);
+                        a->setRepeat(false);
                 }
                 // DCOP?
                 else if(theDialog.theUseDCOP->isChecked() && !theDialog.theObjects->selectedItems().isEmpty() && theDialog.theObjects->selectedItems().first()->parent() && !theDialog.theFunctions->selectedItems().isEmpty())
                 {
-                        a.setProgram(theDialog.program);
-                        a.setObject(theDialog.theObjects->selectedItems().first()->text(0));
-                        a.setMethod(theDialog.theFunctions->selectedItems().first()->text(2));
+                        a->setProgram(theDialog.program);
+                        a->setObject(theDialog.theObjects->selectedItems().first()->text(0));
+                        a->setMethod(theDialog.theFunctions->selectedItems().first()->text(2));
                         theDialog.theParameters->sortItems(3, Qt::AscendingOrder);
-                        a.setArguments(theDialog.theArguments);
+                        a->setArguments(theDialog.theArguments);
                 }
                 // profile?
                 else if(theDialog.theUseProfile->isChecked() && !theDialog.theProfiles->selectedItems().isEmpty() && (!theDialog.theProfileFunctions->selectedItems().isEmpty() || theDialog.theJustStart->isChecked()))
@@ -247,15 +242,15 @@ void KCMLirc::slotAddAction()
 
                         if(theDialog.theNotJustStart->isChecked())
                         {       const ProfileAction *theAction = theServer->getAction(theDialog.profileMap[theDialog.theProfiles->selectedItems().first()], theDialog.profileFunctionMap[theDialog.theProfileFunctions->selectedItems().first()]);
-                                a.setProgram(theAction->profile()->id());
-                                a.setObject(theAction->objId());
-                                a.setMethod(theAction->prototype());
+                                a->setProgram(theAction->profile()->id());
+                                a->setObject(theAction->objId());
+                                a->setMethod(theAction->prototype());
                                 theDialog.theParameters->sortItems(3, Qt::AscendingOrder);
-                                a.setArguments(theDialog.theArguments);
+                                a->setArguments(theDialog.theArguments);
                         }
                         else
-                        {       a.setProgram(theServer->profiles()[theDialog.profileMap[theDialog.theProfiles->selectedItems().first()]]->id());
-                                a.setObject("");
+                        {       a->setProgram(theServer->profiles()[theDialog.profileMap[theDialog.theProfiles->selectedItems().first()]]->id());
+                                a->setObject("");
                         }
                 }
 
@@ -270,7 +265,7 @@ void KCMLirc::slotRemoveAction()
 {
 	if(theKCMLircBase->theActions->selectedItems().isEmpty()) return;
 
-	IRAIt i = actionMap[theKCMLircBase->theActions->selectedItems().first()];
+	IRAction *i = actionMap[theKCMLircBase->theActions->selectedItems().first()];
 	allActions.erase(i);
 	updateActions();
 	emit changed(true);
@@ -284,24 +279,24 @@ void KCMLirc::autoPopulate(const Profile &profile, const Remote &remote, const Q
 		const ProfileAction *pa = profile.searchClass(i.value()->getClass());
 		if(pa)
 		{
-			IRAction a;
-			a.setRemote(remote.id());
-			a.setMode(mode);
-			a.setButton(i.value()->id());
-			a.setRepeat(pa->repeat());
-			a.setAutoStart(pa->autoStart());
-			a.setProgram(pa->profile()->id());
-			a.setObject(pa->objId());
-			a.setMethod(pa->prototype());
-			a.setUnique(pa->profile()->unique());
-			a.setIfMulti(pa->profile()->ifMulti());
+			IRAction *a = new IRAction();
+			a->setRemote(remote.id());
+			a->setMode(mode);
+			a->setButton(i.value()->id());
+			a->setRepeat(pa->repeat());
+			a->setAutoStart(pa->autoStart());
+			a->setProgram(pa->profile()->id());
+			a->setObject(pa->objId());
+			a->setMethod(pa->prototype());
+			a->setUnique(pa->profile()->unique());
+			a->setIfMulti(pa->profile()->ifMulti());
 			Arguments l;
 			// argument count should be either 0 or 1. undefined if > 1.
 			if(Prototype(pa->prototype()).argumentCount() == 1)
 			{	l.append(QString().setNum(i.value()->parameter().toFloat() * pa->multiplier()));
 				l.back().convert(QVariant::nameToType(Prototype(pa->prototype()).type(0).toLocal8Bit()));
 			}
-			a.setArguments(l);
+			a->setArguments(l);
 			allActions.addAction(a);
 		}
 	}
@@ -317,11 +312,6 @@ void KCMLirc::slotAddMode()
 	QMap<QTreeWidgetItem *, QString> remoteMap;
 	QTreeWidgetItem *tr = theKCMLircBase->theModes->selectedItems().first();
 	if(tr) if(tr->parent()) tr = tr->parent();
-/*	for(Q3ListViewItem *i = theKCMLircBase->theModes->firstChild(); i; i = i->nextSibling())
-	{	K3ListViewItem *a = new K3ListViewItem(theDialog.theRemotes, i->text(0));
-		remoteMap[a] = modeMap[i].remote();
-		if(i == tr) { a->setSelected(true); theDialog.theRemotes->setCurrentItem(a); }
-	}*/
 	for(int i = 0; i < theKCMLircBase->theModes->topLevelItemCount(); i++) {
 		QStringList remotesList;
 		remotesList << theKCMLircBase->theModes->topLevelItem(i)->text(0);
@@ -407,7 +397,7 @@ void KCMLirc::slotDrop(QTreeWidget *, QDropEvent *, QTreeWidgetItem *, QTreeWidg
 	}
 	for(int i = 0; i < theKCMLircBase->theActions->topLevelItemCount(); i++) {
 		if(theKCMLircBase->theActions->topLevelItem(i)->isSelected())
-			(*(actionMap[theKCMLircBase->theActions->topLevelItem(i)])).setMode(m.name());
+			(actionMap[theKCMLircBase->theActions->topLevelItem(i)])->setMode(m.name());
 	}
 
 	updateActions();
@@ -416,7 +406,7 @@ void KCMLirc::slotDrop(QTreeWidget *, QDropEvent *, QTreeWidgetItem *, QTreeWidg
 
 void KCMLirc::updateActions()
 {
-	IRAIt oldCurrent;
+	IRAction *oldCurrent;
 	if(!theKCMLircBase->theActions->selectedItems().isEmpty()){
 		oldCurrent = actionMap[theKCMLircBase->theActions->selectedItems().first()];
 	}
@@ -430,18 +420,20 @@ void KCMLirc::updateActions()
 
 	Mode m = modeMap[theKCMLircBase->theModes->selectedItems().first()];
 	theKCMLircBase->theModeLabel->setText(m.remoteName() + ": " + (m.name().isEmpty() ? i18n("Actions <i>always</i> available") : i18n("Actions available only in mode <b>%1</b>", m.name())));
-	IRAItList l = allActions.findByMode(m);
-	for(IRAItList::iterator i = l.begin(); i != l.end(); ++i) {
-		kDebug() << "Adding action: " << (**i).buttonName() << (**i).application(), (**i).function();
+	IRActions l = allActions.findByMode(m);
+	for(int i = 0; i < l.size(); ++i) {
+		kDebug() << "Adding action: " << l.at(i)->buttonName() << l.at(i)->application(), l.at(i)->function();
 		QStringList actionList;
-		actionList << (**i).buttonName();
-		actionList << (**i).application();
-		actionList << (**i).function();
-		actionList << (**i).arguments().toString();
-		actionList << (**i).notes();
+		actionList << l.at(i)->buttonName();
+		actionList << l.at(i)->application();
+		actionList << l.at(i)->function();
+		actionList << l.at(i)->arguments().toString();
+		actionList << l.at(i)->notes();
 		QTreeWidgetItem *b = new QTreeWidgetItem(theKCMLircBase->theActions, actionList);
-		actionMap[b] = *i;
-		if(*i == oldCurrent) { b->setSelected(true); theKCMLircBase->theActions->setCurrentItem(b); }
+		actionMap[b] = l.at(i);
+		if(l[i] == oldCurrent) {
+			b->setSelected(true); theKCMLircBase->theActions->setCurrentItem(b);
+		}
 	}
 
 	if(theKCMLircBase->theActions->currentItem())

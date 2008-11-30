@@ -18,11 +18,10 @@
 
 #include "modeslist.h"
 
-ModesList::ModesList(QWidget *parent, const char *name) : K3ListView(parent)
+ModesList::ModesList(QWidget *parent, const char *name) : QTreeWidget(parent)
 {
 	setAcceptDrops(true);
-	setDropVisualizer(false);
-	setDropHighlighter(true);
+	setDropIndicatorShown(true);
 }
 
 bool ModesList::acceptDrag(QDropEvent *) const

@@ -15,8 +15,6 @@
 #include <qevent.h>
 //Added by qt3to4:
 #include <QMouseEvent>
-//#include <Q3ValueList>
-//#include <Q3CString>
 #include <kdeversion.h>
 #include <kapplication.h>
 #include <kaction.h>
@@ -29,7 +27,7 @@
 #include <kmenu.h>
 #include <kdebug.h>
 #include <klocale.h>
-//#include <kwinmodule.h>
+#include <kwindowsystem.h>
 #include <kwinglobals.h>
 #include <khelpmenu.h>
 #include <kglobal.h>
@@ -77,8 +75,8 @@ IRKick::IRKick(const QString &obj)
 
 //FIXME: Bring back the Tray Icons Menu
 	theTrayIcon->contextMenu()->setTitle( "IRKick");
-	theTrayIcon->contextMenu()->insertItem(SmallIcon( "configure" ), i18n("&Configure..."), this, SLOT(slotConfigure()));
-	theTrayIcon->contextMenu()->insertSeparator();
+	theTrayIcon->contextMenu()->addAction(SmallIcon( "configure" ), i18n("&Configure..."), this, SLOT(slotConfigure()));
+//	theTrayIcon->contextMenu()->insertSeparator();
 //	theTrayIcon->contextMenu()->insertItem(SmallIcon( "help-contents" ), i18n("&Help"), (new KHelpMenu(theTrayIcon, KGlobal::mainComponent().aboutData()))->menu());
 	theTrayIcon->actionCollection()->action("file_quit")->disconnect(SIGNAL(activated()));
 	connect(theTrayIcon->actionCollection()->action("file_quit"), SIGNAL(activated()), SLOT(doQuit()));
@@ -166,7 +164,7 @@ void IRKick::updateModeIcons()
 	{
 		Mode mode = allModes.getMode(i.key(), i.value());
 		if(mode.iconFile().isNull() || mode.iconFile().isEmpty())
-		{	
+		{
 			if(currentModeIcons[i.key()])
 			{
 				delete currentModeIcons[i.key()];
@@ -174,7 +172,7 @@ void IRKick::updateModeIcons()
 			}
 		}
 		else
-		{	
+		{
 			if(!currentModeIcons[i.key()])
 			{
 				currentModeIcons[i.key()] = new IRKTrayIcon();
@@ -203,17 +201,17 @@ bool IRKick::getPrograms(const IRAction &action, QStringList &programs)
 	}
 	else
 	{
-		
+
 		// find all instances...
 		QStringList buf = dBusIface->registeredServiceNames();
-	
+
 		for(QStringList::iterator i = buf.begin(); i != buf.end(); ++i)
 		{
 			QString program = *i;
 			if(program.contains(action.program()))
 				programs += program;
 		}
-		
+
 		if(programs.size() == 1){
 			kDebug() << "Yeah! found it!";
 		} else if(programs.size() == 0) {
@@ -221,16 +219,15 @@ bool IRKick::getPrograms(const IRAction &action, QStringList &programs)
 		} else {
 			kDebug() << "found multiple instances...";
 		}
-		
+
 		if(programs.size() > 1 && action.ifMulti() == IM_DONTSEND) {
 			kDebug() << "size:" << programs.size() << "ifmulti:" << action.ifMulti();
 			return false;
 		} else if(programs.size() > 1 && action.ifMulti() == IM_SENDTOTOP){ ;
-#warning Port me!
-/*			QList<WId> s = KWinModule().stackingOrder();
+			QList<WId> s = KWindowSystem::stackingOrder();
 			// go through all the (ordered) window pids
-			for(QList<WId>::iterator i = s.fromLast(); i != s.end(); i--)
-			{	int p = KWin::windowInfo(*i,NET::WMPid).win();
+			for(int i = 0; i < s.size(); i++) {
+				int p = KWindowSystem::windowInfo(s.at(i),NET::WMPid).win();
 				QString id = action.program() + "-" + QString().setNum(p);
 				if(programs.contains(id))
 				{	programs.clear();
@@ -238,22 +235,21 @@ bool IRKick::getPrograms(const IRAction &action, QStringList &programs)
 					break;
 				}
 			}
-			while(programs.size() > 1) programs.remove(programs.begin());*/
+			while(programs.size() > 1) programs.removeFirst();
 		}
 		else if(programs.size() > 1 && action.ifMulti() == IM_SENDTOBOTTOM){ ;
-#warning Port me!
-/*			Q3ValueList<WId> s = KWinModule().stackingOrder();
+			QList<WId> s = KWindowSystem::stackingOrder();
 			// go through all the (ordered) window pids
-			for(Q3ValueList<WId>::iterator i = s.begin(); i != s.end(); ++i)
-			{	int p = KWin::windowInfo(*i,NET::WMPid).win();
+			for(int i = 0; i < s.size(); ++i) {
+				int p = KWindowSystem::windowInfo(s.at(i),NET::WMPid).win();
 				QString id = action.program() + "-" + QString().setNum(p);
-				if(programs.contains(id))
-				{	programs.clear();
+				if(programs.contains(id)) {
+					programs.clear();
 					programs += id;
 					break;
 				}
 			}
-			while(programs.size() > 1) programs.remove(programs.begin());*/
+			while(programs.size() > 1) programs.removeFirst();
 		}
 	}
 	kDebug() << "returning true";
@@ -264,7 +260,7 @@ void IRKick::executeAction(const IRAction &action)
 {
 	kDebug() << "executeAction called";
 	QDBusConnectionInterface *dBusIface = QDBusConnection::sessionBus().interface();
-	
+
 	QStringList programs;
 
 	if(!getPrograms(action, programs)){
@@ -298,7 +294,7 @@ void IRKick::executeAction(const IRAction &action)
 		kDebug() << "Searching DBus for program:" << program;
 		if(dBusIface->isServiceRegistered(program)){
 			kDebug() << "Sending data (" << program << ", " << "/" + action.object() << ", " << action.method().prototypeNR() ;
-			
+
 			QDBusMessage m = QDBusMessage::createMethodCall(program, "/" + action.object(), "", action.method().prototypeNR());
 
 			for(Arguments::const_iterator j = action.arguments().begin(); j != action.arguments().end(); ++j) {
@@ -333,30 +329,30 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int 
 		if(response.type() == QDBusMessage::ErrorMessage){
 			kDebug() << response.errorMessage();
 		}
-	} else {	
+	} else {
 		if(currentModes[theRemote].isNull()) currentModes[theRemote] = "";
 	kDebug() << "current mode:" << currentModes[theRemote];
-		IRAItList l = allActions.findByModeButton(Mode(theRemote, currentModes[theRemote]), theButton);
+		IRActions l = allActions.findByModeButton(Mode(theRemote, currentModes[theRemote]), theButton);
 		if(!currentModes[theRemote].isEmpty())
 			l += allActions.findByModeButton(Mode(theRemote, ""), theButton);
 		bool doBefore = true, doAfter = false;
-		for(IRAItList::const_iterator i = l.begin(); i != l.end(); ++i)
-			if((**i).isModeChange() && !theRepeatCounter)
+		for(int i = 0; i < l.size(); ++i)
+			if(l.at(i)->isModeChange() && !theRepeatCounter)
 			{	// mode switch
-				currentModes[theRemote] = (**i).modeChange();
-				Mode mode = allModes.getMode(theRemote, (**i).modeChange());
+				currentModes[theRemote] = l.at(i)->modeChange();
+				Mode mode = allModes.getMode(theRemote, l.at(i)->modeChange());
 				updateModeIcons();
-				doBefore = (**i).doBefore();
-				doAfter = (**i).doAfter();
+				doBefore = l.at(i)->doBefore();
+				doAfter = l.at(i)->doAfter();
 				KPassivePopup::message("IRKick", i18n("Mode switched to %1").arg(currentModes[theRemote] == "" ? i18n("Default") : currentModes[theRemote]), SmallIcon("irkick"), theTrayIcon);
 				break;
 			}
 
 		for(int after = 0; after < 2; after++)
 		{	if(doBefore && !after || doAfter && after)
-				for(IRAItList::const_iterator i = l.begin(); i != l.end(); ++i)
-					if(!(**i).isModeChange() && ((**i).repeat() || !theRepeatCounter))
-					{	executeAction(**i);
+				for(int i = 0; i < l.size(); ++i)
+					if(!l.at(i)->isModeChange() && (l.at(i)->repeat() || !theRepeatCounter)) {
+						executeAction(*l.at(i));
 					}
 			if(!after && doAfter)
 			{	l = allActions.findByModeButton(Mode(theRemote, currentModes[theRemote]), theButton);

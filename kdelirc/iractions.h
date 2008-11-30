@@ -13,7 +13,6 @@
 #ifndef IRACTIONS_H
 #define IRACTIONS_H
 
-#include <q3valuelist.h>
 #include <qpair.h>
 
 #include <QMap>
@@ -27,21 +26,18 @@
 
 class KConfig;
 
-typedef Q3ValueListIterator<IRAction> IRAIt;
-typedef Q3ValueList<IRAIt> IRAItList;
-
-class IRActions: protected Q3ValueList<IRAction>
+class IRActions: public QList<IRAction*>
 {
 private:
 	void purgeAllBindings(KConfig &theConfig);
 
 public:
-	IRAIt addAction(const IRAction &theAction);
-	IRAItList findByButton(const QString &remote, const QString &button);
-	IRAItList findByMode(const Mode &mode);
-	IRAItList findByModeButton(const Mode &mode, const QString &button);
+	void addAction(IRAction *theAction);
+	IRActions findByButton(const QString &remote, const QString &button);
+	IRActions findByMode(const Mode &mode);
+	IRActions findByModeButton(const Mode &mode, const QString &button);
 
-	void erase(const IRAIt &action) { Q3ValueList<IRAction>::erase(action); }
+	void erase(IRAction *action);
 	void renameMode(const Mode &mode, const QString &to);
 
 	void loadFromConfig(KConfig &theConfig);

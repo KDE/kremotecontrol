@@ -15,11 +15,9 @@
 
 #include <qpair.h>
 
-#include <q3valuelist.h>
 #include <QMap>
 #include <qxml.h>
 #include <QHash>
-//#include <q3dict.h>
 
 /**
 @author Gav Wood
@@ -60,7 +58,7 @@ class ProfileAction
 	float theMultiplier;
 	const Profile *parent;
 	bool theRepeat, theAutoStart;
-	Q3ValueList<ProfileActionArgument> theArguments;
+	QList<ProfileActionArgument> theArguments;
 
 	friend class Profile;
 public:
@@ -80,7 +78,7 @@ public:
 	void setRepeat(bool a) { theRepeat = a; }
 	bool autoStart() const { return theAutoStart; }
 	void setAutoStart(bool a) { theAutoStart = a; }
-	const Q3ValueList<ProfileActionArgument> &arguments() const { return theArguments; }
+	const QList<ProfileActionArgument> &arguments() const { return theArguments; }
 
 	const Profile *profile() const { return parent; }
 	void setProfile(const Profile *a) { parent = a; }

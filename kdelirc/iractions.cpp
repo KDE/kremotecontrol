@@ -24,8 +24,9 @@ void IRActions::loadFromConfig(KConfig &theConfig)
 	QString helperString = actionGroup.readEntry("Bindings", QString());
 	int numBindings = helperString.toInt();
 
-	for(int i = 0; i < numBindings; i++)
-		addAction(IRAction().loadFromConfig(theConfig, i));
+	for(int i = 0; i < numBindings; i++){
+		addAction(IRAction::loadFromConfig(theConfig, i));
+	}
 }
 
 void IRActions::purgeAllBindings(KConfig &theConfig)
@@ -54,50 +55,59 @@ void IRActions::saveToConfig(KConfig &theConfig)
 	int index = 0;
 	purgeAllBindings(theConfig);
 	for(iterator i = begin(); i != end(); ++i,index++)
-		(*i).saveToConfig(theConfig, index);
+		(*i)->saveToConfig(theConfig, index);
 	actionGroup.writeEntry("Bindings", index);
 }
 
-IRAIt IRActions::addAction(const IRAction &theAction)
+void IRActions::addAction(IRAction *theAction)
 {
-	return append(theAction);
+	append(theAction);
 }
 
-IRAItList IRActions::findByButton(const QString &remote, const QString &button)
+IRActions IRActions::findByButton(const QString &remote, const QString &button)
 {
-	IRAItList ret;
+	IRActions ret;
 	for(iterator i = begin(); i != end(); ++i)
-		if((*i).remote() == remote && (*i).button() == button)
-			ret += i;
+		if((*i)->remote() == remote && (*i)->button() == button)
+			ret += *i;
 	return ret;
 }
 
 void IRActions::renameMode(const Mode &mode, const QString &to)
 {
 	for(iterator i = begin(); i != end(); ++i)
-	{	if((*i).remote() == mode.remote() && (*i).mode() == mode.name()) (*i).setMode(to);
-		if((*i).isModeChange() && (*i).modeChange() == mode.name()) (*i).setModeChange(to);
+	{	if((*i)->remote() == mode.remote() && (*i)->mode() == mode.name()) (*i)->setMode(to);
+		if((*i)->isModeChange() && (*i)->modeChange() == mode.name()) (*i)->setModeChange(to);
 	}
 }
 
-IRAItList IRActions::findByMode(const Mode &mode)
+IRActions IRActions::findByMode(const Mode &mode)
 {
-	IRAItList ret;
+	IRActions ret;
+	kDebug() << "IRActions size: " << size();
 	for(iterator i = begin(); i != end(); ++i){
-		kDebug() << "Searching action: " << (*i).remote() << (*i).button();
-		if((*i).remote() == mode.remote() && (*i).mode() == mode.name()){
-			kDebug() << "Action " << (*i).remote() << (*i).button() << "matches";
-			ret += i;
+		kDebug() << "Searching action: " << (*i)->remote() << (*i)->button();
+		if((*i)->remote() == mode.remote() && (*i)->mode() == mode.name()){
+			kDebug() << "Action " << (*i)->remote() << (*i)->button() << "matches";
+			ret += *i;
 		}
 	}
 	return ret;
 }
 
-IRAItList IRActions::findByModeButton(const Mode &mode, const QString &button)
+IRActions IRActions::findByModeButton(const Mode &mode, const QString &button)
 {
-	IRAItList ret;
+	IRActions ret;
 	for(iterator i = begin(); i != end(); ++i)
-		if((*i).remote() == mode.remote() && (*i).mode() == mode.name() && (*i).button() == button)
-			ret += i;
+		if((*i)->remote() == mode.remote() && (*i)->mode() == mode.name() && (*i)->button() == button)
+			ret.append(*i);
 	return ret;
+}
+
+void IRActions::erase(IRAction *action) {
+	for(int i = 0; i < size(); i++){
+		if(operator[](i) == action){
+			takeAt(i);
+		}
+	}
 }
