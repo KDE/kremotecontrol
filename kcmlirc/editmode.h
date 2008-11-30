@@ -26,7 +26,7 @@ public:
 	void slotCheckText(const QString &newText);
 	void slotClearIcon();
 
-	EditMode(QWidget *parent = 0, const char *name = 0, bool modal = false, Qt::WFlags fl = 0);
+	EditMode(QWidget *parent = 0, Qt::WFlags fl = 0);
 	~EditMode();
 };
 

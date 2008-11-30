@@ -72,7 +72,7 @@ public:
 	void setComment(const QString &a) { theComment = a; }
 	const QString &getClass() const { return theClass; }
 	void setClass(const QString &a) { theClass = a; }
-	const float multiplier() const { return theMultiplier; }
+	float multiplier() const { return theMultiplier; }
 	void setMultiplier(const float a) { theMultiplier = a; }
 	bool repeat() const { return theRepeat; }
 	void setRepeat(bool a) { theRepeat = a; }
@@ -107,9 +107,9 @@ public:
 	void setName(const QString &a) { theName = a; }
 	const QString &author() const { return theAuthor; }
 	void setAuthor(const QString &a) { theAuthor = a; }
-	const bool unique() const { return theUnique; }
+	bool unique() const { return theUnique; }
 	void setUnique(const bool a) { theUnique = a; }
-	const IfMulti ifMulti() const { return theIfMulti; }
+	IfMulti ifMulti() const { return theIfMulti; }
 	void setIfMulti(const IfMulti a) { theIfMulti = a; }
 	const QString &serviceName() const { if(theServiceName != QString()) return theServiceName; return theName; }
 	void setServiceName(const QString &a) { theServiceName = a; }

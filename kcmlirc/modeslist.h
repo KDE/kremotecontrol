@@ -28,7 +28,7 @@ class ModesList : public QTreeWidget
 	Q_OBJECT
 public:
 	virtual bool acceptDrag(QDropEvent *) const;
-	ModesList(QWidget *parent = 0, const char *name = 0);
+	ModesList(QWidget *parent = 0);
 };
 
 #endif

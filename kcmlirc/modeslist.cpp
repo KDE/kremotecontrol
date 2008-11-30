@@ -18,7 +18,7 @@
 
 #include "modeslist.h"
 
-ModesList::ModesList(QWidget *parent, const char *name) : QTreeWidget(parent)
+ModesList::ModesList(QWidget *parent) : QTreeWidget(parent)
 {
 	setAcceptDrops(true);
 	setDropIndicatorShown(true);

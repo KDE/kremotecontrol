@@ -41,14 +41,10 @@
 #include "irkickadaptor.h"
 #include <QtDBus/qdbusconnection.h>
 
-void IRKTrayIcon::mousePressEvent(QMouseEvent *e)
-{
-//	KSystemTrayIcon::mousePressEvent(new QMouseEvent(QEvent::MouseButtonPress, e->pos(), e->globalPos(), e->button() == Qt::LeftButton ? Qt::RightButton : e->button(), e->state()));
-}
-
 IRKick::IRKick(const QString &obj)
     : QObject(), npApp(QString::null)	//krazy:exclude=nullstrassign for old broken gcc
 {
+	Q_UNUSED(obj)
 	new IrkickAdaptor(this);
 	QDBusConnection dBusConnection = QDBusConnection::sessionBus();
 	dBusConnection.registerObject("/IRKick", this, QDBusConnection::ExportAllSlots);
@@ -76,8 +72,9 @@ IRKick::IRKick(const QString &obj)
 //FIXME: Bring back the Tray Icons Menu
 	theTrayIcon->contextMenu()->setTitle( "IRKick");
 	theTrayIcon->contextMenu()->addAction(SmallIcon( "configure" ), i18n("&Configure..."), this, SLOT(slotConfigure()));
+//	QAction *helpAction = new QAction(SmallIcon( "help-contents" ), i18n("&Help"), );
+//	theTrayIcon->contextMenu()->addAction(helpAction);
 //	theTrayIcon->contextMenu()->insertSeparator();
-//	theTrayIcon->contextMenu()->insertItem(SmallIcon( "help-contents" ), i18n("&Help"), (new KHelpMenu(theTrayIcon, KGlobal::mainComponent().aboutData()))->menu());
 	theTrayIcon->actionCollection()->action("file_quit")->disconnect(SIGNAL(activated()));
 	connect(theTrayIcon->actionCollection()->action("file_quit"), SIGNAL(activated()), SLOT(doQuit()));
 
@@ -100,13 +97,14 @@ void IRKick::slotClosed()
 
 void IRKick::checkLirc()
 {
-	if(!theClient->isConnected())
-		if(theClient->connectToLirc())
-		{	KPassivePopup::message("IRKick", i18n("A connection to the infrared system has been made. Remote controls may now be available."), SmallIcon("irkick"), theTrayIcon);
+	if(!theClient->isConnected()) {
+		if(theClient->connectToLirc()) {
+			KPassivePopup::message("IRKick", i18n("A connection to the infrared system has been made. Remote controls may now be available."), SmallIcon("irkick"), theTrayIcon);
 			theTrayIcon->setIcon(theTrayIcon->loadIcon("irkick"));
-		}
-		else
+		} else {
 			QTimer::singleShot(10000, this, SLOT(checkLirc()));
+		}
+	}
 }
 
 void IRKick::flashOff()
@@ -348,16 +346,18 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton, int 
 				break;
 			}
 
-		for(int after = 0; after < 2; after++)
-		{	if(doBefore && !after || doAfter && after)
-				for(int i = 0; i < l.size(); ++i)
+		for(int after = 0; after < 2; after++) {
+			if((doBefore && !after) || (doAfter && after))
+				for(int i = 0; i < l.size(); ++i) {
 					if(!l.at(i)->isModeChange() && (l.at(i)->repeat() || !theRepeatCounter)) {
 						executeAction(*l.at(i));
 					}
-			if(!after && doAfter)
-			{	l = allActions.findByModeButton(Mode(theRemote, currentModes[theRemote]), theButton);
-				if(!currentModes[theRemote].isEmpty())
+				}
+			if(!after && doAfter){
+				l = allActions.findByModeButton(Mode(theRemote, currentModes[theRemote]), theButton);
+				if(!currentModes[theRemote].isEmpty()) {
 					l += allActions.findByModeButton(Mode(theRemote, ""), theButton);
+				}
 			}
 		}
 	}

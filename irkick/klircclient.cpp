@@ -218,9 +218,6 @@ bool KLircClient::haveFullList() const
 const QString KLircClient::readLine()
 {
 	if (!theSocket->canReadLine()) {
-		bool timeout;
-		// FIXME: possible race condition -
-		// more might have arrived between canReadLine and waitForMore
 		theSocket->waitForReadyRead(500);
 		if (!theSocket->canReadLine()){ // Still nothing :(
 			return QString();

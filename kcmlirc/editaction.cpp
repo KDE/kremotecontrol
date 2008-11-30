@@ -37,8 +37,10 @@
 #include "editaction.h"
 #include "addaction.h"
 
-EditAction::EditAction(IRAction *action, QWidget *parent, const char *name) //: EditActionBase(parent, name)
+EditAction::EditAction(IRAction *action, QWidget *parent, const char *name)
 {
+	Q_UNUSED(name)
+	Q_UNUSED(parent)
 	theAction = action;
 
 	//KWindowSystem::setState(widget->winId(), NET::StaysOnTop );
@@ -123,13 +125,10 @@ void EditAction::writeBack()
 		(*theAction).setDoBefore(theDoBefore->isChecked());
 		(*theAction).setDoAfter(theDoAfter->isChecked());
 	}
-	else if(theUseProfile->isChecked() && (
-						ProfileServer::profileServer()->getAction(applicationMap[theApplications->currentText()], functionMap[theFunctions->currentText()])
-						||
-						theJustStart->isChecked() && ProfileServer::profileServer()->profiles()[theApplications->currentText()]
-						)
-		)
-	{	if(theJustStart->isChecked())
+	else if(theUseProfile->isChecked() &&
+			((ProfileServer::profileServer()->getAction(applicationMap[theApplications->currentText()], functionMap[theFunctions->currentText()]) || theJustStart->isChecked()) &&
+			ProfileServer::profileServer()->profiles()[theApplications->currentText()])) {
+		if(theJustStart->isChecked())
 		{	(*theAction).setProgram(ProfileServer::profileServer()->profiles()[applicationMap[theApplications->currentText()]]->id());
 			(*theAction).setObject("");
 		}
@@ -165,11 +164,11 @@ void EditAction::updateArguments()
 		const QList<ProfileActionArgument> &p = a->arguments();
 		if(p.count() != arguments.count())
 		{	arguments.clear();
-			for(unsigned i = 0; i < p.count(); i++)
+			for(int i = 0; i < p.count(); i++)
 				arguments.append(QVariant(""));
 		}
 		theArguments->setEnabled(p.count());
-		for(unsigned i = 0; i < p.count(); i++)
+		for(int i = 0; i < p.count(); i++)
 		{	theArguments->addItem(p[i].comment() + " (" + p[i].type() + ")");
 			arguments[i].convert(QVariant::nameToType(p[i].type().toLocal8Bit()));
 		}
@@ -181,11 +180,11 @@ void EditAction::updateArguments()
 		Prototype p(theDCOPFunctions->currentText());
 		if(p.count() != arguments.count())
 		{	arguments.clear();
-			for(unsigned i = 0; i < p.count(); i++)
+			for(int i = 0; i < p.count(); i++)
 				arguments.append(QVariant(""));
 		}
 		theArguments->setEnabled(p.count());
-		for(unsigned i = 0; i < p.count(); i++)
+		for(int i = 0; i < p.count(); i++)
 		{	theArguments->addItem(QString().setNum(i + 1) + ": " + (p.name(i).isEmpty() ? p.type(i) : p.name(i) + " (" + p.type(i) + ")"));
 			arguments[i].convert(QVariant::nameToType(p.type(i).toLocal8Bit()));
 		}

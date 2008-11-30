@@ -16,7 +16,7 @@
 
 #include "editmode.h"
 
-EditMode::EditMode(QWidget *parent, const char *name, bool modal, Qt::WFlags fl)// : Ui::EditModeBase(parent, name, modal, fl)
+EditMode::EditMode(QWidget *parent, Qt::WFlags fl) : QDialog(parent, fl)
 {
 	setupUi(this);
 	theIcon->setIconType(KIconLoader::Panel, KIconLoader::Any);

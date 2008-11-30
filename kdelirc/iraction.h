@@ -56,14 +56,14 @@ public:
 	const QString &mode() const { return theMode; }
 	const QString &button() const { return theButton; }
 	const Arguments arguments() const { if(theProgram != "" && theObject != "") return theArguments; return Arguments(); }
-	const bool repeat() const { return theRepeat; }
-	const bool autoStart() const { return theAutoStart; }
-	const IfMulti ifMulti() const { return theIfMulti; }
-	const bool unique() const { return theUnique; }
+	bool repeat() const { return theRepeat; }
+	bool autoStart() const { return theAutoStart; }
+	IfMulti ifMulti() const { return theIfMulti; }
+	bool unique() const { return theUnique; }
 
 	const QString &modeChange() const { return theObject; }
-	const bool doBefore() const { return theDoBefore; }
-	const bool doAfter() const { return theDoAfter; }
+	bool doBefore() const { return theDoBefore; }
+	bool doAfter() const { return theDoAfter; }
 
 	bool isModeChange() const { return theProgram == ""; }
 	bool isJustStart() const { return theProgram != "" && theObject == ""; }

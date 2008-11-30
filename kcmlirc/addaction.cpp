@@ -33,6 +33,8 @@
 
 AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMode(mode)
 {
+	Q_UNUSED(name)
+	Q_UNUSED(parent)
 	setupUi(this);
 
 
@@ -117,12 +119,13 @@ void AddAction::slotCorrectPage()
 	}
 
 
-	if(curPage == 2 && theUseProfile->isChecked())
+	if(curPage == 2 && theUseProfile->isChecked()) {
 		if(lastPage > 1) {
 			back();
 		} else {
 			next();
 		}
+	}
 	if(curPage == 2  && theChangeMode->isChecked() && lastPage == 1){
 		next();
 		next();
@@ -137,11 +140,13 @@ void AddAction::slotCorrectPage()
 		back();
 	}
 
-	if(curPage == 3 && theUseDCOP->isChecked())
-		if(lastPage == 4)
+	if(curPage == 3 && theUseDCOP->isChecked()){
+		if(lastPage == 4) {
 			back();
-		else
+		} else {
 			next();
+		}
+	}
 
 	if(curPage == 3){
 		updateProfileFunctions();
@@ -245,7 +250,6 @@ void AddAction::updateForPageChange()
 
 void AddAction::updateButtonStates()
 {
-#warning Port me!
 	kDebug() << "Updating button states";
 	switch(currentId()){
 		case 0:
@@ -436,7 +440,7 @@ void AddAction::updateParameters()
 	if(theUseDCOP->isChecked() && theFunctions->currentItem())
 	{
 		Prototype p(theFunctions->currentItem()->text(2));
-		for(unsigned k = 0; k < p.count(); k++) {
+		for(int k = 0; k < p.count(); k++) {
 			QStringList parameters;
 			parameters << (p.name(k).isEmpty() ? i18n( "<anonymous>" ) : p.name(k)) << "" << p.type(k) << QString().setNum(k + 1);
 			new QTreeWidgetItem(theParameters, parameters);

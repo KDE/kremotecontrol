@@ -26,13 +26,12 @@ class QMouseEvent;
 
 class IRKTrayIcon: public KSystemTrayIcon
 {
-	void mousePressEvent(QMouseEvent *e);
 
 public:
 	QMenu* contextMenu() const { return KSystemTrayIcon::contextMenu(); }
 	KActionCollection* actionCollection() { return KSystemTrayIcon::actionCollection(); }
 
-	IRKTrayIcon(QWidget *parent = 0, const char *name = 0): KSystemTrayIcon(parent) {}
+IRKTrayIcon(QWidget *parent = 0, const char *name = 0): KSystemTrayIcon(parent) {Q_UNUSED(name)}
 };
 
 class IRKick: public QObject
