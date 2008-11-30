@@ -40,16 +40,16 @@ private:
 	Ui::KCMLircBase *theKCMLircBase;
 	IRActions allActions;
 	Modes allModes;
-	QMap<Q3ListViewItem *, IRAIt > actionMap;
-	QMap<Q3ListViewItem *, Mode> modeMap;
-	QMap<Q3ListViewItem *, QString> profileMap, remoteMap;
+	QMap<QTreeWidgetItem *, IRAIt > actionMap;
+	QMap<QTreeWidgetItem *, Mode> modeMap;
+	QMap<QTreeWidgetItem *, QString> profileMap, remoteMap;
 
 	void autoPopulate(const Profile &profile, const Remote &remote, const QString &mode);
 
 public slots:
 	void updateActions();
-	void updateModesStatus(Q3ListViewItem *);
-	void updateActionsStatus(Q3ListViewItem *);
+	void updateModesStatus();
+	void updateActionsStatus();
 	void updateModes();
 	void updateExtensions();
 	void updateInformation();
@@ -60,8 +60,7 @@ public slots:
 	void slotAddActions();
 	void slotEditAction();
 	void slotRemoveAction();
-	void slotDrop(K3ListView *, QDropEvent *, Q3ListViewItem *, Q3ListViewItem *after);
-	void slotRenamed(Q3ListViewItem *item);
+	void slotDrop(QTreeWidget *, QDropEvent *, QTreeWidgetItem *, QTreeWidgetItem *after);
 	void slotEditMode();
 
 

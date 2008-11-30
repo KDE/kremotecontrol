@@ -28,6 +28,7 @@
 #include <qevent.h>
 //#include <q3listview.h>
 //Added by qt3to4:
+#include <k3listview.h>
 #include <QHBoxLayout>
 #include <QDropEvent>
 #include <QWidget>
@@ -103,16 +104,15 @@ KCMLirc::KCMLirc(QWidget *parent, const QStringList &/*args*/)
 
 
 
-	connect(theKCMLircBase->theModes, SIGNAL( selectionChanged(Q3ListViewItem *) ), this, SLOT( updateActions() ));
-	connect(theKCMLircBase->theModes, SIGNAL( selectionChanged(Q3ListViewItem *) ), this, SLOT( updateModesStatus(Q3ListViewItem *) ));
-	connect(theKCMLircBase->theActions, SIGNAL( currentChanged(Q3ListViewItem *) ), this, SLOT( updateActionsStatus(Q3ListViewItem *) ));
-	connect(theKCMLircBase->theExtensions, SIGNAL( selectionChanged(Q3ListViewItem *) ), this, SLOT( updateInformation() ));
-	connect(theKCMLircBase->theModes, SIGNAL( itemRenamed(Q3ListViewItem *) ), this, SLOT( slotRenamed(Q3ListViewItem *) ));
-	connect(theKCMLircBase->theModes, SIGNAL(dropped(K3ListView*, QDropEvent*, Q3ListViewItem*, Q3ListViewItem*)), this, SLOT(slotDrop(K3ListView*, QDropEvent*, Q3ListViewItem*, Q3ListViewItem*)));
+	connect(theKCMLircBase->theModes, SIGNAL( itemSelectionChanged() ), this, SLOT( updateActions() ));
+	connect(theKCMLircBase->theModes, SIGNAL( itemSelectionChanged() ), this, SLOT( updateModesStatus() ));
+	connect(theKCMLircBase->theActions, SIGNAL( itemSelectionChanged() ), this, SLOT( updateActionsStatus() ));
+	connect(theKCMLircBase->theExtensions, SIGNAL( itemSelectionChanged() ), this, SLOT( updateInformation() ));
+	connect(theKCMLircBase->theModes, SIGNAL(dropped(QTreeWidget*, QDropEvent*, QTreeWidgetItem*, QTreeWidgetItem*)), this, SLOT(slotDrop(QTreeWidget*, QDropEvent*, QTreeWidgetItem*, QTreeWidgetItem*)));
 	connect((QObject *)(theKCMLircBase->theAddActions), SIGNAL( clicked() ), this, SLOT( slotAddActions() ));
 	connect((QObject *)(theKCMLircBase->theAddAction), SIGNAL( clicked() ), this, SLOT( slotAddAction() ));
 	connect((QObject *)(theKCMLircBase->theEditAction), SIGNAL( clicked() ), this, SLOT( slotEditAction() ));
-	connect((QObject *)(theKCMLircBase->theActions), SIGNAL( doubleClicked(Q3ListViewItem *) ), this, SLOT( slotEditAction() ));
+	connect((QObject *)(theKCMLircBase->theActions), SIGNAL( doubleClicked(QTreeWidgetItem *) ), this, SLOT( slotEditAction() ));
 	connect((QObject *)(theKCMLircBase->theRemoveAction), SIGNAL( clicked() ), this, SLOT( slotRemoveAction() ));
 	connect((QObject *)(theKCMLircBase->theAddMode), SIGNAL( clicked() ), this, SLOT( slotAddMode() ));
 	connect((QObject *)(theKCMLircBase->theEditMode), SIGNAL( clicked() ), this, SLOT( slotEditMode() ));
@@ -124,45 +124,34 @@ KCMLirc::~KCMLirc()
 {
 }
 
-void KCMLirc::updateModesStatus(Q3ListViewItem *item)
+void KCMLirc::updateModesStatus()
 {
-	theKCMLircBase->theModes->setItemsRenameable(item && item->parent());
-	theKCMLircBase->theAddActions->setEnabled(ProfileServer::profileServer()->profiles().count() && theKCMLircBase->theModes->selectedItem() && RemoteServer::remoteServer()->remotes()[modeMap[theKCMLircBase->theModes->selectedItem()].remote()]);
-	theKCMLircBase->theAddAction->setEnabled(item);
-	theKCMLircBase->theAddMode->setEnabled(item);
-	theKCMLircBase->theRemoveMode->setEnabled(item && item->parent());
-	theKCMLircBase->theEditMode->setEnabled(item);
-}
-
-void KCMLirc::updateActionsStatus(Q3ListViewItem *item)
-{
-	theKCMLircBase->theRemoveAction->setEnabled(item);
-	theKCMLircBase->theEditAction->setEnabled(item);
-}
-
-void KCMLirc::slotRenamed(Q3ListViewItem *item)
-{
-	if(!item) return;
-
-	if(item->parent() && item->text(0) != modeMap[item].name())
-	{	allActions.renameMode(modeMap[item], item->text(0));
-		allModes.rename(modeMap[item], item->text(0));
-		emit changed(true);
-		updateModes();
+	if(!theKCMLircBase->theModes->selectedItems().isEmpty()){
+		theKCMLircBase->theAddActions->setEnabled(ProfileServer::profileServer()->profiles().count() && RemoteServer::remoteServer()->remotes()[modeMap[theKCMLircBase->theModes->selectedItems().first()].remote()]);
+		theKCMLircBase->theAddAction->setEnabled(theKCMLircBase->theModes->selectedItems().first());
+		theKCMLircBase->theAddMode->setEnabled(theKCMLircBase->theModes->selectedItems().first());
+		theKCMLircBase->theRemoveMode->setEnabled(!theKCMLircBase->theModes->selectedItems().isEmpty() && theKCMLircBase->theModes->selectedItems().first()->parent());
+		theKCMLircBase->theEditMode->setEnabled(theKCMLircBase->theModes->selectedItems().first());
 	}
+}
+
+void KCMLirc::updateActionsStatus()
+{
+	theKCMLircBase->theRemoveAction->setEnabled(!theKCMLircBase->theActions->selectedItems().isEmpty());
+	theKCMLircBase->theEditAction->setEnabled(!theKCMLircBase->theActions->selectedItems().isEmpty());
 }
 
 void KCMLirc::slotEditAction()
 {
-	if(!theKCMLircBase->theActions->currentItem()) return;
+	if(theKCMLircBase->theActions->selectedItems().isEmpty()) return;
 
 
-	EditAction theDialog(actionMap[theKCMLircBase->theActions->currentItem()], this);
-	Q3ListViewItem *item = theKCMLircBase->theModes->currentItem();
+	EditAction theDialog(actionMap[theKCMLircBase->theActions->selectedItems().first()], this);
+	QTreeWidgetItem *item = theKCMLircBase->theModes->selectedItems().first();
 	if(item->parent()) item = item->parent();
 	theDialog.addItem(i18n("[Exit current mode]"));
-	for(item = item->firstChild(); item; item = item->nextSibling())
-		theDialog.addItem(item->text(0));
+	for(int i = 0; i < item->childCount(); i++)
+		theDialog.addItem(item->child(i)->text(0));
 	theDialog.readFrom();
 
 	if(theDialog.exec() == QDialog::Accepted) { theDialog.writeBack(); emit changed(true); updateActions(); }
@@ -170,8 +159,10 @@ void KCMLirc::slotEditAction()
 
 void KCMLirc::slotAddActions()
 {
-	if(!theKCMLircBase->theModes->selectedItem()) return;
-	Mode m = modeMap[theKCMLircBase->theModes->selectedItem()];
+	if(theKCMLircBase->theModes->selectedItems().isEmpty()){
+		return;
+	}
+	Mode m = modeMap[theKCMLircBase->theModes->selectedItems().first()];
 	if(!RemoteServer::remoteServer()->remotes()[m.remote()]) return;
 
 	QDialog *theDialog = new QDialog(this);
@@ -195,20 +186,20 @@ void KCMLirc::slotAddActions()
 void KCMLirc::slotAddAction()
 {
 	kDebug() ;
-	if(!theKCMLircBase->theModes->selectedItem()) return;
-	Mode m = modeMap[theKCMLircBase->theModes->selectedItem()];
+	if(theKCMLircBase->theModes->selectedItems().isEmpty()) return;
+	Mode m = modeMap[theKCMLircBase->theModes->selectedItems().first()];
 	kDebug() << "Calling AddAction with Mode: " << m.name();
 	AddAction theDialog(this, 0, m);
 	connect(this, SIGNAL(haveButton(const QString &, const QString &)), &theDialog, SLOT(updateButton(const QString &, const QString &)));
 
 
       // populate the modes list box
-        Q3ListViewItem *item = theKCMLircBase->theModes->selectedItem();
+        QTreeWidgetItem *item = theKCMLircBase->theModes->selectedItems().first();
         if(item->parent()) item = item->parent();
-        theDialog.theModes->setEnabled(item->firstChild());
-        theDialog.theSwitchMode->setEnabled(item->firstChild());
-        for(item = item->firstChild(); item; item = item->nextSibling())
-        {       QListWidgetItem *a = new QListWidgetItem(item->text(0), theDialog.theModes);
+        theDialog.theModes->setEnabled(item->child(0));
+        theDialog.theSwitchMode->setEnabled(item->child(0));
+        for(int i = 0; i < item->childCount(); i++)
+        {       QListWidgetItem *a = new QListWidgetItem(item->child(i)->text(0), theDialog.theModes);
                 if(item->isSelected()) { a->setSelected(true); theDialog.theModes->setCurrentItem(a); }
         }
 
@@ -277,9 +268,9 @@ void KCMLirc::slotAddAction()
 
 void KCMLirc::slotRemoveAction()
 {
-	if(!theKCMLircBase->theActions->currentItem()) return;
+	if(theKCMLircBase->theActions->selectedItems().isEmpty()) return;
 
-	IRAIt i = actionMap[theKCMLircBase->theActions->currentItem()];
+	IRAIt i = actionMap[theKCMLircBase->theActions->selectedItems().first()];
 	allActions.erase(i);
 	updateActions();
 	emit changed(true);
@@ -318,16 +309,25 @@ void KCMLirc::autoPopulate(const Profile &profile, const Remote &remote, const Q
 
 void KCMLirc::slotAddMode()
 {
-	if(!theKCMLircBase->theModes->selectedItem()) return;
+	if(theKCMLircBase->theModes->selectedItems().isEmpty()){
+		return;
+	}
 
 	NewModeDialog theDialog(this);
 	QMap<Q3ListViewItem *, QString> remoteMap;
-	Q3ListViewItem *tr = theKCMLircBase->theModes->selectedItem();
+	QTreeWidgetItem *tr = theKCMLircBase->theModes->selectedItems().first();
 	if(tr) if(tr->parent()) tr = tr->parent();
-	for(Q3ListViewItem *i = theKCMLircBase->theModes->firstChild(); i; i = i->nextSibling())
+/*	for(Q3ListViewItem *i = theKCMLircBase->theModes->firstChild(); i; i = i->nextSibling())
 	{	K3ListViewItem *a = new K3ListViewItem(theDialog.theRemotes, i->text(0));
 		remoteMap[a] = modeMap[i].remote();
 		if(i == tr) { a->setSelected(true); theDialog.theRemotes->setCurrentItem(a); }
+	}*/
+	for(int i = 0; i < theKCMLircBase->theModes->topLevelItemCount(); i++) {
+		Q3ListViewItem *a = new Q3ListViewItem(theDialog.theRemotes, theKCMLircBase->theModes->topLevelItem(i)->text(0));
+		remoteMap[a] = modeMap[theKCMLircBase->theModes->topLevelItem(i)].remote();
+		if(theKCMLircBase->theModes->topLevelItem(i) == tr) {
+			a->setSelected(true); theDialog.theRemotes->setCurrentItem(a);
+		}
 	}
 	if(theDialog.exec() == QDialog::Accepted && theDialog.theRemotes->selectedItem() && !theDialog.theName->text().isEmpty())
 	{
@@ -339,12 +339,12 @@ void KCMLirc::slotAddMode()
 
 void KCMLirc::slotEditMode()
 {
-	if(!theKCMLircBase->theModes->selectedItem()) return;
+	if(theKCMLircBase->theModes->selectedItems().isEmpty()) return;
 
 	EditMode theDialog(this, 0);
 
-	Mode &mode = modeMap[theKCMLircBase->theModes->selectedItem()];
- 	theDialog.theName->setEnabled(theKCMLircBase->theModes->selectedItem()->parent());
+	Mode &mode = modeMap[theKCMLircBase->theModes->selectedItems().first()];
+ 	theDialog.theName->setEnabled(theKCMLircBase->theModes->selectedItems().first()->parent());
  	theDialog.theName->setText(mode.name().isEmpty() ? mode.remoteName() : mode.name());
  	if(!mode.iconFile().isNull())
  		theDialog.theIcon->setIcon(mode.iconFile());
@@ -369,12 +369,16 @@ void KCMLirc::slotEditMode()
 
 void KCMLirc::slotRemoveMode()
 {
-	if(!theKCMLircBase->theModes->selectedItem()) return;
-	if(!theKCMLircBase->theModes->selectedItem()->parent()) return;
+	if(theKCMLircBase->theModes->selectedItems().isEmpty()){
+		return;
+	}
+	if(!theKCMLircBase->theModes->selectedItems().first()->parent()){
+		return;
+	}
 
-	if(KMessageBox::warningContinueCancel(this, i18n("Are you sure you want to remove %1 and all its actions?", theKCMLircBase->theModes->selectedItem()->text(0)), i18n("Erase Actions?")) == KMessageBox::Continue)
+	if(KMessageBox::warningContinueCancel(this, i18n("Are you sure you want to remove %1 and all its actions?", theKCMLircBase->theModes->selectedItems().first()->text(0)), i18n("Erase Actions?")) == KMessageBox::Continue)
 	{
-		allModes.erase(modeMap[theKCMLircBase->theModes->selectedItem()]);
+		allModes.erase(modeMap[theKCMLircBase->theModes->selectedItems().first()]);
 		updateModes();
 		emit changed(true);
 	}
@@ -382,24 +386,27 @@ void KCMLirc::slotRemoveMode()
 
 void KCMLirc::slotSetDefaultMode()
 {
-	if(!theKCMLircBase->theModes->selectedItem()) return;
-	allModes.setDefault(modeMap[theKCMLircBase->theModes->selectedItem()]);
+	if(theKCMLircBase->theModes->selectedItems().isEmpty()){
+		return;
+	}
+	allModes.setDefault(modeMap[theKCMLircBase->theModes->selectedItems().first()]);
 	updateModes();
 	emit changed(true);
 }
 
-void KCMLirc::slotDrop(K3ListView *, QDropEvent *, Q3ListViewItem *, Q3ListViewItem *after)
+void KCMLirc::slotDrop(QTreeWidget *, QDropEvent *, QTreeWidgetItem *, QTreeWidgetItem *after)
 {
 	Mode m = modeMap[after];
 
-	if(modeMap[theKCMLircBase->theModes->selectedItem()].remote() != m.remote())
+	if(modeMap[theKCMLircBase->theModes->selectedItems().first()].remote() != m.remote())
 	{
 		KMessageBox::error(this, i18n("You may only drag the selected items onto a mode of the same remote control"), i18n("You May Not Drag Here"));
 		return;
 	}
-	for(Q3ListViewItem *i = theKCMLircBase->theActions->firstChild(); i; i = i->nextSibling())
-		if(i->isSelected())
-			(*(actionMap[i])).setMode(m.name());
+	for(int i = 0; i < theKCMLircBase->theActions->topLevelItemCount(); i++) {
+		if(theKCMLircBase->theActions->topLevelItem(i)->isSelected())
+			(*(actionMap[theKCMLircBase->theActions->topLevelItem(i)])).setMode(m.name());
+	}
 
 	updateActions();
 	emit changed(true);
@@ -408,26 +415,36 @@ void KCMLirc::slotDrop(K3ListView *, QDropEvent *, Q3ListViewItem *, Q3ListViewI
 void KCMLirc::updateActions()
 {
 	IRAIt oldCurrent;
-	if(theKCMLircBase->theActions->selectedItem()) oldCurrent = actionMap[theKCMLircBase->theActions->selectedItem()];
+	if(!theKCMLircBase->theActions->selectedItems().isEmpty()){
+		oldCurrent = actionMap[theKCMLircBase->theActions->selectedItems().first()];
+	}
 
 	theKCMLircBase->theActions->clear();
 	actionMap.clear();
 
-	if(!theKCMLircBase->theModes->selectedItem()) { updateActionsStatus(0); return; }
+	if(theKCMLircBase->theModes->selectedItems().isEmpty()) {
+		return;
+	}
 
-	Mode m = modeMap[theKCMLircBase->theModes->selectedItem()];
+	Mode m = modeMap[theKCMLircBase->theModes->selectedItems().first()];
 	theKCMLircBase->theModeLabel->setText(m.remoteName() + ": " + (m.name().isEmpty() ? i18n("Actions <i>always</i> available") : i18n("Actions available only in mode <b>%1</b>", m.name())));
 	IRAItList l = allActions.findByMode(m);
 	for(IRAItList::iterator i = l.begin(); i != l.end(); ++i) {
 		kDebug() << "Adding action: " << (**i).buttonName() << (**i).application(), (**i).function();
-		Q3ListViewItem *b = new K3ListViewItem(theKCMLircBase->theActions, (**i).buttonName(), (**i).application(), (**i).function(), (**i).arguments().toString(), (**i).notes());
+		QStringList actionList;
+		actionList << (**i).buttonName();
+		actionList << (**i).application();
+		actionList << (**i).function();
+		actionList << (**i).arguments().toString();
+		actionList << (**i).notes();
+		QTreeWidgetItem *b = new QTreeWidgetItem(theKCMLircBase->theActions, actionList);
 		actionMap[b] = *i;
 		if(*i == oldCurrent) { b->setSelected(true); theKCMLircBase->theActions->setCurrentItem(b); }
 	}
 
 	if(theKCMLircBase->theActions->currentItem())
 		theKCMLircBase->theActions->currentItem()->setSelected(true);
-	updateActionsStatus(theKCMLircBase->theActions->currentItem());
+	updateActionsStatus();
 }
 
 void KCMLirc::gotButton(QString remote, QString button)
@@ -438,7 +455,9 @@ void KCMLirc::gotButton(QString remote, QString button)
 void KCMLirc::updateModes()
 {
 	Mode oldCurrent;
-	if(theKCMLircBase->theModes->selectedItem()) oldCurrent = modeMap[theKCMLircBase->theModes->selectedItem()];
+	if(!theKCMLircBase->theModes->selectedItems().isEmpty()){
+		oldCurrent = modeMap[theKCMLircBase->theModes->selectedItems().first()];
+	}
 
 	theKCMLircBase->theModes->clear();
 	modeMap.clear();
@@ -471,25 +490,34 @@ void KCMLirc::updateModes()
 			mode.setRemote(*i);
 			allModes.add(mode);
 		}
-		Q3ListViewItem *a = new K3ListViewItem(theKCMLircBase->theModes, RemoteServer::remoteServer()->getRemoteName(*i), allModes.isDefault(mode) ? "Default" : "", mode.iconFile().isNull() ? "" : "");
+		QStringList remoteList;
+		remoteList << RemoteServer::remoteServer()->getRemoteName(*i);
+		remoteList << (allModes.isDefault(mode) ? "Default" : "");
+		remoteList << (mode.iconFile().isNull() ? "" : "");
+		QTreeWidgetItem *a = new QTreeWidgetItem(theKCMLircBase->theModes, remoteList);
 		if(!mode.iconFile().isNull())
-			a->setPixmap(2, KIconLoader().loadIcon(mode.iconFile(), KIconLoader::Panel));
+			a->setIcon(2, KIconLoader().loadIcon(mode.iconFile(), KIconLoader::Panel));
 		modeMap[a] = mode;	// the null mode
 		if(modeMap[a] == oldCurrent) { a->setSelected(true); theKCMLircBase->theModes->setCurrentItem(a); }
-		a->setOpen(true);
+		a->setExpanded(true);
 		ModeList l = allModes.getModes(*i);
 		for(ModeList::iterator j = l.begin(); j != l.end(); ++j)
-			if(!(*j).name().isEmpty())
-			{	Q3ListViewItem *b = new K3ListViewItem(a, (*j).name(), allModes.isDefault(*j) ? i18n("Default") : "", (*j).iconFile().isNull() ? "" : "");
+			if(!(*j).name().isEmpty()) {
+				QStringList modeList;
+				modeList << (*j).name();
+				modeList << (allModes.isDefault(*j) ? i18n("Default") : "");
+				modeList << ((*j).iconFile().isNull() ? "" : "");
+				QTreeWidgetItem *b = new QTreeWidgetItem(a, modeList);
 				if(!(*j).iconFile().isNull())
-					b->setPixmap(2, KIconLoader().loadIcon((*j).iconFile(), KIconLoader::Panel));
+					b->setIcon(2, KIconLoader().loadIcon((*j).iconFile(), KIconLoader::Panel));
 				modeMap[b] = *j;
 				if(*j == oldCurrent) { b->setSelected(true); theKCMLircBase->theModes->setCurrentItem(b); }
 			}
 	}
-	if(theKCMLircBase->theModes->currentItem())
+	if(theKCMLircBase->theModes->currentItem()){
 		theKCMLircBase->theModes->currentItem()->setSelected(true);
-	updateModesStatus(theKCMLircBase->theModes->currentItem());
+		updateModesStatus();
+	}
 	updateActions();
 }
 
@@ -498,22 +526,32 @@ void KCMLirc::updateExtensions()
 	theKCMLircBase->theExtensions->clear();
 
 	{	ProfileServer *theServer = ProfileServer::profileServer();
-		Q3ListViewItem *a = new Q3ListViewItem(theKCMLircBase->theExtensions, i18n("Applications"));
-		a->setOpen(true);
+		QStringList extensionList;
+		extensionList << i18n("Applications");
+		QTreeWidgetItem *a = new QTreeWidgetItem(theKCMLircBase->theExtensions, extensionList);
+		a->setExpanded(true);
 		profileMap.clear();
 		QHash<QString, Profile*> dict = theServer->profiles();
 		QHash<QString, Profile*>::const_iterator i;
-		for(i = dict.constBegin(); i != dict.constEnd(); ++i)
-			profileMap[new Q3ListViewItem(a, i.value()->name())] = i.key();
+		for(i = dict.constBegin(); i != dict.constEnd(); ++i){
+			QStringList mapList;
+			mapList << i.value()->name();
+			profileMap[new QTreeWidgetItem(a, mapList)] = i.key();
+		}
 	}
 	{	RemoteServer *theServer = RemoteServer::remoteServer();
-		Q3ListViewItem *a = new Q3ListViewItem(theKCMLircBase->theExtensions, i18n("Remote Controls"));
-		a->setOpen(true);
+		QStringList extensionList;
+		extensionList << i18n("Remote Controls");
+		QTreeWidgetItem *a = new QTreeWidgetItem(theKCMLircBase->theExtensions, extensionList);
+		a->setExpanded(true);
 		remoteMap.clear();
 		QHash<QString, Remote*> dict = theServer->remotes();
 		QHash<QString, Remote*>::const_iterator i;
-		for(i = dict.constBegin(); i != dict.constEnd(); ++i)
-			remoteMap[new Q3ListViewItem(a, i.value()->name())] = i.key();
+		for(i = dict.constBegin(); i != dict.constEnd(); ++i){
+			QStringList mapList;
+			mapList << QStringList(i.value()->name());
+			remoteMap[new QTreeWidgetItem(a, mapList)] = i.key();
+		}
 	}
 	updateInformation();
 }
@@ -523,34 +561,57 @@ void KCMLirc::updateInformation()
 	theKCMLircBase->theInformation->clear();
 	theKCMLircBase->theInformationLabel->setText("");
 
-	if(!theKCMLircBase->theExtensions->selectedItem()) return;
-
-	if(!theKCMLircBase->theExtensions->selectedItem()->parent())
-	{
-		theKCMLircBase->theInformationLabel->setText(i18n("Information on <b>%1</b>:", theKCMLircBase->theExtensions->selectedItem()->text(0)));
-		if(theKCMLircBase->theExtensions->selectedItem()->text(0) == i18n("Applications"))
-			new Q3ListViewItem(theKCMLircBase->theInformation, i18n("Number of Applications"), QString().setNum(theKCMLircBase->theExtensions->selectedItem()->childCount()));
-		else if(theKCMLircBase->theExtensions->selectedItem()->text(0) == i18n("Remote Controls"))
-			new Q3ListViewItem(theKCMLircBase->theInformation, i18n("Number of Remote Controls"), QString().setNum(theKCMLircBase->theExtensions->selectedItem()->childCount()));
+	if(theKCMLircBase->theExtensions->selectedItems().isEmpty()){
+		return;
 	}
-	else if(theKCMLircBase->theExtensions->selectedItem()->parent()->text(0) == i18n("Applications"))
+
+	if(!theKCMLircBase->theExtensions->selectedItems().first()->parent())
+	{
+		theKCMLircBase->theInformationLabel->setText(i18n("Information on <b>%1</b>:", theKCMLircBase->theExtensions->selectedItems().first()->text(0)));
+		if(theKCMLircBase->theExtensions->selectedItems().first()->text(0) == i18n("Applications")){
+			QStringList infoList;
+			infoList << i18n("Number of Applications") << QString().setNum(theKCMLircBase->theExtensions->selectedItems().first()->childCount());
+			new QTreeWidgetItem(theKCMLircBase->theInformation, infoList);
+		} else if(theKCMLircBase->theExtensions->selectedItems().first()->text(0) == i18n("Remote Controls")){
+			QStringList infoList;
+			infoList<< i18n("Number of Remote Controls") << QString().setNum(theKCMLircBase->theExtensions->selectedItems().first()->childCount());
+			new QTreeWidgetItem(theKCMLircBase->theInformation, infoList);
+		}
+	}
+	else if(theKCMLircBase->theExtensions->selectedItems().first()->parent()->text(0) == i18n("Applications"))
 	{
 		ProfileServer *theServer = ProfileServer::profileServer();
-		const Profile *p = theServer->profiles()[profileMap[theKCMLircBase->theExtensions->selectedItem()]];
-		new Q3ListViewItem(theKCMLircBase->theInformation, i18n("Extension Name"), p->name());
-		new Q3ListViewItem(theKCMLircBase->theInformation, i18n("Extension Author"), p->author());
-		new Q3ListViewItem(theKCMLircBase->theInformation, i18n("Application Identifier"), p->id());
-		new Q3ListViewItem(theKCMLircBase->theInformation, i18n("Number of Actions"), QString().setNum(p->actions().count()));
+		const Profile *p = theServer->profiles()[profileMap[theKCMLircBase->theExtensions->selectedItems().first()]];
+		QStringList infoList;
+		infoList << i18n("Extension Name"), p->name();
+		new QTreeWidgetItem(theKCMLircBase->theInformation, infoList);
+		infoList.clear();
+		infoList << i18n("Extension Author"), p->author();
+		new QTreeWidgetItem(theKCMLircBase->theInformation, infoList);
+		infoList.clear();
+		infoList << i18n("Application Identifier"), p->id();
+		new QTreeWidgetItem(theKCMLircBase->theInformation, infoList);
+		infoList.clear();
+		infoList << i18n("Number of Actions"), QString().setNum(p->actions().count());
+		new QTreeWidgetItem(theKCMLircBase->theInformation, infoList);
 		theKCMLircBase->theInformationLabel->setText(i18n("Information on <b>%1</b>:", p->name()));
 	}
-	else if(theKCMLircBase->theExtensions->selectedItem()->parent()->text(0) == i18n("Remote Controls"))
+	else if(theKCMLircBase->theExtensions->selectedItems().first()->parent()->text(0) == i18n("Remote Controls"))
 	{
 		RemoteServer *theServer = RemoteServer::remoteServer();
-		const Remote *p = theServer->remotes()[remoteMap[theKCMLircBase->theExtensions->selectedItem()]];
-		new Q3ListViewItem(theKCMLircBase->theInformation, i18n("Extension Name"), p->name());
-		new Q3ListViewItem(theKCMLircBase->theInformation, i18n("Extension Author"), p->author());
-		new Q3ListViewItem(theKCMLircBase->theInformation, i18n("Remote Control Identifier"), p->id());
-		new Q3ListViewItem(theKCMLircBase->theInformation, i18n("Number of Buttons"), QString().setNum(p->buttons().count()));
+		const Remote *p = theServer->remotes()[remoteMap[theKCMLircBase->theExtensions->selectedItems().first()]];
+		QStringList infoList;
+		infoList << i18n("Extension Name") << p->name();
+		new QTreeWidgetItem(theKCMLircBase->theInformation, infoList);
+		infoList.clear();
+		infoList << i18n("Extension Author") << p->author();
+		new QTreeWidgetItem(theKCMLircBase->theInformation, infoList);
+		infoList.clear();
+		infoList << i18n("Remote Control Identifier") << p->id();
+		new QTreeWidgetItem(theKCMLircBase->theInformation, infoList);
+		infoList.clear();
+		infoList << i18n("Number of Buttons") << QString().setNum(p->buttons().count());
+		new QTreeWidgetItem(theKCMLircBase->theInformation, infoList);
 		theKCMLircBase->theInformationLabel->setText(i18n("Information on <b>%1</b>:", p->name()));
 	}
 }
