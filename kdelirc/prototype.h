@@ -39,7 +39,7 @@ public:
 	const QString argumentList() const;
 	const QString argumentListNN() const;
 	int argumentCount() { return theTypes.count(); }
-	const QString prototypeNR() const { return theName + "(" + argumentListNN() + ")"; }
+	const QString prototypeNR() const { return theName;} // + "(" + argumentListNN() + ")"; }
 
 	void setPrototype(const QString &source) { original = source; parse(); }
 
