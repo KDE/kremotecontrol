@@ -169,7 +169,7 @@ void EditAction::updateArguments()
 		}
 		theArguments->setEnabled(p.count());
 		for(int i = 0; i < p.count(); i++)
-		{	theArguments->addItem(p[i].comment() + " (" + p[i].type() + ")");
+		{	theArguments->addItem(p[i].comment() + " (" + p[i].type() + ')');
 			arguments[i].convert(QVariant::nameToType(p[i].type().toLocal8Bit()));
 		}
 		if(p.count()) updateArgument(0); else updateArgument(-1);
@@ -185,7 +185,7 @@ void EditAction::updateArguments()
 		}
 		theArguments->setEnabled(p.count());
 		for(int i = 0; i < p.count(); i++)
-		{	theArguments->addItem(QString().setNum(i + 1) + ": " + (p.name(i).isEmpty() ? p.type(i) : p.name(i) + " (" + p.type(i) + ")"));
+		{	theArguments->addItem(QString().setNum(i + 1) + ": " + (p.name(i).isEmpty() ? p.type(i) : p.name(i) + " (" + p.type(i) + ')'));
 			arguments[i].convert(QVariant::nameToType(p.type(i).toLocal8Bit()));
 		}
 		if(p.count()) updateArgument(0); else updateArgument(-1);
@@ -392,7 +392,7 @@ void EditAction::updateDCOPFunctions()
 {
 	theDCOPFunctions->clear();
 
- 	QDBusInterface *dBusIface = new QDBusInterface(nameProgramMap[theDCOPApplications->currentText()], "/" + theDCOPObjects->currentText(), "org.freedesktop.DBus.Introspectable");
+ 	QDBusInterface *dBusIface = new QDBusInterface(nameProgramMap[theDCOPApplications->currentText()], '/' + theDCOPObjects->currentText(), "org.freedesktop.DBus.Introspectable");
  	QDBusReply<QString> response = dBusIface->call("Introspect");
 
 	QDomDocument domDoc;
@@ -415,7 +415,7 @@ void EditAction::updateDCOPFunctions()
 				if(subChild.tagName() == QLatin1String("method")){
 					QString method = subChild.attribute(QLatin1String("name"));
 					kDebug() << "Method: " << method;
-					function = "QString " + method + "(";
+					function = "QString " + method + '(';
 					QDomElement arg = subChild.firstChildElement();
 					QString argStr;
 					while(!arg.isNull()){
@@ -443,19 +443,19 @@ void EditAction::updateDCOPFunctions()
 									QString helper = arg.attribute("name");
 									arg = arg.nextSiblingElement();
 									argStr += arg.attribute(QLatin1String("value"));
-									argStr += " " + helper;
+									argStr += ' ' + helper;
 									arg = arg.nextSiblingElement();
 									continue;
 								} else {
 									argStr += arg.attribute(QLatin1String("type"));
 								}
-								argStr += " " + arg.attribute(QLatin1String("name"));
+								argStr += ' ' + arg.attribute(QLatin1String("name"));
 								kDebug() << "Arg: " << argStr;
 							}
 						}
 						arg = arg.nextSiblingElement();
 					}
-					function +=  argStr + ")";
+					function +=  argStr + ')';
 					theDCOPFunctions->addItem(function);
 				}
 				subChild = subChild.nextSiblingElement();

@@ -162,7 +162,7 @@ void KLircClient::slotRead()
 					// <code> <name>
 					QString btn = readLine().mid(17);
 					if(btn.isNull()) break;
-					if(btn.startsWith("'") && btn.endsWith("'"))
+					if(btn.startsWith('\'') && btn.endsWith('\''))
 						btn = btn.mid(1, btn.length() - 2);
 					buttons.append(btn);
 				}
@@ -188,7 +188,7 @@ void KLircClient::slotRead()
 			pos = line.indexOf(' ');
 			if (pos < 0) return;
 			QString btn = line.left(pos);
-			if(btn.startsWith("'") && btn.endsWith("'"))
+			if(btn.startsWith('\'') && btn.endsWith('\''))
 				btn = btn.mid(1, btn.length() - 2);
 			line.remove(0, pos + 1);
 			kDebug() << "Command received!";
@@ -230,7 +230,7 @@ const QString KLircClient::readLine()
 
 void KLircClient::sendCommand(const QString &command)
 {
-    QByteArray cmd = QFile::encodeName( command + "\n" );;
+    QByteArray cmd = QFile::encodeName( command + '\n' );;
     theSocket->write( cmd );
 }
 

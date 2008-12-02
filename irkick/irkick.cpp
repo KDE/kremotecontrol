@@ -226,7 +226,7 @@ bool IRKick::getPrograms(const IRAction &action, QStringList &programs)
 			// go through all the (ordered) window pids
 			for(int i = 0; i < s.size(); i++) {
 				int p = KWindowSystem::windowInfo(s.at(i),NET::WMPid).win();
-				QString id = action.program() + "-" + QString().setNum(p);
+				QString id = action.program() + '-' + QString().setNum(p);
 				if(programs.contains(id))
 				{	programs.clear();
 					programs += id;
@@ -240,7 +240,7 @@ bool IRKick::getPrograms(const IRAction &action, QStringList &programs)
 			// go through all the (ordered) window pids
 			for(int i = 0; i < s.size(); ++i) {
 				int p = KWindowSystem::windowInfo(s.at(i),NET::WMPid).win();
-				QString id = action.program() + "-" + QString().setNum(p);
+				QString id = action.program() + '-' + QString().setNum(p);
 				if(programs.contains(id)) {
 					programs.clear();
 					programs += id;
@@ -278,7 +278,7 @@ void IRKick::executeAction(const IRAction &action)
 			KToolInvocation::startServiceByDesktopName(sname);
 		} else if(action.program().contains(QRegExp("org.[a-zA-Z0-9]*."))){
 			QString runCommand = action.program();
-			runCommand.replace(QRegExp("org.[a-zA-Z0-9]*."), "");
+			runCommand.remove(QRegExp("org.[a-zA-Z0-9]*."));
 			kDebug() << "runCommand" << runCommand;
 			KToolInvocation::startServiceByDesktopName(runCommand);
 		}
@@ -291,9 +291,9 @@ void IRKick::executeAction(const IRAction &action)
 	{	const QString &program = *i;
 		kDebug() << "Searching DBus for program:" << program;
 		if(dBusIface->isServiceRegistered(program)){
-			kDebug() << "Sending data (" << program << ", " << "/" + action.object() << ", " << action.method().prototypeNR() ;
+			kDebug() << "Sending data (" << program << ", " << '/' + action.object() << ", " << action.method().prototypeNR() ;
 
-			QDBusMessage m = QDBusMessage::createMethodCall(program, "/" + action.object(), "", action.method().prototypeNR());
+			QDBusMessage m = QDBusMessage::createMethodCall(program, '/' + action.object(), "", action.method().prototypeNR());
 
 			for(Arguments::const_iterator j = action.arguments().begin(); j != action.arguments().end(); ++j) {
 				kDebug() << "Got argument:" << (*j).type() ;

@@ -280,8 +280,8 @@ void AddAction::updateButtonStates()
 
 const QStringList AddAction::getFunctions(const QString app, const QString obj)
 {
-	kDebug() << "creating Interface with: " << app << "/" + obj << "org.freedesktop.DBus.Introspectable";
-	QDBusInterface *dBusIface = new QDBusInterface(app, "/" + obj, "org.freedesktop.DBus.Introspectable");
+	kDebug() << "creating Interface with: " << app << '/' + obj << "org.freedesktop.DBus.Introspectable";
+	QDBusInterface *dBusIface = new QDBusInterface(app, '/' + obj, "org.freedesktop.DBus.Introspectable");
 	QDBusReply<QString> response = dBusIface->call("Introspect");
 
 	kDebug() << response;
@@ -306,7 +306,7 @@ const QStringList AddAction::getFunctions(const QString app, const QString obj)
 				if(subChild.tagName() == QLatin1String("method")){
 					QString method = subChild.attribute(QLatin1String("name"));
 					kDebug() << "Method: " << method;
-					function = "QString " + method + "(";
+					function = "QString " + method + '(';
 					QDomElement arg = subChild.firstChildElement();
 					QString argStr;
 					while(!arg.isNull()){
@@ -334,19 +334,19 @@ const QStringList AddAction::getFunctions(const QString app, const QString obj)
 									QString helper = arg.attribute("name");
 									arg = arg.nextSiblingElement();
 									argStr += arg.attribute(QLatin1String("value"));
-									argStr += " " + helper;
+									argStr += ' ' + helper;
 									arg = arg.nextSiblingElement();
 									continue;
 								} else {
 									argStr += arg.attribute(QLatin1String("type"));
 								}
-								argStr += " " + arg.attribute(QLatin1String("name"));
+								argStr += ' ' + arg.attribute(QLatin1String("name"));
 								kDebug() << "Arg: " << argStr;
 							}
 						}
 						arg = arg.nextSiblingElement();
 					}
-					function +=  argStr + ")";
+					function +=  argStr + ')';
 					ret += function;
 				}
 				subChild = subChild.nextSiblingElement();

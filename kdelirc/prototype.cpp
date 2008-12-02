@@ -33,7 +33,7 @@ const QString Prototype::argumentList() const
 {
 	QString ret = "";
 	for(int i = 0; i < theTypes.count(); i++)
-		ret += (i ? ", " : "") + theTypes[i] + " " + theNames[i];
+		ret += (i ? ", " : "") + theTypes[i] + ' ' + theNames[i];
 	return ret;
 }
 
