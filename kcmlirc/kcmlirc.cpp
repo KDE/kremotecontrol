@@ -577,16 +577,16 @@ void KCMLirc::updateInformation()
 		ProfileServer *theServer = ProfileServer::profileServer();
 		const Profile *p = theServer->profiles()[profileMap[theKCMLircBase->theExtensions->selectedItems().first()]];
 		QStringList infoList;
-		infoList << i18n("Extension Name"), p->name();
+		infoList << i18n("Extension Name") << p->name();
 		new QTreeWidgetItem(theKCMLircBase->theInformation, infoList);
 		infoList.clear();
-		infoList << i18n("Extension Author"), p->author();
+		infoList << i18n("Extension Author") << p->author();
 		new QTreeWidgetItem(theKCMLircBase->theInformation, infoList);
 		infoList.clear();
-		infoList << i18n("Application Identifier"), p->id();
+		infoList << i18n("Application Identifier") << p->id();
 		new QTreeWidgetItem(theKCMLircBase->theInformation, infoList);
 		infoList.clear();
-		infoList << i18n("Number of Actions"), QString().setNum(p->actions().count());
+		infoList << i18n("Number of Actions") <<  QString().setNum(p->actions().count());
 		new QTreeWidgetItem(theKCMLircBase->theInformation, infoList);
 		theKCMLircBase->theInformationLabel->setText(i18n("Information on <b>%1</b>:", p->name()));
 	}
