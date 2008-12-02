@@ -53,7 +53,7 @@ EditAction::EditAction(IRAction *action, QWidget *parent, const char *name)
 	mainGroup.addButton(theUseProfile);
 	mainGroup.addButton(theChangeMode);
 
-
+	readFrom();
 }
 
 EditAction::~EditAction()
