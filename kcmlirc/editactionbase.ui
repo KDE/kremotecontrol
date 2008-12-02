@@ -19,7 +19,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget3" >
      <property name="currentIndex" >
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab" >
       <attribute name="title" >
@@ -102,8 +102,6 @@
            </widget>
           </item>
          </layout>
-         <zorder></zorder>
-         <zorder>theJustStart</zorder>
         </widget>
        </item>
        <item>
@@ -234,7 +232,7 @@
          <item rowspan="2" row="0" column="2" >
           <widget class="QStackedWidget" name="theValue" >
            <property name="currentIndex" >
-            <number>1</number>
+            <number>4</number>
            </property>
            <widget class="QWidget" name="valuesPage1" >
             <layout class="QVBoxLayout" name="verticalLayout" >

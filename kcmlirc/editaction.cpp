@@ -253,19 +253,19 @@ void EditAction::updateArgument(int index)
 	{	switch(arguments[index].type())
 		{
 		case QVariant::Int: case QVariant::UInt:
-			theValue->setCurrentIndex(2);
+			theValue->setCurrentIndex(4);
 			theValueIntNumInput->setValue(arguments[index].toInt());
 			break;
 		case QVariant::Double:
-			theValue->setCurrentIndex(3);
+			theValue->setCurrentIndex(1);
 			theValueDoubleNumInput->setValue(arguments[index].toDouble());
 			break;
 		case QVariant::Bool:
-			theValue->setCurrentIndex(1);
+			theValue->setCurrentIndex(3);
 			theValueCheckBox->setChecked(arguments[index].toBool());
 			break;
 		case QVariant::StringList:
-		{	theValue->setCurrentIndex(4);
+		{	theValue->setCurrentIndex(0);
 			QStringList backup = arguments[index].toStringList();
 			// backup needed because calling clear will kill what ever has been saved.
 			theValueEditListBox->clear();
@@ -274,7 +274,7 @@ void EditAction::updateArgument(int index)
 			break;
 		}
 		default:
-			theValue->setCurrentIndex(0);
+			theValue->setCurrentIndex(2);
 			theValueLineEdit->setText(arguments[index].toString());
 		}
 		theValue->setEnabled(true);
