@@ -48,10 +48,13 @@ IRAction *IRAction::loadFromConfig(KConfig &theConfig, int index)
 	action->theArguments.clear();
 	for(int j = 0; j < numArguments; j++)
 	{
-		QVariant::Type theType = QVariant::nameToType(actionGroup.readEntry(Binding + "ArgumentType" + QString().setNum(j), QString("").toLocal8Bit()));
+		QVariant::Type theType = QVariant::nameToType(actionGroup.readEntry(Binding + "ArgumentType" + QString().setNum(j), QString().toLocal8Bit()));
 		kDebug() << "Readentry type is:" << actionGroup.readEntry(Binding + "ArgumentType" + QString().setNum(j), QString().toLocal8Bit());
 //		theArguments += actionGroup.readEntry(Binding + "Argument" + QString().setNum(j), theType == QVariant::CString ? QVariant::String : theType);
-		action->theArguments += actionGroup.readEntry(Binding + "Argument" + QString().setNum(j), QString());
+		action->theArguments += actionGroup.readEntry(Binding + "Argument" + QString().setNum(j), QString().toLocal8Bit());
+		if(action->theArguments.last().isNull()){
+			action->theArguments.last() == "";
+		}
 		action->theArguments.last().convert(theType);
 	}
 
@@ -85,9 +88,9 @@ void IRAction::saveToConfig(KConfig &theConfig, int index) const
 	{
 		QVariant arg = theArguments[j];
  		QVariant::Type preType = arg.type();
-		if(preType == QVariant::StringList && arg.toStringList().isEmpty()){
+/*		if(preType == QVariant::StringList && arg.toString().isNull()){
 			arg = "";
-		}
+		}*/
 		actionGroup.writeEntry(Binding + "Argument" + QString().setNum(j), arg);
 		actionGroup.writeEntry(Binding + "ArgumentType" + QString().setNum(j), QVariant::typeToName(preType));
 		kDebug() << "writeEntryType is" << QVariant::typeToName(preType) << "argument" << arg;
