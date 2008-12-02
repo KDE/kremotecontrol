@@ -68,7 +68,7 @@ public:
 	virtual void defaults();
 	virtual void configChanged();
 
-	KCMLirc(QWidget *parent = 0, const QStringList &args = QStringList());
+	explicit KCMLirc(QWidget *parent = 0, const QStringList &args = QStringList());
 	~KCMLirc();
 
 public Q_SLOTS:

@@ -36,7 +36,7 @@ class EditAction : public QDialog, public Ui::EditActionBase
 	QButtonGroup mainGroup;
 
 public:
-	EditAction(IRAction *action, QWidget *parent = 0, const char *name = 0);
+	explicit EditAction(IRAction *action, QWidget *parent = 0, const char *name = 0);
 	~EditAction();
 
 

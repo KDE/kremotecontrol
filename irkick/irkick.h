@@ -31,7 +31,7 @@ public:
 	QMenu* contextMenu() const { return KSystemTrayIcon::contextMenu(); }
 	KActionCollection* actionCollection() { return KSystemTrayIcon::actionCollection(); }
 
-IRKTrayIcon(QWidget *parent = 0, const char *name = 0): KSystemTrayIcon(parent) {Q_UNUSED(name)}
+	explicit IRKTrayIcon(QWidget *parent = 0, const char *name = 0): KSystemTrayIcon(parent) {Q_UNUSED(name)}
 };
 
 class IRKick: public QObject
@@ -121,7 +121,7 @@ private:
 	bool getPrograms(const IRAction &action, QStringList &populous);
 
 public:
-	IRKick(const QString &obj);
+	explicit IRKick(const QString &obj);
 	virtual ~IRKick();
 };
 
