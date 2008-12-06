@@ -33,6 +33,7 @@ install(TARGETS irkick DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( FILES irkick.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES irkick.desktop  DESTINATION ${AUTOSTART_INSTALL_DIR})
+install( FILES irkick.notifyrc  DESTINATION  ${DATA_INSTALL_DIR}/irkick )
 
 kde4_install_icons( ${ICON_INSTALL_DIR}   )
 

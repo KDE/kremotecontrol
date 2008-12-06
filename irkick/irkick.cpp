@@ -33,6 +33,7 @@
 #include <kglobal.h>
 #include <kstdguiitem.h>
 #include <kconfiggroup.h>
+#include <knotification.h>
 
 #include <ktoolinvocation.h>
 
@@ -126,8 +127,14 @@ void IRKick::doQuit()
 
 void IRKick::resetModes()
 {
-	if(theResetCount > 1)
-		KPassivePopup::message("IRKick", i18n("Resetting all modes."), SmallIcon("irkick"), theTrayIcon);
+
+
+
+	if(theResetCount > 1){
+	  KNotification::event("mode_reset", i18n("Resetting all modes."), SmallIcon("irkick"), theTrayIcon->parentWidget());
+	}
+
+
 	if(!theResetCount)
 		allModes.generateNulls(theClient->remotes());
 

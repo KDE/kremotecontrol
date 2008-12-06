@@ -1,0 +1,15 @@
+[Global]
+IconName=irkick
+Comment=Irkick
+
+
+[Event/mode_reset]
+Name=Mode reset
+Comment=The modes are reset
+Action=Popup
+
+
+[Event/mode_switch]
+Name=Mode switched
+Comment=The current mode is switched
+Action=Popup
