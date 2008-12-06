@@ -3,13 +3,18 @@ IconName=irkick
 Comment=Irkick
 
 
-[Event/mode_reset]
-Name=Mode reset
-Comment=The modes are reset
+[Event/global_event]
+Name=Irkick notification
+Comment=Irkick global notification event
 Action=Popup
 
 
-[Event/mode_switch]
-Name=Mode switched
-Comment=The current mode is switched
+[Event/mode_event]
+Name=Mode event
+Comment=Mode has changed
 Action=Popup
+
+[Event/app_event]
+Name=Application event
+Comment=Irkick has triggered an application
+Action=popup
