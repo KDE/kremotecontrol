@@ -28,7 +28,7 @@ EditMode::~EditMode()
 
 void EditMode::slotClearIcon()
 {
-	theIcon->resetIcon();
+	theIcon->setIcon("irkick");
 }
 
 void EditMode::slotCheckText(const QString &newText)

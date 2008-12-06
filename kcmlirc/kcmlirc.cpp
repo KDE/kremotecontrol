@@ -440,18 +440,21 @@ KCMLirc::slotEditMode()
       theKCMLircBase->theModes->selectedItems().first()->parent());
   theDialog.theName->setText(mode.name().isEmpty() ? mode.remoteName()
       : mode.name());
-  if (!mode.iconFile().isNull())
+  if (!mode.iconFile().isNull()){
     theDialog.theIcon->setIcon(mode.iconFile());
-  else
-    theDialog.theIcon->resetIcon();
+    theDialog.checkBox->setChecked(true);
+  }
+  else{
+    theDialog.slotClearIcon();
+  }
   theDialog.theDefault->setChecked(allModes.isDefault(mode));
   theDialog.theDefault->setEnabled(!allModes.isDefault(mode));
 
   if (theDialog.exec() == QDialog::Accepted)
     {
       kDebug() << "Setting icon : " << theDialog.theIcon->icon();
-      mode.setIconFile(theDialog.theIcon->icon().isEmpty() ? QString::null
-          : theDialog.theIcon->icon()); //krazy:exclude=nullstrassign for old broken gcc
+      mode.setIconFile(theDialog.checkBox->isChecked()  ?
+           theDialog.theIcon->icon() : QString::null); //krazy:exclude=nullstrassign for old broken gcc
       allModes.updateMode(mode);
       if (!mode.name().isEmpty())
         {
