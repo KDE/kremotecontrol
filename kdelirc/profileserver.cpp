@@ -66,7 +66,7 @@ Profile::Profile()
 
 const ProfileAction *Profile::searchClass(const QString &c) const
 {
-    for (QHash<QString, ProfileAction*>::const_iterator i = theActions.constBegin(); i != theActions.constEnd(); i++) {
+    for (QHash<QString, ProfileAction*>::const_iterator i = theActions.constBegin(); i != theActions.constEnd(); ++i) {
         kDebug() << "value:" << i.value();
         if (i.value()->getClass() == c) {
             return i.value();

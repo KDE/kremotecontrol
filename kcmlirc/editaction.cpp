@@ -320,7 +320,7 @@ void EditAction::updateDCOPApplications()
     QDBusConnectionInterface *dBusIface = QDBusConnection::sessionBus().interface();
     QStringList allServices = dBusIface->registeredServiceNames();
 
-    for (QStringList::const_iterator i = allServices.constBegin(); i != allServices.constEnd(); i++) {
+    for (QStringList::const_iterator i = allServices.constBegin(); i != allServices.constEnd(); ++i) {
         // Use only KDE-Apps
         if (!(*i).contains("org.kde")) {
             continue;
