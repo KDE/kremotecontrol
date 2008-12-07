@@ -339,7 +339,7 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton,
     theFlashOff->start(200);
     if (!npApp.isNull()) {
         QString theApp = npApp;
-        npApp = QString();
+        npApp.clear();
         // send notifier by DBUS to npApp/npModule/npMethod(theRemote, theButton);
         kDebug() << "Sending keypress to: " << theApp << ":" << npModule << ":" << npMethod;
         kDebug() << "Parameters: " << theRemote << theButton;
@@ -394,7 +394,7 @@ void IRKick::stealNextPress(QString app, QString module, QString method)
 
 void IRKick::dontStealNextPress()
 {
-    npApp = QString();
+    npApp.clear();
 }
 
 #include "irkick.moc"
