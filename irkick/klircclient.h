@@ -29,8 +29,7 @@
 
 #include <QObject>
 #include <QMap>
-
-#include <qstringlist.h>
+#include <QStringList>
 
 class QTcpSocket;
 class QSocketNotifier;

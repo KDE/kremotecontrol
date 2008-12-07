@@ -23,22 +23,15 @@
   * @author Gav Wood
   */
 
-#ifndef __IRKICK_H
-#define __IRKICK_H
-
-
-#include <QMouseEvent>
-
-#include <ksystemtrayicon.h>
-#include <kdedmodule.h>
-#include <kaboutdata.h>
-#include <kmenu.h>
+#ifndef IRKICK_H
+#define IRKICK_H
 
 #include "modes.h"
 #include "iractions.h"
 #include "klircclient.h"
 
-class QMouseEvent;
+#include <ksystemtrayicon.h>
+#include <kaboutdata.h>
 
 class IRKTrayIcon: public KSystemTrayIcon
 {

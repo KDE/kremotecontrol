@@ -25,40 +25,23 @@
 
 // irkick.cpp  -  Implementation of the main window
 
-#include <QWidget>
-#include <qdialog.h>
+#include "irkick.h"
+#include "profileserver.h"
+#include "irkickadaptor.h"
 
-#include <QRegExp>
-#include <QTimer>
-#include <qevent.h>
-//Added by qt3to4:
-#include <QMouseEvent>
-#include <kdeversion.h>
+#include <QtDBus/qdbusconnection.h>
+
 #include <kapplication.h>
-#include <kaction.h>
 #include <kactioncollection.h>
-#include <ksimpleconfig.h>
 #include <ksystemtrayicon.h>
-#include <kiconloader.h>
-#include <kpassivepopup.h>
 #include <kmessagebox.h>
 #include <kmenu.h>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kwindowsystem.h>
-#include <kwinglobals.h>
-#include <khelpmenu.h>
-#include <kglobal.h>
-#include <kstdguiitem.h>
 #include <kconfiggroup.h>
 #include <knotification.h>
-
 #include <ktoolinvocation.h>
-
-#include "profileserver.h"
-#include "irkick.h"
-#include "irkickadaptor.h"
-#include <QtDBus/qdbusconnection.h>
 
 IRKick::IRKick(const QString &obj) :
         QObject(), npApp(QString::null) //krazy:exclude=nullstrassign for old broken gcc

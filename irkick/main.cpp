@@ -25,16 +25,10 @@
 
 //                          main.cpp  -  Implementation of the main window
 
-//#include <klocale.h>
-#include <kcmdlineargs.h>
-#include <kwinglobals.h>
-#include <kaboutdata.h>
-#include <kglobal.h>
-#include <kdebug.h>
-#include <kuniqueapplication.h>
-
 #include "irkick.h"
 
+#include <kcmdlineargs.h>
+#include <kuniqueapplication.h>
 
 extern "C" KDE_EXPORT int kdemain(int argc, char *argv[])
 {

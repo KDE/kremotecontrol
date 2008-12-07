@@ -23,6 +23,8 @@
   * @author Gav Wood
   */
 
+#include "klircclient.h"
+
 #include <unistd.h>
 #include <fcntl.h>
 #include <cstring>
@@ -31,26 +33,12 @@
 #include <errno.h>
 
 #include <QWidget>
-#include <qdialog.h>
 
-#include <qtcpsocket.h>
-#include <qsocketnotifier.h>
+#include <QObject>
+#include <QTcpSocket>
 #include <QFile>
 
-#include <kapplication.h>
-#include <ksystemtrayicon.h>
-#include <kiconloader.h>
-#include <kpassivepopup.h>
-#include <kmessagebox.h>
-#include <kmenu.h>
 #include <kdebug.h>
-#include <klocale.h>
-
-//#include <dcopclient.h>
-//#include <dcopref.h>
-
-#include "klircclient.h"
-
 
 KLircClient::KLircClient(QWidget *parent) : QObject(parent), theSocket(0), listIsUpToDate(false)
 {
