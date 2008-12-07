@@ -23,16 +23,17 @@
   * @author Gav Wood
   */
 
+#include "editaction.h"
+#include "prototype.h"
+#include "profileserver.h"
+#include "remoteserver.h"
+#include "addaction.h"
+
 #include <QRegExp>
-#include <QLabel>
-#include <qradiobutton.h>
-#include <QComboBox>
-#include <QCheckBox>
 #include <QDBusConnectionInterface>
 #include <QDBusInterface>
 #include <QDomDocument>
 #include <QDomElement>
-
 
 #include <kdebug.h>
 #include <klineedit.h>
@@ -40,12 +41,6 @@
 #include <kmessagebox.h>
 #include <knuminput.h>
 #include <keditlistbox.h>
-
-#include "prototype.h"
-#include "profileserver.h"
-#include "remoteserver.h"
-#include "editaction.h"
-#include "addaction.h"
 
 EditAction::EditAction(IRAction *action, QWidget *parent, const char *name)
 {

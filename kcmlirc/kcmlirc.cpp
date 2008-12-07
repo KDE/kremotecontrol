@@ -24,23 +24,17 @@
   */
 
 
+#include "kcmlirc.h"
 #include "addaction.h"
 #include "newmodedialog.h"
 #include "profileserver.h"
 #include "remoteserver.h"
-#include "kcmlirc.h"
 #include "editaction.h"
 #include "editmode.h"
 #include "modeslist.h"
 #include "ui_selectprofile.h"
 #include "kcmlircadaptor.h"
 
-#include <QCheckBox>
-#include <QLabel>
-#include <QLayout>
-#include <QLineEdit>
-#include <qradiobutton.h>
-#include <QComboBox>
 #include <qevent.h>
 #include <QHBoxLayout>
 #include <QDropEvent>
@@ -48,7 +42,6 @@
 #include <qdbusmessage.h>
 #include <qdbusconnection.h>
 
-#include <kpushbutton.h>
 #include <kapplication.h>
 #include <klocale.h>
 #include <kglobal.h>
@@ -814,7 +807,5 @@ void KCMLirc::configChanged()
 //  return new KCMLirc(parent);
 // }
 //}
-
-#include <ktoolinvocation.h>
 
 #include "kcmlirc.moc"

@@ -28,9 +28,6 @@
 
 #include <QTreeWidget>
 
-//Added by qt3to4:
-#include <QDropEvent>
-
 /**
 
 @author Gav Wood

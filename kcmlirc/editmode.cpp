@@ -24,10 +24,6 @@
   */
 
 
-#include <kicondialog.h>
-#include <kiconloader.h>
-#include <kpushbutton.h>
-
 #include "editmode.h"
 
 EditMode::EditMode(QWidget *parent, Qt::WFlags fl) : QDialog(parent, fl)

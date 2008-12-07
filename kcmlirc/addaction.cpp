@@ -23,10 +23,12 @@
   * @author Gav Wood
   */
 
+#include "addaction.h"
+#include "prototype.h"
+#include "profileserver.h"
+#include "remoteserver.h"
+
 #include <QRegExp>
-#include <QLabel>
-#include <qradiobutton.h>
-#include <QCheckBox>
 #include <QDBusMessage>
 #include <QDBusConnection>
 #include <QDBusInterface>
@@ -40,11 +42,6 @@
 #include <knuminput.h>
 #include <keditlistbox.h>
 #include <klocale.h>
-
-#include "prototype.h"
-#include "addaction.h"
-#include "profileserver.h"
-#include "remoteserver.h"
 
 AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMode(mode)
 {

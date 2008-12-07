@@ -23,13 +23,9 @@
   * @author Gav Wood
   */
 
-#include <QWidget>
-//Added by qt3to4:
-#include <QDropEvent>
+#include "modeslist.h"
 
 #include <kdebug.h>
-
-#include "modeslist.h"
 
 ModesList::ModesList(QWidget *parent) : QTreeWidget(parent)
 {
