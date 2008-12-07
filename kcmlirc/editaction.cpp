@@ -100,7 +100,8 @@ void EditAction::readFrom()
         theNotJustStart->setChecked(true);
     } else { // dcop action
         theUseDCOP->setChecked(true);
-        theDCOPApplications->setCurrentIndex(theDCOPApplications->findText((*theAction).program()));
+        QString program = theAction->program();
+        theDCOPApplications->setCurrentIndex(theDCOPApplications->findText(program.remove(0, 8)));
         updateDCOPObjects();
         theDCOPObjects->setCurrentIndex(theDCOPObjects->findText((*theAction).object()));
         updateDCOPFunctions();
@@ -135,7 +136,7 @@ void EditAction::writeBack()
             (*theAction).setArguments(arguments);
         }
     } else {
-        (*theAction).setProgram(program);
+        (*theAction).setProgram("org.kde." + program);
         (*theAction).setObject(theDCOPObjects->currentText());
         (*theAction).setMethod(theDCOPFunctions->currentText());
         (*theAction).setArguments(arguments);
