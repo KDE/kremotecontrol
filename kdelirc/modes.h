@@ -26,12 +26,11 @@
 #ifndef MODES_H
 #define MODES_H
 
+#include "mode.h"
 
 #include <QMap>
-#include <qpair.h>
 #include <QList>
 
-#include "mode.h"
 
 /**
 @author Gav Wood

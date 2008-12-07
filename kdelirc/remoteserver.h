@@ -28,10 +28,9 @@
 
 
 #include <qxml.h>
-#include <qhash.h>
+#include <QHash>
 
 #include <kdebug.h>
-
 
 class RemoteButton
 {

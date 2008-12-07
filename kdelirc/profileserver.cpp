@@ -23,14 +23,14 @@
   * @author Gav Wood
   */
 
+#include "profileserver.h"
+
 #include <QFile>
-#include <qxml.h>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
 
-#include "profileserver.h"
 
 ProfileServer *ProfileServer::theInstance = 0;
 

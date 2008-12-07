@@ -23,11 +23,11 @@
   * @author Gav Wood
   */
 
+#include "mode.h"
+#include "modes.h"
+
 #include <kconfig.h>
 #include <kconfiggroup.h>
-
-#include "modes.h"
-#include "mode.h"
 
 Mode::Mode() : theName(QString::null) //krazy:exclude=nullstrassign for old broken gcc
 {

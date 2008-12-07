@@ -22,14 +22,13 @@
   * @author Gav Wood
   */
 
+#include "remoteserver.h"
+
 #include <QFile>
-#include <qxml.h>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
-
-#include "remoteserver.h"
 
 RemoteServer *RemoteServer::theInstance = 0;
 

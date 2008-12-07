@@ -23,12 +23,12 @@
   * @author Gav Wood
   */
 
+#include "iractions.h"
+#include "iraction.h"
+
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
-
-#include "iractions.h"
-#include "iraction.h"
 
 void IRActions::loadFromConfig(KConfig &theConfig)
 {

@@ -26,8 +26,8 @@
 #ifndef PROTOTYPE_H
 #define PROTOTYPE_H
 
-#include <qstringlist.h>
-#include <qpair.h>
+#include <QStringList>
+#include <QPair>
 
 
 /**

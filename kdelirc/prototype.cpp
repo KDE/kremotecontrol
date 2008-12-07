@@ -23,9 +23,9 @@
   * @author Gav Wood
   */
 
-#include <QRegExp>
-
 #include "prototype.h"
+
+#include <QRegExp>
 
 Prototype::Prototype()
 {

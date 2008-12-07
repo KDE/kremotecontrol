@@ -26,8 +26,7 @@
 #ifndef PROFILESERVER_H
 #define PROFILESERVER_H
 
-#include <qpair.h>
-
+#include <QPair>
 #include <QMap>
 #include <qxml.h>
 #include <QHash>

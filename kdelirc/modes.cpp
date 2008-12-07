@@ -23,12 +23,11 @@
   * @author Gav Wood
   */
 
+#include "modes.h"
+
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
-
-#include "modes.h"
-#include "mode.h"
 
 Modes::Modes()
 {
