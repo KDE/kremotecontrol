@@ -12,6 +12,7 @@ install( FILES
 	hauppauge.remote.xml
 	sonytv.remote.xml
 	AsusDH.remote.xml
+	SL-6399.remote.xml
 	remote.dtd 
 	DESTINATION ${DATA_INSTALL_DIR}/remotes)
 

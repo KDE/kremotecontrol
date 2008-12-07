@@ -1,0 +1,53 @@
+<?xml version="1.0" ?>
+<!DOCTYPE remote SYSTEM "remote.dtd">
+
+<remote id="SL-6399">
+	<name>Speed Link 6399 Remote Control</name>
+	<author>Frank Scheffold</author>
+
+	<information>Speed Link 6399 Media Control Remote (own lircd.conf)</information>
+	<button id="ZERO" class="number" parameter="0"/>
+	<button id="ONE" class="number" parameter="1"/>
+	<button id="TWO" class="number" parameter="2"/>
+	<button id="THREE" class="number" parameter="3"/>
+	<button id="FOUR" class="number" parameter="4"/>
+	<button id="FIVE" class="number" parameter="5"/>
+	<button id="SIX" class="number" parameter="6"/>
+	<button id="SEVEN" class="number" parameter="7"/>
+	<button id="EIGHT" class="number" parameter="8"/>
+	<button id="NINE" class="number" parameter="9"/>
+	<button id="PC" class="off"><name>Power</name></button>
+	<button id="TV"><name>TV/FM</name></button>
+		
+	<button id="OK" class="enter"><name>Enter</name></button>
+	
+	<button id="MUTE" class="mute"><name>Mute</name></button>
+	<button id="CH_UP" class="channelup"><name>Channel Up</name></button>
+	<button id="CH_DOWN" class="channeldown"><name>Channel Down</name></button>
+	<button id="VOL_UP" class="volumeup"><name>Volume Up</name></button>
+	<button id="VOL_DOWN" class="volumedown"><name>Volume Down</name></button>
+
+
+
+	<button id="VIDEOS" class="red"><name>Red</name></button>
+	<button id="MUSIC" class="green"><name>Green</name></button>
+	<button id="PICTURES" class="yellow"><name>Yellow</name></button>
+	<button id="MYTV" class="blue"><name>Blue</name></button>
+	
+	
+	
+	
+	<button id="REW" class="previous"><name>Back</name></button>
+	<button id="PLAY" class="play"><name>Play</name></button>
+	<button id=FFW" class="next"><name>Next</name></button>
+	
+	<button id="STOP" class="stop"><name>Stop</name></button>
+	<button id="RECORD" class="record"><name>Record</name></button>
+	
+	
+	<button id="UP">Up</button>
+	<button id="DOWN">Down</button>
+	<button id="LEFT">Left</button>
+	<button id="RIGHT">Right</button>
+	
+</remote>
