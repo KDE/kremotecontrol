@@ -450,7 +450,7 @@ void AddAction::updateParameters()
         Prototype p(theFunctions->currentItem()->text(2));
         for (int k = 0; k < p.count(); k++) {
             QStringList parameters;
-            parameters << (p.name(k).isEmpty() ? i18n("<anonymous>") : p.name(k)) << "" << p.type(k) << QString().setNum(k + 1);
+            parameters << (p.name(k).isEmpty() ? i18nc("Unknown parameter name in function", "&lt;anonymous&gt;") : p.name(k)) << "" << p.type(k) << QString().setNum(k + 1);
             new QTreeWidgetItem(theParameters, parameters);
             theArguments.append(QVariant(""));
             kDebug() << "converting argument to:" << p.type(k).toLocal8Bit();

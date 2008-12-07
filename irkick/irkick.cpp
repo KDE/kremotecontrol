@@ -381,7 +381,7 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton,
                 updateModeIcons();
                 doBefore = l.at(i)->doBefore();
                 doAfter = l.at(i)->doAfter();
-                KNotification::event("mode_event", i18n("Mode switched to %1").arg(currentModes[theRemote] == "" ? i18n("Default") : currentModes[theRemote]), SmallIcon("irkick"), theTrayIcon->parentWidget());
+                KNotification::event("mode_event", i18n("Mode switched to %1", currentModes[theRemote] == "" ? i18nc("Default mode in notification", "Default") : currentModes[theRemote]), SmallIcon("irkick"), theTrayIcon->parentWidget());
                 break;
             }
 
