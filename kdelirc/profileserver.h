@@ -203,7 +203,9 @@ public:
         theIfMulti = a;
     }
     const QString &serviceName() const {
-        if (theServiceName != QString()) return theServiceName; return theName;
+        if (!theServiceName.isNull()){
+          return theServiceName; return theName;
+        }
     }
     void setServiceName(const QString &a) {
         theServiceName = a;

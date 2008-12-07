@@ -72,13 +72,20 @@ bool Modes::isDefault(const Mode &mode) const
 
 const Mode Modes::getDefault(const QString &remote) const
 {
-    if (theDefaults[remote] == QString())
+    if (theDefaults[remote].isEmpty()){
         return Mode(remote, "");
-    if (contains(remote))
-        if (operator[](remote).contains(theDefaults[remote]))
+    }
+    if (contains(remote)){
+        if (operator[](remote).contains(theDefaults[remote])){
             return operator[](remote)[theDefaults[remote]];
-        else return Mode(remote, "");
-    else return Mode(remote, "");
+        }
+        else {
+          return Mode(remote, "");
+        }
+    }
+    else{
+      return Mode(remote, "");
+    }
 
 }
 
@@ -105,7 +112,7 @@ void Modes::saveToConfig(KConfig &theConfig)
     modesGroup.writeEntry("Modes", index);
 
     for (iterator i = begin(); i != end(); ++i)
-        if (theDefaults[i.key()] == QString())
+        if (theDefaults[i.key()].isEmpty())
             modesGroup.writeEntry("Default" + i.key(), "");
         else
             modesGroup.writeEntry("Default" + i.key(), theDefaults[i.key()]);
