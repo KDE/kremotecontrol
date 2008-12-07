@@ -10,8 +10,8 @@
 
 #include "newmodedialog.h"
 
-NewModeDialog::NewModeDialog( QWidget* parent )
-    : QDialog( parent )
+NewModeDialog::NewModeDialog(QWidget* parent)
+        : QDialog(parent)
 {
     setupUi(this);
 
@@ -26,9 +26,9 @@ NewModeDialog::~NewModeDialog()
 {
 }
 
-void NewModeDialog::slotTextChanged( const QString& newText )
+void NewModeDialog::slotTextChanged(const QString& newText)
 {
-    kPushButton6->setEnabled( !newText.isEmpty() );
+    kPushButton6->setEnabled(!newText.isEmpty());
 }
 
 #include "newmodedialog.moc"

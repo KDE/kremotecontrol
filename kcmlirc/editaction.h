@@ -25,35 +25,35 @@
 
 class EditAction : public QDialog, public Ui::EditActionBase
 {
-	Q_OBJECT
-	IRAction *theAction;
-	QMap<QString, QString> applicationMap, functionMap;
-	QMap<QString, QString> nameProgramMap;
-	QMap<QString, bool> uniqueProgramMap;
-	Arguments arguments;
-	QString program;
-	bool isUnique;
-	QButtonGroup mainGroup;
+    Q_OBJECT
+    IRAction *theAction;
+    QMap<QString, QString> applicationMap, functionMap;
+    QMap<QString, QString> nameProgramMap;
+    QMap<QString, bool> uniqueProgramMap;
+    Arguments arguments;
+    QString program;
+    bool isUnique;
+    QButtonGroup mainGroup;
 
 public:
-	explicit EditAction(IRAction *action, QWidget *parent = 0, const char *name = 0);
-	~EditAction();
+    explicit EditAction(IRAction *action, QWidget *parent = 0, const char *name = 0);
+    ~EditAction();
 
 
-	void writeBack();
-	void readFrom();
+    void writeBack();
+    void readFrom();
 
 public slots:
-	virtual void slotParameterChanged();
-	virtual void updateArgument(int index);
-	virtual void updateArguments();
-	virtual void updateApplications();
-	virtual void updateFunctions();
-	virtual void updateOptions();
-	virtual void updateDCOPApplications();
-	virtual void updateDCOPObjects();
-	virtual void updateDCOPFunctions();
-	virtual void addItem(QString item);
+    virtual void slotParameterChanged();
+    virtual void updateArgument(int index);
+    virtual void updateArguments();
+    virtual void updateApplications();
+    virtual void updateFunctions();
+    virtual void updateOptions();
+    virtual void updateDCOPApplications();
+    virtual void updateDCOPObjects();
+    virtual void updateDCOPFunctions();
+    virtual void addItem(QString item);
 
 };
 

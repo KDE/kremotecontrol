@@ -30,33 +30,37 @@ typedef QList<Mode> ModeList;
 
 class Modes : protected QMap<QString, QMap<QString, Mode> >
 {
-	void purgeAllModes(KConfig &theConfig);
-	QMap<QString, QString> theDefaults;
+    void purgeAllModes(KConfig &theConfig);
+    QMap<QString, QString> theDefaults;
 
 public:
-	void loadFromConfig(KConfig &theConfig);
-	void saveToConfig(KConfig &theConfig);
-	void generateNulls(const QStringList &theRemotes);
+    void loadFromConfig(KConfig &theConfig);
+    void saveToConfig(KConfig &theConfig);
+    void generateNulls(const QStringList &theRemotes);
 
-	const Mode &getMode(const QString &remote, const QString &mode) const;
-	ModeList getModes(const QString &remote) const;
-	const Mode getDefault(const QString &remote) const;
-	bool isDefault(const Mode &mode) const;
+    const Mode &getMode(const QString &remote, const QString &mode) const;
+    ModeList getModes(const QString &remote) const;
+    const Mode getDefault(const QString &remote) const;
+    bool isDefault(const Mode &mode) const;
 
-	/**
-	 * Call when you've changed a previously getMode'd mode and you want the changes
-	 *   to be recorded
-	 **/
-	void updateMode(const Mode &mode) { operator[](mode.remote())[mode.name()] = mode; }
-	void setDefault(const Mode &mode) { theDefaults[mode.remote()] = mode.name(); }
-	void erase(const Mode &mode);
-	void add(const Mode &mode);
+    /**
+     * Call when you've changed a previously getMode'd mode and you want the changes
+     *   to be recorded
+     **/
+    void updateMode(const Mode &mode) {
+        operator[](mode.remote())[mode.name()] = mode;
+    }
+    void setDefault(const Mode &mode) {
+        theDefaults[mode.remote()] = mode.name();
+    }
+    void erase(const Mode &mode);
+    void add(const Mode &mode);
 
-	// don't use this without renaming all the modes in the actions!!!
-	void rename(Mode &mode, const QString name);
+    // don't use this without renaming all the modes in the actions!!!
+    void rename(Mode &mode, const QString name);
 
-	Modes();
-	~Modes();
+    Modes();
+    ~Modes();
 };
 
 #endif

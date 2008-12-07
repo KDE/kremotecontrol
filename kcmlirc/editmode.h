@@ -20,14 +20,14 @@
 */
 class EditMode : public QDialog, public Ui::EditModeBase
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	void slotCheckText(const QString &newText);
-	void slotClearIcon();
+    void slotCheckText(const QString &newText);
+    void slotClearIcon();
 
-	explicit EditMode(QWidget *parent = 0, Qt::WFlags fl = 0);
-	~EditMode();
+    explicit EditMode(QWidget *parent = 0, Qt::WFlags fl = 0);
+    ~EditMode();
 };
 
 #endif

@@ -23,48 +23,48 @@
 
 class AddAction : public QWizard, public Ui::AddActionBase
 {
-	Q_OBJECT
+    Q_OBJECT
 
-	int curPage;
-	Mode theMode;
+    int curPage;
+    Mode theMode;
 
 public slots:
-	virtual void slotCorrectPage();
-	virtual void slotModeSelected();
-	virtual void slotNextParam();
-	virtual void slotParameterChanged();
+    virtual void slotCorrectPage();
+    virtual void slotModeSelected();
+    virtual void slotNextParam();
+    virtual void slotParameterChanged();
 
-	// connected to KCMLirc class to receive DCOP calls to tell it what button has been pressed
-	virtual void updateForPageChange();
-	virtual void updateButton(const QString &remote, const QString &button);
-	virtual void updateButtons();
-	virtual void updateFunctions();
-	virtual void updateObjects();
-	virtual void updateButtonStates();
-	virtual void updateParameters();
-	virtual void updateParameter();
-	virtual void updateProfiles();
-	virtual void updateProfileFunctions();
-	virtual void updateOptions();
+    // connected to KCMLirc class to receive DCOP calls to tell it what button has been pressed
+    virtual void updateForPageChange();
+    virtual void updateButton(const QString &remote, const QString &button);
+    virtual void updateButtons();
+    virtual void updateFunctions();
+    virtual void updateObjects();
+    virtual void updateButtonStates();
+    virtual void updateParameters();
+    virtual void updateParameter();
+    virtual void updateProfiles();
+    virtual void updateProfileFunctions();
+    virtual void updateOptions();
 
 public:
-	Arguments theArguments;
-	QString program;
-	bool isUnique;
+    Arguments theArguments;
+    QString program;
+    bool isUnique;
 
-	static const QStringList getFunctions(const QString app, const QString obj);
-	void updateArgument(QTreeWidgetItem *theItem);
-	void requestNextPress();
-	void cancelRequest();
+    static const QStringList getFunctions(const QString app, const QString obj);
+    void updateArgument(QTreeWidgetItem *theItem);
+    void requestNextPress();
+    void cancelRequest();
 
-	QMap<QListWidgetItem *, QString> profileMap;
-	QMap<QTreeWidgetItem *, QString> profileFunctionMap;
-	QMap<QListWidgetItem *, QString> buttonMap;
-	QMap<QTreeWidgetItem *, bool> uniqueProgramMap;
-	QMap<QTreeWidgetItem *, QString> nameProgramMap;
+    QMap<QListWidgetItem *, QString> profileMap;
+    QMap<QTreeWidgetItem *, QString> profileFunctionMap;
+    QMap<QListWidgetItem *, QString> buttonMap;
+    QMap<QTreeWidgetItem *, bool> uniqueProgramMap;
+    QMap<QTreeWidgetItem *, QString> nameProgramMap;
 
-	AddAction(QWidget *parent, const char *name, const Mode &mode);
-	~AddAction();
+    AddAction(QWidget *parent, const char *name, const Mode &mode);
+    ~AddAction();
 };
 
 #endif

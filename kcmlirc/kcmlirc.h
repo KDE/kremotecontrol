@@ -28,51 +28,51 @@ class Remote;
 
 class KCMLirc: public KCModule
 {
-	Q_OBJECT
-	Q_CLASSINFO("D-Bus Interface", "org.kde.kcmlirc")
+    Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface", "org.kde.kcmlirc")
 
 private:
-	Ui::KCMLircBase *theKCMLircBase;
-	IRActions allActions;
-	Modes allModes;
-	QMap<QTreeWidgetItem *, IRAction *> actionMap;
-	QMap<QTreeWidgetItem *, Mode> modeMap;
-	QMap<QTreeWidgetItem *, QString> profileMap, remoteMap;
+    Ui::KCMLircBase *theKCMLircBase;
+    IRActions allActions;
+    Modes allModes;
+    QMap<QTreeWidgetItem *, IRAction *> actionMap;
+    QMap<QTreeWidgetItem *, Mode> modeMap;
+    QMap<QTreeWidgetItem *, QString> profileMap, remoteMap;
 
-	void autoPopulate(const Profile &profile, const Remote &remote, const QString &mode);
+    void autoPopulate(const Profile &profile, const Remote &remote, const QString &mode);
 
 public slots:
-	void updateActions();
-	void updateModesStatus();
-	void updateActionsStatus();
-	void updateModes();
-	void updateExtensions();
-	void updateInformation();
-	void slotAddMode();
-	void slotRemoveMode();
-	void slotSetDefaultMode();
-	void slotAddAction();
-	void slotAddActions();
-	void slotEditAction();
-	void slotRemoveAction();
-	void slotDrop(QTreeWidget *, QDropEvent *, QTreeWidgetItem *, QTreeWidgetItem *after);
-	void slotEditMode();
+    void updateActions();
+    void updateModesStatus();
+    void updateActionsStatus();
+    void updateModes();
+    void updateExtensions();
+    void updateInformation();
+    void slotAddMode();
+    void slotRemoveMode();
+    void slotSetDefaultMode();
+    void slotAddAction();
+    void slotAddActions();
+    void slotEditAction();
+    void slotRemoveAction();
+    void slotDrop(QTreeWidget *, QDropEvent *, QTreeWidgetItem *, QTreeWidgetItem *after);
+    void slotEditMode();
 
 
 signals:
-	void haveButton(const QString &remote, const QString &button);
+    void haveButton(const QString &remote, const QString &button);
 
 public:
-	virtual void load();
-	virtual void save();
-	virtual void defaults();
-	virtual void configChanged();
+    virtual void load();
+    virtual void save();
+    virtual void defaults();
+    virtual void configChanged();
 
-	explicit KCMLirc(QWidget *parent = 0, const QStringList &args = QStringList());
-	~KCMLirc();
+    explicit KCMLirc(QWidget *parent = 0, const QStringList &args = QStringList());
+    ~KCMLirc();
 
 public Q_SLOTS:
-	void gotButton(QString remote, QString button);
+    void gotButton(QString remote, QString button);
 
 };
 

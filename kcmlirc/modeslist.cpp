@@ -20,15 +20,15 @@
 
 ModesList::ModesList(QWidget *parent) : QTreeWidget(parent)
 {
-	setAcceptDrops(true);
-	setDropIndicatorShown(true);
+    setAcceptDrops(true);
+    setDropIndicatorShown(true);
 }
 
 bool ModesList::acceptDrag(QDropEvent *) const
 {
-	// TODO: make safer by checking source/mime type
-	// TODO: make safer by only allowing drops on the correct remote control's modes
-	return true;
+    // TODO: make safer by checking source/mime type
+    // TODO: make safer by only allowing drops on the correct remote control's modes
+    return true;
 }
 
 #include "modeslist.moc"

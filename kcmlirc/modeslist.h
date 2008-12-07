@@ -25,10 +25,10 @@
 
 class ModesList : public QTreeWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	virtual bool acceptDrag(QDropEvent *) const;
-	ModesList(QWidget *parent = 0);
+    virtual bool acceptDrag(QDropEvent *) const;
+    ModesList(QWidget *parent = 0);
 };
 
 #endif

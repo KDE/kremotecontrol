@@ -19,11 +19,11 @@ class NewModeDialog : public QDialog, public Ui_NewMode
     Q_OBJECT
 
 public:
-    explicit NewModeDialog( QWidget* parent );
+    explicit NewModeDialog(QWidget* parent);
     ~NewModeDialog();
 
 private slots:
-    void slotTextChanged( const QString& newText );
+    void slotTextChanged(const QString& newText);
 };
 
 

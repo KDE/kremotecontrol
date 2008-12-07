@@ -22,10 +22,10 @@
 class Arguments : public QList<QVariant>
 {
 public:
-	const QString toString() const;
+    const QString toString() const;
 
-	Arguments();
-	~Arguments();
+    Arguments();
+    ~Arguments();
 };
 
 #endif

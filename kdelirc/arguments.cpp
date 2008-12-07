@@ -24,13 +24,13 @@ Arguments::~Arguments()
 
 const QString Arguments::toString() const
 {
-	QString ret = "";
-	for(Arguments::const_iterator i = begin(); i != end(); ++i)
-	{	QString s = (*i).toString();
-		if(s.isNull() || s.isEmpty()) s = "...";
-		if(i != begin()) ret += ", ";
-		ret += s;
-	}
-	return ret;
+    QString ret = "";
+    for (Arguments::const_iterator i = begin(); i != end(); ++i) {
+        QString s = (*i).toString();
+        if (s.isNull() || s.isEmpty()) s = "...";
+        if (i != begin()) ret += ", ";
+        ret += s;
+    }
+    return ret;
 }
 

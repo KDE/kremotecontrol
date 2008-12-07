@@ -23,20 +23,20 @@ void KCMLircBase::init()
 {
 #ifdef __GNUC__
 #warning "kde4 port it !!!!!!!!!"
-#endif	
-#if 0		
-		delete theModes;
-	modeLayout->removeItem(modeButtonLayout);
-	theModes = new ModesList(dynamic_cast<QWidget *>(modeLayout->parent()), "theModes");
-	theModes->addColumn(i18n("Remote Control"));
-	theModes->addColumn(i18n("Default"));
-	theModes->addColumn(i18n("Icon"));
-	theModes->setAcceptDrops(true);
-	theModes->setRootIsDecorated(true);
-	theModes->setItemsRenameable(true);
-	modeLayout->addWidget(theModes);
-	modeLayout->addLayout(modeButtonLayout);
-	modeLayout->invalidate();
-	modeLayout->activate();
-#endif	
+#endif
+#if 0
+    delete theModes;
+    modeLayout->removeItem(modeButtonLayout);
+    theModes = new ModesList(dynamic_cast<QWidget *>(modeLayout->parent()), "theModes");
+    theModes->addColumn(i18n("Remote Control"));
+    theModes->addColumn(i18n("Default"));
+    theModes->addColumn(i18n("Icon"));
+    theModes->setAcceptDrops(true);
+    theModes->setRootIsDecorated(true);
+    theModes->setItemsRenameable(true);
+    modeLayout->addWidget(theModes);
+    modeLayout->addLayout(modeButtonLayout);
+    modeLayout->invalidate();
+    modeLayout->activate();
+#endif
 }

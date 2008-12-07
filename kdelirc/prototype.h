@@ -23,31 +23,53 @@
 
 class Prototype
 {
-	QString original, theName, theReturn;
-	QStringList theNames, theTypes;
+    QString original, theName, theReturn;
+    QStringList theNames, theTypes;
 
-	void parse();
+    void parse();
 
 public:
-	int count() const{ return theTypes.count(); }
-	const QPair<QString, QString> operator[](int i) const { return qMakePair(theTypes[i], theNames[i]); }
-	const QString &name(int i) const { return theNames[i]; }
-	const QString &type(int i) const { return theTypes[i]; }
-	const QString &returnType() const { return theReturn; }
-	const QString &name() const { return theName; }
-	const QString &prototype() const { return original; }
-	const QString argumentList() const;
-	const QString argumentListNN() const;
-	int argumentCount() { return theTypes.count(); }
-	const QString prototypeNR() const { return theName;} // + "(" + argumentListNN() + ")"; }
+    int count() const {
+        return theTypes.count();
+    }
+    const QPair<QString, QString> operator[](int i) const {
+        return qMakePair(theTypes[i], theNames[i]);
+    }
+    const QString &name(int i) const {
+        return theNames[i];
+    }
+    const QString &type(int i) const {
+        return theTypes[i];
+    }
+    const QString &returnType() const {
+        return theReturn;
+    }
+    const QString &name() const {
+        return theName;
+    }
+    const QString &prototype() const {
+        return original;
+    }
+    const QString argumentList() const;
+    const QString argumentListNN() const;
+    int argumentCount() {
+        return theTypes.count();
+    }
+    const QString prototypeNR() const {
+        return theName;
+    } // + "(" + argumentListNN() + ")"; }
 
-	void setPrototype(const QString &source) { original = source; parse(); }
+    void setPrototype(const QString &source) {
+        original = source; parse();
+    }
 
-	Prototype &operator=(const QString &source) { setPrototype(source); return *this; }
+    Prototype &operator=(const QString &source) {
+        setPrototype(source); return *this;
+    }
 
-	Prototype(const QString &source);
-	Prototype();
-	~Prototype();
+    Prototype(const QString &source);
+    Prototype();
+    ~Prototype();
 
 };
 

@@ -18,8 +18,8 @@
 
 EditMode::EditMode(QWidget *parent, Qt::WFlags fl) : QDialog(parent, fl)
 {
-	setupUi(this);
-	theIcon->setIconType(KIconLoader::Panel, KIconLoader::Any);
+    setupUi(this);
+    theIcon->setIconType(KIconLoader::Panel, KIconLoader::Any);
 }
 
 EditMode::~EditMode()
@@ -28,12 +28,12 @@ EditMode::~EditMode()
 
 void EditMode::slotClearIcon()
 {
-	theIcon->setIcon("irkick");
+    theIcon->setIcon("irkick");
 }
 
 void EditMode::slotCheckText(const QString &newText)
 {
-	theOK->setEnabled(!newText.isEmpty());
+    theOK->setEnabled(!newText.isEmpty());
 }
 
 #include "editmode.moc"
