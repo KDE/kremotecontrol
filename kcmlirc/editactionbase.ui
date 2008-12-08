@@ -1,6 +1,6 @@
 <ui version="4.0" >
  <class>EditActionBase</class>
- <widget class="QDialog" name="EditActionBase" >
+ <widget class="KDialog" name="EditActionBase" >
   <property name="geometry" >
    <rect>
     <x>0</x>

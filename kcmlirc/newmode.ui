@@ -1,6 +1,6 @@
 <ui version="4.0" >
  <class>NewMode</class>
- <widget class="QDialog" name="NewMode" >
+ <widget class="KDialog" name="NewMode" >
   <property name="geometry" >
    <rect>
     <x>0</x>
@@ -53,7 +53,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="theName" />
+      <widget class="KLineEdit" name="theName" />
      </item>
     </layout>
    </item>

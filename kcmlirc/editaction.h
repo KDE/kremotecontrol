@@ -37,7 +37,7 @@
 @author Gav Wood
 */
 
-class EditAction : public QDialog, public Ui::EditActionBase
+class EditAction : public KDialog, public Ui::EditActionBase
 {
     Q_OBJECT
     IRAction *theAction;

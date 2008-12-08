@@ -26,10 +26,11 @@
 
 #include "editmode.h"
 
-EditMode::EditMode(QWidget *parent, Qt::WFlags fl) : QDialog(parent, fl)
+EditMode::EditMode(QWidget *parent, Qt::WFlags fl) : KDialog(parent, fl)
 {
     setupUi(this);
     theIcon->setIconType(KIconLoader::Panel, KIconLoader::Any);
+    setButtons(KDialog::None);
 }
 
 EditMode::~EditMode()

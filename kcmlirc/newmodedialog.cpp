@@ -26,9 +26,10 @@
 #include "newmodedialog.h"
 
 NewModeDialog::NewModeDialog(QWidget* parent)
-        : QDialog(parent)
+        : KDialog(parent)
 {
     setupUi(this);
+    setButtons(KDialog::None);
 
     // signals and slots connections
     connect(kPushButton6, SIGNAL(clicked()), this, SLOT(accept()));

@@ -27,10 +27,9 @@
 #ifndef NEWMODEDIALOG_H
 #define NEWMODEDIALOG_H
 
-#include <QDialog>
 #include "ui_newmode.h"
 
-class NewModeDialog : public QDialog, public Ui_NewMode
+class NewModeDialog : public KDialog, public Ui_NewMode
 {
     Q_OBJECT
 

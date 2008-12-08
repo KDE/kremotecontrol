@@ -31,7 +31,7 @@
 /**
 @author Gav Wood
 */
-class EditMode : public QDialog, public Ui::EditModeBase
+class EditMode : public KDialog, public Ui::EditModeBase
 {
     Q_OBJECT
 

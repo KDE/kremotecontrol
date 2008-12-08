@@ -20,7 +20,7 @@ set(kcm_lirc_PART_SRCS ${kdelirc_shared_SRCS}
 
 QT4_ADD_DBUS_ADAPTOR(kcm_lirc_PART_SRCS org.kde.kcmlirc.xml kcmlirc.h KCMLirc)
 
-kde4_add_ui_files(kcm_lirc_PART_SRCS addactionbase.ui newmode.ui editactionbase.ui editmodebase.ui kcmlircbase.ui selectprofile.ui )
+kde4_add_ui_files(kcm_lirc_PART_SRCS addactionbase.ui newmode.ui editactionbase.ui editmodebase.ui kcmlircbase.ui )
 
 kde4_add_plugin(kcm_lirc ${kcm_lirc_PART_SRCS})
 

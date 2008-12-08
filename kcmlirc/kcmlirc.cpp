@@ -204,9 +204,12 @@ void KCMLirc::slotAddActions()
     if (!RemoteServer::remoteServer()->remotes()[m.remote()])
         return;
 
-    QDialog *theDialog = new QDialog(this);
-    Ui::SelectProfile *ui = new Ui::SelectProfile();
-    ui->setupUi(theDialog);
+    KDialog *theDialog = new KDialog(this);
+    QTreeWidget *theProfiles = new QTreeWidget();
+    theProfiles->setHeaderLabel(i18n("Select a profile"));
+    theProfiles->setRootIsDecorated(false);
+    theDialog->setMainWidget(theProfiles);
+    theDialog->setWindowTitle(i18n("Auto-Populate"));
 
     QMap<QTreeWidgetItem *, Profile *> profileMap;
     QHash<QString, Profile*> dict = ProfileServer::profileServer()->profiles();
@@ -215,11 +218,11 @@ void KCMLirc::slotAddActions()
     for (i = dict.constBegin(); i != dict.constEnd(); ++i) {
         QStringList profileList;
         profileList << i.value()->name();
-        profileMap[new QTreeWidgetItem(ui->theProfiles, profileList)] = i.value();
+        profileMap[new QTreeWidgetItem(theProfiles, profileList)] = i.value();
     }
 
-    if (theDialog->exec() == QDialog::Accepted && ui->theProfiles->currentItem()) {
-        autoPopulate(*(profileMap[ui->theProfiles->currentItem()]),
+    if (theDialog->exec() == QDialog::Accepted && theProfiles->currentItem()) {
+        autoPopulate(*(profileMap[theProfiles->currentItem()]),
                      *(RemoteServer::remoteServer()->remotes()[m.remote()]), m.name());
         updateActions();
         emit changed(true);

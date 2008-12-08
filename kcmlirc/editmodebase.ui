@@ -1,6 +1,6 @@
 <ui version="4.0" >
  <class>EditModeBase</class>
- <widget class="QDialog" name="EditModeBase" >
+ <widget class="KDialog" name="EditModeBase" >
   <property name="enabled" >
    <bool>true</bool>
   </property>
@@ -90,7 +90,7 @@
       </layout>
      </item>
      <item row="0" column="1" >
-      <widget class="QLineEdit" name="theName" >
+      <widget class="KLineEdit" name="theName" >
        <property name="enabled" >
         <bool>false</bool>
        </property>
