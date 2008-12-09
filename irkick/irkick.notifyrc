@@ -5,11 +5,17 @@ Comment=Irkick
 
 [Event/global_event]
 Name=Irkick notification
+Name[el]=Ειδοποίηση Irkick
+Name[gl]=Notificación de Irkick
+Name[nds]=Irkick-Bescheden
 Name[pt]=Notificação do Irkick
 Name[pt_BR]=Notificação do Irkick
 Name[sv]=Underrättelse från Irkick
 Name[uk]=Сповіщення Irkick
 Comment=Irkick global notification event
+Comment[el]=Γεγονός καθολική ειδοποίησης Irkick
+Comment[gl]=Evento de notificación global de Irkick
+Comment[nds]=Globaal Irkick-Bescheedbegeefnis
 Comment[pt]=Evento de notificação global do Irkick
 Comment[pt_BR]=Evento de notificação global do Irkick
 Comment[sv]=Irkick global underrättelsehändelse
@@ -19,11 +25,17 @@ Action=Popup
 
 [Event/mode_event]
 Name=Mode event
+Name[el]=Γεγονός λειτουργίας
+Name[gl]=Evento de modo
+Name[nds]=Bedriefoort-Begeefnis
 Name[pt]=Evento de modo
 Name[pt_BR]=Evento de modo
 Name[sv]=Lägeshändelse
 Name[uk]=Подія режиму
 Comment=Mode has changed
+Comment[el]=Η λειτουργία τροποποιήθηκε
+Comment[gl]=Modificouse o modo
+Comment[nds]=Bedriefoort hett wesselt
 Comment[pt]=O modo foi alterado
 Comment[pt_BR]=O modo foi alterado
 Comment[sv]=Läge har ändrats
@@ -32,11 +44,17 @@ Action=Popup
 
 [Event/app_event]
 Name=Application event
+Name[el]=Γεγονός εφαρμογής
+Name[gl]=Evento de programa
+Name[nds]=Programm-Begeefnis
 Name[pt]=Evento da aplicação
 Name[pt_BR]=Evento da aplicação
 Name[sv]=Programhändelse
 Name[uk]=Подія програми
 Comment=Irkick has triggered an application
+Comment[el]=Το Irkick ενεργοποίησε μια εφαρμογή
+Comment[gl]=Irkick iniciou un programa
+Comment[nds]=Irkick hett en Programm opropen
 Comment[pt]=O Irkick despoletou uma aplicação
 Comment[pt_BR]=O Irkick despoletou uma aplicação
 Comment[sv]=Irkick har utlöst ett program
