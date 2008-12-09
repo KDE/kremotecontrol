@@ -85,18 +85,8 @@
             </size>
            </property>
            <property name="columnCount" >
-            <number>2</number>
+            <number>0</number>
            </property>
-           <column>
-            <property name="text" >
-             <string>Remote</string>
-            </property>
-           </column>
-           <column>
-            <property name="text" >
-             <string>Used Extension</string>
-            </property>
-           </column>
           </widget>
          </item>
          <item row="2" column="0" >
@@ -285,7 +275,7 @@
      </widget>
      <widget class="QWidget" name="tab" >
       <attribute name="title" >
-       <string>Loaded Extensions</string>
+       <string>Extension overview</string>
       </attribute>
       <layout class="QGridLayout" >
        <item row="0" column="1" >
@@ -318,12 +308,12 @@
              </property>
              <column>
               <property name="text" >
-               <string>Name</string>
+               <string>Information</string>
               </property>
              </column>
              <column>
               <property name="text" >
-               <string>Information</string>
+               <string>Value</string>
               </property>
              </column>
             </widget>
@@ -336,7 +326,7 @@
         <widget class="QTreeWidget" name="theExtensions" >
          <column>
           <property name="text" >
-           <string>Name</string>
+           <string>Available extensions</string>
           </property>
          </column>
         </widget>

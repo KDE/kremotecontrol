@@ -157,7 +157,7 @@
    <item row="6" column="0" >
     <widget class="QCheckBox" name="theDefault" >
      <property name="text" >
-      <string>Mo&amp;de is the default for its remote control</string>
+      <string>Mo&amp;de is the default for its remote </string>
      </property>
     </widget>
    </item>
@@ -226,9 +226,20 @@
  <layoutdefault spacing="6" margin="11" />
  <customwidgets>
   <customwidget>
+   <class>KDialog</class>
+   <extends>QDialog</extends>
+   <header>kdialog.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>KIconButton</class>
    <extends>QPushButton</extends>
    <header>kicondialog.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
   </customwidget>
   <customwidget>
    <class>KPushButton</class>

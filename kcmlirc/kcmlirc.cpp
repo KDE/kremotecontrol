@@ -122,6 +122,11 @@ KCMLirc::KCMLirc(QWidget *parent, const QStringList &/*args*/) :
     QWidget *widget = new QWidget(this);
     theKCMLircBase = new Ui::KCMLircBase();
     theKCMLircBase->setupUi(widget);
+
+    QStringList headers = (QStringList() << i18nc("Column which shows the available remotes on system", "Remote") << i18n("Used Extension"));
+    theKCMLircBase->theModes->setHeaderLabels(headers);
+
+
     layout->addWidget(widget);
 
     connect(theKCMLircBase->theModes, SIGNAL(itemSelectionChanged()), this, SLOT(updateActions()));

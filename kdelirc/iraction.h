@@ -81,7 +81,11 @@ public:
         return theButton;
     }
     const Arguments arguments() const {
-        if (theProgram != "" && theObject != "") return theArguments; return Arguments();
+        if (theProgram.isEmpty() && theObject.isEmpty()) {
+          return Arguments();
+        }else{
+          return theArguments;
+        }
     }
     bool repeat() const {
         return theRepeat;
@@ -107,10 +111,10 @@ public:
     }
 
     bool isModeChange() const {
-        return theProgram == "";
+        return theProgram.isEmpty();
     }
     bool isJustStart() const {
-        return theProgram != "" && theObject == "";
+        return (!theProgram.isEmpty()) && theObject.isEmpty();
     }
 
     void setProgram(const QString &newProgram) {
