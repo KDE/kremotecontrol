@@ -59,4 +59,4 @@ Comment[pt]=O Irkick despoletou uma aplicação
 Comment[pt_BR]=O Irkick despoletou uma aplicação
 Comment[sv]=Irkick har utlöst ett program
 Comment[uk]=Irkick увімкнула програму
-Action=popup
+Action=Popup
