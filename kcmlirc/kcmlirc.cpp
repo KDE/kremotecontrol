@@ -32,7 +32,6 @@
 #include "editaction.h"
 #include "editmode.h"
 #include "modeslist.h"
-#include "ui_selectprofile.h"
 #include "kcmlircadaptor.h"
 
 #include <qevent.h>
