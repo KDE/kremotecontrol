@@ -203,8 +203,9 @@ public:
     }
     const QString &serviceName() const {
         if (!theServiceName.isNull()){
-          return theServiceName; return theName;
+          return theServiceName;
         }
+        return theName;
     }
     void setServiceName(const QString &a) {
         theServiceName = a;

@@ -191,11 +191,11 @@ void IRKick::updateModeIcons()
             if (!currentModeIcons[i.key()]) {
                 currentModeIcons[i.key()] = new IRKTrayIcon();
                 currentModeIcons[i.key()]->show();
-                //    currentModeIcons[i.key()]->contextMenu()->addTitle( mode.remoteName());
-                currentModeIcons[i.key()]->actionCollection()->action("file_quit")->setEnabled(
-                    false);
+                currentModeIcons[i.key()]->contextMenu()->setTitle( mode.remoteName());
+                currentModeIcons[i.key()]->actionCollection()->action("file_quit")->setEnabled(false);
             }
             currentModeIcons[i.key()]->loadIcon(mode.iconFile());
+            kDebug() << "Loading icon: " << mode.iconFile();
             currentModeIcons[i.key()]->setToolTip(mode.remoteName() + ": <b>"
                                                   + mode.name() + "</b>");
         }
