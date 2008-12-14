@@ -4,7 +4,7 @@
 <profile id="konqueror" servicename="konqueror">
 	<name>Konqueror</name>
 	<author>Gav Wood</author>
-	<instances uniqueapp="0" ifmulti="sendtotop"/>
+	<instances unique="0" ifmulti="sendtotop"/>
 	<action objid="KonquerorIface" prototype="void createNewWindow(QString)" repeat="0" autostart="0">
 		<name>Create New Window</name>
 		<comment>Creates a new window and loads an arbitrary URL.</comment>
