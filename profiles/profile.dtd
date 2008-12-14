@@ -1,13 +1,12 @@
-<!DOCTYPE profile [
-
-<!ELEMENT profile (action+, name, author)>
+<!ELEMENT profile (name, author, instances?, action+)>
 <!ELEMENT name (#PCDATA)>
 <!ELEMENT author (#PCDATA)>
 <!ELEMENT action (name, comment, argument*)>
 <!ELEMENT argument (comment, range?, default?)>
 <!ELEMENT comment (#PCDATA)>
 <!ELEMENT type (#PCDATA)>
-<!ELEMENT instances>
+<!ELEMENT instances EMPTY>
+<!ELEMENT range EMPTY>
 <!ELEMENT default (#PCDATA)>
 
 <!ATTLIST profile id CDATA #REQUIRED>
@@ -18,11 +17,8 @@
 <!ATTLIST range min CDATA #REQUIRED>
 <!ATTLIST range max CDATA #REQUIRED>
 <!ATTLIST action class (captions|teletext|fullscreen|scan|finetuneup|finetunedown|recall|enter|number|play|stop|pause|record|previous|next|rewind|forward|eject|mute|volumedown|volumeup|channeldown|channelup|red|yellow|green|blue|on|off) #IMPLIED>
-<!ATTLIST action multiplier CDATA "1" #IMPLIED>
+<!ATTLIST action multiplier CDATA "1">
 <!ATTLIST action repeat (0|1) "0">
-<!ATTLIST instances uniqueapp (0|1) "1" #REQUIRED>
+<!ATTLIST action autostart (0|1) "0">
+<!ATTLIST instances unique (0|1) "1">
 <!ATTLIST instances ifmulti (sendtotop|sendtobottom|sendtoall|dontsend) "dontsend">
-
-]>
-
-
