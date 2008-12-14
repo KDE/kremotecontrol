@@ -576,9 +576,15 @@ void AddAction::updateObjects()
         QString name = (*i);
         name.remove(0, 8);
 
+	// strip trailing numbers
+	QRegExp r1("[a-zA-Z]*-[0-9]*");
+	if(r1.exactMatch(name)){
+	    name.truncate(name.indexOf('-'));
+	}
+
         // Remove "human unreadable" entries
-        QRegExp r("[a-zA-Z]*");
-        if (! r.exactMatch(name)) {
+        QRegExp r2("[a-zA-Z]*");
+        if (! r2.exactMatch(name)) {
             continue;
         }
 
