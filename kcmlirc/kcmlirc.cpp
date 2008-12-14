@@ -361,13 +361,25 @@ void KCMLirc::autoPopulate(const Profile &profile, const Remote &remote,
             action->setUnique(pa->profile()->unique());
             action->setIfMulti(pa->profile()->ifMulti());
             Arguments l;
-            // argument count should be either 0 or 1. undefined if > 1.
-            if (Prototype(pa->prototype()).argumentCount() == 1) {
+            kDebug() << "Argumentcount" << Prototype(pa->prototype()).argumentCount();
+
+            for(int j = 0; j < pa->arguments().size(); ++j){
+            	if(!pa->arguments().at(j).getDefault().isEmpty()){
+            		l.append(pa->arguments().at(j).getDefault());
+            		l.back().convert(QVariant::nameToType(pa->arguments().at(j).type().toLocal8Bit()));
+            	} else {
                 l.append(QString().setNum(i.value()->parameter().toFloat()
                                           * pa->multiplier()));
                 l.back().convert(QVariant::nameToType(
                                      Prototype(pa->prototype()).type(0).toLocal8Bit()));
+
+            	}
+                kDebug() << "added argument: " << l.at(0);
             }
+            // argument count should be either 0 or 1. undefined if > 1.
+//            if (Prototype(pa->prototype()).argumentCount() == 1) {
+//                if(pa->theArguments().
+//            }
             action->setArguments(l);
             allActions.addAction(action);
         }

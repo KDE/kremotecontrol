@@ -66,8 +66,10 @@ Profile::Profile()
 
 const ProfileAction *Profile::searchClass(const QString &c) const
 {
+	kDebug() << "Actionscount: " << theActions.size();
     for (QHash<QString, ProfileAction*>::const_iterator i = theActions.constBegin(); i != theActions.constEnd(); ++i) {
         kDebug() << "value:" << i.value();
+        kDebug() << "Class: " << i.value()->getClass();
         if (i.value()->getClass() == c) {
             return i.value();
         }
@@ -124,6 +126,7 @@ bool Profile::startElement(const QString &, const QString &, const QString &name
         curPA->setObjId(attributes.value("objid"));
         curPA->setPrototype(attributes.value("prototype"));
         curPA->setClass(attributes.value("class"));
+        kDebug() << "adding action class: " << curPA->getClass();
         curPA->setMultiplier(attributes.value("multiplier").isEmpty() ? 1.0 : attributes.value("multiplier").toFloat());
         curPA->setRepeat(attributes.value("repeat") == "1");
         curPA->setAutoStart(attributes.value("autostart") == "1");
@@ -135,6 +138,7 @@ bool Profile::startElement(const QString &, const QString &, const QString &name
         curPAA = &(curPA->theArguments.last());
         curPAA->setAction(curPA);
         curPAA->setType(attributes.value("type"));
+        curPAA->setDefault(attributes.value("default"));
     } else if (name == "range" && curPAA)
         curPAA->setRange(qMakePair(attributes.value("min").toInt(), attributes.value("max").toInt()));
 
