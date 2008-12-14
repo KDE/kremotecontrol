@@ -123,14 +123,15 @@ void EditAction::writeBack()
         (*theAction).setDoBefore(theDoBefore->isChecked());
         (*theAction).setDoAfter(theDoAfter->isChecked());
     } else if (theUseProfile->isChecked() &&
-               ((ProfileServer::profileServer()->getAction(applicationMap[theApplications->currentText()], functionMap[theFunctions->currentText()]) || theJustStart->isChecked()) &&
-                ProfileServer::profileServer()->profiles()[theApplications->currentText()])) {
+               ((ProfileServer::profileServer()->getAction(applicationMap[theApplications->currentText()], functionMap[theFunctions->currentText()])) || (theJustStart->isChecked() &&
+                ProfileServer::profileServer()->profiles()[theApplications->currentText()]))) {
         if (theJustStart->isChecked()) {
             (*theAction).setProgram(ProfileServer::profileServer()->profiles()[applicationMap[theApplications->currentText()]]->id());
             (*theAction).setObject("");
         } else {
             const ProfileAction *a = ProfileServer::profileServer()->getAction(applicationMap[theApplications->currentText()], functionMap[theFunctions->currentText()]);
             (*theAction).setProgram(ProfileServer::profileServer()->profiles()[applicationMap[theApplications->currentText()]]->id());
+            kDebug() << "wrote back: " << applicationMap[theApplications->currentText()];
             (*theAction).setObject(a->objId());
             (*theAction).setMethod(a->prototype());
             (*theAction).setArguments(arguments);
@@ -285,6 +286,7 @@ void EditAction::updateApplications()
     for (i = dict.constBegin(); i != dict.constEnd(); ++i) {
         theApplications->addItem(i.value()->name());
         applicationMap[i.value()->name()] = i.key();
+		kDebug() << "read Application: " << i.value()->name() << i.key();
     }
     updateFunctions();
 }
