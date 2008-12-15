@@ -191,14 +191,18 @@ void IRKick::updateModeIcons()
             if (!currentModeIcons[i.key()]) {
                 currentModeIcons[i.key()] = new IRKTrayIcon();
                 currentModeIcons[i.key()]->show();
-                currentModeIcons[i.key()]->contextMenu()->setTitle( mode.remoteName());
-                currentModeIcons[i.key()]->actionCollection()->action("file_quit")->setEnabled(false);
+
+                //TODO: Micha what kind of action shall this systray icon should have??
+                //Edit mode for example?
+                currentModeIcons[i.key()]->contextMenu()->setEnabled(false);
+                //currentModeIcons[i.key()]->contextMenu()->setTitle( mode.remoteName());
+                currentModeIcons[i.key()]->actionCollection()->action("file_quit")->setVisible(false);
             }
             currentModeIcons[i.key()]->setIcon(currentModeIcons[i.key()]->loadIcon(mode.iconFile()));
             //currentModeIcons[i.key()]->loadIcon(mode.iconFile());
             kDebug() << "Loading icon: " << mode.iconFile();
-            currentModeIcons[i.key()]->setToolTip(mode.remoteName() + ": <b>"
-                                                  + mode.name() + "</b>");
+            QString toolTip = mode.remoteName() + (mode.name().isEmpty() ? QString::null :  ": <b>"+mode.name() + "</b>");
+            currentModeIcons[i.key()]->setToolTip(toolTip);
         }
     }
 }
