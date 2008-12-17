@@ -3,8 +3,8 @@
 
 <remote id="SONY-TV">
 	<name>SonyTV</name>
-	<information>Bundled with some Sony TVs</information>
 	<author>Dirk Ziegelmeier</author>
+	<information>Bundled with some Sony TVs</information>
 	<button id="0" class="number" parameter="0"/>
 	<button id="1" class="number" parameter="1"/>
 	<button id="2" class="number" parameter="2"/>
