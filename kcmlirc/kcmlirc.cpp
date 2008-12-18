@@ -125,7 +125,6 @@ KCMLirc::KCMLirc(QWidget *parent, const QStringList &/*args*/) :
     QStringList headers = (QStringList() << i18nc("Column which shows the available remotes on system", "Remote") << i18n("Used Extension"));
     theKCMLircBase->theModes->setHeaderLabels(headers);
 
-
     layout->addWidget(widget);
 
     connect(theKCMLircBase->theModes, SIGNAL(itemSelectionChanged()), this, SLOT(updateActions()));
@@ -608,8 +607,14 @@ void KCMLirc::updateModes()
         QString remoteName = RemoteServer::remoteServer()->getRemoteName(*i);
         remoteList << *i;
 
+        QFont font = KApplication::font();
+        font.setBold(true);
+        QFontMetrics fm(font);
         if (remoteName.compare(*i) != 0) {
             remoteList << remoteName;
+            if(fm.width(remoteName) + 40 > theKCMLircBase->theModes->columnWidth(0)){
+            	theKCMLircBase->theModes->setColumnWidth(0, fm.width(remoteName) + 40);
+            }
         }
 
         kDebug() << "Remote Service ";
@@ -635,6 +640,9 @@ void KCMLirc::updateModes()
                 QStringList modeList;
                 modeList << (*modeListIter).name();
                 modeList << (modeListIter->iconFile().isNull() ? "" : "");
+                if(fm.width((*modeListIter).name()) + 70 > theKCMLircBase->theModes->columnWidth(0)){
+                	theKCMLircBase->theModes->setColumnWidth(0, fm.width((*modeListIter).name()) + 70);
+                }
                 QTreeWidgetItem *modeWidgetItem = new QTreeWidgetItem(remoteTreeWidgetIcon, modeList);
                 tFont.setBold(allModes.isDefault(*modeListIter));
                 modeWidgetItem->setFont(0, tFont);
