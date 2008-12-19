@@ -5,12 +5,12 @@
         <name>Asus Digital Home</name>
         <author>Gioacchino Mazzurco</author>
         <information>Bundled with all Asus Digital Home motherboard series</information>
-        <button id="POWER" class="power"><name>Power</name></button>
-        <button id="QUICK_POWER" class="quickpower"><name>Quick Power</name></button>
-        <button id="NOISE_OFF" class="noiseoff"><name>Noise Off</name></button>
-        <button id="WIFI" class="wifi"><name>Wi Fi</name></button>
-        <button id="AP_LAUNCH" class="applaunch"><name>Launch App</name></button>
-        <button id="MAXIMIZE" class="maximize"><name>Maximize</name></button>
+        <button id="POWER" class="off"><name>Power off</name></button>
+        <button id="QUICK_POWER" class="on"><name>Quick Power</name></button>
+        <button id="NOISE_OFF" class="blue"><name>Noise off</name></button> <!-- I used blue because there is not specific class for this ( blue seems generic ) can we add some class to dtd ?-->
+        <button id="WIFI" class="red"><name>Wi Fi</name></button> <!-- I used red because there is not specific class for this ( red seems generic ) can we add some class to dtd ?-->
+        <button id="AP_LAUNCH" class="applaunch"><name>Launch app</name></button>
+        <button id="MAXIMIZE" class="green"><name>Maximize</name></button> <!-- I used green because there is not specific class for this ( green seems generic ) can we add some class to dtd ?-->
         <button id="PLUS" class="volumeup"><name>Volume +</name></button>
         <button id="REV" class="rev"><name>Previous</name></button>
         <button id="PLAY/PAUSE" class="playpause"><name>Play / Pause</name></button>
