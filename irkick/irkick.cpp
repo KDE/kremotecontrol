@@ -136,7 +136,7 @@ void IRKick::doQuit()
 
 void IRKick::resetModes()
 {
-
+kDebug()<< "resseting modes";
     if (theResetCount > 1) {
         KNotification::event("global_event", i18n("Resetting all modes."),
                              SmallIcon("irkick"), theTrayIcon->parentWidget());
@@ -162,8 +162,10 @@ void IRKick::slotReloadConfiguration()
     KConfig theConfig("irkickrc");
     allActions.loadFromConfig(theConfig);
     allModes.loadFromConfig(theConfig);
-    if (currentModes.count() && theResetCount)
+    if (currentModes.count() && theResetCount){
+      kDebug()<< "reloading conf";
         resetModes();
+    }
 }
 
 void IRKick::slotConfigure()
@@ -174,7 +176,7 @@ void IRKick::slotConfigure()
 void IRKick::updateTray()
 {
   QString toolTip="<qt><nobr>";
-  QString icon =QString::null;
+  QString icon = QString("");
   if(!theClient->isConnected()){
     toolTip += i18n("Lirc daemon is currently not available.");
     toolTip+="</nobr";
@@ -191,7 +193,6 @@ void IRKick::updateTray()
     for (QMap<QString, QString>::iterator i = currentModes.begin(); i != currentModes.end(); ++i) {
       Mode mode = allModes.getMode(i.key(), i.value());
       toolTip+="<br><nobr>";
-      QString iconPath= QString::null;
       if( !mode.iconFile().isEmpty()) {
         QString iconPath = KIconLoader::global()->iconPath( mode.iconFile(), KIconLoader::Small,false );
         toolTip += QString(" <img src=\"%1\"></img> ").arg(iconPath);
