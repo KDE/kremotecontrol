@@ -297,7 +297,10 @@ void IRKick::executeAction(const IRAction &action)
             KNotification::event("app_event", i18n("Starting <b>%1</b>...",
                                                    action.application()), SmallIcon("irkick"), theTrayIcon->parentWidget());
             kDebug() << "starting service:" << sname;
-            KToolInvocation::startServiceByDesktopName(sname);
+            QString error;
+            if(KToolInvocation::startServiceByDesktopName(sname, QString(), &error)){
+            	kDebug() << "starting " + sname + " failed: " << error;
+            }
         } else if (action.program().contains(QRegExp("org.[a-zA-Z0-9]*."))) {
             QString runCommand = action.program();
             runCommand.remove(QRegExp("org.[a-zA-Z0-9]*."));

@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE profile SYSTEM "profile.dtd">
-<profile id="org.kde.okular" servicename="org.kde.okular">
+<profile id="org.kde.okular" servicename="okular">
     <name>Okular</name>
     <author>Pino Toscano</author>
     <instances unique="0" ifmulti="sendtotop"/>

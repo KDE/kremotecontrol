@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE profile SYSTEM "profile.dtd">
-<profile id="org.mpris.dragonplayer" servicename="org.mpris.dragonplayer">
+<profile id="org.mpris.dragonplayer" servicename="dragonplayer">
     <name>Dragon Player</name>
     <author>Gioacchino Mazzurco [gmazzurco89@gmail.com]</author>
     <instances unique="0" ifmulti="sendtoone"/>

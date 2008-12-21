@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE profile SYSTEM "profile.dtd">
-<profile id="org.kde.kmix" servicename="org.kde.kmix">
+<profile id="org.kde.kmix" servicename="kmix">
     <name>Sound Mixer</name>
     <author>Michael Zanetti</author>
     <instances unique="1"/>
