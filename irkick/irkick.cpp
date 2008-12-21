@@ -42,6 +42,7 @@
 #include <kconfiggroup.h>
 #include <knotification.h>
 #include <ktoolinvocation.h>
+#include <KStandardDirs>
 
 IRKick::IRKick(const QString &obj) :
         QObject(), npApp(QString::null) //krazy:exclude=nullstrassign for old broken gcc
@@ -56,11 +57,11 @@ IRKick::IRKick(const QString &obj) :
     theTrayIcon = new IRKTrayIcon();
     if (theClient->isConnected()) {
         theTrayIcon->setIcon(theTrayIcon->loadIcon("irkick"));
-        theTrayIcon->setToolTip(i18n("KDE Lirc Server: Ready."));
     } else {
         theTrayIcon->setIcon(theTrayIcon->loadIcon("irkickoff"));
         theTrayIcon->setToolTip(i18n(
                                     "KDE Lirc Server: No infra-red remote controls found."));
+
         QTimer::singleShot(10000, this, SLOT(checkLirc()));
     }
     theFlashOff = new QTimer(theTrayIcon);
@@ -81,6 +82,11 @@ IRKick::IRKick(const QString &obj) :
     theTrayIcon->actionCollection()->action("file_quit")->disconnect(SIGNAL(activated()));
     connect(theTrayIcon->actionCollection()->action("file_quit"), SIGNAL(activated()), SLOT(doQuit()));
 
+    QString tt = QLatin1String("<qt>");
+    tt += i18n("<img src=\"%1\"></img> Test", KStandardDirs::locate( "data", "amarok/images/star.png" ));
+    tt += QLatin1String("</qt>");
+    kDebug() << "Tooltip =" << tt;
+    theTrayIcon->setToolTip(tt);
     theTrayIcon->show();
 }
 
@@ -158,8 +164,8 @@ void IRKick::resetModes()
             delete currentModeIcons[*i];
         currentModeIcons[*i] = 0;
     }
-    updateModeIcons();
-    theResetCount++;
+    updateToolTip();
+    ++theResetCount;
 }
 
 void IRKick::slotReloadConfiguration()
@@ -177,34 +183,33 @@ void IRKick::slotConfigure()
     KToolInvocation::startServiceByDesktopName("kcmlirc");
 }
 
-void IRKick::updateModeIcons()
+void IRKick::updateToolTip()
 {
-    for (QMap<QString, QString>::iterator i = currentModes.begin(); i
-            != currentModes.end(); ++i) {
-        Mode mode = allModes.getMode(i.key(), i.value());
-        if (mode.iconFile().isNull() || mode.iconFile().isEmpty()) {
-            if (currentModeIcons[i.key()]) {
-                delete currentModeIcons[i.key()];
-                currentModeIcons[i.key()] = 0;
-            }
-        } else {
-            if (!currentModeIcons[i.key()]) {
-                currentModeIcons[i.key()] = new IRKTrayIcon();
-                currentModeIcons[i.key()]->show();
-
-                //TODO: Micha what kind of action shall this systray icon should have??
-                //Edit mode for example?
-                currentModeIcons[i.key()]->contextMenu()->setEnabled(false);
-                //currentModeIcons[i.key()]->contextMenu()->setTitle( mode.remoteName());
-                currentModeIcons[i.key()]->actionCollection()->action("file_quit")->setVisible(false);
-            }
-            currentModeIcons[i.key()]->setIcon(currentModeIcons[i.key()]->loadIcon(mode.iconFile()));
-            //currentModeIcons[i.key()]->loadIcon(mode.iconFile());
-            kDebug() << "Loading icon: " << mode.iconFile();
-            QString toolTip = mode.remoteName() + (mode.name().isEmpty() ? QString::null :  ": <b>"+mode.name() + "</b>");
-            currentModeIcons[i.key()]->setToolTip(toolTip);
-        }
-    }
+  QString toolTip="<qt>";
+  if(!theClient->isConnected()){
+    toolTip+="<nobr";
+    toolTip += i18n("KDE Lirc Server: No infra-red remote controls found.");
+    toolTip+="</nobr";
+    return;
+  }else{
+    toolTip+="<nobr><b><u>";
+    toolTip += i18n("KDE Lirc Server: Ready.");
+    toolTip+="</u></b></nobr>";
+    for (QMap<QString, QString>::iterator i = currentModes.begin(); i != currentModes.end(); ++i) {
+      Mode mode = allModes.getMode(i.key(), i.value());
+      toolTip+="<br><nobr>";
+      QString iconPath= QString::null;
+      if( !mode.iconFile().isEmpty()) {
+        QString iconPath = KIconLoader::global()->iconPath( mode.iconFile(), KIconLoader::Small,false );
+        toolTip += QString(" <img src=\"%1\"></img> ").arg(iconPath);
+      }
+      toolTip += "<b>"+ mode.remoteName() + "</b> <i>(";
+      toolTip += mode.name().isEmpty() ? i18n("Master") : mode.name();
+      toolTip +=")</i></nobr></br>";
+  }
+    toolTip+="</qt>";
+  }
+  theTrayIcon->setToolTip(toolTip);
 }
 
 bool IRKick::getPrograms(const IRAction &action, QStringList &programs)
@@ -366,7 +371,7 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton,
             if (l.at(i)->isModeChange() && !theRepeatCounter) { // mode switch
                 currentModes[theRemote] = l.at(i)->modeChange();
                 Mode mode = allModes.getMode(theRemote, l.at(i)->modeChange());
-                updateModeIcons();
+                updateToolTip();
                 doBefore = l.at(i)->doBefore();
                 doAfter = l.at(i)->doAfter();
                 KNotification::event("mode_event", i18n("Mode switched to %1", currentModes[theRemote] == "" ? i18nc("Default mode in notification", "Default") : currentModes[theRemote]), SmallIcon("irkick"), theTrayIcon->parentWidget());
