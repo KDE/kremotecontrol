@@ -66,10 +66,10 @@ bool KLircClient::connectToLirc()
 
     if(!theSocket){
     	theSocket = new QLocalSocket();
+        connect(theSocket, SIGNAL(readyRead()), SLOT(slotRead()));
+        connect(theSocket, SIGNAL(disconnected()), SLOT(slotClosed()));
     }
     theSocket->setSocketDescriptor(sock);
-    connect(theSocket, SIGNAL(readyRead()), SLOT(slotRead()));
-    connect(theSocket, SIGNAL(disconnected()), SLOT(slotClosed()));
     updateRemotes();
     return true;
 }
