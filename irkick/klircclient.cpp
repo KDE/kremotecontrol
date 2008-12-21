@@ -35,7 +35,7 @@
 #include <QWidget>
 
 #include <QObject>
-#include <QTcpSocket>
+#include <QLocalSocket>
 #include <QFile>
 
 #include <kdebug.h>
@@ -63,10 +63,10 @@ bool KLircClient::connectToLirc()
         }
     }
 
-    theSocket = new QTcpSocket();
+    theSocket = new QLocalSocket();
     theSocket->setSocketDescriptor(sock);
     connect(theSocket, SIGNAL(readyRead()), SLOT(slotRead()));
-    connect(theSocket, SIGNAL(connectionClosed()), SLOT(slotClosed()));
+    connect(theSocket, SIGNAL(disconnected()), SLOT(slotClosed()));
     updateRemotes();
     return true;
 }
@@ -194,7 +194,7 @@ void KLircClient::updateRemotes()
 bool KLircClient::isConnected() const
 {
     if (!theSocket) return false;
-    return theSocket->state() == QTcpSocket::ConnectedState;
+    return theSocket->state() == QLocalSocket::ConnectedState;
 }
 
 bool KLircClient::haveFullList() const
