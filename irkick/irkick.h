@@ -66,7 +66,7 @@ class IRKick: public QObject
     KAboutData *aboutData;
     QTimer *theFlashOff;
 
-    void updateToolTip();
+    void updateTray();
 
 protected:
     KLircClient *theClient;

@@ -55,13 +55,7 @@ IRKick::IRKick(const QString &obj) :
     theClient = new KLircClient();
 
     theTrayIcon = new IRKTrayIcon();
-    if (theClient->isConnected()) {
-        theTrayIcon->setIcon(theTrayIcon->loadIcon("irkick"));
-    } else {
-        theTrayIcon->setIcon(theTrayIcon->loadIcon("irkickoff"));
-        theTrayIcon->setToolTip(i18n(
-                                    "KDE Lirc Server: No infra-red remote controls found."));
-
+    if (! theClient->isConnected()) {
         QTimer::singleShot(10000, this, SLOT(checkLirc()));
     }
     theFlashOff = new QTimer(theTrayIcon);
@@ -95,9 +89,9 @@ IRKick::~IRKick()
 
 void IRKick::slotClosed()
 {
-    theTrayIcon->loadIcon("irkickoff");
     KNotification::event("global_event", i18n("The infrared system has severed its connection. Remote controls are no longer available."), SmallIcon("irkick"), theTrayIcon->parentWidget());
     QTimer::singleShot(1000, this, SLOT(checkLirc()));
+    updateTray();
 }
 
 void IRKick::checkLirc()
@@ -106,7 +100,7 @@ void IRKick::checkLirc()
         if (theClient->connectToLirc()) {
             KNotification::event("global_event", i18n("A connection to the infrared system has been made. Remote controls may now be available."),
                                  SmallIcon("irkick"), theTrayIcon->parentWidget());
-            theTrayIcon->setIcon(theTrayIcon->loadIcon("irkick"));
+            updateTray();
         } else {
             QTimer::singleShot(10000, this, SLOT(checkLirc()));
         }
@@ -158,7 +152,7 @@ void IRKick::resetModes()
             delete currentModeIcons[*i];
         currentModeIcons[*i] = 0;
     }
-    updateToolTip();
+    updateTray();
     ++theResetCount;
 }
 
@@ -177,15 +171,20 @@ void IRKick::slotConfigure()
     KToolInvocation::startServiceByDesktopName("kcmlirc");
 }
 
-void IRKick::updateToolTip()
+void IRKick::updateTray()
 {
-  QString toolTip="<qt>";
+  QString toolTip="<qt><nobr>";
+  QString icon =QString::null;
   if(!theClient->isConnected()){
-    toolTip+="<nobr";
+    toolTip += i18n("Lirc daemon is currently not available.");
+    toolTip+="</nobr";
+    icon = "irkickoff";
+  }else if(currentModes.size() == 0){
     toolTip += i18n("KDE Lirc Server: No infra-red remote controls found.");
     toolTip+="</nobr";
-    return;
+    icon = "irkick";
   }else{
+    icon = "irkick";
     toolTip+="<nobr><b><u>";
     toolTip += i18n("KDE Lirc Server: Ready.");
     toolTip+="</u></b></nobr>";
@@ -204,6 +203,7 @@ void IRKick::updateToolTip()
     toolTip+="</qt>";
   }
   theTrayIcon->setToolTip(toolTip);
+  theTrayIcon->setIcon(theTrayIcon->loadIcon(icon));
 }
 
 bool IRKick::getPrograms(const IRAction &action, QStringList &programs)
@@ -368,7 +368,7 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton,
             if (l.at(i)->isModeChange() && !theRepeatCounter) { // mode switch
                 currentModes[theRemote] = l.at(i)->modeChange();
                 Mode mode = allModes.getMode(theRemote, l.at(i)->modeChange());
-                updateToolTip();
+                updateTray();
                 doBefore = l.at(i)->doBefore();
                 doAfter = l.at(i)->doAfter();
                 KNotification::event("mode_event", i18n("Mode switched to %1", currentModes[theRemote] == "" ? i18nc("Default mode in notification", "Default") : currentModes[theRemote]), SmallIcon("irkick"), theTrayIcon->parentWidget());
