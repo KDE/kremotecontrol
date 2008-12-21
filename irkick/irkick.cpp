@@ -81,12 +81,6 @@ IRKick::IRKick(const QString &obj) :
     // theTrayIcon->contextMenu()->insertSeparator();
     theTrayIcon->actionCollection()->action("file_quit")->disconnect(SIGNAL(activated()));
     connect(theTrayIcon->actionCollection()->action("file_quit"), SIGNAL(activated()), SLOT(doQuit()));
-
-    QString tt = QLatin1String("<qt>");
-    tt += i18n("<img src=\"%1\"></img> Test", KStandardDirs::locate( "data", "amarok/images/star.png" ));
-    tt += QLatin1String("</qt>");
-    kDebug() << "Tooltip =" << tt;
-    theTrayIcon->setToolTip(tt);
     theTrayIcon->show();
 }
 
