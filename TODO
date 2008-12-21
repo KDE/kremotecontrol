@@ -1,6 +1,8 @@
-general:
-* Take out kdedmodule_stub.h, install by default (KDE4)
-
-kcmlirc:
-
-irkick:
+Todos / Bugs
+-------------------
+* check why resetModes is called twiced after starting lirc
+* editmode: krazy2
+* editmode:  edit action: hide cancel / ok from kdialog or rewrite dialog
+* kcmlirc -> add -> add actions: dbus options should be placed on top
+* when deleting a mode, action which switches to the mode should also be deleted
+* test, test, test and put issue here ;-)
