@@ -42,6 +42,7 @@
 
 KLircClient::KLircClient(QWidget *parent) : QObject(parent), theSocket(0), listIsUpToDate(false)
 {
+	theSocket = 0;
     connectToLirc();
 }
 
@@ -63,7 +64,9 @@ bool KLircClient::connectToLirc()
         }
     }
 
-    theSocket = new QLocalSocket();
+    if(!theSocket){
+    	theSocket = new QLocalSocket();
+    }
     theSocket->setSocketDescriptor(sock);
     connect(theSocket, SIGNAL(readyRead()), SLOT(slotRead()));
     connect(theSocket, SIGNAL(disconnected()), SLOT(slotClosed()));
@@ -79,8 +82,6 @@ KLircClient::~KLircClient()
 
 void KLircClient::slotClosed()
 {
-    delete theSocket;
-    theSocket = 0;
     emit connectionClosed();
 }
 
