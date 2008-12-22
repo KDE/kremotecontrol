@@ -28,10 +28,10 @@
         <name>Reload</name>
         <comment>Reloads the open document</comment>
     </action>
-    <action objid="okular" prototype="void goToPage(int)" repeat="0" autostart="0">
+    <action objid="okular" prototype="void goToPage(uint)" repeat="0" autostart="0">
         <name>Go to Page</name>
         <comment>Goes to the specified page</comment>
-        <argument type="int"><comment>The page to choose</comment></argument>
+        <argument type="uint"><comment>The page to choose</comment></argument>
     </action>
     <action objid="okular" prototype="void openDocument(QString)" repeat="0" autostart="0">
         <name>Open document</name>
