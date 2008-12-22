@@ -1,8 +1,13 @@
 Todos / Bugs
 -------------------
 * check why resetModes is called twiced after starting lirc
+    -> It is not called twice... It is called once for every installed remote...
+    -> IMHO we can skip this point as the code would be too complex just for skipping one notification
 * editmode: krazy2
 * editmode:  edit action: hide cancel / ok from kdialog or rewrite dialog
+    -> Hidden for now... But it's not the "KDE way"(TM)
 * kcmlirc -> add -> add actions: dbus options should be placed on top
+    -> Why? IMHO the default user likes profiles more then fiddling around with DBus 
 * when deleting a mode, action which switches to the mode should also be deleted
+* When deleting the default mode (not the master-mode) the master mode should be set to the default mode
 * test, test, test and put issue here ;-)
