@@ -49,8 +49,6 @@ public slots:
     virtual void slotModeSelected();
     virtual void slotNextParam();
     virtual void slotParameterChanged();
-
-    // connected to KCMLirc class to receive DCOP calls to tell it what button has been pressed
     virtual void updateForPageChange();
     virtual void updateButton(const QString &remote, const QString &button);
     virtual void updateButtons();

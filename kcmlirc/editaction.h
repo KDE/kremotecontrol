@@ -64,9 +64,9 @@ public slots:
     virtual void updateApplications();
     virtual void updateFunctions();
     virtual void updateOptions();
-    virtual void updateDCOPApplications();
-    virtual void updateDCOPObjects();
-    virtual void updateDCOPFunctions();
+    virtual void updateDBusApplications();
+    virtual void updateDBusObjects();
+    virtual void updateDBusFunctions();
     virtual void addItem(QString item);
 
 };

@@ -111,11 +111,6 @@ KCMLirc::KCMLirc(QWidget *parent, const QStringList &/*args*/) :
         }
     }
 
-    // KApplication::kApplication()->dcopClient()->remoteInterfaces("irkick", "IRKick", &ok);
-    // ok = false;
-    // kDebug() << "OK" << ok ;
-
-
     QHBoxLayout *layout = new QHBoxLayout(this);
 
     QWidget *widget = new QWidget(this);
@@ -286,8 +281,8 @@ void KCMLirc::slotAddAction()
             action->setAutoStart(false);
             action->setRepeat(false);
         }
-        // DCOP?
-        else if (theDialog.theUseDCOP->isChecked()
+        // DBus?
+        else if (theDialog.theUseDBus->isChecked()
                  && !theDialog.theObjects->selectedItems().isEmpty()
                  && theDialog.theObjects->selectedItems().first()->parent()
                  && !theDialog.theFunctions->selectedItems().isEmpty()) {
@@ -562,9 +557,10 @@ void KCMLirc::gotButton(QString remote, QString button)
 
 void KCMLirc::updateModes()
 {
-    Mode oldCurrent;
+    Mode currentSelectedMode;
+    QTreeWidgetItem *modeToSelectTreeWidgetItem = 0;
     if (!theKCMLircBase->theModes->selectedItems().isEmpty()) {
-        oldCurrent = modeMap[theKCMLircBase->theModes->selectedItems().first()];
+        currentSelectedMode = modeMap[theKCMLircBase->theModes->selectedItems().first()];
     }
 
     theKCMLircBase->theModes->clear();
@@ -590,6 +586,7 @@ void KCMLirc::updateModes()
 
     if (remotes.begin() == remotes.end()){
         theKCMLircBase->theMainLabel->setMaximumSize(32767, 32767);
+        return;
     }
     else{
         theKCMLircBase->theMainLabel->setMaximumSize(0, 0);
@@ -623,15 +620,17 @@ void KCMLirc::updateModes()
         tFont.setBold(allModes.isDefault(mode));
         QTreeWidgetItem *remoteTreeWidgetIcon = new QTreeWidgetItem(theKCMLircBase->theModes, remoteList);
         remoteTreeWidgetIcon->setFont(0, tFont);
-        if (!mode.iconFile().isNull())
-            remoteTreeWidgetIcon->setIcon(0, KIconLoader().loadIcon(mode.iconFile(), KIconLoader::Panel));
-        modeMap[remoteTreeWidgetIcon] = mode; // the null mode
-        if (modeMap[remoteTreeWidgetIcon] == oldCurrent) {
-            remoteTreeWidgetIcon->setSelected(true); theKCMLircBase->theModes->setCurrentItem(remoteTreeWidgetIcon);
-        }
         remoteTreeWidgetIcon->setExpanded(true);
         remoteTreeWidgetIcon->setToolTip(0, *remoteList.begin());
         remoteTreeWidgetIcon->setToolTip(1, *(--remoteList.end()));
+
+        if (!mode.iconFile().isNull())
+            remoteTreeWidgetIcon->setIcon(0, KIconLoader().loadIcon(mode.iconFile(), KIconLoader::Panel));
+        modeMap[remoteTreeWidgetIcon] = mode; // the null mode
+
+        if (modeMap[remoteTreeWidgetIcon] == currentSelectedMode) {
+          theKCMLircBase->theModes->setCurrentItem(remoteTreeWidgetIcon);
+        }
 
         ModeList modeList = allModes.getModes(*i);
         for (ModeList::iterator modeListIter = modeList.begin(); modeListIter != modeList.end(); ++modeListIter)
@@ -652,23 +651,23 @@ void KCMLirc::updateModes()
                 modeWidgetItem->setToolTip(0,modeListIter->name());
                 modeWidgetItem->setToolTip(1,modeListIter->name());
                 modeMap[modeWidgetItem] = *modeListIter;
-                if (*modeListIter == oldCurrent) {
-                    modeWidgetItem->setSelected(true); theKCMLircBase->theModes->setCurrentItem(modeWidgetItem);
+                if (*modeListIter == currentSelectedMode) {
+                    theKCMLircBase->theModes->setCurrentItem(modeWidgetItem);
                 }
             }
         remoteTreeWidgetIcon->sortChildren(0, Qt::AscendingOrder);
     }
-    if (theKCMLircBase->theModes->currentItem()) {
-        theKCMLircBase->theModes->currentItem()->setSelected(true);
-        updateModesStatus();
+    if (theKCMLircBase->theModes->currentItem() == 0) {
+      theKCMLircBase->theModes->setCurrentItem(theKCMLircBase->theModes->topLevelItem(0));
     }
+    theKCMLircBase->theModes->currentItem()->setSelected(true);
+    updateModesStatus();
     updateActions();
 }
 
 void KCMLirc::updateExtensions()
 {
     theKCMLircBase->theExtensions->clear();
-
     {
         ProfileServer *theServer = ProfileServer::profileServer();
         QTreeWidgetItem *a = new QTreeWidgetItem(theKCMLircBase->theExtensions,
@@ -697,6 +696,7 @@ void KCMLirc::updateExtensions()
         }
         a->sortChildren(1, Qt::AscendingOrder);
     }
+    theKCMLircBase->theExtensions->setCurrentItem(theKCMLircBase->theExtensions->topLevelItem(0));
     updateInformation();
 }
 
@@ -749,8 +749,7 @@ void KCMLirc::updateInformation()
                    0) == i18n("Remote Controls")) {
         RemoteServer *theServer = RemoteServer::remoteServer();
         const Remote
-        *p =
-            theServer->remotes()[remoteMap[theKCMLircBase->theExtensions->selectedItems().first()]];
+        *p = theServer->remotes()[remoteMap[theKCMLircBase->theExtensions->selectedItems().first()]];
         QStringList infoList;
         infoList << i18n("Extension Name") << p->name();
         new QTreeWidgetItem(theKCMLircBase->theInformation, infoList);

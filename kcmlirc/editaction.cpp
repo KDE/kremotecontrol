@@ -51,11 +51,71 @@ EditAction::EditAction(IRAction *action, QWidget *parent, const char *name)
     //KWindowSystem::setState(widget->winId(), NET::StaysOnTop );
     setupUi(this);
     setButtons(KDialog::None);
+    theValue->layout()->setMargin(0);
+
+    connect(buttonOk, SIGNAL(clicked()), this, SLOT(accept()));
+    connect(buttonCancel, SIGNAL(clicked()), this, SLOT(reject()));
+    connect(theArguments, SIGNAL(activated(int)), this, SLOT(updateArgument(int)));
+    connect(theNotJustStart, SIGNAL(toggled(bool)), this, SLOT(updateOptions()));
+    connect(theFunctions, SIGNAL(activated(QString)), this, SLOT(updateArguments()));
+    connect(theNotJustStart, SIGNAL(toggled(bool)), theFunctions, SLOT(setEnabled(bool)));
+    connect(theDBusFunctions, SIGNAL(activated(QString)), this, SLOT(updateArguments()));
+
+
+    connect(theChangeMode, SIGNAL(toggled(bool)), theModes, SLOT(setEnabled(bool)));
+    connect(theChangeMode, SIGNAL(toggled(bool)), theDoAfter, SLOT(setEnabled(bool)));
+    connect(theChangeMode, SIGNAL(toggled(bool)), theDoBefore, SLOT(setEnabled(bool)));
+    connect(theChangeMode, SIGNAL(toggled(bool)), this, SLOT(updateOptions()));
+    connect(theChangeMode, SIGNAL(toggled(bool)), theAppDbusOptionsLabel, SLOT(setDisabled(bool)));
+
+    connect(theValueDoubleNumInput, SIGNAL(valueChanged(double)), this, SLOT(slotParameterChanged()));
+    connect(theValueLineEdit, SIGNAL(textChanged(QString)), this, SLOT(slotParameterChanged()));
+    connect(theValueCheckBox, SIGNAL(toggled(bool)), this, SLOT(slotParameterChanged()));
+    connect(theValueIntNumInput, SIGNAL(valueChanged(int)), this, SLOT(slotParameterChanged()));
+    connect(theValueEditListBox, SIGNAL(changed()), this, SLOT(slotParameterChanged()));
+
+
+    connect(theJustStart, SIGNAL(toggled(bool)), theAutoStart, SLOT(setChecked(bool)));
+    connect(theJustStart, SIGNAL(toggled(bool)), this, SLOT(updateOptions()));
+
+    connect(theNotJustStart, SIGNAL(toggled(bool)), theRepeat, SLOT(setChecked(bool)));
+    connect(theNotJustStart, SIGNAL(toggled(bool)), theAutoStart, SLOT(setEnabled(bool)));
+    connect(theNotJustStart, SIGNAL(toggled(bool)), theRepeat, SLOT(setEnabled(bool)));
+    connect(theNotJustStart, SIGNAL(toggled(bool)), theArguments, SLOT(setEnabled(bool)));
+
+    connect(theUseProfile, SIGNAL(toggled(bool)), theArguments, SLOT(setEnabled(bool)));
+    connect(theUseProfile, SIGNAL(toggled(bool)), theApplications, SLOT(setEnabled(bool)));
+    connect(theUseProfile, SIGNAL(clicked()), this, SLOT(updateArguments()));
+    connect(theUseProfile, SIGNAL(toggled(bool)), theAutoStart, SLOT(setEnabled(bool)));
+    connect(theUseProfile, SIGNAL(toggled(bool)), theRepeat, SLOT(setEnabled(bool)));
+    connect(theUseProfile, SIGNAL(toggled(bool)), theNotJustStart, SLOT(setEnabled(bool)));
+    connect(theUseProfile, SIGNAL(toggled(bool)), theJustStart, SLOT(setEnabled(bool)));
+    connect(theUseProfile, SIGNAL(toggled(bool)), theNotJustStart, SLOT(setChecked(bool)));
+    connect(theUseProfile, SIGNAL(toggled(bool)), this, SLOT(updateOptions()));
+    connect(theUseProfile, SIGNAL(toggled(bool)), theUseProfileAppLabel, SLOT(setEnabled(bool)));
+    connect(theUseProfile, SIGNAL(toggled(bool)), theFunctions, SLOT(setEnabled(bool)));
+
+    connect(theDBusApplications, SIGNAL(activated(QString)), this, SLOT(updateOptions()));
+    connect(theDBusApplications, SIGNAL(activated(QString)), this, SLOT(updateDBusObjects()));
+
+    connect(theApplications, SIGNAL(activated(QString)), this, SLOT(updateOptions()));
+    connect(theApplications, SIGNAL(activated(QString)), this, SLOT(updateFunctions()));
+
+    connect(theUseDBus, SIGNAL(toggled(bool)), theDBusApplications, SLOT(setEnabled(bool)));
+    connect(theUseDBus, SIGNAL(toggled(bool)), theDBusObjects, SLOT(setEnabled(bool)));
+    connect(theUseDBus, SIGNAL(toggled(bool)), theDBusFunctions, SLOT(setEnabled(bool)));
+    connect(theUseDBus, SIGNAL(toggled(bool)), theDBusObjectsLabel, SLOT(setEnabled(bool)));
+    connect(theUseDBus, SIGNAL(toggled(bool)), theDBusApplicationsLabel, SLOT(setEnabled(bool)));
+    connect(theUseDBus, SIGNAL(toggled(bool)), theAppDbusOptionsLabel, SLOT(setEnabled(bool)));
+    connect(theUseDBus, SIGNAL(toggled(bool)), theDBusFunctionsLabel, SLOT(setEnabled(bool)));
+    connect(theUseDBus, SIGNAL(toggled(bool)), this, SLOT(updateOptions()));
+    connect(theUseDBus, SIGNAL(toggled(bool)), this, SLOT(updateArguments()));
+
 
     updateApplications();
-    updateDCOPApplications();
+    updateDBusApplications();
 
-    mainGroup.addButton(theUseDCOP);
+    mainGroup.addButton(theUseDBus);
     mainGroup.addButton(theUseProfile);
     mainGroup.addButton(theChangeMode);
 
@@ -99,14 +159,14 @@ void EditAction::readFrom()
         arguments = (*theAction).arguments();
         updateArguments();
         theNotJustStart->setChecked(true);
-    } else { // dcop action
-        theUseDCOP->setChecked(true);
+    } else { // DBus action
+        theUseDBus->setChecked(true);
         QString program = theAction->program();
-        theDCOPApplications->setCurrentIndex(theDCOPApplications->findText(program.remove(0, 8)));
-        updateDCOPObjects();
-        theDCOPObjects->setCurrentIndex(theDCOPObjects->findText((*theAction).object()));
-        updateDCOPFunctions();
-        theDCOPFunctions->setCurrentIndex(theDCOPFunctions->findText((*theAction).method().prototype()));
+        theDBusApplications->setCurrentIndex(theDBusApplications->findText(program.remove(0, 8)));
+        updateDBusObjects();
+        theDBusObjects->setCurrentIndex(theDBusObjects->findText((*theAction).object()));
+        updateDBusFunctions();
+        theDBusFunctions->setCurrentIndex(theDBusFunctions->findText((*theAction).method().prototype()));
         arguments = (*theAction).arguments();
         updateArguments();
     }
@@ -139,8 +199,8 @@ void EditAction::writeBack()
         }
     } else {
         (*theAction).setProgram("org.kde." + program);
-        (*theAction).setObject(theDCOPObjects->currentText());
-        (*theAction).setMethod(theDCOPFunctions->currentText());
+        (*theAction).setObject(theDBusObjects->currentText());
+        (*theAction).setMethod(theDBusFunctions->currentText());
         (*theAction).setArguments(arguments);
     }
     (*theAction).setRepeat(theRepeat->isChecked());
@@ -151,28 +211,29 @@ void EditAction::writeBack()
 
 void EditAction::updateArguments()
 {
-    kDebug() ;
     if (theUseProfile->isChecked()) {
         theArguments->clear();
         const ProfileAction *a = ProfileServer::profileServer()->getAction(applicationMap[theApplications->currentText()], functionMap[theFunctions->currentText()]);
         if (!a) {
             arguments.clear(); return;
         }
-        const QList<ProfileActionArgument> &p = a->arguments();
-        if (p.count() != arguments.count()) {
+        const QList<ProfileActionArgument> &actionArguments = a->arguments();
+        if (actionArguments.count() != arguments.count()) {
             arguments.clear();
-            for (int i = 0; i < p.count(); i++)
+            for (int i = 0; i < actionArguments.count(); i++) {
                 arguments.append(QVariant(""));
+            }
         }
-        theArguments->setEnabled(p.count());
-        for (int i = 0; i < p.count(); i++) {
-            theArguments->addItem(p[i].comment() + " (" + p[i].type() + ')');
-            arguments[i].convert(QVariant::nameToType(p[i].type().toLocal8Bit()));
+        theArguments->setEnabled(actionArguments.count());
+        for (int i = 0; i < actionArguments.count(); i++) {
+            theArguments->addItem(actionArguments[i].comment() + " (" + actionArguments[i].type() + ')');
+            arguments[i].convert(QVariant::nameToType(actionArguments[i].type().toLocal8Bit()));
         }
-        if (p.count()) updateArgument(0); else updateArgument(-1);
-    } else if (theUseDCOP->isChecked()) {
+        actionArguments.count() ? updateArgument(0) : updateArgument(-1);
+
+    } else if (theUseDBus->isChecked()) {
         theArguments->clear();
-        Prototype p(theDCOPFunctions->currentText());
+        Prototype p(theDBusFunctions->currentText());
         if (p.count() != arguments.count()) {
             arguments.clear();
             for (int i = 0; i < p.count(); i++)
@@ -183,7 +244,7 @@ void EditAction::updateArguments()
             theArguments->addItem(QString().setNum(i + 1) + ": " + (p.name(i).isEmpty() ? p.type(i) : p.name(i) + " (" + p.type(i) + ')'));
             arguments[i].convert(QVariant::nameToType(p.type(i).toLocal8Bit()));
         }
-        if (p.count()) updateArgument(0); else updateArgument(-1);
+        p.count() ?  updateArgument(0) : updateArgument(-1);
     }
 }
 
@@ -194,10 +255,10 @@ void EditAction::updateOptions()
         if (theApplications->currentIndex() == -1) return;
         const Profile *p = theServer->profiles()[applicationMap[theApplications->currentText()]];
         isUnique = p->unique();
-    } else if (theUseDCOP->isChecked()) {
-        if (theDCOPApplications->currentText().isNull() || theDCOPApplications->currentText().isEmpty()) return;
-        program = theDCOPApplications->currentText();
-        isUnique = uniqueProgramMap[theDCOPApplications->currentText()];
+    } else if (theUseDBus->isChecked()) {
+        if (theDBusApplications->currentText().isNull() || theDBusApplications->currentText().isEmpty()) return;
+        program = theDBusApplications->currentText();
+        isUnique = uniqueProgramMap[theDBusApplications->currentText()];
     } else
         isUnique = true;
 
@@ -310,11 +371,11 @@ void EditAction::updateFunctions()
     updateArguments();
 }
 
-void EditAction::updateDCOPApplications()
+void EditAction::updateDBusApplications()
 {
     QStringList names;
 
-    theDCOPApplications->clear();
+    theDBusApplications->clear();
 
     QDBusConnectionInterface *dBusIface = QDBusConnection::sessionBus().interface();
     QStringList allServices = dBusIface->registeredServiceNames();
@@ -340,21 +401,21 @@ void EditAction::updateDCOPApplications()
             continue;
         }
 
-        theDCOPApplications->addItem(name);
+        theDBusApplications->addItem(name);
         nameProgramMap[name] = *i;
     }
 
 
-    updateDCOPObjects();
+    updateDBusObjects();
 }
 
-void EditAction::updateDCOPObjects()
+void EditAction::updateDBusObjects()
 {
-    theDCOPObjects->clear();
+    theDBusObjects->clear();
 
-    kDebug() << "ProgramMap: " << nameProgramMap[theDCOPApplications->currentText()];
+    kDebug() << "ProgramMap: " << nameProgramMap[theDBusApplications->currentText()];
 
-    QDBusInterface *dBusIface = new QDBusInterface(nameProgramMap[theDCOPApplications->currentText()], "/", "org.freedesktop.DBus.Introspectable");
+    QDBusInterface *dBusIface = new QDBusInterface(nameProgramMap[theDBusApplications->currentText()], "/", "org.freedesktop.DBus.Introspectable");
     QDBusReply<QString> response = dBusIface->call("Introspect");
 
     QDomDocument domDoc;
@@ -365,7 +426,7 @@ void EditAction::updateDCOPObjects()
     while (!child.isNull()) {
         kDebug() << child.tagName() << ":" << child.attribute(QLatin1String("name"));
         if (child.tagName() == QLatin1String("node")) {
-            theDCOPObjects->insertItem(0, child.attribute(QLatin1String("name")));
+            theDBusObjects->insertItem(0, child.attribute(QLatin1String("name")));
         }
         child = child.nextSiblingElement();
     }
@@ -374,14 +435,14 @@ void EditAction::updateDCOPObjects()
 
 
 
-    updateDCOPFunctions();
+    updateDBusFunctions();
 }
 
-void EditAction::updateDCOPFunctions()
+void EditAction::updateDBusFunctions()
 {
-    theDCOPFunctions->clear();
+    theDBusFunctions->clear();
 
-    QDBusInterface *dBusIface = new QDBusInterface(nameProgramMap[theDCOPApplications->currentText()], '/' + theDCOPObjects->currentText(), "org.freedesktop.DBus.Introspectable");
+    QDBusInterface *dBusIface = new QDBusInterface(nameProgramMap[theDBusApplications->currentText()], '/' + theDBusObjects->currentText(), "org.freedesktop.DBus.Introspectable");
     QDBusReply<QString> response = dBusIface->call("Introspect");
 
     QDomDocument domDoc;
@@ -445,7 +506,7 @@ void EditAction::updateDCOPFunctions()
                         arg = arg.nextSiblingElement();
                     }
                     function +=  argStr + ')';
-                    theDCOPFunctions->addItem(function);
+                    theDBusFunctions->addItem(function);
                 }
                 subChild = subChild.nextSiblingElement();
             }

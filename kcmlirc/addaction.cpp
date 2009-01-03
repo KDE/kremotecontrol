@@ -53,6 +53,29 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMo
     connect(this, SIGNAL(currentIdChanged(int)), SLOT(updateForPageChange()));
     connect(this, SIGNAL(currentIdChanged(int)), SLOT(slotCorrectPage()));
 
+    connect(theValueDoubleNumInput, SIGNAL(valueChanged(double)), this, SLOT(slotParameterChanged()));
+    connect(theValueIntNumInput, SIGNAL(valueChanged(int)), this, SLOT(slotParameterChanged()));
+    connect(theValueLineEdit, SIGNAL(textChanged(QString)), this, SLOT(slotParameterChanged()));
+    connect(theValueCheckBox, SIGNAL(toggled(bool)), this, SLOT(slotParameterChanged()));
+    connect(theValueEditListBox, SIGNAL(changed()), this, SLOT(slotParameterChanged()));
+    connect(theChangeMode, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
+    connect(theParameters, SIGNAL(itemSelectionChanged()), this, SLOT(updateParameter()));
+    connect(theSwitchMode, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
+    connect(theExitMode, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
+    connect(theUseDBus, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
+
+    connect(theUseProfile, SIGNAL(toggled(bool)), theProfiles, SLOT(setEnabled(bool)));
+    connect(theUseProfile, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
+
+    connect(theNotJustStart, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
+    connect(theNotJustStart, SIGNAL(toggled(bool)), theProfileFunctions, SLOT(setEnabled(bool)));
+    connect(theNotJustStart, SIGNAL(toggled(bool)), theAutoStart, SLOT(setEnabled(bool)));
+    connect(theNotJustStart, SIGNAL(toggled(bool)), theRepeat, SLOT(setEnabled(bool)));
+    connect(theNotJustStart, SIGNAL(toggled(bool)), theRepeat, SLOT(setChecked(bool)));
+
+    connect(theJustStart, SIGNAL(toggled(bool)), theAutoStart, SLOT(setChecked(bool)));
+    connect(theJustStart, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
+
     connect(theObjects, SIGNAL(itemSelectionChanged()), this, SLOT(updateFunctions()));
     connect(theObjects, SIGNAL(itemSelectionChanged()), this, SLOT(updateFunctions()));
     connect(theObjects, SIGNAL(itemSelectionChanged()), this, SLOT(updateButtonStates()));
@@ -73,26 +96,12 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMo
     connect(theProfileFunctions, SIGNAL(itemSelectionChanged()), this, SLOT(updateOptions()));
     connect(theProfileFunctions, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(next()));
 
-    connect(theUseProfile, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
-
-    connect(theUseDCOP, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
-
-    connect(theChangeMode, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
-
-    connect(theJustStart, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
-
-    connect(theNotJustStart, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
 
     connect(theFunctions, SIGNAL(itemSelectionChanged()), this, SLOT(updateButtonStates()));
     connect(theFunctions, SIGNAL(itemSelectionChanged()), this, SLOT(updateParameter()));
     connect(theFunctions, SIGNAL(itemSelectionChanged()), this, SLOT(updateOptions()));
     connect(theFunctions, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(next()));
 
-    connect(theParameters, SIGNAL(itemSelectionChanged()), this, SLOT(updateParameter()));
-
-    connect(theSwitchMode, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
-
-    connect(theExitMode, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
 
     curPage = 0;
     updateProfiles();
@@ -124,7 +133,7 @@ void AddAction::slotCorrectPage()
 
     kDebug() << "lastPage:" << lastPage << "; curPage:" << curPage;
 
-    if (theUseProfile->isChecked() || theUseDCOP->isChecked()) {
+    if (theUseProfile->isChecked() || theUseDBus->isChecked()) {
         QWizard::page(5)->setFinalPage(true);
     } else {
         QWizard::page(5)->setFinalPage(false);
@@ -152,7 +161,7 @@ void AddAction::slotCorrectPage()
         back();
     }
 
-    if (curPage == 3 && theUseDCOP->isChecked()) {
+    if (curPage == 3 && theUseDBus->isChecked()) {
         if (lastPage == 4) {
             back();
         } else {
@@ -169,13 +178,13 @@ void AddAction::slotCorrectPage()
     }
 
     if (curPage == 4 && (
-                (theUseDCOP->isChecked() && theFunctions->currentItem() && !Prototype(theFunctions->currentItem()->text(2)).count()) ||
+                (theUseDBus->isChecked() && theFunctions->currentItem() && !Prototype(theFunctions->currentItem()->text(2)).count()) ||
                 (theUseProfile->isChecked() && (theProfileFunctions->currentItem() && !theProfileFunctions->currentItem()->text(1).toInt())) || theJustStart->isChecked()
             )) {
-//  showPage(((QWizard *)this)->page(lastPage == 5 ? (theUseDCOP->isChecked() ? 2 : 3) : 5));
+//  showPage(((QWizard *)this)->page(lastPage == 5 ? (theUseDBus->isChecked() ? 2 : 3) : 5));
 
         if (lastPage == 5) {
-            if (theUseDCOP->isChecked()) {
+            if (theUseDBus->isChecked()) {
                 back();
 //    back();
             } else {
@@ -388,7 +397,7 @@ void AddAction::updateOptions()
         const Profile *p = theServer->profiles()[profileMap[theProfiles->currentItem()]];
         im = p->ifMulti();
         isUnique = p->unique();
-    } else if (theUseDCOP->isChecked()) {
+    } else if (theUseDBus->isChecked()) {
         if (!theObjects->selectedItems().first()) return;
         QTreeWidgetItem* i = theObjects->selectedItems().first()->parent();
         if (!i) return;
@@ -443,7 +452,7 @@ void AddAction::updateParameters()
     theParameters->clear();
     kDebug() << "clearing arguments";
     theArguments.clear();
-    if (theUseDCOP->isChecked() && theFunctions->currentItem()) {
+    if (theUseDBus->isChecked() && theFunctions->currentItem()) {
         Prototype p(theFunctions->currentItem()->text(2));
         for (int k = 0; k < p.count(); k++) {
             QStringList parameters;

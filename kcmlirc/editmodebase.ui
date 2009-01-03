@@ -255,72 +255,7 @@
   <include location="local" >kpushbutton.h</include>
  </includes>
  <resources/>
- <connections>
-  <connection>
-   <sender>theName</sender>
-   <signal>textChanged(QString)</signal>
-   <receiver>EditModeBase</receiver>
-   <slot>slotCheckText(QString)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>455</x>
-     <y>63</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theOK</sender>
-   <signal>clicked()</signal>
-   <receiver>EditModeBase</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>260</x>
-     <y>329</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>kPushButton8</sender>
-   <signal>clicked()</signal>
-   <receiver>EditModeBase</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>370</x>
-     <y>329</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>checkBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>theIcon</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>66</x>
-     <y>82</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>385</x>
-     <y>86</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
  <slots>
   <slot>iconChanged(QString)</slot>
   <signal>slotIconChanged(QString)</signal>

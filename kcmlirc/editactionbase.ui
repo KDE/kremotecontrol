@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>982</width>
-    <height>545</height>
+    <height>621</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -17,7 +17,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_7" >
    <item>
-    <widget class="QTabWidget" name="tabWidget3" >
+    <widget class="KTabWidget" name="tabWidget3" >
      <property name="currentIndex" >
       <number>0</number>
      </property>
@@ -46,7 +46,7 @@
          </property>
          <layout class="QGridLayout" name="gridLayout_2" >
           <item row="0" column="0" >
-           <widget class="QLabel" name="textLabel5" >
+           <widget class="QLabel" name="theUseProfileAppLabel" >
             <property name="text" >
              <string>&amp;Application:</string>
             </property>
@@ -59,7 +59,7 @@
            </widget>
           </item>
           <item row="0" column="1" >
-           <widget class="QComboBox" name="theApplications" >
+           <widget class="KComboBox" name="theApplications" >
             <property name="sizePolicy" >
              <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
               <horstretch>0</horstretch>
@@ -85,7 +85,7 @@
            </widget>
           </item>
           <item row="1" column="1" >
-           <widget class="QComboBox" name="theFunctions" >
+           <widget class="KComboBox" name="theFunctions" >
             <property name="sizePolicy" >
              <sizepolicy vsizetype="Fixed" hsizetype="MinimumExpanding" >
               <horstretch>0</horstretch>
@@ -105,9 +105,9 @@
         </widget>
        </item>
        <item>
-        <widget class="QRadioButton" name="theUseDCOP" >
+        <widget class="QRadioButton" name="theUseDBus" >
          <property name="text" >
-          <string>Use &amp;DCOP:</string>
+          <string>Use &amp;DBus:</string>
          </property>
         </widget>
        </item>
@@ -121,7 +121,7 @@
          </property>
          <layout class="QGridLayout" name="gridLayout" >
           <item row="0" column="0" >
-           <widget class="QLabel" name="textLabel5_2" >
+           <widget class="QLabel" name="theDBusApplicationsLabel" >
             <property name="enabled" >
              <bool>false</bool>
             </property>
@@ -132,12 +132,12 @@
              <bool>false</bool>
             </property>
             <property name="buddy" >
-             <cstring>theDCOPApplications</cstring>
+             <cstring>theDBusApplications</cstring>
             </property>
            </widget>
           </item>
           <item row="0" column="1" >
-           <widget class="QComboBox" name="theDCOPApplications" >
+           <widget class="KComboBox" name="theDBusApplications" >
             <property name="enabled" >
              <bool>false</bool>
             </property>
@@ -150,7 +150,7 @@
            </widget>
           </item>
           <item row="1" column="0" >
-           <widget class="QLabel" name="textLabel4_3" >
+           <widget class="QLabel" name="theDBusObjectsLabel" >
             <property name="enabled" >
              <bool>false</bool>
             </property>
@@ -161,19 +161,19 @@
              <bool>false</bool>
             </property>
             <property name="buddy" >
-             <cstring>theDCOPObjects</cstring>
+             <cstring>theDBusObjects</cstring>
             </property>
            </widget>
           </item>
           <item row="1" column="1" >
-           <widget class="QComboBox" name="theDCOPObjects" >
+           <widget class="KComboBox" name="theDBusObjects" >
             <property name="enabled" >
              <bool>false</bool>
             </property>
            </widget>
           </item>
           <item row="2" column="0" >
-           <widget class="QLabel" name="textLabel4_2" >
+           <widget class="QLabel" name="theDBusFunctionsLabel" >
             <property name="enabled" >
              <bool>false</bool>
             </property>
@@ -184,12 +184,12 @@
              <bool>false</bool>
             </property>
             <property name="buddy" >
-             <cstring>theDCOPFunctions</cstring>
+             <cstring>theDBusFunctions</cstring>
             </property>
            </widget>
           </item>
           <item row="2" column="1" >
-           <widget class="QComboBox" name="theDCOPFunctions" >
+           <widget class="KComboBox" name="theDBusFunctions" >
             <property name="enabled" >
              <bool>false</bool>
             </property>
@@ -200,26 +200,10 @@
        </item>
        <item>
         <layout class="QGridLayout" >
-         <item row="0" column="1" >
-          <widget class="QComboBox" name="theArguments" >
-           <property name="sizePolicy" >
-            <sizepolicy vsizetype="Fixed" hsizetype="MinimumExpanding" >
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize" >
-            <size>
-             <width>106</width>
-             <height>0</height>
-            </size>
-           </property>
-          </widget>
-         </item>
          <item row="0" column="0" >
-          <widget class="QLabel" name="textLabel8" >
+          <widget class="QLabel" name="theAppDbusOptionsLabel" >
            <property name="text" >
-            <string>A&amp;pplication/DCOP options:</string>
+            <string>A&amp;pplication/DBus options:</string>
            </property>
            <property name="wordWrap" >
             <bool>false</bool>
@@ -231,8 +215,11 @@
          </item>
          <item rowspan="2" row="0" column="2" >
           <widget class="QStackedWidget" name="theValue" >
+           <property name="lineWidth" >
+            <number>1</number>
+           </property>
            <property name="currentIndex" >
-            <number>4</number>
+            <number>1</number>
            </property>
            <widget class="QWidget" name="valuesPage1" >
             <layout class="QVBoxLayout" name="verticalLayout" >
@@ -254,7 +241,20 @@
            <widget class="QWidget" name="valuesPage2" >
             <layout class="QVBoxLayout" name="verticalLayout_2" >
              <item>
-              <widget class="KDoubleNumInput" native="1" name="theValueDoubleNumInput" />
+              <widget class="KDoubleNumInput" name="theValueDoubleNumInput" />
+             </item>
+             <item>
+              <spacer name="verticalSpacer_6" >
+               <property name="orientation" >
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0" >
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
              </item>
             </layout>
            </widget>
@@ -312,9 +312,24 @@
            <widget class="QWidget" name="valuesPage4" >
             <layout class="QVBoxLayout" name="verticalLayout_4" >
              <item>
-              <widget class="KIntNumInput" native="1" name="theValueIntNumInput" />
+              <widget class="KIntNumInput" name="theValueIntNumInput" />
+             </item>
+             <item>
+              <spacer name="verticalSpacer_5" >
+               <property name="orientation" >
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0" >
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
              </item>
             </layout>
+            <zorder>theValueIntNumInput</zorder>
+            <zorder>theArguments</zorder>
            </widget>
           </widget>
          </item>
@@ -331,6 +346,22 @@
            </property>
           </spacer>
          </item>
+         <item row="0" column="1" >
+          <widget class="KComboBox" name="theArguments" >
+           <property name="sizePolicy" >
+            <sizepolicy vsizetype="Fixed" hsizetype="MinimumExpanding" >
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize" >
+            <size>
+             <width>106</width>
+             <height>0</height>
+            </size>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
        <item>
@@ -343,7 +374,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="theModes" >
+          <widget class="KComboBox" name="theModes" >
            <property name="enabled" >
             <bool>false</bool>
            </property>
@@ -367,7 +398,7 @@
        <item>
         <widget class="QLabel" name="textLabel3" >
          <property name="text" >
-          <string>&lt;b>DCOP/Application Action Options&lt;/b></string>
+          <string>&lt;b>DBus/Application Action Options&lt;/b></string>
          </property>
          <property name="wordWrap" >
           <bool>false</bool>
@@ -640,6 +671,17 @@
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <customwidgets>
   <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KDialog</class>
+   <extends>QDialog</extends>
+   <header>kdialog.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>KDoubleNumInput</class>
    <extends>QWidget</extends>
    <header>knuminput.h</header>
@@ -660,20 +702,40 @@
    <extends>QLineEdit</extends>
    <header>klineedit.h</header>
   </customwidget>
+  <customwidget>
+   <class>KTabWidget</class>
+   <extends>QTabWidget</extends>
+   <header>ktabwidget.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>tabWidget3</tabstop>
   <tabstop>theUseProfile</tabstop>
+  <tabstop>theNotJustStart</tabstop>
   <tabstop>theApplications</tabstop>
-  <tabstop>theDCOPApplications</tabstop>
-  <tabstop>theDCOPObjects</tabstop>
-  <tabstop>theDCOPFunctions</tabstop>
-  <tabstop>theModes</tabstop>
+  <tabstop>theJustStart</tabstop>
+  <tabstop>theFunctions</tabstop>
+  <tabstop>theUseDBus</tabstop>
+  <tabstop>theDBusApplications</tabstop>
+  <tabstop>theDBusObjects</tabstop>
   <tabstop>theRepeat</tabstop>
   <tabstop>theAutoStart</tabstop>
-  <tabstop>buttonHelp</tabstop>
+  <tabstop>theDBusFunctions</tabstop>
   <tabstop>buttonOk</tabstop>
   <tabstop>buttonCancel</tabstop>
+  <tabstop>buttonHelp</tabstop>
+  <tabstop>theArguments</tabstop>
+  <tabstop>theChangeMode</tabstop>
+  <tabstop>theModes</tabstop>
+  <tabstop>theValueLineEdit</tabstop>
+  <tabstop>theValueCheckBox</tabstop>
+  <tabstop>theDoBefore</tabstop>
+  <tabstop>theDoAfter</tabstop>
+  <tabstop>theDontSend</tabstop>
+  <tabstop>theSendToTop</tabstop>
+  <tabstop>theSendToBottom</tabstop>
+  <tabstop>theSendToAll</tabstop>
  </tabstops>
  <includes>
   <include location="local" >klineedit.h</include>
@@ -682,806 +744,5 @@
   <include location="local" >klineedit.h</include>
  </includes>
  <resources/>
- <connections>
-  <connection>
-   <sender>buttonOk</sender>
-   <signal>clicked()</signal>
-   <receiver>EditActionBase</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonCancel</sender>
-   <signal>clicked()</signal>
-   <receiver>EditActionBase</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theUseProfile</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>theApplications</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theUseDCOP</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>theDCOPApplications</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theUseDCOP</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>theDCOPObjects</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theUseDCOP</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>theDCOPFunctions</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theChangeMode</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>theModes</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theApplications</sender>
-   <signal>activated(QString)</signal>
-   <receiver>EditActionBase</receiver>
-   <slot>updateFunctions()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theDCOPApplications</sender>
-   <signal>activated(QString)</signal>
-   <receiver>EditActionBase</receiver>
-   <slot>updateDCOPObjects()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theDCOPObjects</sender>
-   <signal>activated(QString)</signal>
-   <receiver>EditActionBase</receiver>
-   <slot>updateDCOPFunctions()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theDCOPFunctions</sender>
-   <signal>activated(QString)</signal>
-   <receiver>EditActionBase</receiver>
-   <slot>updateArguments()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theUseProfile</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>theArguments</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theUseDCOP</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>theArguments</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theArguments</sender>
-   <signal>activated(int)</signal>
-   <receiver>EditActionBase</receiver>
-   <slot>updateArgument(int)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theUseProfile</sender>
-   <signal>clicked()</signal>
-   <receiver>EditActionBase</receiver>
-   <slot>updateArguments()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theUseDCOP</sender>
-   <signal>clicked()</signal>
-   <receiver>EditActionBase</receiver>
-   <slot>updateArguments()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theUseProfile</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>theAutoStart</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theUseDCOP</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>theAutoStart</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theUseProfile</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>theRepeat</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theUseDCOP</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>theRepeat</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theChangeMode</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>theDoAfter</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theChangeMode</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>theDoBefore</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theValueDoubleNumInput</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>EditActionBase</receiver>
-   <slot>slotParameterChanged()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theValueLineEdit</sender>
-   <signal>textChanged(QString)</signal>
-   <receiver>EditActionBase</receiver>
-   <slot>slotParameterChanged()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theValueCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>EditActionBase</receiver>
-   <slot>slotParameterChanged()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theValueIntNumInput</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>EditActionBase</receiver>
-   <slot>slotParameterChanged()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theValueEditListBox</sender>
-   <signal>changed()</signal>
-   <receiver>EditActionBase</receiver>
-   <slot>slotParameterChanged()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theJustStart</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>theAutoStart</receiver>
-   <slot>setChecked(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theNotJustStart</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>theRepeat</receiver>
-   <slot>setChecked(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theNotJustStart</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>theAutoStart</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theNotJustStart</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>theRepeat</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theNotJustStart</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>theArguments</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theUseProfile</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>theNotJustStart</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theUseProfile</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>theJustStart</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theUseProfile</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>theNotJustStart</receiver>
-   <slot>setChecked(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theDCOPApplications</sender>
-   <signal>activated(QString)</signal>
-   <receiver>EditActionBase</receiver>
-   <slot>updateOptions()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theApplications</sender>
-   <signal>activated(QString)</signal>
-   <receiver>EditActionBase</receiver>
-   <slot>updateOptions()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theUseProfile</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>EditActionBase</receiver>
-   <slot>updateOptions()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theUseDCOP</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>EditActionBase</receiver>
-   <slot>updateOptions()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theChangeMode</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>EditActionBase</receiver>
-   <slot>updateOptions()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theJustStart</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>EditActionBase</receiver>
-   <slot>updateOptions()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theNotJustStart</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>EditActionBase</receiver>
-   <slot>updateOptions()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theUseProfile</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>textLabel5</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theUseDCOP</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>textLabel5_2</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theUseDCOP</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>textLabel4_3</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theUseDCOP</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>textLabel4_2</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theChangeMode</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>textLabel8</receiver>
-   <slot>setDisabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theUseProfile</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>theFunctions</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theFunctions</sender>
-   <signal>activated(QString)</signal>
-   <receiver>EditActionBase</receiver>
-   <slot>updateArguments()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theNotJustStart</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>theFunctions</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

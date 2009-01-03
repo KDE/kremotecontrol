@@ -29,6 +29,12 @@
 EditMode::EditMode(QWidget *parent, Qt::WFlags fl) : KDialog(parent, fl)
 {
     setupUi(this);
+    connect(theName, SIGNAL(textChanged(QString)), this, SLOT(slotCheckText(QString)));
+    connect(theOK, SIGNAL(clicked()), this, SLOT(accept()));
+    connect(kPushButton8, SIGNAL(clicked()), this, SLOT(reject()));
+    connect(checkBox, SIGNAL(toggled(bool)), theIcon, SLOT(setEnabled(bool)));
+
+
     theIcon->setIconType(KIconLoader::Panel, KIconLoader::Any);
     setButtons(KDialog::None);
 }

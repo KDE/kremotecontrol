@@ -36,7 +36,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QRadioButton" name="theUseDCOP" >
+     <widget class="QRadioButton" name="theUseDBus" >
       <property name="text" >
        <string>I wish to manually select a &amp;function from a running program</string>
       </property>
@@ -285,7 +285,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="KIntNumInput" native="1" name="theValueIntNumInput" />
+         <widget class="KIntNumInput" name="theValueIntNumInput" />
         </item>
        </layout>
       </widget>
@@ -305,7 +305,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="KDoubleNumInput" native="1" name="theValueDoubleNumInput" />
+         <widget class="KDoubleNumInput" name="theValueDoubleNumInput" />
         </item>
        </layout>
       </widget>
@@ -640,182 +640,5 @@
   <include location="local" >klineedit.h</include>
  </includes>
  <resources/>
- <connections>
-  <connection>
-   <sender>theUseProfile</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>theProfiles</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theValueDoubleNumInput</sender>
-   <signal>valueChanged(double)</signal>
-   <receiver>AddActionBase</receiver>
-   <slot>slotParameterChanged()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theValueIntNumInput</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>AddActionBase</receiver>
-   <slot>slotParameterChanged()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theValueLineEdit</sender>
-   <signal>textChanged(QString)</signal>
-   <receiver>AddActionBase</receiver>
-   <slot>slotParameterChanged()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theValueCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>AddActionBase</receiver>
-   <slot>slotParameterChanged()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theValueEditListBox</sender>
-   <signal>changed()</signal>
-   <receiver>AddActionBase</receiver>
-   <slot>slotParameterChanged()</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theNotJustStart</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>theProfileFunctions</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theNotJustStart</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>theAutoStart</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theJustStart</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>theAutoStart</receiver>
-   <slot>setChecked(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theNotJustStart</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>theRepeat</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>theNotJustStart</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>theRepeat</receiver>
-   <slot>setChecked(bool)</slot>
-   <hints>
-    <hint type="sourcelabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel" >
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>
