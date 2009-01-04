@@ -54,27 +54,26 @@ EditAction::EditAction(IRAction *action, QWidget *parent, const char *name)
     theValue->layout()->setMargin(0);
 
     QMetaObject::connectSlotsByName(this);
+    connect(buttonOk,SIGNAL(clicked()),this,SLOT(accept()));
+    connect(buttonCancel,SIGNAL(clicked()),this,SLOT(reject()));
+    connect(theApplications,SIGNAL(activated(QString)),this,SLOT(updateFunctions()));
+    connect(theApplications,SIGNAL(activated(QString)),this,SLOT(updateOptions()));
+    connect(theFunctions,SIGNAL(activated(QString)),this,SLOT(updateArguments()));
+    connect(theJustStart,SIGNAL(toggled(bool)),this,SLOT(updateOptions()));
+    connect(theJustStart,SIGNAL(toggled(bool)),theAutoStart,SLOT(setChecked(bool)));
 
-    connect(buttonOk, SIGNAL(clicked()), this, SLOT(accept()));
-    connect(buttonCancel, SIGNAL(clicked()), this, SLOT(reject()));
+    connect(theDBusApplications,SIGNAL(activated(QString)),this,SLOT(updateDCOPObjects()));
+    connect(theDBusApplications,SIGNAL(activated(QString)),this,SLOT(updateOptions()));
+    connect(theDBusFunctions,SIGNAL(activated(QString)),this,SLOT(updateArguments()));
+    connect(theDBusObjects,SIGNAL(activated(QString)),this,SLOT(updateDCOPFunctions()));
 
-    connect(theValueDoubleNumInput, SIGNAL(valueChanged(double)), this, SLOT(slotParameterChanged()));
-    connect(theValueLineEdit, SIGNAL(textChanged(QString)), this, SLOT(slotParameterChanged()));
-    connect(theValueCheckBox, SIGNAL(toggled(bool)), this, SLOT(slotParameterChanged()));
-    connect(theValueIntNumInput, SIGNAL(valueChanged(int)), this, SLOT(slotParameterChanged()));
-    connect(theValueEditListBox, SIGNAL(changed()), this, SLOT(slotParameterChanged()));
 
-    connect(theJustStart, SIGNAL(toggled(bool)), theAutoStart, SLOT(setChecked(bool)));
-    connect(theJustStart, SIGNAL(toggled(bool)), this, SLOT(updateOptions()));
+    connect(theValueCheckBox,SIGNAL(toggled(bool)),this,SLOT(slotParameterChanged()));
+    connect(theValueDoubleNumInput,SIGNAL(valueChanged(double)),this,SLOT(slotParameterChanged()));
+    connect(theValueEditListBox,SIGNAL(changed()),this,SLOT(slotParameterChanged()));
+    connect(theValueIntNumInput,SIGNAL(valueChanged(int)),this,SLOT(slotParameterChanged()));
+    connect(theValueLineEdit,SIGNAL(textChanged(QString)),this,SLOT(slotParameterChanged()));
 
-    connect(theDBusApplications, SIGNAL(activated(QString)), this, SLOT(updateDBusObjects()));
-    connect(theDBusApplications, SIGNAL(activated(QString)), this, SLOT(updateOptions()));
-
-    connect(theArguments, SIGNAL(activated(int)), this, SLOT(updateArgument(int)));
-    connect(theFunctions, SIGNAL(activated(QString)), this, SLOT(updateArguments()));
-    connect(theDBusFunctions, SIGNAL(activated(QString)), this, SLOT(updateArguments()));
-    connect(theApplications, SIGNAL(activated(QString)), this, SLOT(updateOptions()));
-    connect(theApplications, SIGNAL(activated(QString)), this, SLOT(updateFunctions()));
 
     mainGroup.addButton(theUseDBus);
     mainGroup.addButton(theUseProfile);
@@ -88,9 +87,6 @@ EditAction::EditAction(IRAction *action, QWidget *parent, const char *name)
 EditAction::~EditAction()
 {
 }
-
-
-
 
 void EditAction::on_theUseProfile_toggled(bool toogle)
 {
@@ -388,6 +384,7 @@ void EditAction::initDBusApplications()
 
     QDBusConnectionInterface *dBusIface = QDBusConnection::sessionBus().interface();
     QStringList allServices = dBusIface->registeredServiceNames();
+    allServices.sort();
 
     for (QStringList::const_iterator i = allServices.constBegin(); i != allServices.constEnd(); ++i) {
         // Use only KDE-Apps
@@ -431,15 +428,18 @@ void EditAction::updateDBusObjects()
     domDoc.setContent(response);
 
     QDomElement node = domDoc.documentElement();
+
     QDomElement child = node.firstChildElement();
+    QStringList  tObjectsList;
     while (!child.isNull()) {
         kDebug() << child.tagName() << ":" << child.attribute(QLatin1String("name"));
         if (child.tagName() == QLatin1String("node")) {
-            theDBusObjects->insertItem(0, child.attribute(QLatin1String("name")));
+          tObjectsList << child.attribute(QLatin1String("name"));
         }
         child = child.nextSiblingElement();
     }
-
+    tObjectsList.sort();
+    theDBusObjects->insertItems(0, tObjectsList);
     updateDBusFunctions();
 }
 
@@ -457,7 +457,7 @@ void EditAction::updateDBusFunctions()
     QDomElement child = node.firstChildElement();
 
     QString function;
-
+    QStringList functionsList;
     while (!child.isNull()) {
         if (child.tagName() == QLatin1String("interface")) {
             if (child.attribute("name") == "org.freedesktop.DBus.Properties" ||
@@ -511,11 +511,14 @@ void EditAction::updateDBusFunctions()
                         arg = arg.nextSiblingElement();
                     }
                     function +=  argStr + ')';
-                    theDBusFunctions->addItem(function);
+                    functionsList << function;
                 }
                 subChild = subChild.nextSiblingElement();
             }
         }
+        functionsList.sort();
+        theDBusFunctions->addItems(functionsList);
+
         child = child.nextSiblingElement();
     }
 
