@@ -558,7 +558,6 @@ void KCMLirc::gotButton(QString remote, QString button)
 void KCMLirc::updateModes()
 {
     Mode currentSelectedMode;
-    QTreeWidgetItem *modeToSelectTreeWidgetItem = 0;
     if (!theKCMLircBase->theModes->selectedItems().isEmpty()) {
         currentSelectedMode = modeMap[theKCMLircBase->theModes->selectedItems().first()];
     }

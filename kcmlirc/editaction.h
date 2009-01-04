@@ -41,8 +41,7 @@ class EditAction : public KDialog, public Ui::EditActionBase
 {
     Q_OBJECT
     IRAction *theAction;
-    QMap<QString, QString> applicationMap, functionMap;
-    QMap<QString, QString> nameProgramMap;
+    QMap<QString, QString> applicationMap, functionMap, nameProgramMap;
     QMap<QString, bool> uniqueProgramMap;
     Arguments arguments;
     QString program;
@@ -61,14 +60,17 @@ public slots:
     virtual void slotParameterChanged();
     virtual void updateArgument(int index);
     virtual void updateArguments();
-    virtual void updateApplications();
+    virtual void initApplications();
     virtual void updateFunctions();
     virtual void updateOptions();
-    virtual void updateDBusApplications();
+    virtual void initDBusApplications();
     virtual void updateDBusObjects();
     virtual void updateDBusFunctions();
     virtual void addItem(QString item);
-
+    virtual void on_theUseDBus_toggled(bool toogle);
+    virtual void on_theChangeMode_toggled(bool toogle);
+    virtual void on_theNotJustStart_toggled(bool toogle);
+    virtual void on_theUseProfile_toggled(bool toogle);
 };
 
 #endif

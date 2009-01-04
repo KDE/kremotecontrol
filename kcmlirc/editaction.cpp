@@ -53,20 +53,10 @@ EditAction::EditAction(IRAction *action, QWidget *parent, const char *name)
     setButtons(KDialog::None);
     theValue->layout()->setMargin(0);
 
+    QMetaObject::connectSlotsByName(this);
+
     connect(buttonOk, SIGNAL(clicked()), this, SLOT(accept()));
     connect(buttonCancel, SIGNAL(clicked()), this, SLOT(reject()));
-    connect(theArguments, SIGNAL(activated(int)), this, SLOT(updateArgument(int)));
-    connect(theNotJustStart, SIGNAL(toggled(bool)), this, SLOT(updateOptions()));
-    connect(theFunctions, SIGNAL(activated(QString)), this, SLOT(updateArguments()));
-    connect(theNotJustStart, SIGNAL(toggled(bool)), theFunctions, SLOT(setEnabled(bool)));
-    connect(theDBusFunctions, SIGNAL(activated(QString)), this, SLOT(updateArguments()));
-
-
-    connect(theChangeMode, SIGNAL(toggled(bool)), theModes, SLOT(setEnabled(bool)));
-    connect(theChangeMode, SIGNAL(toggled(bool)), theDoAfter, SLOT(setEnabled(bool)));
-    connect(theChangeMode, SIGNAL(toggled(bool)), theDoBefore, SLOT(setEnabled(bool)));
-    connect(theChangeMode, SIGNAL(toggled(bool)), this, SLOT(updateOptions()));
-    connect(theChangeMode, SIGNAL(toggled(bool)), theAppDbusOptionsLabel, SLOT(setDisabled(bool)));
 
     connect(theValueDoubleNumInput, SIGNAL(valueChanged(double)), this, SLOT(slotParameterChanged()));
     connect(theValueLineEdit, SIGNAL(textChanged(QString)), this, SLOT(slotParameterChanged()));
@@ -74,56 +64,80 @@ EditAction::EditAction(IRAction *action, QWidget *parent, const char *name)
     connect(theValueIntNumInput, SIGNAL(valueChanged(int)), this, SLOT(slotParameterChanged()));
     connect(theValueEditListBox, SIGNAL(changed()), this, SLOT(slotParameterChanged()));
 
-
     connect(theJustStart, SIGNAL(toggled(bool)), theAutoStart, SLOT(setChecked(bool)));
     connect(theJustStart, SIGNAL(toggled(bool)), this, SLOT(updateOptions()));
 
-    connect(theNotJustStart, SIGNAL(toggled(bool)), theRepeat, SLOT(setChecked(bool)));
-    connect(theNotJustStart, SIGNAL(toggled(bool)), theAutoStart, SLOT(setEnabled(bool)));
-    connect(theNotJustStart, SIGNAL(toggled(bool)), theRepeat, SLOT(setEnabled(bool)));
-    connect(theNotJustStart, SIGNAL(toggled(bool)), theArguments, SLOT(setEnabled(bool)));
-
-    connect(theUseProfile, SIGNAL(toggled(bool)), theArguments, SLOT(setEnabled(bool)));
-    connect(theUseProfile, SIGNAL(toggled(bool)), theApplications, SLOT(setEnabled(bool)));
-    connect(theUseProfile, SIGNAL(clicked()), this, SLOT(updateArguments()));
-    connect(theUseProfile, SIGNAL(toggled(bool)), theAutoStart, SLOT(setEnabled(bool)));
-    connect(theUseProfile, SIGNAL(toggled(bool)), theRepeat, SLOT(setEnabled(bool)));
-    connect(theUseProfile, SIGNAL(toggled(bool)), theNotJustStart, SLOT(setEnabled(bool)));
-    connect(theUseProfile, SIGNAL(toggled(bool)), theJustStart, SLOT(setEnabled(bool)));
-    connect(theUseProfile, SIGNAL(toggled(bool)), theNotJustStart, SLOT(setChecked(bool)));
-    connect(theUseProfile, SIGNAL(toggled(bool)), this, SLOT(updateOptions()));
-    connect(theUseProfile, SIGNAL(toggled(bool)), theUseProfileAppLabel, SLOT(setEnabled(bool)));
-    connect(theUseProfile, SIGNAL(toggled(bool)), theFunctions, SLOT(setEnabled(bool)));
-
-    connect(theDBusApplications, SIGNAL(activated(QString)), this, SLOT(updateOptions()));
     connect(theDBusApplications, SIGNAL(activated(QString)), this, SLOT(updateDBusObjects()));
+    connect(theDBusApplications, SIGNAL(activated(QString)), this, SLOT(updateOptions()));
 
+    connect(theArguments, SIGNAL(activated(int)), this, SLOT(updateArgument(int)));
+    connect(theFunctions, SIGNAL(activated(QString)), this, SLOT(updateArguments()));
+    connect(theDBusFunctions, SIGNAL(activated(QString)), this, SLOT(updateArguments()));
     connect(theApplications, SIGNAL(activated(QString)), this, SLOT(updateOptions()));
     connect(theApplications, SIGNAL(activated(QString)), this, SLOT(updateFunctions()));
-
-    connect(theUseDBus, SIGNAL(toggled(bool)), theDBusApplications, SLOT(setEnabled(bool)));
-    connect(theUseDBus, SIGNAL(toggled(bool)), theDBusObjects, SLOT(setEnabled(bool)));
-    connect(theUseDBus, SIGNAL(toggled(bool)), theDBusFunctions, SLOT(setEnabled(bool)));
-    connect(theUseDBus, SIGNAL(toggled(bool)), theDBusObjectsLabel, SLOT(setEnabled(bool)));
-    connect(theUseDBus, SIGNAL(toggled(bool)), theDBusApplicationsLabel, SLOT(setEnabled(bool)));
-    connect(theUseDBus, SIGNAL(toggled(bool)), theAppDbusOptionsLabel, SLOT(setEnabled(bool)));
-    connect(theUseDBus, SIGNAL(toggled(bool)), theDBusFunctionsLabel, SLOT(setEnabled(bool)));
-    connect(theUseDBus, SIGNAL(toggled(bool)), this, SLOT(updateOptions()));
-    connect(theUseDBus, SIGNAL(toggled(bool)), this, SLOT(updateArguments()));
-
-
-    updateApplications();
-    updateDBusApplications();
 
     mainGroup.addButton(theUseDBus);
     mainGroup.addButton(theUseProfile);
     mainGroup.addButton(theChangeMode);
 
+    initDBusApplications();
+    initApplications();
     readFrom();
 }
 
 EditAction::~EditAction()
 {
+}
+
+
+
+
+void EditAction::on_theUseProfile_toggled(bool toogle)
+{
+  theArguments->setEnabled(toogle);
+  theApplications->setEnabled(toogle);
+  theAutoStart->setEnabled(toogle);
+  theRepeat->setEnabled(toogle);
+  theNotJustStart->setEnabled(toogle);
+  theJustStart->setEnabled(toogle);
+  theNotJustStart->setChecked(toogle);
+  theUseProfileAppLabel->setEnabled(toogle);
+  theFunctions->setEnabled(toogle);
+  updateFunctions();
+  updateArguments();
+  updateOptions();
+}
+
+void EditAction::on_theNotJustStart_toggled(bool toogle)
+{
+  theRepeat->setChecked(toogle);
+  theAutoStart->setEnabled(toogle);
+  theRepeat->setEnabled(toogle);
+  theArguments->setEnabled(toogle);
+  theFunctions->setEnabled(toogle);
+  updateOptions();
+}
+
+void EditAction::on_theChangeMode_toggled(bool toogle)
+{
+  theModes->setEnabled(toogle);
+  theDoAfter->setEnabled(toogle);
+  theDoBefore->setEnabled(toogle);
+  theAppDbusOptionsLabel->setDisabled(toogle);
+  updateOptions();
+}
+
+void EditAction::on_theUseDBus_toggled(bool toogle)
+{
+  theDBusApplications->setEnabled(toogle);
+  theDBusObjects->setEnabled(toogle);
+  theDBusFunctions->setEnabled(toogle);
+  theDBusObjectsLabel->setEnabled(toogle);
+  theDBusApplicationsLabel->setEnabled(toogle);
+  theAppDbusOptionsLabel->setEnabled(toogle);
+  theDBusFunctionsLabel->setEnabled(toogle);
+  updateArguments();
+  updateOptions();
 }
 
 void EditAction::readFrom()
@@ -147,17 +161,13 @@ void EditAction::readFrom()
         theUseProfile->setChecked(true);
         const Profile *p = ProfileServer::profileServer()->profiles()[(*theAction).program()];
         theApplications->setCurrentIndex(theApplications->findText(p->name()));
-        updateFunctions();
-        updateArguments();
         theJustStart->setChecked(true);
     } else if (ProfileServer::profileServer()->getAction((*theAction).program(), (*theAction).object(), (*theAction).method().prototype())) { // profile action
         theUseProfile->setChecked(true);
         const ProfileAction *a = ProfileServer::profileServer()->getAction((*theAction).program(), (*theAction).object(), (*theAction).method().prototype());
         theApplications->setCurrentIndex(theApplications->findText(a->profile()->name()));
-        updateFunctions();
         theFunctions->setCurrentIndex(theFunctions->findText(a->name()));
         arguments = (*theAction).arguments();
-        updateArguments();
         theNotJustStart->setChecked(true);
     } else { // DBus action
         theUseDBus->setChecked(true);
@@ -168,9 +178,7 @@ void EditAction::readFrom()
         updateDBusFunctions();
         theDBusFunctions->setCurrentIndex(theDBusFunctions->findText((*theAction).method().prototype()));
         arguments = (*theAction).arguments();
-        updateArguments();
     }
-    updateOptions();
 }
 
 void EditAction::writeBack()
@@ -300,32 +308,33 @@ void EditAction::slotParameterChanged()
 void EditAction::updateArgument(int index)
 {
     kDebug() << " i: " << index ;
-    if (index >= 0) {
+    if (index >= 0 && ! arguments.isEmpty()) {
         switch (arguments[index].type()) {
         case QVariant::Int: case QVariant::UInt:
-            theValue->setCurrentIndex(4);
-            theValueIntNumInput->setValue(arguments[index].toInt());
-            break;
+          theValue->setCurrentIndex(4);
+          theValueIntNumInput->setValue(arguments[index].toInt());
+          break;
         case QVariant::Double:
-            theValue->setCurrentIndex(1);
-            theValueDoubleNumInput->setValue(arguments[index].toDouble());
-            break;
+          theValue->setCurrentIndex(1);
+          theValueDoubleNumInput->setValue(arguments[index].toDouble());
+          break;
         case QVariant::Bool:
-            theValue->setCurrentIndex(3);
-            theValueCheckBox->setChecked(arguments[index].toBool());
-            break;
-        case QVariant::StringList: {
-            theValue->setCurrentIndex(0);
-            QStringList backup = arguments[index].toStringList();
-            // backup needed because calling clear will kill what ever has been saved.
-            theValueEditListBox->clear();
-            theValueEditListBox->insertStringList(backup);
-            arguments[index] = backup;
-            break;
+          theValue->setCurrentIndex(3);
+          theValueCheckBox->setChecked(arguments[index].toBool());
+          break;
+
+        case QVariant::StringList:{
+          theValue->setCurrentIndex(0);
+          QStringList backup = arguments[index].toStringList();
+          // backup needed because calling clear will kill what ever has been saved.
+          theValueEditListBox->clear();
+          theValueEditListBox->insertStringList(backup);
+          arguments[index] = backup;
+          break;
         }
         default:
-            theValue->setCurrentIndex(2);
-            theValueLineEdit->setText(arguments[index].toString());
+          theValue->setCurrentIndex(2);
+          theValueLineEdit->setText(arguments[index].toString());
         }
         theValue->setEnabled(true);
     } else {
@@ -337,7 +346,7 @@ void EditAction::updateArgument(int index)
     }
 }
 
-void EditAction::updateApplications()
+void EditAction::initApplications()
 {
     ProfileServer *theServer = ProfileServer::profileServer();
     theApplications->clear();
@@ -371,7 +380,7 @@ void EditAction::updateFunctions()
     updateArguments();
 }
 
-void EditAction::updateDBusApplications()
+void EditAction::initDBusApplications()
 {
     QStringList names;
 
@@ -430,10 +439,6 @@ void EditAction::updateDBusObjects()
         }
         child = child.nextSiblingElement();
     }
-
-
-
-
 
     updateDBusFunctions();
 }
