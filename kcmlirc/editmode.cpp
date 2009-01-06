@@ -31,7 +31,6 @@
 EditMode::EditMode(Mode mode, bool isDefault, QWidget *parent, const bool &modal): KDialog(parent)
 {
     editModeBaseWidget = new EditModeBaseWidget();
-    editModeBaseWidget->theIcon->setIconType(KIconLoader::Panel, KIconLoader::Any);
     setMainWidget(editModeBaseWidget);
     setButtons( Ok | Cancel);
     setDefaultButton(Ok);
@@ -39,6 +38,8 @@ EditMode::EditMode(Mode mode, bool isDefault, QWidget *parent, const bool &modal
 
     editModeBaseWidget->theName->setText(mode.name().isEmpty() ? mode.remoteName() : mode.name());
     editModeBaseWidget->theName->setEnabled(! mode.name().isEmpty());
+
+    editModeBaseWidget->theIcon->setIconType(KIconLoader::Panel, KIconLoader::Any);
     if (!mode.iconFile().isNull()) {
       editModeBaseWidget->theIcon->setIcon(mode.iconFile());
       editModeBaseWidget->theIcon->setEnabled(true);

@@ -36,11 +36,23 @@
 /**
 @author Gav Wood
 */
-
-class EditAction : public KDialog, public Ui::EditActionBase
+class EditActionBaseWidget : public QWidget, public Ui::EditActionBase
 {
+public:
+  EditActionBaseWidget(QWidget *parent = 0) : QWidget(parent)
+  {
+    setupUi(this);
+  }
+};
+
+
+
+class EditAction : public KDialog
+{
+private:
     Q_OBJECT
     IRAction *theAction;
+    EditActionBaseWidget *editActionBaseWidget;
     QMap<QString, QString> applicationMap, functionMap, nameProgramMap;
     QMap<QString, bool> uniqueProgramMap;
     Arguments arguments;
@@ -49,7 +61,7 @@ class EditAction : public KDialog, public Ui::EditActionBase
     QButtonGroup mainGroup;
 
 public:
-    explicit EditAction(IRAction *action, QWidget *parent = 0, const char *name = 0);
+    explicit EditAction(IRAction *action, QWidget *parent = 0, const bool &modal = false);
     ~EditAction();
 
 

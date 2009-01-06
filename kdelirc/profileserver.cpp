@@ -100,8 +100,10 @@ const ProfileAction *ProfileServer::getAction(const QString &appId, const QStrin
 
 const QString &ProfileServer::getServiceName(const QString &appId) const
 {
-    if (theProfiles[appId])
+    if (theProfiles[appId]){
         return theProfiles[appId]->serviceName();
+    }
+    //TODO: FIX this
     return QString();
 }
 
