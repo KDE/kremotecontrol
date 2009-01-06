@@ -31,16 +31,38 @@
 /**
 @author Gav Wood
 */
-class EditMode : public KDialog, public Ui::EditModeBase
+
+class Mode;
+
+class EditModeBaseWidget : public QWidget, public Ui::EditModeBase
+{
+public:
+  EditModeBaseWidget(QWidget *parent = 0) : QWidget(parent)
+  {
+    setupUi(this);
+  }
+};
+
+
+
+
+
+class EditMode : public KDialog
 {
     Q_OBJECT
 
-public:
-    void slotCheckText(const QString &newText);
-    void slotClearIcon();
+private:
+  EditModeBaseWidget *editModeBaseWidget;
 
-    explicit EditMode(QWidget *parent = 0, Qt::WFlags fl = 0);
+public:
+    explicit EditMode(Mode mode, bool isDefault, QWidget *parent = 0, const bool &modal = false);
+    void clearIcon();
+    bool isDefaultMode();
+    Mode getMode();
     ~EditMode();
+
+private slots:
+    void slotCheckText(const QString &newText);
 };
 
 #endif

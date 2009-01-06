@@ -81,7 +81,6 @@ KCMLirc::KCMLirc(QWidget *parent, const QStringList &/*args*/) :
             ki18n(
                 "Use this to configure KDE's infrared remote control system in order to control any KDE application with your infrared remote control."),
             "http://www.kde.org"));
-    setButtons(KCModule::Help);
     setQuickHelp(
         i18n(
             "<h1>Remote Controls</h1><p>This module allows you to configure bindings between your remote controls and KDE applications. Simply select your remote control and click Add under the Actions/Buttons list. If you want KDE to attempt to automatically assign buttons to a supported application's actions, try clicking the Auto-Populate button.</p><p>To view the recognised applications and remote controls, simply select the <em>Loaded Extensions</em> tab.</p>"));
@@ -386,31 +385,38 @@ void KCMLirc::slotAddMode()
         return;
     }
 
-    NewModeDialog theDialog(this);
+   // NewModeDialog theDialog(this);
    QMap<QTreeWidgetItem *, QString> remoteMap;
     theKCMLircBase->theModes->sortByColumn(0);
     QTreeWidgetItem *tr = theKCMLircBase->theModes->selectedItems().first();
-    if (tr)
-        if (tr->parent())
+    if (tr && tr->parent()) {
             tr = tr->parent();
-    for (int i = 0; i < theKCMLircBase->theModes->topLevelItemCount(); i++) {
-        QStringList remotesList;
-        remotesList << theKCMLircBase->theModes->topLevelItem(i)->text(0);
-        QTreeWidgetItem *a = new QTreeWidgetItem(theDialog.theRemotes,
-                remotesList);
-        remoteMap[a]
-        = modeMap[theKCMLircBase->theModes->topLevelItem(i)].remote();
-        if (theKCMLircBase->theModes->topLevelItem(i) == tr) {
-            a->setSelected(true);
-            theDialog.theRemotes->setCurrentItem(a);
-        }
     }
-    if (theDialog.exec() == QDialog::Accepted
-            && !theDialog.theRemotes->selectedItems().isEmpty()
-            && !theDialog.theName->text().isEmpty()) {
-        allModes.add(Mode(
-                         remoteMap[theDialog.theRemotes->selectedItems().first()],
-                         theDialog.theName->text()));
+    QStringList remotesList;
+    for (int i = 0; i < theKCMLircBase->theModes->topLevelItemCount(); i++) {
+remotesList << theKCMLircBase->theModes->topLevelItem(i)->text(0);
+//        QTreeWidgetItem *a = new QTreeWidgetItem(theDialog.theRemotes,
+//                remotesList);
+//        remoteMap[a]
+//        = modeMap[theKCMLircBase->theModes->topLevelItem(i)].remote();
+//        if (theKCMLircBase->theModes->topLevelItem(i) == tr) {
+//            a->setSelected(true);
+//            theDialog.theRemotes->setCurrentItem(a);
+//        }
+    }
+    NewModeDialog theDialog(remotesList, this,0);
+
+
+    if (theDialog.exec() == QDialog::Accepted){
+      //TODO: What when mode with same name currently exists?
+      //MessageBox with warning or shall okButton in the Dialog be disabled when typing?
+      //What meant that newmode must know about all modes of the remote
+      // Same todo in editMode
+      Mode mode = theDialog.getMode();
+      allModes.add(mode);
+      if(theDialog.isDefaultMode()){
+        allModes.setDefault(mode);
+      }
         updateModes();
         emit changed(true);
     }
@@ -421,55 +427,44 @@ void KCMLirc::slotEditMode()
     if (theKCMLircBase->theModes->selectedItems().isEmpty())
         return;
 
-    EditMode theDialog(this, 0);
-
     Mode &mode = modeMap[theKCMLircBase->theModes->selectedItems().first()];
-    theDialog.theName->setEnabled(
-        theKCMLircBase->theModes->selectedItems().first()->parent());
-    theDialog.theName->setText(mode.name().isEmpty() ? mode.remoteName()
-                               : mode.name());
-    if (!mode.iconFile().isNull()) {
-        theDialog.theIcon->setIcon(mode.iconFile());
-        theDialog.checkBox->setChecked(true);
-    } else {
-        theDialog.slotClearIcon();
-    }
-    theDialog.theDefault->setChecked(allModes.isDefault(mode));
-    theDialog.theDefault->setEnabled(!allModes.isDefault(mode));
+    EditMode theDialog(mode,allModes.isDefault(mode), this, 0);
 
     if (theDialog.exec() == QDialog::Accepted) {
-        kDebug() << "Setting icon : " << theDialog.theIcon->icon();
-        mode.setIconFile(theDialog.checkBox->isChecked()  ?
-                         theDialog.theIcon->icon() : QString::null); //krazy:exclude=nullstrassign for old broken gcc
-        allModes.updateMode(mode);
+        Mode newMode = theDialog.getMode();
+        kDebug() << "Setting icon : " << newMode.iconFile();
+        mode.setIconFile(newMode.iconFile());
         if (!mode.name().isEmpty()) {
-            allActions.renameMode(mode, theDialog.theName->text());
-            allModes.rename(mode, theDialog.theName->text());
+            allActions.renameMode(mode, newMode.name());
+            allModes.rename(mode, newMode.name());
         }
-        if (theDialog.theDefault->isChecked())
-            allModes.setDefault(mode);emit
-        changed(true);
+        if (theDialog.isDefaultMode()){
+            allModes.setDefault(mode);
+        }
+        allModes.updateMode(mode);
+        emit changed(true);
         updateModes();
     }
 }
 
 void KCMLirc::slotRemoveMode()
 {
-    if (theKCMLircBase->theModes->selectedItems().isEmpty()) {
-        return;
-    }
-    if (!theKCMLircBase->theModes->selectedItems().first()->parent()) {
-        return;
-    }
+//    if (theKCMLircBase->theModes->selectedItems().isEmpty()) {
+//        return;
+//    }
+//    if (!theKCMLircBase->theModes->selectedItems().first()->parent()) {
+//        return;
+//    }
 
-    if (KMessageBox::warningContinueCancel(this, i18n(
-                                               "Are you sure you want to remove %1 and all its actions?",
-                                               theKCMLircBase->theModes->selectedItems().first()->text(0)), i18n(
-                                               "Erase Actions?")) == KMessageBox::Continue) {
-        allModes.erase(modeMap[theKCMLircBase->theModes->selectedItems().first()]);
-        updateModes();
-        emit changed(true);
-    }
+  if (KMessageBox::warningContinueCancel(this, i18n(
+                                                "Are you sure you want to remove %1 and all its actions?",
+                                                theKCMLircBase->theModes->selectedItems().first()->text(0)), i18n(
+                                                "Erase Actions?")) == KMessageBox::Continue) {
+         allModes.erase(modeMap[theKCMLircBase->theModes->selectedItems().first()]);
+         updateModes();
+         emit changed(true);
+     }
+
 }
 
 void KCMLirc::slotSetDefaultMode()

@@ -25,32 +25,59 @@
 
 
 #include "editmode.h"
+#include "mode.h"
 
-EditMode::EditMode(QWidget *parent, Qt::WFlags fl) : KDialog(parent, fl)
+
+EditMode::EditMode(Mode mode, bool isDefault, QWidget *parent, const bool &modal): KDialog(parent)
 {
-    setupUi(this);
-    connect(theName, SIGNAL(textChanged(QString)), this, SLOT(slotCheckText(QString)));
-    connect(theOK, SIGNAL(clicked()), this, SLOT(accept()));
-    connect(kPushButton8, SIGNAL(clicked()), this, SLOT(reject()));
-    connect(checkBox, SIGNAL(toggled(bool)), theIcon, SLOT(setEnabled(bool)));
+    editModeBaseWidget = new EditModeBaseWidget();
+    editModeBaseWidget->theIcon->setIconType(KIconLoader::Panel, KIconLoader::Any);
+    setMainWidget(editModeBaseWidget);
+    setButtons( Ok | Cancel);
+    setDefaultButton(Ok);
+    setModal(modal);
 
+    editModeBaseWidget->theName->setText(mode.name().isEmpty() ? mode.remoteName() : mode.name());
+    editModeBaseWidget->theName->setEnabled(! mode.name().isEmpty());
+    if (!mode.iconFile().isNull()) {
+      editModeBaseWidget->theIcon->setIcon(mode.iconFile());
+      editModeBaseWidget->theIcon->setEnabled(true);
+      editModeBaseWidget->checkBox->setChecked(true);
+    } else {
+        clearIcon();
+    }
+    editModeBaseWidget->theDefault->setChecked(isDefault);
+    editModeBaseWidget->theDefault->setEnabled(!isDefault);
 
-    theIcon->setIconType(KIconLoader::Panel, KIconLoader::Any);
-    setButtons(KDialog::None);
+    connect(editModeBaseWidget->theName, SIGNAL(textChanged(QString)), this, SLOT(slotCheckText(QString)));
+    connect(editModeBaseWidget->checkBox, SIGNAL(toggled(bool)),  editModeBaseWidget->theIcon, SLOT(setEnabled(bool)));
 }
 
 EditMode::~EditMode()
 {
 }
 
-void EditMode::slotClearIcon()
+Mode EditMode::getMode(){
+  Mode mode;
+  mode.setIconFile(editModeBaseWidget->checkBox->isChecked()  ?
+      editModeBaseWidget->theIcon->icon() : QString::null);
+  mode.setName(editModeBaseWidget->theName->text());
+  return mode;
+}
+
+bool EditMode::isDefaultMode()
 {
-    theIcon->setIcon("irkick");
+ return editModeBaseWidget->theDefault->isChecked();
+}
+
+void EditMode::clearIcon()
+{
+  editModeBaseWidget->theIcon->setIcon("irkick");
 }
 
 void EditMode::slotCheckText(const QString &newText)
 {
-    theOK->setEnabled(!newText.isEmpty());
+  enableButtonOk(!newText.isEmpty());
 }
 
 #include "editmode.moc"

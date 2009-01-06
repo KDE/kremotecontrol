@@ -29,17 +29,41 @@
 
 #include "ui_newmode.h"
 
-class NewModeDialog : public KDialog, public Ui_NewMode
+class Mode;
+class QStringList;
+
+class NewModeBaseWidget : public QWidget, public Ui::NewMode
+{
+public:
+  NewModeBaseWidget(QWidget *parent = 0) : QWidget(parent)
+  {
+    setupUi(this);
+  }
+};
+
+
+
+
+class NewModeDialog : public KDialog
 {
     Q_OBJECT
 
 public:
-    explicit NewModeDialog(QWidget* parent);
+    explicit NewModeDialog(QStringList remotesList, QWidget *parent = 0, const bool &modal = false);
     ~NewModeDialog();
+
+private:
+  NewModeBaseWidget *newModeBaseWidget;
+
 
 private slots:
     void slotTextChanged(const QString& newText);
-};
+    void slotRemoteChanged(QTreeWidgetItem* qTreeWidgetItem);
 
+public:
+  Mode getMode();
+  bool isDefaultMode();
+  void setSelectedRemote(QString remote);
+};
 
 #endif /* NEWMODEDIALOG_H */

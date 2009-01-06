@@ -50,7 +50,6 @@ EditAction::EditAction(IRAction *action, QWidget *parent, const char *name)
 
     //KWindowSystem::setState(widget->winId(), NET::StaysOnTop );
     setupUi(this);
-    setButtons(KDialog::None);
     theValue->layout()->setMargin(0);
 
     QMetaObject::connectSlotsByName(this);

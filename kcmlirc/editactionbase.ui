@@ -1,6 +1,6 @@
 <ui version="4.0" >
  <class>EditActionBase</class>
- <widget class="KDialog" name="EditActionBase" >
+ <widget class="QWidget" name="EditActionBase" >
   <property name="geometry" >
    <rect>
     <x>0</x>
@@ -11,9 +11,6 @@
   </property>
   <property name="windowTitle" >
    <string>Edit Action</string>
-  </property>
-  <property name="sizeGripEnabled" >
-   <bool>true</bool>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_7" >
    <item>
@@ -676,7 +673,7 @@
    <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
-   <class>KDialog</class>
+   <class>QWidget</class>
    <extends>QDialog</extends>
    <header>kdialog.h</header>
    <container>1</container>
