@@ -27,6 +27,10 @@
 #include "prototype.h"
 #include "profileserver.h"
 #include "remoteserver.h"
+#include "mode.h"
+#include "arguments.h"
+#include "iraction.h"
+
 
 #include <QRegExp>
 #include <QDBusMessage>
@@ -93,13 +97,13 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMo
 
     connect(theProfileFunctions, SIGNAL(itemSelectionChanged()), this, SLOT(updateButtonStates()));
     connect(theProfileFunctions, SIGNAL(itemSelectionChanged()), this, SLOT(updateParameter()));
-    connect(theProfileFunctions, SIGNAL(itemSelectionChanged()), this, SLOT(updateOptions()));
+    connect(theProfileFunctions, SIGNAL(itemSelectionChanged()), this, SLOT(updateInstancesOptions()));
     connect(theProfileFunctions, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(next()));
 
 
     connect(theFunctions, SIGNAL(itemSelectionChanged()), this, SLOT(updateButtonStates()));
     connect(theFunctions, SIGNAL(itemSelectionChanged()), this, SLOT(updateParameter()));
-    connect(theFunctions, SIGNAL(itemSelectionChanged()), this, SLOT(updateOptions()));
+    connect(theFunctions, SIGNAL(itemSelectionChanged()), this, SLOT(updateInstancesOptions()));
     connect(theFunctions, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(next()));
 
 
@@ -647,4 +651,71 @@ void AddAction::updateFunctions()
     updateOptions();
 }
 
+
+IRAction* AddAction::getAction()
+{
+          IRAction *action = new IRAction();
+          action->setRemote(theMode.remote());
+          action->setMode(theMode.name());
+          kDebug() << "Saving action. Button is: " << buttonMap[theButtons->currentItem()];
+          action->setButton(buttonMap[theButtons->currentItem()]);
+          action->setRepeat(theRepeat->isChecked());
+          action->setAutoStart(theAutoStart->isChecked());
+          action->setDoBefore(theDoBefore->isChecked());
+          action->setDoAfter(theDoAfter->isChecked());
+          action->setUnique(isUnique);
+          action->setIfMulti(theDontSend->isChecked() ? IM_DONTSEND
+                             : theSendToTop->isChecked() ? IM_SENDTOTOP
+                             : theSendToBottom->isChecked() ? IM_SENDTOBOTTOM
+                             : IM_SENDTOALL);
+          // change mode?
+          if (theChangeMode->isChecked()) {
+              if (theSwitchMode->isChecked()
+                      && !theModes->selectedItems().isEmpty()) {
+                  action->setProgram("");
+                  action->setObject(theModes->selectedItems().first()->text());
+              } else if (theExitMode->isChecked()) {
+                  action->setProgram("");
+                  action->setObject("");
+              }
+              action->setAutoStart(false);
+              action->setRepeat(false);
+          }
+          // DBus?
+          else if (theUseDBus->isChecked()
+                   && !theObjects->selectedItems().isEmpty()
+                   && theObjects->selectedItems().first()->parent()
+                   && !theFunctions->selectedItems().isEmpty()) {
+              action->setProgram(program);
+              action->setObject(theObjects->selectedItems().first()->text(0));
+              action->setMethod(theFunctions->selectedItems().first()->text(2));
+              theParameters->sortItems(3, Qt::AscendingOrder);
+              action->setArguments(theArguments);
+          }
+          // profile?
+          else if (theUseProfile->isChecked()
+                   && !theProfiles->selectedItems().isEmpty()
+                   && (!theProfileFunctions->selectedItems().isEmpty()
+                       || theJustStart->isChecked())) {
+              ProfileServer *theServer = ProfileServer::profileServer();
+
+              if (theNotJustStart->isChecked()) {
+                  const ProfileAction
+                  *theAction =
+                      theServer->getAction(
+                          profileMap[theProfiles->selectedItems().first()],
+                          profileFunctionMap[theProfileFunctions->selectedItems().first()]);
+                  action->setProgram(theAction->profile()->id());
+                  action->setObject(theAction->objId());
+                  action->setMethod(theAction->prototype());
+                  theParameters->sortItems(3, Qt::AscendingOrder);
+                  action->setArguments(theArguments);
+              } else {
+                  action->setProgram(
+                      theServer->profiles()[profileMap[theProfiles->selectedItems().first()]]->id());
+                  action->setObject("");
+              }
+          }
+          return action;
+}
 #include "addaction.moc"

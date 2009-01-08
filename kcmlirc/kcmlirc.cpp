@@ -186,8 +186,8 @@ void KCMLirc::slotEditAction()
     theDialog.readFrom();
 
     if (theDialog.exec() == QDialog::Accepted) {
-        theDialog.writeBack();emit
-        changed(true);
+        theDialog.writeBack();
+        emit changed(true);
         updateActions();
     }
 }
@@ -251,76 +251,82 @@ void KCMLirc::slotAddAction()
         }
     }
 
-    if (theDialog.exec() == QDialog::Accepted
-            && theDialog.theButtons->currentItem()) {
-        IRAction *action = new IRAction();
-        action->setRemote(m.remote());
-        action->setMode(m.name());
-        kDebug() << "Saving action. Button is: " << theDialog.buttonMap[theDialog.theButtons->currentItem()];
-        action->setButton(theDialog.buttonMap[theDialog.theButtons->currentItem()]);
-        action->setRepeat(theDialog.theRepeat->isChecked());
-        action->setAutoStart(theDialog.theAutoStart->isChecked());
-        action->setDoBefore(theDialog.theDoBefore->isChecked());
-        action->setDoAfter(theDialog.theDoAfter->isChecked());
-        action->setUnique(theDialog.isUnique);
-        action->setIfMulti(theDialog.theDontSend->isChecked() ? IM_DONTSEND
-                           : theDialog.theSendToTop->isChecked() ? IM_SENDTOTOP
-                           : theDialog.theSendToBottom->isChecked() ? IM_SENDTOBOTTOM
-                           : IM_SENDTOALL);
-        // change mode?
-        if (theDialog.theChangeMode->isChecked()) {
-            if (theDialog.theSwitchMode->isChecked()
-                    && !theDialog.theModes->selectedItems().isEmpty()) {
-                action->setProgram("");
-                action->setObject(theDialog.theModes->selectedItems().first()->text());
-            } else if (theDialog.theExitMode->isChecked()) {
-                action->setProgram("");
-                action->setObject("");
-            }
-            action->setAutoStart(false);
-            action->setRepeat(false);
-        }
-        // DBus?
-        else if (theDialog.theUseDBus->isChecked()
-                 && !theDialog.theObjects->selectedItems().isEmpty()
-                 && theDialog.theObjects->selectedItems().first()->parent()
-                 && !theDialog.theFunctions->selectedItems().isEmpty()) {
-            action->setProgram(theDialog.program);
-            action->setObject(theDialog.theObjects->selectedItems().first()->text(0));
-            action->setMethod(theDialog.theFunctions->selectedItems().first()->text(2));
-            theDialog.theParameters->sortItems(3, Qt::AscendingOrder);
-            action->setArguments(theDialog.theArguments);
-        }
-        // profile?
-        else if (theDialog.theUseProfile->isChecked()
-                 && !theDialog.theProfiles->selectedItems().isEmpty()
-                 && (!theDialog.theProfileFunctions->selectedItems().isEmpty()
-                     || theDialog.theJustStart->isChecked())) {
-            ProfileServer *theServer = ProfileServer::profileServer();
+    if (theDialog.exec() == QDialog::Accepted){
+      allActions.addAction(theDialog.getAction());
+      updateActions();
+      emit changed(true);
 
-            if (theDialog.theNotJustStart->isChecked()) {
-                const ProfileAction
-                *theAction =
-                    theServer->getAction(
-                        theDialog.profileMap[theDialog.theProfiles->selectedItems().first()],
-                        theDialog.profileFunctionMap[theDialog.theProfileFunctions->selectedItems().first()]);
-                action->setProgram(theAction->profile()->id());
-                action->setObject(theAction->objId());
-                action->setMethod(theAction->prototype());
-                theDialog.theParameters->sortItems(3, Qt::AscendingOrder);
-                action->setArguments(theDialog.theArguments);
-            } else {
-                action->setProgram(
-                    theServer->profiles()[theDialog.profileMap[theDialog.theProfiles->selectedItems().first()]]->id());
-                action->setObject("");
-            }
-        }
+    }
+//    if (theDialog.exec() == QDialog::Accepted
+//            && theDialog.theButtons->currentItem()) {
+//        IRAction *action = new IRAction();
+//        action->setRemote(m.remote());
+//        action->setMode(m.name());
+//        kDebug() << "Saving action. Button is: " << theDialog.buttonMap[theDialog.theButtons->currentItem()];
+//        action->setButton(theDialog.buttonMap[theDialog.theButtons->currentItem()]);
+//        action->setRepeat(theDialog.theRepeat->isChecked());
+//        action->setAutoStart(theDialog.theAutoStart->isChecked());
+//        action->setDoBefore(theDialog.theDoBefore->isChecked());
+//        action->setDoAfter(theDialog.theDoAfter->isChecked());
+//        action->setUnique(theDialog.isUnique);
+//        action->setIfMulti(theDialog.theDontSend->isChecked() ? IM_DONTSEND
+//                           : theDialog.theSendToTop->isChecked() ? IM_SENDTOTOP
+//                           : theDialog.theSendToBottom->isChecked() ? IM_SENDTOBOTTOM
+//                           : IM_SENDTOALL);
+//        // change mode?
+//        if (theDialog.theChangeMode->isChecked()) {
+//            if (theDialog.theSwitchMode->isChecked()
+//                    && !theDialog.theModes->selectedItems().isEmpty()) {
+//                action->setProgram("");
+//                action->setObject(theDialog.theModes->selectedItems().first()->text());
+//            } else if (theDialog.theExitMode->isChecked()) {
+//                action->setProgram("");
+//                action->setObject("");
+//            }
+//            action->setAutoStart(false);
+//            action->setRepeat(false);
+//        }
+//        // DBus?
+//        else if (theDialog.theUseDBus->isChecked()
+//                 && !theDialog.theObjects->selectedItems().isEmpty()
+//                 && theDialog.theObjects->selectedItems().first()->parent()
+//                 && !theDialog.theFunctions->selectedItems().isEmpty()) {
+//            action->setProgram(theDialog.program);
+//            action->setObject(theDialog.theObjects->selectedItems().first()->text(0));
+//            action->setMethod(theDialog.theFunctions->selectedItems().first()->text(2));
+//            theDialog.theParameters->sortItems(3, Qt::AscendingOrder);
+//            action->setArguments(theDialog.theArguments);
+//        }
+//        // profile?
+//        else if (theDialog.theUseProfile->isChecked()
+//                 && !theDialog.theProfiles->selectedItems().isEmpty()
+//                 && (!theDialog.theProfileFunctions->selectedItems().isEmpty()
+//                     || theDialog.theJustStart->isChecked())) {
+//            ProfileServer *theServer = ProfileServer::profileServer();
+//
+//            if (theDialog.theNotJustStart->isChecked()) {
+//                const ProfileAction
+//                *theAction =
+//                    theServer->getAction(
+//                        theDialog.profileMap[theDialog.theProfiles->selectedItems().first()],
+//                        theDialog.profileFunctionMap[theDialog.theProfileFunctions->selectedItems().first()]);
+//                action->setProgram(theAction->profile()->id());
+//                action->setObject(theAction->objId());
+//                action->setMethod(theAction->prototype());
+//                theDialog.theParameters->sortItems(3, Qt::AscendingOrder);
+//                action->setArguments(theDialog.theArguments);
+//            } else {
+//                action->setProgram(
+//                    theServer->profiles()[theDialog.profileMap[theDialog.theProfiles->selectedItems().first()]]->id());
+//                action->setObject("");
+//            }
+//        }
 
         // save our new action
-        allActions.addAction(action);
-        updateActions();
-        emit changed(true);
-    }
+//        allActions.addAction(action);
+//        updateActions();
+//        emit changed(true);
+//    }
 }
 
 void KCMLirc::slotRemoveAction()

@@ -59,6 +59,7 @@ private:
     QString program;
     bool isUnique;
     QButtonGroup mainGroup;
+    void connectSignalsAndSlots();
 
 public:
     explicit EditAction(IRAction *action, QWidget *parent = 0, const bool &modal = false);
@@ -74,15 +75,11 @@ public slots:
     virtual void updateArguments();
     virtual void initApplications();
     virtual void updateFunctions();
-    virtual void updateOptions();
+    virtual void updateInstancesOptions();
     virtual void initDBusApplications();
     virtual void updateDBusObjects();
     virtual void updateDBusFunctions();
     virtual void addItem(QString item);
-    virtual void on_theUseDBus_toggled(bool toogle);
-    virtual void on_theChangeMode_toggled(bool toogle);
-    virtual void on_theNotJustStart_toggled(bool toogle);
-    virtual void on_theUseProfile_toggled(bool toogle);
 };
 
 #endif

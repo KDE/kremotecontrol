@@ -66,7 +66,7 @@
            </widget>
           </item>
           <item row="1" column="0" >
-           <widget class="QRadioButton" name="theNotJustStart" >
+           <widget class="QRadioButton" name="thePerformFunction" >
             <property name="sizePolicy" >
              <sizepolicy vsizetype="Fixed" hsizetype="MinimumExpanding" >
               <horstretch>0</horstretch>
@@ -391,7 +391,7 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_8" >
        <item>
-        <widget class="QLabel" name="textLabel3" >
+        <widget class="QLabel" name="optionsDBusAppLabel" >
          <property name="text" >
           <string>&lt;b>DBus/Application Action Options&lt;/b></string>
          </property>
@@ -441,7 +441,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QLabel" name="textLabel1_2" >
+        <widget class="QLabel" name="theMCOLabel" >
          <property name="text" >
           <string>&lt;b>Mode Change Options&lt;/b></string>
          </property>
@@ -648,7 +648,7 @@
  <tabstops>
   <tabstop>tabWidget3</tabstop>
   <tabstop>theUseProfile</tabstop>
-  <tabstop>theNotJustStart</tabstop>
+  <tabstop>thePerformFunction</tabstop>
   <tabstop>theApplications</tabstop>
   <tabstop>theJustStart</tabstop>
   <tabstop>theFunctions</tabstop>

@@ -56,64 +56,11 @@ EditAction::EditAction(IRAction *action, QWidget *parent, const bool &modal): KD
     //TODO: Layout theValue
     editActionBaseWidget->theValue->layout()->setMargin(0);
 
-//    QMetaObject::connectSlotsByName(this->mainWidget());
-
-    connect(editActionBaseWidget->theApplications,SIGNAL(activated(QString)),this,SLOT(updateFunctions()));
-    connect(editActionBaseWidget->theApplications,SIGNAL(activated(QString)),this,SLOT(updateOptions()));
-    connect(editActionBaseWidget->theFunctions,SIGNAL(activated(QString)),this,SLOT(updateArguments()));
-    connect(editActionBaseWidget->theJustStart,SIGNAL(toggled(bool)),this,SLOT(updateOptions()));
-    connect(editActionBaseWidget->theJustStart,SIGNAL(toggled(bool)),editActionBaseWidget->theAutoStart,SLOT(setChecked(bool)));
-
-    connect(editActionBaseWidget->theDBusApplications,SIGNAL(activated(QString)),this,SLOT(updateDCOPObjects()));
-    connect(editActionBaseWidget->theDBusApplications,SIGNAL(activated(QString)),this,SLOT(updateOptions()));
-    connect(editActionBaseWidget->theDBusFunctions,SIGNAL(activated(QString)),this,SLOT(updateArguments()));
-    connect(editActionBaseWidget->theDBusObjects,SIGNAL(activated(QString)),this,SLOT(updateDCOPFunctions()));
-
-
-    connect(editActionBaseWidget->theValueCheckBox,SIGNAL(toggled(bool)),this,SLOT(slotParameterChanged()));
-    connect(editActionBaseWidget->theValueDoubleNumInput,SIGNAL(valueChanged(double)),this,SLOT(slotParameterChanged()));
-    connect(editActionBaseWidget->theValueEditListBox,SIGNAL(changed()),this,SLOT(slotParameterChanged()));
-    connect(editActionBaseWidget->theValueIntNumInput,SIGNAL(valueChanged(int)),this,SLOT(slotParameterChanged()));
-    connect(editActionBaseWidget->theValueLineEdit,SIGNAL(textChanged(QString)),this,SLOT(slotParameterChanged()));
-
-    connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theArguments, SLOT(setEnabled(bool)));
-    connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theApplications, SLOT(setEnabled(bool)));
-    connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theAutoStart, SLOT(setEnabled(bool)));
-    connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theRepeat, SLOT(setEnabled(bool)));
-    connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theNotJustStart, SLOT(setEnabled(bool)));
-    connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theJustStart, SLOT(setEnabled(bool)));
-    connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theNotJustStart, SLOT(setChecked(bool)));
-    connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theUseProfileAppLabel, SLOT(setEnabled(bool)));
-    connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theFunctions, SLOT(setEnabled(bool)));
-    connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),this, SLOT(updateFunctions()));
-    connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),this, SLOT(updateArguments()));
-    connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)), this, SLOT(updateOptions()));
-
-    connect(editActionBaseWidget->theNotJustStart,SIGNAL(toggled(bool)),editActionBaseWidget->theRepeat, SLOT(setChecked(bool)));
-    connect(editActionBaseWidget->theNotJustStart,SIGNAL(toggled(bool)),editActionBaseWidget->theAutoStart, SLOT(setEnabled(bool)));
-    connect(editActionBaseWidget->theNotJustStart,SIGNAL(toggled(bool)),editActionBaseWidget->theRepeat,SLOT(setEnabled(bool)));
-    connect(editActionBaseWidget->theNotJustStart,SIGNAL(toggled(bool)),editActionBaseWidget->theArguments,SLOT(setEnabled(bool)));
-    connect(editActionBaseWidget->theNotJustStart,SIGNAL(toggled(bool)),editActionBaseWidget->theFunctions, SLOT(setEnabled(bool)));
-    connect(editActionBaseWidget->theNotJustStart,SIGNAL(toggled(bool)),this, SLOT(updateOptions()));
-    connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),editActionBaseWidget->theModes, SLOT(setEnabled(bool)));
-    connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),editActionBaseWidget->theDoAfter, SLOT(setEnabled(bool)));
-    connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),editActionBaseWidget->theDoBefore, SLOT(setEnabled(bool)));
-    connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),editActionBaseWidget->theAppDbusOptionsLabel, SLOT(setDisabled(bool)));
-    connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),this, SLOT(updateOptions()));
-    connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)), editActionBaseWidget->theDBusApplications, SLOT(setEnabled(bool)));
-    connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)), editActionBaseWidget->theDBusObjects, SLOT(setEnabled(bool)));
-    connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)), editActionBaseWidget->theDBusFunctions, SLOT(setEnabled(bool)));
-    connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)), editActionBaseWidget->theDBusObjectsLabel, SLOT(setEnabled(bool)));
-    connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)), editActionBaseWidget->theDBusApplicationsLabel, SLOT(setEnabled(bool)));
-    connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)), editActionBaseWidget->theAppDbusOptionsLabel, SLOT(setEnabled(bool)));
-    connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)), editActionBaseWidget->theDBusFunctionsLabel, SLOT(setEnabled(bool)));
-    connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)), this, SLOT(updateArguments()));
-    connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)), this, SLOT(updateOptions()));
-
     mainGroup.addButton(editActionBaseWidget->theUseDBus);
     mainGroup.addButton(editActionBaseWidget->theUseProfile);
     mainGroup.addButton(editActionBaseWidget->theChangeMode);
 
+    connectSignalsAndSlots();
     initDBusApplications();
     initApplications();
     readFrom();
@@ -123,53 +70,85 @@ EditAction::~EditAction()
 {
 }
 
-void EditAction::on_theUseProfile_toggled(bool toogle)
-{
-//  editActionBaseWidget->theArguments->setEnabled(toogle);
-//  editActionBaseWidget->theApplications->setEnabled(toogle);
-//  editActionBaseWidget->theAutoStart->setEnabled(toogle);
-//  editActionBaseWidget->theRepeat->setEnabled(toogle);
-//  editActionBaseWidget->theNotJustStart->setEnabled(toogle);
-//  editActionBaseWidget->theJustStart->setEnabled(toogle);
-//  editActionBaseWidget->theNotJustStart->setChecked(toogle);
-//  editActionBaseWidget->theUseProfileAppLabel->setEnabled(toogle);
-//  editActionBaseWidget->theFunctions->setEnabled(toogle);
-//  updateFunctions();
-//  updateArguments();
-//  updateOptions();
+void EditAction::connectSignalsAndSlots(){
+
+  //TODO: Micha: Updating the arguments when switching to justStart: Or shall we use this to allow starting multiple instances?
+
+  //Profile Action
+
+  connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theUseProfileAppLabel,SLOT(setEnabled(bool)));
+  connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theApplications,SLOT(setEnabled(bool)));
+  connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theArguments,SLOT(setEnabled(bool)));
+  connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theAutoStart,SLOT(setEnabled(bool)));
+  connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theFunctions,SLOT(setEnabled(bool)));
+  connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theJustStart,SLOT(setEnabled(bool)));
+  connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->thePerformFunction,SLOT(setChecked(bool)));
+  connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->thePerformFunction,SLOT(setEnabled(bool)));
+  connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theRepeat,SLOT(setEnabled(bool)));
+
+  connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),this,SLOT(updateArguments()));
+  connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),this,SLOT(updateInstancesOptions()));
+
+  connect(editActionBaseWidget->theJustStart,SIGNAL(toggled(bool)),editActionBaseWidget->theAutoStart,SLOT(setChecked(bool)));
+  connect(editActionBaseWidget->theJustStart,SIGNAL(toggled(bool)),this,SLOT(updateInstancesOptions()));
+  connect(editActionBaseWidget->theJustStart,SIGNAL(toggled(bool)),this,SLOT(updateArguments()()));
+
+  connect(editActionBaseWidget->theApplications,SIGNAL(activated(QString)),this,SLOT(updateFunctions()));
+
+  connect(editActionBaseWidget->theFunctions,SIGNAL(activated(QString)),this,SLOT(updateArguments()));
+
+  connect(editActionBaseWidget->theApplications,SIGNAL(activated(QString)),this,SLOT(updateInstancesOptions()));
+
+  //connect(editActionBaseWidget->thePerformFunction,SIGNAL(toggled(bool)),editActionBaseWidget->theArguments,SLOT(setEnabled(bool)));
+  connect(editActionBaseWidget->thePerformFunction,SIGNAL(toggled(bool)),editActionBaseWidget->theAutoStart,SLOT(setEnabled(bool)));
+  connect(editActionBaseWidget->thePerformFunction,SIGNAL(toggled(bool)),editActionBaseWidget->theFunctions,SLOT(setEnabled(bool)));
+  connect(editActionBaseWidget->thePerformFunction,SIGNAL(toggled(bool)),editActionBaseWidget->theRepeat,SLOT(setChecked(bool)));
+  connect(editActionBaseWidget->thePerformFunction,SIGNAL(toggled(bool)),editActionBaseWidget->theRepeat,SLOT(setEnabled(bool)));
+  connect(editActionBaseWidget->thePerformFunction,SIGNAL(toggled(bool)),this,SLOT(updateInstancesOptions()));
+
+
+  //DBus Action
+  connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theDBusApplicationsLabel,SLOT(setEnabled(bool)));
+  connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theDBusObjectsLabel,SLOT(setEnabled(bool)));
+  connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theDBusFunctionsLabel,SLOT(setEnabled(bool)));
+
+  connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theArguments,SLOT(setEnabled(bool)));
+  connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theAutoStart,SLOT(setEnabled(bool)));
+  connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theDBusApplications,SLOT(setEnabled(bool)));
+  connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theDBusFunctions,SLOT(setEnabled(bool)));
+  connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theDBusObjects,SLOT(setEnabled(bool)));
+  connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theRepeat,SLOT(setEnabled(bool)));
+
+  connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),this, SLOT(updateInstancesOptions()));
+
+  connect(editActionBaseWidget->theDBusApplications,SIGNAL(activated(QString)),this,SLOT(updateDBusObjects()));
+  connect(editActionBaseWidget->theDBusApplications,SIGNAL(activated(QString)),this,SLOT(updateInstancesOptions()));
+  connect(editActionBaseWidget->theDBusFunctions,SIGNAL(activated(QString)),this,SLOT(updateArguments()));
+  connect(editActionBaseWidget->theDBusObjects,SIGNAL(activated(QString)),this,SLOT(updateDBusFunctions()));
+  connect(editActionBaseWidget->theUseDBus,SIGNAL(clicked()),this, SLOT(updateArguments()));
+
+
+   //Mode Action
+  connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),editActionBaseWidget->theAppDbusOptionsLabel,SLOT(setDisabled(bool)));
+  connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),editActionBaseWidget->theDoAfter,SLOT(setEnabled(bool)));
+  connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),editActionBaseWidget->theDoBefore,SLOT(setEnabled(bool)));
+  connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),editActionBaseWidget->theModes,SLOT(setEnabled(bool)));
+  connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),this,SLOT(updateInstancesOptions()));
+
+
+  //StackView + Arguments
+
+  connect(editActionBaseWidget->theArguments,SIGNAL(activated(int)),this,SLOT(updateArgument(int)));
+  connect(editActionBaseWidget->theValueCheckBox,SIGNAL(toggled(bool)),this,SLOT(slotParameterChanged()));
+  connect(editActionBaseWidget->theValueDoubleNumInput,SIGNAL(valueChanged(double)),this,SLOT(slotParameterChanged()));
+  connect(editActionBaseWidget->theValueEditListBox,SIGNAL(changed()),this,SLOT(slotParameterChanged()));
+  connect(editActionBaseWidget->theValueIntNumInput,SIGNAL(valueChanged(int)),this,SLOT(slotParameterChanged()));
+  connect(editActionBaseWidget->theValueLineEdit,SIGNAL(textChanged(QString)),this,SLOT(slotParameterChanged()));
+
+
 }
 
-void EditAction::on_theNotJustStart_toggled(bool toogle)
-{
-//  theRepeat->setChecked(toogle);
-//  theAutoStart->setEnabled(toogle);
-//  theRepeat->setEnabled(toogle);
-//  theArguments->setEnabled(toogle);
-//  theFunctions->setEnabled(toogle);
-//  updateOptions();
-}
 
-void EditAction::on_theChangeMode_toggled(bool toogle)
-{
-//  theModes->setEnabled(toogle);
-//   theDoAfter->setEnabled(toogle);
-//   theDoBefore->setEnabled(toogle);
-//   theAppDbusOptionsLabel->setDisabled(toogle);
-//   updateOptions();
-}
-
-void EditAction::on_theUseDBus_toggled(bool toogle)
-{
-//  editActionBaseWidget->theDBusApplications->setEnabled(toogle);
-//  editActionBaseWidget->theDBusObjects->setEnabled(toogle);
-//  editActionBaseWidget->theDBusFunctions->setEnabled(toogle);
-//  editActionBaseWidget->theDBusObjectsLabel->setEnabled(toogle);
-//  editActionBaseWidget->theDBusApplicationsLabel->setEnabled(toogle);
-//  editActionBaseWidget->theAppDbusOptionsLabel->setEnabled(toogle);
-//  editActionBaseWidget->theDBusFunctionsLabel->setEnabled(toogle);
-//  updateArguments();
-//  updateOptions();
-}
 
 void EditAction::readFrom()
 {
@@ -195,11 +174,11 @@ void EditAction::readFrom()
     editActionBaseWidget->theJustStart->setChecked(true);
   } else if (ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype())) { // profile action
     editActionBaseWidget->theUseProfile->setChecked(true);
-    const ProfileAction *a = ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype());
-    editActionBaseWidget->theApplications->setCurrentIndex(editActionBaseWidget->theApplications->findText(a->profile()->name()));
-    editActionBaseWidget->theFunctions->setCurrentIndex(editActionBaseWidget->theFunctions->findText(a->name()));
+    const ProfileAction *profileAction = ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype());
+    editActionBaseWidget->theApplications->setCurrentIndex(editActionBaseWidget->theApplications->findText(profileAction->profile()->name()));
+    editActionBaseWidget->theFunctions->setCurrentIndex(editActionBaseWidget->theFunctions->findText(profileAction->name()));
     arguments = theAction->arguments();
-    editActionBaseWidget->theNotJustStart->setChecked(true);
+    editActionBaseWidget->thePerformFunction->setChecked(true);
   } else { // DBus action
     editActionBaseWidget->theUseDBus->setChecked(true);
     QString program = theAction->program();
@@ -223,15 +202,14 @@ void EditAction::writeBack()
     theAction->setDoBefore(editActionBaseWidget->theDoBefore->isChecked());
     theAction->setDoAfter(editActionBaseWidget->theDoAfter->isChecked());
   } else if (editActionBaseWidget->theUseProfile->isChecked()) {
-      QString application = applicationMap[editActionBaseWidget->theApplications->currentText()];
-      QString function = functionMap[editActionBaseWidget->theFunctions->currentText()];
+      QString application = editActionBaseWidget->theApplications->currentText();
+      QString function = editActionBaseWidget->theFunctions->currentText();
       const ProfileAction *profileAction = ProfileServer::profileServer()->getAction(applicationMap[application], functionMap[function]);
-      if( profileAction != 0 || (editActionBaseWidget->theJustStart->isChecked() &&  ProfileServer::profileServer()->profiles()[application])) {
+      if( profileAction  || (editActionBaseWidget->theJustStart->isChecked() &&  ProfileServer::profileServer()->profiles()[application])) {
+              theAction->setProgram(ProfileServer::profileServer()->profiles()[applicationMap[application]]->id());
             if (editActionBaseWidget->theJustStart->isChecked()) {
-              theAction->setProgram(ProfileServer::profileServer()->profiles()[applicationMap[editActionBaseWidget->theApplications->currentText()]]->id());
               theAction->setObject("");
             } else {
-              theAction->setProgram(ProfileServer::profileServer()->profiles()[applicationMap[application]]->id());
               kDebug() << "wrote back: " << applicationMap[application];
               theAction->setObject(profileAction->objId());
               theAction->setMethod(profileAction->prototype());
@@ -247,6 +225,7 @@ void EditAction::writeBack()
   theAction->setRepeat(editActionBaseWidget->theRepeat->isChecked());
   theAction->setAutoStart(editActionBaseWidget->theAutoStart->isChecked());
   theAction->setUnique(isUnique);
+
   if(editActionBaseWidget->theDontSend->isChecked()){
     theAction->setIfMulti(IM_DONTSEND);
   }else if ( editActionBaseWidget->theSendToTop->isChecked()){
@@ -263,23 +242,23 @@ void EditAction::updateArguments()
 {
   if (editActionBaseWidget->theUseProfile->isChecked()) {
     editActionBaseWidget->theArguments->clear();
-    const ProfileAction *a = ProfileServer::profileServer()->getAction(applicationMap[editActionBaseWidget->theApplications->currentText()], functionMap[editActionBaseWidget->theFunctions->currentText()]);
-    if (!a) {
+    const ProfileAction *profileAction = ProfileServer::profileServer()->getAction(applicationMap[editActionBaseWidget->theApplications->currentText()], functionMap[editActionBaseWidget->theFunctions->currentText()]);
+    if (!profileAction) {
       arguments.clear(); return;
     }
-    const QList<ProfileActionArgument> &actionArguments = a->arguments();
-    if (actionArguments.count() != arguments.count()) {
+    const QList<ProfileActionArgument> &profileActionArguments = profileAction->arguments();
+    if (profileActionArguments.count() != arguments.count()) {
       arguments.clear();
-      for (int i = 0; i < actionArguments.count(); i++) {
+      for (int i = 0; i < profileActionArguments.count(); ++i) {
         arguments.append(QVariant(""));
       }
     }
-    editActionBaseWidget->theArguments->setEnabled(actionArguments.count());
-    for (int i = 0; i < actionArguments.count(); i++) {
-      editActionBaseWidget->theArguments->addItem(actionArguments[i].comment() + " (" + actionArguments[i].type() + ')');
-      arguments[i].convert(QVariant::nameToType(actionArguments[i].type().toLocal8Bit()));
+    editActionBaseWidget->theArguments->setEnabled(profileActionArguments.count());
+    for (int i = 0; i < profileActionArguments.count(); ++i) {
+      editActionBaseWidget->theArguments->addItem(profileActionArguments[i].comment() + " (" + profileActionArguments[i].type() + ')');
+      arguments[i].convert(QVariant::nameToType(profileActionArguments[i].type().toLocal8Bit()));
     }
-    actionArguments.count() ? updateArgument(0) : updateArgument(-1);
+    profileActionArguments.count() ? updateArgument(0) : updateArgument(-1);
 
   } else if ( editActionBaseWidget->theUseDBus->isChecked()) {
     editActionBaseWidget->theArguments->clear();
@@ -298,7 +277,7 @@ void EditAction::updateArguments()
   }
 }
 
-void EditAction::updateOptions()
+void EditAction::updateInstancesOptions()
 {
   if (editActionBaseWidget->theUseProfile->isChecked()) {
     ProfileServer *theServer = ProfileServer::profileServer();
@@ -327,7 +306,7 @@ void EditAction::slotParameterChanged()
 {
 
   int index =  editActionBaseWidget->theArguments->currentIndex();
-  kDebug() << "in: " << arguments[index].toString() ;
+ //KDebug() << "in: " << arguments[index].toString() ;
   int type = arguments[editActionBaseWidget->theArguments->currentIndex()].type();
   kDebug() << type ;
   switch (type) {
@@ -410,6 +389,9 @@ void EditAction::initApplications()
 
 void EditAction::updateFunctions()
 {
+  if(editActionBaseWidget->theJustStart->isChecked()){
+    return;
+  }
   ProfileServer *theServer = ProfileServer::profileServer();
   editActionBaseWidget->theFunctions->clear();
   functionMap.clear();

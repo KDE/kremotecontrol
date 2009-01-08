@@ -26,11 +26,8 @@
 #ifndef EDITMODE_H
 #define EDITMODE_H
 
-#include "ui_editmodebase.h"
 
-/**
-@author Gav Wood
-*/
+#include "ui_editmodebase.h"
 
 class Mode;
 

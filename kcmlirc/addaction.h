@@ -27,18 +27,18 @@
 #define ADDACTION_H
 
 #include <qpair.h>
-
 #include <ui_addactionbase.h>
 
-#include "mode.h"
-#include "arguments.h"
 
-/**
-@author Gav Wood
-*/
+#include "arguments.h"
+#include "mode.h"
+
+class IRAction;
+
 
 class AddAction : public QWizard, public Ui::AddActionBase
 {
+private:
     Q_OBJECT
 
     int curPage;
@@ -70,6 +70,7 @@ public:
     void updateArgument(QTreeWidgetItem *theItem);
     void requestNextPress();
     void cancelRequest();
+    IRAction * getAction();
 
     QMap<QListWidgetItem *, QString> profileMap;
     QMap<QTreeWidgetItem *, QString> profileFunctionMap;
