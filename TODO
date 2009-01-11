@@ -1,5 +1,8 @@
 Todos / Bugs
 -------------------
+* check why not ask if you want start it on kde startup when you close irkick
+* check why not autostart if set it in systemsetting as autostart with KDE ( if we fix the first point this is not needed... )
+
 * check why resetModes is called twiced after starting lirc
     -> It is not called twice... It is called once for every installed remote...
     -> IMHO we can skip this point as the code would be too complex just for skipping one notification
