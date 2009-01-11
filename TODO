@@ -1,5 +1,6 @@
 Todos / Bugs
 -------------------
+* check why when use dbus selector to add some action to app we see only kdeapps and not all DBUS app
 * check why not ask if you want start it on kde startup when you close irkick
 * check why not autostart if set it in systemsetting as autostart with KDE ( if we fix the first point this is not needed... )
 
