@@ -104,7 +104,7 @@
        <item>
         <widget class="QRadioButton" name="theUseDBus" >
          <property name="text" >
-          <string>Use &amp;DBus:</string>
+          <string>Use &amp;D-Bus:</string>
          </property>
         </widget>
        </item>
@@ -200,7 +200,7 @@
          <item row="0" column="0" >
           <widget class="QLabel" name="theAppDbusOptionsLabel" >
            <property name="text" >
-            <string>A&amp;pplication/DBus options:</string>
+            <string>A&amp;pplication/D-Bus options:</string>
            </property>
            <property name="wordWrap" >
             <bool>false</bool>
@@ -393,7 +393,7 @@
        <item>
         <widget class="QLabel" name="optionsDBusAppLabel" >
          <property name="text" >
-          <string>&lt;b>DBus/Application Action Options&lt;/b></string>
+          <string>&lt;b>D-Bus/Application Action Options&lt;/b></string>
          </property>
          <property name="wordWrap" >
           <bool>false</bool>
