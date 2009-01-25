@@ -33,58 +33,6 @@
 #include "ui_editactionbase.h"
 
 
-//#include <QStringList>
-//#include <QtAlgorithms>
-//#include <QStandardItemModel>
-//#include <kdebug.h>
-//
-//
-//
-//
-//class DBusListModel : public QStringListModel
-//{
-//Q_OBJECT
-//
-//private:
-//  QStringList theAppList;
-//
-//public:
-//  DBusListModel(QObject *parent) : QStringListModel(parent)
-//  {
-//
-//  }
-//
-//  bool dbussAppLessThan(const QString &s1, const QString &s2)
-//  {
-//    kDebug() << trimAppname(s1) << trimAppname(s2);
-//    return trimAppname(s1) < trimAppname(s2);
-//  }
-//
-//  int rowCount ( const QModelIndex & ) const
-//  {
-//    kDebug() << " size " << stringList().size();
-//    return stringList().size();
-//
-//  }
-//
-//  QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const
-//  {
-//    kDebug() <<  "blub + Index "<< index.row() <<  stringList().at(index.row());
-//
-////    /kDebug() <<  "blub + " + children.at(index.row());
-//    return "blub + " + stringList().at(index.row());
-//  }
-//
-//  QString trimAppname(const QString &appName)
-//  {
-//   QString s = appName;
-//   kDebug() << s;
-//   s.remove(0, appName.lastIndexOf(".",0,Qt::CaseSensitive));
-//   kDebug() << s;
-//   return s;
-//  }
-//
-//};
 
 class Arguments;
 
