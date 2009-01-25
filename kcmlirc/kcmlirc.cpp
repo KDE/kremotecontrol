@@ -183,8 +183,6 @@ void KCMLirc::slotEditAction()
     theDialog.addItem(i18n("[Exit current mode]"));
     for (int i = 0; i < item->childCount(); i++)
         theDialog.addItem(item->child(i)->text(0));
-    theDialog.readFrom();
-
     if (theDialog.exec() == QDialog::Accepted) {
         theDialog.writeBack();
         emit changed(true);

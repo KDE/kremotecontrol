@@ -93,8 +93,8 @@ void Profile::loadFromFile(const QString &fileName)
 const ProfileAction *ProfileServer::getAction(const QString &appId, const QString &actionId) const
 {
     if (theProfiles[appId])
-        if (theProfiles[appId]->theActions[actionId])
-            return theProfiles[appId]->theActions[actionId];
+        if (theProfiles[appId]->actions()[actionId])
+            return theProfiles[appId]->actions()[actionId];
     return 0;
 }
 

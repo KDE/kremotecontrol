@@ -41,6 +41,7 @@
 #include <kmessagebox.h>
 #include <knuminput.h>
 #include <keditlistbox.h>
+ #include <QAbstractItemModel>
 
 EditAction::EditAction(IRAction *action, QWidget *parent, const bool &modal): KDialog(parent)
 {
@@ -64,86 +65,93 @@ EditAction::EditAction(IRAction *action, QWidget *parent, const bool &modal): KD
     initDBusApplications();
     initApplications();
     readFrom();
+   // editActionBaseWidget->theDBusApplications->setModel(new QStringListModel(0));
 }
 
 EditAction::~EditAction()
 {
 }
 
-void EditAction::connectSignalsAndSlots(){
-
-  //TODO: Micha: Updating the arguments when switching to justStart: Or shall we use this to allow starting multiple instances?
-
-  //Profile Action
-
-  connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theUseProfileAppLabel,SLOT(setEnabled(bool)));
-  connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theApplications,SLOT(setEnabled(bool)));
-  connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theArguments,SLOT(setEnabled(bool)));
-  connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theAutoStart,SLOT(setEnabled(bool)));
-  connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theFunctions,SLOT(setEnabled(bool)));
-  connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theJustStart,SLOT(setEnabled(bool)));
-  connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->thePerformFunction,SLOT(setChecked(bool)));
-  connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->thePerformFunction,SLOT(setEnabled(bool)));
-  connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theRepeat,SLOT(setEnabled(bool)));
-
-  connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),this,SLOT(updateArguments()));
-  connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),this,SLOT(updateInstancesOptions()));
-
-  connect(editActionBaseWidget->theJustStart,SIGNAL(toggled(bool)),editActionBaseWidget->theAutoStart,SLOT(setChecked(bool)));
-  connect(editActionBaseWidget->theJustStart,SIGNAL(toggled(bool)),this,SLOT(updateInstancesOptions()));
-  connect(editActionBaseWidget->theJustStart,SIGNAL(toggled(bool)),this,SLOT(updateArguments()()));
-
-  connect(editActionBaseWidget->theApplications,SIGNAL(activated(QString)),this,SLOT(updateFunctions()));
-
-  connect(editActionBaseWidget->theFunctions,SIGNAL(activated(QString)),this,SLOT(updateArguments()));
-
-  connect(editActionBaseWidget->theApplications,SIGNAL(activated(QString)),this,SLOT(updateInstancesOptions()));
-
-  //connect(editActionBaseWidget->thePerformFunction,SIGNAL(toggled(bool)),editActionBaseWidget->theArguments,SLOT(setEnabled(bool)));
-  connect(editActionBaseWidget->thePerformFunction,SIGNAL(toggled(bool)),editActionBaseWidget->theAutoStart,SLOT(setEnabled(bool)));
-  connect(editActionBaseWidget->thePerformFunction,SIGNAL(toggled(bool)),editActionBaseWidget->theFunctions,SLOT(setEnabled(bool)));
-  connect(editActionBaseWidget->thePerformFunction,SIGNAL(toggled(bool)),editActionBaseWidget->theRepeat,SLOT(setChecked(bool)));
-  connect(editActionBaseWidget->thePerformFunction,SIGNAL(toggled(bool)),editActionBaseWidget->theRepeat,SLOT(setEnabled(bool)));
-  connect(editActionBaseWidget->thePerformFunction,SIGNAL(toggled(bool)),this,SLOT(updateInstancesOptions()));
+void EditAction::connectSignalsAndSlots() {
 
 
-  //DBus Action
-  connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theDBusApplicationsLabel,SLOT(setEnabled(bool)));
-  connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theDBusObjectsLabel,SLOT(setEnabled(bool)));
-  connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theDBusFunctionsLabel,SLOT(setEnabled(bool)));
+    //Profile Action
 
-  connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theArguments,SLOT(setEnabled(bool)));
-  connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theAutoStart,SLOT(setEnabled(bool)));
-  connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theDBusApplications,SLOT(setEnabled(bool)));
-  connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theDBusFunctions,SLOT(setEnabled(bool)));
-  connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theDBusObjects,SLOT(setEnabled(bool)));
-  connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theRepeat,SLOT(setEnabled(bool)));
+    connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theUseProfileAppLabel,SLOT(setEnabled(bool)));
+    connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theApplications,SLOT(setEnabled(bool)));
+    connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theArguments,SLOT(setEnabled(bool)));
+    connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theValue,SLOT(setEnabled(bool)));
+    connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theAutoStart,SLOT(setEnabled(bool)));
+    connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theFunctions,SLOT(setEnabled(bool)));
+    connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theJustStart,SLOT(setEnabled(bool)));
+    connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->thePerformFunction,SLOT(setChecked(bool)));
+    connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->thePerformFunction,SLOT(setEnabled(bool)));
+    connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theRepeat,SLOT(setEnabled(bool)));
 
-  connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),this, SLOT(updateInstancesOptions()));
+    connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),this,SLOT(updateArguments()));
+    connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),this,SLOT(updateInstancesOptions()));
 
-  connect(editActionBaseWidget->theDBusApplications,SIGNAL(activated(QString)),this,SLOT(updateDBusObjects()));
-  connect(editActionBaseWidget->theDBusApplications,SIGNAL(activated(QString)),this,SLOT(updateInstancesOptions()));
-  connect(editActionBaseWidget->theDBusFunctions,SIGNAL(activated(QString)),this,SLOT(updateArguments()));
-  connect(editActionBaseWidget->theDBusObjects,SIGNAL(activated(QString)),this,SLOT(updateDBusFunctions()));
-  connect(editActionBaseWidget->theUseDBus,SIGNAL(clicked()),this, SLOT(updateArguments()));
+    connect(editActionBaseWidget->theJustStart,SIGNAL(toggled(bool)),editActionBaseWidget->theAutoStart,SLOT(setChecked(bool)));
+    connect(editActionBaseWidget->theJustStart,SIGNAL(toggled(bool)),editActionBaseWidget->theFunctions,SLOT(setDisabled(bool)));
+    connect(editActionBaseWidget->theJustStart,SIGNAL(toggled(bool)),editActionBaseWidget->theAppDbusOptionsLabel,SLOT(setDisabled(bool)));
+    connect(editActionBaseWidget->theJustStart,SIGNAL(toggled(bool)),editActionBaseWidget->theArguments,SLOT(setDisabled(bool)));
+    connect(editActionBaseWidget->theJustStart,SIGNAL(toggled(bool)),editActionBaseWidget->theValue,SLOT(setDisabled(bool)));
+    connect(editActionBaseWidget->theJustStart,SIGNAL(toggled(bool)),this,SLOT(updateInstancesOptions()));
+    connect(editActionBaseWidget->theJustStart,SIGNAL(toggled(bool)),this,SLOT(updateArguments()));
+
+    connect(editActionBaseWidget->theApplications,SIGNAL(activated(QString)),this,SLOT(updateFunctions()));
+    connect(editActionBaseWidget->theApplications,SIGNAL(activated(QString)),this,SLOT(updateInstancesOptions()));
+
+    connect(editActionBaseWidget->theFunctions,SIGNAL(activated(QString)),this,SLOT(updateArguments()));
 
 
-   //Mode Action
-  connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),editActionBaseWidget->theAppDbusOptionsLabel,SLOT(setDisabled(bool)));
-  connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),editActionBaseWidget->theDoAfter,SLOT(setEnabled(bool)));
-  connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),editActionBaseWidget->theDoBefore,SLOT(setEnabled(bool)));
-  connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),editActionBaseWidget->theModes,SLOT(setEnabled(bool)));
-  connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),this,SLOT(updateInstancesOptions()));
+    //connect(editActionBaseWidget->thePerformFunction,SIGNAL(toggled(bool)),editActionBaseWidget->theArguments,SLOT(setEnabled(bool)));
+    connect(editActionBaseWidget->thePerformFunction,SIGNAL(toggled(bool)),editActionBaseWidget->theAutoStart,SLOT(setEnabled(bool)));
+    connect(editActionBaseWidget->thePerformFunction,SIGNAL(toggled(bool)),editActionBaseWidget->theFunctions,SLOT(setEnabled(bool)));
+    connect(editActionBaseWidget->thePerformFunction,SIGNAL(toggled(bool)),editActionBaseWidget->theRepeat,SLOT(setChecked(bool)));
+    connect(editActionBaseWidget->thePerformFunction,SIGNAL(toggled(bool)),editActionBaseWidget->theRepeat,SLOT(setEnabled(bool)));
+    connect(editActionBaseWidget->thePerformFunction,SIGNAL(toggled(bool)),this,SLOT(updateFunctions()));
+    connect(editActionBaseWidget->thePerformFunction,SIGNAL(toggled(bool)),this,SLOT(updateInstancesOptions()));
 
 
-  //StackView + Arguments
+    //DBus Action
+    connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theDBusApplicationsLabel,SLOT(setEnabled(bool)));
+    connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theDBusObjectsLabel,SLOT(setEnabled(bool)));
+    connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theDBusFunctionsLabel,SLOT(setEnabled(bool)));
 
-  connect(editActionBaseWidget->theArguments,SIGNAL(activated(int)),this,SLOT(updateArgument(int)));
-  connect(editActionBaseWidget->theValueCheckBox,SIGNAL(toggled(bool)),this,SLOT(slotParameterChanged()));
-  connect(editActionBaseWidget->theValueDoubleNumInput,SIGNAL(valueChanged(double)),this,SLOT(slotParameterChanged()));
-  connect(editActionBaseWidget->theValueEditListBox,SIGNAL(changed()),this,SLOT(slotParameterChanged()));
-  connect(editActionBaseWidget->theValueIntNumInput,SIGNAL(valueChanged(int)),this,SLOT(slotParameterChanged()));
-  connect(editActionBaseWidget->theValueLineEdit,SIGNAL(textChanged(QString)),this,SLOT(slotParameterChanged()));
+    connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theArguments,SLOT(setEnabled(bool)));
+    connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theValue,SLOT(setEnabled(bool)));
+    connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theAutoStart,SLOT(setEnabled(bool)));
+    connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theDBusApplications,SLOT(setEnabled(bool)));
+    connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theDBusFunctions,SLOT(setEnabled(bool)));
+    connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theDBusObjects,SLOT(setEnabled(bool)));
+    connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theRepeat,SLOT(setEnabled(bool)));
+
+    connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),this, SLOT(updateInstancesOptions()));
+
+    connect(editActionBaseWidget->theDBusApplications,SIGNAL(activated(QString)),this,SLOT(updateDBusObjects()));
+    connect(editActionBaseWidget->theDBusApplications,SIGNAL(activated(QString)),this,SLOT(updateInstancesOptions()));
+    connect(editActionBaseWidget->theDBusFunctions,SIGNAL(activated(QString)),this,SLOT(updateArguments()));
+    connect(editActionBaseWidget->theDBusObjects,SIGNAL(activated(QString)),this,SLOT(updateDBusFunctions()));
+    connect(editActionBaseWidget->theUseDBus,SIGNAL(clicked()),this, SLOT(updateArguments()));
+
+
+    //Mode Action
+    connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),editActionBaseWidget->theAppDbusOptionsLabel,SLOT(setDisabled(bool)));
+    connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),editActionBaseWidget->theDoAfter,SLOT(setEnabled(bool)));
+    connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),editActionBaseWidget->theDoBefore,SLOT(setEnabled(bool)));
+    connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),editActionBaseWidget->theModes,SLOT(setEnabled(bool)));
+    connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),this,SLOT(updateInstancesOptions()));
+
+
+    //StackView + Arguments
+
+    connect(editActionBaseWidget->theArguments,SIGNAL(activated(int)),this,SLOT(updateArgument(int)));
+    connect(editActionBaseWidget->theValueCheckBox,SIGNAL(toggled(bool)),this,SLOT(slotParameterChanged()));
+    connect(editActionBaseWidget->theValueDoubleNumInput,SIGNAL(valueChanged(double)),this,SLOT(slotParameterChanged()));
+    connect(editActionBaseWidget->theValueEditListBox,SIGNAL(changed()),this,SLOT(slotParameterChanged()));
+    connect(editActionBaseWidget->theValueIntNumInput,SIGNAL(valueChanged(int)),this,SLOT(slotParameterChanged()));
+    connect(editActionBaseWidget->theValueLineEdit,SIGNAL(textChanged(QString)),this,SLOT(slotParameterChanged()));
 
 
 }
@@ -152,417 +160,429 @@ void EditAction::connectSignalsAndSlots(){
 
 void EditAction::readFrom()
 {
-  editActionBaseWidget->theRepeat->setChecked(theAction->repeat());
-  editActionBaseWidget->theAutoStart->setChecked(theAction->autoStart());
-  editActionBaseWidget->theDoBefore->setChecked(theAction->doBefore());
-  editActionBaseWidget->theDoAfter->setChecked(theAction->doAfter());
-  editActionBaseWidget->theDontSend->setChecked(theAction->ifMulti() == IM_DONTSEND);
-  editActionBaseWidget->theSendToTop->setChecked(theAction->ifMulti() == IM_SENDTOTOP);
-  editActionBaseWidget->theSendToBottom->setChecked(theAction->ifMulti() == IM_SENDTOBOTTOM);
-  editActionBaseWidget->theSendToAll->setChecked(theAction->ifMulti() == IM_SENDTOALL);
+    editActionBaseWidget->theRepeat->setChecked(theAction->repeat());
+    editActionBaseWidget->theAutoStart->setChecked(theAction->autoStart());
+    editActionBaseWidget->theDoBefore->setChecked(theAction->doBefore());
+    editActionBaseWidget->theDoAfter->setChecked(theAction->doAfter());
+    editActionBaseWidget->theDontSend->setChecked(theAction->ifMulti() == IM_DONTSEND);
+    editActionBaseWidget->theSendToTop->setChecked(theAction->ifMulti() == IM_SENDTOTOP);
+    editActionBaseWidget->theSendToBottom->setChecked(theAction->ifMulti() == IM_SENDTOBOTTOM);
+    editActionBaseWidget->theSendToAll->setChecked(theAction->ifMulti() == IM_SENDTOALL);
 
-  if (theAction->isModeChange()) { // change mode
-    editActionBaseWidget->theChangeMode->setChecked(true);
-    if (theAction->object().isEmpty())
-      editActionBaseWidget->theModes->setCurrentIndex(editActionBaseWidget->theModes->findText(i18n("[Exit current mode]")));
-    else
-      editActionBaseWidget->theModes->setCurrentIndex(editActionBaseWidget->theModes->findText(theAction->object()));
-  } else if (theAction->isJustStart()) { // profile action
-    editActionBaseWidget->theUseProfile->setChecked(true);
-    const Profile *p = ProfileServer::profileServer()->profiles()[theAction->program()];
-    editActionBaseWidget->theApplications->setCurrentIndex(editActionBaseWidget->theApplications->findText(p->name()));
-    editActionBaseWidget->theJustStart->setChecked(true);
-  } else if (ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype())) { // profile action
-    editActionBaseWidget->theUseProfile->setChecked(true);
-    const ProfileAction *profileAction = ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype());
-    editActionBaseWidget->theApplications->setCurrentIndex(editActionBaseWidget->theApplications->findText(profileAction->profile()->name()));
-    editActionBaseWidget->theFunctions->setCurrentIndex(editActionBaseWidget->theFunctions->findText(profileAction->name()));
-    arguments = theAction->arguments();
-    editActionBaseWidget->thePerformFunction->setChecked(true);
-  } else { // DBus action
-    editActionBaseWidget->theUseDBus->setChecked(true);
-    QString program = theAction->program();
-    editActionBaseWidget->theDBusApplications->setCurrentIndex(editActionBaseWidget->theDBusApplications->findText(program.remove(0, 8)));
-    updateDBusObjects();
-    editActionBaseWidget->theDBusObjects->setCurrentIndex(editActionBaseWidget->theDBusObjects->findText(theAction->object()));
-    updateDBusFunctions();
-    editActionBaseWidget->theDBusFunctions->setCurrentIndex(editActionBaseWidget->theDBusFunctions->findText(theAction->method().prototype()));
-    arguments = theAction->arguments();
-  }
+    if (theAction->isModeChange()) { // change mode
+        editActionBaseWidget->theChangeMode->setChecked(true);
+        if (theAction->object().isEmpty())
+            editActionBaseWidget->theModes->setCurrentIndex(editActionBaseWidget->theModes->findText(i18n("[Exit current mode]")));
+        else
+            editActionBaseWidget->theModes->setCurrentIndex(editActionBaseWidget->theModes->findText(theAction->object()));
+    } else if (theAction->isJustStart()) { // profile action
+        editActionBaseWidget->theUseProfile->setChecked(true);
+        const Profile *p = ProfileServer::profileServer()->profiles()[theAction->program()];
+        editActionBaseWidget->theApplications->setCurrentIndex(editActionBaseWidget->theApplications->findText(p->name()));
+        editActionBaseWidget->theJustStart->setChecked(true);
+        updateFunctions();
+    } else if (ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype())) { // profile action
+        editActionBaseWidget->theUseProfile->setChecked(true);
+        const ProfileAction *profileAction = ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype());
+        editActionBaseWidget->theApplications->setCurrentIndex(editActionBaseWidget->theApplications->findText(profileAction->profile()->name()));
+        editActionBaseWidget->theFunctions->setCurrentIndex(editActionBaseWidget->theFunctions->findText(profileAction->name()));
+        arguments = theAction->arguments();
+        editActionBaseWidget->thePerformFunction->setChecked(true);
+    } else { // DBus action
+        editActionBaseWidget->theUseDBus->setChecked(true);
+        QString program = theAction->program();
+        editActionBaseWidget->theDBusApplications->setCurrentIndex(editActionBaseWidget->theDBusApplications->findText(program.remove(0, 8)));
+        updateDBusObjects();
+        editActionBaseWidget->theDBusObjects->setCurrentIndex(editActionBaseWidget->theDBusObjects->findText(theAction->object()));
+        updateDBusFunctions();
+        editActionBaseWidget->theDBusFunctions->setCurrentIndex(editActionBaseWidget->theDBusFunctions->findText(theAction->method().prototype()));
+        arguments = theAction->arguments();
+
+    }
 }
 
 void EditAction::writeBack()
 {
-  if (editActionBaseWidget->theChangeMode->isChecked()) {
-    theAction->setProgram("");
-    if (editActionBaseWidget->theModes->currentText() == i18n("[Exit current mode]"))
-      theAction->setObject("");
-    else
-      theAction->setObject(editActionBaseWidget->theModes->currentText());
-    theAction->setDoBefore(editActionBaseWidget->theDoBefore->isChecked());
-    theAction->setDoAfter(editActionBaseWidget->theDoAfter->isChecked());
-  } else if (editActionBaseWidget->theUseProfile->isChecked()) {
-      QString application = editActionBaseWidget->theApplications->currentText();
-      QString function = editActionBaseWidget->theFunctions->currentText();
-      const ProfileAction *profileAction = ProfileServer::profileServer()->getAction(applicationMap[application], functionMap[function]);
-      if( profileAction  || (editActionBaseWidget->theJustStart->isChecked() &&  ProfileServer::profileServer()->profiles()[application])) {
-              theAction->setProgram(ProfileServer::profileServer()->profiles()[applicationMap[application]]->id());
+    if (editActionBaseWidget->theChangeMode->isChecked()) {
+        theAction->setProgram("");
+        if (editActionBaseWidget->theModes->currentText() == i18n("[Exit current mode]"))
+            theAction->setObject("");
+        else
+            theAction->setObject(editActionBaseWidget->theModes->currentText());
+        theAction->setDoBefore(editActionBaseWidget->theDoBefore->isChecked());
+        theAction->setDoAfter(editActionBaseWidget->theDoAfter->isChecked());
+    } else if (editActionBaseWidget->theUseProfile->isChecked()) {
+        QString application = editActionBaseWidget->theApplications->currentText();
+        QString function = editActionBaseWidget->theFunctions->currentText();
+        const ProfileAction *profileAction = ProfileServer::profileServer()->getAction(applicationMap[application], functionMap[function]);
+        if ( profileAction  || (editActionBaseWidget->theJustStart->isChecked() &&  ProfileServer::profileServer()->profiles()[application])) {
+            theAction->setProgram(ProfileServer::profileServer()->profiles()[applicationMap[application]]->id());
             if (editActionBaseWidget->theJustStart->isChecked()) {
-              theAction->setObject("");
+                theAction->setObject("");
             } else {
-              kDebug() << "wrote back: " << applicationMap[application];
-              theAction->setObject(profileAction->objId());
-              theAction->setMethod(profileAction->prototype());
-              theAction->setArguments(arguments);
+                kDebug() << "wrote back: " << applicationMap[application];
+                theAction->setObject(profileAction->objId());
+                theAction->setMethod(profileAction->prototype());
+                theAction->setArguments(arguments);
             }
-  }
-  } else {
-    theAction->setProgram("org.kde." + program);
-    theAction->setObject(editActionBaseWidget->theDBusObjects->currentText());
-    theAction->setMethod(editActionBaseWidget->theDBusFunctions->currentText());
-    theAction->setArguments(arguments);
-  }
-  theAction->setRepeat(editActionBaseWidget->theRepeat->isChecked());
-  theAction->setAutoStart(editActionBaseWidget->theAutoStart->isChecked());
-  theAction->setUnique(isUnique);
+        }
+    } else {
+        theAction->setProgram("org.kde." + program);
+        theAction->setObject(editActionBaseWidget->theDBusObjects->currentText());
+        theAction->setMethod(editActionBaseWidget->theDBusFunctions->currentText());
+        theAction->setArguments(arguments);
+    }
+    theAction->setRepeat(editActionBaseWidget->theRepeat->isChecked());
+    theAction->setAutoStart(editActionBaseWidget->theAutoStart->isChecked());
+    theAction->setUnique(isUnique);
 
-  if(editActionBaseWidget->theDontSend->isChecked()){
-    theAction->setIfMulti(IM_DONTSEND);
-  }else if ( editActionBaseWidget->theSendToTop->isChecked()){
-    theAction->setIfMulti(IM_SENDTOTOP);
-  }else if( editActionBaseWidget->theSendToBottom->isChecked()){
-    theAction->setIfMulti(IM_SENDTOBOTTOM);
-  }else{
-    theAction->setIfMulti(IM_SENDTOALL);
-  }
+    if (editActionBaseWidget->theDontSend->isChecked()) {
+        theAction->setIfMulti(IM_DONTSEND);
+    } else if ( editActionBaseWidget->theSendToTop->isChecked()) {
+        theAction->setIfMulti(IM_SENDTOTOP);
+    } else if ( editActionBaseWidget->theSendToBottom->isChecked()) {
+        theAction->setIfMulti(IM_SENDTOBOTTOM);
+    } else {
+        theAction->setIfMulti(IM_SENDTOALL);
+    }
 //  theAction->setIfMulti(addActionBaseWidget->theDontSend->isChecked() ? IM_DONTSEND : addActionBaseWidget->theSendToTop->isChecked() ? IM_SENDTOTOP : addActionBaseWidget->theSendToBottom->isChecked() ? IM_SENDTOBOTTOM : IM_SENDTOALL);
 }
 
 void EditAction::updateArguments()
 {
-  if (editActionBaseWidget->theUseProfile->isChecked()) {
     editActionBaseWidget->theArguments->clear();
-    const ProfileAction *profileAction = ProfileServer::profileServer()->getAction(applicationMap[editActionBaseWidget->theApplications->currentText()], functionMap[editActionBaseWidget->theFunctions->currentText()]);
-    if (!profileAction) {
-      arguments.clear(); return;
-    }
-    const QList<ProfileActionArgument> &profileActionArguments = profileAction->arguments();
-    if (profileActionArguments.count() != arguments.count()) {
-      arguments.clear();
-      for (int i = 0; i < profileActionArguments.count(); ++i) {
-        arguments.append(QVariant(""));
-      }
-    }
-    editActionBaseWidget->theArguments->setEnabled(profileActionArguments.count());
-    for (int i = 0; i < profileActionArguments.count(); ++i) {
-      editActionBaseWidget->theArguments->addItem(profileActionArguments[i].comment() + " (" + profileActionArguments[i].type() + ')');
-      arguments[i].convert(QVariant::nameToType(profileActionArguments[i].type().toLocal8Bit()));
-    }
-    profileActionArguments.count() ? updateArgument(0) : updateArgument(-1);
+    if (editActionBaseWidget->theUseProfile->isChecked()) {
+        const ProfileAction *profileAction = ProfileServer::profileServer()->getAction(applicationMap[editActionBaseWidget->theApplications->currentText()], functionMap[editActionBaseWidget->theFunctions->currentText()]);
+        if (!profileAction ||  editActionBaseWidget->theJustStart->isChecked()) {
+            arguments.clear();
+            updateArgument(-1);
+            return;
+        }
+        const QList<ProfileActionArgument> &profileActionArguments = profileAction->arguments();
+        if (profileActionArguments.count() != arguments.count()) {
+            arguments.clear();
+            for (int i = 0; i < profileActionArguments.count(); ++i) {
+                arguments.append(QVariant(""));
+            }
+        }
+        editActionBaseWidget->theArguments->setEnabled(profileActionArguments.count());
+        for (int i = 0; i < profileActionArguments.count(); ++i) {
+            editActionBaseWidget->theArguments->addItem(profileActionArguments[i].comment() + " (" + profileActionArguments[i].type() + ')');
+            arguments[i].convert(QVariant::nameToType(profileActionArguments[i].type().toLocal8Bit()));
+        }
+        profileActionArguments.count() ? updateArgument(0) : updateArgument(-1);
 
-  } else if ( editActionBaseWidget->theUseDBus->isChecked()) {
-    editActionBaseWidget->theArguments->clear();
-    Prototype p(editActionBaseWidget->theDBusFunctions->currentText());
-    if (p.count() != arguments.count()) {
-      arguments.clear();
-      for (int i = 0; i < p.count(); i++)
-        arguments.append(QVariant(""));
+    } else if ( editActionBaseWidget->theUseDBus->isChecked()) {
+        Prototype p(editActionBaseWidget->theDBusFunctions->currentText());
+        if (p.count() != arguments.count()) {
+            arguments.clear();
+            for (int i = 0; i < p.count(); i++)
+                arguments.append(QVariant(""));
+        }
+        editActionBaseWidget->theArguments->setEnabled(p.count());
+        for (int i = 0; i < p.count(); i++) {
+            editActionBaseWidget->theArguments->addItem(QString().setNum(i + 1) + ": " + (p.name(i).isEmpty() ? p.type(i) : p.name(i) + " (" + p.type(i) + ')'));
+            arguments[i].convert(QVariant::nameToType(p.type(i).toLocal8Bit()));
+        }
+        p.count() ?  updateArgument(0) : updateArgument(-1);
     }
-    editActionBaseWidget->theArguments->setEnabled(p.count());
-    for (int i = 0; i < p.count(); i++) {
-      editActionBaseWidget->theArguments->addItem(QString().setNum(i + 1) + ": " + (p.name(i).isEmpty() ? p.type(i) : p.name(i) + " (" + p.type(i) + ')'));
-      arguments[i].convert(QVariant::nameToType(p.type(i).toLocal8Bit()));
-    }
-    p.count() ?  updateArgument(0) : updateArgument(-1);
-  }
 }
 
 void EditAction::updateInstancesOptions()
 {
-  if (editActionBaseWidget->theUseProfile->isChecked()) {
-    ProfileServer *theServer = ProfileServer::profileServer();
-    if (editActionBaseWidget->theApplications->currentIndex() == -1) return;
-    const Profile *p = theServer->profiles()[applicationMap[editActionBaseWidget->theApplications->currentText()]];
-    isUnique = p->unique();
-  } else if ( editActionBaseWidget->theUseDBus->isChecked()) {
-    program =  editActionBaseWidget->theDBusApplications->currentText();
-    if ( program.isNull() ||  program.isEmpty()) {
-      return;
-    }
-    isUnique = uniqueProgramMap[program];
-  } else
-    isUnique = true;
+    if (editActionBaseWidget->theUseProfile->isChecked()) {
+        ProfileServer *theServer = ProfileServer::profileServer();
+        if (editActionBaseWidget->theApplications->currentIndex() == -1) return;
+        const Profile *p = theServer->profiles()[applicationMap[editActionBaseWidget->theApplications->currentText()]];
+        isUnique = p->unique();
+    } else if ( editActionBaseWidget->theUseDBus->isChecked()) {
+        program =  editActionBaseWidget->theDBusApplications->currentText();
+        if ( program.isNull() ||  program.isEmpty()) {
+            return;
+        }
+        isUnique = uniqueProgramMap[program];
+    } else
+        isUnique = true;
 
-  editActionBaseWidget->theIMLabel->setEnabled(!isUnique);
-  // theIMGroup->setEnabled(!isUnique);
-  editActionBaseWidget->theDontSend->setEnabled(!isUnique);
-  editActionBaseWidget->theSendToTop->setEnabled(!isUnique);
-  editActionBaseWidget->theSendToBottom->setEnabled(!isUnique);
-  editActionBaseWidget->theSendToAll->setEnabled(!isUnique);
+    editActionBaseWidget->theIMLabel->setEnabled(!isUnique);
+    // theIMGroup->setEnabled(!isUnique);
+    editActionBaseWidget->theDontSend->setEnabled(!isUnique);
+    editActionBaseWidget->theSendToTop->setEnabled(!isUnique);
+    editActionBaseWidget->theSendToBottom->setEnabled(!isUnique);
+    editActionBaseWidget->theSendToAll->setEnabled(!isUnique);
 }
 
 // called when the textbox/checkbox/whatever changes value
 void EditAction::slotParameterChanged()
 {
 
-  int index =  editActionBaseWidget->theArguments->currentIndex();
- //KDebug() << "in: " << arguments[index].toString() ;
-  int type = arguments[editActionBaseWidget->theArguments->currentIndex()].type();
-  kDebug() << type ;
-  switch (type) {
-  case QVariant::Int: case QVariant::UInt:
-    arguments[index] = editActionBaseWidget->theValueIntNumInput->value();
-    break;
-  case QVariant::Double:
-    arguments[index] = editActionBaseWidget->theValueDoubleNumInput->value();
-    break;
-  case QVariant::Bool:
-    arguments[index] = editActionBaseWidget->theValueCheckBox->isChecked();
-    break;
-  case QVariant::StringList:
-    arguments[index] = editActionBaseWidget->theValueEditListBox->items();
-    break;
-  default:
-    arguments[index] = editActionBaseWidget->theValueLineEdit->text();
-  }
-  arguments[index].convert(QVariant::Type(type));
-  kDebug() << "out: " << arguments[index].toString() ;
+    int index =  editActionBaseWidget->theArguments->currentIndex();
+//KDebug() << "in: " << arguments[index].toString() ;
+    int type = arguments[editActionBaseWidget->theArguments->currentIndex()].type();
+    kDebug() << type ;
+    switch (type) {
+    case QVariant::Int:
+    case QVariant::UInt:
+        arguments[index] = editActionBaseWidget->theValueIntNumInput->value();
+        break;
+    case QVariant::Double:
+        arguments[index] = editActionBaseWidget->theValueDoubleNumInput->value();
+        break;
+    case QVariant::Bool:
+        arguments[index] = editActionBaseWidget->theValueCheckBox->isChecked();
+        break;
+    case QVariant::StringList:
+        arguments[index] = editActionBaseWidget->theValueEditListBox->items();
+        break;
+    default:
+        arguments[index] = editActionBaseWidget->theValueLineEdit->text();
+    }
+    arguments[index].convert(QVariant::Type(type));
+    kDebug() << "out: " << arguments[index].toString() ;
 
 }
 
 void EditAction::updateArgument(int index)
 {
-  kDebug() << " i: " << index ;
-  if (index >= 0 && ! arguments.isEmpty()) {
-    switch (arguments[index].type()) {
-    case QVariant::Int: case QVariant::UInt:
-      editActionBaseWidget->theValue->setCurrentIndex(4);
-      editActionBaseWidget->theValueIntNumInput->setValue(arguments[index].toInt());
-      break;
-    case QVariant::Double:
-      editActionBaseWidget->theValue->setCurrentIndex(1);
-      editActionBaseWidget->theValueDoubleNumInput->setValue(arguments[index].toDouble());
-      break;
-    case QVariant::Bool:
-      editActionBaseWidget->theValue->setCurrentIndex(3);
-      editActionBaseWidget->theValueCheckBox->setChecked(arguments[index].toBool());
-      break;
+    kDebug() << " i: " << index ;
+    if (index >= 0 && ! arguments.isEmpty()) {
+        switch (arguments[index].type()) {
+        case QVariant::Int:
+        case QVariant::UInt:
+            editActionBaseWidget->theValue->setCurrentIndex(4);
+            editActionBaseWidget->theValueIntNumInput->setValue(arguments[index].toInt());
+            break;
+        case QVariant::Double:
+            editActionBaseWidget->theValue->setCurrentIndex(1);
+            editActionBaseWidget->theValueDoubleNumInput->setValue(arguments[index].toDouble());
+            break;
+        case QVariant::Bool:
+            editActionBaseWidget->theValue->setCurrentIndex(3);
+            editActionBaseWidget->theValueCheckBox->setChecked(arguments[index].toBool());
+            break;
 
-    case QVariant::StringList:{
-      editActionBaseWidget->theValue->setCurrentIndex(0);
-      QStringList backup = arguments[index].toStringList();
-      // backup needed because calling clear will kill what ever has been saved.
-      editActionBaseWidget->theValueEditListBox->clear();
-      editActionBaseWidget->theValueEditListBox->insertStringList(backup);
-      arguments[index] = backup;
-      break;
+        case QVariant::StringList: {
+            editActionBaseWidget->theValue->setCurrentIndex(0);
+            QStringList backup = arguments[index].toStringList();
+            // backup needed because calling clear will kill what ever has been saved.
+            editActionBaseWidget->theValueEditListBox->clear();
+            editActionBaseWidget->theValueEditListBox->insertStringList(backup);
+            arguments[index] = backup;
+            break;
+        }
+        default:
+            editActionBaseWidget->theValue->setCurrentIndex(2);
+            editActionBaseWidget->theValueLineEdit->setText(arguments[index].toString());
+        }
+        editActionBaseWidget->theValue->setEnabled(true);
+    } else {
+        editActionBaseWidget->theValueLineEdit->setText("");
+        editActionBaseWidget->theValueCheckBox->setChecked(false);
+        editActionBaseWidget->theValueIntNumInput->setValue(0);
+        editActionBaseWidget->theValueDoubleNumInput->setValue(0.0);
+        editActionBaseWidget->theValue->setEnabled(false);
     }
-    default:
-      editActionBaseWidget->theValue->setCurrentIndex(2);
-      editActionBaseWidget->theValueLineEdit->setText(arguments[index].toString());
-    }
-    editActionBaseWidget->theValue->setEnabled(true);
-  } else {
-    editActionBaseWidget->theValueLineEdit->setText("");
-    editActionBaseWidget->theValueCheckBox->setChecked(false);
-    editActionBaseWidget->theValueIntNumInput->setValue(0);
-    editActionBaseWidget->theValueDoubleNumInput->setValue(0.0);
-    editActionBaseWidget->theValue->setEnabled(false);
-  }
 }
 
 void EditAction::initApplications()
 {
-  ProfileServer *theServer = ProfileServer::profileServer();
-  editActionBaseWidget->theApplications->clear();
-  applicationMap.clear();
+    ProfileServer *theServer = ProfileServer::profileServer();
+    editActionBaseWidget->theApplications->clear();
+    applicationMap.clear();
 
-  QHash<QString, Profile*> dict = theServer->profiles();
-  QHash<QString, Profile*>::const_iterator i;
-  for (i = dict.constBegin(); i != dict.constEnd(); ++i) {
-    editActionBaseWidget->theApplications->addItem(i.value()->name());
-    applicationMap[i.value()->name()] = i.key();
-    kDebug() << "read Application: " << i.value()->name() << i.key();
-  }
-  updateFunctions();
+    QHash<QString, Profile*> dict = theServer->profiles();
+    QHash<QString, Profile*>::const_iterator i;
+    for (i = dict.constBegin(); i != dict.constEnd(); ++i) {
+        editActionBaseWidget->theApplications->addItem(i.value()->name());
+        applicationMap[i.value()->name()] = i.key();
+        kDebug() << "read Application: " << i.value()->name() << i.key();
+    }
+//  updateFunctions();
 }
 
 void EditAction::updateFunctions()
 {
-  if(editActionBaseWidget->theJustStart->isChecked()){
-    return;
-  }
-  ProfileServer *theServer = ProfileServer::profileServer();
-  editActionBaseWidget->theFunctions->clear();
-  functionMap.clear();
-  QString application = editActionBaseWidget->theApplications->currentText();
-  if (application.isNull() || application.isEmpty()){
-    return;
-  }
-
-  const Profile *p = theServer->profiles()[applicationMap[application]];
-
-  QHash<QString, ProfileAction*> dict = p->actions();
-  QHash<QString, ProfileAction*>::const_iterator i;
-  for (i = dict.constBegin(); i != dict.constEnd(); ++i) {
-    editActionBaseWidget->theFunctions->addItem(i.value()->name());
-    functionMap[i.value()->name()] = i.key();
-  }
-  updateArguments();
+    editActionBaseWidget->theFunctions->clear();
+    functionMap.clear();
+    if (editActionBaseWidget->theJustStart->isChecked()) {
+        updateArguments();
+        return;
+    }
+    QString application = editActionBaseWidget->theApplications->currentText();
+    if (application.isNull() || application.isEmpty()) {
+        return;
+    }
+    QHash<QString, ProfileAction*> dict = ProfileServer::profileServer()->profiles()[applicationMap[application]]->actions();
+    kDebug() << dict;
+    QHash<QString, ProfileAction*>::const_iterator i;
+    QStringList theFunctions;
+    for (i = dict.constBegin(); i != dict.constEnd(); ++i) {
+        theFunctions << i.value()->name();
+        functionMap[i.value()->name()] = i.key();
+    }
+    theFunctions.sort();
+    editActionBaseWidget->theFunctions->addItems(theFunctions);
+    updateArguments();
 }
 
 void EditAction::initDBusApplications()
 {
-  QStringList names;
+    QStringList names;
 
-  editActionBaseWidget->theDBusApplications->clear();
+    editActionBaseWidget->theDBusApplications->clear();
 
-  QDBusConnectionInterface *dBusIface = QDBusConnection::sessionBus().interface();
-  QStringList allServices = dBusIface->registeredServiceNames();
-  allServices.sort();
+    QDBusConnectionInterface *dBusIface = QDBusConnection::sessionBus().interface();
+    QStringList allServices = dBusIface->registeredServiceNames();
+    allServices.sort();
 
-  for (QStringList::const_iterator i = allServices.constBegin(); i != allServices.constEnd(); ++i) {
-    // Use only KDE-Apps
-    if (!(*i).contains("org.kde")) {
-      continue;
+    for (QStringList::const_iterator i = allServices.constBegin(); i != allServices.constEnd(); ++i) {
+        // Use only KDE-Apps
+        if (!(*i).contains("org.kde")) {
+            continue;
+        }
+
+        // Remove the "org.kde."
+        QString name = (*i);
+        name.remove(0, 8);
+
+        // Remove "human unreadable" entries
+        QRegExp r("[a-zA-Z]*");
+        if (! r.exactMatch(name)) {
+            continue;
+        }
+
+        //remove duplicates
+        if (names.contains(name)) {
+            continue;
+        }
+
+        editActionBaseWidget->theDBusApplications->addItem(name);
+        names << name;
+        nameProgramMap[name] = *i;
     }
-
-    // Remove the "org.kde."
-    QString name = (*i);
-    name.remove(0, 8);
-
-    // Remove "human unreadable" entries
-    QRegExp r("[a-zA-Z]*");
-    if (! r.exactMatch(name)) {
-      continue;
-    }
-
-    //remove duplicates
-    if (names.contains(name)) {
-      continue;
-    }
-
-    editActionBaseWidget->theDBusApplications->addItem(name);
-    nameProgramMap[name] = *i;
-  }
-
-
-  updateDBusObjects();
+    names.sort();
+    editActionBaseWidget->theDBusApplications->addItems(names);
+    updateDBusObjects();
 }
 
 void EditAction::updateDBusObjects()
 {
-  editActionBaseWidget->theDBusObjects->clear();
-  QString dbusApp = editActionBaseWidget->theDBusApplications->currentText();
-  kDebug() << "ProgramMap: " << nameProgramMap[dbusApp];
+    editActionBaseWidget->theDBusObjects->clear();
+    QString dbusApp = editActionBaseWidget->theDBusApplications->currentText();
+    kDebug() << "ProgramMap: " << nameProgramMap[dbusApp];
 
-  QDBusInterface *dBusIface = new QDBusInterface(nameProgramMap[dbusApp], "/", "org.freedesktop.DBus.Introspectable");
-  QDBusReply<QString> response = dBusIface->call("Introspect");
+    QDBusInterface *dBusIface = new QDBusInterface(nameProgramMap[dbusApp], "/", "org.freedesktop.DBus.Introspectable");
+    QDBusReply<QString> response = dBusIface->call("Introspect");
 
-  QDomDocument domDoc;
-  domDoc.setContent(response);
+    QDomDocument domDoc;
+    domDoc.setContent(response);
 
-  QDomElement node = domDoc.documentElement();
+    QDomElement node = domDoc.documentElement();
 
-  QDomElement child = node.firstChildElement();
-  QStringList  tObjectsList;
-  while (!child.isNull()) {
-    kDebug() << child.tagName() << ":" << child.attribute(QLatin1String("name"));
-    if (child.tagName() == QLatin1String("node")) {
-      tObjectsList << child.attribute(QLatin1String("name"));
+    QDomElement child = node.firstChildElement();
+    QStringList  tObjectsList;
+    while (!child.isNull()) {
+        kDebug() << child.tagName() << ":" << child.attribute(QLatin1String("name"));
+        if (child.tagName() == QLatin1String("node")) {
+            tObjectsList << child.attribute(QLatin1String("name"));
+        }
+        child = child.nextSiblingElement();
     }
-    child = child.nextSiblingElement();
-  }
-  tObjectsList.sort();
-  editActionBaseWidget->theDBusObjects->insertItems(0, tObjectsList);
-  updateDBusFunctions();
+    tObjectsList.sort();
+
+    editActionBaseWidget->theDBusObjects->insertItems(0, tObjectsList);
+    updateDBusFunctions();
 }
 
 void EditAction::updateDBusFunctions()
 {
-  editActionBaseWidget->theDBusFunctions->clear();
+    editActionBaseWidget->theDBusFunctions->clear();
 
-  QDBusInterface *dBusIface = new QDBusInterface(nameProgramMap[editActionBaseWidget->theDBusApplications->currentText()], '/' + editActionBaseWidget->theDBusObjects->currentText(), "org.freedesktop.DBus.Introspectable");
-  QDBusReply<QString> response = dBusIface->call("Introspect");
+    QDBusInterface *dBusIface = new QDBusInterface(nameProgramMap[editActionBaseWidget->theDBusApplications->currentText()], '/' + editActionBaseWidget->theDBusObjects->currentText(), "org.freedesktop.DBus.Introspectable");
+    QDBusReply<QString> response = dBusIface->call("Introspect");
 
-  QDomDocument domDoc;
-  domDoc.setContent(response);
+    QDomDocument domDoc;
+    domDoc.setContent(response);
 
-  QDomElement node = domDoc.documentElement();
-  QDomElement child = node.firstChildElement();
+    QDomElement node = domDoc.documentElement();
+    QDomElement child = node.firstChildElement();
 
-  QString function;
-  QStringList functionsList;
-  while (!child.isNull()) {
-    if (child.tagName() == QLatin1String("interface")) {
-      if (child.attribute("name") == "org.freedesktop.DBus.Properties" ||
-          child.attribute("name") == "org.freedesktop.DBus.Introspectable") {
-            child = child.nextSiblingElement();
-            continue;
-      }
-      QDomElement subChild = child.firstChildElement();
-      while (!subChild.isNull()) {
-        if (subChild.tagName() == QLatin1String("method")) {
-          QString method = subChild.attribute(QLatin1String("name"));
-          kDebug() << "Method: " << method;
-          function = "QString " + method + '(';
-          QDomElement arg = subChild.firstChildElement();
-          QString argStr;
-          while (!arg.isNull()) {
-            if (arg.tagName() == QLatin1String("arg")) {
-              if (arg.attribute(QLatin1String("direction")) == "in") {
-                if (!argStr.isEmpty()) {
-                  argStr += ", ";
-                }
-                if (arg.attribute(QLatin1String("type")) == "i") {
-                  argStr += "int";
-                } else if (arg.attribute(QLatin1String("type")) == "u") {
-                  argStr += "uint";
-                } else if (arg.attribute(QLatin1String("type")) == "s") {
-                  argStr += "QString";
-                } else if (arg.attribute(QLatin1String("type")) == "b") {
-                  argStr += "bool";
-                } else if (arg.attribute(QLatin1String("type")) == "d") {
-                  argStr += "double";
-                } else if (arg.attribute(QLatin1String("type")) == "as") {
-                  argStr += "QStringList";
-                } else if (arg.attribute(QLatin1String("type")) == "ay") {
-                  argStr += "QByteArray";
-                } else if (arg.attribute(QLatin1String("type")) == "(iii)") {
-                  kDebug() << "got a (iii) type";
-                  QString helper = arg.attribute("name");
-                  arg = arg.nextSiblingElement();
-                  argStr += arg.attribute(QLatin1String("value"));
-                  argStr += ' ' + helper;
-                  arg = arg.nextSiblingElement();
-                  continue;
-                } else {
-                  argStr += arg.attribute(QLatin1String("type"));
-                }
-                argStr += ' ' + arg.attribute(QLatin1String("name"));
-                kDebug() << "Arg: " << argStr;
-              }
+    QString function;
+    QStringList functionsList;
+    while (!child.isNull()) {
+        if (child.tagName() == QLatin1String("interface")) {
+            if (child.attribute("name") == "org.freedesktop.DBus.Properties" ||
+                    child.attribute("name") == "org.freedesktop.DBus.Introspectable") {
+                child = child.nextSiblingElement();
+                continue;
             }
-            arg = arg.nextSiblingElement();
-          }
-          function +=  argStr + ')';
-          functionsList << function;
+            QDomElement subChild = child.firstChildElement();
+            while (!subChild.isNull()) {
+                if (subChild.tagName() == QLatin1String("method")) {
+                    QString method = subChild.attribute(QLatin1String("name"));
+                    kDebug() << "Method: " << method;
+                    function = "QString " + method + '(';
+                    QDomElement arg = subChild.firstChildElement();
+                    QString argStr;
+                    while (!arg.isNull()) {
+                        if (arg.tagName() == QLatin1String("arg")) {
+                            if (arg.attribute(QLatin1String("direction")) == "in") {
+                                if (!argStr.isEmpty()) {
+                                    argStr += ", ";
+                                }
+                                if (arg.attribute(QLatin1String("type")) == "i") {
+                                    argStr += "int";
+                                } else if (arg.attribute(QLatin1String("type")) == "u") {
+                                    argStr += "uint";
+                                } else if (arg.attribute(QLatin1String("type")) == "s") {
+                                    argStr += "QString";
+                                } else if (arg.attribute(QLatin1String("type")) == "b") {
+                                    argStr += "bool";
+                                } else if (arg.attribute(QLatin1String("type")) == "d") {
+                                    argStr += "double";
+                                } else if (arg.attribute(QLatin1String("type")) == "as") {
+                                    argStr += "QStringList";
+                                } else if (arg.attribute(QLatin1String("type")) == "ay") {
+                                    argStr += "QByteArray";
+                                } else if (arg.attribute(QLatin1String("type")) == "(iii)") {
+                                    kDebug() << "got a (iii) type";
+                                    QString helper = arg.attribute("name");
+                                    arg = arg.nextSiblingElement();
+                                    argStr += arg.attribute(QLatin1String("value"));
+                                    argStr += ' ' + helper;
+                                    arg = arg.nextSiblingElement();
+                                    continue;
+                                } else {
+				      argStr += arg.attribute(QLatin1String("type"));
+                                }
+                                argStr += ' ' + arg.attribute(QLatin1String("name"));
+                                kDebug() << "Arg: " << argStr;
+                            }
+                        }
+                        arg = arg.nextSiblingElement();
+                    }
+                    function +=  argStr + ')';
+                    functionsList << function;
+                }
+                subChild = subChild.nextSiblingElement();
+            }
         }
-        subChild = subChild.nextSiblingElement();
-      }
+        functionsList.sort();
+        editActionBaseWidget->theDBusFunctions->addItems(functionsList);
+        //editActionBaseWidget->theDBusFunctions->
+
+        child = child.nextSiblingElement();
     }
-    functionsList.sort();
-    editActionBaseWidget->theDBusFunctions->addItems(functionsList);
 
-    child = child.nextSiblingElement();
-  }
-
-  updateArguments();
+    updateArguments();
 }
 
 void EditAction::addItem(QString item)
 {
-  editActionBaseWidget->theModes->addItem(item);
+    editActionBaseWidget->theModes->addItem(item);
 }
+
+
+
 
 #include "editaction.moc"
