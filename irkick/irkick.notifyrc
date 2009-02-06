@@ -1,6 +1,7 @@
 [Global]
 IconName=irkick
 Comment=Irkick
+Comment[cs]=IRKick
 Comment[es]=IRKick
 Comment[x-test]=xxIrkickxx
 
