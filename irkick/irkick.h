@@ -141,9 +141,6 @@ private slots:
     void slotConfigure();
     void slotReloadConfiguration();
     void slotClosed();
-private:
-    void executeAction(const IRAction &action);
-    bool getPrograms(const IRAction &action, QStringList &populous);
 
 public:
     explicit IRKick(const QString &obj);
