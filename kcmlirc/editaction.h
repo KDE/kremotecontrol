@@ -61,6 +61,12 @@ private:
   QButtonGroup mainGroup;
   void connectSignalsAndSlots();
 
+inline QString getCurrentDbusApp(){
+   return  editActionBaseWidget->theDBusApplications->itemData(editActionBaseWidget->theDBusApplications->currentIndex(),Qt::UserRole).toString();
+}
+
+
+
 public:
   explicit EditAction(IRAction *action, QWidget *parent = 0, const bool &modal = false);
   ~EditAction();

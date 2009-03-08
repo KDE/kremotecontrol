@@ -611,6 +611,8 @@ void AddAction::updateObjects()
         QStringList tmpList;
         tmpList << name;
         QTreeWidgetItem *a = new QTreeWidgetItem(theObjects, tmpList);
+  
+	//theObjects->
         uniqueProgramMap[a] = name == QString(*i);
         nameProgramMap[a] = *i;
 
@@ -645,7 +647,7 @@ void AddAction::updateFunctions()
             Prototype p((QString)(*i));
             QStringList parameters;
             parameters << p.name() << p.argumentList() << *i;
-            new QTreeWidgetItem(theFunctions, parameters);
+            QTreeWidgetItem *t = new QTreeWidgetItem(theFunctions, parameters);
         }
     }
     updateOptions();
@@ -687,6 +689,8 @@ IRAction* AddAction::getAction()
                    && theObjects->selectedItems().first()->parent()
                    && !theFunctions->selectedItems().isEmpty()) {
               action->setProgram(program);
+	  kDebug() << "programm                 ++++++++++++++++++  " << program;
+    kDebug() << "function                 ++++++++++++++++++  " << theFunctions->selectedItems().first()->text(2);
               action->setObject(theObjects->selectedItems().first()->text(0));
               action->setMethod(theFunctions->selectedItems().first()->text(2));
               theParameters->sortItems(3, Qt::AscendingOrder);

@@ -27,11 +27,20 @@
 
 #ifndef MODEL_H_
 #define MODEL_H_
+
+
+#include "prototype.h"
+
 #include <QStringListModel>
+
 
 //class QVariant
 //class QString
 #endif /* MODEL_H_ */
+
+
+    Q_DECLARE_METATYPE(Prototype)
+
 
 class DBusProfileModel : public  QStringListModel
 {
@@ -49,4 +58,28 @@ public:
 
 };
 
+
+class DBusFunctionModel : public  QAbstractListModel
+{
+private:
+    QList <Prototype>  theProtoTypeList;
+
+public:
+
+  DBusFunctionModel (QObject * parent );
+
+
+  virtual QVariant data( const QModelIndex & index, int  role) const;
+  virtual bool setData(const QModelIndex &index,  const QVariant &value, int role);
+  bool insertRows(int position, int rows, const QModelIndex &parent);
+  bool removeRows(int position, int rows, const QModelIndex &parent);
+
+ int rowCount(const QModelIndex &parent) const{
+      return theProtoTypeList.size();
+  }
+
+
+
+    Qt::ItemFlags flags(const QModelIndex &index) const;
+};
 

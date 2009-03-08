@@ -34,6 +34,8 @@
 @author Gav Wood
 */
 
+class Prototype;
+
 class Prototype
 {
     QString original, theName, theReturn;
@@ -81,7 +83,8 @@ public:
     }
 
     Prototype(const QString &source);
-    Prototype();
+    Prototype(){original = "bla";};
+    Prototype(const Prototype &pType);
     ~Prototype();
 
 };

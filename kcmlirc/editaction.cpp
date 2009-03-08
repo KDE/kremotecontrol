@@ -57,6 +57,7 @@ EditAction::EditAction(IRAction *action, QWidget *parent, const bool &modal): KD
     setModal(modal);
     //TODO: Layout theValue
     editActionBaseWidget->theDBusApplications->setModel(new DBusProfileModel(0));
+    editActionBaseWidget->theDBusFunctions->setModel(new DBusFunctionModel(0));
     editActionBaseWidget->theValue->layout()->setMargin(0);
 
     mainGroup.addButton(editActionBaseWidget->theUseDBus);
@@ -436,112 +437,99 @@ void EditAction::initDBusApplications()
 
 void EditAction::updateDBusObjects()
 {
-    editActionBaseWidget->theDBusObjects->clear();
-    QString dbusApp = editActionBaseWidget->theDBusApplications->currentText();
-    kDebug() << "ProgramMap: " << nameProgramMap[dbusApp];
-
-    QDBusInterface *dBusIface = new QDBusInterface(nameProgramMap[dbusApp], "/", "org.freedesktop.DBus.Introspectable");
-    QDBusReply<QString> response = dBusIface->call("Introspect");
-
-    QDomDocument domDoc;
-    domDoc.setContent(response);
-
-    QDomElement node = domDoc.documentElement();
-
-    QDomElement child = node.firstChildElement();
-    QStringList  tObjectsList;
-    while (!child.isNull()) {
-        kDebug() << child.tagName() << ":" << child.attribute(QLatin1String("name"));
-        if (child.tagName() == QLatin1String("node")) {
-            tObjectsList << child.attribute(QLatin1String("name"));
-        }
-        child = child.nextSiblingElement();
-    }
-    tObjectsList.sort();
-
-    editActionBaseWidget->theDBusObjects->insertItems(0, tObjectsList);
-    updateDBusFunctions();
+    editActionBaseWidget->theDBusObjects->clear();   
+     editActionBaseWidget->theDBusObjects->insertItems(0, DBusInterface::getInstance()->getObjects(getCurrentDbusApp()));
+     updateDBusFunctions();
 }
 
 void EditAction::updateDBusFunctions()
 {
     editActionBaseWidget->theDBusFunctions->clear();
 
-    QDBusInterface *dBusIface = new QDBusInterface(nameProgramMap[editActionBaseWidget->theDBusApplications->currentText()], '/' + editActionBaseWidget->theDBusObjects->currentText(), "org.freedesktop.DBus.Introspectable");
-    QDBusReply<QString> response = dBusIface->call("Introspect");
+    QList<Prototype> tList = DBusInterface::getInstance()->getFunctions(getCurrentDbusApp(), editActionBaseWidget->theDBusObjects->currentText());
 
-    QDomDocument domDoc;
-    domDoc.setContent(response);
-
-    QDomElement node = domDoc.documentElement();
-    QDomElement child = node.firstChildElement();
-
-    QString function;
-    QStringList functionsList;
-    while (!child.isNull()) {
-        if (child.tagName() == QLatin1String("interface")) {
-            if (child.attribute("name") == "org.freedesktop.DBus.Properties" ||
-                    child.attribute("name") == "org.freedesktop.DBus.Introspectable") {
-                child = child.nextSiblingElement();
-                continue;
-            }
-            QDomElement subChild = child.firstChildElement();
-            while (!subChild.isNull()) {
-                if (subChild.tagName() == QLatin1String("method")) {
-                    QString method = subChild.attribute(QLatin1String("name"));
-                    kDebug() << "Method: " << method;
-                    function = "QString " + method + '(';
-                    QDomElement arg = subChild.firstChildElement();
-                    QString argStr;
-                    while (!arg.isNull()) {
-                        if (arg.tagName() == QLatin1String("arg")) {
-                            if (arg.attribute(QLatin1String("direction")) == "in") {
-                                if (!argStr.isEmpty()) {
-                                    argStr += ", ";
-                                }
-                                if (arg.attribute(QLatin1String("type")) == "i") {
-                                    argStr += "int";
-                                } else if (arg.attribute(QLatin1String("type")) == "u") {
-                                    argStr += "uint";
-                                } else if (arg.attribute(QLatin1String("type")) == "s") {
-                                    argStr += "QString";
-                                } else if (arg.attribute(QLatin1String("type")) == "b") {
-                                    argStr += "bool";
-                                } else if (arg.attribute(QLatin1String("type")) == "d") {
-                                    argStr += "double";
-                                } else if (arg.attribute(QLatin1String("type")) == "as") {
-                                    argStr += "QStringList";
-                                } else if (arg.attribute(QLatin1String("type")) == "ay") {
-                                    argStr += "QByteArray";
-                                } else if (arg.attribute(QLatin1String("type")) == "(iii)") {
-                                    kDebug() << "got a (iii) type";
-                                    QString helper = arg.attribute("name");
-                                    arg = arg.nextSiblingElement();
-                                    argStr += arg.attribute(QLatin1String("value"));
-                                    argStr += ' ' + helper;
-                                    arg = arg.nextSiblingElement();
-                                    continue;
-                                } else {
-				      argStr += arg.attribute(QLatin1String("type"));
-                                }
-                                argStr += ' ' + arg.attribute(QLatin1String("name"));
-                                kDebug() << "Arg: " << argStr;
-                            }
-                        }
-                        arg = arg.nextSiblingElement();
-                    }
-                    function +=  argStr + ')';
-                    functionsList << function;
-                }
-                subChild = subChild.nextSiblingElement();
-            }
-        }
-        functionsList.sort();
-        editActionBaseWidget->theDBusFunctions->addItems(functionsList);
-        //editActionBaseWidget->theDBusFunctions->
-
-        child = child.nextSiblingElement();
+    foreach(Prototype tType, tList){
+        QVariant t;
+    kDebug()<< "type = " << tType.prototype();
+    qVariantSetValue(t,tType);
+    editActionBaseWidget->theDBusFunctions->addItem(0, qVariantFromValue(t));
     }
+
+//    QDBusInterface *dBusIface = new QDBusInterface(getCurrentDbusApp(), '/' + editActionBaseWidget->theDBusObjects->currentText(), "org.freedesktop.DBus.Introspectable");
+//    QDBusReply<QString> response = dBusIface->call("Introspect");
+//
+//    QDomDocument domDoc;
+//    domDoc.setContent(response);
+//
+//    QDomElement node = domDoc.documentElement();
+//    QDomElement child = node.firstChildElement();
+//
+//    QString function;
+//    QStringList functionsList;
+//    while (!child.isNull()) {
+//        if (child.tagName() == QLatin1String("interface")) {
+//            if (child.attribute("name") == "org.freedesktop.DBus.Properties" ||
+//                    child.attribute("name") == "org.freedesktop.DBus.Introspectable") {
+//                child = child.nextSiblingElement();
+//                continue;
+//            }
+//            QDomElement subChild = child.firstChildElement();
+//            while (!subChild.isNull()) {
+//                if (subChild.tagName() == QLatin1String("method")) {
+//                    QString method = subChild.attribute(QLatin1String("name"));
+//                    kDebug() << "Method: " << method;
+//                    function = "QString " + method + '(';
+//                    QDomElement arg = subChild.firstChildElement();
+//                    QString argStr;
+//                    while (!arg.isNull()) {
+//                        if (arg.tagName() == QLatin1String("arg")) {
+//                            if (arg.attribute(QLatin1String("direction")) == "in") {
+//                                if (!argStr.isEmpty()) {
+//                                    argStr += ", ";
+//                                }
+//                                if (arg.attribute(QLatin1String("type")) == "i") {
+//                                    argStr += "int";
+//                                } else if (arg.attribute(QLatin1String("type")) == "u") {
+//                                    argStr += "uint";
+//                                } else if (arg.attribute(QLatin1String("type")) == "s") {
+//                                    argStr += "QString";
+//                                } else if (arg.attribute(QLatin1String("type")) == "b") {
+//                                    argStr += "bool";
+//                                } else if (arg.attribute(QLatin1String("type")) == "d") {
+//                                    argStr += "double";
+//                                } else if (arg.attribute(QLatin1String("type")) == "as") {
+//                                    argStr += "QStringList";
+//                                } else if (arg.attribute(QLatin1String("type")) == "ay") {
+//                                    argStr += "QByteArray";
+//                                } else if (arg.attribute(QLatin1String("type")) == "(iii)") {
+//                                    kDebug() << "got a (iii) type";
+//                                    QString helper = arg.attribute("name");
+//                                    arg = arg.nextSiblingElement();
+//                                    argStr += arg.attribute(QLatin1String("value"));
+//                                    argStr += ' ' + helper;
+//                                    arg = arg.nextSiblingElement();
+//                                    continue;
+//                                } else {
+//				      argStr += arg.attribute(QLatin1String("type"));
+//                                }
+//                                argStr += ' ' + arg.attribute(QLatin1String("name"));
+//                                kDebug() << "Arg: " << argStr;
+//                            }
+//                        }
+//                        arg = arg.nextSiblingElement();
+//                    }
+//                    function +=  argStr + ')';
+//                    functionsList << function;
+//                }
+//                subChild = subChild.nextSiblingElement();
+//            }
+//        }
+//        functionsList.sort();
+//        editActionBaseWidget->theDBusFunctions->addItems(functionsList);
+//        //editActionBaseWidget->theDBusFunctions->
+//
+//        child = child.nextSiblingElement();
+//    }
 
     updateArguments();
 }

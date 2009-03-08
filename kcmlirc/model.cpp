@@ -24,15 +24,18 @@
  *      @author Frank Scheffold
  */
 
+#include "model.h"
+
 #include <QtAlgorithms>
 #include <kdebug.h>
 #include <QVariant>
-#include "model.h"
+
+
 
 DBusProfileModel::DBusProfileModel(QObject *parent = 0) :
   QStringListModel(parent)
 {
-kdDebug() << "new dbus list model";
+
 }
 
 bool DBusProfileModel::ascendingLessThan(const QPair<QString, int> &s1, const QPair<QString, int> &s2)
@@ -65,7 +68,6 @@ QVariant DBusProfileModel::data(const QModelIndex & index, int role = Qt::Displa
       kDebug() << " Index invalid";
     return QVariant();
   }
-
   if (index.row() >= 0 || index.row() <= stringList().size()) {
     if (role == Qt::DisplayRole || role == Qt::EditRole) {
 
@@ -115,3 +117,85 @@ void  DBusProfileModel::sort(int, Qt::SortOrder order)
 
 
 }
+
+
+DBusFunctionModel::DBusFunctionModel(QObject* parent ) : QAbstractListModel(parent) {
+qRegisterMetaType<Prototype>("Prototype");
+}
+
+
+
+
+QVariant DBusFunctionModel::data(const QModelIndex & index, int role = Qt::DisplayRole) const
+{
+
+  if (!index.isValid()) {
+      kDebug() << " Index invalid";
+    return QVariant();
+  }
+  if (index.row() >= 0 || index.row() <= theProtoTypeList.size()) {
+    if (role == Qt::DisplayRole || role == Qt::EditRole) {
+       kDebug()  <<  "model return " << theProtoTypeList.at(index.row()).prototype();
+       return theProtoTypeList.at(index.row()).prototype();    
+    }
+    if (role == Qt::UserRole) {
+
+      return qVariantFromValue(theProtoTypeList.at(index.row()));
+    }
+  }        
+  return QVariant();
+
+}
+
+
+
+bool DBusFunctionModel::setData(const QModelIndex &index,  const QVariant &value, int role)
+ {
+
+     if (index.isValid() && role == Qt::EditRole) {
+         kDebug() << "value +++"<< value.value<Prototype>().prototype();
+    kDebug()<< "setDaete+++++++++++++";
+//         if(value.canConvert(Prototype())){
+         Prototype tType = qVariantValue<Prototype>(value);
+          kDebug()<< "setting data for index " << index.row() <<  tType.prototype();
+	  theProtoTypeList.replace(index.row(), tType);
+         emit dataChanged(index, index);
+         return true;
+//     }
+     }
+     return false;
+ }
+
+bool DBusFunctionModel::insertRows(int position, int rows, const QModelIndex &parent)
+ {
+     beginInsertRows(QModelIndex(), position, position+rows-1);
+     for (int row = 0; row < rows; ++row) {
+         theProtoTypeList.insert(position, Prototype());
+     }
+
+     endInsertRows();
+     return true;
+ }
+
+
+bool DBusFunctionModel::removeRows(int position, int rows, const QModelIndex &parent)
+ {
+     beginRemoveRows(QModelIndex(), position, position+rows-1);
+
+     for (int row = 0; row < rows; ++row) {
+         theProtoTypeList.removeAt(position);
+     }
+
+     endRemoveRows();
+     return true;
+ }
+
+
+Qt::ItemFlags DBusFunctionModel::flags(const QModelIndex &index) const
+ {
+     if (!index.isValid())
+         return Qt::ItemIsEnabled;
+
+     return QAbstractItemModel::flags(index) | Qt::ItemIsEditable;
+ }
+

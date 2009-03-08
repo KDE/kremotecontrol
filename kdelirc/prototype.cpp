@@ -27,9 +27,10 @@
 
 #include <QRegExp>
 
-Prototype::Prototype()
+Prototype::Prototype(const Prototype &pType)
 {
-    original = "";
+    original = pType.prototype();
+
 }
 
 Prototype::Prototype(const QString &source)
