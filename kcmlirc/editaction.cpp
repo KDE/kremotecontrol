@@ -29,7 +29,7 @@
 #include "remoteserver.h"
 #include "addaction.h"
 #include "model.h"
-
+#include "dbusinterface.h"
 #include <QRegExp>
 #include <QDBusConnectionInterface>
 #include <QDBusInterface>
@@ -429,49 +429,8 @@ void EditAction::updateFunctions()
 
 void EditAction::initDBusApplications()
 {
-    QStringList names;
-    QStringList apps;
-
-    editActionBaseWidget->theDBusApplications->clear();
-
-    QDBusConnectionInterface *dBusIface = QDBusConnection::sessionBus().interface();
-    QStringList allServices = dBusIface->registeredServiceNames();
-    allServices.sort();
-
-    for (QStringList::const_iterator i = allServices.constBegin(); i != allServices.constEnd(); ++i) {
-        // Use only KDE-Apps
-        if (!(*i).contains("org.kde")) {
-            continue;
-        }
-
-        if (!(*i).contains("org.kde")) {
-            continue;
-        }
-
-        // Remove the "org.kde."
-        QString name = (*i);
-        name.remove(0, 8);
-
-        // Remove "human unreadable" entries
-        QRegExp r("[a-zA-Z]*");
-        if (! r.exactMatch(name)) {
-            continue;
-        }
-
-        //remove duplicates
-        if (names.contains(name)) {
-            continue;
-        }
-
-        kDebug()<< "name " << *i;
-        //editActionBaseWidget->theDBusApplications->addItem(*i);
-        names << name;
-        apps << *i;
-        nameProgramMap[name] = *i;
-    }
-    //names.sort();
-    //kdDebug() << "adding apsp to "  << apps;
-    editActionBaseWidget->theDBusApplications->addItems(apps);
+   editActionBaseWidget->theDBusApplications->clear();
+    editActionBaseWidget->theDBusApplications->addItems(DBusInterface::getInstance()->getRegisteredPrograms());
     updateDBusObjects();
 }
 
