@@ -5,6 +5,11 @@
  *      Author: frank
  */
 
+#ifndef DBUSINTERFACE_H
+#define DBUSINTERFACE_H
+
+#include "prototype.h"
+
 #include <QStringList>
 
 class DBusProgramm
@@ -52,6 +57,11 @@ public:
 
   static DBusInterface *getInstance();
 
-  QStringList getRegisteredPrograms() const;
+  QStringList getRegisteredPrograms();
+  QStringList getObjects(const QString &program);
+  QList<Prototype> getFunctions(const QString &program, const QString &object);
+  
 
 };
+
+#endif
