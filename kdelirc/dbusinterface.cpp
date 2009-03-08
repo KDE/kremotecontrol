@@ -16,6 +16,9 @@
 
 #include <kdebug.h>
 #include <kwindowsystem.h>
+#include <knotification.h>
+#include <klocale.h>
+#include <kiconloader.h>
 
 static DBusInterface *theInstance = NULL;
 
@@ -184,8 +187,8 @@ void DBusInterface::executeAction(const IRAction& action) {
         QString sname = ProfileServer::profileServer()->getServiceName(
                             action.program());
         if (!sname.isNull()) {
-//            KNotification::event("app_event", i18n("Starting <b>%1</b>...",
-//                                                   action.application()), SmallIcon("irkick"), theTrayIcon->parentWidget());
+            KNotification::event("app_event", i18n("Starting <b>%1</b>...",
+                                                   action.application()), SmallIcon("irkick"));
             kDebug() << "starting service:" << sname;
             QString error;
             if(KToolInvocation::startServiceByDesktopName(sname, QString(), &error)){
@@ -239,7 +242,9 @@ bool DBusInterface::searchForProgram(const IRAction &action, QStringList &progra
         if (dBusIface->isServiceRegistered(action.program())) {
             kDebug() << "adding Program: " << action.program();
             programs += action.program();
-        }
+        } else {
+	    kDebug() << "nope... " + action.program() + " not here.";
+	}
     } else {
 
         // find all instances...
