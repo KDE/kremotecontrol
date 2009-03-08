@@ -9,8 +9,12 @@
 #define DBUSINTERFACE_H
 
 #include "prototype.h"
+#include "iraction.h"
 
 #include <QStringList>
+
+#include <ktoolinvocation.h>
+
 
 class DBusProgramm
 {
@@ -49,6 +53,7 @@ class DBusInterface
 private:
   DBusInterface();
 
+  bool searchForProgram(const IRAction &action, QStringList &programs);
 
 public:
 
@@ -61,6 +66,7 @@ public:
   QStringList getObjects(const QString &program);
   QList<Prototype> getFunctions(const QString &program, const QString &object);
   
+  void executeAction(const IRAction &action);
 
 };
 
