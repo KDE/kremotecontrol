@@ -92,6 +92,7 @@ void Profile::loadFromFile(const QString &fileName)
 
 const ProfileAction *ProfileServer::getAction(const QString &appId, const QString &actionId) const
 {
+	kDebug() << appId << actionId;
     if (theProfiles[appId])
         if (theProfiles[appId]->actions()[actionId])
             return theProfiles[appId]->actions()[actionId];
@@ -166,6 +167,7 @@ bool Profile::endElement(const QString &, const QString &, const QString &name)
     else if (name == "action") {
         curPA->setProfile(this);
         theActions.insert(curPA->objId() + "::" + curPA->prototype(), curPA);
+    	kDebug() << "theActions"  << theActions;
         curPA = 0;
     } else if (name == "argument")
         curPAA = 0;

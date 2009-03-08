@@ -31,6 +31,8 @@
 #include <qxml.h>
 #include <QHash>
 
+#include <kdebug.h>
+
 /**
 @author Gav Wood
 */
