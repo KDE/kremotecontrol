@@ -28,6 +28,7 @@
 #include "profileserver.h"
 #include "remoteserver.h"
 #include "addaction.h"
+#include "model.h"
 
 #include <QRegExp>
 #include <QDBusConnectionInterface>
@@ -55,6 +56,7 @@ EditAction::EditAction(IRAction *action, QWidget *parent, const bool &modal): KD
     setDefaultButton(Ok);
     setModal(modal);
     //TODO: Layout theValue
+    editActionBaseWidget->theDBusApplications->setModel(new DBusProfileModel(0));
     editActionBaseWidget->theValue->layout()->setMargin(0);
 
     mainGroup.addButton(editActionBaseWidget->theUseDBus);
@@ -65,7 +67,7 @@ EditAction::EditAction(IRAction *action, QWidget *parent, const bool &modal): KD
     initDBusApplications();
     initApplications();
     readFrom();
-   // editActionBaseWidget->theDBusApplications->setModel(new QStringListModel(0));
+    
 }
 
 EditAction::~EditAction()
@@ -428,6 +430,7 @@ void EditAction::updateFunctions()
 void EditAction::initDBusApplications()
 {
     QStringList names;
+    QStringList apps;
 
     editActionBaseWidget->theDBusApplications->clear();
 
@@ -437,6 +440,10 @@ void EditAction::initDBusApplications()
 
     for (QStringList::const_iterator i = allServices.constBegin(); i != allServices.constEnd(); ++i) {
         // Use only KDE-Apps
+        if (!(*i).contains("org.kde")) {
+            continue;
+        }
+
         if (!(*i).contains("org.kde")) {
             continue;
         }
@@ -456,12 +463,15 @@ void EditAction::initDBusApplications()
             continue;
         }
 
-        editActionBaseWidget->theDBusApplications->addItem(name);
+        kDebug()<< "name " << *i;
+        //editActionBaseWidget->theDBusApplications->addItem(*i);
         names << name;
+        apps << *i;
         nameProgramMap[name] = *i;
     }
-    names.sort();
-    editActionBaseWidget->theDBusApplications->addItems(names);
+    //names.sort();
+    //kdDebug() << "adding apsp to "  << apps;
+    editActionBaseWidget->theDBusApplications->addItems(apps);
     updateDBusObjects();
 }
 

@@ -16,7 +16,8 @@ set(kcm_lirc_PART_SRCS ${kdelirc_shared_SRCS}
    editmode.cpp 
    editaction.cpp 
    modeslist.cpp
-   newmodedialog.cpp )
+   newmodedialog.cpp
+   model.cpp )
 
 QT4_ADD_DBUS_ADAPTOR(kcm_lirc_PART_SRCS org.kde.kcmlirc.xml kcmlirc.h KCMLirc)
 

@@ -176,7 +176,7 @@ void IRKick::slotConfigure()
 void IRKick::updateTray()
 {
   QString toolTip="<qt><nobr>";
-  QString icon = QString("");
+  QString icon = QString("irkick");
   if(!theClient->isConnected()){
     toolTip += i18n("Lirc daemon is currently not available.");
     toolTip+="</nobr";
@@ -184,9 +184,7 @@ void IRKick::updateTray()
   }else if(currentModes.size() == 0){
     toolTip += i18n("KDE Lirc Server: No infra-red remote controls found.");
     toolTip+="</nobr";
-    icon = "irkick";
   }else{
-    icon = "irkick";
     toolTip+="<nobr><b><u>";
     toolTip += i18n("KDE Lirc Server: Ready.");
     toolTip+="</u></b></nobr>";

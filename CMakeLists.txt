@@ -16,6 +16,7 @@ set(kdelirc_shared_SRCS
 	${CMAKE_SOURCE_DIR}/kdelirc/mode.cpp 
 	${CMAKE_SOURCE_DIR}/kdelirc/profileserver.cpp 
 	${CMAKE_SOURCE_DIR}/kdelirc/remoteserver.cpp
+	${CMAKE_SOURCE_DIR}/kdelirc/dbusqueryinterface.cpp
 )
 
 
