@@ -151,17 +151,11 @@ QVariant DBusFunctionModel::data(const QModelIndex & index, int role = Qt::Displ
 
 bool DBusFunctionModel::setData(const QModelIndex &index,  const QVariant &value, int role)
  {
-
-     if (index.isValid() && role == Qt::EditRole) {
-         kDebug() << "value +++"<< value.value<Prototype>().prototype();
-    kDebug()<< "setDaete+++++++++++++";
-//         if(value.canConvert(Prototype())){
-         Prototype tType = qVariantValue<Prototype>(value);
-          kDebug()<< "setting data for index " << index.row() <<  tType.prototype();
-	  theProtoTypeList.replace(index.row(), tType);
+     if (index.isValid() && role == Qt::UserRole && value.canConvert<Prototype>()) {
+         Prototype tType =value.value<Prototype>();          
+	theProtoTypeList.replace(index.row(), tType);
          emit dataChanged(index, index);
          return true;
-//     }
      }
      return false;
  }

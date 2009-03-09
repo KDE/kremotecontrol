@@ -448,89 +448,9 @@ void EditAction::updateDBusFunctions()
 
     QList<Prototype> tList = DBusInterface::getInstance()->getFunctions(getCurrentDbusApp(), editActionBaseWidget->theDBusObjects->currentText());
 
-    foreach(Prototype tType, tList){
-        QVariant t;
-    kDebug()<< "type = " << tType.prototype();
-    qVariantSetValue(t,tType);
-    editActionBaseWidget->theDBusFunctions->addItem(0, qVariantFromValue(t));
+    foreach(Prototype tType, tList){     
+	editActionBaseWidget->theDBusFunctions->addItem(0, qVariantFromValue(tType));
     }
-
-//    QDBusInterface *dBusIface = new QDBusInterface(getCurrentDbusApp(), '/' + editActionBaseWidget->theDBusObjects->currentText(), "org.freedesktop.DBus.Introspectable");
-//    QDBusReply<QString> response = dBusIface->call("Introspect");
-//
-//    QDomDocument domDoc;
-//    domDoc.setContent(response);
-//
-//    QDomElement node = domDoc.documentElement();
-//    QDomElement child = node.firstChildElement();
-//
-//    QString function;
-//    QStringList functionsList;
-//    while (!child.isNull()) {
-//        if (child.tagName() == QLatin1String("interface")) {
-//            if (child.attribute("name") == "org.freedesktop.DBus.Properties" ||
-//                    child.attribute("name") == "org.freedesktop.DBus.Introspectable") {
-//                child = child.nextSiblingElement();
-//                continue;
-//            }
-//            QDomElement subChild = child.firstChildElement();
-//            while (!subChild.isNull()) {
-//                if (subChild.tagName() == QLatin1String("method")) {
-//                    QString method = subChild.attribute(QLatin1String("name"));
-//                    kDebug() << "Method: " << method;
-//                    function = "QString " + method + '(';
-//                    QDomElement arg = subChild.firstChildElement();
-//                    QString argStr;
-//                    while (!arg.isNull()) {
-//                        if (arg.tagName() == QLatin1String("arg")) {
-//                            if (arg.attribute(QLatin1String("direction")) == "in") {
-//                                if (!argStr.isEmpty()) {
-//                                    argStr += ", ";
-//                                }
-//                                if (arg.attribute(QLatin1String("type")) == "i") {
-//                                    argStr += "int";
-//                                } else if (arg.attribute(QLatin1String("type")) == "u") {
-//                                    argStr += "uint";
-//                                } else if (arg.attribute(QLatin1String("type")) == "s") {
-//                                    argStr += "QString";
-//                                } else if (arg.attribute(QLatin1String("type")) == "b") {
-//                                    argStr += "bool";
-//                                } else if (arg.attribute(QLatin1String("type")) == "d") {
-//                                    argStr += "double";
-//                                } else if (arg.attribute(QLatin1String("type")) == "as") {
-//                                    argStr += "QStringList";
-//                                } else if (arg.attribute(QLatin1String("type")) == "ay") {
-//                                    argStr += "QByteArray";
-//                                } else if (arg.attribute(QLatin1String("type")) == "(iii)") {
-//                                    kDebug() << "got a (iii) type";
-//                                    QString helper = arg.attribute("name");
-//                                    arg = arg.nextSiblingElement();
-//                                    argStr += arg.attribute(QLatin1String("value"));
-//                                    argStr += ' ' + helper;
-//                                    arg = arg.nextSiblingElement();
-//                                    continue;
-//                                } else {
-//				      argStr += arg.attribute(QLatin1String("type"));
-//                                }
-//                                argStr += ' ' + arg.attribute(QLatin1String("name"));
-//                                kDebug() << "Arg: " << argStr;
-//                            }
-//                        }
-//                        arg = arg.nextSiblingElement();
-//                    }
-//                    function +=  argStr + ')';
-//                    functionsList << function;
-//                }
-//                subChild = subChild.nextSiblingElement();
-//            }
-//        }
-//        functionsList.sort();
-//        editActionBaseWidget->theDBusFunctions->addItems(functionsList);
-//        //editActionBaseWidget->theDBusFunctions->
-//
-//        child = child.nextSiblingElement();
-//    }
-
     updateArguments();
 }
 

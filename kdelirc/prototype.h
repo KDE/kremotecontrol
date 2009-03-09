@@ -83,7 +83,7 @@ public:
     }
 
     Prototype(const QString &source);
-    Prototype(){original = "bla";};
+    Prototype(){};
     Prototype(const Prototype &pType);
     ~Prototype();
 
