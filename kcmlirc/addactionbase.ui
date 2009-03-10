@@ -1,34 +1,35 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <author>Gav Wood</author>
  <class>AddActionBase</class>
- <widget class="QWizard" name="AddActionBase" >
-  <property name="geometry" >
+ <widget class="QWizard" name="AddActionBase">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>798</width>
-    <height>491</height>
+    <width>794</width>
+    <height>487</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Add Action</string>
   </property>
-  <widget class="QWizardPage" name="page1" >
-   <layout class="QVBoxLayout" name="verticalLayout" >
+  <widget class="QWizardPage" name="page1">
+   <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QRadioButton" name="theUseProfile" >
-      <property name="text" >
+     <widget class="QRadioButton" name="theUseProfile">
+      <property name="text">
        <string>I wish to select an &amp;application below for usage:</string>
       </property>
-      <property name="checked" >
+      <property name="checked">
        <bool>true</bool>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QListWidget" name="theProfiles" >
-      <property name="sizePolicy" >
-       <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+     <widget class="QListWidget" name="theProfiles">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>3</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -36,40 +37,40 @@
      </widget>
     </item>
     <item>
-     <widget class="QRadioButton" name="theUseDBus" >
-      <property name="text" >
+     <widget class="QRadioButton" name="theUseDBus">
+      <property name="text">
        <string>I wish to manually select a &amp;function from a running program</string>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QRadioButton" name="theChangeMode" >
-      <property name="text" >
+     <widget class="QRadioButton" name="theChangeMode">
+      <property name="text">
        <string>I wish to change the remote control's &amp;mode</string>
       </property>
      </widget>
     </item>
    </layout>
   </widget>
-  <widget class="QWizardPage" name="page2" >
-   <layout class="QVBoxLayout" name="verticalLayout_9" >
+  <widget class="QWizardPage" name="page2">
+   <layout class="QVBoxLayout" name="verticalLayout_9">
     <item>
-     <widget class="QLabel" name="theButtonText" >
-      <property name="text" >
+     <widget class="QLabel" name="theButtonText">
+      <property name="text">
        <string>You are attempting to configure an action for a button on [remote] (in mode [mode]). Press a button on this remote control or select from the list.</string>
       </property>
-      <property name="alignment" >
+      <property name="alignment">
        <set>Qt::AlignVCenter</set>
       </property>
-      <property name="wordWrap" >
+      <property name="wordWrap">
        <bool>true</bool>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QListWidget" name="theButtons" >
-      <property name="sizePolicy" >
-       <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+     <widget class="QListWidget" name="theButtons">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>2</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -78,46 +79,46 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWizardPage" name="page3" >
-   <layout class="QHBoxLayout" name="horizontalLayout" >
+  <widget class="QWizardPage" name="page3">
+   <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="QTreeWidget" name="theObjects" >
-      <property name="sizePolicy" >
-       <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+     <widget class="QTreeWidget" name="theObjects">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
         <verstretch>1</verstretch>
        </sizepolicy>
       </property>
-      <property name="rootIsDecorated" >
+      <property name="rootIsDecorated">
        <bool>true</bool>
       </property>
       <column>
-       <property name="text" >
+       <property name="text">
         <string>Program</string>
        </property>
       </column>
      </widget>
     </item>
     <item>
-     <widget class="QTreeWidget" name="theFunctions" >
-      <property name="sizePolicy" >
-       <sizepolicy vsizetype="Expanding" hsizetype="MinimumExpanding" >
+     <widget class="QTreeWidget" name="theFunctions">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
       <column>
-       <property name="text" >
+       <property name="text">
         <string>Function</string>
        </property>
       </column>
       <column>
-       <property name="text" >
+       <property name="text">
         <string>Parameter</string>
        </property>
       </column>
       <column>
-       <property name="text" >
+       <property name="text">
         <string>Prototype</string>
        </property>
       </column>
@@ -125,107 +126,101 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWizardPage" name="page4" >
-   <layout class="QVBoxLayout" name="verticalLayout_6" >
+  <widget class="QWizardPage" name="page4">
+   <layout class="QVBoxLayout" name="verticalLayout_6">
     <item>
-     <widget class="QRadioButton" name="theNotJustStart" >
-      <property name="text" >
+     <widget class="QRadioButton" name="theNotJustStart">
+      <property name="text">
        <string>&amp;Perform a function in the application:</string>
       </property>
-      <property name="checked" >
+      <property name="checked">
        <bool>true</bool>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QTreeWidget" name="theProfileFunctions" >
-      <property name="sizePolicy" >
-       <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+     <widget class="QTreeWidget" name="theProfileFunctions">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>7</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
       <column>
-       <property name="text" >
+       <property name="text">
         <string>Function</string>
        </property>
       </column>
       <column>
-       <property name="text" >
+       <property name="text">
         <string>Options</string>
        </property>
       </column>
       <column>
-       <property name="text" >
+       <property name="text">
         <string>Description</string>
        </property>
       </column>
      </widget>
     </item>
     <item>
-     <widget class="QRadioButton" name="theJustStart" >
-      <property name="text" >
+     <widget class="QRadioButton" name="theJustStart">
+      <property name="text">
        <string>&amp;Just start the application. Do not do anything else.</string>
       </property>
      </widget>
     </item>
    </layout>
   </widget>
-  <widget class="QWizardPage" name="page5" >
-   <layout class="QGridLayout" name="gridLayout_2" >
-    <item row="0" column="0" colspan="2" >
-     <widget class="QTreeWidget" name="theParameters" >
+  <widget class="QWizardPage" name="page5">
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="0" colspan="2">
+     <widget class="QTreeWidget" name="theParameters">
       <column>
-       <property name="text" >
+       <property name="text">
         <string>Option Description</string>
        </property>
       </column>
       <column>
-       <property name="text" >
+       <property name="text">
         <string>Value</string>
        </property>
       </column>
       <column>
-       <property name="text" >
+       <property name="text">
         <string>Type</string>
        </property>
       </column>
       <column>
-       <property name="text" >
+       <property name="text">
         <string>Place</string>
        </property>
       </column>
      </widget>
     </item>
-    <item row="1" column="0" >
-     <spacer name="spacer32" >
-      <property name="orientation" >
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeType" >
-       <enum>QSizePolicy::Expanding</enum>
-      </property>
-      <property name="sizeHint" stdset="0" >
-       <size>
-        <width>358</width>
-        <height>210</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item rowspan="2" row="1" column="1" >
-     <widget class="QStackedWidget" name="theValue" >
-      <property name="currentIndex" >
+    <item row="1" column="1" rowspan="3">
+     <widget class="QStackedWidget" name="theValue">
+      <property name="currentIndex">
        <number>0</number>
       </property>
-      <widget class="QWidget" name="valuesPage1" >
-       <layout class="QVBoxLayout" name="verticalLayout_2" >
+      <widget class="QWidget" name="valuesPage1">
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <property name="topMargin">
+         <number>0</number>
+        </property>
         <item>
-         <spacer name="verticalSpacer" >
-          <property name="orientation" >
+         <widget class="KLineEdit" name="theValueLineEdit">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer">
+          <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
-          <property name="sizeHint" stdset="0" >
+          <property name="sizeHint" stdset="0">
            <size>
             <width>20</width>
             <height>186</height>
@@ -233,23 +228,16 @@
           </property>
          </spacer>
         </item>
-        <item>
-         <widget class="KLineEdit" name="theValueLineEdit" >
-          <property name="enabled" >
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="valuesPage2" >
-       <layout class="QVBoxLayout" name="verticalLayout_3" >
+      <widget class="QWidget" name="valuesPage2">
+       <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
-         <spacer name="verticalSpacer_2" >
-          <property name="orientation" >
+         <spacer name="verticalSpacer_2">
+          <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
-          <property name="sizeHint" stdset="0" >
+          <property name="sizeHint" stdset="0">
            <size>
             <width>20</width>
             <height>183</height>
@@ -258,25 +246,25 @@
          </spacer>
         </item>
         <item>
-         <widget class="QCheckBox" name="theValueCheckBox" >
-          <property name="enabled" >
+         <widget class="QCheckBox" name="theValueCheckBox">
+          <property name="enabled">
            <bool>true</bool>
           </property>
-          <property name="text" >
+          <property name="text">
            <string/>
           </property>
          </widget>
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="valueIsPage3" >
-       <layout class="QVBoxLayout" name="verticalLayout_4" >
+      <widget class="QWidget" name="valueIsPage3">
+       <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
-         <spacer name="verticalSpacer_3" >
-          <property name="orientation" >
+         <spacer name="verticalSpacer_3">
+          <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
-          <property name="sizeHint" stdset="0" >
+          <property name="sizeHint" stdset="0">
            <size>
             <width>20</width>
             <height>186</height>
@@ -285,18 +273,18 @@
          </spacer>
         </item>
         <item>
-         <widget class="KIntNumInput" name="theValueIntNumInput" />
+         <widget class="KIntNumInput" name="theValueIntNumInput" native="true"/>
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="valuesPage4" >
-       <layout class="QVBoxLayout" name="verticalLayout_5" >
+      <widget class="QWidget" name="valuesPage4">
+       <layout class="QVBoxLayout" name="verticalLayout_5">
         <item>
-         <spacer name="verticalSpacer_4" >
-          <property name="orientation" >
+         <spacer name="verticalSpacer_4">
+          <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
-          <property name="sizeHint" stdset="0" >
+          <property name="sizeHint" stdset="0">
            <size>
             <width>20</width>
             <height>186</height>
@@ -305,15 +293,15 @@
          </spacer>
         </item>
         <item>
-         <widget class="KDoubleNumInput" name="theValueDoubleNumInput" />
+         <widget class="KDoubleNumInput" name="theValueDoubleNumInput" native="true"/>
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="valuesPage5" >
-       <layout class="QGridLayout" name="gridLayout" >
-        <item row="0" column="0" >
-         <widget class="KEditListBox" name="theValueEditListBox" >
-          <property name="title" >
+      <widget class="QWidget" name="valuesPage5">
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
+         <widget class="KEditListBox" name="theValueEditListBox">
+          <property name="title">
            <string/>
           </property>
          </widget>
@@ -322,81 +310,106 @@
       </widget>
      </widget>
     </item>
-    <item row="2" column="0" >
-     <widget class="QLabel" name="theCurParameter" >
-      <property name="enabled" >
+    <item row="2" column="0">
+     <spacer name="spacer32">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Expanding</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>358</width>
+        <height>200</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="theCurParameter">
+      <property name="enabled">
        <bool>false</bool>
       </property>
-      <property name="sizePolicy" >
-       <sizepolicy vsizetype="Preferred" hsizetype="MinimumExpanding" >
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>Parameter:</string>
       </property>
-      <property name="wordWrap" >
+      <property name="alignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+      </property>
+      <property name="wordWrap">
        <bool>false</bool>
+      </property>
+      <property name="margin">
+       <number>0</number>
+      </property>
+      <property name="indent">
+       <number>-1</number>
       </property>
      </widget>
     </item>
    </layout>
   </widget>
-  <widget class="QWizardPage" name="page6" >
-   <layout class="QVBoxLayout" name="verticalLayout_7" >
+  <widget class="QWizardPage" name="page6">
+   <layout class="QVBoxLayout" name="verticalLayout_7">
     <item>
-     <widget class="QLabel" name="textLabel1" >
-      <property name="font" >
+     <widget class="QLabel" name="textLabel1">
+      <property name="font">
        <font>
         <weight>75</weight>
         <bold>true</bold>
        </font>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>Miscellaneous Options</string>
       </property>
-      <property name="wordWrap" >
+      <property name="wordWrap">
        <bool>false</bool>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="Line" name="line1_2" >
-      <property name="frameShape" >
+     <widget class="Line" name="line1_2">
+      <property name="frameShape">
        <enum>QFrame::HLine</enum>
       </property>
-      <property name="frameShadow" >
+      <property name="frameShadow">
        <enum>QFrame::Sunken</enum>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QCheckBox" name="theRepeat" >
-      <property name="text" >
+     <widget class="QCheckBox" name="theRepeat">
+      <property name="text">
        <string>This action is &amp;repeatable if the button is held down</string>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QCheckBox" name="theAutoStart" >
-      <property name="text" >
+     <widget class="QCheckBox" name="theAutoStart">
+      <property name="text">
        <string>This action causes the application to &amp;start if not already running</string>
       </property>
-      <property name="checked" >
+      <property name="checked">
        <bool>true</bool>
       </property>
      </widget>
     </item>
     <item>
-     <spacer name="spacer22" >
-      <property name="orientation" >
+     <spacer name="spacer22">
+      <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
-      <property name="sizeType" >
+      <property name="sizeType">
        <enum>QSizePolicy::Expanding</enum>
       </property>
-      <property name="sizeHint" stdset="0" >
+      <property name="sizeHint" stdset="0">
        <size>
         <width>670</width>
         <height>20</height>
@@ -405,102 +418,102 @@
      </spacer>
     </item>
     <item>
-     <widget class="QLabel" name="theIMTop" >
-      <property name="enabled" >
+     <widget class="QLabel" name="theIMTop">
+      <property name="enabled">
        <bool>false</bool>
       </property>
-      <property name="font" >
+      <property name="font">
        <font>
         <weight>75</weight>
         <bold>true</bold>
        </font>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>Multiple Instances</string>
       </property>
-      <property name="wordWrap" >
+      <property name="wordWrap">
        <bool>false</bool>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="Line" name="theIMLine" >
-      <property name="enabled" >
+     <widget class="Line" name="theIMLine">
+      <property name="enabled">
        <bool>false</bool>
       </property>
-      <property name="frameShape" >
+      <property name="frameShape">
        <enum>QFrame::HLine</enum>
       </property>
-      <property name="frameShadow" >
+      <property name="frameShadow">
        <enum>QFrame::Sunken</enum>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QLabel" name="theIMLabel" >
-      <property name="enabled" >
+     <widget class="QLabel" name="theIMLabel">
+      <property name="enabled">
        <bool>false</bool>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>This application may have multiple instances. In the case of having multiple instances at once when this action should be executed, choose a course of action:</string>
       </property>
-      <property name="alignment" >
+      <property name="alignment">
        <set>Qt::AlignVCenter</set>
       </property>
-      <property name="wordWrap" >
+      <property name="wordWrap">
        <bool>false</bool>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QRadioButton" name="theDontSend" >
-      <property name="enabled" >
+     <widget class="QRadioButton" name="theDontSend">
+      <property name="enabled">
        <bool>false</bool>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>&amp;Ignore the action</string>
       </property>
-      <property name="checked" >
+      <property name="checked">
        <bool>true</bool>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QRadioButton" name="theSendToTop" >
-      <property name="enabled" >
+     <widget class="QRadioButton" name="theSendToTop">
+      <property name="enabled">
        <bool>false</bool>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>Send the action to the instance hi&amp;ghest in the window stacking order</string>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QRadioButton" name="theSendToBottom" >
-      <property name="enabled" >
+     <widget class="QRadioButton" name="theSendToBottom">
+      <property name="enabled">
        <bool>false</bool>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>Send the action to the instance &amp;lowest in window stacking order</string>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QRadioButton" name="theSendToAll" >
-      <property name="enabled" >
+     <widget class="QRadioButton" name="theSendToAll">
+      <property name="enabled">
        <bool>false</bool>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>Send the action to &amp;all instances</string>
       </property>
      </widget>
     </item>
     <item>
-     <spacer name="verticalSpacer_5" >
-      <property name="orientation" >
+     <spacer name="verticalSpacer_5">
+      <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
-      <property name="sizeHint" stdset="0" >
+      <property name="sizeHint" stdset="0">
        <size>
         <width>20</width>
         <height>86</height>
@@ -510,19 +523,19 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWizardPage" name="page7" >
-   <layout class="QVBoxLayout" name="verticalLayout_8" >
+  <widget class="QWizardPage" name="page7">
+   <layout class="QVBoxLayout" name="verticalLayout_8">
     <item>
-     <widget class="QRadioButton" name="theSwitchMode" >
-      <property name="text" >
+     <widget class="QRadioButton" name="theSwitchMode">
+      <property name="text">
        <string>&amp;Switch to mode:</string>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QListWidget" name="theModes" >
-      <property name="sizePolicy" >
-       <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+     <widget class="QListWidget" name="theModes">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>3</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -530,24 +543,24 @@
      </widget>
     </item>
     <item>
-     <widget class="QRadioButton" name="theExitMode" >
-      <property name="text" >
+     <widget class="QRadioButton" name="theExitMode">
+      <property name="text">
        <string>&amp;Exit current mode</string>
       </property>
-      <property name="checked" >
+      <property name="checked">
        <bool>true</bool>
       </property>
      </widget>
     </item>
     <item>
-     <spacer name="spacer15_2" >
-      <property name="orientation" >
+     <spacer name="spacer15_2">
+      <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
-      <property name="sizeType" >
+      <property name="sizeType">
        <enum>QSizePolicy::Expanding</enum>
       </property>
-      <property name="sizeHint" stdset="0" >
+      <property name="sizeHint" stdset="0">
        <size>
         <width>551</width>
         <height>47</height>
@@ -556,48 +569,48 @@
      </spacer>
     </item>
     <item>
-     <widget class="QLabel" name="textLabel1_2" >
-      <property name="text" >
-       <string>&lt;b>Options&lt;/b></string>
+     <widget class="QLabel" name="textLabel1_2">
+      <property name="text">
+       <string>&lt;b&gt;Options&lt;/b&gt;</string>
       </property>
-      <property name="wordWrap" >
+      <property name="wordWrap">
        <bool>false</bool>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="Line" name="line2" >
-      <property name="frameShape" >
+     <widget class="Line" name="line2">
+      <property name="frameShape">
        <enum>QFrame::HLine</enum>
       </property>
-      <property name="frameShadow" >
+      <property name="frameShadow">
        <enum>QFrame::Sunken</enum>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QCheckBox" name="theDoBefore" >
-      <property name="text" >
+     <widget class="QCheckBox" name="theDoBefore">
+      <property name="text">
        <string>E&amp;xecute all other actions before mode change (in original mode)</string>
       </property>
-      <property name="checked" >
+      <property name="checked">
        <bool>true</bool>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QCheckBox" name="theDoAfter" >
-      <property name="text" >
+     <widget class="QCheckBox" name="theDoAfter">
+      <property name="text">
        <string>Exec&amp;ute all actions after mode change (in new mode)</string>
       </property>
      </widget>
     </item>
     <item>
-     <spacer name="verticalSpacer_6" >
-      <property name="orientation" >
+     <spacer name="verticalSpacer_6">
+      <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
-      <property name="sizeHint" stdset="0" >
+      <property name="sizeHint" stdset="0">
        <size>
         <width>20</width>
         <height>40</height>
@@ -608,7 +621,7 @@
    </layout>
   </widget>
  </widget>
- <layoutdefault spacing="6" margin="11" />
+ <layoutdefault spacing="6" margin="11"/>
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <customwidgets>
   <customwidget>
@@ -634,10 +647,10 @@
   </customwidget>
  </customwidgets>
  <includes>
-  <include location="local" >klineedit.h</include>
-  <include location="local" >knuminput.h</include>
-  <include location="local" >keditlistbox.h</include>
-  <include location="local" >klineedit.h</include>
+  <include location="local">klineedit.h</include>
+  <include location="local">knuminput.h</include>
+  <include location="local">keditlistbox.h</include>
+  <include location="local">klineedit.h</include>
  </includes>
  <resources/>
  <connections/>
