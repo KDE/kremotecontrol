@@ -106,6 +106,7 @@ QStringList DBusInterface::getObjects(const QString &program){
         }
         child = child.nextSiblingElement();
     }
+    kDebug() << "returning Object list: " << returnList;
     return returnList;
 }
 
@@ -176,7 +177,9 @@ QList<Prototype> DBusInterface::getFunctions(const QString &program, const QStri
 		  function += "(" + argStr + ")";
                 }
                 subChild = subChild.nextSiblingElement();
-		funcList.append(function);
+		if(!funcList.contains(function) && !function.isEmpty()){
+		  funcList.append(function);
+		}
             }
         }
         child = child.nextSiblingElement();
@@ -185,6 +188,7 @@ QList<Prototype> DBusInterface::getFunctions(const QString &program, const QStri
     foreach(QString tmp, funcList){
       ret.append(Prototype(tmp));
     }
+    kDebug() << "returning function list: " << funcList;
     return ret;
 }
 
