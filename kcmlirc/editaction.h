@@ -32,7 +32,7 @@
 #include "iractions.h"
 #include "ui_editactionbase.h"
 
-
+#include "model.h"
 
 class Arguments;
 
@@ -65,7 +65,10 @@ inline QString getCurrentDbusApp(){
    return  editActionBaseWidget->theDBusApplications->itemData(editActionBaseWidget->theDBusApplications->currentIndex(),Qt::UserRole).toString();
 }
 inline QString getCurrentDbusFunction(){
-   return  editActionBaseWidget->theDBusFunctions->itemData(editActionBaseWidget->theDBusFunctions->currentIndex(),Qt::UserRole).toString();
+    kDebug() << editActionBaseWidget->theDBusFunctions->itemData(editActionBaseWidget->theDBusFunctions->currentIndex(),Qt::UserRole).value<Prototype>().name();
+    kDebug() << editActionBaseWidget->theDBusFunctions->itemData(editActionBaseWidget->theDBusFunctions->currentIndex(),Qt::UserRole).value<Prototype>().prototype();
+    kDebug() << editActionBaseWidget->theDBusFunctions->itemData(editActionBaseWidget->theDBusFunctions->currentIndex(),Qt::UserRole).value<Prototype>().argumentList();
+   return  editActionBaseWidget->theDBusFunctions->itemData(editActionBaseWidget->theDBusFunctions->currentIndex(),Qt::UserRole).value<Prototype>().prototype();
 }
 
 

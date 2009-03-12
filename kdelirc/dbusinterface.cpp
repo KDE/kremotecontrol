@@ -136,7 +136,7 @@ QList<Prototype> DBusInterface::getFunctions(const QString &program, const QStri
                 if (subChild.tagName() == QLatin1String("method")) {
 
 		  QString method = subChild.attribute(QLatin1String("name"));
-		  function = "QString " + method + " ";
+		  function = "QString " + method;
 		  QDomElement arg = subChild.firstChildElement();
 		  QString argStr;
 		  while (!arg.isNull()) {
@@ -168,6 +168,7 @@ QList<Prototype> DBusInterface::getFunctions(const QString &program, const QStri
 			} else {
 			  argStr += arg.attribute(QLatin1String("type"));
 			}
+kDebug() << arg.attribute(QLatin1String("name"));
 			argStr += " " + arg.attribute(QLatin1String("name"));
 		      }
 		    }

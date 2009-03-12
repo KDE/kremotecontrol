@@ -97,11 +97,11 @@ void IRActions::renameMode(const Mode &mode, const QString &to)
 IRActions IRActions::findByMode(const Mode &mode)
 {
     IRActions ret;
-    kDebug() << "IRActions size: " << size();
+//    kDebug() << "IRActions size: " << size();
     for (iterator i = begin(); i != end(); ++i) {
-        kDebug() << "Searching action: " << (*i)->remote() << (*i)->button();
+//        kDebug() << "Searching action: " << (*i)->remote() << (*i)->button();
         if ((*i)->remote() == mode.remote() && (*i)->mode() == mode.name()) {
-            kDebug() << "Action " << (*i)->remote() << (*i)->button() << "matches";
+//            kDebug() << "Action " << (*i)->remote() << (*i)->button() << "matches";
             ret += *i;
         }
     }

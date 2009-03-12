@@ -39,7 +39,7 @@
 #endif /* MODEL_H_ */
 
 
-    Q_DECLARE_METATYPE(Prototype)
+Q_DECLARE_METATYPE(Prototype)
 
 
 class DBusProfileModel : public  QStringListModel

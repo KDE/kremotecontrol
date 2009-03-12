@@ -28,7 +28,7 @@
 #include "profileserver.h"
 #include "remoteserver.h"
 #include "addaction.h"
-#include "model.h"
+//#include "model.h"
 #include "dbusinterface.h"
 #include <QRegExp>
 #include <QDBusConnectionInterface>
@@ -192,15 +192,13 @@ void EditAction::readFrom()
         arguments = theAction->arguments();
         editActionBaseWidget->thePerformFunction->setChecked(true);
     } else { // DBus action
-        editActionBaseWidget->theUseDBus->setChecked(true);
-        QString program = theAction->program();
-        editActionBaseWidget->theDBusApplications->setCurrentIndex(editActionBaseWidget->theDBusApplications->findText(program.remove(0, 8)));
-        updateDBusObjects();
-        editActionBaseWidget->theDBusObjects->setCurrentIndex(editActionBaseWidget->theDBusObjects->findText(theAction->object()));
-        updateDBusFunctions();
-        editActionBaseWidget->theDBusFunctions->setCurrentIndex(editActionBaseWidget->theDBusFunctions->findText(theAction->method().prototype()));
-        arguments = theAction->arguments();
-
+	editActionBaseWidget->theUseDBus->setChecked(true);
+	editActionBaseWidget->theDBusApplications->setCurrentIndex(editActionBaseWidget->theDBusApplications->findData(theAction->program())); 
+	updateDBusObjects();
+	editActionBaseWidget->theDBusObjects->setCurrentIndex(editActionBaseWidget->theDBusObjects->findText(theAction->object()));
+	updateDBusFunctions(); 
+	editActionBaseWidget->theDBusFunctions->setCurrentIndex(editActionBaseWidget->theDBusFunctions->findData(qVariantFromValue(theAction->method())));
+	arguments = theAction->arguments();
     }
 }
 
