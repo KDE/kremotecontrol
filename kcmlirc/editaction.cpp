@@ -230,9 +230,10 @@ void EditAction::writeBack()
             }
         }
     } else {
-        theAction->setProgram("org.kde." + program);
+        theAction->setProgram(getCurrentDbusApp());
         theAction->setObject(editActionBaseWidget->theDBusObjects->currentText());
-        theAction->setMethod(editActionBaseWidget->theDBusFunctions->currentText());
+        theAction->setMethod(getCurrentDbusFunction());
+	kDebug() << "got dbus funcion:" << getCurrentDbusFunction();
         theAction->setArguments(arguments);
     }
     theAction->setRepeat(editActionBaseWidget->theRepeat->isChecked());

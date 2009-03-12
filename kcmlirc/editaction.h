@@ -64,6 +64,9 @@ private:
 inline QString getCurrentDbusApp(){
    return  editActionBaseWidget->theDBusApplications->itemData(editActionBaseWidget->theDBusApplications->currentIndex(),Qt::UserRole).toString();
 }
+inline QString getCurrentDbusFunction(){
+   return  editActionBaseWidget->theDBusFunctions->itemData(editActionBaseWidget->theDBusFunctions->currentIndex(),Qt::UserRole).toString();
+}
 
 
 
