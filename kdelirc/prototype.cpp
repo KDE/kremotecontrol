@@ -68,16 +68,16 @@ void Prototype::parse()
 
     QRegExp main("^(.*) (\\w[\\d\\w]*)\\((.*)\\)");
     QRegExp parameters("^\\s*([^,\\s]+)(\\s+(\\w[\\d\\w]*))?(,(.*))?$");
-
+/*
     kDebug() << "************************************************************************";
 
     kDebug() << "************************************************************************";
 
-    kDebug() << "original:" << original;
+    kDebug() << "original:" << original;*/
     if (main.indexIn(original) == -1) return;
     theReturn = main.cap(1);
     theName = main.cap(2);
-    kDebug() << "theName:" << theName;
+//     kDebug() << "theName:" << theName;
 
     QString args = main.cap(3);
     while (parameters.indexIn(args) != -1) {
@@ -86,4 +86,9 @@ void Prototype::parse()
         args = parameters.cap(5);
     }
 }
+
+bool Prototype::operator==(const Prototype& other) const {
+    return this->prototype() == other.prototype();
+}
+
 

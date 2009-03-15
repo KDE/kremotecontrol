@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>982</width>
-    <height>673</height>
+    <width>980</width>
+    <height>671</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -212,14 +212,23 @@
          </item>
          <item rowspan="2" row="0" column="2" >
           <widget class="QStackedWidget" name="theValue" >
+           <property name="enabled" >
+            <bool>true</bool>
+           </property>
            <property name="lineWidth" >
-            <number>1</number>
+            <number>0</number>
            </property>
            <property name="currentIndex" >
-            <number>1</number>
+            <number>3</number>
            </property>
            <widget class="QWidget" name="valuesPage1" >
+            <property name="enabled" >
+             <bool>true</bool>
+            </property>
             <layout class="QVBoxLayout" name="verticalLayout" >
+             <property name="topMargin" >
+              <number>1</number>
+             </property>
              <item>
               <widget class="KEditListBox" name="theValueEditListBox" >
                <property name="sizePolicy" >
@@ -237,6 +246,9 @@
            </widget>
            <widget class="QWidget" name="valuesPage2" >
             <layout class="QVBoxLayout" name="verticalLayout_2" >
+             <property name="topMargin" >
+              <number>1</number>
+             </property>
              <item>
               <widget class="KDoubleNumInput" name="theValueDoubleNumInput" />
              </item>
@@ -257,6 +269,9 @@
            </widget>
            <widget class="QWidget" name="valuesPage3" >
             <layout class="QVBoxLayout" name="verticalLayout_3" >
+             <property name="topMargin" >
+              <number>1</number>
+             </property>
              <item>
               <widget class="KLineEdit" name="theValueLineEdit" >
                <property name="enabled" >
@@ -281,6 +296,9 @@
            </widget>
            <widget class="QWidget" name="page_4" >
             <layout class="QVBoxLayout" name="verticalLayout_5" >
+             <property name="topMargin" >
+              <number>5</number>
+             </property>
              <item>
               <widget class="QCheckBox" name="theValueCheckBox" >
                <property name="enabled" >

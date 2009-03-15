@@ -197,7 +197,12 @@ void EditAction::readFrom()
 	updateDBusObjects();
 	editActionBaseWidget->theDBusObjects->setCurrentIndex(editActionBaseWidget->theDBusObjects->findText(theAction->object()));
 	updateDBusFunctions(); 
-	editActionBaseWidget->theDBusFunctions->setCurrentIndex(editActionBaseWidget->theDBusFunctions->findData(qVariantFromValue(theAction->method())));
+      QVariant t = qVariantFromValue(theAction->method());
+  Prototype tType =t.value<Prototype>();        
+int ti =editActionBaseWidget->theDBusFunctions->findData(t);
+kDebug() << "the find Data *************************" << tType.prototype() << "idnec " << ti;
+
+	editActionBaseWidget->theDBusFunctions->setCurrentIndex(ti);
 	arguments = theAction->arguments();
     }
 }
