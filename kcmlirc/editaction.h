@@ -39,10 +39,10 @@ class Arguments;
 class EditActionBaseWidget : public QWidget, public Ui::EditActionBase
 {
 public:
-  EditActionBaseWidget(QWidget *parent = 0) : QWidget(parent)
-  {
-    setupUi(this);
-  }
+    EditActionBaseWidget(QWidget *parent = 0) : QWidget(parent)
+    {
+        setupUi(this);
+    }
 };
 
 
@@ -50,48 +50,48 @@ public:
 class EditAction : public KDialog
 {
 private:
-  Q_OBJECT
-  IRAction *theAction;
-  EditActionBaseWidget *editActionBaseWidget;
-  QMap<QString, QString> applicationMap, functionMap, nameProgramMap;
-  QMap<QString, bool> uniqueProgramMap;
-  Arguments arguments;
-  QString program;
-  bool isUnique;
-  QButtonGroup mainGroup;
-  void connectSignalsAndSlots();
+    Q_OBJECT
+    IRAction *theAction;
+    EditActionBaseWidget *editActionBaseWidget;
+    QMap<QString, QString> applicationMap, functionMap, nameProgramMap;
+    QMap<QString, bool> uniqueProgramMap;
+    Arguments arguments;
+    QString program;
+    bool isUnique;
+    QButtonGroup mainGroup;
+    void connectSignalsAndSlots();
 
-inline QString getCurrentDbusApp(){
-   return  editActionBaseWidget->theDBusApplications->itemData(editActionBaseWidget->theDBusApplications->currentIndex(),Qt::UserRole).toString();
-}
-inline QString getCurrentDbusFunction(){
-    kDebug() << editActionBaseWidget->theDBusFunctions->itemData(editActionBaseWidget->theDBusFunctions->currentIndex(),Qt::UserRole).value<Prototype>().name();
-    kDebug() << editActionBaseWidget->theDBusFunctions->itemData(editActionBaseWidget->theDBusFunctions->currentIndex(),Qt::UserRole).value<Prototype>().prototype();
-    kDebug() << editActionBaseWidget->theDBusFunctions->itemData(editActionBaseWidget->theDBusFunctions->currentIndex(),Qt::UserRole).value<Prototype>().argumentList();
-   return  editActionBaseWidget->theDBusFunctions->itemData(editActionBaseWidget->theDBusFunctions->currentIndex(),Qt::UserRole).value<Prototype>().prototype();
-}
+    inline QString getCurrentDbusApp() {
+        return  editActionBaseWidget->theDBusApplications->itemData(editActionBaseWidget->theDBusApplications->currentIndex(),Qt::UserRole).toString();
+    }
+    inline QString getCurrentDbusFunction() {
+        kDebug() << editActionBaseWidget->theDBusFunctions->itemData(editActionBaseWidget->theDBusFunctions->currentIndex(),Qt::UserRole).value<Prototype>().name();
+        kDebug() << editActionBaseWidget->theDBusFunctions->itemData(editActionBaseWidget->theDBusFunctions->currentIndex(),Qt::UserRole).value<Prototype>().prototype();
+        kDebug() << editActionBaseWidget->theDBusFunctions->itemData(editActionBaseWidget->theDBusFunctions->currentIndex(),Qt::UserRole).value<Prototype>().argumentList();
+        return  editActionBaseWidget->theDBusFunctions->itemData(editActionBaseWidget->theDBusFunctions->currentIndex(),Qt::UserRole).value<Prototype>().prototype();
+    }
 
 
 
 public:
-  explicit EditAction(IRAction *action, QWidget *parent = 0, const bool &modal = false);
-  ~EditAction();
+    explicit EditAction(IRAction *action, QWidget *parent = 0, const bool &modal = false);
+    ~EditAction();
 
 
-  void writeBack();
-  void readFrom();
+    void writeBack();
+    void readFrom();
 
 public slots:
-  virtual void slotParameterChanged();
-  virtual void updateArgument(int index);
-  virtual void updateArguments();
-  virtual void initApplications();
-  virtual void updateFunctions();
-  virtual void updateInstancesOptions();
-  virtual void initDBusApplications();
-  virtual void updateDBusObjects();
-  virtual void updateDBusFunctions();
-  virtual void addItem(QString item);
+    virtual void slotParameterChanged();
+    virtual void updateArgument(int index);
+    virtual void updateArguments();
+    virtual void initApplications();
+    virtual void updateFunctions();
+    virtual void updateInstancesOptions();
+    virtual void initDBusApplications();
+    virtual void updateDBusObjects();
+    virtual void updateDBusFunctions();
+    virtual void addItem(QString item);
 
 };
 #endif

@@ -42,7 +42,7 @@
 #include <kmessagebox.h>
 #include <knuminput.h>
 #include <keditlistbox.h>
- #include <QAbstractItemModel>
+#include <QAbstractItemModel>
 
 EditAction::EditAction(IRAction *action, QWidget *parent, const bool &modal): KDialog(parent)
 {
@@ -68,7 +68,7 @@ EditAction::EditAction(IRAction *action, QWidget *parent, const bool &modal): KD
     initDBusApplications();
     initApplications();
     readFrom();
-    
+
 }
 
 EditAction::~EditAction()
@@ -192,18 +192,18 @@ void EditAction::readFrom()
         arguments = theAction->arguments();
         editActionBaseWidget->thePerformFunction->setChecked(true);
     } else { // DBus action
-	editActionBaseWidget->theUseDBus->setChecked(true);
-	editActionBaseWidget->theDBusApplications->setCurrentIndex(editActionBaseWidget->theDBusApplications->findData(theAction->program())); 
-	updateDBusObjects();
-	editActionBaseWidget->theDBusObjects->setCurrentIndex(editActionBaseWidget->theDBusObjects->findText(theAction->object()));
-	updateDBusFunctions(); 
-      QVariant t = qVariantFromValue(theAction->method());
-  Prototype tType =t.value<Prototype>();        
-int ti =editActionBaseWidget->theDBusFunctions->findData(t);
-kDebug() << "the find Data *************************" << tType.prototype() << "idnec " << ti;
+        editActionBaseWidget->theUseDBus->setChecked(true);
+        editActionBaseWidget->theDBusApplications->setCurrentIndex(editActionBaseWidget->theDBusApplications->findData(theAction->program()));
+        updateDBusObjects();
+        editActionBaseWidget->theDBusObjects->setCurrentIndex(editActionBaseWidget->theDBusObjects->findText(theAction->object()));
+        updateDBusFunctions();
+        QVariant t = qVariantFromValue(theAction->method());
+        Prototype tType =t.value<Prototype>();
+        int ti =editActionBaseWidget->theDBusFunctions->findData(t);
 
-	editActionBaseWidget->theDBusFunctions->setCurrentIndex(ti);
-	arguments = theAction->arguments();
+
+        editActionBaseWidget->theDBusFunctions->setCurrentIndex(ti);
+        arguments = theAction->arguments();
     }
 }
 
@@ -235,8 +235,7 @@ void EditAction::writeBack()
     } else {
         theAction->setProgram(getCurrentDbusApp());
         theAction->setObject(editActionBaseWidget->theDBusObjects->currentText());
-        theAction->setMethod(getCurrentDbusFunction());
-	kDebug() << "got dbus funcion:" << getCurrentDbusFunction();
+        theAction->setMethod(getCurrentDbusFunction());        
         theAction->setArguments(arguments);
     }
     theAction->setRepeat(editActionBaseWidget->theRepeat->isChecked());
@@ -434,16 +433,16 @@ void EditAction::updateFunctions()
 
 void EditAction::initDBusApplications()
 {
-   editActionBaseWidget->theDBusApplications->clear();
+    editActionBaseWidget->theDBusApplications->clear();
     editActionBaseWidget->theDBusApplications->addItems(DBusInterface::getInstance()->getRegisteredPrograms());
     updateDBusObjects();
 }
 
 void EditAction::updateDBusObjects()
 {
-    editActionBaseWidget->theDBusObjects->clear();   
-     editActionBaseWidget->theDBusObjects->insertItems(0, DBusInterface::getInstance()->getObjects(getCurrentDbusApp()));
-     updateDBusFunctions();
+    editActionBaseWidget->theDBusObjects->clear();
+    editActionBaseWidget->theDBusObjects->insertItems(0, DBusInterface::getInstance()->getObjects(getCurrentDbusApp()));
+    updateDBusFunctions();
 }
 
 void EditAction::updateDBusFunctions()
@@ -452,8 +451,8 @@ void EditAction::updateDBusFunctions()
 
     QList<Prototype> tList = DBusInterface::getInstance()->getFunctions(getCurrentDbusApp(), editActionBaseWidget->theDBusObjects->currentText());
 
-    foreach(Prototype tType, tList){     
-	editActionBaseWidget->theDBusFunctions->addItem(0, qVariantFromValue(tType));
+    foreach(Prototype tType, tList) {
+        editActionBaseWidget->theDBusFunctions->addItem(0, qVariantFromValue(tType));
     }
     updateArguments();
 }
