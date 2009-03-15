@@ -84,6 +84,8 @@
 
 
       bool operator==(const Prototype &other) const ;
+      bool operator<(const Prototype &other) const ;
+      bool operator>(const Prototype &other) const ;
 
       Prototype(const QString &source);
       Prototype(){};

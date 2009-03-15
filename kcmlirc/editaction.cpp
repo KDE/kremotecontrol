@@ -235,7 +235,7 @@ void EditAction::writeBack()
     } else {
         theAction->setProgram(getCurrentDbusApp());
         theAction->setObject(editActionBaseWidget->theDBusObjects->currentText());
-        theAction->setMethod(getCurrentDbusFunction());        
+        theAction->setMethod(getCurrentDbusFunction());
         theAction->setArguments(arguments);
     }
     theAction->setRepeat(editActionBaseWidget->theRepeat->isChecked());
@@ -435,6 +435,7 @@ void EditAction::initDBusApplications()
 {
     editActionBaseWidget->theDBusApplications->clear();
     editActionBaseWidget->theDBusApplications->addItems(DBusInterface::getInstance()->getRegisteredPrograms());
+    editActionBaseWidget->theDBusApplications->model()->sort( Qt::AscendingOrder);
     updateDBusObjects();
 }
 
@@ -442,6 +443,7 @@ void EditAction::updateDBusObjects()
 {
     editActionBaseWidget->theDBusObjects->clear();
     editActionBaseWidget->theDBusObjects->insertItems(0, DBusInterface::getInstance()->getObjects(getCurrentDbusApp()));
+    editActionBaseWidget->theDBusObjects->model()->sort( Qt::AscendingOrder);
     updateDBusFunctions();
 }
 
@@ -454,6 +456,7 @@ void EditAction::updateDBusFunctions()
     foreach(Prototype tType, tList) {
         editActionBaseWidget->theDBusFunctions->addItem(0, qVariantFromValue(tType));
     }
+    editActionBaseWidget->theDBusFunctions->model()->sort( Qt::AscendingOrder);
     updateArguments();
 }
 

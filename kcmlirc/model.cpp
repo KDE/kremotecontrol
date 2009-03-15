@@ -38,14 +38,15 @@ DBusProfileModel::DBusProfileModel(QObject *parent = 0) :
 
 }
 
-bool DBusProfileModel::ascendingLessThan(const QPair<QString, int> &s1, const QPair<QString, int> &s2)
+bool DBusProfileModel::ascendingLessThan(const QString &s1, const QString &s2)
 {
-    return trimAppname(s1.first) < trimAppname(s2.first);
+    return trimAppname(s1) < trimAppname(s2);
 }
 
-bool DBusProfileModel::decendingLessThan(const QPair<QString, int> &s1, const QPair<QString, int> &s2)
+bool DBusProfileModel::decendingLessThan(const QString &s1, const QString &s2)
 {
-    return trimAppname(s1.first) > trimAppname(s2.first);
+
+    return trimAppname(s1) > trimAppname(s2);
 }
 
 QString DBusProfileModel::trimAppname(const QString &appName)
@@ -83,39 +84,17 @@ QVariant DBusProfileModel::data(const QModelIndex & index, int role = Qt::Displa
 }
 
 
-/*!
-  // Copy and pasted from QStringListModel::sort() to overwrite ascendingLess and descendingLess
-*/
 void  DBusProfileModel::sort(int, Qt::SortOrder order)
 {
-    kDebug()<< "sorting";
     emit layoutAboutToBeChanged();
-
-    QList<QPair<QString, int> > list;
-    for (int i = 0; i < stringList().count(); ++i)
-        list.append(QPair<QString, int>(stringList().at(i), i));
+    QStringList tList = stringList();
 
     if (order == Qt::AscendingOrder)
-        qSort(list.begin(), list.end(), DBusProfileModel::ascendingLessThan);
+        qSort(tList.begin(), tList.end(),  DBusProfileModel::ascendingLessThan);
     else
-        qSort(list.begin(), list.end(), DBusProfileModel::decendingLessThan);
-
-    stringList().clear();
-    QVector<int> forwarding(list.count());
-    for (int i = 0; i < list.count(); ++i) {
-        stringList().append(list.at(i).first);
-        forwarding[list.at(i).second] = i;
-    }
-
-    QModelIndexList oldList = persistentIndexList();
-    QModelIndexList newList;
-    for (int i = 0; i < oldList.count(); ++i)
-        newList.append(index(forwarding.at(oldList.at(i).row()), 0));
-    changePersistentIndexList(oldList, newList);
-
+        qSort(tList.begin(), tList.end(),  DBusProfileModel::decendingLessThan);
+    setStringList(tList);
     emit layoutChanged();
-
-
 }
 
 
@@ -213,4 +192,16 @@ QModelIndexList DBusFunctionModel::match(const QModelIndex &start, int role,
         }
     }
     return result;
+}
+
+
+void DBusFunctionModel::sort(int column, Qt::SortOrder order) {
+    emit layoutAboutToBeChanged();
+    QList<Prototype>  tList = QList<Prototype>(theProtoTypeList);
+    if (order == Qt::AscendingOrder)
+        qSort(tList.begin(), tList.end());
+    else
+        qSort(tList.begin(), tList.end());
+    theProtoTypeList = tList;
+    emit layoutChanged();
 }

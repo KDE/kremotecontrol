@@ -47,13 +47,13 @@ class DBusProfileModel : public  QStringListModel
 
 public:
 
-  DBusProfileModel (QObject * parent );
+    DBusProfileModel (QObject * parent );
 
-  virtual QVariant data( const QModelIndex & index, int  role) const;
-  static QString trimAppname(const QString &appName);
-  static bool decendingLessThan(const QPair<QString, int> &s1, const QPair<QString, int> &s2);
-  static bool ascendingLessThan(const QPair<QString, int> &s1, const QPair<QString, int> &s2);
-  void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
+    virtual QVariant data( const QModelIndex & index, int  role) const;
+    static QString trimAppname(const QString &appName);
+    static bool decendingLessThan(const QString &s1, const QString &s2);
+    static bool ascendingLessThan(const QString &s1, const QString &s2);
+    void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
 
 
 };
@@ -66,20 +66,21 @@ private:
 
 public:
 
-  DBusFunctionModel (QObject * parent );
+    DBusFunctionModel (QObject * parent );
 
 
-  virtual QVariant data( const QModelIndex & index, int  role) const;
-  virtual bool setData(const QModelIndex &index,  const QVariant &value, int role);
-  bool insertRows(int position, int rows, const QModelIndex &parent);
-  bool removeRows(int position, int rows, const QModelIndex &parent);
+    virtual QVariant data( const QModelIndex & index, int  role) const;
+    virtual bool setData(const QModelIndex &index,  const QVariant &value, int role);
+    bool insertRows(int position, int rows, const QModelIndex &parent);
+    bool removeRows(int position, int rows, const QModelIndex &parent);
 
- int rowCount(const QModelIndex &parent) const{
-      return theProtoTypeList.size();
-  }
+    int rowCount(const QModelIndex &parent) const {
+        return theProtoTypeList.size();
+    }
 
-QModelIndexList match(const QModelIndex &start, int role, const QVariant &value, int hits, Qt::MatchFlags flags =0) const;
+    QModelIndexList match(const QModelIndex &start, int role, const QVariant &value, int hits, Qt::MatchFlags flags =0) const;
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
+    void sort(int column, Qt::SortOrder order);
 };
 

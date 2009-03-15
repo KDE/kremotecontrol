@@ -92,3 +92,12 @@ bool Prototype::operator==(const Prototype& other) const {
 }
 
 
+bool Prototype::operator>(const Prototype& other) const {
+    return this->prototype() > other.prototype();
+}
+
+
+bool Prototype::operator<(const Prototype& other) const {
+    return this->prototype() < other.prototype();
+}
+
