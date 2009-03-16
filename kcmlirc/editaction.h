@@ -85,10 +85,10 @@ public slots:
     virtual void slotParameterChanged();
     virtual void updateArgument(int index);
     virtual void updateArguments();
-    virtual void initApplications();
+    virtual void updateApplications();
     virtual void updateFunctions();
     virtual void updateInstancesOptions();
-    virtual void initDBusApplications();
+    virtual void updateDBusApplications();
     virtual void updateDBusObjects();
     virtual void updateDBusFunctions();
     virtual void addItem(QString item);
