@@ -88,6 +88,7 @@ void EditAction::connectSignalsAndSlots() {
     connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->thePerformFunction,SLOT(setChecked(bool)));
     connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->thePerformFunction,SLOT(setEnabled(bool)));
     connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theRepeat,SLOT(setEnabled(bool)));
+connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),this,SLOT(updateUseDbusApplicationLabL()));
 
     //When only just start ist checked
     connect(editActionBaseWidget->theJustStart,SIGNAL(toggled(bool)),editActionBaseWidget->theAutoStart,SLOT(setChecked(bool)));
@@ -122,7 +123,7 @@ void EditAction::connectSignalsAndSlots() {
     connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theDBusFunctions,SLOT(setEnabled(bool)));
     connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theDBusObjects,SLOT(setEnabled(bool)));
     connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theRepeat,SLOT(setEnabled(bool)));
-
+    connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),this,SLOT(updateUseDbusApplicationLabL()));
 
     //Fill in DBUS Application Comboboxes
     connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),this, SLOT(updateDBusApplications()));
@@ -136,7 +137,7 @@ void EditAction::connectSignalsAndSlots() {
     connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),editActionBaseWidget->theDoBefore,SLOT(setEnabled(bool)));
     connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),editActionBaseWidget->theModes,SLOT(setEnabled(bool)));
     connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),this,SLOT(updateInstancesOptions()));
-
+    connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),this,SLOT(updateUseDbusApplicationLabL()));
 
     //StackView + Arguments
 
@@ -298,9 +299,7 @@ void EditAction::updateInstancesOptions()
 // called when the textbox/checkbox/whatever changes value
 void EditAction::slotParameterChanged()
 {
-
     int index =  editActionBaseWidget->theArguments->currentIndex();
-//KDebug() << "in: " << arguments[index].toString() ;
     int type = arguments[editActionBaseWidget->theArguments->currentIndex()].type();
     kDebug() << type ;
     switch (type) {
@@ -327,10 +326,9 @@ void EditAction::slotParameterChanged()
 
 void EditAction::updateArgument(int index)
 {
+kDebug()<< "update arguments";
     kDebug() << " i: " << index ;
-    if (index >= 0 && ! arguments.isEmpty()) {
-       editActionBaseWidget->theValue->show();
-	editActionBaseWidget->theArguments->show();
+    if (index >= 0 && ! arguments.isEmpty()) {       
         switch (arguments[index].type()) {
         
 	case QVariant::StringList: {
@@ -366,8 +364,7 @@ void EditAction::updateArgument(int index)
         editActionBaseWidget->theValueIntNumInput->setValue(0);
         editActionBaseWidget->theValueDoubleNumInput->setValue(0.0);
         editActionBaseWidget->theValue->setEnabled(false);
-	editActionBaseWidget->theArguments->hide();
-	editActionBaseWidget->theValue->hide();
+	editActionBaseWidget->theValue->setCurrentIndex(5);
     }
 }
 
@@ -391,10 +388,12 @@ void EditAction::updateApplications()
 
 void EditAction::updateFunctions()
 {
+  kDebug()<< "Updating dbus  functions";
     editActionBaseWidget->theFunctions->clear();
     functionMap.clear();
+
     if (editActionBaseWidget->theJustStart->isChecked()) {
-        updateArguments();
+     
         return;
     }
     QString application = editActionBaseWidget->theApplications->currentText();
@@ -416,6 +415,7 @@ void EditAction::updateFunctions()
 
 void EditAction::updateDBusApplications()
 {
+kDebug()<< "update dbus applications";
     //TODO: handling if iraction is dbusaction and application is not running
     editActionBaseWidget->theDBusApplications->clear();
     editActionBaseWidget->theDBusApplications->addItems(DBusInterface::getInstance()->getRegisteredPrograms());
@@ -427,6 +427,7 @@ void EditAction::updateDBusApplications()
 
 void EditAction::updateDBusObjects()
 {
+      kDebug()<< "update dbus objects";
       //TODO: handling if iraction is dbusaction and application is not running
     editActionBaseWidget->theDBusObjects->clear();
     editActionBaseWidget->theDBusObjects->insertItems(0, DBusInterface::getInstance()->getObjects(getCurrentDbusApp()));
@@ -440,8 +441,8 @@ void EditAction::updateDBusFunctions()
     //TODO: handling if iraction is dbusaction and application is not running
     editActionBaseWidget->theDBusFunctions->clear();
     QList<Prototype> tList = DBusInterface::getInstance()->getFunctions(getCurrentDbusApp(), editActionBaseWidget->theDBusObjects->currentText());
-    foreach(Prototype tType, tList) {
-        editActionBaseWidget->theDBusFunctions->addItem(0, qVariantFromValue(tType));
+    foreach(Prototype tType, tList) {	
+        editActionBaseWidget->theDBusFunctions->addItem(0, qVariantFromValue(tType));	
     }
     editActionBaseWidget->theDBusFunctions->model()->sort( Qt::AscendingOrder);
     int ti =editActionBaseWidget->theDBusFunctions->findData(qVariantFromValue(theAction->method()));
@@ -453,7 +454,17 @@ void EditAction::addItem(QString item)
     editActionBaseWidget->theModes->addItem(item);
 }
 
-
-
+void EditAction::updateUseDbusApplicationLabL() {
+QString labelDesc;
+if(editActionBaseWidget->theUseProfile->isChecked()){
+labelDesc=i18n("Profile argument options:");
+}
+else if(editActionBaseWidget->theUseDBus->isChecked()){
+labelDesc=i18n("DBus function arguments:");
+}else{
+labelDesc=i18n("A&pplication / D-Bus options:");
+}
+editActionBaseWidget->theAppDbusOptionsLabel->setText(labelDesc);
+}
 
 #include "editaction.moc"

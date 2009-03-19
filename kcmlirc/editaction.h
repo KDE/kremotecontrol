@@ -92,6 +92,7 @@ public slots:
     virtual void updateDBusObjects();
     virtual void updateDBusFunctions();
     virtual void addItem(QString item);
+    virtual void updateUseDbusApplicationLabL();
 
 };
 #endif
