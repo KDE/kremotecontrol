@@ -58,8 +58,6 @@ EditAction::EditAction(IRAction *action, QWidget *parent, const bool &modal): KD
     //TODO: Layout theValue
     editActionBaseWidget->theDBusApplications->setModel(new DBusProfileModel(0));
     editActionBaseWidget->theDBusFunctions->setModel(new DBusFunctionModel(0));
-    editActionBaseWidget->theValue->layout()->setMargin(0);
-
     mainGroup.addButton(editActionBaseWidget->theUseDBus);
     mainGroup.addButton(editActionBaseWidget->theUseProfile);
     mainGroup.addButton(editActionBaseWidget->theChangeMode);
@@ -331,22 +329,11 @@ void EditAction::updateArgument(int index)
 {
     kDebug() << " i: " << index ;
     if (index >= 0 && ! arguments.isEmpty()) {
+       editActionBaseWidget->theValue->show();
+	editActionBaseWidget->theArguments->show();
         switch (arguments[index].type()) {
-        case QVariant::Int:
-        case QVariant::UInt:
-            editActionBaseWidget->theValue->setCurrentIndex(4);
-            editActionBaseWidget->theValueIntNumInput->setValue(arguments[index].toInt());
-            break;
-        case QVariant::Double:
-            editActionBaseWidget->theValue->setCurrentIndex(1);
-            editActionBaseWidget->theValueDoubleNumInput->setValue(arguments[index].toDouble());
-            break;
-        case QVariant::Bool:
-            editActionBaseWidget->theValue->setCurrentIndex(3);
-            editActionBaseWidget->theValueCheckBox->setChecked(arguments[index].toBool());
-            break;
-
-        case QVariant::StringList: {
+        
+	case QVariant::StringList: {
             editActionBaseWidget->theValue->setCurrentIndex(0);
             QStringList backup = arguments[index].toStringList();
             // backup needed because calling clear will kill what ever has been saved.
@@ -354,9 +341,22 @@ void EditAction::updateArgument(int index)
             editActionBaseWidget->theValueEditListBox->insertStringList(backup);
             arguments[index] = backup;
             break;
-        }
-        default:
+	  }
+	 case QVariant::Int:
+        case QVariant::UInt:
+            editActionBaseWidget->theValue->setCurrentIndex(1);
+            editActionBaseWidget->theValueIntNumInput->setValue(arguments[index].toInt());
+            break;        
+        case QVariant::Double:
             editActionBaseWidget->theValue->setCurrentIndex(2);
+            editActionBaseWidget->theValueDoubleNumInput->setValue(arguments[index].toDouble());
+            break;
+        case QVariant::Bool:
+            editActionBaseWidget->theValue->setCurrentIndex(3);
+            editActionBaseWidget->theValueCheckBox->setChecked(arguments[index].toBool());
+            break;
+        default:
+            editActionBaseWidget->theValue->setCurrentIndex(4);
             editActionBaseWidget->theValueLineEdit->setText(arguments[index].toString());
         }
         editActionBaseWidget->theValue->setEnabled(true);
@@ -366,6 +366,8 @@ void EditAction::updateArgument(int index)
         editActionBaseWidget->theValueIntNumInput->setValue(0);
         editActionBaseWidget->theValueDoubleNumInput->setValue(0.0);
         editActionBaseWidget->theValue->setEnabled(false);
+	editActionBaseWidget->theArguments->hide();
+	editActionBaseWidget->theValue->hide();
     }
 }
 

@@ -5,7 +5,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>980</width>
+    <width>979</width>
     <height>671</height>
    </rect>
   </property>
@@ -199,8 +199,11 @@
         <layout class="QGridLayout" >
          <item row="0" column="0" >
           <widget class="QLabel" name="theAppDbusOptionsLabel" >
+           <property name="styleSheet" >
+            <string notr="true" >margin-top:12px;</string>
+           </property>
            <property name="text" >
-            <string>A&amp;pplication/D-Bus options:</string>
+            <string>A&amp;pplication / D-Bus options:</string>
            </property>
            <property name="wordWrap" >
             <bool>false</bool>
@@ -219,15 +222,15 @@
             <number>0</number>
            </property>
            <property name="currentIndex" >
-            <number>3</number>
+            <number>1</number>
            </property>
-           <widget class="QWidget" name="valuesPage1" >
+           <widget class="QWidget" name="valuesPage0" >
             <property name="enabled" >
              <bool>true</bool>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout" >
              <property name="topMargin" >
-              <number>1</number>
+              <number>0</number>
              </property>
              <item>
               <widget class="KEditListBox" name="theValueEditListBox" >
@@ -244,10 +247,33 @@
              </item>
             </layout>
            </widget>
+           <widget class="QWidget" name="valuesPage1" >
+            <layout class="QVBoxLayout" name="verticalLayout5" >
+             <property name="topMargin" >
+              <number>12</number>
+             </property>
+             <item>
+              <widget class="KIntNumInput" name="theValueIntNumInput" />
+             </item>
+             <item>
+              <spacer name="verticalSpacer_5" >
+               <property name="orientation" >
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0" >
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
            <widget class="QWidget" name="valuesPage2" >
             <layout class="QVBoxLayout" name="verticalLayout_2" >
              <property name="topMargin" >
-              <number>1</number>
+              <number>12</number>
              </property>
              <item>
               <widget class="KDoubleNumInput" name="theValueDoubleNumInput" />
@@ -268,36 +294,9 @@
             </layout>
            </widget>
            <widget class="QWidget" name="valuesPage3" >
-            <layout class="QVBoxLayout" name="verticalLayout_3" >
+            <layout class="QVBoxLayout" name="valuesPage4" >
              <property name="topMargin" >
-              <number>1</number>
-             </property>
-             <item>
-              <widget class="KLineEdit" name="theValueLineEdit" >
-               <property name="enabled" >
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="verticalSpacer_2" >
-               <property name="orientation" >
-                <enum>Qt::Vertical</enum>
-               </property>
-               <property name="sizeHint" stdset="0" >
-                <size>
-                 <width>20</width>
-                 <height>40</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </widget>
-           <widget class="QWidget" name="page_4" >
-            <layout class="QVBoxLayout" name="verticalLayout_5" >
-             <property name="topMargin" >
-              <number>5</number>
+              <number>12</number>
              </property>
              <item>
               <widget class="QCheckBox" name="theValueCheckBox" >
@@ -325,12 +324,19 @@
             </layout>
            </widget>
            <widget class="QWidget" name="valuesPage4" >
-            <layout class="QVBoxLayout" name="verticalLayout_4" >
+            <layout class="QVBoxLayout" name="verticalLayout_3" >
+             <property name="topMargin" >
+              <number>12</number>
+             </property>
              <item>
-              <widget class="KIntNumInput" name="theValueIntNumInput" />
+              <widget class="KLineEdit" name="theValueLineEdit" >
+               <property name="enabled" >
+                <bool>true</bool>
+               </property>
+              </widget>
              </item>
              <item>
-              <spacer name="verticalSpacer_5" >
+              <spacer name="verticalSpacer_2" >
                <property name="orientation" >
                 <enum>Qt::Vertical</enum>
                </property>
@@ -372,6 +378,9 @@
              <width>106</width>
              <height>0</height>
             </size>
+           </property>
+           <property name="styleSheet" >
+            <string notr="true" >margin-top:12px;</string>
            </property>
           </widget>
          </item>
