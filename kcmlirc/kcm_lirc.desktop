@@ -1,13 +1,15 @@
 [Desktop Entry]
 Icon=irkick
-Exec=kcmshell4 kcmlirc
+Exec=kcmshell4 kcm_lirc
 
 Type=Service
-X-KDE-ServiceType=KCModule
+X-KDE-ServiceTypes=KCModule
 X-KDE-Library=kcm_lirc
+X-KDE-FactoryName=kcm_lirc
+X-KDE-ParentApp=kcontrol
+X-KDE-System-Settings-Parent-Category=computer-administration
 X-DocPath=kcmlirc/index.html
-Categories=Qt;KDE;X-KDE-settings-peripherals;
-
+Categories=Qt;KDE;X-KDE-settings-system;
 
 X-KDE-Keywords=KCMLirc,kcmlirc
 X-KDE-Keywords[nl]=kcmlirc,linux infrarood,infrarood,afstandsbediening

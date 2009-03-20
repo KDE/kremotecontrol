@@ -32,5 +32,5 @@ install(TARGETS kcm_lirc DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES kcmlirc.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES kcm_lirc.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 

@@ -57,11 +57,14 @@
 
 #define VERSION "version name goes here"
 
-typedef KGenericFactory<KCMLirc, QWidget> theFactory;
-K_EXPORT_COMPONENT_FACTORY(kcm_lirc, theFactory("kcmlirc"))
+// typedef KGenericFactory<KCMLirc, QWidget> theFactory;
+// K_EXPORT_COMPONENT_FACTORY(kcm_lirc, theFactory("kcmlirc"))
 
-KCMLirc::KCMLirc(QWidget *parent, const QStringList &/*args*/) :
-        KCModule(theFactory::componentData(), parent)
+K_PLUGIN_FACTORY( KCMLircFactory, registerPlugin<KCMLirc>();)
+K_EXPORT_PLUGIN( KCMLircFactory( "kcm_lirc" ) )
+
+KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
+        KCModule(KCMLircFactory::componentData(), parent, args)
 {
 
     new KcmlircAdaptor(this);
@@ -69,10 +72,10 @@ KCMLirc::KCMLirc(QWidget *parent, const QStringList &/*args*/) :
     dBusConnection.registerObject("/KCMLirc", this,
                                   QDBusConnection::ExportAllSlots);
 
-    KGlobal::locale()->insertCatalog("kcmlirc");
+    KGlobal::locale()->insertCatalog("kcm_lirc");
     setAboutData(
         new KAboutData(
-            "kcmlirc",
+            "kcm_lirc",
             0,
             ki18n("KDE Lirc"),
             VERSION, ki18n("The KDE IR Remote Control System"),
