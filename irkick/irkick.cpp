@@ -82,6 +82,7 @@ IRKick::IRKick(const QString &obj) :
     theTrayIcon->actionCollection()->action("file_quit")->disconnect(SIGNAL(activated()));
     connect(theTrayIcon->actionCollection()->action("file_quit"), SIGNAL(activated()), SLOT(doQuit()));
     theTrayIcon->show();
+    updateTray();
 }
 
 IRKick::~IRKick()
