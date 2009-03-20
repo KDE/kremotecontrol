@@ -69,7 +69,6 @@ IRKick::IRKick(const QString &obj) :
     connect(theClient, SIGNAL(remotesRead()), this, SLOT(resetModes()));
     connect(theClient, SIGNAL(commandReceived(const QString &, const QString &, int)), this, SLOT(gotMessage(const QString &, const QString &, int)));
 
-    //FIXME: Bring back the Tray Icons Menu
     theTrayIcon->contextMenu()->setTitle("IRKick");
     theTrayIcon->contextMenu()->addAction(SmallIcon("configure"), i18n("&Configure..."), this, SLOT(slotConfigure()));
     QAction *helpAction = new QAction(SmallIcon("help-contents"), i18n("&Help"), theTrayIcon->contextMenu());
@@ -121,6 +120,7 @@ void IRKick::flashOff()
 
 void IRKick::doQuit()
 {
+    kDebug() << "doQuit called";
     KConfig theConfig("irkickrc");
     KConfigGroup generalGroup = theConfig.group("General");
     switch (KMessageBox::questionYesNoCancel(
@@ -177,7 +177,7 @@ void IRKick::slotReloadConfiguration()
 
 void IRKick::slotConfigure()
 {
-    KToolInvocation::startServiceByDesktopName("kcmlirc");
+    KToolInvocation::startServiceByDesktopName("kcm_lirc");
 }
 
 void IRKick::updateTray()
