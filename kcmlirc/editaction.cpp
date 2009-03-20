@@ -64,7 +64,7 @@ EditAction::EditAction(IRAction *action, QWidget *parent, const bool &modal): KD
 
     connectSignalsAndSlots();
     //initDBusApplications();
-    //initApplications();
+    updateApplications();
     readFrom();
 
 }
@@ -177,9 +177,14 @@ void EditAction::readFrom()
         editActionBaseWidget->theUseProfile->setChecked(true);
         const ProfileAction *profileAction = ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype());
         editActionBaseWidget->theApplications->setCurrentIndex(editActionBaseWidget->theApplications->findText(profileAction->profile()->name()));
-        editActionBaseWidget->theFunctions->setCurrentIndex(editActionBaseWidget->theFunctions->findText(profileAction->name()));
-        arguments = theAction->arguments();
+	for(int i = 0; i < editActionBaseWidget->theFunctions->count(); ++i){
+	  kDebug() << editActionBaseWidget->theFunctions->itemText(i);
+	}
+	kDebug() << "current function:" << profileAction->name();
+	kDebug() << "current function index:" << editActionBaseWidget->theFunctions->findText(profileAction->name());
         editActionBaseWidget->thePerformFunction->setChecked(true);
+        arguments = theAction->arguments();
+        editActionBaseWidget->theFunctions->setCurrentIndex(editActionBaseWidget->theFunctions->findText(profileAction->name()));
     } else { // DBus action
         editActionBaseWidget->theUseDBus->setChecked(true);
         arguments = theAction->arguments();
@@ -234,16 +239,19 @@ void EditAction::writeBack()
 
 void EditAction::updateArguments()
 {
+    kDebug() << "****************************************************************************";
     editActionBaseWidget->theArguments->clear();
     if (editActionBaseWidget->theUseProfile->isChecked()) {
         const ProfileAction *profileAction = ProfileServer::profileServer()->getAction(applicationMap[editActionBaseWidget->theApplications->currentText()], functionMap[editActionBaseWidget->theFunctions->currentText()]);
         if (!profileAction ||  editActionBaseWidget->theJustStart->isChecked()) {
+	    kDebug() << "clearing arguments1";
             arguments.clear();
             updateArgument(-1);
             return;
         }
         const QList<ProfileActionArgument> &profileActionArguments = profileAction->arguments();
         if (profileActionArguments.count() != arguments.count()) {
+	    kDebug() << "clearing arguments2";
             arguments.clear();
             for (int i = 0; i < profileActionArguments.count(); ++i) {
                 arguments.append(QVariant(""));
@@ -255,6 +263,7 @@ void EditAction::updateArguments()
             arguments[i].convert(QVariant::nameToType(profileActionArguments[i].type().toLocal8Bit()));
         }
         profileActionArguments.count() ? updateArgument(0) : updateArgument(-1);
+	kDebug() << arguments;
 
     } else if ( editActionBaseWidget->theUseDBus->isChecked()) {
         Prototype p(editActionBaseWidget->theDBusFunctions->currentText());
@@ -326,7 +335,7 @@ void EditAction::slotParameterChanged()
 
 void EditAction::updateArgument(int index)
 {
-kDebug()<< "update arguments";
+kDebug()<< "update argument"<< arguments;
     kDebug() << " i: " << index ;
     if (index >= 0 && ! arguments.isEmpty()) {       
         switch (arguments[index].type()) {
@@ -344,6 +353,7 @@ kDebug()<< "update arguments";
         case QVariant::UInt:
             editActionBaseWidget->theValue->setCurrentIndex(1);
             editActionBaseWidget->theValueIntNumInput->setValue(arguments[index].toInt());
+	    kDebug() << "int argument" << index << "is " << arguments[index].toInt();
             break;        
         case QVariant::Double:
             editActionBaseWidget->theValue->setCurrentIndex(2);
@@ -388,7 +398,6 @@ void EditAction::updateApplications()
 
 void EditAction::updateFunctions()
 {
-  kDebug()<< "Updating dbus  functions";
     editActionBaseWidget->theFunctions->clear();
     functionMap.clear();
 
@@ -401,7 +410,6 @@ void EditAction::updateFunctions()
         return;
     }
     QHash<QString, ProfileAction*> dict = ProfileServer::profileServer()->profiles()[applicationMap[application]]->actions();
-    kDebug() << dict;
     QHash<QString, ProfileAction*>::const_iterator i;
     QStringList theFunctions;
     for (i = dict.constBegin(); i != dict.constEnd(); ++i) {
@@ -410,7 +418,7 @@ void EditAction::updateFunctions()
     }
     theFunctions.sort();
     editActionBaseWidget->theFunctions->addItems(theFunctions);
-//    updateArguments();
+    //updateArguments();
 }
 
 void EditAction::updateDBusApplications()
@@ -455,6 +463,7 @@ void EditAction::addItem(QString item)
 }
 
 void EditAction::updateUseDbusApplicationLabL() {
+ kDebug();
 QString labelDesc;
 if(editActionBaseWidget->theUseProfile->isChecked()){
 labelDesc=i18n("Profile argument options:");

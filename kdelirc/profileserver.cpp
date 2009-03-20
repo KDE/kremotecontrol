@@ -92,10 +92,12 @@ void Profile::loadFromFile(const QString &fileName)
 
 const ProfileAction *ProfileServer::getAction(const QString &appId, const QString &actionId) const
 {
-	kDebug() << appId << actionId;
-    if (theProfiles[appId])
-        if (theProfiles[appId]->actions()[actionId])
+    kDebug() << "Profile to search:" << appId << actionId;
+    if (theProfiles[appId]){
+        if (theProfiles[appId]->actions()[actionId]){
             return theProfiles[appId]->actions()[actionId];
+	}
+    }
     return 0;
 }
 
