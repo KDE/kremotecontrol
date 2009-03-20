@@ -133,6 +133,9 @@ ModeList Modes::getModes(const QString &remote) const
 
 void Modes::erase(const Mode &mode)
 {
+    if(isDefault(mode)){
+      setDefault(getModes(mode.remote()).first());
+    }
     operator[](mode.remote()).remove(mode.name());
     kDebug() << "should erease mode...";
 }
