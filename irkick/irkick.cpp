@@ -44,6 +44,7 @@
 #include <knotification.h>
 #include <ktoolinvocation.h>
 #include <KStandardDirs>
+#include <khelpmenu.h>
 
 IRKick::IRKick(const QString &obj) :
         QObject(), npApp(QString::null) //krazy:exclude=nullstrassign for old broken gcc
@@ -71,9 +72,13 @@ IRKick::IRKick(const QString &obj) :
     //FIXME: Bring back the Tray Icons Menu
     theTrayIcon->contextMenu()->setTitle("IRKick");
     theTrayIcon->contextMenu()->addAction(SmallIcon("configure"), i18n("&Configure..."), this, SLOT(slotConfigure()));
-    // QAction *helpAction = new QAction(SmallIcon( "help-contents" ), i18n("&Help"), );
-    // theTrayIcon->contextMenu()->addAction(helpAction);
-    // theTrayIcon->contextMenu()->insertSeparator();
+    QAction *helpAction = new QAction(SmallIcon("help-contents"), i18n("&Help"), theTrayIcon->contextMenu());
+
+    KHelpMenu *helpMenu = new  KHelpMenu(0, KGlobal::mainComponent().aboutData());
+    theTrayIcon->contextMenu()->addAction(KIcon("help-contents"), i18n("&Help"), helpMenu, SLOT(appHelpActivated()));
+    theTrayIcon->contextMenu()->addAction(KIcon("irkick"), i18n("&About"), helpMenu, SLOT(aboutApplication()));
+
+    theTrayIcon->contextMenu()->addSeparator();
     theTrayIcon->actionCollection()->action("file_quit")->disconnect(SIGNAL(activated()));
     connect(theTrayIcon->actionCollection()->action("file_quit"), SIGNAL(activated()), SLOT(doQuit()));
     theTrayIcon->show();

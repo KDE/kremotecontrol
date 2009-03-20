@@ -82,7 +82,9 @@ QStringList DBusInterface::getRegisteredPrograms()
     if(r2.exactMatch(tmp)){
       tmp.truncate(tmp.lastIndexOf('-'));
     }
-    returnList << tmp;
+    if(!returnList.contains(tmp)){
+      returnList << tmp;
+    }
 
   }
 
@@ -102,7 +104,10 @@ QStringList DBusInterface::getObjects(const QString &program){
     QStringList returnList;
     while (!child.isNull()) {
         if (child.tagName() == QLatin1String("node")) {
-            returnList << child.attribute(QLatin1String("name"));
+	    QString name = child.attribute(QLatin1String("name"));
+	    if(name != "org" && name != "modules"){
+	      returnList << name;
+	    }
         }
         child = child.nextSiblingElement();
     }
@@ -136,45 +141,68 @@ QList<Prototype> DBusInterface::getFunctions(const QString &program, const QStri
                 if (subChild.tagName() == QLatin1String("method")) {
 
 		  QString method = subChild.attribute(QLatin1String("name"));
-		  function = "QString " + method;
+		  function = method;
 		  QDomElement arg = subChild.firstChildElement();
 		  QString argStr;
+		  QString retArg = "void";
 		  while (!arg.isNull()) {
 		    if (arg.tagName() == QLatin1String("arg")) {
+		      QString tmpArg = arg.attribute(QLatin1String("type"));
 		      if (arg.attribute(QLatin1String("direction")) == "in") {
 			if(!argStr.isEmpty()){
 			  argStr += ", ";
 			}
-			if (arg.attribute(QLatin1String("type")) == "i") {
+			if (tmpArg == "i") {
 			  argStr += "int";
-			} else if (arg.attribute(QLatin1String("type")) == "u") {
+			} else if (tmpArg == "u") {
 			  argStr += "uint";
-			} else if (arg.attribute(QLatin1String("type")) == "s") {
+			} else if (tmpArg == "s") {
 			  argStr += "QString";
-			} else if (arg.attribute(QLatin1String("type")) == "b") {
+			} else if (tmpArg == "b") {
 			  argStr += "bool";
-			} else if (arg.attribute(QLatin1String("type")) == "d") {
+			} else if (tmpArg == "d") {
 			  argStr += "double";
-			} else if (arg.attribute(QLatin1String("type")) == "as") {
+			} else if (tmpArg == "as") {
 			  argStr += "QStringList";
-			} else if (arg.attribute(QLatin1String("type")) == "ay") {
+			} else if (tmpArg == "ay") {
 			  argStr += "QByteArray";
-			} else if (arg.attribute(QLatin1String("type")) == "(iii)") {
+			} else if (tmpArg == "(ii)") {
 			  QString helper = arg.attribute("name");
 			  arg = arg.nextSiblingElement();
 			  argStr += arg.attribute(QLatin1String("value")) + ' ' + helper;
 			  arg = arg.nextSiblingElement();
 			  continue;
 			} else {
-			  argStr += arg.attribute(QLatin1String("type"));
+			  argStr += tmpArg;
 			}
-kDebug() << arg.attribute(QLatin1String("name"));
 			argStr += " " + arg.attribute(QLatin1String("name"));
+		      } else if (arg.attribute(QLatin1String("direction")) == "out") {
+			if (tmpArg == "i") {
+			  retArg = "int";
+			} else if (tmpArg == "u") {
+			  retArg = "uint";
+			} else if (tmpArg == "s") {
+			  retArg = "QString";
+			} else if (tmpArg == "b") {
+			  retArg = "bool";
+			} else if (tmpArg == "d") {
+			  retArg = "double";
+			} else if (tmpArg == "as") {
+			  retArg = "QStringList";
+			} else if (tmpArg == "ay") {
+			  retArg = "QByteArray";
+			} else if (tmpArg == "(ii)") {
+			  arg = arg.nextSiblingElement();
+			  retArg = arg.attribute(QLatin1String("value"));
+			} else {
+			  retArg = arg.attribute(QLatin1String("type"));
+			}
+
 		      }
 		    }
 		    arg = arg.nextSiblingElement();
 		  }
-
+		  function = retArg + " " + function;
 		  function += "(" + argStr + ")";
                 }
                 subChild = subChild.nextSiblingElement();

@@ -40,6 +40,8 @@ extern "C" KDE_EXPORT int kdemain(int argc, char *argv[])
     aboutData->addCredit(ki18n("Dirk Ziegelmeier"), ki18n("Ideas, concept code"), "dirk@ziegelmeier.net");
     aboutData->addCredit(ki18n("Zsolt Rizsanyi"), ki18n("Random patches"), "rizsanyi@myrealbox.com");
     aboutData->addCredit(ki18n("Antonio Larrosa Jiménez"), ki18n("Ideas"), "larrosa@kde.org");
+    aboutData->addCredit(ki18n("Michael Zanetti"), ki18n("KDE4-Port"), "michael_zanetti@gmx.net");
+    aboutData->addCredit(ki18n("Frank Scheffold"), ki18n("KDE4-Port"), "fscheffold@googlemail.com");
 
 
     KCmdLineArgs::init(argc, argv, aboutData);
