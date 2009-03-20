@@ -39,6 +39,7 @@ private:
   DBusInterface();
 
   bool searchForProgram(const IRAction &action, QStringList &programs);
+  QStringList getAllRegisteredPrograms();
 
 public:
 

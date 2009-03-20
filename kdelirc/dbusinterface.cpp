@@ -61,12 +61,17 @@ DBusInterface::~DBusInterface()
   //DBusInterface::theInstance = 0;
 }
 
+QStringList DBusInterface::getAllRegisteredPrograms() {
+  QDBusConnectionInterface *dBusIface = QDBusConnection::sessionBus().interface();
+  return dBusIface->registeredServiceNames();
+}
+
+
 QStringList DBusInterface::getRegisteredPrograms()
 {
   QStringList returnList;
 
-  QDBusConnectionInterface *dBusIface = QDBusConnection::sessionBus().interface();
-  QStringList allServices = dBusIface->registeredServiceNames();
+  QStringList allServices = getAllRegisteredPrograms();
   
   //Throw out invalid entries
   for(int i = 0; i < allServices.size(); ++i){
@@ -92,11 +97,21 @@ QStringList DBusInterface::getRegisteredPrograms()
 }
 
 QStringList DBusInterface::getObjects(const QString &program){
-    QDBusInterface *dBusIface = new QDBusInterface(program, "/", "org.freedesktop.DBus.Introspectable");
-    QDBusReply<QString> response = dBusIface->call("Introspect");
+    QDBusInterface dBusIface(program, "/", "org.freedesktop.DBus.Introspectable");
+    QDBusReply<QString> response = dBusIface.call("Introspect");
 
     QDomDocument domDoc;
     domDoc.setContent(response);
+    if(domDoc.toString().isEmpty()){ // No reply... perhaps a multi-instance...
+      QStringList instances = getAllRegisteredPrograms().filter(program);
+      kDebug() << "instances of " + program << instances;
+      if(!instances.isEmpty()){
+	QDBusInterface iFace(instances.first(), "/", "org.freedesktop.DBus.Introspectable");
+	response = iFace.call("Introspect");
+	domDoc.setContent(response);
+	kDebug() << "new DBus response:" << response;
+      }
+    }
 
     QDomElement node = domDoc.documentElement();
 
@@ -116,12 +131,23 @@ QStringList DBusInterface::getObjects(const QString &program){
 }
 
 QList<Prototype> DBusInterface::getFunctions(const QString &program, const QString &object){
-    QDBusInterface *dBusIface = new QDBusInterface(program, '/' + object, "org.freedesktop.DBus.Introspectable");
-    QDBusReply<QString> response = dBusIface->call("Introspect");
+    QDBusInterface dBusIface(program, '/' + object, "org.freedesktop.DBus.Introspectable");
+    QDBusReply<QString> response = dBusIface.call("Introspect");
 
  //   kDebug() << response;
     QDomDocument domDoc;
     domDoc.setContent(response);
+
+    if(domDoc.toString().isEmpty()){ // No reply... perhaps a multi-instance...
+      QStringList instances = getAllRegisteredPrograms().filter(program);
+      kDebug() << "instances of " + program << instances;
+      if(!instances.isEmpty()){
+	QDBusInterface iFace(instances.first(), "/" + object, "org.freedesktop.DBus.Introspectable");
+	response = iFace.call("Introspect");
+	domDoc.setContent(response);
+	kDebug() << "new DBus response:" << response;
+      }
+    }
 
     QDomElement node = domDoc.documentElement();
     QDomElement child = node.firstChildElement();
