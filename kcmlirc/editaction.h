@@ -61,10 +61,6 @@ private:
     QButtonGroup mainGroup;
     void connectSignalsAndSlots();
 
-    void initApplications();
-    void initFunctions();
-
-
     inline QString getCurrentDbusApp() {
         return  editActionBaseWidget->theDBusApplications->itemData(editActionBaseWidget->theDBusApplications->currentIndex(),Qt::UserRole).toString();
     }
@@ -84,17 +80,20 @@ public:
 
     void writeBack();
     void readFrom();
+    void addItem(QString item);
 
-public slots:
-    virtual void slotParameterChanged();
-    virtual void updateArgument(int index);
-    virtual void updateArguments();
-    virtual void updateInstancesOptions();
-    virtual void updateDBusApplications();
-    virtual void updateDBusObjects();
-    virtual void updateDBusFunctions();
-    virtual void addItem(QString item);
-    virtual void updateUseDbusApplicationLabL();
+private slots:
+    void updateApplications();
+    void updateFunctions();
+    void updateArgumentsLabel();
+    void slotParameterChanged();
+    void updateArgument(int index);
+    void updateArguments();
+    void updateInstancesOptions();
+    void updateDBusApplications();
+    void updateDBusObjects();
+    void updateDBusFunctions();
+
 
 };
 #endif

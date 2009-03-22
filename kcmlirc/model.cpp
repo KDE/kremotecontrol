@@ -113,7 +113,6 @@ QVariant DBusFunctionModel::data(const QModelIndex & index, int role = Qt::Displ
         return QVariant();
     }
     if (index.row() >= 0 || index.row() <= theProtoTypeList.size()) {
-        kDebug()<< "index column" << index.column();
         if (role == Qt::DisplayRole || role == Qt::EditRole) {
             switch (index.column())  {
             case 0:

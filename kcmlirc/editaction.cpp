@@ -62,7 +62,7 @@ EditAction::EditAction(IRAction *action, QWidget *parent, const bool &modal): KD
     mainGroup.addButton(editActionBaseWidget->theUseProfile);
     mainGroup.addButton(editActionBaseWidget->theChangeMode);
 
-    initApplications();
+    updateApplications();
     connectSignalsAndSlots();
     //initDBusApplications();
     readFrom();
@@ -87,6 +87,7 @@ void EditAction::connectSignalsAndSlots() {
     connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theJustStart,SLOT(setEnabled(bool)));
     connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->thePerformFunction,SLOT(setChecked(bool)));
     connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->thePerformFunction,SLOT(setEnabled(bool)));
+    connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theRepeat,SLOT(setEnabled(bool)));
     connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theRepeat,SLOT(setEnabled(bool)));
     connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),this,SLOT(updateUseDbusApplicationLabL()));
 
@@ -174,16 +175,8 @@ void EditAction::readFrom()
         editActionBaseWidget->theJustStart->setChecked(true);
     } else if (ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype())) { // profile action
         editActionBaseWidget->theUseProfile->setChecked(true);
-        const ProfileAction *profileAction = ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype());
-        editActionBaseWidget->theApplications->setCurrentIndex(editActionBaseWidget->theApplications->findText(profileAction->profile()->name()));
-	for(int i = 0; i < editActionBaseWidget->theFunctions->count(); ++i){
-	  kDebug() << editActionBaseWidget->theFunctions->itemText(i);
-	}
-	kDebug() << "current function:" << profileAction->name();
-	kDebug() << "current function index:" << editActionBaseWidget->theFunctions->findText(profileAction->name());
-        editActionBaseWidget->thePerformFunction->setChecked(true);
-        arguments = theAction->arguments();
-        editActionBaseWidget->theFunctions->setCurrentIndex(editActionBaseWidget->theFunctions->findText(profileAction->name()));
+	editActionBaseWidget->thePerformFunction->setChecked(true);
+	arguments = theAction->arguments();
     } else { // DBus action
         editActionBaseWidget->theUseDBus->setChecked(true);
         arguments = theAction->arguments();
@@ -379,45 +372,76 @@ kDebug()<< "update argument"<< arguments;
     }
 }
 
-void EditAction::initApplications()
+void EditAction::updateApplications()
 {
     editActionBaseWidget->theApplications->clear();
     foreach(Profile *tmp, ProfileServer::profileServer()->profiles()){
 	editActionBaseWidget->theApplications->addItem(tmp->name(), tmp->id());
     }
+    editActionBaseWidget->theApplications->model()->sort(0);
+
+    const ProfileAction *profileAction = ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype());
+    if(profileAction){
+      int index = editActionBaseWidget->theApplications->findText(profileAction->profile()->name());
+      editActionBaseWidget->theApplications->setCurrentIndex(index < 0 ? 0: index);
+    } else {
+      editActionBaseWidget->theApplications->setCurrentIndex(0);
+    }
 }
 
-void EditAction::initFunctions()
+void EditAction::updateFunctions()
 {
+    editActionBaseWidget->theFunctions->clear();
+    if(editActionBaseWidget->theJustStart->isChecked()){
+      return;
+    }
+
     QString application = editActionBaseWidget->theApplications->itemData(editActionBaseWidget->theApplications->currentIndex()).toString();
     kDebug() << "app:" << application;
     QHash<QString, ProfileAction*> dict = ProfileServer::profileServer()->getProfileById(application)->actions();
     QHash<QString, ProfileAction*>::const_iterator i;
     for (i = dict.constBegin(); i != dict.constEnd(); ++i) {
 	editActionBaseWidget->theFunctions->addItem(i.value()->name(), i.key());
-
     }
-    //updateArguments();
+    const ProfileAction *action = ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype());
+    if(action && (action->profile()->name() == editActionBaseWidget->theApplications->currentText())){
+      int index = editActionBaseWidget->theFunctions->findText(action->name());
+      editActionBaseWidget->theFunctions->setCurrentIndex(index < 0 ? 0 : index);
+    }
 }
 
 void EditAction::updateDBusApplications()
 {
 kDebug()<< "update dbus applications";
-    //TODO: handling if iraction is dbusaction and application is not running
     editActionBaseWidget->theDBusApplications->clear();
     editActionBaseWidget->theDBusApplications->addItems(DBusInterface::getInstance()->getRegisteredPrograms());
+
+    if(!ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype()) &&
+	  !DBusInterface::getInstance()->isProgramRunning(theAction->program())){
+	editActionBaseWidget->theDBusApplications->addItem(theAction->program());
+    }
+
     editActionBaseWidget->theDBusApplications->model()->sort( Qt::AscendingOrder);
     int ti = editActionBaseWidget->theDBusApplications->findData(theAction->program());
+    
     editActionBaseWidget->theDBusApplications->setCurrentIndex(ti == -1 ? 0 : ti);
 
 }
 
 void EditAction::updateDBusObjects()
 {
-      kDebug()<< "update dbus objects";
-      //TODO: handling if iraction is dbusaction and application is not running
     editActionBaseWidget->theDBusObjects->clear();
     editActionBaseWidget->theDBusObjects->insertItems(0, DBusInterface::getInstance()->getObjects(getCurrentDbusApp()));
+
+    // Check if configured Action is a DBus Action but not running
+    if(!ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype()) &&
+	  !DBusInterface::getInstance()->isProgramRunning(theAction->program())){ 
+	if(editActionBaseWidget->theDBusApplications->itemData(editActionBaseWidget->theDBusApplications->currentIndex()).toString() ==
+	      theAction->program()){ // Is selected!
+	  editActionBaseWidget->theDBusObjects->addItem(theAction->object());
+	}
+    }
+
     editActionBaseWidget->theDBusObjects->model()->sort( Qt::AscendingOrder);
     int ti = editActionBaseWidget->theDBusObjects->findText(theAction->object());
     editActionBaseWidget->theDBusObjects->setCurrentIndex(ti == -1 ? 0 : ti);
@@ -425,12 +449,27 @@ void EditAction::updateDBusObjects()
 
 void EditAction::updateDBusFunctions()
 {
-    //TODO: handling if iraction is dbusaction and application is not running
     editActionBaseWidget->theDBusFunctions->clear();
     QList<Prototype> tList = DBusInterface::getInstance()->getFunctions(getCurrentDbusApp(), editActionBaseWidget->theDBusObjects->currentText());
     foreach(Prototype tType, tList) {	
         editActionBaseWidget->theDBusFunctions->addItem(0, qVariantFromValue(tType));	
     }
+
+    // Check if configured Action is a DBus Action but not running
+    if(!ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype()) &&
+	  !DBusInterface::getInstance()->isProgramRunning(theAction->program())){ 
+	if(editActionBaseWidget->theDBusApplications->itemData(editActionBaseWidget->theDBusApplications->currentIndex()).toString() ==
+	      theAction->program()){ // The correct object is selected!
+	  kDebug() << "theAction->object" << theAction->object();
+	  kDebug() << "current selected" << editActionBaseWidget->theDBusObjects->currentText();
+	  if(editActionBaseWidget->theDBusObjects->currentText() ==
+		theAction->object()){ // And the Object is selected too!
+	    editActionBaseWidget->theDBusFunctions->addItem(0, qVariantFromValue(Prototype(theAction->function())));
+	  }
+	}
+    }
+
+
     editActionBaseWidget->theDBusFunctions->model()->sort( Qt::AscendingOrder);
     int ti =editActionBaseWidget->theDBusFunctions->findData(qVariantFromValue(theAction->method()));
     editActionBaseWidget->theDBusFunctions->setCurrentIndex(ti == -1 ? 0 : ti);
@@ -441,18 +480,16 @@ void EditAction::addItem(QString item)
     editActionBaseWidget->theModes->addItem(item);
 }
 
-void EditAction::updateUseDbusApplicationLabL() {
- kDebug();
-QString labelDesc;
-if(editActionBaseWidget->theUseProfile->isChecked()){
-labelDesc=i18n("Profile argument options:");
-}
-else if(editActionBaseWidget->theUseDBus->isChecked()){
-labelDesc=i18n("DBus function arguments:");
-}else{
-labelDesc=i18n("A&pplication / D-Bus options:");
-}
-editActionBaseWidget->theAppDbusOptionsLabel->setText(labelDesc);
+void EditAction::updateArgumentsLabel() {
+  QString labelDesc;
+  if(editActionBaseWidget->theUseProfile->isChecked()){
+    labelDesc=i18n("Profile argument options:");
+  } else if(editActionBaseWidget->theUseDBus->isChecked()){
+    labelDesc=i18n("DBus function arguments:");
+  } else {
+    labelDesc=i18n("A&pplication / D-Bus options:");
+  }
+  editActionBaseWidget->theAppDbusOptionsLabel->setText(labelDesc);
 }
 
 #include "editaction.moc"
