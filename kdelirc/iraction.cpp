@@ -162,7 +162,7 @@ const QString IRAction::application() const
     if (theProgram.isEmpty())
         return "";
     else {
-        const Profile *a = theServer->profiles()[theProgram];
+	const Profile *a = theServer->getProfileById(theProgram);
         if (a)
             return a->name();
         else

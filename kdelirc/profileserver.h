@@ -226,15 +226,16 @@ class ProfileServer
 {
     static ProfileServer *theInstance;
     void loadProfiles();
-    QHash<QString, Profile*> theProfiles;   // id => Profile
+    QList<Profile*> theProfiles;
 
 public:
     static ProfileServer *profileServer() {
         if (!theInstance) theInstance = new ProfileServer(); return theInstance;
     }
-    const QHash<QString, Profile*> profiles() const {
+    const QList<Profile*> profiles() const {
         return theProfiles;
     }
+    const Profile *getProfileById(const QString &profileId) const;
     const ProfileAction *getAction(const QString &appId, const QString &objId, const QString &prototype) const;
     const ProfileAction *getAction(const QString &appId, const QString &actionId) const;
     const QString &getServiceName(const QString &appId) const;

@@ -210,13 +210,10 @@ void KCMLirc::slotAddActions()
     theDialog->setWindowTitle(i18n("Auto-Populate"));
 
     QMap<QTreeWidgetItem *, Profile *> profileMap;
-    QHash<QString, Profile*> dict = ProfileServer::profileServer()->profiles();
-
-    QHash<QString, Profile*>::const_iterator i;
-    for (i = dict.constBegin(); i != dict.constEnd(); ++i) {
+    foreach(Profile *tmp, ProfileServer::profileServer()->profiles()){
         QStringList profileList;
-        profileList << i.value()->name();
-        profileMap[new QTreeWidgetItem(theProfiles, profileList)] = i.value();
+        profileList << tmp->name();
+        profileMap[new QTreeWidgetItem(theProfiles, profileList)] = tmp;
     }
 
     if (theDialog->exec() == QDialog::Accepted && theProfiles->currentItem()) {
@@ -670,16 +667,13 @@ void KCMLirc::updateExtensions()
 {
     theKCMLircBase->theExtensions->clear();
     {
-        ProfileServer *theServer = ProfileServer::profileServer();
         QTreeWidgetItem *a = new QTreeWidgetItem(theKCMLircBase->theExtensions,
                 (QStringList() << i18n("Applications")));
         a->setExpanded(true);
 
         profileMap.clear();
-        QHash<QString, Profile*> dict = theServer->profiles();
-        QHash<QString, Profile*>::const_iterator i;
-        for (i = dict.constBegin(); i != dict.constEnd(); ++i) {
-            profileMap[new QTreeWidgetItem(a, (QStringList()<< i.value()->name()))] = i.key();
+        foreach(Profile *tmp, ProfileServer::profileServer()->profiles()){
+            profileMap[new QTreeWidgetItem(a, (QStringList()<< tmp->name()))] = tmp->id();
         }
         a->sortChildren(1, Qt::AscendingOrder);
     }
@@ -730,7 +724,7 @@ void KCMLirc::updateInformation()
     } else if (theKCMLircBase->theExtensions->selectedItems().first()->parent()->text(
                    0) == i18n("Applications")) {
         ProfileServer *theServer = ProfileServer::profileServer();
-        const Profile *p = theServer->profiles()[profileMap[theKCMLircBase->theExtensions->selectedItems().first()]];
+        const Profile *p = theServer->getProfileById(profileMap[theKCMLircBase->theExtensions->selectedItems().first()]);
         QStringList infoList;
         infoList << i18n("Extension Name") << p->name();
         new QTreeWidgetItem(theKCMLircBase->theInformation, infoList);

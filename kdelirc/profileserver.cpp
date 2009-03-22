@@ -51,9 +51,19 @@ void ProfileServer::loadProfiles()
         kDebug() << "Found data file: " << *i ;
         Profile *p = new Profile();
         p->loadFromFile(*i);
-        theProfiles.insert(p->id(), p);
+        theProfiles.append(p);
     }
 }
+
+const Profile* ProfileServer::getProfileById(const QString& profileId) const{
+  foreach(Profile *prof, theProfiles){
+    if(profileId == prof->id()){
+      return prof;
+    }
+  }
+  return NULL;
+}
+
 
 Profile::Profile()
 {
@@ -93,9 +103,9 @@ void Profile::loadFromFile(const QString &fileName)
 const ProfileAction *ProfileServer::getAction(const QString &appId, const QString &actionId) const
 {
     kDebug() << "Profile to search:" << appId << actionId;
-    if (theProfiles[appId]){
-        if (theProfiles[appId]->actions()[actionId]){
-            return theProfiles[appId]->actions()[actionId];
+    if (getProfileById(appId)){
+        if (getProfileById(appId)->actions()[actionId]){
+            return getProfileById(appId)->actions()[actionId];
 	}
     }
     return 0;
@@ -103,8 +113,8 @@ const ProfileAction *ProfileServer::getAction(const QString &appId, const QStrin
 
 const QString &ProfileServer::getServiceName(const QString &appId) const
 {
-    if (theProfiles[appId]){
-        return theProfiles[appId]->serviceName();
+    if (getProfileById(appId)){
+        return getProfileById(appId)->serviceName();
     }
     //TODO: FIX this
     return QString();

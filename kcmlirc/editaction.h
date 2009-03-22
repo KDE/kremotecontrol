@@ -53,13 +53,17 @@ private:
     Q_OBJECT
     IRAction *theAction;
     EditActionBaseWidget *editActionBaseWidget;
-    QMap<QString, QString> applicationMap, functionMap, nameProgramMap;
+    QMap<QString, QString> nameProgramMap;
     QMap<QString, bool> uniqueProgramMap;
     Arguments arguments;
     QString program;
     bool isUnique;
     QButtonGroup mainGroup;
     void connectSignalsAndSlots();
+
+    void initApplications();
+    void initFunctions();
+
 
     inline QString getCurrentDbusApp() {
         return  editActionBaseWidget->theDBusApplications->itemData(editActionBaseWidget->theDBusApplications->currentIndex(),Qt::UserRole).toString();
@@ -85,8 +89,6 @@ public slots:
     virtual void slotParameterChanged();
     virtual void updateArgument(int index);
     virtual void updateArguments();
-    virtual void updateApplications();
-    virtual void updateFunctions();
     virtual void updateInstancesOptions();
     virtual void updateDBusApplications();
     virtual void updateDBusObjects();

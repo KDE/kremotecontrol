@@ -62,9 +62,9 @@ EditAction::EditAction(IRAction *action, QWidget *parent, const bool &modal): KD
     mainGroup.addButton(editActionBaseWidget->theUseProfile);
     mainGroup.addButton(editActionBaseWidget->theChangeMode);
 
+    initApplications();
     connectSignalsAndSlots();
     //initDBusApplications();
-    updateApplications();
     readFrom();
 
 }
@@ -88,7 +88,7 @@ void EditAction::connectSignalsAndSlots() {
     connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->thePerformFunction,SLOT(setChecked(bool)));
     connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->thePerformFunction,SLOT(setEnabled(bool)));
     connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theRepeat,SLOT(setEnabled(bool)));
-connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),this,SLOT(updateUseDbusApplicationLabL()));
+    connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),this,SLOT(updateUseDbusApplicationLabL()));
 
     //When only just start ist checked
     connect(editActionBaseWidget->theJustStart,SIGNAL(toggled(bool)),editActionBaseWidget->theAutoStart,SLOT(setChecked(bool)));
@@ -97,7 +97,6 @@ connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),this,SLOT(upda
     connect(editActionBaseWidget->theJustStart,SIGNAL(toggled(bool)),editActionBaseWidget->theArguments,SLOT(setDisabled(bool)));
     connect(editActionBaseWidget->theJustStart,SIGNAL(toggled(bool)),editActionBaseWidget->theValue,SLOT(setDisabled(bool)));
 
-    connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)), this,SLOT(updateApplications()));
     connect(editActionBaseWidget->theApplications,SIGNAL(currentIndexChanged ( QString)),this,SLOT(updateFunctions()));
 
 
@@ -170,7 +169,7 @@ void EditAction::readFrom()
             editActionBaseWidget->theModes->setCurrentIndex(editActionBaseWidget->theModes->findText(theAction->object()));
     } else if (theAction->isJustStart()) { // profile action
         editActionBaseWidget->theUseProfile->setChecked(true);
-        const Profile *p = ProfileServer::profileServer()->profiles()[theAction->program()];
+        const Profile *p = ProfileServer::profileServer()->getProfileById(theAction->program());
         editActionBaseWidget->theApplications->setCurrentIndex(editActionBaseWidget->theApplications->findText(p->name()));
         editActionBaseWidget->theJustStart->setChecked(true);
     } else if (ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype())) { // profile action
@@ -202,15 +201,15 @@ void EditAction::writeBack()
         theAction->setDoBefore(editActionBaseWidget->theDoBefore->isChecked());
         theAction->setDoAfter(editActionBaseWidget->theDoAfter->isChecked());
     } else if (editActionBaseWidget->theUseProfile->isChecked()) {
-        QString application = editActionBaseWidget->theApplications->currentText();
-        QString function = editActionBaseWidget->theFunctions->currentText();
-        const ProfileAction *profileAction = ProfileServer::profileServer()->getAction(applicationMap[application], functionMap[function]);
-        if ( profileAction  || (editActionBaseWidget->theJustStart->isChecked() &&  ProfileServer::profileServer()->profiles()[application])) {
-            theAction->setProgram(ProfileServer::profileServer()->profiles()[applicationMap[application]]->id());
+        QString application = editActionBaseWidget->theApplications->itemData(editActionBaseWidget->theApplications->currentIndex()).toString();
+        QString function = editActionBaseWidget->theFunctions->itemData(editActionBaseWidget->theFunctions->currentIndex()).toString();
+        const ProfileAction *profileAction = ProfileServer::profileServer()->getAction(application, function);
+        if ( profileAction  || (editActionBaseWidget->theJustStart->isChecked() &&  ProfileServer::profileServer()->getProfileById(application))) {
+            theAction->setProgram(ProfileServer::profileServer()->getProfileById(application)->id());
             if (editActionBaseWidget->theJustStart->isChecked()) {
                 theAction->setObject("");
             } else {
-                kDebug() << "wrote back: " << applicationMap[application];
+                kDebug() << "wrote back: " << application;
                 theAction->setObject(profileAction->objId());
                 theAction->setMethod(profileAction->prototype());
                 theAction->setArguments(arguments);
@@ -242,7 +241,9 @@ void EditAction::updateArguments()
     kDebug() << "****************************************************************************";
     editActionBaseWidget->theArguments->clear();
     if (editActionBaseWidget->theUseProfile->isChecked()) {
-        const ProfileAction *profileAction = ProfileServer::profileServer()->getAction(applicationMap[editActionBaseWidget->theApplications->currentText()], functionMap[editActionBaseWidget->theFunctions->currentText()]);
+	QString function = editActionBaseWidget->theFunctions->itemData(editActionBaseWidget->theFunctions->currentIndex()).toString();
+	QString application = editActionBaseWidget->theApplications->itemData(editActionBaseWidget->theApplications->currentIndex()).toString();
+        const ProfileAction *profileAction = ProfileServer::profileServer()->getAction(application, function);
         if (!profileAction ||  editActionBaseWidget->theJustStart->isChecked()) {
 	    kDebug() << "clearing arguments1";
             arguments.clear();
@@ -286,7 +287,7 @@ void EditAction::updateInstancesOptions()
     if (editActionBaseWidget->theUseProfile->isChecked()) {
         ProfileServer *theServer = ProfileServer::profileServer();
         if (editActionBaseWidget->theApplications->currentIndex() == -1) return;
-        const Profile *p = theServer->profiles()[applicationMap[editActionBaseWidget->theApplications->currentText()]];
+        const Profile *p = theServer->getProfileById(editActionBaseWidget->theApplications->itemData(editActionBaseWidget->theApplications->currentIndex()).toString());
         isUnique = p->unique();
     } else if ( editActionBaseWidget->theUseDBus->isChecked()) {
         program =  editActionBaseWidget->theDBusApplications->currentText();
@@ -378,46 +379,24 @@ kDebug()<< "update argument"<< arguments;
     }
 }
 
-void EditAction::updateApplications()
+void EditAction::initApplications()
 {
-    ProfileServer *theServer = ProfileServer::profileServer();
     editActionBaseWidget->theApplications->clear();
-    applicationMap.clear();
-
-    QHash<QString, Profile*> dict = theServer->profiles();
-    QHash<QString, Profile*>::const_iterator i;
-    QStringList tList;
-    for (i = dict.constBegin(); i != dict.constEnd(); ++i) {
-        tList << i.value()->name();
-        applicationMap[i.value()->name()] = i.key();
-
+    foreach(Profile *tmp, ProfileServer::profileServer()->profiles()){
+	editActionBaseWidget->theApplications->addItem(tmp->name(), tmp->id());
     }
-    tList.sort();
-    editActionBaseWidget->theApplications->addItems(tList);
 }
 
-void EditAction::updateFunctions()
+void EditAction::initFunctions()
 {
-    editActionBaseWidget->theFunctions->clear();
-    functionMap.clear();
-
-    if (editActionBaseWidget->theJustStart->isChecked()) {
-     
-        return;
-    }
-    QString application = editActionBaseWidget->theApplications->currentText();
-    if (application.isNull() || application.isEmpty()) {
-        return;
-    }
-    QHash<QString, ProfileAction*> dict = ProfileServer::profileServer()->profiles()[applicationMap[application]]->actions();
+    QString application = editActionBaseWidget->theApplications->itemData(editActionBaseWidget->theApplications->currentIndex()).toString();
+    kDebug() << "app:" << application;
+    QHash<QString, ProfileAction*> dict = ProfileServer::profileServer()->getProfileById(application)->actions();
     QHash<QString, ProfileAction*>::const_iterator i;
-    QStringList theFunctions;
     for (i = dict.constBegin(); i != dict.constEnd(); ++i) {
-        theFunctions << i.value()->name();
-        functionMap[i.value()->name()] = i.key();
+	editActionBaseWidget->theFunctions->addItem(i.value()->name(), i.key());
+
     }
-    theFunctions.sort();
-    editActionBaseWidget->theFunctions->addItems(theFunctions);
     //updateArguments();
 }
 

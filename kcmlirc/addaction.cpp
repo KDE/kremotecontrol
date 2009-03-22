@@ -382,14 +382,11 @@ const QStringList AddAction::getFunctions(const QString app, const QString obj)
 
 void AddAction::updateProfiles()
 {
-    ProfileServer *theServer = ProfileServer::profileServer();
     theProfiles->clear();
     profileMap.clear();
 
-    QHash<QString, Profile*> dict = theServer->profiles();
-    QHash<QString, Profile*>::const_iterator i;
-    for (i = dict.constBegin(); i != dict.constEnd(); ++i)
-        profileMap[new QListWidgetItem(i.value()->name(), theProfiles)] = i.key();
+    foreach (Profile *tmp, ProfileServer::profileServer()->profiles())
+        profileMap[new QListWidgetItem(tmp->name(), theProfiles)] = tmp->id();
 }
 
 void AddAction::updateOptions()
@@ -398,7 +395,7 @@ void AddAction::updateOptions()
     if (theUseProfile->isChecked()) {
         ProfileServer *theServer = ProfileServer::profileServer();
         if (!theProfiles->currentItem()) return;
-        const Profile *p = theServer->profiles()[profileMap[theProfiles->currentItem()]];
+        const Profile *p = theServer->getProfileById(profileMap[theProfiles->currentItem()]);
         im = p->ifMulti();
         isUnique = p->unique();
     } else if (theUseDBus->isChecked()) {
@@ -437,7 +434,7 @@ void AddAction::updateProfileFunctions()
         return;
     }
 
-    const Profile *p = theServer->profiles()[profileMap[theProfiles->currentItem()]];
+    const Profile *p = theServer->getProfileById(profileMap[theProfiles->currentItem()]);
     QHash<QString, ProfileAction*> dict = p->actions();
     kDebug() << "actions: " << p->actions();
     QHash<QString, ProfileAction*>::const_iterator i;
@@ -471,7 +468,7 @@ void AddAction::updateParameters()
 
         if (!theProfiles->currentItem()) return;
         if (!theProfileFunctions->currentItem()) return;
-        const Profile *p = theServer->profiles()[profileMap[theProfiles->currentItem()]];
+        const Profile *p = theServer->getProfileById(profileMap[theProfiles->currentItem()]);
         const ProfileAction *pa = p->actions()[profileFunctionMap[theProfileFunctions->currentItem()]];
 
         int index = 1;
@@ -716,7 +713,7 @@ IRAction* AddAction::getAction()
                   action->setArguments(theArguments);
               } else {
                   action->setProgram(
-                      theServer->profiles()[profileMap[theProfiles->selectedItems().first()]]->id());
+                      theServer->getProfileById(profileMap[theProfiles->selectedItems().first()])->id());
                   action->setObject("");
               }
           }
