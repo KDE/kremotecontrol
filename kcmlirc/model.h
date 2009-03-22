@@ -82,5 +82,6 @@ public:
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
     void sort(int column, Qt::SortOrder order);
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 };
 

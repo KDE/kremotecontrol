@@ -29,7 +29,7 @@
 #include <QtAlgorithms>
 #include <kdebug.h>
 #include <QVariant>
-
+#include <KLocale>
 
 
 DBusProfileModel::DBusProfileModel(QObject *parent = 0) :
@@ -113,8 +113,16 @@ QVariant DBusFunctionModel::data(const QModelIndex & index, int role = Qt::Displ
         return QVariant();
     }
     if (index.row() >= 0 || index.row() <= theProtoTypeList.size()) {
+        kDebug()<< "index column" << index.column();
         if (role == Qt::DisplayRole || role == Qt::EditRole) {
-            return theProtoTypeList.at(index.row()).prototype();
+            switch (index.column())  {
+            case 0:
+                return theProtoTypeList.at(index.row()).prototype();
+            case 1:
+                return theProtoTypeList.at(index.row()).name();
+            case 2:
+                return theProtoTypeList.at(index.row()).argumentList();
+            }
         }
         if (role == Qt::UserRole) {
 
@@ -205,3 +213,28 @@ void DBusFunctionModel::sort(int column, Qt::SortOrder order) {
     theProtoTypeList = tList;
     emit layoutChanged();
 }
+
+
+QVariant DBusFunctionModel::headerData(int section, Qt::Orientation orientation,
+                                       int role) const
+{
+    if (role != Qt::DisplayRole)
+        return QVariant();
+
+    if (orientation == Qt::Horizontal) {
+
+        switch (section) {
+        case 0:
+            return i18n("Prototype");
+        case 1:
+            return i18n("Function");
+        case 2:
+            return i18n("Parameter");
+
+        default:
+            return QString();
+        }
+    }
+
+}
+
