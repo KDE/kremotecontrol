@@ -58,6 +58,7 @@ EditAction::EditAction(IRAction *action, QWidget *parent, const bool &modal): KD
     //TODO: Layout theValue
     editActionBaseWidget->theDBusApplications->setModel(new DBusProfileModel(0));
     editActionBaseWidget->theDBusFunctions->setModel(new DBusFunctionModel(0));
+    editActionBaseWidget->theDBusFunctions->setModelColumn(2);
     mainGroup.addButton(editActionBaseWidget->theUseDBus);
     mainGroup.addButton(editActionBaseWidget->theUseProfile);
     mainGroup.addButton(editActionBaseWidget->theChangeMode);

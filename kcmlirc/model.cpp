@@ -116,11 +116,11 @@ QVariant DBusFunctionModel::data(const QModelIndex & index, int role = Qt::Displ
         if (role == Qt::DisplayRole || role == Qt::EditRole) {
             switch (index.column())  {
             case 0:
-                return theProtoTypeList.at(index.row()).prototype();
-            case 1:
                 return theProtoTypeList.at(index.row()).name();
-            case 2:
+            case 1:
                 return theProtoTypeList.at(index.row()).argumentList();
+            case 2:
+                return theProtoTypeList.at(index.row()).prototype();
             }
         }
         if (role == Qt::UserRole) {
@@ -224,12 +224,11 @@ QVariant DBusFunctionModel::headerData(int section, Qt::Orientation orientation,
 
         switch (section) {
         case 0:
-            return i18n("Prototype");
-        case 1:
             return i18n("Function");
+        case 1:
+            return i18n("Parameter");            
         case 2:
-            return i18n("Parameter");
-
+            return i18n("Prototype");
         default:
             return QString();
         }

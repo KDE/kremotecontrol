@@ -78,6 +78,10 @@ public:
         return theProtoTypeList.size();
     }
 
+    int columnCount(const QModelIndex &parent) const {
+        return 3;
+    }
+
     QModelIndexList match(const QModelIndex &start, int role, const QVariant &value, int hits, Qt::MatchFlags flags =0) const;
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
