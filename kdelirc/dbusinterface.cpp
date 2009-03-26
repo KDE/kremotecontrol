@@ -174,57 +174,38 @@ QList<Prototype> DBusInterface::getFunctions(const QString &program, const QStri
 		  while (!arg.isNull()) {
 		    if (arg.tagName() == QLatin1String("arg")) {
 		      QString tmpArg = arg.attribute(QLatin1String("type"));
+		      if (tmpArg == "i") {
+			tmpArg = "int";
+		      } else if (tmpArg == "u") {
+			tmpArg = "uint";
+		      } else if (tmpArg == "s") {
+			tmpArg = "QString";
+		      } else if (tmpArg == "b") {
+			tmpArg = "bool";
+		      } else if (tmpArg == "d") {
+			tmpArg = "double";
+		      } else if (tmpArg == "as") {
+			tmpArg = "QStringList";
+		      } else if (tmpArg == "ay") {
+			tmpArg = "QByteArray";
+		      } else {
+			arg = arg.nextSiblingElement();
+			continue;
+		      }
+
 		      if (arg.attribute(QLatin1String("direction")) == "in") {
+			
 			if(!argStr.isEmpty()){
 			  argStr += ", ";
 			}
-			if (tmpArg == "i") {
-			  argStr += "int";
-			} else if (tmpArg == "u") {
-			  argStr += "uint";
-			} else if (tmpArg == "s") {
-			  argStr += "QString";
-			} else if (tmpArg == "b") {
-			  argStr += "bool";
-			} else if (tmpArg == "d") {
-			  argStr += "double";
-			} else if (tmpArg == "as") {
-			  argStr += "QStringList";
-			} else if (tmpArg == "ay") {
-			  argStr += "QByteArray";
-			} else if (tmpArg == "(ii)") {
-			  QString helper = arg.attribute("name");
-			  arg = arg.nextSiblingElement();
-			  argStr += arg.attribute(QLatin1String("value")) + ' ' + helper;
-			  arg = arg.nextSiblingElement();
-			  continue;
-			} else {
-			  argStr += tmpArg;
-			}
+			argStr += tmpArg;
 			argStr += " " + arg.attribute(QLatin1String("name"));
-		      } else if (arg.attribute(QLatin1String("direction")) == "out") {
-			if (tmpArg == "i") {
-			  retArg = "int";
-			} else if (tmpArg == "u") {
-			  retArg = "uint";
-			} else if (tmpArg == "s") {
-			  retArg = "QString";
-			} else if (tmpArg == "b") {
-			  retArg = "bool";
-			} else if (tmpArg == "d") {
-			  retArg = "double";
-			} else if (tmpArg == "as") {
-			  retArg = "QStringList";
-			} else if (tmpArg == "ay") {
-			  retArg = "QByteArray";
-			} else if (tmpArg == "(ii)") {
-			  arg = arg.nextSiblingElement();
-			  retArg = arg.attribute(QLatin1String("value"));
-			} else {
-			  retArg = arg.attribute(QLatin1String("type"));
-			}
+
+		      } else if(arg.attribute(QLatin1String("direction")) == "out"){
+			retArg = tmpArg;
 
 		      }
+
 		    }
 		    arg = arg.nextSiblingElement();
 		  }
