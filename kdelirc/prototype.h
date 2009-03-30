@@ -81,7 +81,7 @@ public:
         original = source;
         parse();
     }
-    const QList<QPair<QVariant::Type, QString> >& getArgumentTypes() {
+    const QList<QPair<QVariant::Type, QString> >& getArguments() {
         return argumentTypes;
     }
     QVariant::Type getReturnType() const  {

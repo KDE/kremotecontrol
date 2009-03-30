@@ -361,7 +361,7 @@ void KCMLirc::autoPopulate(const Profile &profile, const Remote &remote,
             kDebug() << "Argumentcount" << Prototype(pa->prototype()).argumentCount();
 
             for(int j = 0; j < pa->arguments().size(); ++j){
-            	if(!pa->arguments().at(j).getDefault().isEmpty()){
+                if(!pa->arguments().at(j).getDefault().toString().isEmpty()){
             		l.append(pa->arguments().at(j).getDefault());
             		l.back().convert(QVariant::nameToType(pa->arguments().at(j).type().toLocal8Bit()));
             	} else {

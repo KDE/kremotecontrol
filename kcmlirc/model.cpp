@@ -30,7 +30,14 @@
 #include <kdebug.h>
 #include <QVariant>
 #include <KLocale>
-
+#include <QSpinBox>
+#include <QLineEdit>
+#include <QCheckBox>
+#include <KEditListBox>
+#include <QDoubleSpinBox>
+#include <QStyleOptionMenuItem>
+#include <QApplication>
+#include <QComboBox>
 
 DBusProfileModel::DBusProfileModel(QObject *parent = 0) :
         QStringListModel(parent)
@@ -235,4 +242,145 @@ QVariant DBusFunctionModel::headerData(int section, Qt::Orientation orientation,
     }
 
 }
+
+
+
+
+
+ArgumentDelegate::ArgumentDelegate(QObject *parent)
+    : QItemDelegate(parent)
+{
+}
+
+QWidget *ArgumentDelegate::createEditor(QWidget *parent,
+    const QStyleOptionViewItem &/* option */,
+    const QModelIndex &index) const
+{
+    QWidget *editor;
+    switch(index.model()->data(index, Qt::EditRole).type()){
+	case QVariant::Int:
+        case QVariant::UInt:
+          editor = new QSpinBox(parent);
+          break;
+        case QVariant::Double:
+          editor = new QDoubleSpinBox(parent);
+          break;
+        case QVariant::Bool:
+          editor = new QComboBox(parent);
+          break;
+        case QVariant::StringList:{
+            QLineEdit *lineEdit = new QLineEdit(parent);
+            lineEdit->setToolTip(i18n("A comma-separated list oft Strings"));
+            editor = lineEdit;
+          }
+          break;
+        case QVariant::ByteArray:
+        case QVariant::String:
+        default:
+          editor = new QLineEdit(parent);
+    }
+    return editor;
+}
+
+
+void ArgumentDelegate::setEditorData(QWidget *editor,
+                                    const QModelIndex &index) const
+{
+
+    switch(index.model()->data(index, Qt::EditRole).type()){
+        case QVariant::UInt:
+        case QVariant::Int:{
+              QSpinBox *spinBox = static_cast<QSpinBox*>(editor);
+              spinBox->setValue(index.model()->data(index, Qt::EditRole).toInt());
+          }
+          break;
+        case QVariant::Double:{
+              QDoubleSpinBox *doubleSpinBox = static_cast<QDoubleSpinBox*>(editor);
+              doubleSpinBox->setValue(index.model()->data(index, Qt::EditRole).toDouble(NULL));
+          }
+        case QVariant::Bool:{
+              QComboBox *comboBox = static_cast<QComboBox*>(editor);
+              comboBox->addItem(i18n("True"));
+              comboBox->addItem(i18n("False"));
+              comboBox->setCurrentIndex(index.model()->data(index, Qt::EditRole).toBool() ? 0 : 1);
+          }
+          break;
+        case QVariant::StringList:{
+              QLineEdit *listLineEdit = static_cast<QLineEdit*>(editor);
+              QString value;
+              value.clear();
+              foreach(QString tmp, index.model()->data(index, Qt::EditRole).toStringList()){
+                  if(!value.isEmpty()){
+                      value += ",";
+                  }
+                  value += tmp;
+              }
+              listLineEdit->setText(value);
+          }
+            break;
+        case QVariant::ByteArray:
+        case QVariant::String:
+        default:{
+          QLineEdit *lineEdit = static_cast<QLineEdit*>(editor);
+          lineEdit->setText(index.model()->data(index, Qt::EditRole).toString());
+        }
+    }
+
+}
+
+
+void ArgumentDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
+                                   const QModelIndex &index) const
+{
+    QVariant value;
+    switch(index.model()->data(index, Qt::EditRole).type()){
+        case QVariant::Int:
+        case QVariant::UInt:
+              value = QVariant(static_cast<QSpinBox*>(editor)->value());
+          break;
+        case QVariant::Double:
+          value = QVariant(static_cast<QDoubleSpinBox*>(editor)->value());
+          break;
+        case QVariant::Bool:
+              value = QVariant(static_cast<QComboBox*>(editor)->currentIndex() == 0 ? true : false);
+          break;
+        case QVariant::StringList:
+          value = QVariant(static_cast<QLineEdit*>(editor)->text().split(','));
+          break;
+        case QVariant::ByteArray:
+        case QVariant::String:
+        default:{
+              value = QVariant(static_cast<QLineEdit*>(editor)->text());
+        }
+    }
+    kDebug() << "setting value" << value;
+    model->setData(index, value, Qt::EditRole);
+}
+
+void ArgumentDelegate::updateEditorGeometry(QWidget *editor,
+    const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
+{
+    editor->setGeometry(option.rect);
+}
+
+
+QVariant ArgumentsModelItem::data ( int role ) const {
+
+    if (role == Qt::DisplayRole && (QStandardItem::data(role).type() == QVariant::StringList)) {
+        QString retList;
+        retList.clear();
+        foreach(QString tmp, QStandardItem::data(role).toStringList()){
+            if(!retList.isEmpty()){
+                retList += ",";
+            }
+            retList += tmp;
+        }
+        return QVariant(retList);
+    } else {
+        return QStandardItem::data(role);
+    }
+}
+
+
+
 

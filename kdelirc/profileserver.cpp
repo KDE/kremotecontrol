@@ -153,7 +153,11 @@ bool Profile::startElement(const QString &, const QString &, const QString &name
         curPAA = &(curPA->theArguments.last());
         curPAA->setAction(curPA);
         curPAA->setType(attributes.value("type"));
-        curPAA->setDefault(attributes.value("default"));
+        QVariant tmpArg(attributes.value("default"));
+        kDebug() << "created arg of type" << tmpArg;
+        tmpArg.convert(QVariant::nameToType(attributes.value("type").toLocal8Bit()));
+        kDebug() << "read default" << tmpArg << "type is" << attributes.value("type");
+        curPAA->setDefault(tmpArg);
     } else if (name == "range" && curPAA)
         curPAA->setRange(qMakePair(attributes.value("min").toInt(), attributes.value("max").toInt()));
 

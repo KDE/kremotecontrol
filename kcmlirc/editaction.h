@@ -34,6 +34,8 @@
 
 #include "model.h"
 
+#include <QStandardItemModel>
+
 class Arguments;
 
 class EditActionBaseWidget : public QWidget, public Ui::EditActionBase
@@ -55,20 +57,24 @@ private:
     EditActionBaseWidget *editActionBaseWidget;
     QMap<QString, QString> nameProgramMap;
     QMap<QString, bool> uniqueProgramMap;
-    Arguments arguments;
     QString program;
     bool isUnique;
     QButtonGroup mainGroup;
     void connectSignalsAndSlots();
+    QStandardItemModel *argumentsModel;
 
     inline QString getCurrentDbusApp() {
         return  editActionBaseWidget->theDBusApplications->itemData(editActionBaseWidget->theDBusApplications->currentIndex(),Qt::UserRole).toString();
     }
-    inline QString getCurrentDbusFunction() {
-        kDebug() << editActionBaseWidget->theDBusFunctions->itemData(editActionBaseWidget->theDBusFunctions->currentIndex(),Qt::UserRole).value<Prototype>().name();
-        kDebug() << editActionBaseWidget->theDBusFunctions->itemData(editActionBaseWidget->theDBusFunctions->currentIndex(),Qt::UserRole).value<Prototype>().prototype();
-        kDebug() << editActionBaseWidget->theDBusFunctions->itemData(editActionBaseWidget->theDBusFunctions->currentIndex(),Qt::UserRole).value<Prototype>().argumentList();
+    inline QString getCurrentDBusFunction() {
         return  editActionBaseWidget->theDBusFunctions->itemData(editActionBaseWidget->theDBusFunctions->currentIndex(),Qt::UserRole).value<Prototype>().prototype();
+    }
+    inline Arguments getCurrentArgs() {
+        Arguments retList;
+        foreach(QStandardItem *item, argumentsModel->takeColumn(1)){
+            retList.append(item->data(Qt::EditRole));
+        }
+        return retList;
     }
 
 
@@ -85,9 +91,6 @@ public:
 private slots:
     void updateApplications();
     void updateFunctions();
-    void updateArgumentsLabel();
-    void slotParameterChanged();
-    void updateArgument(int index);
     void updateArguments();
     void updateInstancesOptions();
     void updateDBusApplications();

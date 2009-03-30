@@ -32,11 +32,11 @@
 #include "prototype.h"
 
 #include <QStringListModel>
-
+#include <QItemDelegate>
+#include <QStandardItem>
 
 //class QVariant
 //class QString
-#endif /* MODEL_H_ */
 
 
 Q_DECLARE_METATYPE(Prototype)
@@ -89,3 +89,34 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 };
 
+class ArgumentsModelItem: public QStandardItem
+{
+public:
+    virtual QVariant data ( int role = Qt::UserRole + 1 ) const;
+
+private:
+
+};
+
+
+class ArgumentDelegate : public QItemDelegate
+{
+    Q_OBJECT
+
+public:
+    ArgumentDelegate(QObject *parent = 0);
+
+    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
+                          const QModelIndex &index) const;
+
+    void setEditorData(QWidget *editor, const QModelIndex &index) const;
+    void setModelData(QWidget *editor, QAbstractItemModel *model,
+                      const QModelIndex &index) const;
+
+    void updateEditorGeometry(QWidget *editor,
+        const QStyleOptionViewItem &option, const QModelIndex &index) const;
+
+};
+
+
+#endif /* MODEL_H_ */

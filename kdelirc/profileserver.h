@@ -30,6 +30,7 @@
 #include <QMap>
 #include <qxml.h>
 #include <QHash>
+#include <QVariant>
 
 #include <kdebug.h>
 
@@ -48,7 +49,7 @@ class ProfileActionArgument
 {
     QString theComment, theType;
     Range theRange;
-    QString theDefault;  // should be QVariant?
+    QVariant theDefault;  // should be QVariant?
     const ProfileAction *parent;
 
     friend class Profile;
@@ -65,10 +66,10 @@ public:
     void setType(const QString &a) {
         theType = a;
     }
-    const QString &getDefault() const {
+    const QVariant &getDefault() const {
         return theDefault;
     }
-    void setDefault(const QString &a) {
+    void setDefault(const QVariant &a) {
         theDefault = a;
     }
     const Range &range() const {

@@ -43,6 +43,7 @@
 #include <knuminput.h>
 #include <keditlistbox.h>
 #include <QAbstractItemModel>
+#include <QStandardItemModel>
 
 EditAction::EditAction(IRAction *action, QWidget *parent, const bool &modal): KDialog(parent)
 {
@@ -66,6 +67,13 @@ EditAction::EditAction(IRAction *action, QWidget *parent, const bool &modal): KD
     updateApplications();
     connectSignalsAndSlots();
     //initDBusApplications();
+
+    argumentsModel = new QStandardItemModel(editActionBaseWidget->argumentsView);
+    editActionBaseWidget->argumentsView->setModel(argumentsModel);
+    editActionBaseWidget->argumentsView->setItemDelegate(new ArgumentDelegate());
+    argumentsModel->setHeaderData(0, Qt::Horizontal, i18n("Name"));
+    argumentsModel->setHeaderData(1, Qt::Horizontal, i18n("Value"));
+
     readFrom();
 
 }
@@ -81,8 +89,8 @@ void EditAction::connectSignalsAndSlots() {
 
     connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theUseProfileAppLabel,SLOT(setEnabled(bool)));
     connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theApplications,SLOT(setEnabled(bool)));
-    connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theArguments,SLOT(setEnabled(bool)));
-    connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theValue,SLOT(setEnabled(bool)));
+//    connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theArguments,SLOT(setEnabled(bool)));
+//    connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theValue,SLOT(setEnabled(bool)));
     connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theAutoStart,SLOT(setEnabled(bool)));
     connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theFunctions,SLOT(setEnabled(bool)));
     connect(editActionBaseWidget->theUseProfile,SIGNAL(toggled(bool)),editActionBaseWidget->theJustStart,SLOT(setEnabled(bool)));
@@ -95,9 +103,9 @@ void EditAction::connectSignalsAndSlots() {
     //When only just start ist checked
     connect(editActionBaseWidget->theJustStart,SIGNAL(toggled(bool)),editActionBaseWidget->theAutoStart,SLOT(setChecked(bool)));
     connect(editActionBaseWidget->theJustStart,SIGNAL(toggled(bool)),editActionBaseWidget->theFunctions,SLOT(setDisabled(bool)));
-    connect(editActionBaseWidget->theJustStart,SIGNAL(toggled(bool)),editActionBaseWidget->theAppDbusOptionsLabel,SLOT(setDisabled(bool)));
-    connect(editActionBaseWidget->theJustStart,SIGNAL(toggled(bool)),editActionBaseWidget->theArguments,SLOT(setDisabled(bool)));
-    connect(editActionBaseWidget->theJustStart,SIGNAL(toggled(bool)),editActionBaseWidget->theValue,SLOT(setDisabled(bool)));
+//    connect(editActionBaseWidget->theJustStart,SIGNAL(toggled(bool)),editActionBaseWidget->theAppDbusOptionsLabel,SLOT(setDisabled(bool)));
+//    connect(editActionBaseWidget->theJustStart,SIGNAL(toggled(bool)),editActionBaseWidget->theArguments,SLOT(setDisabled(bool)));
+//    connect(editActionBaseWidget->theJustStart,SIGNAL(toggled(bool)),editActionBaseWidget->theValue,SLOT(setDisabled(bool)));
 
     connect(editActionBaseWidget->theApplications,SIGNAL(currentIndexChanged ( QString)),this,SLOT(updateFunctions()));
 
@@ -117,8 +125,8 @@ void EditAction::connectSignalsAndSlots() {
     connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theDBusObjectsLabel,SLOT(setEnabled(bool)));
     connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theDBusFunctionsLabel,SLOT(setEnabled(bool)));
 
-    connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theArguments,SLOT(setEnabled(bool)));
-    connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theValue,SLOT(setEnabled(bool)));
+//    connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theArguments,SLOT(setEnabled(bool)));
+//    connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theValue,SLOT(setEnabled(bool)));
     connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theAutoStart,SLOT(setEnabled(bool)));
     connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theDBusApplications,SLOT(setEnabled(bool)));
     connect(editActionBaseWidget->theUseDBus,SIGNAL(toggled(bool)),editActionBaseWidget->theDBusFunctions,SLOT(setEnabled(bool)));
@@ -133,21 +141,12 @@ void EditAction::connectSignalsAndSlots() {
     connect(editActionBaseWidget->theDBusFunctions,SIGNAL(currentIndexChanged ( QString)),this,SLOT(updateArguments()));
 
     //Mode Action
-    connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),editActionBaseWidget->theAppDbusOptionsLabel,SLOT(setDisabled(bool)));
+    connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),editActionBaseWidget->argumentsView ,SLOT(setDisabled(bool)));
     connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),editActionBaseWidget->theDoAfter,SLOT(setEnabled(bool)));
     connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),editActionBaseWidget->theDoBefore,SLOT(setEnabled(bool)));
     connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),editActionBaseWidget->theModes,SLOT(setEnabled(bool)));
     connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),this,SLOT(updateInstancesOptions()));
     connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),this,SLOT(updateArgumentsLabel()));
-
-    //StackView + Arguments
-
-    connect(editActionBaseWidget->theArguments,SIGNAL(activated(int)),this,SLOT(updateArgument(int)));
-    connect(editActionBaseWidget->theValueCheckBox,SIGNAL(toggled(bool)),this,SLOT(slotParameterChanged()));
-    connect(editActionBaseWidget->theValueDoubleNumInput,SIGNAL(valueChanged(double)),this,SLOT(slotParameterChanged()));
-    connect(editActionBaseWidget->theValueEditListBox,SIGNAL(changed()),this,SLOT(slotParameterChanged()));
-    connect(editActionBaseWidget->theValueIntNumInput,SIGNAL(valueChanged(int)),this,SLOT(slotParameterChanged()));
-    connect(editActionBaseWidget->theValueLineEdit,SIGNAL(textChanged(QString)),this,SLOT(slotParameterChanged()));
 }
 
 
@@ -177,10 +176,8 @@ void EditAction::readFrom()
     } else if (ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype())) { // profile action
         editActionBaseWidget->theUseProfile->setChecked(true);
 	editActionBaseWidget->thePerformFunction->setChecked(true);
-	arguments = theAction->arguments();
     } else { // DBus action
         editActionBaseWidget->theUseDBus->setChecked(true);
-        arguments = theAction->arguments();
     }
 }
 
@@ -206,14 +203,14 @@ void EditAction::writeBack()
                 kDebug() << "wrote back: " << application;
                 theAction->setObject(profileAction->objId());
                 theAction->setMethod(profileAction->prototype());
-                theAction->setArguments(arguments);
+                theAction->setArguments(getCurrentArgs());
             }
         }
     } else {
         theAction->setProgram(getCurrentDbusApp());
         theAction->setObject(editActionBaseWidget->theDBusObjects->currentText());
-        theAction->setMethod(getCurrentDbusFunction());
-        theAction->setArguments(arguments);
+        theAction->setMethod(getCurrentDBusFunction());
+        theAction->setArguments(getCurrentArgs());
     }
     theAction->setRepeat(editActionBaseWidget->theRepeat->isChecked());
     theAction->setAutoStart(editActionBaseWidget->theAutoStart->isChecked());
@@ -232,48 +229,103 @@ void EditAction::writeBack()
 
 void EditAction::updateArguments()
 {
-    kDebug() << "****************************************************************************";
-    editActionBaseWidget->theArguments->clear();
+    editActionBaseWidget->argumentsView->setEnabled(true);
+    argumentsModel->clear();
+    QStringList headerLabels;
+    headerLabels << i18n("Name") << i18n("Value");
+    argumentsModel->setHorizontalHeaderLabels(headerLabels);
+
     if (editActionBaseWidget->theUseProfile->isChecked()) {
 	QString function = editActionBaseWidget->theFunctions->itemData(editActionBaseWidget->theFunctions->currentIndex()).toString();
 	QString application = editActionBaseWidget->theApplications->itemData(editActionBaseWidget->theApplications->currentIndex()).toString();
         const ProfileAction *profileAction = ProfileServer::profileServer()->getAction(application, function);
+
+        // No profile action configured or theJustStart is checked... No need for arguments
         if (!profileAction ||  editActionBaseWidget->theJustStart->isChecked()) {
-	    kDebug() << "clearing arguments1";
-            arguments.clear();
-            updateArgument(-1);
+            editActionBaseWidget->argumentsView->setEnabled(false);
             return;
         }
-        const QList<ProfileActionArgument> &profileActionArguments = profileAction->arguments();
-        if (profileActionArguments.count() != arguments.count()) {
-	    kDebug() << "clearing arguments2";
-            arguments.clear();
+
+        // Is the configured Action the selected one?
+        if(profileAction && (profileAction->profile()->name() == theAction->application()) &&
+           profileAction->name() == theAction->function())
+        {
+            kDebug() << "appending configured args";
+            for(int i = 0; i < profileAction->arguments().count(); ++i){
+                QList<QStandardItem*> tmp;
+                tmp.append(new QStandardItem(profileAction->arguments().at(i).comment() + " (" + profileAction->arguments().at(i).type() + ")"));
+                QStandardItem *tmp2 = new ArgumentsModelItem();
+                tmp2->setData(theAction->arguments().at(i), Qt::EditRole);
+                kDebug() << "arg is" << theAction->arguments().at(i);
+                tmp.append(tmp2);
+                tmp.first()->setEditable(false);
+                if(QVariant::nameToType(profileAction->arguments().at(i).type().toLocal8Bit()) == QVariant::StringList){
+                    tmp.first()->setToolTip(i18n("A comma-separated list oft Strings"));
+                    tmp.last()->setToolTip(i18n("A comma-separated list oft Strings"));
+                }
+                argumentsModel->appendRow(tmp);
+            }
+
+        } else {
+            kDebug() << "Appending default args";
+            const QList<ProfileActionArgument> &profileActionArguments = profileAction->arguments();
             for (int i = 0; i < profileActionArguments.count(); ++i) {
-                arguments.append(QVariant(""));
+                QList<QStandardItem*> tmp;
+                tmp.append(new QStandardItem(profileActionArguments.at(i).comment() + " (" + profileActionArguments.at(i).type() + ")"));
+                QStandardItem *tmp2 = new ArgumentsModelItem();
+                tmp2->setData(profileActionArguments.at(i).getDefault());
+                tmp.append(tmp2);
+                tmp.first()->setEditable(false);
+                if(QVariant::nameToType(profileActionArguments.at(i).type().toLocal8Bit()) == QVariant::StringList){
+                    tmp.first()->setToolTip(i18n("A comma-separated list oft Strings"));
+                    tmp.last()->setToolTip(i18n("A comma-separated list oft Strings"));
+                }
+                argumentsModel->appendRow(tmp);
             }
         }
-        editActionBaseWidget->theArguments->setEnabled(profileActionArguments.count());
-        for (int i = 0; i < profileActionArguments.count(); ++i) {
-            editActionBaseWidget->theArguments->addItem(profileActionArguments[i].comment() + " (" + profileActionArguments[i].type() + ')');
-            arguments[i].convert(QVariant::nameToType(profileActionArguments[i].type().toLocal8Bit()));
-        }
-        profileActionArguments.count() ? updateArgument(0) : updateArgument(-1);
-	kDebug() << arguments;
-
     } else if ( editActionBaseWidget->theUseDBus->isChecked()) {
-        Prototype p(editActionBaseWidget->theDBusFunctions->currentText());
-        if (p.count() != arguments.count()) {
-            arguments.clear();
-            for (int i = 0; i < p.count(); i++)
-                arguments.append(QVariant(""));
+	Prototype p = editActionBaseWidget->theDBusFunctions->itemData(editActionBaseWidget->theDBusFunctions->currentIndex(), Qt::UserRole).value<Prototype>().prototype();
+
+
+        // Check if the current selected function is the configured one
+        if(!ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype()) &&
+                getCurrentDbusApp() == theAction->program() && // The correct app is selected!
+                editActionBaseWidget->theDBusObjects->currentText() == theAction->object() && // And the Object is selected too!
+                getCurrentDBusFunction() == theAction->method().prototype()){ // And also the Function. Fill in the arguments
+            for(int i = 0; i < theAction->arguments().size(); ++i){
+                QList<QStandardItem*> tmp;
+                tmp.append(new QStandardItem(p.getArguments().at(i).second + " (" + QVariant::typeToName(p.getArguments().at(i).first) + ")"));
+                QStandardItem *tmp2 = new ArgumentsModelItem();
+                tmp2->setData(theAction->arguments().at(i), Qt::EditRole);
+                kDebug() << "inserting" << theAction->arguments().at(i);
+                tmp.append(tmp2);
+                tmp.first()->setEditable(false);
+                if(p.getArguments().at(i).first == QVariant::StringList){
+                    tmp.first()->setToolTip(i18n("A comma-separated list oft Strings"));
+                    tmp.last()->setToolTip(i18n("A comma-separated list oft Strings"));
+                }
+                argumentsModel->appendRow(tmp);
+            }
+        } else {
+            for(int i = 0; i < p.getArguments().size(); ++i){
+                QList<QStandardItem*> tmp;
+                tmp.append(new QStandardItem(p.getArguments().at(i).second + " (" + QVariant::typeToName(p.getArguments().at(i).first) + ")"));
+                QStandardItem *tmp2 = new ArgumentsModelItem();
+                tmp2->setData(QVariant(p.getArguments().at(i).first), Qt::EditRole);
+                kDebug() << "inserting" << QVariant(p.getArguments().at(i).first);
+                tmp.append(tmp2);
+                tmp.first()->setEditable(false);
+                if(p.getArguments().at(i).first == QVariant::StringList){
+                    tmp.first()->setToolTip(i18n("A comma-separated list oft Strings"));
+                    tmp.last()->setToolTip(i18n("A comma-separated list oft Strings"));
+                }
+                argumentsModel->appendRow(tmp);
+            }
         }
-        editActionBaseWidget->theArguments->setEnabled(p.count());
-        for (int i = 0; i < p.count(); i++) {
-            editActionBaseWidget->theArguments->addItem(QString().setNum(i + 1) + ": " + (p.name(i).isEmpty() ? p.type(i) : p.name(i) + " (" + p.type(i) + ')'));
-            arguments[i].convert(QVariant::nameToType(p.type(i).toLocal8Bit()));
-        }
-        p.count() ?  updateArgument(0) : updateArgument(-1);
     }
+    editActionBaseWidget->argumentsView->resizeColumnsToContents();
+    editActionBaseWidget->argumentsView->resizeRowsToContents();
+    editActionBaseWidget->argumentsView->horizontalHeader()->setStretchLastSection(true);
 }
 
 void EditAction::updateInstancesOptions()
@@ -298,79 +350,6 @@ void EditAction::updateInstancesOptions()
     editActionBaseWidget->theSendToTop->setEnabled(!isUnique);
     editActionBaseWidget->theSendToBottom->setEnabled(!isUnique);
     editActionBaseWidget->theSendToAll->setEnabled(!isUnique);
-}
-
-// called when the textbox/checkbox/whatever changes value
-void EditAction::slotParameterChanged()
-{
-    int index =  editActionBaseWidget->theArguments->currentIndex();
-    int type = arguments[editActionBaseWidget->theArguments->currentIndex()].type();
-    kDebug() << type ;
-    switch (type) {
-    case QVariant::Int:
-    case QVariant::UInt:
-        arguments[index] = editActionBaseWidget->theValueIntNumInput->value();
-        break;
-    case QVariant::Double:
-        arguments[index] = editActionBaseWidget->theValueDoubleNumInput->value();
-        break;
-    case QVariant::Bool:
-        arguments[index] = editActionBaseWidget->theValueCheckBox->isChecked();
-        break;
-    case QVariant::StringList:
-        arguments[index] = editActionBaseWidget->theValueEditListBox->items();
-        break;
-    default:
-        arguments[index] = editActionBaseWidget->theValueLineEdit->text();
-    }
-    arguments[index].convert(QVariant::Type(type));
-    kDebug() << "out: " << arguments[index].toString() ;
-
-}
-
-void EditAction::updateArgument(int index)
-{
-kDebug()<< "update argument"<< arguments;
-    kDebug() << " i: " << index ;
-    if (index >= 0 && ! arguments.isEmpty()) {       
-        switch (arguments[index].type()) {
-        
-	case QVariant::StringList: {
-            editActionBaseWidget->theValue->setCurrentIndex(0);
-            QStringList backup = arguments[index].toStringList();
-            // backup needed because calling clear will kill what ever has been saved.
-            editActionBaseWidget->theValueEditListBox->clear();
-            editActionBaseWidget->theValueEditListBox->insertStringList(backup);
-            arguments[index] = backup;
-            break;
-	  }
-	 case QVariant::Int:
-        case QVariant::UInt:
-            editActionBaseWidget->theValue->setCurrentIndex(1);
-            editActionBaseWidget->theValueIntNumInput->setValue(arguments[index].toInt());
-	    kDebug() << "int argument" << index << "is " << arguments[index].toInt();
-            break;        
-        case QVariant::Double:
-            editActionBaseWidget->theValue->setCurrentIndex(2);
-            editActionBaseWidget->theValueDoubleNumInput->setValue(arguments[index].toDouble());
-            break;
-        case QVariant::Bool:
-            editActionBaseWidget->theValue->setCurrentIndex(3);
-            editActionBaseWidget->theValueCheckBox->setChecked(arguments[index].toBool());
-            break;
-        default:
-            editActionBaseWidget->theValue->setCurrentIndex(4);
-            editActionBaseWidget->theValueLineEdit->setText(arguments[index].toString());
-        }
-        editActionBaseWidget->theValue->setEnabled(true);
-    } else {
-        editActionBaseWidget->theValueLineEdit->setText("");
-        editActionBaseWidget->theValueCheckBox->setChecked(false);
-        editActionBaseWidget->theValueIntNumInput->setValue(0);
-        editActionBaseWidget->theValueDoubleNumInput->setValue(0.0);
-        editActionBaseWidget->theValue->setEnabled(false);
-	editActionBaseWidget->theValue->setCurrentIndex(5);
-    }
 }
 
 void EditAction::updateApplications()
@@ -460,7 +439,7 @@ void EditAction::updateDBusFunctions()
     if(!ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype()) &&
 	  !DBusInterface::getInstance()->isProgramRunning(theAction->program())){ 
 	if(editActionBaseWidget->theDBusApplications->itemData(editActionBaseWidget->theDBusApplications->currentIndex()).toString() ==
-	      theAction->program()){ // The correct object is selected!
+              theAction->program()){ // The correct app is selected!
 	  kDebug() << "theAction->object" << theAction->object();
 	  kDebug() << "current selected" << editActionBaseWidget->theDBusObjects->currentText();
 	  if(editActionBaseWidget->theDBusObjects->currentText() ==
@@ -472,25 +451,14 @@ void EditAction::updateDBusFunctions()
 
 
     editActionBaseWidget->theDBusFunctions->model()->sort( Qt::AscendingOrder);
-    int ti =editActionBaseWidget->theDBusFunctions->findData(qVariantFromValue(theAction->method()));
+    kDebug() << "searching for" << theAction->method().prototype();
+    int ti =editActionBaseWidget->theDBusFunctions->findData(qVariantFromValue(theAction->method()), Qt::EditRole);
     editActionBaseWidget->theDBusFunctions->setCurrentIndex(ti == -1 ? 0 : ti);
 }
 
 void EditAction::addItem(QString item)
 {
     editActionBaseWidget->theModes->addItem(item);
-}
-
-void EditAction::updateArgumentsLabel() {
-  QString labelDesc;
-  if(editActionBaseWidget->theUseProfile->isChecked()){
-    labelDesc=i18n("Profile argument options:");
-  } else if(editActionBaseWidget->theUseDBus->isChecked()){
-    labelDesc=i18n("DBus function arguments:");
-  } else {
-    labelDesc=i18n("A&pplication / D-Bus options:");
-  }
-  editActionBaseWidget->theAppDbusOptionsLabel->setText(labelDesc);
 }
 
 #include "editaction.moc"

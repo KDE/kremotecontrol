@@ -77,11 +77,11 @@ void Prototype::parse()
     while (parameters.indexIn(args) != -1) {
         theTypes += parameters.cap(1);
         theNames += parameters.cap(3);
-      //  argumentTypes.append(QPair<QVariant::Type, QString>(QVariant::nameToType(parameters.cap(1).toLocal8Bit()), parameters.cap(3)));
+        argumentTypes.append(QPair<QVariant::Type, QString>(QVariant::nameToType(parameters.cap(1).toLocal8Bit()), parameters.cap(3)));
         args = parameters.cap(5);
       
     }
-  kDebug() << "arguments " << argumentTypes;
+//  kDebug() << "arguments " << argumentTypes;
 }
 
 bool Prototype::operator==(const Prototype& other) const {
