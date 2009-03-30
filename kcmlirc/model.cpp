@@ -257,6 +257,7 @@ QWidget *ArgumentDelegate::createEditor(QWidget *parent,
     const QModelIndex &index) const
 {
     QWidget *editor;
+    kDebug() << "creaing edtor for:" << index.model()->data(index, Qt::EditRole);
     switch(index.model()->data(index, Qt::EditRole).type()){
 	case QVariant::Int:
         case QVariant::UInt:

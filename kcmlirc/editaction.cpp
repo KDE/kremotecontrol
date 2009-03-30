@@ -273,7 +273,8 @@ void EditAction::updateArguments()
                 QList<QStandardItem*> tmp;
                 tmp.append(new QStandardItem(profileActionArguments.at(i).comment() + " (" + profileActionArguments.at(i).type() + ")"));
                 QStandardItem *tmp2 = new ArgumentsModelItem();
-                tmp2->setData(profileActionArguments.at(i).getDefault());
+                tmp2->setData(profileActionArguments.at(i).getDefault(), Qt::EditRole);
+                kDebug() << "inserting" << profileActionArguments.at(i).getDefault();
                 tmp.append(tmp2);
                 tmp.first()->setEditable(false);
                 if(QVariant::nameToType(profileActionArguments.at(i).type().toLocal8Bit()) == QVariant::StringList){
