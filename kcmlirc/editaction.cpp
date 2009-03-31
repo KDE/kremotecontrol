@@ -260,8 +260,8 @@ void EditAction::updateArguments()
                 tmp.append(tmp2);
                 tmp.first()->setEditable(false);
                 if(QVariant::nameToType(profileAction->arguments().at(i).type().toLocal8Bit()) == QVariant::StringList){
-                    tmp.first()->setToolTip(i18n("A comma-separated list oft Strings"));
-                    tmp.last()->setToolTip(i18n("A comma-separated list oft Strings"));
+                    tmp.first()->setToolTip(i18n("A comma-separated list of Strings"));
+                    tmp.last()->setToolTip(i18n("A comma-separated list of Strings"));
                 }
                 argumentsModel->appendRow(tmp);
             }
@@ -278,8 +278,8 @@ void EditAction::updateArguments()
                 tmp.append(tmp2);
                 tmp.first()->setEditable(false);
                 if(QVariant::nameToType(profileActionArguments.at(i).type().toLocal8Bit()) == QVariant::StringList){
-                    tmp.first()->setToolTip(i18n("A comma-separated list oft Strings"));
-                    tmp.last()->setToolTip(i18n("A comma-separated list oft Strings"));
+                    tmp.first()->setToolTip(i18n("A comma-separated list of Strings"));
+                    tmp.last()->setToolTip(i18n("A comma-separated list of Strings"));
                 }
                 argumentsModel->appendRow(tmp);
             }
@@ -302,8 +302,8 @@ void EditAction::updateArguments()
                 tmp.append(tmp2);
                 tmp.first()->setEditable(false);
                 if(p.getArguments().at(i).first == QVariant::StringList){
-                    tmp.first()->setToolTip(i18n("A comma-separated list oft Strings"));
-                    tmp.last()->setToolTip(i18n("A comma-separated list oft Strings"));
+                    tmp.first()->setToolTip(i18n("A comma-separated list of Strings"));
+                    tmp.last()->setToolTip(i18n("A comma-separated list of Strings"));
                 }
                 argumentsModel->appendRow(tmp);
             }
@@ -317,8 +317,8 @@ void EditAction::updateArguments()
                 tmp.append(tmp2);
                 tmp.first()->setEditable(false);
                 if(p.getArguments().at(i).first == QVariant::StringList){
-                    tmp.first()->setToolTip(i18n("A comma-separated list oft Strings"));
-                    tmp.last()->setToolTip(i18n("A comma-separated list oft Strings"));
+                    tmp.first()->setToolTip(i18n("A comma-separated list of Strings"));
+                    tmp.last()->setToolTip(i18n("A comma-separated list of Strings"));
                 }
                 argumentsModel->appendRow(tmp);
             }
