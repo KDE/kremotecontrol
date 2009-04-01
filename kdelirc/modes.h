@@ -50,7 +50,7 @@ public:
     void saveToConfig(KConfig &theConfig);
     void generateNulls(const QStringList &theRemotes);
 
-    const Mode &getMode(const QString &remote, const QString &mode) const;
+    Mode getMode(const QString &remote, const QString &mode) const;
     ModeList getModes(const QString &remote) const;
     const Mode getDefault(const QString &remote) const;
     bool isDefault(const Mode &mode) const;
