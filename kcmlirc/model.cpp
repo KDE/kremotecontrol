@@ -271,7 +271,7 @@ QWidget *ArgumentDelegate::createEditor(QWidget *parent,
           break;
         case QVariant::StringList:{
             QLineEdit *lineEdit = new QLineEdit(parent);
-            lineEdit->setToolTip(i18n("A comma-separated list oft Strings"));
+            lineEdit->setToolTip(i18n("A comma-separated list of Strings"));
             editor = lineEdit;
           }
           break;
