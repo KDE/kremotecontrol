@@ -45,9 +45,8 @@ private:
 public:
 
 
-  ~DBusInterface();
-
   static DBusInterface *getInstance();
+  ~DBusInterface();
 
   bool isProgramRunning(const QString &program);
 
@@ -55,8 +54,10 @@ public:
   QStringList getObjects(const QString &program);
   QList<Prototype> getFunctions(const QString &program, const QString &object);
 
+  QStringList getRemotes();
   void requestNextKeyPress();
   void cancelKeyPressRequest();
+  void reloadIRKick();
 
   QStringList getButtons(const QString &remoteName);
   

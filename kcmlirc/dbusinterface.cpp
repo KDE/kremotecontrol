@@ -233,6 +233,18 @@ QList<Prototype> DBusInterface::getFunctions(const QString &program, const QStri
     return ret;
 }
 
+QStringList DBusInterface::getRemotes(){
+    QStringList remotes;
+    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.irkick", "/IRKick",
+                     "", "remotes");
+    QDBusMessage response = QDBusConnection::sessionBus().call(m);
+    if (response.type() == QDBusMessage::ErrorMessage) {
+        kDebug() << response.errorMessage();
+    } else {
+        remotes = response.arguments().at(0).toStringList();
+    }
+    return remotes;
+}
 
 
 void DBusInterface::requestNextKeyPress(){
@@ -267,6 +279,17 @@ QStringList DBusInterface::getButtons(const QString& remoteName) {
     kDebug() << "Got response: " << response.arguments();
     return response.arguments().at(0).toStringList();
 }
+
+void DBusInterface::reloadIRKick() {
+    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.irkick", "/IRKick",
+                     "", "reloadConfiguration");
+    QDBusMessage response = QDBusConnection::sessionBus().call(m);
+    if (response.type() == QDBusMessage::ErrorMessage) {
+        kDebug() << response.errorMessage();
+    }
+
+}
+
 
 bool DBusInterface::isProgramRunning(const QString &program) {
   QDBusConnectionInterface *dBusIface = QDBusConnection::sessionBus().interface();

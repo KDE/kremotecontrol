@@ -32,13 +32,14 @@
 #include "editaction.h"
 #include "editmode.h"
 #include "modeslist.h"
+#include "dbusinterface.h"
 
 #include <qevent.h>
 #include <QHBoxLayout>
 #include <QDropEvent>
 #include <QWidget>
-#include <qdbusmessage.h>
-#include <qdbusconnection.h>
+// #include <qdbusmessage.h>
+// #include <qdbusconnection.h>
 
 #include <kapplication.h>
 #include <klocale.h>
@@ -81,11 +82,7 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
         i18n(
             "<h1>Remote Controls</h1><p>This module allows you to configure bindings between your remote controls and KDE applications. Simply select your remote control and click Add under the Actions/Buttons list. If you want KDE to attempt to automatically assign buttons to a supported application's actions, try clicking the Auto-Populate button.</p><p>To view the recognised applications and remote controls, simply select the <em>Loaded Extensions</em> tab.</p>"));
 
-    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.irkick", "/IRKick",
-                     "", "remotes");
-    QDBusMessage response = QDBusConnection::sessionBus().call(m);
-    if (response.type() == QDBusMessage::ErrorMessage) {
-        kDebug() << response.errorMessage();
+    if (!DBusInterface::getInstance()->isProgramRunning("org.kde.irkick")) {
         if (KMessageBox::questionYesNo(
                     this,
                     i18n(
@@ -554,21 +551,7 @@ void KCMLirc::updateModes()
 
     kDebug() << "updating Modes";
 
-    QStringList remotes;
-
-    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.irkick", "/IRKick",
-                     "", "remotes");
-    QDBusMessage response = QDBusConnection::sessionBus().call(m);
-    if (response.type() == QDBusMessage::ErrorMessage) {
-        kDebug() << response.errorMessage();
-    } else {
-
-        for (int i = 0; i < response.arguments().at(0).toStringList().size(); ++i) {
-            kDebug() << "Reveiced remote: " << response.arguments().at(0).toStringList().at(i);
-        }
-        remotes = response.arguments().at(0).toStringList();
-
-    }
+    QStringList remotes = DBusInterface::getInstance()->getRemotes();
 
     if (remotes.begin() == remotes.end()){
         theKCMLircBase->theMainLabel->setMaximumSize(32767, 32767);
@@ -758,17 +741,7 @@ void KCMLirc::load()
 
     allActions.loadFromConfig(theConfig);
     allModes.loadFromConfig(theConfig);
-    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.irkick", "/IRKick",
-                     "", "remotes");
-    QDBusMessage response = QDBusConnection::sessionBus().call(m);
-    if (response.type() == QDBusMessage::ErrorMessage) {
-        kDebug() << response.errorMessage();
-    }
-
-    QStringList remotes;
-    for (int i = 0; i < response.arguments().size(); ++i) {
-        remotes << response.arguments().at(i).toString();
-    }
+    QStringList remotes = DBusInterface::getInstance()->getRemotes();
 
     allModes.generateNulls(remotes);
 
@@ -791,12 +764,7 @@ void KCMLirc::save()
 
     theConfig.sync();
 
-    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.irkick", "/IRKick",
-                     "", "reloadConfiguration");
-    QDBusMessage response = QDBusConnection::sessionBus().call(m);
-    if (response.type() == QDBusMessage::ErrorMessage) {
-        kDebug() << response.errorMessage();
-    }
+    DBusInterface::getInstance()->reloadIRKick();
 
     emit changed(true);
 }
