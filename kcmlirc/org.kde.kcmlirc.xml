@@ -1,30 +1,6 @@
 <!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
 <node>
   <interface name="org.kde.kcmlirc">
-    <method name="updateActions">
-    </method>
-    <method name="updateModes">
-    </method>
-    <method name="updateExtensions">
-    </method>
-    <method name="updateInformation">
-    </method>
-    <method name="slotAddMode">
-    </method>
-    <method name="slotRemoveMode">
-    </method>
-    <method name="slotSetDefaultMode">
-    </method>
-    <method name="slotAddAction">
-    </method>
-    <method name="slotAddActions">
-    </method>
-    <method name="slotEditAction">
-    </method>
-    <method name="slotRemoveAction">
-    </method>
-    <method name="slotEditMode">
-    </method>
     <method name="gotButton">
       <arg name="remote" type="s" direction="in"/>
       <arg name="button" type="s" direction="in"/>

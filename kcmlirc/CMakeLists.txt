@@ -20,7 +20,7 @@ set(kcm_lirc_PART_SRCS ${kdelirc_shared_SRCS}
    model.cpp 
    dbusinterface.cpp)
 
-QT4_ADD_DBUS_ADAPTOR(kcm_lirc_PART_SRCS org.kde.kcmlirc.xml dbusinterface.h KCMLirc)
+QT4_ADD_DBUS_ADAPTOR(kcm_lirc_PART_SRCS org.kde.kcmlirc.xml dbusinterface.h DBusInterface)
 
 kde4_add_ui_files(kcm_lirc_PART_SRCS addactionbase.ui newmode.ui editactionbase.ui editmodebase.ui kcmlircbase.ui )
 
