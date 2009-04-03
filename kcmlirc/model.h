@@ -42,12 +42,12 @@
 Q_DECLARE_METATYPE(Prototype)
 
 
-class DBusProfileModel : public  QStringListModel
+class DBusServiceModel : public  QStringListModel
 {
 
 public:
 
-    DBusProfileModel (QObject * parent );
+    DBusServiceModel (QObject * parent );
 
     virtual QVariant data( const QModelIndex & index, int  role) const;
     static QString trimAppname(const QString &appName);

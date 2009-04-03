@@ -48,7 +48,7 @@ EditAction::EditAction(IRAction *action, QWidget *parent, const bool &modal): KD
     setButtons( Ok | Cancel);
     setDefaultButton(Ok);
     setModal(modal);
-    editActionBaseWidget->theDBusApplications->setModel(new DBusProfileModel(0));
+    editActionBaseWidget->theDBusApplications->setModel(new DBusServiceModel(0));
     editActionBaseWidget->theDBusFunctions->setModel(new DBusFunctionModel(0));
     editActionBaseWidget->theDBusFunctions->setModelColumn(2);
     mainGroup.addButton(editActionBaseWidget->theUseDBus);

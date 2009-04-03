@@ -39,24 +39,24 @@
 #include <QApplication>
 #include <QComboBox>
 
-DBusProfileModel::DBusProfileModel(QObject *parent = 0) :
+DBusServiceModel::DBusServiceModel(QObject *parent = 0) :
         QStringListModel(parent)
 {
 
 }
 
-bool DBusProfileModel::ascendingLessThan(const QString &s1, const QString &s2)
+bool DBusServiceModel::ascendingLessThan(const QString &s1, const QString &s2)
 {
     return trimAppname(s1) < trimAppname(s2);
 }
 
-bool DBusProfileModel::decendingLessThan(const QString &s1, const QString &s2)
+bool DBusServiceModel::decendingLessThan(const QString &s1, const QString &s2)
 {
 
     return trimAppname(s1) > trimAppname(s2);
 }
 
-QString DBusProfileModel::trimAppname(const QString &appName)
+QString DBusServiceModel::trimAppname(const QString &appName)
 {
 
     int lastIndex = appName .lastIndexOf(".") + 1;
@@ -70,7 +70,7 @@ QString DBusProfileModel::trimAppname(const QString &appName)
     return appName;
 }
 
-QVariant DBusProfileModel::data(const QModelIndex & index, int role = Qt::DisplayRole) const
+QVariant DBusServiceModel::data(const QModelIndex & index, int role = Qt::DisplayRole) const
 {
     if (!index.isValid()) {
         kDebug() << " Index invalid";
@@ -91,15 +91,15 @@ QVariant DBusProfileModel::data(const QModelIndex & index, int role = Qt::Displa
 }
 
 
-void  DBusProfileModel::sort(int, Qt::SortOrder order)
+void  DBusServiceModel::sort(int, Qt::SortOrder order)
 {
     emit layoutAboutToBeChanged();
     QStringList tList = stringList();
 
     if (order == Qt::AscendingOrder)
-        qSort(tList.begin(), tList.end(),  DBusProfileModel::ascendingLessThan);
+        qSort(tList.begin(), tList.end(),  DBusServiceModel::ascendingLessThan);
     else
-        qSort(tList.begin(), tList.end(),  DBusProfileModel::decendingLessThan);
+        qSort(tList.begin(), tList.end(),  DBusServiceModel::decendingLessThan);
     setStringList(tList);
     emit layoutChanged();
 }
