@@ -54,7 +54,8 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMo
     setupUi(this);
     dbusFuntionModel = new DBusFunctionModel(theFunctions);
     theFunctions->setModel(dbusFuntionModel);
-
+    theFunctions->setSelectionBehavior(QAbstractItemView::SelectRows);
+    theFunctions->setSelectionMode(QAbstractItemView::SingleSelection);
 
 
     connect(this, SIGNAL(currentIdChanged(int)), SLOT(updateForPageChange()));
@@ -578,7 +579,8 @@ void AddAction::updateFunctions()
         for (int i = 0; i < tList.size(); i++) {
             theFunctions->model()->setData(theFunctions->model()->index(i,0),qVariantFromValue( tList.at(i)), Qt::UserRole);
         }
-    }
+    }        theFunctions->model()->sort(0, Qt::AscendingOrder);
+
     updateOptions();
 }
 
