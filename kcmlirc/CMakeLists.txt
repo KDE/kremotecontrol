@@ -17,9 +17,10 @@ set(kcm_lirc_PART_SRCS ${kdelirc_shared_SRCS}
    editaction.cpp 
    modeslist.cpp
    newmodedialog.cpp
-   model.cpp )
+   model.cpp 
+   dbusinterface.cpp)
 
-QT4_ADD_DBUS_ADAPTOR(kcm_lirc_PART_SRCS org.kde.kcmlirc.xml kcmlirc.h KCMLirc)
+QT4_ADD_DBUS_ADAPTOR(kcm_lirc_PART_SRCS org.kde.kcmlirc.xml dbusinterface.h KCMLirc)
 
 kde4_add_ui_files(kcm_lirc_PART_SRCS addactionbase.ui newmode.ui editactionbase.ui editmodebase.ui kcmlircbase.ui )
 

@@ -30,11 +30,6 @@
 #include "addaction.h"
 //#include "model.h"
 #include "dbusinterface.h"
-#include <QRegExp>
-#include <QDBusConnectionInterface>
-#include <QDBusInterface>
-#include <QDomDocument>
-#include <QDomElement>
 
 #include <kdebug.h>
 #include <klineedit.h>
@@ -47,16 +42,12 @@
 
 EditAction::EditAction(IRAction *action, QWidget *parent, const bool &modal): KDialog(parent)
 {
-
-
-
     theAction = action;
     editActionBaseWidget = new EditActionBaseWidget();
     setMainWidget(editActionBaseWidget);
     setButtons( Ok | Cancel);
     setDefaultButton(Ok);
     setModal(modal);
-    //TODO: Layout theValue
     editActionBaseWidget->theDBusApplications->setModel(new DBusProfileModel(0));
     editActionBaseWidget->theDBusFunctions->setModel(new DBusFunctionModel(0));
     editActionBaseWidget->theDBusFunctions->setModelColumn(2);

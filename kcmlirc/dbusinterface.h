@@ -32,13 +32,14 @@
 
 #include <QStringList>
 
-class DBusInterface
+class DBusInterface: public QObject
 {
+    Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface", "org.kde.kcmlirc")
 
 private:
   DBusInterface();
 
-  bool searchForProgram(const IRAction &action, QStringList &programs);
   QStringList getAllRegisteredPrograms();
 
 public:
@@ -53,8 +54,19 @@ public:
   QStringList getRegisteredPrograms();
   QStringList getObjects(const QString &program);
   QList<Prototype> getFunctions(const QString &program, const QString &object);
+
+  void requestNextKeyPress();
+  void cancelKeyPressRequest();
+
+  QStringList getButtons(const QString &remoteName);
   
-  void executeAction(const IRAction &action);
+
+signals:
+    void haveButton(const QString &remote, const QString &button);
+
+public Q_SLOTS:
+    void gotButton(QString remote, QString button);
+
 
 };
 

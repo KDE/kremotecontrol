@@ -43,7 +43,6 @@ class Remote;
 class KCMLirc: public KCModule
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "org.kde.kcmlirc")
 
 private:
     Ui::KCMLircBase *theKCMLircBase;
@@ -72,10 +71,6 @@ public slots:
     void slotDrop(QTreeWidget *, QDropEvent *, QTreeWidgetItem *, QTreeWidgetItem *after);
     void slotEditMode();
 
-
-signals:
-    void haveButton(const QString &remote, const QString &button);
-
 public:
     virtual void load();
     virtual void save();
@@ -84,9 +79,6 @@ public:
 
     explicit KCMLirc(QWidget *parent = 0, const QVariantList &args = QVariantList());
     ~KCMLirc();
-
-public Q_SLOTS:
-    void gotButton(QString remote, QString button);
 
 };
 

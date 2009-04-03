@@ -67,6 +67,8 @@ class IRKick: public QObject
     QTimer *theFlashOff;
 
     void updateTray();
+    bool searchForProgram(const IRAction &action, QStringList &programs);
+    void executeAction(const IRAction &action);
 
 protected:
     KLircClient *theClient;

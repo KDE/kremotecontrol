@@ -32,7 +32,6 @@
 #include "editaction.h"
 #include "editmode.h"
 #include "modeslist.h"
-#include "kcmlircadaptor.h"
 
 #include <qevent.h>
 #include <QHBoxLayout>
@@ -66,12 +65,6 @@ K_EXPORT_PLUGIN( KCMLircFactory( "kcm_lirc" ) )
 KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
         KCModule(KCMLircFactory::componentData(), parent, args)
 {
-
-    new KcmlircAdaptor(this);
-    QDBusConnection dBusConnection = QDBusConnection::sessionBus();
-    dBusConnection.registerObject("/KCMLirc", this,
-                                  QDBusConnection::ExportAllSlots);
-
     KGlobal::locale()->insertCatalog("kcm_lirc");
     setAboutData(
         new KAboutData(
@@ -547,11 +540,6 @@ void KCMLirc::updateActions()
     if (theKCMLircBase->theActions->currentItem())
         theKCMLircBase->theActions->currentItem()->setSelected(true);
     updateActionsStatus();
-}
-
-void KCMLirc::gotButton(QString remote, QString button)
-{
-    emit haveButton(remote, button);
 }
 
 void KCMLirc::updateModes()
