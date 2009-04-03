@@ -52,8 +52,7 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMo
     Q_UNUSED(name)
     Q_UNUSED(parent)
     setupUi(this);
-    dbusFuntionModel = new DBusFunctionModel(theFunctions);
-    theFunctions->setModel(dbusFuntionModel);
+    theFunctions->setModel(new DBusFunctionModel(theFunctions));
     theFunctions->setSelectionBehavior(QAbstractItemView::SelectRows);
     theFunctions->setSelectionMode(QAbstractItemView::SingleSelection);
 
@@ -250,22 +249,16 @@ void AddAction::updateButton(const QString &remote, const QString &button)
 
 void AddAction::updateButtons()
 {
+
+
+
     theButtons->clear();
-    buttonMap.clear();
-    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.irkick", "/IRKick", "", "buttons");
-    m << theMode.remote();
-    QDBusMessage response = QDBusConnection::sessionBus().call(m);
-
-    if (response.type() == QDBusMessage::ErrorMessage) {
-        kDebug() << response.errorMessage();
-    }
-
-    kDebug() << "Got response: " << response.arguments();
-
-    QStringList buttons = response.arguments().at(0).toStringList();
-
-    for (QStringList::iterator j = buttons.begin(); j != buttons.end(); ++j)
-        buttonMap[new QListWidgetItem(RemoteServer::remoteServer()->getButtonName(theMode.remote(), *j), theButtons)] = *j;
+    foreach(QString buttonName, DBusInterface::getInstance()->getButtons(theMode.remote())){
+    kDebug() << "foud buttonName " << buttonName;
+    QListWidgetItem *tItem =  new  QListWidgetItem(RemoteServer::remoteServer()->getButtonName(theMode.remote(), buttonName),theButtons);
+    tItem->setData(Qt::UserRole,buttonName);
+    
+}
 }
 
 void AddAction::updateForPageChange()
@@ -575,7 +568,8 @@ void AddAction::updateFunctions()
     if (theObjects->currentItem() && theObjects->currentItem()->parent()) {
         QList<Prototype> tList = DBusInterface::getInstance()->getFunctions(nameProgramMap[theObjects->currentItem()->parent()], theObjects->currentItem()->text(0));
         kDebug()<< "size " << tList.size();
-        theFunctions->model()->insertRows(0, tList.size());
+      //-1 clears the model
+        theFunctions->model()->insertRows(-1, tList.size());
         for (int i = 0; i < tList.size(); i++) {
             theFunctions->model()->setData(theFunctions->model()->index(i,0),qVariantFromValue( tList.at(i)), Qt::UserRole);
         }
@@ -590,8 +584,11 @@ IRAction* AddAction::getAction()
     IRAction *action = new IRAction();
     action->setRemote(theMode.remote());
     action->setMode(theMode.name());
-    kDebug() << "Saving action. Button is: " << buttonMap[theButtons->currentItem()];
-    action->setButton(buttonMap[theButtons->currentItem()]);
+    
+
+
+
+    action->setButton(theButtons->currentItem()->data(Qt::UserRole).toString());
     action->setRepeat(theRepeat->isChecked());
     action->setAutoStart(theAutoStart->isChecked());
     action->setDoBefore(theDoBefore->isChecked());

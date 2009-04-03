@@ -166,6 +166,9 @@ bool DBusFunctionModel::setData(const QModelIndex &index,  const QVariant &value
 bool DBusFunctionModel::insertRows(int position, int rows, const QModelIndex &parent)
 {
     beginInsertRows(parent, position, position+rows-1);
+    if(position == -1){
+      theProtoTypeList.clear();      
+    }
     for (int row = 0; row < rows; ++row) {
         theProtoTypeList.insert(position, Prototype());
     }

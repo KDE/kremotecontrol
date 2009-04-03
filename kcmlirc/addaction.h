@@ -43,7 +43,6 @@ private:
 
     int curPage;
     Mode theMode;
-    DBusFunctionModel *dbusFuntionModel;
 
 public slots:
     virtual void slotCorrectPage();
@@ -75,7 +74,6 @@ public:
 
     QMap<QListWidgetItem *, QString> profileMap;
     QMap<QTreeWidgetItem *, QString> profileFunctionMap;
-    QMap<QListWidgetItem *, QString> buttonMap;
     QMap<QTreeWidgetItem *, bool> uniqueProgramMap;
     QMap<QTreeWidgetItem *, QString> nameProgramMap;
 
