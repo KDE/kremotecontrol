@@ -116,12 +116,12 @@ QVariant DBusFunctionModel::data(const QModelIndex & index, int role = Qt::Displ
 {
 
     if (!index.isValid()) {
-        kDebug() << " Index invalid";
+        kDebug() << " Index invalid Row" << index.row() << " Col " << index.column();
         return QVariant();
     }
     if (index.row() >= 0 || index.row() <= theProtoTypeList.size()) {
         if (role == Qt::DisplayRole || role == Qt::EditRole) {
-            switch (index.column())  {
+	    switch (index.column())  {
             case 0:
                 return theProtoTypeList.at(index.row()).name();
             case 1:
@@ -131,7 +131,6 @@ QVariant DBusFunctionModel::data(const QModelIndex & index, int role = Qt::Displ
             }
         }
         if (role == Qt::UserRole) {
-
             return qVariantFromValue(theProtoTypeList.at(index.row()));
         }
     }
@@ -139,11 +138,23 @@ QVariant DBusFunctionModel::data(const QModelIndex & index, int role = Qt::Displ
 
 }
 
+void DBusFunctionModel::setPrototypes(const QList< Prototype > protoTypeList) {
+  beginInsertRows(QModelIndex(), 0, protoTypeList.size() );  
+   theProtoTypeList = protoTypeList;
+endInsertRows();
+}
 
 
 bool DBusFunctionModel::setData(const QModelIndex &index,  const QVariant &value, int role)
 {
-    if (index.isValid() && role == Qt::UserRole && value.canConvert<Prototype>()) {
+    if (!index.isValid()){
+      
+kDebug() << " Index invalid Row" << index.row() << " Col " << index.column();
+return false;
+}
+
+if(role == Qt::UserRole && value.canConvert<Prototype>()) {
+	kDebug() << "Adding";
         Prototype tType =value.value<Prototype>();
         theProtoTypeList.replace(index.row(), tType);
         emit dataChanged(index, index);
@@ -154,11 +165,10 @@ bool DBusFunctionModel::setData(const QModelIndex &index,  const QVariant &value
 
 bool DBusFunctionModel::insertRows(int position, int rows, const QModelIndex &parent)
 {
-    beginInsertRows(QModelIndex(), position, position+rows-1);
+    beginInsertRows(parent, position, position+rows-1);  
     for (int row = 0; row < rows; ++row) {
         theProtoTypeList.insert(position, Prototype());
-    }
-
+    }    
     endInsertRows();
     return true;
 }
@@ -179,10 +189,10 @@ bool DBusFunctionModel::removeRows(int position, int rows, const QModelIndex &pa
 
 Qt::ItemFlags DBusFunctionModel::flags(const QModelIndex &index) const
 {
-    if (!index.isValid())
-        return Qt::ItemIsEnabled;
+    //if (!index.isValid())
+        return Qt::ItemIsEditable | Qt::ItemIsSelectable;
 
-    return QAbstractItemModel::flags(index) | Qt::ItemIsEditable;
+    //return QAbstractItemModel::flags(index) | Qt::ItemIsSelectable;
 }
 
 
@@ -221,14 +231,12 @@ void DBusFunctionModel::sort(int column, Qt::SortOrder order) {
 }
 
 
-QVariant DBusFunctionModel::headerData(int section, Qt::Orientation orientation,
-                                       int role) const
+QVariant DBusFunctionModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if (role != Qt::DisplayRole)
-        return QVariant();
-
-    if (orientation == Qt::Horizontal) {
-
+    kDebug() << "we are in header data section " << section << " role " << role  <<" orientation " << orientation;
+//     if (role != Qt::DisplayRole)
+//         return QVariant();
+//     if (orientation == Qt::Horizontal) {
         switch (section) {
         case 0:
             return i18n("Function");
@@ -238,9 +246,8 @@ QVariant DBusFunctionModel::headerData(int section, Qt::Orientation orientation,
             return i18n("Prototype");
         default:
             return QString();
-        }
-    }
-
+//         }
+     }
 }
 
 

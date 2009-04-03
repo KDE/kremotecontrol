@@ -34,7 +34,6 @@
 #include <QStringListModel>
 #include <QItemDelegate>
 #include <QStandardItem>
-
 //class QVariant
 //class QString
 
@@ -73,6 +72,7 @@ public:
     virtual bool setData(const QModelIndex &index,  const QVariant &value, int role);
     bool insertRows(int position, int rows, const QModelIndex &parent);
     bool removeRows(int position, int rows, const QModelIndex &parent);
+    void setPrototypes( const QList <Prototype>  protoTypeList);
 
     int rowCount(const QModelIndex &parent) const {
         return theProtoTypeList.size();
@@ -120,3 +120,4 @@ public:
 
 
 #endif /* MODEL_H_ */
+

@@ -100,28 +100,13 @@
      </widget>
     </item>
     <item>
-     <widget class="QTreeWidget" name="theFunctions">
+     <widget class="QTableView" name="theFunctions">
       <property name="sizePolicy">
        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <column>
-       <property name="text">
-        <string>Function</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Parameter</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Prototype</string>
-       </property>
-      </column>
      </widget>
     </item>
    </layout>

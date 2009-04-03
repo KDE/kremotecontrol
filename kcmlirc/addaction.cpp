@@ -30,8 +30,8 @@
 #include "mode.h"
 #include "arguments.h"
 #include "iraction.h"
-
-
+#include "model.h"
+#include "dbusinterface.h"
 #include <QRegExp>
 #include <QDBusMessage>
 #include <QDBusConnection>
@@ -52,6 +52,9 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMo
     Q_UNUSED(name)
     Q_UNUSED(parent)
     setupUi(this);
+    dbusFuntionModel = new DBusFunctionModel(theFunctions);
+    theFunctions->setModel(dbusFuntionModel);
+
 
 
     connect(this, SIGNAL(currentIdChanged(int)), SLOT(updateForPageChange()));
@@ -179,30 +182,29 @@ void AddAction::slotCorrectPage()
 
     if (curPage == 4) {
         updateParameters();
-    }
-
-    if (curPage == 4 && (
-                (theUseDBus->isChecked() && theFunctions->currentItem() && !Prototype(theFunctions->currentItem()->text(2)).count()) ||
+        Prototype  tType = theFunctions->model()->data(theFunctions->currentIndex()).value<Prototype>();
+        if ( (theUseDBus->isChecked() && theFunctions->currentIndex().row() >= 0 && tType.count() == 0) ||
                 (theUseProfile->isChecked() && (theProfileFunctions->currentItem() && !theProfileFunctions->currentItem()->text(1).toInt())) || theJustStart->isChecked()
-            )) {
+           ) {
 //  showPage(((QWizard *)this)->page(lastPage == 5 ? (theUseDBus->isChecked() ? 2 : 3) : 5));
 
-        if (lastPage == 5) {
-            if (theUseDBus->isChecked()) {
-                back();
+            if (lastPage == 5) {
+                if (theUseDBus->isChecked()) {
+                    back();
 //    back();
+                } else {
+                    back();
+                }
+                // Restore the Wizard layout in case its modified
+                QList<QWizard::WizardButton> layout;
+                layout << QWizard::Stretch << QWizard::BackButton << QWizard::NextButton << QWizard::FinishButton << QWizard::CancelButton;
+                setButtonLayout(layout);
             } else {
-                back();
+                next();
+                QList<QWizard::WizardButton> layout;
+                layout << QWizard::Stretch << QWizard::BackButton << QWizard::FinishButton << QWizard::CancelButton;
+                setButtonLayout(layout);
             }
-            // Restore the Wizard layout in case its modified
-            QList<QWizard::WizardButton> layout;
-            layout << QWizard::Stretch << QWizard::BackButton << QWizard::NextButton << QWizard::FinishButton << QWizard::CancelButton;
-            setButtonLayout(layout);
-        } else {
-            next();
-            QList<QWizard::WizardButton> layout;
-            layout << QWizard::Stretch << QWizard::BackButton << QWizard::FinishButton << QWizard::CancelButton;
-            setButtonLayout(layout);
         }
     }
 }
@@ -282,7 +284,8 @@ void AddAction::updateButtonStates()
         button(QWizard::NextButton)->setEnabled(!theButtons->selectedItems().isEmpty());
         break;
     case 2:
-        button(QWizard::NextButton)->setEnabled(theFunctions->currentItem() != 0);
+
+        button(QWizard::NextButton)->setEnabled(theFunctions->currentIndex().row() != 0);
         break;
     case 3:
         button(QWizard::NextButton)->setEnabled(theProfileFunctions->currentItem() != 0 || theJustStart->isChecked());
@@ -301,84 +304,7 @@ void AddAction::updateButtonStates()
     }
 }
 
-const QStringList AddAction::getFunctions(const QString app, const QString obj)
-{
-    kDebug() << "creating Interface with: " << app << '/' + obj << "org.freedesktop.DBus.Introspectable";
-    QDBusInterface *dBusIface = new QDBusInterface(app, '/' + obj, "org.freedesktop.DBus.Introspectable");
-    QDBusReply<QString> response = dBusIface->call("Introspect");
 
-    kDebug() << response;
-    QDomDocument domDoc;
-    domDoc.setContent(response);
-
-    QDomElement node = domDoc.documentElement();
-    QDomElement child = node.firstChildElement();
-
-    QStringList ret;
-    QString function;
-
-    while (!child.isNull()) {
-        if (child.tagName() == QLatin1String("interface")) {
-            if (child.attribute("name") == "org.freedesktop.DBus.Properties" ||
-                    child.attribute("name") == "org.freedesktop.DBus.Introspectable") {
-                child = child.nextSiblingElement();
-                continue;
-            }
-            QDomElement subChild = child.firstChildElement();
-            while (!subChild.isNull()) {
-                if (subChild.tagName() == QLatin1String("method")) {
-                    QString method = subChild.attribute(QLatin1String("name"));
-                    kDebug() << "Method: " << method;
-                    function = "QString " + method + '(';
-                    QDomElement arg = subChild.firstChildElement();
-                    QString argStr;
-                    while (!arg.isNull()) {
-                        if (arg.tagName() == QLatin1String("arg")) {
-                            if (arg.attribute(QLatin1String("direction")) == "in") {
-                                if (!argStr.isEmpty()) {
-                                    argStr += ", ";
-                                }
-                                if (arg.attribute(QLatin1String("type")) == "i") {
-                                    argStr += "int";
-                                } else if (arg.attribute(QLatin1String("type")) == "u") {
-                                    argStr += "uint";
-                                } else if (arg.attribute(QLatin1String("type")) == "s") {
-                                    argStr += "QString";
-                                } else if (arg.attribute(QLatin1String("type")) == "b") {
-                                    argStr += "bool";
-                                } else if (arg.attribute(QLatin1String("type")) == "d") {
-                                    argStr += "double";
-                                } else if (arg.attribute(QLatin1String("type")) == "as") {
-                                    argStr += "QStringList";
-                                } else if (arg.attribute(QLatin1String("type")) == "ay") {
-                                    argStr += "QByteArray";
-                                } else if (arg.attribute(QLatin1String("type")) == "(iii)") {
-                                    kDebug() << "got a (iii) type";
-                                    QString helper = arg.attribute("name");
-                                    arg = arg.nextSiblingElement();
-                                    argStr += arg.attribute(QLatin1String("value"));
-                                    argStr += ' ' + helper;
-                                    arg = arg.nextSiblingElement();
-                                    continue;
-                                } else {
-                                    argStr += arg.attribute(QLatin1String("type"));
-                                }
-                                argStr += ' ' + arg.attribute(QLatin1String("name"));
-                                kDebug() << "Arg: " << argStr;
-                            }
-                        }
-                        arg = arg.nextSiblingElement();
-                    }
-                    function +=  argStr + ')';
-                    ret += function;
-                }
-                subChild = subChild.nextSiblingElement();
-            }
-        }
-        child = child.nextSiblingElement();
-    }
-    return ret;
-}
 
 void AddAction::updateProfiles()
 {
@@ -386,7 +312,7 @@ void AddAction::updateProfiles()
     profileMap.clear();
 
     foreach (Profile *tmp, ProfileServer::profileServer()->profiles())
-        profileMap[new QListWidgetItem(tmp->name(), theProfiles)] = tmp->id();
+    profileMap[new QListWidgetItem(tmp->name(), theProfiles)] = tmp->id();
 }
 
 void AddAction::updateOptions()
@@ -417,10 +343,18 @@ void AddAction::updateOptions()
     theSendToTop->setEnabled(!isUnique);
     theSendToAll->setEnabled(!isUnique);
     switch (im) {
-    case IM_DONTSEND: theDontSend->setChecked(true); break;
-    case IM_SENDTOTOP: theSendToTop->setChecked(true); break;
-    case IM_SENDTOBOTTOM: theSendToBottom->setChecked(true); break;
-    case IM_SENDTOALL: theSendToAll->setChecked(true); break;
+    case IM_DONTSEND:
+        theDontSend->setChecked(true);
+        break;
+    case IM_SENDTOTOP:
+        theSendToTop->setChecked(true);
+        break;
+    case IM_SENDTOBOTTOM:
+        theSendToBottom->setChecked(true);
+        break;
+    case IM_SENDTOALL:
+        theSendToAll->setChecked(true);
+        break;
     }
 }
 
@@ -453,8 +387,8 @@ void AddAction::updateParameters()
     theParameters->clear();
     kDebug() << "clearing arguments";
     theArguments.clear();
-    if (theUseDBus->isChecked() && theFunctions->currentItem()) {
-        Prototype p(theFunctions->currentItem()->text(2));
+    if (theUseDBus->isChecked() && theFunctions->currentIndex().row() >= 0) {
+        Prototype p =  theFunctions->model()->data(theFunctions->currentIndex()).value<Prototype>();
         for (int k = 0; k < p.count(); k++) {
             QStringList parameters;
             parameters << (p.name(k).isEmpty() ? i18nc("Unknown parameter name in function", "&lt;anonymous&gt;") : p.name(k)) << "" << p.type(k) << QString().setNum(k + 1);
@@ -586,11 +520,11 @@ void AddAction::updateObjects()
         QString name = (*i);
         name.remove(0, 8);
 
-	// strip trailing numbers
-	QRegExp r1("[a-zA-Z]*-[0-9]*");
-	if(r1.exactMatch(name)){
-	    name.truncate(name.indexOf('-'));
-	}
+        // strip trailing numbers
+        QRegExp r1("[a-zA-Z]*-[0-9]*");
+        if (r1.exactMatch(name)) {
+            name.truncate(name.indexOf('-'));
+        }
 
         // Remove "human unreadable" entries
         QRegExp r2("[a-zA-Z]*");
@@ -608,8 +542,8 @@ void AddAction::updateObjects()
         QStringList tmpList;
         tmpList << name;
         QTreeWidgetItem *a = new QTreeWidgetItem(theObjects, tmpList);
-  
-	//theObjects->
+
+        //theObjects->
         uniqueProgramMap[a] = name == QString(*i);
         nameProgramMap[a] = *i;
 
@@ -637,14 +571,12 @@ void AddAction::updateObjects()
 void AddAction::updateFunctions()
 {
     kDebug() << "updateFunctions called";
-    theFunctions->clear();
     if (theObjects->currentItem() && theObjects->currentItem()->parent()) {
-        QStringList functions = getFunctions(nameProgramMap[theObjects->currentItem()->parent()], theObjects->currentItem()->text(0));
-        for (QStringList::iterator i = functions.begin(); i != functions.end(); ++i) {
-            Prototype p((QString)(*i));
-            QStringList parameters;
-            parameters << p.name() << p.argumentList() << *i;
-            QTreeWidgetItem *t = new QTreeWidgetItem(theFunctions, parameters);
+        QList<Prototype> tList = DBusInterface::getInstance()->getFunctions(nameProgramMap[theObjects->currentItem()->parent()], theObjects->currentItem()->text(0));
+        kDebug()<< "size " << tList.size();
+        theFunctions->model()->insertRows(0, tList.size());
+        for (int i = 0; i < tList.size(); i++) {
+            theFunctions->model()->setData(theFunctions->model()->index(i,0),qVariantFromValue( tList.at(i)), Qt::UserRole);
         }
     }
     updateOptions();
@@ -653,70 +585,70 @@ void AddAction::updateFunctions()
 
 IRAction* AddAction::getAction()
 {
-          IRAction *action = new IRAction();
-          action->setRemote(theMode.remote());
-          action->setMode(theMode.name());
-          kDebug() << "Saving action. Button is: " << buttonMap[theButtons->currentItem()];
-          action->setButton(buttonMap[theButtons->currentItem()]);
-          action->setRepeat(theRepeat->isChecked());
-          action->setAutoStart(theAutoStart->isChecked());
-          action->setDoBefore(theDoBefore->isChecked());
-          action->setDoAfter(theDoAfter->isChecked());
-          action->setUnique(isUnique);
-          action->setIfMulti(theDontSend->isChecked() ? IM_DONTSEND
-                             : theSendToTop->isChecked() ? IM_SENDTOTOP
-                             : theSendToBottom->isChecked() ? IM_SENDTOBOTTOM
-                             : IM_SENDTOALL);
-          // change mode?
-          if (theChangeMode->isChecked()) {
-              if (theSwitchMode->isChecked()
-                      && !theModes->selectedItems().isEmpty()) {
-                  action->setProgram("");
-                  action->setObject(theModes->selectedItems().first()->text());
-              } else if (theExitMode->isChecked()) {
-                  action->setProgram("");
-                  action->setObject("");
-              }
-              action->setAutoStart(false);
-              action->setRepeat(false);
-          }
-          // DBus?
-          else if (theUseDBus->isChecked()
-                   && !theObjects->selectedItems().isEmpty()
-                   && theObjects->selectedItems().first()->parent()
-                   && !theFunctions->selectedItems().isEmpty()) {
-              action->setProgram(program);
-	  kDebug() << "programm                 ++++++++++++++++++  " << program;
-    kDebug() << "function                 ++++++++++++++++++  " << theFunctions->selectedItems().first()->text(2);
-              action->setObject(theObjects->selectedItems().first()->text(0));
-              action->setMethod(theFunctions->selectedItems().first()->text(2));
-              theParameters->sortItems(3, Qt::AscendingOrder);
-              action->setArguments(theArguments);
-          }
-          // profile?
-          else if (theUseProfile->isChecked()
-                   && !theProfiles->selectedItems().isEmpty()
-                   && (!theProfileFunctions->selectedItems().isEmpty()
-                       || theJustStart->isChecked())) {
-              ProfileServer *theServer = ProfileServer::profileServer();
+    IRAction *action = new IRAction();
+    action->setRemote(theMode.remote());
+    action->setMode(theMode.name());
+    kDebug() << "Saving action. Button is: " << buttonMap[theButtons->currentItem()];
+    action->setButton(buttonMap[theButtons->currentItem()]);
+    action->setRepeat(theRepeat->isChecked());
+    action->setAutoStart(theAutoStart->isChecked());
+    action->setDoBefore(theDoBefore->isChecked());
+    action->setDoAfter(theDoAfter->isChecked());
+    action->setUnique(isUnique);
+    action->setIfMulti(theDontSend->isChecked() ? IM_DONTSEND
+                       : theSendToTop->isChecked() ? IM_SENDTOTOP
+                       : theSendToBottom->isChecked() ? IM_SENDTOBOTTOM
+                       : IM_SENDTOALL);
+    // change mode?
+    if (theChangeMode->isChecked()) {
+        if (theSwitchMode->isChecked()
+                && !theModes->selectedItems().isEmpty()) {
+            action->setProgram("");
+            action->setObject(theModes->selectedItems().first()->text());
+        } else if (theExitMode->isChecked()) {
+            action->setProgram("");
+            action->setObject("");
+        }
+        action->setAutoStart(false);
+        action->setRepeat(false);
+    }
+    // DBus?
+    else if (theUseDBus->isChecked()
+             && !theObjects->selectedItems().isEmpty()
+             && theObjects->selectedItems().first()->parent()
+             && !theFunctions->currentIndex().row() != -1) {
+        action->setProgram(program);
+        kDebug() << "programm                 ++++++++++++++++++  " << program;
+//    kDebug() << "function                 ++++++++++++++++++  " << theFunctions->selectedItems().first()->text(2);
+        Prototype p =   theFunctions->model()->data(theFunctions->currentIndex()).value<Prototype>();
+        action->setMethod(p.argumentList());
+        theParameters->sortItems(3, Qt::AscendingOrder);
+        action->setArguments(theArguments);
+    }
+    // profile?
+    else if (theUseProfile->isChecked()
+             && !theProfiles->selectedItems().isEmpty()
+             && (!theProfileFunctions->selectedItems().isEmpty()
+                 || theJustStart->isChecked())) {
+        ProfileServer *theServer = ProfileServer::profileServer();
 
-              if (theNotJustStart->isChecked()) {
-                  const ProfileAction
-                  *theAction =
-                      theServer->getAction(
-                          profileMap[theProfiles->selectedItems().first()],
-                          profileFunctionMap[theProfileFunctions->selectedItems().first()]);
-                  action->setProgram(theAction->profile()->id());
-                  action->setObject(theAction->objId());
-                  action->setMethod(theAction->prototype());
-                  theParameters->sortItems(3, Qt::AscendingOrder);
-                  action->setArguments(theArguments);
-              } else {
-                  action->setProgram(
-                      theServer->getProfileById(profileMap[theProfiles->selectedItems().first()])->id());
-                  action->setObject("");
-              }
-          }
-          return action;
+        if (theNotJustStart->isChecked()) {
+            const ProfileAction
+            *theAction =
+                theServer->getAction(
+                    profileMap[theProfiles->selectedItems().first()],
+                    profileFunctionMap[theProfileFunctions->selectedItems().first()]);
+            action->setProgram(theAction->profile()->id());
+            action->setObject(theAction->objId());
+            action->setMethod(theAction->prototype());
+            theParameters->sortItems(3, Qt::AscendingOrder);
+            action->setArguments(theArguments);
+        } else {
+            action->setProgram(
+                theServer->getProfileById(profileMap[theProfiles->selectedItems().first()])->id());
+            action->setObject("");
+        }
+    }
+    return action;
 }
 #include "addaction.moc"

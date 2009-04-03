@@ -32,7 +32,7 @@
 
 #include "arguments.h"
 #include "mode.h"
-
+#include "model.h"
 class IRAction;
 
 
@@ -43,6 +43,7 @@ private:
 
     int curPage;
     Mode theMode;
+    DBusFunctionModel *dbusFuntionModel;
 
 public slots:
     virtual void slotCorrectPage();
