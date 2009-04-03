@@ -92,6 +92,8 @@ public:
 class ArgumentsModelItem: public QStandardItem
 {
 public:
+    ArgumentsModelItem ( const QString & text );
+    ArgumentsModelItem ( const QVariant &data);
     virtual QVariant data ( int role = Qt::UserRole + 1 ) const;
 
 private:

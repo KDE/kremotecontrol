@@ -371,6 +371,17 @@ void ArgumentDelegate::updateEditorGeometry(QWidget *editor,
     editor->setGeometry(option.rect);
 }
 
+ArgumentsModelItem::ArgumentsModelItem ( const QString & text ):QStandardItem(text){
+    setFlags(Qt::ItemIsEnabled);
+};
+
+ArgumentsModelItem::ArgumentsModelItem ( const QVariant &data ){
+    setData(data, Qt::EditRole);
+    if(data.type() == QVariant::StringList){
+	setToolTip(i18n("A comma-separated list of Strings"));
+    }
+
+};
 
 QVariant ArgumentsModelItem::data ( int role ) const {
 
@@ -388,7 +399,6 @@ QVariant ArgumentsModelItem::data ( int role ) const {
         return QStandardItem::data(role);
     }
 }
-
 
 
 

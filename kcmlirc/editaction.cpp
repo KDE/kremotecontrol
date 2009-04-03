@@ -244,16 +244,8 @@ void EditAction::updateArguments()
             kDebug() << "appending configured args";
             for(int i = 0; i < profileAction->arguments().count(); ++i){
                 QList<QStandardItem*> tmp;
-                tmp.append(new QStandardItem(profileAction->arguments().at(i).comment() + " (" + profileAction->arguments().at(i).type() + ")"));
-                QStandardItem *tmp2 = new ArgumentsModelItem();
-                tmp2->setData(theAction->arguments().at(i), Qt::EditRole);
-                kDebug() << "arg is" << theAction->arguments().at(i);
-                tmp.append(tmp2);
-                tmp.first()->setEditable(false);
-                if(QVariant::nameToType(profileAction->arguments().at(i).type().toLocal8Bit()) == QVariant::StringList){
-                    tmp.first()->setToolTip(i18n("A comma-separated list of Strings"));
-                    tmp.last()->setToolTip(i18n("A comma-separated list of Strings"));
-                }
+                tmp.append(new ArgumentsModelItem(profileAction->arguments().at(i).comment() + " (" + profileAction->arguments().at(i).type() + ")"));
+                tmp.append(new ArgumentsModelItem(theAction->arguments().at(i)));
                 argumentsModel->appendRow(tmp);
             }
 
@@ -262,16 +254,8 @@ void EditAction::updateArguments()
             const QList<ProfileActionArgument> &profileActionArguments = profileAction->arguments();
             for (int i = 0; i < profileActionArguments.count(); ++i) {
                 QList<QStandardItem*> tmp;
-                tmp.append(new QStandardItem(profileActionArguments.at(i).comment() + " (" + profileActionArguments.at(i).type() + ")"));
-                QStandardItem *tmp2 = new ArgumentsModelItem();
-                tmp2->setData(profileActionArguments.at(i).getDefault(), Qt::EditRole);
-                kDebug() << "inserting" << profileActionArguments.at(i).getDefault();
-                tmp.append(tmp2);
-                tmp.first()->setEditable(false);
-                if(QVariant::nameToType(profileActionArguments.at(i).type().toLocal8Bit()) == QVariant::StringList){
-                    tmp.first()->setToolTip(i18n("A comma-separated list of Strings"));
-                    tmp.last()->setToolTip(i18n("A comma-separated list of Strings"));
-                }
+                tmp.append(new ArgumentsModelItem(profileActionArguments.at(i).comment() + " (" + profileActionArguments.at(i).type() + ")"));
+                tmp.append(new ArgumentsModelItem(profileActionArguments.at(i).getDefault()));
                 argumentsModel->appendRow(tmp);
             }
         }
@@ -286,31 +270,15 @@ void EditAction::updateArguments()
                 getCurrentDBusFunction() == theAction->method().prototype()){ // And also the Function. Fill in the arguments
             for(int i = 0; i < theAction->arguments().size(); ++i){
                 QList<QStandardItem*> tmp;
-                tmp.append(new QStandardItem(p.getArguments().at(i).second + " (" + QVariant::typeToName(p.getArguments().at(i).first) + ")"));
-                QStandardItem *tmp2 = new ArgumentsModelItem();
-                tmp2->setData(theAction->arguments().at(i), Qt::EditRole);
-                kDebug() << "inserting" << theAction->arguments().at(i);
-                tmp.append(tmp2);
-                tmp.first()->setEditable(false);
-                if(p.getArguments().at(i).first == QVariant::StringList){
-                    tmp.first()->setToolTip(i18n("A comma-separated list of Strings"));
-                    tmp.last()->setToolTip(i18n("A comma-separated list of Strings"));
-                }
+                tmp.append(new ArgumentsModelItem(p.getArguments().at(i).second + " (" + QVariant::typeToName(p.getArguments().at(i).first) + ")"));
+                tmp.append(new ArgumentsModelItem(theAction->arguments().at(i)));
                 argumentsModel->appendRow(tmp);
             }
         } else {
             for(int i = 0; i < p.getArguments().size(); ++i){
                 QList<QStandardItem*> tmp;
-                tmp.append(new QStandardItem(p.getArguments().at(i).second + " (" + QVariant::typeToName(p.getArguments().at(i).first) + ")"));
-                QStandardItem *tmp2 = new ArgumentsModelItem();
-                tmp2->setData(QVariant(p.getArguments().at(i).first), Qt::EditRole);
-                kDebug() << "inserting" << QVariant(p.getArguments().at(i).first);
-                tmp.append(tmp2);
-                tmp.first()->setEditable(false);
-                if(p.getArguments().at(i).first == QVariant::StringList){
-                    tmp.first()->setToolTip(i18n("A comma-separated list of Strings"));
-                    tmp.last()->setToolTip(i18n("A comma-separated list of Strings"));
-                }
+                tmp.append(new ArgumentsModelItem(p.getArguments().at(i).second + " (" + QVariant::typeToName(p.getArguments().at(i).first) + ")"));
+                tmp.append(new ArgumentsModelItem(QVariant(p.getArguments().at(i).first)));
                 argumentsModel->appendRow(tmp);
             }
         }
