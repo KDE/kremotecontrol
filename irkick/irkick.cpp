@@ -28,7 +28,6 @@
 #include "irkick.h"
 #include "profileserver.h"
 #include "irkickadaptor.h"
-#include "dbusinterface.h"
 
 #include <QtDBus/qdbusconnection.h>
 
