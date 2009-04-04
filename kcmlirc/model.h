@@ -49,7 +49,6 @@ class DBusServiceItem : public QStandardItem{
 
 public:
 DBusServiceItem(const QString &item);
-DBusServiceItem();
 
 virtual QVariant data(int  role) const;
  static QString trimAppname(const QString &appName);
@@ -59,7 +58,7 @@ virtual bool operator>(const QStandardItem& other) const;
 };
 
 
-
+/*
 class DBusServiceModel : public  QStringListModel
 {
 
@@ -74,7 +73,7 @@ public:
     void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
 
 
-};
+};*/
 
 
 class DBusFunctionModel : public  QAbstractListModel

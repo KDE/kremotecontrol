@@ -46,9 +46,6 @@ DBusServiceItem::DBusServiceItem(const QString &item):QStandardItem(){
   setFlags(Qt::ItemIsSelectable | Qt::ItemIsEditable);
 }
 
-DBusServiceItem::DBusServiceItem():QStandardItem(){
-  setFlags(Qt::ItemIsSelectable | Qt::ItemIsEditable);
-}
 
 QVariant DBusServiceItem::data(int role) const {
 
@@ -90,79 +87,6 @@ QString DBusServiceItem::trimAppname(const QString& appName) {
 
 
 
-
-
-
-
-
-
-
-
-
-DBusServiceModel::DBusServiceModel(QObject *parent = 0) :
-        QStringListModel(parent)
-{
-
-}
-
-bool DBusServiceModel::ascendingLessThan(const QString &s1, const QString &s2)
-{
-    return trimAppname(s1) < trimAppname(s2);
-}
-
-bool DBusServiceModel::decendingLessThan(const QString &s1, const QString &s2)
-{
-
-    return trimAppname(s1) > trimAppname(s2);
-}
-
-QString DBusServiceModel::trimAppname(const QString &appName)
-{
-
-    int lastIndex = appName .lastIndexOf(".") + 1;
-    if (lastIndex < appName.size()) {
-        QString s = appName;
-        QString domainName = appName;
-        s.remove(0, lastIndex);
-        domainName.remove(lastIndex -1, domainName.length());
-        return  s.left(1).toUpper() + s.right(s.size() - 1) + " (" + domainName+")";
-    }
-    return appName;
-}
-
-QVariant DBusServiceModel::data(const QModelIndex & index, int role = Qt::DisplayRole) const
-{
-    if (!index.isValid()) {
-        kDebug() << " Index invalid";
-        return QVariant();
-    }
-    if (index.row() >= 0 || index.row() <= stringList().size()) {
-        if (role == Qt::DisplayRole || role == Qt::EditRole) {
-
-            return trimAppname(stringList().at(index.row()));
-        }
-        if (role == Qt::UserRole) {
-
-            return stringList().at(index.row());
-        }
-    }
-    return QVariant();
-
-}
-
-
-void  DBusServiceModel::sort(int, Qt::SortOrder order)
-{
-    emit layoutAboutToBeChanged();
-    QStringList tList = stringList();
-
-    if (order == Qt::AscendingOrder)
-        qSort(tList.begin(), tList.end(),  DBusServiceModel::ascendingLessThan);
-    else
-        qSort(tList.begin(), tList.end(),  DBusServiceModel::decendingLessThan);
-    setStringList(tList);
-    emit layoutChanged();
-}
 
 
 DBusFunctionModel::DBusFunctionModel(QObject* parent ) : QAbstractListModel(parent) {
@@ -463,3 +387,72 @@ QVariant ArgumentsModelItem::data ( int role ) const {
 
 
 
+
+
+/*
+
+
+DBusServiceModel::DBusServiceModel(QObject *parent = 0) :
+        QStringListModel(parent)
+{
+
+}
+
+bool DBusServiceModel::ascendingLessThan(const QString &s1, const QString &s2)
+{
+    return trimAppname(s1) < trimAppname(s2);
+}
+
+bool DBusServiceModel::decendingLessThan(const QString &s1, const QString &s2)
+{
+
+    return trimAppname(s1) > trimAppname(s2);
+}
+
+QString DBusServiceModel::trimAppname(const QString &appName)
+{
+
+    int lastIndex = appName .lastIndexOf(".") + 1;
+    if (lastIndex < appName.size()) {
+        QString s = appName;
+        QString domainName = appName;
+        s.remove(0, lastIndex);
+        domainName.remove(lastIndex -1, domainName.length());
+        return  s.left(1).toUpper() + s.right(s.size() - 1) + " (" + domainName+")";
+    }
+    return appName;
+}
+
+QVariant DBusServiceModel::data(const QModelIndex & index, int role = Qt::DisplayRole) const
+{
+    if (!index.isValid()) {
+        kDebug() << " Index invalid";
+        return QVariant();
+    }
+    if (index.row() >= 0 || index.row() <= stringList().size()) {
+        if (role == Qt::DisplayRole || role == Qt::EditRole) {
+
+            return trimAppname(stringList().at(index.row()));
+        }
+        if (role == Qt::UserRole) {
+
+            return stringList().at(index.row());
+        }
+    }
+    return QVariant();
+
+}
+
+
+void  DBusServiceModel::sort(int, Qt::SortOrder order)
+{
+    emit layoutAboutToBeChanged();
+    QStringList tList = stringList();
+
+    if (order == Qt::AscendingOrder)
+        qSort(tList.begin(), tList.end(),  DBusServiceModel::ascendingLessThan);
+    else
+        qSort(tList.begin(), tList.end(),  DBusServiceModel::decendingLessThan);
+    setStringList(tList);
+    emit layoutChanged();
+}*/

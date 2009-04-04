@@ -349,21 +349,15 @@ void EditAction::updateDBusApplications()
 {
 kDebug()<< "update dbus applications";
     editActionBaseWidget->theDBusApplications->clear();
-    editActionBaseWidget->theDBusApplications->addItems(DBusInterface::getInstance()->getRegisteredPrograms());
+    //editActionBaseWidget->theDBusApplications->addItems(DBusInterface::getInstance()->getRegisteredPrograms());
 
     foreach(QString item, DBusInterface::getInstance()->getRegisteredPrograms()){
-      DBusServiceItem *t = new DBusServiceItem();
-            t->setData(item, Qt::UserRole);
-        dbusServiceModel->appendRow(t);
-//        dbusServiceModel->appendRow(new DBusServiceItem(item));
+        dbusServiceModel->appendRow(new DBusServiceItem(item));
     }
 
     if(!ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype()) &&
-    !DBusInterface::getInstance()->isProgramRunning(theAction->program())){
-      DBusServiceItem *t = new DBusServiceItem();
-      t->setData(theAction->program(), Qt::UserRole);
-      //dbusServiceModel->appendRow(new DBusServiceItem(theAction->program()));
-      dbusServiceModel->appendRow(t);
+    !DBusInterface::getInstance()->isProgramRunning(theAction->program())){      
+      dbusServiceModel->appendRow(new DBusServiceItem(theAction->program()));      
     }
     editActionBaseWidget->theDBusApplications->model()->sort( Qt::AscendingOrder);
     int ti = editActionBaseWidget->theDBusApplications->findData(theAction->program());
