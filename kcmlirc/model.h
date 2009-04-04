@@ -41,6 +41,25 @@
 Q_DECLARE_METATYPE(Prototype)
 
 
+
+
+
+
+class DBusServiceItem : public QStandardItem{
+
+public:
+DBusServiceItem(const QString &item);
+DBusServiceItem();
+
+virtual QVariant data(int  role) const;
+ static QString trimAppname(const QString &appName);
+virtual bool operator<(const QStandardItem& other) const;
+virtual bool operator>(const QStandardItem& other) const;
+
+};
+
+
+
 class DBusServiceModel : public  QStringListModel
 {
 
@@ -74,11 +93,11 @@ public:
     bool removeRows(int position, int rows, const QModelIndex &parent);
     void setPrototypes( const QList <Prototype>  protoTypeList);
 
-    int rowCount(const QModelIndex &parent) const {
+    int rowCount(const QModelIndex &parent=QModelIndex()) const {
         return theProtoTypeList.size();
     }
 
-    int columnCount(const QModelIndex &parent) const {
+    int columnCount(const QModelIndex &parent=QModelIndex()) const {
         return 3;
     }
 

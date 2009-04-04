@@ -584,10 +584,6 @@ IRAction* AddAction::getAction()
     IRAction *action = new IRAction();
     action->setRemote(theMode.remote());
     action->setMode(theMode.name());
-    
-
-
-
     action->setButton(theButtons->currentItem()->data(Qt::UserRole).toString());
     action->setRepeat(theRepeat->isChecked());
     action->setAutoStart(theAutoStart->isChecked());

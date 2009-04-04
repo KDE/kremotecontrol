@@ -39,6 +39,66 @@
 #include <QApplication>
 #include <QComboBox>
 
+
+
+DBusServiceItem::DBusServiceItem(const QString &item):QStandardItem(){
+  setData(item, Qt::UserRole);
+  setFlags(Qt::ItemIsSelectable | Qt::ItemIsEditable);
+}
+
+DBusServiceItem::DBusServiceItem():QStandardItem(){
+  setFlags(Qt::ItemIsSelectable | Qt::ItemIsEditable);
+}
+
+QVariant DBusServiceItem::data(int role) const {
+
+  kDebug() << "role " << role<<  " Data " <<  QStandardItem::data(role);
+        if (role == Qt::DisplayRole || role == Qt::EditRole)  {
+            return trimAppname(QStandardItem::data(Qt::UserRole).toString());
+        }
+        else if(role == Qt::UserRole){
+          kDebug()<< " userrole";
+           return QStandardItem::data(role);
+        }
+return QVariant();
+}
+
+
+bool DBusServiceItem::operator<(const QStandardItem& other) const {
+    return data(Qt::EditRole).toString().compare(other.data(Qt::EditRole).toString());
+}
+
+bool DBusServiceItem::operator>(const QStandardItem& other) const {
+    return other.data(Qt::EditRole).toString().compare(data(Qt::EditRole).toString());
+}
+
+
+QString DBusServiceItem::trimAppname(const QString& appName) {
+    int lastIndex = appName .lastIndexOf(".") + 1;
+    if (lastIndex < appName.size()) {
+        QString s = appName;
+        QString domainName = appName;
+        s.remove(0, lastIndex);
+        domainName.remove(lastIndex -1, domainName.length());
+        return  s.left(1).toUpper() + s.right(s.size() - 1) + " (" + domainName+")";
+    }
+    return appName;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 DBusServiceModel::DBusServiceModel(QObject *parent = 0) :
         QStringListModel(parent)
 {
@@ -167,7 +227,7 @@ bool DBusFunctionModel::insertRows(int position, int rows, const QModelIndex &pa
 {
     beginInsertRows(parent, position, position+rows-1);
     if(position == -1){
-      theProtoTypeList.clear();      
+      theProtoTypeList.clear();
     }
     for (int row = 0; row < rows; ++row) {
         theProtoTypeList.insert(position, Prototype());
@@ -379,7 +439,7 @@ ArgumentsModelItem::ArgumentsModelItem ( const QString & text ):QStandardItem(te
 ArgumentsModelItem::ArgumentsModelItem ( const QVariant &data ){
     setData(data, Qt::EditRole);
     if(data.type() == QVariant::StringList){
-	setToolTip(i18n("A comma-separated list of Strings"));
+  setToolTip(i18n("A comma-separated list of Strings"));
     }
 
 };
