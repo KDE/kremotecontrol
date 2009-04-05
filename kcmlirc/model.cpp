@@ -18,10 +18,10 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>. *
 *************************************************************************/
 
-/*
+/**
 *
 *  Created on: 01.02.2009
-*      @author Frank Scheffold
+*      @author Frank Scheffold and Michael Zanetti
 */
 
 #include "model.h"
@@ -41,23 +41,29 @@
 
 
 
-DBusServiceItem::DBusServiceItem(const QString &item):QStandardItem(){
-  setData(item, Qt::UserRole);
-  setFlags(Qt::ItemIsSelectable | Qt::ItemIsEditable);
+/*
+***********************************
+DBusServiceItem
+***********************************
+*/
+
+
+DBusServiceItem::DBusServiceItem(const QString &item):QStandardItem() {
+    setData(item, Qt::UserRole);
+    setFlags(Qt::ItemIsSelectable);
 }
 
 
-QVariant DBusServiceItem::data(int role) const {
+QVariant DBusServiceItem::data(int role) const
+{
     if (role == Qt::DisplayRole || role == Qt::EditRole)  {
-	return trimAppname(QStandardItem::data(Qt::UserRole).toString());
+        return trimAppname(QStandardItem::data(Qt::UserRole).toString());
     }
-    else if(role == Qt::UserRole){
-	kDebug()<< " userrole";
-	return QStandardItem::data(role);
+    else if (role == Qt::UserRole) {
+        return QStandardItem::data(role);
     }
-return QVariant();
+    return QVariant();
 }
-
 
 QString DBusServiceItem::trimAppname(const QString& appName) {
     int lastIndex = appName .lastIndexOf(".") + 1;
@@ -66,17 +72,21 @@ QString DBusServiceItem::trimAppname(const QString& appName) {
         QString domainName = appName;
         s.remove(0, lastIndex);
         domainName.remove(lastIndex -1, domainName.length());
-        return  s.left(1).toUpper() + s.right(s.size() - 1) + " (" + domainName+")";
+        return  s + " (" + domainName+")";
     }
     return appName;
 }
 
 
+/*
+***********************************
+DBusFunctionModel
+***********************************
+*/
 
 DBusFunctionModel::DBusFunctionModel(QObject* parent ) : QAbstractListModel(parent) {
     qRegisterMetaType<Prototype>("Prototype");
 }
-
 
 QVariant DBusFunctionModel::data(const QModelIndex & index, int role = Qt::DisplayRole) const
 {
@@ -132,8 +142,8 @@ bool DBusFunctionModel::setData(const QModelIndex &index,  const QVariant &value
 bool DBusFunctionModel::insertRows(int position, int rows, const QModelIndex &parent)
 {
     beginInsertRows(parent, position, position+rows-1);
-    if(position == -1){
-      theProtoTypeList.clear();
+    if (position == -1) {
+        theProtoTypeList.clear();
     }
     for (int row = 0; row < rows; ++row) {
         theProtoTypeList.insert(position, Prototype());
@@ -219,6 +229,12 @@ QVariant DBusFunctionModel::headerData(int section, Qt::Orientation orientation,
 
 
 
+
+/*
+***********************************
+ArgumentDelegate
+***********************************
+*/
 
 
 ArgumentDelegate::ArgumentDelegate(QObject *parent)
@@ -338,14 +354,23 @@ void ArgumentDelegate::updateEditorGeometry(QWidget *editor,
     editor->setGeometry(option.rect);
 }
 
-ArgumentsModelItem::ArgumentsModelItem ( const QString & text ):QStandardItem(text){
+
+
+
+/*
+***********************************
+ArgumentsModelItem
+***********************************
+*/
+
+ArgumentsModelItem::ArgumentsModelItem ( const QString & text ):QStandardItem(text) {
     setFlags(Qt::ItemIsEnabled);
 };
 
-ArgumentsModelItem::ArgumentsModelItem ( const QVariant &data ){
+ArgumentsModelItem::ArgumentsModelItem ( const QVariant &data ) {
     setData(data, Qt::EditRole);
-    if(data.type() == QVariant::StringList){
-  setToolTip(i18n("A comma-separated list of Strings"));
+    if (data.type() == QVariant::StringList) {
+        setToolTip(i18n("A comma-separated list of Strings"));
     }
 
 };
@@ -370,6 +395,11 @@ QVariant ArgumentsModelItem::data ( int role ) const {
 
 
 
+/*
+***********************************
+DBusServiceModel
+***********************************
+*/
 
 /*
 

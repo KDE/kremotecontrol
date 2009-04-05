@@ -20,7 +20,7 @@
 
 
 /**
-  * @author Gav Wood
+  * @author Gav Wood, Michael Zanetti & Frank Scheffold
   */
 
 #include "editaction.h"

@@ -7,8 +7,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>794</width>
-    <height>487</height>
+    <width>796</width>
+    <height>489</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -82,7 +82,7 @@
   <widget class="QWizardPage" name="page3">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="QTreeWidget" name="theObjects">
+     <widget class="QTreeView" name="theObjects">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -92,11 +92,6 @@
       <property name="rootIsDecorated">
        <bool>true</bool>
       </property>
-      <column>
-       <property name="text">
-        <string>Program</string>
-       </property>
-      </column>
      </widget>
     </item>
     <item>
@@ -258,7 +253,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="KIntNumInput" name="theValueIntNumInput" native="true"/>
+         <widget class="KIntNumInput" name="theValueIntNumInput"/>
         </item>
        </layout>
       </widget>
@@ -278,7 +273,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="KDoubleNumInput" name="theValueDoubleNumInput" native="true"/>
+         <widget class="KDoubleNumInput" name="theValueDoubleNumInput"/>
         </item>
        </layout>
       </widget>

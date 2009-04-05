@@ -1,3 +1,4 @@
 Code mostly by Gav Wood <gav@kde.org>
 LIRC interface code adapted from Noatun/Infrared by Malte Starostik.
+Port to kde4 and refactoring by Frank Scheffold and Michael Zanetti
 

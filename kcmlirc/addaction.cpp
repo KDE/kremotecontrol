@@ -20,7 +20,7 @@
 
 
 /**
-  * @author Gav Wood
+  * @author Gav Wood, Michael Zanetti & Frank Scheffold
   */
 
 #include "addaction.h"
@@ -55,6 +55,9 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMo
     theFunctions->setModel(new DBusFunctionModel(theFunctions));
     theFunctions->setSelectionBehavior(QAbstractItemView::SelectRows);
     theFunctions->setSelectionMode(QAbstractItemView::SingleSelection);
+    dbusAppsModel = new QStandardItemModel(theObjects);
+    dbusAppsModel->setHorizontalHeaderLabels(QStringList() << i18n("DBus functions"));
+    theObjects->setModel(dbusAppsModel);
 
 
     connect(this, SIGNAL(currentIdChanged(int)), SLOT(updateForPageChange()));
@@ -83,9 +86,9 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMo
     connect(theJustStart, SIGNAL(toggled(bool)), theAutoStart, SLOT(setChecked(bool)));
     connect(theJustStart, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
 
-    connect(theObjects, SIGNAL(itemSelectionChanged()), this, SLOT(updateFunctions()));
-    connect(theObjects, SIGNAL(itemSelectionChanged()), this, SLOT(updateFunctions()));
-    connect(theObjects, SIGNAL(itemSelectionChanged()), this, SLOT(updateButtonStates()));
+
+    connect(theObjects, SIGNAL(clicked(QModelIndex)), this, SLOT(updatePrototyes(QModelIndex)));
+    connect(theObjects, SIGNAL(clicked(QModelIndex)), this, SLOT(updateButtonStates()));
 
     connect(theProfiles, SIGNAL(itemSelectionChanged()), this, SLOT(updateButtonStates()));
     connect(theProfiles, SIGNAL(itemSelectionChanged()), this, SLOT(updateProfileFunctions()));
@@ -104,10 +107,10 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMo
     connect(theProfileFunctions, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(next()));
 
 
-    connect(theFunctions, SIGNAL(itemSelectionChanged()), this, SLOT(updateButtonStates()));
-    connect(theFunctions, SIGNAL(itemSelectionChanged()), this, SLOT(updateParameter()));
-    connect(theFunctions, SIGNAL(itemSelectionChanged()), this, SLOT(updateInstancesOptions()));
-    connect(theFunctions, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(next()));
+    connect(theFunctions, SIGNAL(clicked(QModelIndex)), this, SLOT(updateButtonStates()));
+    connect(theFunctions, SIGNAL(clicked(QModelIndex)), this, SLOT(updateParameter()));
+    connect(theFunctions, SIGNAL(clicked(QModelIndex)), this, SLOT(updateInstancesOptions()));
+    connect(theFunctions,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(next()));
 
 
     curPage = 0;
@@ -135,7 +138,7 @@ void AddAction::slotModeSelected()
 
 void AddAction::slotCorrectPage()
 {
-    int lastPage = curPage;
+     int lastPage = curPage;
     curPage = this->currentId();
 
     kDebug() << "lastPage:" << lastPage << "; curPage:" << curPage;
@@ -209,6 +212,7 @@ void AddAction::slotCorrectPage()
     }
 }
 
+
 void AddAction::requestNextPress()
 {
     kDebug() << "Requesting next press from irkick";
@@ -253,12 +257,12 @@ void AddAction::updateButtons()
 
 
     theButtons->clear();
-    foreach(QString buttonName, DBusInterface::getInstance()->getButtons(theMode.remote())){
-    kDebug() << "foud buttonName " << buttonName;
-    QListWidgetItem *tItem =  new  QListWidgetItem(RemoteServer::remoteServer()->getButtonName(theMode.remote(), buttonName),theButtons);
-    tItem->setData(Qt::UserRole,buttonName);
-    
-}
+    foreach(QString buttonName, DBusInterface::getInstance()->getButtons(theMode.remote())) {
+        kDebug() << "foud buttonName " << buttonName;
+        QListWidgetItem *tItem =  new  QListWidgetItem(RemoteServer::remoteServer()->getButtonName(theMode.remote(), buttonName),theButtons);
+        tItem->setData(Qt::UserRole,buttonName);
+
+    }
 }
 
 void AddAction::updateForPageChange()
@@ -279,7 +283,7 @@ void AddAction::updateButtonStates()
         break;
     case 2:
 
-        button(QWizard::NextButton)->setEnabled(theFunctions->currentIndex().row() != 0);
+        button(QWizard::NextButton)->setEnabled(theFunctions->currentIndex().isValid());
         break;
     case 3:
         button(QWizard::NextButton)->setEnabled(theProfileFunctions->currentItem() != 0 || theJustStart->isChecked());
@@ -319,13 +323,15 @@ void AddAction::updateOptions()
         im = p->ifMulti();
         isUnique = p->unique();
     } else if (theUseDBus->isChecked()) {
-        if (!theObjects->selectedItems().first()) return;
+        //TODO: rewrite
+        /*if (!theObjects->selectedItems().first()) return;
         QTreeWidgetItem* i = theObjects->selectedItems().first()->parent();
-        if (!i) return;
-        isUnique = uniqueProgramMap[i];
-        QRegExp r("(.*)-[0-9]+");
-        program = r.exactMatch(nameProgramMap[i]) ? r.cap(1) : nameProgramMap[i];
-        im = IM_DONTSEND;
+        */
+//        if (!i) return;
+        /*        isUnique = uniqueProgramMap[i];
+                QRegExp r("(.*)-[0-9]+");
+                program = r.exactMatch(nameProgramMap[i]) ? r.cap(1) : nameProgramMap[i];
+                im = IM_DONTSEND;*/
     } else return;
 
     theIMLabel->setEnabled(!isUnique);
@@ -494,88 +500,27 @@ void AddAction::updateArgument(QTreeWidgetItem *theItem)
 
 void AddAction::updateObjects()
 {
-    QStringList names;
-    theObjects->clear();
-    uniqueProgramMap.clear();
-    nameProgramMap.clear();
-
-    QDBusConnectionInterface *dBusIface = QDBusConnection::sessionBus().interface();
-    QStringList allServices = dBusIface->registeredServiceNames();
-
-    QStringList kdeServices;
-
-    for (QStringList::iterator i = allServices.begin(); i != allServices.end(); ++i) {
-        // Use only KDE-Apps
-        if (!(*i).contains("org.kde")) {
-            continue;
-        }
-
-        // Remove the "org.kde."
-        QString name = (*i);
-        name.remove(0, 8);
-
-        // strip trailing numbers
-        QRegExp r1("[a-zA-Z]*-[0-9]*");
-        if (r1.exactMatch(name)) {
-            name.truncate(name.indexOf('-'));
-        }
-
-        // Remove "human unreadable" entries
-        QRegExp r2("[a-zA-Z]*");
-        if (! r2.exactMatch(name)) {
-            continue;
-        }
-
-        //remove duplicates
-        if (names.contains(name)) {
-            continue;
-        }
-        names += name;
-
-        // insert service into theObjects
-        QStringList tmpList;
-        tmpList << name;
-        QTreeWidgetItem *a = new QTreeWidgetItem(theObjects, tmpList);
-
-        //theObjects->
-        uniqueProgramMap[a] = name == QString(*i);
-        nameProgramMap[a] = *i;
-
-        QDBusInterface *dBusIface = new QDBusInterface(*i, "/", "org.freedesktop.DBus.Introspectable");
-        QDBusReply<QString> response = dBusIface->call("Introspect");
-
-        QDomDocument domDoc;
-        domDoc.setContent(response);
-
-        QDomElement node = domDoc.documentElement();
-        QDomElement child = node.firstChildElement();
-        while (!child.isNull()) {
-            if (child.tagName() == QLatin1String("node")) {
-                QStringList path;
-                path << child.attribute(QLatin1String("name"));
-                kDebug() << "path: " << path;
-                new QTreeWidgetItem(a, path);
-            }
-            child = child.nextSiblingElement();
+    foreach(QString item, DBusInterface::getInstance()->getRegisteredPrograms()) {
+        DBusServiceItem *tServiceItem = new DBusServiceItem(item);
+        dbusAppsModel->appendRow(tServiceItem);
+        foreach(QString object, DBusInterface::getInstance()->getObjects(item)) {
+            tServiceItem->appendRow(new QStandardItem(object));
         }
     }
-    updateFunctions();
+    dbusAppsModel->sort(0, Qt::AscendingOrder);
 }
 
-void AddAction::updateFunctions()
-{
-    kDebug() << "updateFunctions called";
-    if (theObjects->currentItem() && theObjects->currentItem()->parent()) {
-        QList<Prototype> tList = DBusInterface::getInstance()->getFunctions(nameProgramMap[theObjects->currentItem()->parent()], theObjects->currentItem()->text(0));
-        kDebug()<< "size " << tList.size();
-      //-1 clears the model
+
+void AddAction::updatePrototyes(QModelIndex pIndex) {
+    QModelIndex tParent = pIndex.parent();
+    if (tParent.isValid()) {
+        QList<Prototype> tList = DBusInterface::getInstance()->getFunctions(dbusAppsModel->data(tParent, Qt::UserRole).toString(), dbusAppsModel->data(pIndex).toString() );
         theFunctions->model()->insertRows(-1, tList.size());
         for (int i = 0; i < tList.size(); i++) {
             theFunctions->model()->setData(theFunctions->model()->index(i,0),qVariantFromValue( tList.at(i)), Qt::UserRole);
         }
-    }        theFunctions->model()->sort(0, Qt::AscendingOrder);
-
-    updateOptions();
+        theFunctions->model()->sort(0, Qt::AscendingOrder);
+    }
 }
 
 
@@ -609,8 +554,9 @@ IRAction* AddAction::getAction()
     }
     // DBus?
     else if (theUseDBus->isChecked()
-             && !theObjects->selectedItems().isEmpty()
-             && theObjects->selectedItems().first()->parent()
+//TODO: do w need all thes checks ??
+//              && !theObjects->selectedItems().isEmpty()
+//              && theObjects->selectedItems().first()->parent()
              && !theFunctions->currentIndex().row() != -1) {
         action->setProgram(program);
         kDebug() << "programm                 ++++++++++++++++++  " << program;
@@ -647,3 +593,98 @@ IRAction* AddAction::getAction()
     return action;
 }
 #include "addaction.moc"
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+void AddAction::slotCorrectPage()
+{
+    int lastPage = curPage;
+    curPage = this->currentId();
+    int pageToShow=-1;
+    kDebug() << "lastPage:" << lastPage << "; curPage:" << curPage;
+
+    if (theUseProfile->isChecked() || theUseDBus->isChecked()) {
+        QWizard::page(ACTION_ARGUMENTS)->setFinalPage(true);
+    } else {
+        QWizard::page(ACTION_ARGUMENTS)->setFinalPage(false);
+    }
+
+    //user has clicked back
+    if (lastPage > curPage) {
+	  if (curPage == SELECT_BUTTON) {            
+                pageToShow = START;
+         }
+        else if (curPage == SELECT_FUNCTION_DBUS || curPage == SELECT_FUNCTION_PROFILE) {
+            pageToShow = SELECT_BUTTON;
+        }
+        else if (curPage == ACTION_OPTIONS) {
+	    if(theUseDBus->isChecked()){
+		  curPage=SELECT_FUNCTION_DBUS;
+	    } else if(theUseProfile->isChecked()){
+		  curPage = SELECT_FUNCTION_PROFILE;
+	    }            
+        }
+        else if (curPage == ACTION_ARGUMENTS) {
+            if(theUseProfile->isChecked()){
+	  curPage = SELECT_FUNCTION_PROFILE;
+	  }else
+            return;
+        }
+
+
+    } else if (lastPage < curPage) { //user has clicked next        
+        if (curPage == START) {
+	  pageToShow = SELECT_BUTTON;
+	}
+        else if (curPage == SELECT_BUTTON) {
+            if (theUseDBus->isChecked()) {
+                pageToShow = SELECT_FUNCTION_DBUS;
+            }
+            else if (theUseProfile->isChecked()) {
+                pageToShow = SELECT_FUNCTION_PROFILE;
+            }
+            else if (theChangeMode->isChecked()) {
+                pageToShow = ACTION_ARGUMENTS;
+            }
+        }
+        else if (curPage == SELECT_FUNCTION_DBUS) {
+            pageToShow = ACTION_ARGUMENTS;
+        }
+        else if (curPage == SELECT_FUNCTION_PROFILE) {
+            pageToShow = ACTION_OPTIONS;
+        }
+
+        else if (curPage == ACTION_OPTIONS) {
+            pageToShow = ACTION_ARGUMENTS;
+            QList<QWizard::WizardButton> layout;
+            layout << QWizard::Stretch << QWizard::BackButton << QWizard::FinishButton << QWizard::CancelButton;
+            setButtonLayout(layout);
+        }
+        else if (curPage == ACTION_ARGUMENTS) {
+            QList<QWizard::WizardButton> layout;
+            layout << QWizard::Stretch << QWizard::BackButton << QWizard::FinishButton << QWizard::CancelButton;
+            setButtonLayout(layout);
+            return;
+        }
+
+    }
+    else{
+      
+      pageToShow = START;
+    }
+    kDebug()<< "now wer are showing page " << pageToShow; 
+      QWizard::page(curPage)->cleanupPage();
+    QWizard::page(pageToShow)->show();
+}
+*/
