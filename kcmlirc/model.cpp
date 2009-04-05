@@ -61,15 +61,6 @@ return QVariant();
 }
 
 
-bool DBusServiceItem::operator<(const QStandardItem& other) const {
-    return data(Qt::EditRole).toString().compare(other.data(Qt::EditRole).toString());
-}
-
-bool DBusServiceItem::operator>(const QStandardItem& other) const {
-    return other.data(Qt::EditRole).toString().compare(data(Qt::EditRole).toString());
-}
-
-
 QString DBusServiceItem::trimAppname(const QString& appName) {
     int lastIndex = appName .lastIndexOf(".") + 1;
     if (lastIndex < appName.size()) {

@@ -52,9 +52,6 @@ DBusServiceItem(const QString &item);
 
 virtual QVariant data(int  role) const;
  static QString trimAppname(const QString &appName);
-virtual bool operator<(const QStandardItem& other) const;
-virtual bool operator>(const QStandardItem& other) const;
-
 };
 
 
