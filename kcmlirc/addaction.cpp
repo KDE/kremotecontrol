@@ -53,6 +53,7 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMo
     //theFunctions->setShowGrid(false);
     dbusAppsModel = new QStandardItemModel(theObjects);
     dbusAppsModel->setHorizontalHeaderLabels(QStringList() << i18n("DBus functions"));
+    theObjects->setEditTriggers(QAbstractItemView::NoEditTriggers);
     theObjects->setModel(dbusAppsModel);
 
 
@@ -85,7 +86,6 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMo
 
     connect(theObjects, SIGNAL(clicked(QModelIndex)), this, SLOT(updatePrototyes(QModelIndex)));
     connect(theObjects, SIGNAL(clicked(QModelIndex)), this, SLOT(updateButtonStates()));
-    connect(theObjects, SIGNAL(clicked(QModelIndex)), theObjects, SLOT(expand(QModelIndex)));
 
     connect(theProfiles, SIGNAL(itemSelectionChanged()), this, SLOT(updateButtonStates()));
     connect(theProfiles, SIGNAL(itemSelectionChanged()), this, SLOT(updateProfileFunctions()));
@@ -487,6 +487,7 @@ void AddAction::updateObjects()
         }
     }
     dbusAppsModel->sort(0, Qt::AscendingOrder);
+    //theObjects->setEditTriggers(QAbstractItemView::NoEditTriggers);
 }
 
 
