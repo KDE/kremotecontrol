@@ -92,7 +92,7 @@ QVariant DBusFunctionModel::data(const QModelIndex & index, int role = Qt::Displ
 {
 
     if (!index.isValid()) {
-        kDebug() << " Index invalid Row" << index.row() << " Col " << index.column();
+//        kDebug() << " Index invalid Row" << index.row() << " Col " << index.column();
         return QVariant();
     }
     if (index.row() >= 0 || index.row() <= theProtoTypeList.size()) {
@@ -125,12 +125,12 @@ bool DBusFunctionModel::setData(const QModelIndex &index,  const QVariant &value
 {
     if (!index.isValid()) {
 
-        kDebug() << " Index invalid Row" << index.row() << " Col " << index.column();
+//        kDebug() << " Index invalid Row" << index.row() << " Col " << index.column();
         return false;
     }
 
     if (role == Qt::UserRole && value.canConvert<Prototype>()) {
-        kDebug() << "Adding";
+//        kDebug() << "Adding";
         Prototype tType =value.value<Prototype>();
         theProtoTypeList.replace(index.row(), tType);
         emit dataChanged(index, index);
@@ -211,7 +211,7 @@ QVariant DBusFunctionModel::headerData(int section, Qt::Orientation orientation,
 {
     if (orientation == Qt::Horizontal) {
         if (role == Qt::DisplayRole) {
-            kDebug()<< "section is " << section;
+//            kDebug()<< "section is " << section;
             switch (section) {
             case 0:
                 return i18n("Function");
@@ -247,7 +247,7 @@ QWidget *ArgumentDelegate::createEditor(QWidget *parent,
                                         const QModelIndex &index) const
 {
     QWidget *editor;
-    kDebug() << "creaing edtor for:" << index.model()->data(index, Qt::EditRole);
+//    kDebug() << "creaing edtor for:" << index.model()->data(index, Qt::EditRole);
     switch (index.model()->data(index, Qt::EditRole).type()) {
     case QVariant::Int:
     case QVariant::UInt:
@@ -344,7 +344,7 @@ void ArgumentDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
         value = QVariant(static_cast<QLineEdit*>(editor)->text());
     }
     }
-    kDebug() << "setting value" << value;
+//    kDebug() << "setting value" << value;
     model->setData(index, value, Qt::EditRole);
 }
 

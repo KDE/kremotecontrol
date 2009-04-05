@@ -114,7 +114,6 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMo
     connect(DBusInterface::getInstance(), SIGNAL(haveButton(const QString &, const QString &)), this, SLOT(updateButton(const QString &, const QString &)));
 
 
-    lastPage = 0;
     updateProfiles();
     updateButtons();
     updateObjects();
@@ -140,7 +139,6 @@ void AddAction::slotModeSelected()
 
 int AddAction::nextId() const
 {
-    kDebug() << "lastPage:" << lastPage << "; curPage:" << currentId();
     if(currentId() == START){
       return SELECT_BUTTON;
     }
@@ -463,7 +461,8 @@ void AddAction::updatePrototyes(QModelIndex pIndex) {
         theFunctions->model()->sort(0, Qt::AscendingOrder);
 
     }
-       theFunctions->resizeColumnsToContents();
+    theFunctions->resizeColumnsToContents();
+    theFunctions->resizeRowsToContents();
 }
 
 

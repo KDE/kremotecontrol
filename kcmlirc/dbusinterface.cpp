@@ -204,7 +204,11 @@ QList<Prototype> DBusInterface::getFunctions(const QString &program, const QStri
 			  argStr += ", ";
 			}
 			argStr += tmpArg;
-			argStr += " " + arg.attribute(QLatin1String("name"));
+			if(!arg.attribute(QLatin1String("name")).isEmpty()){
+			  argStr += " " + arg.attribute(QLatin1String("name"));
+			} else {
+			  argStr += " " + i18nc("The name of a parameter", "unknown");
+			}
 
 		      } else if(arg.attribute(QLatin1String("direction")) == "out"){
 			retArg = tmpArg;

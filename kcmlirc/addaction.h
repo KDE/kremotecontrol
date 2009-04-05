@@ -41,7 +41,6 @@ class AddAction : public QWizard, public Ui::AddActionBase
 private:
     Q_OBJECT
 
-    int lastPage;
     Mode theMode;
     QStandardItemModel *dbusAppsModel;
     enum  {
