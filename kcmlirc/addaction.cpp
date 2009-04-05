@@ -50,6 +50,7 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMo
     theFunctions->setModel(new DBusFunctionModel(theFunctions));
     theFunctions->setSelectionBehavior(QAbstractItemView::SelectRows);
     theFunctions->setSelectionMode(QAbstractItemView::SingleSelection);
+    //theFunctions->setShowGrid(false);
     dbusAppsModel = new QStandardItemModel(theObjects);
     dbusAppsModel->setHorizontalHeaderLabels(QStringList() << i18n("DBus functions"));
     theObjects->setModel(dbusAppsModel);
@@ -67,7 +68,7 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMo
     connect(theParameters, SIGNAL(itemSelectionChanged()), this, SLOT(updateParameter()));
     connect(theSwitchMode, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
     connect(theExitMode, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
-    connect(theUseDBus, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
+    connect(theUseDBus, SIGNAL(clicked()), this, SLOT(updateButtonStates()));    
 
     connect(theUseProfile, SIGNAL(toggled(bool)), theProfiles, SLOT(setEnabled(bool)));
     connect(theUseProfile, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
@@ -84,6 +85,7 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMo
 
     connect(theObjects, SIGNAL(clicked(QModelIndex)), this, SLOT(updatePrototyes(QModelIndex)));
     connect(theObjects, SIGNAL(clicked(QModelIndex)), this, SLOT(updateButtonStates()));
+    connect(theObjects, SIGNAL(clicked(QModelIndex)), theObjects, SLOT(expand(QModelIndex)));
 
     connect(theProfiles, SIGNAL(itemSelectionChanged()), this, SLOT(updateButtonStates()));
     connect(theProfiles, SIGNAL(itemSelectionChanged()), this, SLOT(updateProfileFunctions()));
@@ -478,6 +480,7 @@ void AddAction::updateObjects()
 {
     foreach(QString item, DBusInterface::getInstance()->getRegisteredPrograms()) {
         DBusServiceItem *tServiceItem = new DBusServiceItem(item);
+	tServiceItem->setEditable(false);
         dbusAppsModel->appendRow(tServiceItem);
         foreach(QString object, DBusInterface::getInstance()->getObjects(item)) {
             tServiceItem->appendRow(new QStandardItem(object));
@@ -496,7 +499,9 @@ void AddAction::updatePrototyes(QModelIndex pIndex) {
             theFunctions->model()->setData(theFunctions->model()->index(i,0),qVariantFromValue( tList.at(i)), Qt::UserRole);
         }
         theFunctions->model()->sort(0, Qt::AscendingOrder);
+
     }
+       theFunctions->resizeColumnsToContents();
 }
 
 

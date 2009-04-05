@@ -210,21 +210,21 @@ void DBusFunctionModel::sort(int column, Qt::SortOrder order) {
 QVariant DBusFunctionModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal) {
-        kDebug()<< "section is " << section;
-        switch (section) {
-        case 0:
-            return i18n("Function");
-        case 1:
-            return i18n("Parameter");
-        case 2:
-            return i18n("Prototype");
-        default:
-            return QVariant();
+        if (role == Qt::DisplayRole) {
+            kDebug()<< "section is " << section;
+            switch (section) {
+            case 0:
+                return i18n("Function");
+            case 1:
+                return i18n("Parameter");
+            case 2:
+                return i18n("Prototype");
+            default:
+                return QVariant();
+            }
         }
     }
-    else {
-        return QVariant();
-    }
+    return QVariant();
 }
 
 

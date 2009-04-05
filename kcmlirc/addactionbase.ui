@@ -92,6 +92,9 @@
       <property name="rootIsDecorated">
        <bool>true</bool>
       </property>
+      <property name="sortingEnabled">
+       <bool>true</bool>
+      </property>
      </widget>
     </item>
     <item>
@@ -101,6 +104,12 @@
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
+      </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::EditKeyPressed</set>
+      </property>
+      <property name="sortingEnabled">
+       <bool>true</bool>
       </property>
      </widget>
     </item>
@@ -606,23 +615,23 @@
  <customwidgets>
   <customwidget>
    <class>KDoubleNumInput</class>
-   <extends>QWidget</extends>
+   <extends></extends>
    <header>knuminput.h</header>
   </customwidget>
   <customwidget>
    <class>KEditListBox</class>
-   <extends>QGroupBox</extends>
+   <extends></extends>
    <header>keditlistbox.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>KIntNumInput</class>
-   <extends>QWidget</extends>
+   <extends></extends>
    <header>knuminput.h</header>
   </customwidget>
   <customwidget>
    <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
+   <extends></extends>
    <header>klineedit.h</header>
   </customwidget>
  </customwidgets>
