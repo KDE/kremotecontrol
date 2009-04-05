@@ -175,13 +175,11 @@ void AddAction::updateButton(const QString &remote, const QString &button)
     if (theMode.remote() == remote) { // note this isn't the "correct" way of doing it; really i should iterate throughg the items and try to find the item which when put through buttonMap[item] returns the current button name. but i cant be arsed.
         theButtons->setCurrentItem(theButtons->findItems(RemoteServer::remoteServer()->getButtonName(remote, button), 0).first());
         theButtons->scrollToItem(theButtons->findItems(RemoteServer::remoteServer()->getButtonName(remote, button), 0).first());
-    } else
+    } else {
         KMessageBox::error(0, i18n("You did not select a mode of that remote control. Please use %1, "
                                    "or revert back to select a different mode.", theMode.remoteName()),
                            i18n("Incorrect Remote Control Detected"));
-
-    updateButtonStates();
-
+    }
 }
 
 void AddAction::updateButtons()
@@ -202,10 +200,9 @@ void AddAction::updateForPageChange()
 {
     if (currentId() == 1){
 	DBusInterface::getInstance()->requestNextKeyPress();
-    } else {
+    } else if (currentId() == SELECT_FUNCTION_PROFILE || currentId() == SELECT_FUNCTION_DBUS || currentId() == SELECT_MODE){
 	DBusInterface::getInstance()->cancelKeyPressRequest();
     }
-    updateButtonStates();
 }
 
 void AddAction::updateButtonStates()
@@ -244,10 +241,12 @@ void AddAction::updateButtonStates()
 void AddAction::updateProfiles()
 {
     theProfiles->clear();
-    profileMap.clear();
 
-    foreach (Profile *tmp, ProfileServer::profileServer()->profiles())
-    profileMap[new QListWidgetItem(tmp->name(), theProfiles)] = tmp->id();
+    foreach (Profile *tmp, ProfileServer::profileServer()->profiles()) {
+	QListWidgetItem *item = new QListWidgetItem(tmp->name());
+	item->setData(Qt::UserRole, tmp->id());
+	theProfiles->addItem(item);
+    }
 }
 
 void AddAction::updateOptions()
@@ -255,8 +254,10 @@ void AddAction::updateOptions()
     IfMulti im;
     if (theUseProfile->isChecked()) {
         ProfileServer *theServer = ProfileServer::profileServer();
-        if (!theProfiles->currentItem()) return;
-        const Profile *p = theServer->getProfileById(profileMap[theProfiles->currentItem()]);
+        if (!theProfiles->currentItem()) {
+	    return;
+	}
+        const Profile *p = theServer->getProfileById(theProfiles->currentItem()->data(Qt::UserRole).toString() );
         im = p->ifMulti();
         isUnique = p->unique();
     } else if (theUseDBus->isChecked()) {
@@ -300,12 +301,11 @@ void AddAction::updateProfileFunctions()
     kDebug() << "updateProfileFunctions called";
     ProfileServer *theServer = ProfileServer::profileServer();
     theProfileFunctions->clear();
-    profileFunctionMap.clear();
-    if (theProfiles->selectedItems().isEmpty()) {
+    if (!theProfiles->currentItem()) {
         return;
     }
 
-    const Profile *p = theServer->getProfileById(profileMap[theProfiles->currentItem()]);
+    const Profile *p = theServer->getProfileById(theProfiles->currentItem()->data(Qt::UserRole).toString());
     QHash<QString, ProfileAction*> dict = p->actions();
     kDebug() << "actions: " << p->actions();
     QHash<QString, ProfileAction*>::const_iterator i;
@@ -313,10 +313,9 @@ void AddAction::updateProfileFunctions()
         kDebug() << "got function: " << i.value()->name();
         QStringList parameters;
         parameters << i.value()->name() << QString().setNum(i.value()->arguments().count()) << i.value()->comment();
-        profileFunctionMap[new QTreeWidgetItem(theProfileFunctions, parameters)] = i.key();
+        QTreeWidgetItem *item = new QTreeWidgetItem(theProfileFunctions, parameters);
+	item->setData(0, Qt::UserRole, i.key());
     }
-    updateParameters();
-    updateOptions();
 }
 
 void AddAction::updateParameters()
@@ -495,40 +494,27 @@ IRAction* AddAction::getAction()
         action->setRepeat(false);
     }
     // DBus?
-    else if (theUseDBus->isChecked()
-//TODO: do w need all thes checks ??
-//              && !theObjects->selectedItems().isEmpty()
-//              && theObjects->selectedItems().first()->parent()
-             && !theFunctions->currentIndex().row() != -1) {
-        action->setProgram(program);
-        kDebug() << "programm                 ++++++++++++++++++  " << program;
-//    kDebug() << "function                 ++++++++++++++++++  " << theFunctions->selectedItems().first()->text(2);
-        Prototype p =   theFunctions->model()->data(theFunctions->currentIndex()).value<Prototype>();
-        action->setMethod(p.argumentList());
-//        theParameters->sortItems(3, Qt::AscendingOrder);
+    else if (theUseDBus->isChecked()) {
+        action->setProgram(dbusAppsModel->data(theObjects->currentIndex().parent(), Qt::UserRole).toString());
+	action->setObject(dbusAppsModel->data(theObjects->currentIndex(), Qt::DisplayRole).toString());
+        Prototype p =   theFunctions->model()->data(theFunctions->currentIndex(), Qt::UserRole).value<Prototype>();
+        action->setMethod(p.prototype());
+// TODO set Arguments
         action->setArguments(theArguments);
-    }
-    // profile?
-    else if (theUseProfile->isChecked()
-             && !theProfiles->selectedItems().isEmpty()
-             && (!theProfileFunctions->selectedItems().isEmpty()
-                 || theJustStart->isChecked())) {
+    } else if (theUseProfile->isChecked() && !theProfiles->selectedItems().isEmpty() && 
+		     (!theProfileFunctions->selectedItems().isEmpty() || theJustStart->isChecked())) {
         ProfileServer *theServer = ProfileServer::profileServer();
 
         if (theNotJustStart->isChecked()) {
             const ProfileAction
-            *theAction =
-                theServer->getAction(
-                    profileMap[theProfiles->selectedItems().first()],
-                    profileFunctionMap[theProfileFunctions->selectedItems().first()]);
+            *theAction = theServer->getAction(theProfiles->currentItem()->data(Qt::UserRole).toString(), theProfileFunctions->currentItem()->data(0, Qt::UserRole).toString());
             action->setProgram(theAction->profile()->id());
             action->setObject(theAction->objId());
             action->setMethod(theAction->prototype());
 //            theParameters->sortItems(3, Qt::AscendingOrder);
             action->setArguments(theArguments);
         } else {
-            action->setProgram(
-                theServer->getProfileById(profileMap[theProfiles->selectedItems().first()])->id());
+            action->setProgram(theProfiles->currentItem()->data(Qt::UserRole).toString());
             action->setObject("");
         }
     }

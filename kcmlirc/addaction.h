@@ -72,15 +72,14 @@ public slots:
 
 public:
     Arguments theArguments;
-    QString program;
     bool isUnique;
 
     static const QStringList getFunctions(const QString app, const QString obj);
     void updateArgument(QTreeWidgetItem *theItem);
     IRAction * getAction();
 
-    QMap<QListWidgetItem *, QString> profileMap;
-    QMap<QTreeWidgetItem *, QString> profileFunctionMap;
+//    QMap<QListWidgetItem *, QString> profileMap;
+//    QMap<QTreeWidgetItem *, QString> profileFunctionMap;
 
     AddAction(QWidget *parent, const char *name, const Mode &mode);
     ~AddAction();
