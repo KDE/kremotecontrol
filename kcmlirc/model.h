@@ -45,32 +45,17 @@ Q_DECLARE_METATYPE(Prototype)
 
 
 
-class DBusServiceItem : public QStandardItem{
-
-public:
-DBusServiceItem(const QString &item);
-
-virtual QVariant data(int  role) const;
- static QString trimAppname(const QString &appName);
-};
-
-
-/*
-class DBusServiceModel : public  QStringListModel
+class DBusServiceItem : public QStandardItem
 {
 
-public:
-
-    DBusServiceModel (QObject * parent );
-
-    virtual QVariant data( const QModelIndex & index, int  role) const;
+private:
     static QString trimAppname(const QString &appName);
-    static bool decendingLessThan(const QString &s1, const QString &s2);
-    static bool ascendingLessThan(const QString &s1, const QString &s2);
-    void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
 
+public:
+    DBusServiceItem(const QString &item);
 
-};*/
+    virtual QVariant data(int  role) const;
+};
 
 
 class DBusFunctionModel : public  QAbstractListModel

@@ -48,15 +48,13 @@ DBusServiceItem::DBusServiceItem(const QString &item):QStandardItem(){
 
 
 QVariant DBusServiceItem::data(int role) const {
-
-  kDebug() << "role " << role<<  " Data " <<  QStandardItem::data(role);
-        if (role == Qt::DisplayRole || role == Qt::EditRole)  {
-            return trimAppname(QStandardItem::data(Qt::UserRole).toString());
-        }
-        else if(role == Qt::UserRole){
-          kDebug()<< " userrole";
-           return QStandardItem::data(role);
-        }
+    if (role == Qt::DisplayRole || role == Qt::EditRole)  {
+	return trimAppname(QStandardItem::data(Qt::UserRole).toString());
+    }
+    else if(role == Qt::UserRole){
+	kDebug()<< " userrole";
+	return QStandardItem::data(role);
+    }
 return QVariant();
 }
 
@@ -75,16 +73,9 @@ QString DBusServiceItem::trimAppname(const QString& appName) {
 
 
 
-
-
-
-
-
 DBusFunctionModel::DBusFunctionModel(QObject* parent ) : QAbstractListModel(parent) {
     qRegisterMetaType<Prototype>("Prototype");
 }
-
-
 
 
 QVariant DBusFunctionModel::data(const QModelIndex & index, int role = Qt::DisplayRole) const
