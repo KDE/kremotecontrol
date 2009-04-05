@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=IRKick
+Name[hne]=आईआरकिक
 Name[x-test]=xxIRKickxx
 GenericName=KDE LIRC Server
 GenericName[de]=LIRC-Server für KDE
