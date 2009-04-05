@@ -33,11 +33,6 @@
 #include "model.h"
 #include "dbusinterface.h"
 #include <QRegExp>
-#include <QDBusMessage>
-#include <QDBusConnection>
-#include <QDBusInterface>
-#include <QDBusConnectionInterface>
-#include <QDomDocument>
 
 #include <kdebug.h>
 #include <klineedit.h>
@@ -111,6 +106,8 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMo
     connect(theFunctions, SIGNAL(clicked(QModelIndex)), this, SLOT(updateParameter()));
     connect(theFunctions, SIGNAL(clicked(QModelIndex)), this, SLOT(updateInstancesOptions()));
     connect(theFunctions,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(next()));
+
+    connect(DBusInterface::getInstance(), SIGNAL(haveButton(const QString &, const QString &)), this, SLOT(updateButton(const QString &, const QString &)));
 
 
     curPage = 0;
@@ -212,31 +209,6 @@ void AddAction::slotCorrectPage()
     }
 }
 
-
-void AddAction::requestNextPress()
-{
-    kDebug() << "Requesting next press from irkick";
-    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.irkick", "/IRKick", "", "stealNextPress");
-    m << "org.kde.kcmshell_kcmlirc";
-    m << "/KCMLirc";
-    m << "gotButton";
-    QDBusMessage response = QDBusConnection::sessionBus().call(m);
-    if (response.type() == QDBusMessage::ErrorMessage) {
-        kDebug() << response.errorMessage();
-    }
-}
-
-void AddAction::cancelRequest()
-{
-    kDebug() << "Cancelling keypress request";
-    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.irkick", "/IRKick", "", "dontStealNextPress");
-    QDBusMessage response = QDBusConnection::sessionBus().call(m);
-    if (response.type() == QDBusMessage::ErrorMessage) {
-        kDebug() << response.errorMessage();
-    }
-    kDebug() << "done...";
-}
-
 void AddAction::updateButton(const QString &remote, const QString &button)
 {
     if (theMode.remote() == remote) { // note this isn't the "correct" way of doing it; really i should iterate throughg the items and try to find the item which when put through buttonMap[item] returns the current button name. but i cant be arsed.
@@ -267,7 +239,11 @@ void AddAction::updateButtons()
 
 void AddAction::updateForPageChange()
 {
-    if (currentId() == 1) requestNextPress(); //else cancelRequest();
+    if (currentId() == 1){
+	DBusInterface::getInstance()->requestNextKeyPress();
+    } else {
+	DBusInterface::getInstance()->cancelKeyPressRequest();
+    }
     updateButtonStates();
 }
 

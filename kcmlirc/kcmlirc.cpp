@@ -222,7 +222,6 @@ void KCMLirc::slotAddAction()
     Mode m = modeMap[theKCMLircBase->theModes->selectedItems().first()];
     kDebug() << "Calling AddAction with Mode: " << m.name();
     AddAction theDialog(this, 0, m);
-    connect(this, SIGNAL(haveButton(const QString &, const QString &)), &theDialog, SLOT(updateButton(const QString &, const QString &)));
 
     // populate the modes list box
     QTreeWidgetItem *item = theKCMLircBase->theModes->selectedItems().first();

@@ -79,8 +79,6 @@ public:
 
     static const QStringList getFunctions(const QString app, const QString obj);
     void updateArgument(QTreeWidgetItem *theItem);
-    void requestNextPress();
-    void cancelRequest();
     IRAction * getAction();
 
     QMap<QListWidgetItem *, QString> profileMap;

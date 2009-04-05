@@ -250,9 +250,10 @@ QStringList DBusInterface::getRemotes(){
 void DBusInterface::requestNextKeyPress(){
     kDebug() << "Requesting next press from irkick";
     QDBusMessage m = QDBusMessage::createMethodCall("org.kde.irkick", "/IRKick", "", "stealNextPress");
-    m << "org.kde.kcmshell_kcmlirc";
+    m << "org.kde.kcmshell_kcm_lirc";
     m << "/KCMLirc";
     m << "gotButton";
+kDebug() << "arguments are:" << m;
     QDBusMessage response = QDBusConnection::sessionBus().call(m);
     if (response.type() == QDBusMessage::ErrorMessage) {
         kDebug() << response.errorMessage();
