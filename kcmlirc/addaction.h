@@ -41,7 +41,7 @@ class AddAction : public QWizard, public Ui::AddActionBase
 private:
     Q_OBJECT
 
-    int curPage;
+    int lastPage;
     Mode theMode;
     QStandardItemModel *dbusAppsModel;
     enum  {
@@ -56,7 +56,6 @@ private:
     } page;
 
 public slots:
-    virtual void slotCorrectPage();
     virtual void slotModeSelected();
     virtual void slotNextParam();
     virtual void slotParameterChanged();
@@ -88,6 +87,7 @@ public:
     ~AddAction();
 
 
+    virtual int nextId () const;
 };
 
 #endif

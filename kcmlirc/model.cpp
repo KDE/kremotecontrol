@@ -50,7 +50,7 @@ DBusServiceItem
 
 DBusServiceItem::DBusServiceItem(const QString &item):QStandardItem() {
     setData(item, Qt::UserRole);
-    setFlags(Qt::ItemIsSelectable);
+    setFlags(Qt::ItemIsEnabled);
 }
 
 

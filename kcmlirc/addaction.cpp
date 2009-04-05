@@ -47,6 +47,8 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMo
     Q_UNUSED(name)
     Q_UNUSED(parent)
     setupUi(this);
+//    setPixmap(BackgroundPixmap,KIconLoader::global()->loadIcon("irkick",KIconLoader::NoGroup, 400));
+
     theFunctions->setModel(new DBusFunctionModel(theFunctions));
     theFunctions->setSelectionBehavior(QAbstractItemView::SelectRows);
     theFunctions->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -60,13 +62,13 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMo
     connect(this, SIGNAL(currentIdChanged(int)), SLOT(updateForPageChange()));
     connect(this, SIGNAL(currentIdChanged(int)), SLOT(slotCorrectPage()));
 
-    connect(theValueDoubleNumInput, SIGNAL(valueChanged(double)), this, SLOT(slotParameterChanged()));
-    connect(theValueIntNumInput, SIGNAL(valueChanged(int)), this, SLOT(slotParameterChanged()));
-    connect(theValueLineEdit, SIGNAL(textChanged(QString)), this, SLOT(slotParameterChanged()));
-    connect(theValueCheckBox, SIGNAL(toggled(bool)), this, SLOT(slotParameterChanged()));
-    connect(theValueEditListBox, SIGNAL(changed()), this, SLOT(slotParameterChanged()));
+//    connect(theValueDoubleNumInput, SIGNAL(valueChanged(double)), this, SLOT(slotParameterChanged()));
+//    connect(theValueIntNumInput, SIGNAL(valueChanged(int)), this, SLOT(slotParameterChanged()));
+//    connect(theValueLineEdit, SIGNAL(textChanged(QString)), this, SLOT(slotParameterChanged()));
+//    connect(theValueCheckBox, SIGNAL(toggled(bool)), this, SLOT(slotParameterChanged()));
+//    connect(theValueEditListBox, SIGNAL(changed()), this, SLOT(slotParameterChanged()));
     connect(theChangeMode, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
-    connect(theParameters, SIGNAL(itemSelectionChanged()), this, SLOT(updateParameter()));
+//    connect(theParameters, SIGNAL(itemSelectionChanged()), this, SLOT(updateParameter()));
     connect(theSwitchMode, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
     connect(theExitMode, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
     connect(theUseDBus, SIGNAL(clicked()), this, SLOT(updateButtonStates()));    
@@ -112,7 +114,7 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMo
     connect(DBusInterface::getInstance(), SIGNAL(haveButton(const QString &, const QString &)), this, SLOT(updateButton(const QString &, const QString &)));
 
 
-    curPage = 0;
+    lastPage = 0;
     updateProfiles();
     updateButtons();
     updateObjects();
@@ -135,80 +137,39 @@ void AddAction::slotModeSelected()
     theSwitchMode->setChecked(true);
 }
 
-void AddAction::slotCorrectPage()
+
+int AddAction::nextId() const
 {
-     int lastPage = curPage;
-    curPage = this->currentId();
-
-    kDebug() << "lastPage:" << lastPage << "; curPage:" << curPage;
-
-    if (theUseProfile->isChecked() || theUseDBus->isChecked()) {
-        QWizard::page(5)->setFinalPage(true);
-    } else {
-        QWizard::page(5)->setFinalPage(false);
+    kDebug() << "lastPage:" << lastPage << "; curPage:" << currentId();
+    if(currentId() == START){
+      return SELECT_BUTTON;
     }
 
+    if(currentId() == SELECT_BUTTON){
+      if(theUseProfile->isChecked()){
+	return SELECT_FUNCTION_PROFILE;
+      }
 
-    if (curPage == 2 && theUseProfile->isChecked()) {
-        if (lastPage > 1) {
-            back();
-        } else {
-            next();
-        }
-    }
-    if (curPage == 2  && theChangeMode->isChecked() && lastPage == 1) {
-        next();
-        next();
-        next();
-        next();
+      if(theUseDBus->isChecked()){
+	return SELECT_FUNCTION_DBUS;
+      }
+
+      return SELECT_MODE;
     }
 
-    if (curPage == 5 && theChangeMode->isChecked() && lastPage == 6) {
-        back();
-        back();
-        back();
-        back();
+    if(currentId() == SELECT_FUNCTION_PROFILE){
+      return ACTION_ARGUMENTS;
     }
 
-    if (curPage == 3 && theUseDBus->isChecked()) {
-        if (lastPage == 4) {
-            back();
-        } else {
-            next();
-        }
+    if(currentId() == SELECT_FUNCTION_DBUS){
+      return ACTION_ARGUMENTS;
     }
 
-    if (curPage == 3) {
-        updateProfileFunctions();
+    if(currentId() == ACTION_ARGUMENTS){
+      return ACTION_OPTIONS;
     }
 
-    if (curPage == 4) {
-        updateParameters();
-        Prototype  tType = theFunctions->model()->data(theFunctions->currentIndex()).value<Prototype>();
-        if ( (theUseDBus->isChecked() && theFunctions->currentIndex().row() >= 0 && tType.count() == 0) ||
-                (theUseProfile->isChecked() && (theProfileFunctions->currentItem() && !theProfileFunctions->currentItem()->text(1).toInt())) || theJustStart->isChecked()
-           ) {
-//  showPage(((QWizard *)this)->page(lastPage == 5 ? (theUseDBus->isChecked() ? 2 : 3) : 5));
-
-            if (lastPage == 5) {
-                if (theUseDBus->isChecked()) {
-                    back();
-//    back();
-                } else {
-                    back();
-                }
-                // Restore the Wizard layout in case its modified
-                QList<QWizard::WizardButton> layout;
-                layout << QWizard::Stretch << QWizard::BackButton << QWizard::NextButton << QWizard::FinishButton << QWizard::CancelButton;
-                setButtonLayout(layout);
-            } else {
-                next();
-                QList<QWizard::WizardButton> layout;
-                layout << QWizard::Stretch << QWizard::BackButton << QWizard::FinishButton << QWizard::CancelButton;
-                setButtonLayout(layout);
-            }
-        }
-    }
+    return -1;
 }
 
 void AddAction::updateButton(const QString &remote, const QString &button)
@@ -362,7 +323,7 @@ void AddAction::updateProfileFunctions()
 
 void AddAction::updateParameters()
 {
-    theParameters->clear();
+/*    theParameters->clear();
     kDebug() << "clearing arguments";
     theArguments.clear();
     if (theUseDBus->isChecked() && theFunctions->currentIndex().row() >= 0) {
@@ -398,12 +359,12 @@ void AddAction::updateParameters()
         theAutoStart->setChecked(pa->autoStart());
     }
 
-    updateParameter();
+    updateParameter();*/
 }
 
 void AddAction::updateParameter()
 {
-    kDebug() << "Update parameter called";
+/*    kDebug() << "Update parameter called";
     if (!theParameters->selectedItems().isEmpty()) {
         QString type = theParameters->currentItem()->text(2);
         int index = theParameters->currentItem()->text(3).toInt() - 1;
@@ -441,13 +402,13 @@ void AddAction::updateParameter()
         theValueDoubleNumInput->setValue(0.0);
         theCurParameter->setEnabled(false);
         theValue->setEnabled(false);
-    }
+    }*/
 }
 
 // called when the textbox/checkbox/whatever changes value
 void AddAction::slotParameterChanged()
 {
-    kDebug() << "slotParameterChanged() called";
+/*    kDebug() << "slotParameterChanged() called";
     if (!theParameters->currentItem()) return;
     int index = theParameters->currentItem()->text(3).toInt() - 1;
     QString type = theParameters->currentItem()->text(2);
@@ -466,14 +427,14 @@ void AddAction::slotParameterChanged()
 
 // kDebug() << "setting argument nr: " << index << " to:" << theValueLineEdit->text() << "type is:" << type;
     theArguments[theParameters->currentItem()->text(3).toInt() - 1].convert(QVariant::nameToType(theParameters->currentItem()->text(2).toLocal8Bit()));
-    updateArgument(theParameters->currentItem());
+    updateArgument(theParameters->currentItem());*/
 }
 
 // takes theArguments[theIndex] and puts it into theItem
 void AddAction::updateArgument(QTreeWidgetItem *theItem)
 {
-    kDebug() << "theArgument:" << theArguments[theItem->text(3).toInt() - 1] << "index:" << theItem->text(3).toInt() - 1;
-    theItem->setText(1, theArguments[theItem->text(3).toInt() - 1].toString());
+/*    kDebug() << "theArgument:" << theArguments[theItem->text(3).toInt() - 1] << "index:" << theItem->text(3).toInt() - 1;
+    theItem->setText(1, theArguments[theItem->text(3).toInt() - 1].toString());*/
 }
 
 void AddAction::updateObjects()
@@ -545,7 +506,7 @@ IRAction* AddAction::getAction()
 //    kDebug() << "function                 ++++++++++++++++++  " << theFunctions->selectedItems().first()->text(2);
         Prototype p =   theFunctions->model()->data(theFunctions->currentIndex()).value<Prototype>();
         action->setMethod(p.argumentList());
-        theParameters->sortItems(3, Qt::AscendingOrder);
+//        theParameters->sortItems(3, Qt::AscendingOrder);
         action->setArguments(theArguments);
     }
     // profile?
@@ -564,7 +525,7 @@ IRAction* AddAction::getAction()
             action->setProgram(theAction->profile()->id());
             action->setObject(theAction->objId());
             action->setMethod(theAction->prototype());
-            theParameters->sortItems(3, Qt::AscendingOrder);
+//            theParameters->sortItems(3, Qt::AscendingOrder);
             action->setArguments(theArguments);
         } else {
             action->setProgram(
@@ -574,99 +535,5 @@ IRAction* AddAction::getAction()
     }
     return action;
 }
+
 #include "addaction.moc"
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-void AddAction::slotCorrectPage()
-{
-    int lastPage = curPage;
-    curPage = this->currentId();
-    int pageToShow=-1;
-    kDebug() << "lastPage:" << lastPage << "; curPage:" << curPage;
-
-    if (theUseProfile->isChecked() || theUseDBus->isChecked()) {
-        QWizard::page(ACTION_ARGUMENTS)->setFinalPage(true);
-    } else {
-        QWizard::page(ACTION_ARGUMENTS)->setFinalPage(false);
-    }
-
-    //user has clicked back
-    if (lastPage > curPage) {
-	  if (curPage == SELECT_BUTTON) {            
-                pageToShow = START;
-         }
-        else if (curPage == SELECT_FUNCTION_DBUS || curPage == SELECT_FUNCTION_PROFILE) {
-            pageToShow = SELECT_BUTTON;
-        }
-        else if (curPage == ACTION_OPTIONS) {
-	    if(theUseDBus->isChecked()){
-		  curPage=SELECT_FUNCTION_DBUS;
-	    } else if(theUseProfile->isChecked()){
-		  curPage = SELECT_FUNCTION_PROFILE;
-	    }            
-        }
-        else if (curPage == ACTION_ARGUMENTS) {
-            if(theUseProfile->isChecked()){
-	  curPage = SELECT_FUNCTION_PROFILE;
-	  }else
-            return;
-        }
-
-
-    } else if (lastPage < curPage) { //user has clicked next        
-        if (curPage == START) {
-	  pageToShow = SELECT_BUTTON;
-	}
-        else if (curPage == SELECT_BUTTON) {
-            if (theUseDBus->isChecked()) {
-                pageToShow = SELECT_FUNCTION_DBUS;
-            }
-            else if (theUseProfile->isChecked()) {
-                pageToShow = SELECT_FUNCTION_PROFILE;
-            }
-            else if (theChangeMode->isChecked()) {
-                pageToShow = ACTION_ARGUMENTS;
-            }
-        }
-        else if (curPage == SELECT_FUNCTION_DBUS) {
-            pageToShow = ACTION_ARGUMENTS;
-        }
-        else if (curPage == SELECT_FUNCTION_PROFILE) {
-            pageToShow = ACTION_OPTIONS;
-        }
-
-        else if (curPage == ACTION_OPTIONS) {
-            pageToShow = ACTION_ARGUMENTS;
-            QList<QWizard::WizardButton> layout;
-            layout << QWizard::Stretch << QWizard::BackButton << QWizard::FinishButton << QWizard::CancelButton;
-            setButtonLayout(layout);
-        }
-        else if (curPage == ACTION_ARGUMENTS) {
-            QList<QWizard::WizardButton> layout;
-            layout << QWizard::Stretch << QWizard::BackButton << QWizard::FinishButton << QWizard::CancelButton;
-            setButtonLayout(layout);
-            return;
-        }
-
-    }
-    else{
-      
-      pageToShow = START;
-    }
-    kDebug()<< "now wer are showing page " << pageToShow; 
-      QWizard::page(curPage)->cleanupPage();
-    QWizard::page(pageToShow)->show();
-}
-*/
