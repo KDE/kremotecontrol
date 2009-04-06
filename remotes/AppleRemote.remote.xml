@@ -1,15 +1,15 @@
 <?xml version="1.0" ?>
 <!DOCTYPE remote SYSTEM "remote.dtd">
 
-<remote id="AppleRemote">
+<remote id="Apple_A1156">
 	<name>Apple Remote</name>
 	<author>Michael Zanetti</author>
 	<information>Bundled with all Intel powered Apple Computers and some late MacMini PPC models</information>
-	<button id="Menu" class="enter"><name>Menu</name></button>
-	<button id="Play" class="play"><name>Play</name></button>
-	<button id="Vol+" class="volumeup"><name>Volume Up</name></button>
-	<button id="Vol-" class="volumedown"><name>Volume Down</name></button>
-	<button id="Rew" class="rewind"><name>Rewind</name></button>
-	<button id="Fwd" class="forward"><name>Forward</name></button>
+	<button id="MENU" class="enter"><name>Menu</name></button>
+	<button id="PLAY" class="play"><name>Play</name></button>
+	<button id="VOLUP" class="volumeup"><name>Volume Up</name></button>
+	<button id="VOLDOWN" class="volumedown"><name>Volume Down</name></button>
+	<button id="BACKWARD" class="rewind"><name>Rewind</name></button>
+	<button id="FORWARD" class="forward"><name>Forward</name></button>
 	
 </remote>
