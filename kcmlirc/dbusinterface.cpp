@@ -88,6 +88,9 @@ QStringList DBusInterface::getRegisteredPrograms()
     if(!r1.exactMatch(tmp)){
       continue;
     }
+    if(getObjects(tmp).isEmpty()){
+      continue;
+    }
     QRegExp r2("[a-zA-Z0-9_\\.-]+-[0-9]+");
     if(r2.exactMatch(tmp)){
       tmp.truncate(tmp.lastIndexOf('-'));
@@ -125,7 +128,7 @@ QStringList DBusInterface::getObjects(const QString &program){
     while (!child.isNull()) {
         if (child.tagName() == QLatin1String("node")) {
 	    QString name = child.attribute(QLatin1String("name"));
-	    if(name != "org" && name != "modules"){
+	    if(name != "org" && name != "modules" && !getFunctions(program, name).isEmpty()){
 	      returnList << name;
 	    }
         }
@@ -233,7 +236,7 @@ QList<Prototype> DBusInterface::getFunctions(const QString &program, const QStri
     foreach(QString tmp, funcList){
       ret.append(Prototype(tmp));
     }
-    kDebug() << "returning function list: " << funcList;
+//    kDebug() << "returning function list: " << funcList;
     return ret;
 }
 

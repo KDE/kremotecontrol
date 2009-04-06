@@ -27,14 +27,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QListWidget" name="theProfiles">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>3</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-     </widget>
+     <widget class="KListWidget" name="theProfiles"/>
     </item>
     <item>
      <widget class="QRadioButton" name="theUseDBus">
@@ -68,14 +61,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QListWidget" name="theButtons">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>2</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-     </widget>
+     <widget class="KListWidget" name="theButtons"/>
     </item>
    </layout>
   </widget>
@@ -442,6 +428,13 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <customwidgets>
+  <customwidget>
+   <class>KListWidget</class>
+   <extends>QListWidget</extends>
+   <header>klistwidget.h</header>
+  </customwidget>
+ </customwidgets>
  <includes>
   <include location="local">klineedit.h</include>
   <include location="local">knuminput.h</include>

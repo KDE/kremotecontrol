@@ -106,7 +106,6 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMo
 
 
     connect(theDBusFunctions, SIGNAL(clicked(QModelIndex)), this, SLOT(updateButtonStates()));
-    connect(theDBusFunctions, SIGNAL(clicked(QModelIndex)), this, SLOT(updateParameter()));
     connect(theDBusFunctions, SIGNAL(clicked(QModelIndex)), this, SLOT(updateInstancesOptions()));
     connect(theDBusFunctions,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(next()));
 
@@ -115,8 +114,6 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMo
 
     updateProfiles();
     updateButtons();
-    updateDBusApplications();
-
 }
 
 AddAction::~AddAction()
@@ -195,6 +192,8 @@ void AddAction::updateForPageChange()
 	DBusInterface::getInstance()->cancelKeyPressRequest();
 	if(currentId() == SELECT_FUNCTION_PROFILE){
 	    updateProfileFunctions();
+	} else if(currentId() == SELECT_FUNCTION_DBUS){
+	    updateDBusApplications();
 	}
     } else if(currentId() == ACTION_ARGUMENTS){
 	updateArguments();
