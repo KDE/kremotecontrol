@@ -360,15 +360,15 @@ void AddAction::updateDBusApplications()
         }
     }
     dbusAppsModel->sort(0, Qt::AscendingOrder);
-    //theObjects->setEditTriggers(QAbstractItemView::NoEditTriggers);
 }
 
-
+  
 void AddAction::updateDBusFunctions(QModelIndex pIndex) {
     QModelIndex tParent = pIndex.parent();
     if (tParent.isValid()) {
         QList<Prototype> tList = DBusInterface::getInstance()->getFunctions(dbusAppsModel->data(tParent, Qt::UserRole).toString(), dbusAppsModel->data(pIndex).toString() );
-        theDBusFunctions->model()->insertRows(-1, tList.size());
+        theDBusFunctions->model()->removeRows(0, theDBusFunctions->model()->rowCount());
+	theDBusFunctions->model()->insertRows(0, tList.size());
         for (int i = 0; i < tList.size(); i++) {
             theDBusFunctions->model()->setData(theDBusFunctions->model()->index(i,0),qVariantFromValue( tList.at(i)), Qt::UserRole);
         }
