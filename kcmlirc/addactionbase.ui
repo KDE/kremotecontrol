@@ -82,7 +82,7 @@
   <widget class="QWizardPage" name="page3">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="QTreeView" name="theObjects">
+     <widget class="QTreeView" name="theDBusApplications">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -98,7 +98,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QTableView" name="theFunctions">
+     <widget class="QTableView" name="theDBusFunctions">
       <property name="sizePolicy">
        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -164,12 +164,12 @@
   <widget class="QWizardPage" name="page5">
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="1" column="0">
-     <widget class="QTableView" name="tableView"/>
+     <widget class="QTableView" name="argumentsView"/>
     </item>
     <item row="0" column="0">
      <widget class="QLabel" name="label">
       <property name="text">
-       <string>Specify the arguments to be passed to the pplication</string>
+       <string>Specify the arguments to be passed to the application</string>
       </property>
      </widget>
     </item>
@@ -442,29 +442,6 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
- <customwidgets>
-  <customwidget>
-   <class>KDoubleNumInput</class>
-   <extends></extends>
-   <header>knuminput.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KEditListBox</class>
-   <extends></extends>
-   <header>keditlistbox.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>KIntNumInput</class>
-   <extends></extends>
-   <header>knuminput.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KLineEdit</class>
-   <extends></extends>
-   <header>klineedit.h</header>
-  </customwidget>
- </customwidgets>
  <includes>
   <include location="local">klineedit.h</include>
   <include location="local">knuminput.h</include>

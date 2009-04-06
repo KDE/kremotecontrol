@@ -135,8 +135,6 @@ void EditAction::connectSignalsAndSlots() {
     connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),this,SLOT(updateInstancesOptions()));
 }
 
-
-
 void EditAction::readFrom()
 {
     editActionBaseWidget->theRepeat->setChecked(theAction->repeat());
@@ -336,7 +334,7 @@ void EditAction::updateFunctions()
     QHash<QString, ProfileAction*> dict = ProfileServer::profileServer()->getProfileById(application)->actions();
     QHash<QString, ProfileAction*>::const_iterator i;
     for (i = dict.constBegin(); i != dict.constEnd(); ++i) {
-  editActionBaseWidget->theFunctions->addItem(i.value()->name(), i.key());
+      editActionBaseWidget->theFunctions->addItem(i.value()->name(), i.key());
     }
     const ProfileAction *action = ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype());
     if(action && (action->profile()->name() == editActionBaseWidget->theApplications->currentText())){

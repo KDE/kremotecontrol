@@ -43,6 +43,7 @@ private:
 
     Mode theMode;
     QStandardItemModel *dbusAppsModel;
+    QStandardItemModel *argumentsModel;
     enum  {
         START =0,
         SELECT_BUTTON =1,
@@ -54,24 +55,30 @@ private:
 	
     } page;
 
+    inline Arguments getCurrentArgs() {
+        Arguments retList;
+        foreach(QStandardItem *item, argumentsModel->takeColumn(1)){
+            retList.append(item->data(Qt::EditRole));
+        }
+        return retList;
+    }
+
+
 public slots:
     virtual void slotModeSelected();
-    virtual void slotNextParam();
-    virtual void slotParameterChanged();
     virtual void updateForPageChange();
+    virtual void updateButtonStates();
     virtual void updateButton(const QString &remote, const QString &button);
     virtual void updateButtons();
-    virtual void updateObjects();
-    virtual void updateButtonStates();
-    virtual void updateParameters();
-    virtual void updateParameter();
+    virtual void updateDBusApplications();
+    virtual void updateDBusFunctions(QModelIndex);
     virtual void updateProfiles();
     virtual void updateProfileFunctions();
+    virtual void updateArguments();
     virtual void updateOptions();
-    virtual void updatePrototyes(QModelIndex);
 
 public:
-    Arguments theArguments;
+//    Arguments theArguments;
     bool isUnique;
 
     static const QStringList getFunctions(const QString app, const QString obj);
