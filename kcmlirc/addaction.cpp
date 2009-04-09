@@ -53,7 +53,7 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMo
     theDBusFunctions->setSelectionMode(QAbstractItemView::SingleSelection);
     //theFunctions->setShowGrid(false);
     dbusAppsModel = new QStandardItemModel(theDBusApplications);
-    dbusAppsModel->setHorizontalHeaderLabels(QStringList() << i18n("DBus functions"));
+    dbusAppsModel->setHorizontalHeaderLabels(QStringList() << i18n("D-Bus applications"));
     theDBusApplications->setEditTriggers(QAbstractItemView::NoEditTriggers);
     theDBusApplications->setModel(dbusAppsModel);
 
