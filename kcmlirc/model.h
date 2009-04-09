@@ -31,7 +31,6 @@
 
 #include "prototype.h"
 
-#include <QStringListModel>
 #include <QItemDelegate>
 #include <QStandardItem>
 //class QVariant

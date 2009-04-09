@@ -33,10 +33,7 @@
 #include <QSpinBox>
 #include <QLineEdit>
 #include <QCheckBox>
-#include <KEditListBox>
 #include <QDoubleSpinBox>
-#include <QStyleOptionMenuItem>
-#include <QApplication>
 #include <QComboBox>
 
 

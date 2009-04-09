@@ -42,7 +42,6 @@
 #include <kconfiggroup.h>
 #include <knotification.h>
 #include <ktoolinvocation.h>
-#include <KStandardDirs>
 #include <khelpmenu.h>
 
 IRKick::IRKick(const QString &obj) :

@@ -37,7 +37,6 @@
 #include <kmessagebox.h>
 #include <knuminput.h>
 #include <keditlistbox.h>
-#include <QAbstractItemModel>
 #include <QStandardItemModel>
 
 EditAction::EditAction(IRAction *action, QWidget *parent, const bool &modal): KDialog(parent)

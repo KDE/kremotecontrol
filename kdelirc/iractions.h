@@ -28,7 +28,6 @@
 
 #include <qpair.h>
 
-#include <QMap>
 
 #include "iraction.h"
 #include "mode.h"

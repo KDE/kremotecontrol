@@ -31,7 +31,6 @@
 #include "iractions.h"
 #include "modes.h"
 
-#include <QStringList>
 #include <QMap>
 
 #include <kcmodule.h>
