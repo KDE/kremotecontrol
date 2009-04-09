@@ -57,7 +57,7 @@ DBusInterface *DBusInterface::getInstance() {
     theInstance = new DBusInterface();
   }
   return theInstance;
-};
+}
 
 
 DBusInterface::~DBusInterface()

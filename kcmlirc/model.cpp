@@ -365,7 +365,7 @@ ArgumentsModelItem
 
 ArgumentsModelItem::ArgumentsModelItem ( const QString & text ):QStandardItem(text) {
     setFlags(Qt::ItemIsEnabled);
-};
+}
 
 ArgumentsModelItem::ArgumentsModelItem ( const QVariant &data ) {
     setData(data, Qt::EditRole);
@@ -373,7 +373,7 @@ ArgumentsModelItem::ArgumentsModelItem ( const QVariant &data ) {
         setToolTip(i18n("A comma-separated list of Strings"));
     }
 
-};
+}
 
 QVariant ArgumentsModelItem::data ( int role ) const {
 

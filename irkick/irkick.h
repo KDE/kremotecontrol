@@ -52,7 +52,7 @@ public:
 class IRKick: public QObject
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "org.kde.irkick");
+    Q_CLASSINFO("D-Bus Interface", "org.kde.irkick")
 
 
     QString npApp, npModule, npMethod;
