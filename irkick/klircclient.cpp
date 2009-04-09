@@ -135,7 +135,7 @@ void KLircClient::slotRead()
                 while (!line.isEmpty() && line != "END");
                 if (line.isEmpty())
                     return; // abort on corrupt data
-                for (QStringList::ConstIterator it = remotes.begin(); it != remotes.end(); ++it)
+                for (QStringList::ConstIterator it = remotes.constBegin(); it != remotes.constEnd(); ++it)
                     sendCommand("LIST " + *it);
                 return;
             } else if (line.left(4) == "LIST") {
