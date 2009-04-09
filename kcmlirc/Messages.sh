@@ -1,2 +1,2 @@
 #! /bin/sh
-$XGETTEXT *.cpp *.h -o $podir/kcmlirc.pot
+$XGETTEXT *.cpp -o $podir/kcmlirc.pot
