@@ -28,24 +28,24 @@
 
 #include <QRegExp>
 
-Prototype::Prototype(const Prototype &pType)
+KDE_EXPORT Prototype::Prototype(const Prototype &pType)
 {
     original = pType.prototype();
     parse();
 
 }
 
-Prototype::Prototype(const QString &source)
+KDE_EXPORT Prototype::Prototype(const QString &source)
 {
     original = source;
     parse();
 }
 
-Prototype::~Prototype()
+KDE_EXPORT Prototype::~Prototype()
 {
 }
 
-const QString Prototype::argumentList() const
+KDE_EXPORT const QString Prototype::argumentList() const
 {
     QString ret = "";
     for (int i = 0; i < theTypes.count(); i++)
@@ -84,17 +84,17 @@ void Prototype::parse()
 //  kDebug() << "arguments " << argumentTypes;
 }
 
-bool Prototype::operator==(const Prototype& other) const {
+KDE_EXPORT bool Prototype::operator==(const Prototype& other) const {
     return this->prototype() == other.prototype();
 }
 
 
-bool Prototype::operator>(const Prototype& other) const {
+KDE_EXPORT bool Prototype::operator>(const Prototype& other) const {
     return this->prototype() > other.prototype();
 }
 
 
-bool Prototype::operator<(const Prototype& other) const {
+KDE_EXPORT bool Prototype::operator<(const Prototype& other) const {
     return this->prototype() < other.prototype();
 }
 

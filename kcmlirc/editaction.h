@@ -69,13 +69,7 @@ private:
     inline QString getCurrentDBusFunction() {
         return  editActionBaseWidget->theDBusFunctions->itemData(editActionBaseWidget->theDBusFunctions->currentIndex(),Qt::UserRole).value<Prototype>().prototype();
     }
-    inline Arguments getCurrentArgs() {
-        Arguments retList;
-        foreach(QStandardItem *item, argumentsModel->takeColumn(1)){
-            retList.append(item->data(Qt::EditRole));
-        }
-        return retList;
-    }
+    Arguments getCurrentArgs();
 
 
 

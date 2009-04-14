@@ -29,22 +29,22 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 
-Mode::Mode() : theName(QString::null) //krazy:exclude=nullstrassign for old broken gcc
+KDE_EXPORT Mode::Mode() : theName(QString::null) //krazy:exclude=nullstrassign for old broken gcc
 {
 }
 
-Mode::Mode(const QString &remote, const QString &name, const QString &iconFile)
+KDE_EXPORT Mode::Mode(const QString &remote, const QString &name, const QString &iconFile)
 {
     theRemote = remote;
     theName = name;
     theIconFile = iconFile;
 }
 
-Mode::~Mode()
+KDE_EXPORT Mode::~Mode()
 {
 }
 
-const Mode &Mode::loadFromConfig(KConfig &theConfig, int index)
+KDE_EXPORT const Mode &Mode::loadFromConfig(KConfig &theConfig, int index)
 {
     KConfigGroup modesGroup = theConfig.group("Modes");
     QString Prefix = "Mode" + QString().setNum(index);
@@ -55,7 +55,7 @@ const Mode &Mode::loadFromConfig(KConfig &theConfig, int index)
     return *this;
 }
 
-void Mode::saveToConfig(KConfig &theConfig, int index)
+KDE_EXPORT void Mode::saveToConfig(KConfig &theConfig, int index)
 {
     KConfigGroup modesGroup = theConfig.group("Modes");
     QString Prefix = "Mode" + QString().setNum(index);

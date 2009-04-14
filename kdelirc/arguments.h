@@ -28,18 +28,33 @@
 #define ARGUMENTS_H
 
 #include <QVariant>
+#include <KApplication>
 
 /**
 @author Gav Wood
 */
 
-class Arguments : public QList<QVariant>
+class Arguments : public QObject
 {
+  Q_OBJECT
 public:
     const QString toString() const;
 
     Arguments();
+    Arguments(const Arguments &args);
     ~Arguments();
+
+    QList<QVariant> getArgumentsList() const;
+    void operator=(const Arguments &args);
+    void clear();
+    void append(const QVariant &arg);
+    int count() const;
+    QVariant at(int i) const;
+    QVariant back();
+    int size() const;
+
+private:
+    QList<QVariant> arguments;
 };
 
 #endif

@@ -33,7 +33,7 @@
 #include <kconfiggroup.h>
 #include <klocale.h>
 
-IRAction::IRAction(const QString &newProgram, const QString &newObject, const QString &newMethod, const Arguments &newArguments, const QString &newRemote, const QString &newMode, const QString &newButton, const bool newRepeat, const bool newAutoStart, const bool newDoBefore, const bool newDoAfter, const bool newUnique, const IfMulti newIfMulti)
+KDE_EXPORT IRAction::IRAction(const QString &newProgram, const QString &newObject, const QString &newMethod, const Arguments &newArguments, const QString &newRemote, const QString &newMode, const QString &newButton, const bool newRepeat, const bool newAutoStart, const bool newDoBefore, const bool newDoAfter, const bool newUnique, const IfMulti newIfMulti)
 {
     theProgram = newProgram;
     theObject = newObject;
@@ -50,7 +50,7 @@ IRAction::IRAction(const QString &newProgram, const QString &newObject, const QS
     theIfMulti = newIfMulti;
 }
 
-IRAction *IRAction::loadFromConfig(KConfig &theConfig, int index)
+KDE_EXPORT IRAction *IRAction::loadFromConfig(KConfig &theConfig, int index)
 {
     IRAction *action = new IRAction();
     KConfigGroup actionGroup = theConfig.group("Actions");
@@ -62,14 +62,14 @@ IRAction *IRAction::loadFromConfig(KConfig &theConfig, int index)
         QVariant::Type theType = QVariant::nameToType(actionGroup.readEntry(Binding + "ArgumentType" + QString().setNum(j), QString().toLocal8Bit()));
         kDebug() << "Readentry type is:" << actionGroup.readEntry(Binding + "ArgumentType" + QString().setNum(j), QString().toLocal8Bit());
 //  theArguments += actionGroup.readEntry(Binding + "Argument" + QString().setNum(j), theType == QVariant::CString ? QVariant::String : theType);
-        action->theArguments += actionGroup.readEntry(Binding + "Argument" + QString().setNum(j), QString().toLocal8Bit());
-        if (action->theArguments.last().isNull()) {
-            action->theArguments.last() == "";
+        action->theArguments.append(actionGroup.readEntry(Binding + "Argument" + QString().setNum(j), QString().toLocal8Bit()));
+        if (action->theArguments.at(action->theArguments.count() - 1).isNull()) {
+            action->theArguments.at(action->theArguments.count() - 1) == "";
         }
-        action->theArguments.last().convert(theType);
+        action->theArguments.at(action->theArguments.count() - 1).convert(theType);
     }
 
-    kDebug() << "Arguments: " << action->theArguments;
+//    kDebug() << "Arguments: " << action->theArguments;
 
     action->theProgram = actionGroup.readEntry(Binding + "Program", QString());
     action->theObject = actionGroup.readEntry(Binding + "Object", QString());
@@ -88,7 +88,7 @@ IRAction *IRAction::loadFromConfig(KConfig &theConfig, int index)
     return action;
 }
 
-void IRAction::saveToConfig(KConfig &theConfig, int index) const
+KDE_EXPORT void IRAction::saveToConfig(KConfig &theConfig, int index) const
 {
     KConfigGroup actionGroup = theConfig.group("Actions");
 
@@ -96,7 +96,7 @@ void IRAction::saveToConfig(KConfig &theConfig, int index) const
     actionGroup.writeEntry(Binding + "Arguments", theArguments.count());
 
     for (int j = 0; j < theArguments.count(); j++) {
-        QVariant arg = theArguments[j];
+        QVariant arg = theArguments.at(j);
         QVariant::Type preType = arg.type();
         /*  if(preType == QVariant::StringList && arg.toString().isNull()){
            arg = "";
@@ -119,7 +119,7 @@ void IRAction::saveToConfig(KConfig &theConfig, int index) const
     actionGroup.writeEntry(Binding + "IfMulti", int(theIfMulti));
 }
 
-const QString IRAction::function() const
+KDE_EXPORT const QString IRAction::function() const
 {
     ProfileServer *theServer = ProfileServer::profileServer();
     if (theProgram.isEmpty())
@@ -139,7 +139,7 @@ const QString IRAction::function() const
         }
 }
 
-const QString IRAction::notes() const
+KDE_EXPORT const QString IRAction::notes() const
 {
 
     if (isModeChange())
@@ -156,7 +156,7 @@ const QString IRAction::notes() const
                                  : "");
 }
 
-const QString IRAction::application() const
+KDE_EXPORT const QString IRAction::application() const
 {
     ProfileServer *theServer = ProfileServer::profileServer();
     if (theProgram.isEmpty())
@@ -175,7 +175,7 @@ const QString IRAction::remoteName() const
     return RemoteServer::remoteServer()->getRemoteName(theRemote);
 }
 
-const QString IRAction::buttonName() const
+KDE_EXPORT const QString IRAction::buttonName() const
 {
     return RemoteServer::remoteServer()->getButtonName(theRemote, theButton);
 }

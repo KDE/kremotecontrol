@@ -30,9 +30,9 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 
-RemoteServer *RemoteServer::theInstance = 0;
+KDE_EXPORT RemoteServer *RemoteServer::theInstance = 0;
 
-RemoteServer::RemoteServer()
+KDE_EXPORT RemoteServer::RemoteServer()
 {
     loadRemotes();
 }

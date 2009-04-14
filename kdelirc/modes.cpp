@@ -29,16 +29,16 @@
 #include <kconfiggroup.h>
 #include <kdebug.h>
 
-Modes::Modes()
+KDE_EXPORT Modes::Modes()
 {
 }
 
 
-Modes::~Modes()
+KDE_EXPORT Modes::~Modes()
 {
 }
 
-void Modes::loadFromConfig(KConfig &theConfig)
+KDE_EXPORT void Modes::loadFromConfig(KConfig &theConfig)
 {
     KConfigGroup modesGroup = theConfig.group("Modes");
     clear();
@@ -52,7 +52,7 @@ void Modes::loadFromConfig(KConfig &theConfig)
         theDefaults[i.key()] = modesGroup.readEntry("Default" + i.key(), QString());
 }
 
-void Modes::generateNulls(const QStringList &theRemotes)
+KDE_EXPORT void Modes::generateNulls(const QStringList &theRemotes)
 {
     for (QStringList::const_iterator i = theRemotes.begin(); i != theRemotes.end(); ++i) {
         if (!contains(*i) || !operator[](*i).contains("")) operator[](*i)[""] = Mode(*i, "");
@@ -60,7 +60,7 @@ void Modes::generateNulls(const QStringList &theRemotes)
     }
 }
 
-bool Modes::isDefault(const Mode &mode) const
+KDE_EXPORT bool Modes::isDefault(const Mode &mode) const
 {
     if (theDefaults[mode.remote()] == mode.name())
         return true;
@@ -69,7 +69,7 @@ bool Modes::isDefault(const Mode &mode) const
     return false;
 }
 
-const Mode Modes::getDefault(const QString &remote) const
+KDE_EXPORT const Mode Modes::getDefault(const QString &remote) const
 {
     if (theDefaults[remote].isEmpty()){
         return Mode(remote, "");
@@ -100,7 +100,7 @@ void Modes::purgeAllModes(KConfig &theConfig)
     }
 }
 
-void Modes::saveToConfig(KConfig &theConfig)
+KDE_EXPORT void Modes::saveToConfig(KConfig &theConfig)
 {
     KConfigGroup modesGroup = theConfig.group("Modes");
     int index = 0;
@@ -117,14 +117,14 @@ void Modes::saveToConfig(KConfig &theConfig)
             modesGroup.writeEntry("Default" + i.key(), theDefaults[i.key()]);
 }
 
-Mode Modes::getMode(const QString &remote, const QString &mode) const
+KDE_EXPORT Mode Modes::getMode(const QString &remote, const QString &mode) const
 {
     kDebug() << "found mode: " << operator[](remote)[mode].name() << operator[](remote)[mode].remote();
     Mode retMode = operator[](remote)[mode];
     return retMode;
 }
 
-ModeList Modes::getModes(const QString &remote) const
+KDE_EXPORT ModeList Modes::getModes(const QString &remote) const
 {
     ModeList ret;
     for (QMap<QString, Mode>::const_iterator i = operator[](remote).begin(); i != operator[](remote).end(); ++i)
@@ -132,7 +132,7 @@ ModeList Modes::getModes(const QString &remote) const
     return ret;
 }
 
-void Modes::erase(const Mode &mode)
+KDE_EXPORT void Modes::erase(const Mode &mode)
 {
     if(isDefault(mode)){
       setDefault(getModes(mode.remote()).first());
@@ -141,13 +141,13 @@ void Modes::erase(const Mode &mode)
     kDebug() << "should erease mode...";
 }
 
-void Modes::add(const Mode &mode)
+KDE_EXPORT void Modes::add(const Mode &mode)
 {
     kDebug() << "adding a mode " << mode.name() << " to remote " << mode.remote() ;
     operator[](mode.remote())[mode.name()] = mode;
 }
 
-void Modes::rename(Mode &mode, const QString name)
+KDE_EXPORT void Modes::rename(Mode &mode, const QString name)
 {
     bool was = isDefault(mode);
     erase(mode);

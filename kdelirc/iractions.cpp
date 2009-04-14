@@ -30,7 +30,7 @@
 #include <kconfiggroup.h>
 #include <kdebug.h>
 
-void IRActions::loadFromConfig(KConfig &theConfig)
+KDE_EXPORT void IRActions::loadFromConfig(KConfig &theConfig)
 {
     clear();
     KConfigGroup actionGroup = theConfig.group("Actions");
@@ -62,7 +62,7 @@ void IRActions::purgeAllBindings(KConfig &theConfig)
     }
 }
 
-void IRActions::saveToConfig(KConfig &theConfig)
+KDE_EXPORT void IRActions::saveToConfig(KConfig &theConfig)
 {
     KConfigGroup actionGroup = theConfig.group("Actions");
     int index = 0;
@@ -72,7 +72,7 @@ void IRActions::saveToConfig(KConfig &theConfig)
     actionGroup.writeEntry("Bindings", index);
 }
 
-void IRActions::addAction(IRAction *theAction)
+KDE_EXPORT void IRActions::addAction(IRAction *theAction)
 {
     append(theAction);
 }
@@ -86,7 +86,7 @@ IRActions IRActions::findByButton(const QString &remote, const QString &button)
     return ret;
 }
 
-void IRActions::renameMode(const Mode &mode, const QString &to)
+KDE_EXPORT void IRActions::renameMode(const Mode &mode, const QString &to)
 {
     for (iterator i = begin(); i != end(); ++i) {
         if ((*i)->remote() == mode.remote() && (*i)->mode() == mode.name())(*i)->setMode(to);
@@ -94,7 +94,7 @@ void IRActions::renameMode(const Mode &mode, const QString &to)
     }
 }
 
-IRActions IRActions::findByMode(const Mode &mode)
+KDE_EXPORT IRActions IRActions::findByMode(const Mode &mode)
 {
     IRActions ret;
 //    kDebug() << "IRActions size: " << size();
@@ -108,7 +108,7 @@ IRActions IRActions::findByMode(const Mode &mode)
     return ret;
 }
 
-IRActions IRActions::findByModeButton(const Mode &mode, const QString &button)
+KDE_EXPORT IRActions IRActions::findByModeButton(const Mode &mode, const QString &button)
 {
     IRActions ret;
     for (iterator i = begin(); i != end(); ++i)
@@ -117,7 +117,7 @@ IRActions IRActions::findByModeButton(const Mode &mode, const QString &button)
     return ret;
 }
 
-void IRActions::erase(IRAction *action)
+KDE_EXPORT void IRActions::erase(IRAction *action)
 {
     for (int i = 0; i < size(); i++) {
         if (operator[](i) == action) {

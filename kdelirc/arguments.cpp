@@ -26,23 +26,60 @@
 
 #include "arguments.h"
 
-Arguments::Arguments()
+KDE_EXPORT Arguments::Arguments()
 {
 }
 
-Arguments::~Arguments()
+KDE_EXPORT Arguments::Arguments(const Arguments &args){
+    arguments = args.getArgumentsList();
+}
+
+KDE_EXPORT Arguments::~Arguments()
 {
 }
 
-const QString Arguments::toString() const
+KDE_EXPORT QList<QVariant> Arguments::getArgumentsList() const{
+    return arguments;
+}
+
+KDE_EXPORT void Arguments::operator=(const Arguments& args) {
+    arguments = args.getArgumentsList();
+}
+
+
+KDE_EXPORT const QString Arguments::toString() const
 {
     QString ret = "";
-    for (Arguments::const_iterator i = begin(); i != end(); ++i) {
+    for (QList<QVariant>::const_iterator i = arguments.constBegin(); i != arguments.constEnd(); ++i) {
         QString s = (*i).toString();
         if (s.isNull() || s.isEmpty()) s = "...";
-        if (i != begin()) ret += ", ";
+        if (i != arguments.constBegin()) ret += ", ";
         ret += s;
     }
     return ret;
+}
+
+KDE_EXPORT void Arguments::clear() {
+  arguments.clear();
+}
+
+KDE_EXPORT void Arguments::append(const QVariant& arg) {
+  arguments.append(arg);
+}
+
+KDE_EXPORT int Arguments::count() const {
+  return arguments.count();
+}
+
+KDE_EXPORT QVariant Arguments::at(int i) const {
+  return arguments.at(i);
+}
+
+KDE_EXPORT QVariant Arguments::back() {
+    return arguments.back();
+}
+
+KDE_EXPORT int Arguments::size() const {
+    return arguments.size();
 }
 

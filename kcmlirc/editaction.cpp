@@ -416,4 +416,12 @@ void EditAction::addItem(QString item)
     editActionBaseWidget->theModes->addItem(item);
 }
 
+Arguments EditAction::getCurrentArgs() {
+    Arguments retList;
+    foreach(QStandardItem *item, argumentsModel->takeColumn(1)){
+	retList.append(item->data(Qt::EditRole));
+    }
+    return retList;
+}
+
 #include "editaction.moc"

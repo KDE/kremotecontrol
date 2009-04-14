@@ -329,8 +329,8 @@ void IRKick::executeAction(const IRAction& action) {
             QDBusMessage m = QDBusMessage::createMethodCall(program, '/'
                              + action.object(), "", action.method().prototypeNR());
 
-            for (Arguments::const_iterator j = action.arguments().begin(); j
-                    != action.arguments().end(); ++j) {
+            for (QList<QVariant>::const_iterator j = action.arguments().getArgumentsList().constBegin(); j
+                    != action.arguments().getArgumentsList().constEnd(); ++j) {
                 kDebug() << "Got argument:" << (*j).type();
                 //    m << (*j).toString();
                 m << (*j);

@@ -32,19 +32,19 @@
 #include <kdebug.h>
 
 
-ProfileServer *ProfileServer::theInstance = 0;
+KDE_EXPORT ProfileServer *ProfileServer::theInstance = 0;
 
-ProfileServer::ProfileServer()
+KDE_EXPORT ProfileServer::ProfileServer()
 {
 // theProfiles.setAutoDelete(true);
     loadProfiles();
 }
 
-ProfileServer::~ProfileServer()
+KDE_EXPORT ProfileServer::~ProfileServer()
 {
 }
 
-void ProfileServer::loadProfiles()
+KDE_EXPORT void ProfileServer::loadProfiles()
 {
     QStringList theFiles = KGlobal::dirs()->findAllResources("data", "profiles/*.profile.xml");
     for (QStringList::iterator i = theFiles.begin(); i != theFiles.end(); ++i) {
@@ -55,7 +55,7 @@ void ProfileServer::loadProfiles()
     }
 }
 
-const Profile* ProfileServer::getProfileById(const QString& profileId) const{
+KDE_EXPORT const Profile* ProfileServer::getProfileById(const QString& profileId) const{
   foreach(Profile *prof, theProfiles){
     if(profileId == prof->id()){
       return prof;
@@ -65,7 +65,7 @@ const Profile* ProfileServer::getProfileById(const QString& profileId) const{
 }
 
 
-Profile::Profile()
+KDE_EXPORT Profile::Profile()
 {
     // set up defaults
     theUnique = true;
@@ -74,7 +74,7 @@ Profile::Profile()
 // theActions.setAutoDelete(true);
 }
 
-const ProfileAction *Profile::searchClass(const QString &c) const
+KDE_EXPORT const ProfileAction *Profile::searchClass(const QString &c) const
 {
 	kDebug() << "Actionscount: " << theActions.size();
     for (QHash<QString, ProfileAction*>::const_iterator i = theActions.constBegin(); i != theActions.constEnd(); ++i) {
@@ -87,7 +87,7 @@ const ProfileAction *Profile::searchClass(const QString &c) const
     return 0;
 }
 
-void Profile::loadFromFile(const QString &fileName)
+KDE_EXPORT void Profile::loadFromFile(const QString &fileName)
 {
     charBuffer = "";
     curPA = 0;
@@ -100,7 +100,7 @@ void Profile::loadFromFile(const QString &fileName)
     reader.parse(source);
 }
 
-const ProfileAction *ProfileServer::getAction(const QString &appId, const QString &actionId) const
+KDE_EXPORT const ProfileAction *ProfileServer::getAction(const QString &appId, const QString &actionId) const
 {
     kDebug() << "Profile to search:" << appId << actionId;
     if (getProfileById(appId)){
@@ -111,7 +111,7 @@ const ProfileAction *ProfileServer::getAction(const QString &appId, const QStrin
     return 0;
 }
 
-const QString &ProfileServer::getServiceName(const QString &appId) const
+KDE_EXPORT const QString &ProfileServer::getServiceName(const QString &appId) const
 {
     if (getProfileById(appId)){
         return getProfileById(appId)->serviceName();
@@ -120,18 +120,18 @@ const QString &ProfileServer::getServiceName(const QString &appId) const
     return QString();
 }
 
-const ProfileAction *ProfileServer::getAction(const QString &appId, const QString &objId, const QString &prototype) const
+KDE_EXPORT const ProfileAction *ProfileServer::getAction(const QString &appId, const QString &objId, const QString &prototype) const
 {
     return getAction(appId, objId + "::" + prototype);
 }
 
-bool Profile::characters(const QString &data)
+KDE_EXPORT bool Profile::characters(const QString &data)
 {
     charBuffer += data;
     return true;
 }
 
-bool Profile::startElement(const QString &, const QString &, const QString &name, const QXmlAttributes &attributes)
+KDE_EXPORT bool Profile::startElement(const QString &, const QString &, const QString &name, const QXmlAttributes &attributes)
 {
     if (name == "profile") {
         theId = attributes.value("id");
@@ -165,7 +165,7 @@ bool Profile::startElement(const QString &, const QString &, const QString &name
     return true;
 }
 
-bool Profile::endElement(const QString &, const QString &, const QString &name)
+KDE_EXPORT bool Profile::endElement(const QString &, const QString &, const QString &name)
 {
     if (name == "name")
         if (curPA)

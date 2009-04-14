@@ -1,16 +1,15 @@
 
 include_directories( 
-	${CMAKE_SOURCE_DIR}/irkick/
 	${CMAKE_SOURCE_DIR}/kdelirc/
 	${CMAKE_SOURCE_DIR}/kcmlirc/	
 	${CMAKE_CURRENT_BINARY_DIR}
 	${KDE4_INCLUDES}
 	${QT_INCLUDES} )
 
-
+#link_directories(${KDE4_LIB_DIR} ${CMAKE_CURRENT_BINARY_DIR}  ${CMAKE_BINARY_DIR}/lib)
 ########### next target ###############
 
-set(kcm_lirc_PART_SRCS ${kdelirc_shared_SRCS}
+set(kcm_lirc_PART_SRCS
    kcmlirc.cpp 
    addaction.cpp 
    editmode.cpp 
@@ -26,7 +25,7 @@ kde4_add_ui_files(kcm_lirc_PART_SRCS addactionbase.ui newmode.ui editactionbase.
 
 kde4_add_plugin(kcm_lirc ${kcm_lirc_PART_SRCS})
 
-target_link_libraries(kcm_lirc  ${KDE4_KIO_LIBS})
+target_link_libraries(kcm_lirc ${KDE4_KIO_LIBS} kdelirc_shared)
 
 install(TARGETS kcm_lirc DESTINATION ${PLUGIN_INSTALL_DIR})
 
