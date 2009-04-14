@@ -45,9 +45,17 @@ DBusServiceItem
 */
 
 
-DBusServiceItem::DBusServiceItem(const QString &item):QStandardItem() {
-    setData(item, Qt::UserRole);
+
+DBusServiceItem::DBusServiceItem(const QString &item) {
+    setData(item, Qt::UserRole);  
     setFlags(Qt::ItemIsEnabled);
+}
+
+DBusServiceItem::DBusServiceItem(const QString &item,  QStringList &objects)  {
+  new DBusServiceItem(item);
+    foreach(QString object, objects) {
+	  this->appendRow(new QStandardItem(object));
+    }
 }
 
 
@@ -73,7 +81,6 @@ QString DBusServiceItem::trimAppname(const QString& appName) {
     }
     return appName;
 }
-
 
 /*
 ***********************************
@@ -111,23 +118,13 @@ QVariant DBusFunctionModel::data(const QModelIndex & index, int role = Qt::Displ
 
 }
 
-void DBusFunctionModel::setPrototypes(const QList< Prototype > protoTypeList) {
-    beginInsertRows(QModelIndex(), 0, protoTypeList.size() );
-    theProtoTypeList = protoTypeList;
-    endInsertRows();
-}
-
-
 bool DBusFunctionModel::setData(const QModelIndex &index,  const QVariant &value, int role)
 {
     if (!index.isValid()) {
-
-//        kDebug() << " Index invalid Row" << index.row() << " Col " << index.column();
         return false;
     }
 
     if (role == Qt::UserRole && value.canConvert<Prototype>()) {
-//        kDebug() << "Adding";
         Prototype tType =value.value<Prototype>();
         theProtoTypeList.replace(index.row(), tType);
         emit dataChanged(index, index);
@@ -138,10 +135,7 @@ bool DBusFunctionModel::setData(const QModelIndex &index,  const QVariant &value
 
 bool DBusFunctionModel::insertRows(int position, int rows, const QModelIndex &parent)
 {
-    beginInsertRows(parent, position, position+rows-1);
-    if (position == -1) {
-        theProtoTypeList.clear();
-    }
+    beginInsertRows(parent, position, position+rows-1);    
     for (int row = 0; row < rows; ++row) {
         theProtoTypeList.insert(position, Prototype());
     }
@@ -388,80 +382,3 @@ QVariant ArgumentsModelItem::data ( int role ) const {
         return QStandardItem::data(role);
     }
 }
-
-
-
-
-/*
-***********************************
-DBusServiceModel
-***********************************
-*/
-
-/*
-
-
-DBusServiceModel::DBusServiceModel(QObject *parent = 0) :
-        QStringListModel(parent)
-{
-
-}
-
-bool DBusServiceModel::ascendingLessThan(const QString &s1, const QString &s2)
-{
-    return trimAppname(s1) < trimAppname(s2);
-}
-
-bool DBusServiceModel::decendingLessThan(const QString &s1, const QString &s2)
-{
-
-    return trimAppname(s1) > trimAppname(s2);
-}
-
-QString DBusServiceModel::trimAppname(const QString &appName)
-{
-
-    int lastIndex = appName .lastIndexOf(".") + 1;
-    if (lastIndex < appName.size()) {
-        QString s = appName;
-        QString domainName = appName;
-        s.remove(0, lastIndex);
-        domainName.remove(lastIndex -1, domainName.length());
-        return  s.left(1).toUpper() + s.right(s.size() - 1) + " (" + domainName+")";
-    }
-    return appName;
-}
-
-QVariant DBusServiceModel::data(const QModelIndex & index, int role = Qt::DisplayRole) const
-{
-    if (!index.isValid()) {
-        kDebug() << " Index invalid";
-        return QVariant();
-    }
-    if (index.row() >= 0 || index.row() <= stringList().size()) {
-        if (role == Qt::DisplayRole || role == Qt::EditRole) {
-
-            return trimAppname(stringList().at(index.row()));
-        }
-        if (role == Qt::UserRole) {
-
-            return stringList().at(index.row());
-        }
-    }
-    return QVariant();
-
-}
-
-
-void  DBusServiceModel::sort(int, Qt::SortOrder order)
-{
-    emit layoutAboutToBeChanged();
-    QStringList tList = stringList();
-
-    if (order == Qt::AscendingOrder)
-        qSort(tList.begin(), tList.end(),  DBusServiceModel::ascendingLessThan);
-    else
-        qSort(tList.begin(), tList.end(),  DBusServiceModel::decendingLessThan);
-    setStringList(tList);
-    emit layoutChanged();
-}*/

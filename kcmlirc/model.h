@@ -30,19 +30,16 @@
 
 
 #include "prototype.h"
-
+#include "iraction.h"
 #include <QItemDelegate>
 #include <QStandardItem>
 //class QVariant
 //class QString
+#include <iraction.h>
 
 
 Q_DECLARE_METATYPE(Prototype)
-
-
-
-
-
+Q_DECLARE_METATYPE(IRAction*)
 
 class DBusServiceItem : public QStandardItem
 {
@@ -52,10 +49,10 @@ private:
 
 public:
     DBusServiceItem(const QString &item);
+    DBusServiceItem(const QString &item, QStringList &objects);
 
     virtual QVariant data(int  role) const;
 };
-
 
 class DBusFunctionModel : public  QAbstractListModel
 {

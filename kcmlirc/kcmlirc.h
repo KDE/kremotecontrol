@@ -30,14 +30,18 @@
 #include "ui_kcmlircbase.h"
 #include "iractions.h"
 #include "modes.h"
-
+#include "model.h"
+#include "iraction.h"
 #include <QMap>
-
+#include<QVariant>
+#include <QStandardItemModel>
 #include <kcmodule.h>
 
 class QDropEvent;
 class Profile;
 class Remote;
+
+Q_DECLARE_METATYPE(Mode)
 
 class KCMLirc: public KCModule
 {
@@ -47,11 +51,16 @@ private:
     Ui::KCMLircBase *theKCMLircBase;
     IRActions allActions;
     Modes allModes;
-    QMap<QTreeWidgetItem *, IRAction *> actionMap;
-    QMap<QTreeWidgetItem *, Mode> modeMap;
+//    QMap<QTreeWidgetItem *, Mode> modeMap;
     QMap<QTreeWidgetItem *, QString> profileMap, remoteMap;
 
     void autoPopulate(const Profile &profile, const Remote &remote, const QString &mode);
+
+     inline IRAction *currentAction(){
+       IRAction *tAction = theKCMLircBase->theActions->currentItem()->data(0, Qt::UserRole).value<IRAction*>();
+       return tAction;
+       
+     }
 
 public slots:
     void updateActions();
