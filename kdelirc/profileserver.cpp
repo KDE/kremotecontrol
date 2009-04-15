@@ -55,13 +55,13 @@ KDE_EXPORT void ProfileServer::loadProfiles()
     }
 }
 
-KDE_EXPORT const Profile* ProfileServer::getProfileById(const QString& profileId) const{
-  foreach(Profile *prof, theProfiles){
-    if(profileId == prof->id()){
-      return prof;
+KDE_EXPORT const Profile* ProfileServer::getProfileById(const QString& profileId) const {
+    foreach(Profile *prof, theProfiles) {
+        if (profileId == prof->id()) {
+            return prof;
+        }
     }
-  }
-  return NULL;
+    return NULL;
 }
 
 
@@ -76,7 +76,7 @@ KDE_EXPORT Profile::Profile()
 
 KDE_EXPORT const ProfileAction *Profile::searchClass(const QString &c) const
 {
-	kDebug() << "Actionscount: " << theActions.size();
+    kDebug() << "Actionscount: " << theActions.size();
     for (QHash<QString, ProfileAction*>::const_iterator i = theActions.constBegin(); i != theActions.constEnd(); ++i) {
         kDebug() << "value:" << i.value();
         kDebug() << "Class: " << i.value()->getClass();
@@ -103,20 +103,19 @@ KDE_EXPORT void Profile::loadFromFile(const QString &fileName)
 KDE_EXPORT const ProfileAction *ProfileServer::getAction(const QString &appId, const QString &actionId) const
 {
     kDebug() << "Profile to search:" << appId << actionId;
-    if (getProfileById(appId)){
-        if (getProfileById(appId)->actions()[actionId]){
+    if (getProfileById(appId)) {
+        if (getProfileById(appId)->actions()[actionId]) {
             return getProfileById(appId)->actions()[actionId];
-	}
+        }
     }
     return 0;
 }
 
-KDE_EXPORT const QString &ProfileServer::getServiceName(const QString &appId) const
+KDE_EXPORT const QString ProfileServer::getServiceName(const QString &appId) const
 {
-    if (getProfileById(appId)){
+    if (getProfileById(appId)) {
         return getProfileById(appId)->serviceName();
     }
-    //TODO: FIX this
     return QString();
 }
 
@@ -183,7 +182,7 @@ KDE_EXPORT bool Profile::endElement(const QString &, const QString &, const QStr
     else if (name == "action") {
         curPA->setProfile(this);
         theActions.insert(curPA->objId() + "::" + curPA->prototype(), curPA);
-    	kDebug() << "theActions"  << theActions;
+        kDebug() << "theActions"  << theActions;
         curPA = 0;
     } else if (name == "argument")
         curPAA = 0;

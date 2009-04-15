@@ -53,72 +53,72 @@ DBusInterface::DBusInterface()
 }
 
 DBusInterface *DBusInterface::getInstance() {
-  if (!theInstance) {
-    theInstance = new DBusInterface();
-  }
-  return theInstance;
+    if (!theInstance) {
+        theInstance = new DBusInterface();
+    }
+    return theInstance;
 }
 
 
 DBusInterface::~DBusInterface()
 {
-  //delete(DBusInterface::theInstance);
-  //DBusInterface::theInstance = 0;
+    //delete(DBusInterface::theInstance);
+    //DBusInterface::theInstance = 0;
 }
 
 QStringList DBusInterface::getAllRegisteredPrograms() {
-  QDBusConnectionInterface *dBusIface = QDBusConnection::sessionBus().interface();
-  return dBusIface->registeredServiceNames();
+    QDBusConnectionInterface *dBusIface = QDBusConnection::sessionBus().interface();
+    return dBusIface->registeredServiceNames();
 }
 
 
 QStringList DBusInterface::getRegisteredPrograms()
 {
-  QStringList returnList;
+    QStringList returnList;
 
-  QStringList allServices = getAllRegisteredPrograms();
-  
-  //Throw out invalid entries
-  for(int i = 0; i < allServices.size(); ++i){
-    kDebug() << "Service: " << allServices.at(i);
+    QStringList allServices = getAllRegisteredPrograms();
 
-    QString tmp = allServices.at(i);
+    //Throw out invalid entries
+    for (int i = 0; i < allServices.size(); ++i) {
+        kDebug() << "Service: " << allServices.at(i);
 
-    QRegExp r1("[a-zA-Z]{1,3}\\.[a-zA-Z0-9-]+\\.[a-zA-Z0-9_-]+");
-    if(!r1.exactMatch(tmp)){
-      continue;
+        QString tmp = allServices.at(i);
+
+        QRegExp r1("[a-zA-Z]{1,3}\\.[a-zA-Z0-9-]+\\.[a-zA-Z0-9_-]+");
+        if (!r1.exactMatch(tmp)) {
+            continue;
+        }
+        if (getObjects(tmp).isEmpty()) {
+            continue;
+        }
+        QRegExp r2("[a-zA-Z0-9_\\.-]+-[0-9]+");
+        if (r2.exactMatch(tmp)) {
+            tmp.truncate(tmp.lastIndexOf('-'));
+        }
+        if (!returnList.contains(tmp)) {
+            returnList << tmp;
+        }
+
     }
-    if(getObjects(tmp).isEmpty()){
-      continue;
-    }
-    QRegExp r2("[a-zA-Z0-9_\\.-]+-[0-9]+");
-    if(r2.exactMatch(tmp)){
-      tmp.truncate(tmp.lastIndexOf('-'));
-    }
-    if(!returnList.contains(tmp)){
-      returnList << tmp;
-    }
 
-  }
-
-  return returnList;
+    return returnList;
 }
 
-QStringList DBusInterface::getObjects(const QString &program){
+QStringList DBusInterface::getObjects(const QString &program) {
     QDBusInterface dBusIface(program, "/", "org.freedesktop.DBus.Introspectable");
     QDBusReply<QString> response = dBusIface.call("Introspect");
 
     QDomDocument domDoc;
     domDoc.setContent(response);
-    if(domDoc.toString().isEmpty()){ // No reply... perhaps a multi-instance...
-      QStringList instances = getAllRegisteredPrograms().filter(program);
-      kDebug() << "instances of " + program << instances;
-      if(!instances.isEmpty()){
-	QDBusInterface iFace(instances.first(), "/", "org.freedesktop.DBus.Introspectable");
-	response = iFace.call("Introspect");
-	domDoc.setContent(response);
-	kDebug() << "new DBus response:" << response;
-      }
+    if (domDoc.toString().isEmpty()) { // No reply... perhaps a multi-instance...
+        QStringList instances = getAllRegisteredPrograms().filter(program);
+        kDebug() << "instances of " + program << instances;
+        if (!instances.isEmpty()) {
+            QDBusInterface iFace(instances.first(), "/", "org.freedesktop.DBus.Introspectable");
+            response = iFace.call("Introspect");
+            domDoc.setContent(response);
+            kDebug() << "new DBus response:" << response;
+        }
     }
 
     QDomElement node = domDoc.documentElement();
@@ -127,10 +127,10 @@ QStringList DBusInterface::getObjects(const QString &program){
     QStringList returnList;
     while (!child.isNull()) {
         if (child.tagName() == QLatin1String("node")) {
-	    QString name = child.attribute(QLatin1String("name"));
-	    if(name != "org" && name != "modules" && !getFunctions(program, name).isEmpty()){
-	      returnList << name;
-	    }
+            QString name = child.attribute(QLatin1String("name"));
+            if (name != "org" && name != "modules" && !getFunctions(program, name).isEmpty()) {
+                returnList << name;
+            }
         }
         child = child.nextSiblingElement();
     }
@@ -138,23 +138,23 @@ QStringList DBusInterface::getObjects(const QString &program){
     return returnList;
 }
 
-QList<Prototype> DBusInterface::getFunctions(const QString &program, const QString &object){
+QList<Prototype> DBusInterface::getFunctions(const QString &program, const QString &object) {
     QDBusInterface dBusIface(program, '/' + object, "org.freedesktop.DBus.Introspectable");
     QDBusReply<QString> response = dBusIface.call("Introspect");
 
- //   kDebug() << response;
+//   kDebug() << response;
     QDomDocument domDoc;
     domDoc.setContent(response);
 
-    if(domDoc.toString().isEmpty()){ // No reply... perhaps a multi-instance...
-      QStringList instances = getAllRegisteredPrograms().filter(program);
-      kDebug() << "instances of " + program << instances;
-      if(!instances.isEmpty()){
-	QDBusInterface iFace(instances.first(), "/" + object, "org.freedesktop.DBus.Introspectable");
-	response = iFace.call("Introspect");
-	domDoc.setContent(response);
-	kDebug() << "new DBus response:" << response;
-      }
+    if (domDoc.toString().isEmpty()) { // No reply... perhaps a multi-instance...
+        QStringList instances = getAllRegisteredPrograms().filter(program);
+        kDebug() << "instances of " + program << instances;
+        if (!instances.isEmpty()) {
+            QDBusInterface iFace(instances.first(), '/' + object, "org.freedesktop.DBus.Introspectable");
+            response = iFace.call("Introspect");
+            domDoc.setContent(response);
+            kDebug() << "new DBus response:" << response;
+        }
     }
 
     QDomElement node = domDoc.documentElement();
@@ -174,73 +174,69 @@ QList<Prototype> DBusInterface::getFunctions(const QString &program, const QStri
             while (!subChild.isNull()) {
                 if (subChild.tagName() == QLatin1String("method")) {
 
-		  QString method = subChild.attribute(QLatin1String("name"));
-		  function = method;
-		  QDomElement arg = subChild.firstChildElement();
-		  QString argStr;
-		  QString retArg = "void";
-		  while (!arg.isNull()) {
-		    if (arg.tagName() == QLatin1String("arg")) {
-		      QString tmpArg = arg.attribute(QLatin1String("type"));
-		      if (tmpArg == "i") {
-			tmpArg = "int";
-		      } else if (tmpArg == "u") {
-			tmpArg = "uint";
-		      } else if (tmpArg == "s") {
-			tmpArg = "QString";
-		      } else if (tmpArg == "b") {
-			tmpArg = "bool";
-		      } else if (tmpArg == "d") {
-			tmpArg = "double";
-		      } else if (tmpArg == "as") {
-			tmpArg = "QStringList";
-		      } else if (tmpArg == "ay") {
-			tmpArg = "QByteArray";
-		      } else {
-			arg = arg.nextSiblingElement();
-			continue;
-		      }
+                    QString method = subChild.attribute(QLatin1String("name"));
+                    function = method;
+                    QDomElement arg = subChild.firstChildElement();
+                    QString argStr;
+                    QString retArg = "void";
+                    while (!arg.isNull()) {
+                        if (arg.tagName() == QLatin1String("arg")) {
+                            QString tmpArg = arg.attribute(QLatin1String("type"));
+                            if (tmpArg == "i") {
+                                tmpArg = "int";
+                            } else if (tmpArg == "u") {
+                                tmpArg = "uint";
+                            } else if (tmpArg == "s") {
+                                tmpArg = "QString";
+                            } else if (tmpArg == "b") {
+                                tmpArg = "bool";
+                            } else if (tmpArg == "d") {
+                                tmpArg = "double";
+                            } else if (tmpArg == "as") {
+                                tmpArg = "QStringList";
+                            } else if (tmpArg == "ay") {
+                                tmpArg = "QByteArray";
+                            } else {
+                                arg = arg.nextSiblingElement();
+                                continue;
+                            }
 
-		      if (arg.attribute(QLatin1String("direction")) == "in") {
-			
-			if(!argStr.isEmpty()){
-			  argStr += ", ";
-			}
-			argStr += tmpArg;
-			if(!arg.attribute(QLatin1String("name")).isEmpty()){
-			  argStr += " " + arg.attribute(QLatin1String("name"));
-			} else {
-			  argStr += " " + i18nc("The name of a parameter", "unknown");
-			}
-
-		      } else if(arg.attribute(QLatin1String("direction")) == "out"){
-			retArg = tmpArg;
-
-		      }
-
-		    }
-		    arg = arg.nextSiblingElement();
-		  }
-		  function = retArg + " " + function;
-		  function += "(" + argStr + ")";
+                            if (arg.attribute(QLatin1String("direction")) == "in") {
+                                if (!argStr.isEmpty()) {
+                                    argStr += ", ";
+                                }
+                                argStr += tmpArg;
+                                argStr.append(' ' );
+                                if (!arg.attribute(QLatin1String("name")).isEmpty()) {
+                                    argStr.append(arg.attribute(QLatin1String("name")));
+                                } else {
+                                    argStr.append( i18nc("The name of a parameter", "unknown"));
+                                }
+                            } else if (arg.attribute(QLatin1String("direction")) == "out") {
+                                retArg = tmpArg;
+                            }
+                        }
+                        arg = arg.nextSiblingElement();
+                    }
+                    function = retArg + " " + function;//krazy:exclude=[doublequote_chars]
+                    function += "(" + argStr + ")";// krazy:exclude=[doublequote_chars]
                 }
                 subChild = subChild.nextSiblingElement();
-		if(!funcList.contains(function) && !function.isEmpty()){
-		  funcList.append(function);
-		}
+                if (!funcList.contains(function) && !function.isEmpty()) {
+                    funcList.append(function);
+                }
             }
         }
         child = child.nextSiblingElement();
     }
     QList<Prototype> ret;
-    foreach(QString tmp, funcList){
-      ret.append(Prototype(tmp));
+    foreach(QString tmp, funcList) {// krazy:exclude=[foreach]
+        ret.append(Prototype(tmp));
     }
-//    kDebug() << "returning function list: " << funcList;
     return ret;
 }
 
-QStringList DBusInterface::getRemotes(){
+QStringList DBusInterface::getRemotes() {
     QStringList remotes;
     QDBusMessage m = QDBusMessage::createMethodCall("org.kde.irkick", "/IRKick",
                      "", "remotes");
@@ -254,13 +250,13 @@ QStringList DBusInterface::getRemotes(){
 }
 
 
-void DBusInterface::requestNextKeyPress(){
+void DBusInterface::requestNextKeyPress() {
     kDebug() << "Requesting next press from irkick";
     QDBusMessage m = QDBusMessage::createMethodCall("org.kde.irkick", "/IRKick", "", "stealNextPress");
     m << "org.kde.kcmshell_kcm_lirc";
     m << "/KCMLirc";
     m << "gotButton";
-kDebug() << "arguments are:" << m;
+    kDebug() << "arguments are:" << m;
     QDBusMessage response = QDBusConnection::sessionBus().call(m);
     if (response.type() == QDBusMessage::ErrorMessage) {
         kDebug() << response.errorMessage();
@@ -300,11 +296,11 @@ void DBusInterface::reloadIRKick() {
 
 
 bool DBusInterface::isProgramRunning(const QString &program) {
-  QDBusConnectionInterface *dBusIface = QDBusConnection::sessionBus().interface();
-  if(dBusIface->isServiceRegistered(program)){
-    return true;
-  }
-  return false;
+    QDBusConnectionInterface *dBusIface = QDBusConnection::sessionBus().interface();
+    if (dBusIface->isServiceRegistered(program)) {
+        return true;
+    }
+    return false;
 }
 
 void DBusInterface::gotButton(QString remote, QString button)

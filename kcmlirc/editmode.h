@@ -34,14 +34,11 @@ class Mode;
 class EditModeBaseWidget : public QWidget, public Ui::EditModeBase
 {
 public:
-  EditModeBaseWidget(QWidget *parent = 0) : QWidget(parent)
-  {
-    setupUi(this);
-  }
+    EditModeBaseWidget(QWidget *parent = 0) : QWidget(parent)
+    {
+        setupUi(this);
+    }
 };
-
-
-
 
 
 class EditMode : public KDialog
@@ -49,7 +46,7 @@ class EditMode : public KDialog
     Q_OBJECT
 
 private:
-  EditModeBaseWidget *editModeBaseWidget;
+    EditModeBaseWidget *editModeBaseWidget;
 
 public:
     explicit EditMode(Mode mode, bool isDefault, QWidget *parent = 0, const bool &modal = false);

@@ -25,17 +25,15 @@
  *      @author Frank Scheffold
  */
 
-#ifndef MODEL_H_
-#define MODEL_H_
+#ifndef MODEL_H
+#define MODEL_H
 
 
 #include "prototype.h"
 #include "iraction.h"
 #include <QItemDelegate>
 #include <QStandardItem>
-//class QVariant
-//class QString
-#include <iraction.h>
+
 
 
 Q_DECLARE_METATYPE(Prototype)
@@ -49,7 +47,7 @@ private:
 
 public:
     DBusServiceItem(const QString &item);
-    DBusServiceItem(const QString &item, QStringList &objects);
+    DBusServiceItem(const QString &item, const QStringList &objects);
 
     virtual QVariant data(int  role) const;
 };
@@ -70,11 +68,13 @@ public:
     bool removeRows(int position, int rows, const QModelIndex &parent);
     void setPrototypes( const QList <Prototype>  protoTypeList);
 
-    int rowCount(const QModelIndex &parent=QModelIndex()) const {
+    int rowCount(const QModelIndex &parent) const {
+        Q_UNUSED(parent)
         return theProtoTypeList.size();
     }
 
-    int columnCount(const QModelIndex &parent=QModelIndex()) const {
+    int columnCount(const QModelIndex &parent) const {
+        Q_UNUSED(parent)
         return 3;
     }
 
@@ -112,7 +112,7 @@ public:
                       const QModelIndex &index) const;
 
     void updateEditorGeometry(QWidget *editor,
-        const QStyleOptionViewItem &option, const QModelIndex &index) const;
+                              const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
 };
 

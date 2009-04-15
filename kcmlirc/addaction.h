@@ -27,13 +27,14 @@
 #define ADDACTION_H
 
 #include <qpair.h>
-#include <ui_addactionbase.h>
+
 #include <QStandardItemModel>
 
+#include "ui_addactionbase.h"
 #include "arguments.h"
 #include "mode.h"
 #include "model.h"
-class IRAction;
+#include "iraction.h"
 
 
 class AddAction : public QWizard, public Ui::AddActionBase
@@ -49,15 +50,15 @@ private:
         SELECT_BUTTON =1,
         SELECT_FUNCTION_DBUS =2,
         SELECT_FUNCTION_PROFILE =3,
-	ACTION_ARGUMENTS =4,
+        ACTION_ARGUMENTS =4,
         ACTION_OPTIONS=5,
         SELECT_MODE=6
-	
+
     } page;
 
     inline Arguments getCurrentArgs() {
         Arguments retList;
-        foreach(QStandardItem *item, argumentsModel->takeColumn(1)){
+        foreach(QStandardItem *item, argumentsModel->takeColumn(1)) {
             retList.append(item->data(Qt::EditRole));
         }
         return retList;

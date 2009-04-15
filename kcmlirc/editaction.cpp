@@ -28,7 +28,6 @@
 #include "profileserver.h"
 #include "remoteserver.h"
 #include "addaction.h"
-//#include "model.h"
 #include "dbusinterface.h"
 
 #include <kdebug.h>
@@ -48,7 +47,7 @@ EditAction::EditAction(IRAction *action, QWidget *parent, const bool &modal): KD
     setDefaultButton(Ok);
     setModal(modal);
     //editActionBaseWidget->theDBusApplications->setModel(new DBusServiceModel(0));
-        dbusServiceModel = new QStandardItemModel(editActionBaseWidget->theDBusApplications);
+    dbusServiceModel = new QStandardItemModel(editActionBaseWidget->theDBusApplications);
     editActionBaseWidget->theDBusApplications->setModel(dbusServiceModel);
     editActionBaseWidget->theDBusFunctions->setModel(new DBusFunctionModel(0));
     editActionBaseWidget->theDBusFunctions->setModelColumn(2);
@@ -66,8 +65,8 @@ EditAction::EditAction(IRAction *action, QWidget *parent, const bool &modal): KD
     argumentsModel = new QStandardItemModel(editActionBaseWidget->argumentsView);
     editActionBaseWidget->argumentsView->setModel(argumentsModel);
     editActionBaseWidget->argumentsView->setItemDelegate(new ArgumentDelegate());
-    argumentsModel->setHeaderData(0, Qt::Horizontal, i18n("Name"));
-    argumentsModel->setHeaderData(1, Qt::Horizontal, i18n("Value"));
+    argumentsModel->setHeaderData(0, Qt::Horizontal, i18nc("Name", "The name of the argument"));
+    argumentsModel->setHeaderData(1, Qt::Horizontal, i18nc("Value", "The value of the argument"));
 
     readFrom();
 
@@ -158,7 +157,7 @@ void EditAction::readFrom()
         editActionBaseWidget->theJustStart->setChecked(true);
     } else if (ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype())) { // profile action
         editActionBaseWidget->theUseProfile->setChecked(true);
-  editActionBaseWidget->thePerformFunction->setChecked(true);
+        editActionBaseWidget->thePerformFunction->setChecked(true);
     } else { // DBus action
         editActionBaseWidget->theUseDBus->setChecked(true);
     }
@@ -215,12 +214,12 @@ void EditAction::updateArguments()
     editActionBaseWidget->argumentsView->setEnabled(true);
     argumentsModel->clear();
     QStringList headerLabels;
-    headerLabels << i18n("Name") << i18n("Value");
+    headerLabels << i18nc("Name", "Name of the argument" ) << i18nc("Value", "Value of the argument");
     argumentsModel->setHorizontalHeaderLabels(headerLabels);
 
     if (editActionBaseWidget->theUseProfile->isChecked()) {
-  QString function = editActionBaseWidget->theFunctions->itemData(editActionBaseWidget->theFunctions->currentIndex()).toString();
-  QString application = editActionBaseWidget->theApplications->itemData(editActionBaseWidget->theApplications->currentIndex()).toString();
+        QString function = editActionBaseWidget->theFunctions->itemData(editActionBaseWidget->theFunctions->currentIndex()).toString();
+        QString application = editActionBaseWidget->theApplications->itemData(editActionBaseWidget->theApplications->currentIndex()).toString();
         const ProfileAction *profileAction = ProfileServer::profileServer()->getAction(application, function);
 
         // No profile action configured or theJustStart is checked... No need for arguments
@@ -230,46 +229,44 @@ void EditAction::updateArguments()
         }
 
         // Is the configured Action the selected one?
-        if(profileAction && (profileAction->profile()->name() == theAction->application()) &&
-           profileAction->name() == theAction->function())
+        if (profileAction && (profileAction->profile()->name() == theAction->application()) &&
+                profileAction->name() == theAction->function())
         {
-            kDebug() << "appending configured args";
-            for(int i = 0; i < profileAction->arguments().count(); ++i){
+            for (int i = 0; i < profileAction->arguments().count(); ++i) {// krazy:exclude=[foreach]
                 QList<QStandardItem*> tmp;
-                tmp.append(new ArgumentsModelItem(profileAction->arguments().at(i).comment() + " (" + profileAction->arguments().at(i).type() + ")"));
+                tmp.append(new ArgumentsModelItem(profileAction->arguments().at(i).comment() + " (" + profileAction->arguments().at(i).type() + ")"));// krazy:exclude=[doublequote_chars]
                 tmp.append(new ArgumentsModelItem(theAction->arguments().at(i)));
                 argumentsModel->appendRow(tmp);
             }
 
         } else {
-            kDebug() << "Appending default args";
             const QList<ProfileActionArgument> &profileActionArguments = profileAction->arguments();
-            for (int i = 0; i < profileActionArguments.count(); ++i) {
+            for (int i = 0; i < profileActionArguments.count(); ++i) {// krazy:exclude=[foreach]
                 QList<QStandardItem*> tmp;
-                tmp.append(new ArgumentsModelItem(profileActionArguments.at(i).comment() + " (" + profileActionArguments.at(i).type() + ")"));
+                tmp.append(new ArgumentsModelItem(profileActionArguments.at(i).comment() + " (" + profileActionArguments.at(i).type() + ")"));// krazy:exclude=[doublequote_chars]
                 tmp.append(new ArgumentsModelItem(profileActionArguments.at(i).getDefault()));
                 argumentsModel->appendRow(tmp);
             }
         }
     } else if ( editActionBaseWidget->theUseDBus->isChecked()) {
-  Prototype p = editActionBaseWidget->theDBusFunctions->itemData(editActionBaseWidget->theDBusFunctions->currentIndex(), Qt::UserRole).value<Prototype>().prototype();
+        Prototype p = editActionBaseWidget->theDBusFunctions->itemData(editActionBaseWidget->theDBusFunctions->currentIndex(), Qt::UserRole).value<Prototype>().prototype();
 
 
         // Check if the current selected function is the configured one
-        if(!ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype()) &&
+        if (!ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype()) &&
                 getCurrentDbusApp() == theAction->program() && // The correct app is selected!
                 editActionBaseWidget->theDBusObjects->currentText() == theAction->object() && // And the Object is selected too!
-                getCurrentDBusFunction() == theAction->method().prototype()){ // And also the Function. Fill in the arguments
-            for(int i = 0; i < theAction->arguments().size(); ++i){
+                getCurrentDBusFunction() == theAction->method().prototype()) { // And also the Function. Fill in the arguments
+            for (int i = 0; i < theAction->arguments().size(); ++i) {
                 QList<QStandardItem*> tmp;
-                tmp.append(new ArgumentsModelItem(p.getArguments().at(i).second + " (" + QVariant::typeToName(p.getArguments().at(i).first) + ")"));
+                tmp.append(new ArgumentsModelItem(p.getArguments().at(i).second + " (" + QVariant::typeToName(p.getArguments().at(i).first) + ")"));// krazy:exclude=[doublequote_chars]
                 tmp.append(new ArgumentsModelItem(theAction->arguments().at(i)));
                 argumentsModel->appendRow(tmp);
             }
         } else {
-            for(int i = 0; i < p.getArguments().size(); ++i){
+            for (int i = 0; i < p.getArguments().size(); ++i) {
                 QList<QStandardItem*> tmp;
-                tmp.append(new ArgumentsModelItem(p.getArguments().at(i).second + " (" + QVariant::typeToName(p.getArguments().at(i).first) + ")"));
+                tmp.append(new ArgumentsModelItem(p.getArguments().at(i).second + " (" + QVariant::typeToName(p.getArguments().at(i).first) + ")"));// krazy:exclude=[doublequote_chars]
                 tmp.append(new ArgumentsModelItem(QVariant(p.getArguments().at(i).first)));
                 argumentsModel->appendRow(tmp);
             }
@@ -307,25 +304,25 @@ void EditAction::updateInstancesOptions()
 void EditAction::updateApplications()
 {
     editActionBaseWidget->theApplications->clear();
-    foreach(Profile *tmp, ProfileServer::profileServer()->profiles()){
-  editActionBaseWidget->theApplications->addItem(tmp->name(), tmp->id());
+    foreach(Profile *tmp, ProfileServer::profileServer()->profiles()) {
+        editActionBaseWidget->theApplications->addItem(tmp->name(), tmp->id());
     }
     editActionBaseWidget->theApplications->model()->sort(0);
 
     const ProfileAction *profileAction = ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype());
-    if(profileAction){
-      int index = editActionBaseWidget->theApplications->findText(profileAction->profile()->name());
-      editActionBaseWidget->theApplications->setCurrentIndex(index < 0 ? 0: index);
+    if (profileAction) {
+        int index = editActionBaseWidget->theApplications->findText(profileAction->profile()->name());
+        editActionBaseWidget->theApplications->setCurrentIndex(index < 0 ? 0: index);
     } else {
-      editActionBaseWidget->theApplications->setCurrentIndex(0);
+        editActionBaseWidget->theApplications->setCurrentIndex(0);
     }
 }
 
 void EditAction::updateFunctions()
 {
     editActionBaseWidget->theFunctions->clear();
-    if(editActionBaseWidget->theJustStart->isChecked()){
-      return;
+    if (editActionBaseWidget->theJustStart->isChecked()) {
+        return;
     }
 
     QString application = editActionBaseWidget->theApplications->itemData(editActionBaseWidget->theApplications->currentIndex()).toString();
@@ -333,28 +330,28 @@ void EditAction::updateFunctions()
     QHash<QString, ProfileAction*> dict = ProfileServer::profileServer()->getProfileById(application)->actions();
     QHash<QString, ProfileAction*>::const_iterator i;
     for (i = dict.constBegin(); i != dict.constEnd(); ++i) {
-      editActionBaseWidget->theFunctions->addItem(i.value()->name(), i.key());
+        editActionBaseWidget->theFunctions->addItem(i.value()->name(), i.key());
     }
     const ProfileAction *action = ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype());
-    if(action && (action->profile()->name() == editActionBaseWidget->theApplications->currentText())){
-      int index = editActionBaseWidget->theFunctions->findText(action->name());
-      editActionBaseWidget->theFunctions->setCurrentIndex(index < 0 ? 0 : index);
+    if (action && (action->profile()->name() == editActionBaseWidget->theApplications->currentText())) {
+        int index = editActionBaseWidget->theFunctions->findText(action->name());
+        editActionBaseWidget->theFunctions->setCurrentIndex(index < 0 ? 0 : index);
     }
 }
 
 void EditAction::updateDBusApplications()
 {
-kDebug()<< "update dbus applications";
+    kDebug()<< "update dbus applications";
     editActionBaseWidget->theDBusApplications->clear();
     //editActionBaseWidget->theDBusApplications->addItems(DBusInterface::getInstance()->getRegisteredPrograms());
 
-    foreach(QString item, DBusInterface::getInstance()->getRegisteredPrograms()){
+    foreach(QString item, DBusInterface::getInstance()->getRegisteredPrograms()) {// krazy:exclude=[foreach]
         dbusServiceModel->appendRow(new DBusServiceItem(item));
     }
 
-    if(!ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype()) &&
-    !DBusInterface::getInstance()->isProgramRunning(theAction->program())){      
-      dbusServiceModel->appendRow(new DBusServiceItem(theAction->program()));      
+    if (!ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype()) &&
+            !DBusInterface::getInstance()->isProgramRunning(theAction->program())) {
+        dbusServiceModel->appendRow(new DBusServiceItem(theAction->program()));
     }
     editActionBaseWidget->theDBusApplications->model()->sort( Qt::AscendingOrder);
     int ti = editActionBaseWidget->theDBusApplications->findData(theAction->program());
@@ -368,12 +365,12 @@ void EditAction::updateDBusObjects()
     editActionBaseWidget->theDBusObjects->insertItems(0, DBusInterface::getInstance()->getObjects(getCurrentDbusApp()));
     kDebug() << "Currnet app " << getCurrentDbusApp();
     // Check if configured Action is a DBus Action but not running
-    if(!ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype()) &&
-    !DBusInterface::getInstance()->isProgramRunning(theAction->program())){
-  if(editActionBaseWidget->theDBusApplications->itemData(editActionBaseWidget->theDBusApplications->currentIndex()).toString() ==
-        theAction->program()){ // Is selected!
-    editActionBaseWidget->theDBusObjects->addItem(theAction->object());
-  }
+    if (!ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype()) &&
+            !DBusInterface::getInstance()->isProgramRunning(theAction->program())) {
+        if (editActionBaseWidget->theDBusApplications->itemData(editActionBaseWidget->theDBusApplications->currentIndex()).toString() ==
+                theAction->program()) { // Is selected!
+            editActionBaseWidget->theDBusObjects->addItem(theAction->object());
+        }
     }
 
     editActionBaseWidget->theDBusObjects->model()->sort( Qt::AscendingOrder);
@@ -385,23 +382,23 @@ void EditAction::updateDBusFunctions()
 {
     editActionBaseWidget->theDBusFunctions->clear();
 
-    QList<Prototype> tList = DBusInterface::getInstance()->getFunctions(getCurrentDbusApp(), editActionBaseWidget->theDBusObjects->currentText());
-    foreach(Prototype tType, tList) {
+    const QList<Prototype> tList = DBusInterface::getInstance()->getFunctions(getCurrentDbusApp(), editActionBaseWidget->theDBusObjects->currentText());
+    foreach(Prototype tType, tList) {// krazy:exclude=[foreach]
         editActionBaseWidget->theDBusFunctions->addItem(0, qVariantFromValue(tType));
     }
 
     // Check if configured Action is a DBus Action but not running
-    if(!ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype()) &&
-    !DBusInterface::getInstance()->isProgramRunning(theAction->program())){
-  if(editActionBaseWidget->theDBusApplications->itemData(editActionBaseWidget->theDBusApplications->currentIndex()).toString() ==
-              theAction->program()){ // The correct app is selected!
-    kDebug() << "theAction->object" << theAction->object();
-    kDebug() << "current selected" << editActionBaseWidget->theDBusObjects->currentText();
-    if(editActionBaseWidget->theDBusObjects->currentText() ==
-    theAction->object()){ // And the Object is selected too!
-      editActionBaseWidget->theDBusFunctions->addItem(0, qVariantFromValue(Prototype(theAction->function())));
-    }
-  }
+    if (!ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype()) &&
+            !DBusInterface::getInstance()->isProgramRunning(theAction->program())) {
+        if (editActionBaseWidget->theDBusApplications->itemData(editActionBaseWidget->theDBusApplications->currentIndex()).toString() ==
+                theAction->program()) { // The correct app is selected!
+            kDebug() << "theAction->object" << theAction->object();
+            kDebug() << "current selected" << editActionBaseWidget->theDBusObjects->currentText();
+            if (editActionBaseWidget->theDBusObjects->currentText() ==
+                    theAction->object()) { // And the Object is selected too!
+                editActionBaseWidget->theDBusFunctions->addItem(0, qVariantFromValue(Prototype(theAction->function())));
+            }
+        }
     }
 
 
@@ -418,8 +415,8 @@ void EditAction::addItem(QString item)
 
 Arguments EditAction::getCurrentArgs() {
     Arguments retList;
-    foreach(QStandardItem *item, argumentsModel->takeColumn(1)){
-	retList.append(item->data(Qt::EditRole));
+    foreach(QStandardItem *item, argumentsModel->takeColumn(1)) {
+        retList.append(item->data(Qt::EditRole));
     }
     return retList;
 }

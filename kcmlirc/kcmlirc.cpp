@@ -65,7 +65,7 @@ K_EXPORT_PLUGIN( KCMLircFactory( "kcm_lirc" ) )
 KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
         KCModule(KCMLircFactory::componentData(), parent, args)
 {
-    
+
     qRegisterMetaType<IRAction*>("IRAction*");
     qRegisterMetaType<Mode>("Mode");
 
@@ -107,7 +107,7 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
     }
 
     QHBoxLayout *layout = new QHBoxLayout(this);
-    
+
     QWidget *widget = new QWidget(this);
     theKCMLircBase = new Ui::KCMLircBase();
     theKCMLircBase->setupUi(widget);
@@ -172,7 +172,7 @@ void KCMLirc::slotEditAction()
     QTreeWidgetItem *item = theKCMLircBase->theModes->selectedItems().first();
     if (item->parent())
         item = item->parent();
-  //TODO: this in not nice should be rewritten
+    //TODO: this in not nice should be rewritten
     theDialog.addItem(i18n("[Exit current mode]"));
     for (int i = 0; i < item->childCount(); i++)
         theDialog.addItem(item->child(i)->text(0));
@@ -200,7 +200,7 @@ void KCMLirc::slotAddActions()
     theDialog->setWindowTitle(i18n("Auto-Populate"));
 
     QMap<QTreeWidgetItem *, Profile *> profileMap;
-    foreach(Profile *tmp, ProfileServer::profileServer()->profiles()){
+    foreach(Profile *tmp, ProfileServer::profileServer()->profiles()) {
         QStringList profileList;
         profileList << tmp->name();
         profileMap[new QTreeWidgetItem(theProfiles, profileList)] = tmp;
@@ -238,10 +238,10 @@ void KCMLirc::slotAddAction()
         }
     }
 
-    if (theDialog.exec() == QDialog::Accepted){
-      allActions.addAction(theDialog.getAction());
-      updateActions();
-      emit changed(true);
+    if (theDialog.exec() == QDialog::Accepted) {
+        allActions.addAction(theDialog.getAction());
+        updateActions();
+        emit changed(true);
     }
 }
 
@@ -253,7 +253,7 @@ void KCMLirc::slotRemoveAction()
 }
 
 void KCMLirc::autoPopulate(const Profile &profile, const Remote &remote,
-                      const QString &mode)
+                           const QString &mode)
 {
     QHash<QString, RemoteButton*> d = remote.buttons();
     QHash<QString, RemoteButton*>::const_iterator i;
@@ -274,17 +274,17 @@ void KCMLirc::autoPopulate(const Profile &profile, const Remote &remote,
             Arguments l;
             kDebug() << "Argumentcount" << Prototype(pa->prototype()).argumentCount();
 
-            for(int j = 0; j < pa->arguments().size(); ++j){
-                if(!pa->arguments().at(j).getDefault().toString().isEmpty()){
-            		l.append(pa->arguments().at(j).getDefault());
-            		l.back().convert(QVariant::nameToType(pa->arguments().at(j).type().toLocal8Bit()));
-            	} else {
-                l.append(QString().setNum(i.value()->parameter().toFloat()
-                                          * pa->multiplier()));
-                l.back().convert(QVariant::nameToType(
-                                     Prototype(pa->prototype()).type(0).toLocal8Bit()));
+            for (int j = 0; j < pa->arguments().size(); ++j) {
+                if (!pa->arguments().at(j).getDefault().toString().isEmpty()) {
+                    l.append(pa->arguments().at(j).getDefault());
+                    l.back().convert(QVariant::nameToType(pa->arguments().at(j).type().toLocal8Bit()));
+                } else {
+                    l.append(QString().setNum(i.value()->parameter().toFloat()
+                                              * pa->multiplier()));
+                    l.back().convert(QVariant::nameToType(
+                                         Prototype(pa->prototype()).type(0).toLocal8Bit()));
 
-            	}
+                }
                 kDebug() << "added argument: " << l.at(0);
             }
             // argument count should be either 0 or 1. undefined if > 1.
@@ -303,30 +303,30 @@ void KCMLirc::slotAddMode()
         return;
     }
 
-   // NewModeDialog theDialog(this);
-   QMap<QTreeWidgetItem *, QString> remoteMap;
+    // NewModeDialog theDialog(this);
+    QMap<QTreeWidgetItem *, QString> remoteMap;
     theKCMLircBase->theModes->sortByColumn(0);
     QTreeWidgetItem *tr = theKCMLircBase->theModes->selectedItems().first();
     if (tr && tr->parent()) {
-            tr = tr->parent();
+        tr = tr->parent();
     }
     QStringList remotesList;
     for (int i = 0; i < theKCMLircBase->theModes->topLevelItemCount(); i++) {
-remotesList << theKCMLircBase->theModes->topLevelItem(i)->text(0);
+        remotesList << theKCMLircBase->theModes->topLevelItem(i)->text(0);
     }
     NewModeDialog theDialog(remotesList, this,0);
 
 
-    if (theDialog.exec() == QDialog::Accepted){
-      //TODO: What when mode with same name currently exists?
-      //MessageBox with warning or shall okButton in the Dialog be disabled when typing?
-      //What meant that newmode must know about all modes of the remote
-      // Same todo in editMode
-      Mode mode = theDialog.getMode();
-      allModes.add(mode);
-      if(theDialog.isDefaultMode()){
-        allModes.setDefault(mode);
-      }
+    if (theDialog.exec() == QDialog::Accepted) {
+        //TODO: What when mode with same name currently exists?
+        //MessageBox with warning or shall okButton in the Dialog be disabled when typing?
+        //What meant that newmode must know about all modes of the remote
+        // Same todo in editMode
+        Mode mode = theDialog.getMode();
+        allModes.add(mode);
+        if (theDialog.isDefaultMode()) {
+            allModes.setDefault(mode);
+        }
         updateModes();
         emit changed(true);
     }
@@ -348,7 +348,7 @@ void KCMLirc::slotEditMode()
             allActions.renameMode(mode, newMode.name());
             allModes.rename(mode, newMode.name());
         }
-        if (theDialog.isDefaultMode()){
+        if (theDialog.isDefaultMode()) {
             allModes.setDefault(mode);
         }
         allModes.updateMode(mode);
@@ -359,14 +359,14 @@ void KCMLirc::slotEditMode()
 
 void KCMLirc::slotRemoveMode()
 {
-  if (KMessageBox::warningContinueCancel(this, i18n(
-                                                "Are you sure you want to remove %1 and all its actions?",
-                                                theKCMLircBase->theModes->selectedItems().first()->text(0)), i18n(
-                                                "Erase Actions?")) == KMessageBox::Continue) {
-         allModes.erase(theKCMLircBase->theModes->currentItem()->data(0, Qt::UserRole).value<Mode>());
-         updateModes();
-         emit changed(true);
-     }
+    if (KMessageBox::warningContinueCancel(this, i18n(
+                                               "Are you sure you want to remove %1 and all its actions?",
+                                               theKCMLircBase->theModes->selectedItems().first()->text(0)), i18n(
+                                               "Erase Actions?")) == KMessageBox::Continue) {
+        allModes.erase(theKCMLircBase->theModes->currentItem()->data(0, Qt::UserRole).value<Mode>());
+        updateModes();
+        emit changed(true);
+    }
 
 }
 
@@ -381,12 +381,13 @@ void KCMLirc::slotSetDefaultMode()
 }
 
 void KCMLirc::slotDrop(QTreeWidget *, QDropEvent *, QTreeWidgetItem *,
-                  QTreeWidgetItem *after)
-{
+                       QTreeWidgetItem *after)
 
+{
+    Q_UNUSED(after)
 //TODO: drag and drop of actions to modes
 //     Mode m = modeMap[after];
-// 
+//
 //     if (modeMap[theKCMLircBase->theModes->selectedItems().first()].remote()
 //             != m.remote()) {
 //         KMessageBox::error(
@@ -401,7 +402,7 @@ void KCMLirc::slotDrop(QTreeWidget *, QDropEvent *, QTreeWidgetItem *,
 //             currenttAction()->setMode(m.name());
 // 	}
 //     }
-// 
+//
 //     updateActions();
 //     emit changed(true);
 }
@@ -415,7 +416,7 @@ void KCMLirc::updateActions()
 
     IRAction *oldCurrent = 0;
     if (theKCMLircBase->theActions->currentIndex().isValid()) {
-        oldCurrent = currentAction();        
+        oldCurrent = currentAction();
     }
     theKCMLircBase->theActions->clear();
     Mode m = theKCMLircBase->theModes->currentItem()->data(0, Qt::UserRole).value<Mode>();
@@ -423,12 +424,12 @@ void KCMLirc::updateActions()
                                           + (m.name().isEmpty() ? i18n("Actions <i>always</i> available") : i18n(
                                                  "Actions available only in mode <b>%1</b>", m.name())));
     IRActions allActionsList = allActions.findByMode(m);
-    foreach(IRAction *tmp, allActionsList){
-	QStringList row;
-	row << tmp->buttonName() << tmp->application() << tmp->function() << tmp->arguments().toString() << tmp->notes();
-	QTreeWidgetItem *actionItem = new  QTreeWidgetItem(row);
-	actionItem->setData(0, Qt::UserRole, qVariantFromValue(tmp));
-	theKCMLircBase->theActions->addTopLevelItem(actionItem);
+    foreach(IRAction *tmp, allActionsList) {
+        QStringList row;
+        row << tmp->buttonName() << tmp->application() << tmp->function() << tmp->arguments().toString() << tmp->notes();
+        QTreeWidgetItem *actionItem = new  QTreeWidgetItem(row);
+        actionItem->setData(0, Qt::UserRole, qVariantFromValue(tmp));
+        theKCMLircBase->theActions->addTopLevelItem(actionItem);
     }
     updateActionsStatus();
 }
@@ -446,11 +447,11 @@ void KCMLirc::updateModes()
 
     QStringList remotes = DBusInterface::getInstance()->getRemotes();
 
-    if (remotes.begin() == remotes.end()){
+    if (remotes.begin() == remotes.end()) {
         theKCMLircBase->theMainLabel->setMaximumSize(32767, 32767);
         return;
     }
-    else{
+    else {
         theKCMLircBase->theMainLabel->setMaximumSize(0, 0);
     }
 
@@ -471,8 +472,8 @@ void KCMLirc::updateModes()
         QFontMetrics fm(font);
         if (remoteName.compare(*i) != 0) {
             remoteList << remoteName;
-            if(fm.width(remoteName) + 40 > theKCMLircBase->theModes->columnWidth(0)){
-            	theKCMLircBase->theModes->setColumnWidth(0, fm.width(remoteName) + 40);
+            if (fm.width(remoteName) + 40 > theKCMLircBase->theModes->columnWidth(0)) {
+                theKCMLircBase->theModes->setColumnWidth(0, fm.width(remoteName) + 40);
             }
         }
 
@@ -491,7 +492,7 @@ void KCMLirc::updateModes()
         remoteTreeWidgetIcon->setData(0, Qt::UserRole, qVariantFromValue(mode)); // the null mode
 
         if (remoteTreeWidgetIcon->data(0, Qt::UserRole).value<Mode>() == currentSelectedMode) {
-          theKCMLircBase->theModes->setCurrentItem(remoteTreeWidgetIcon);
+            theKCMLircBase->theModes->setCurrentItem(remoteTreeWidgetIcon);
         }
 
         ModeList modeList = allModes.getModes(*i);
@@ -501,8 +502,8 @@ void KCMLirc::updateModes()
                 QStringList modeList;
                 modeList << (*modeListIter).name();
                 modeList << (modeListIter->iconFile().isNull() ? "" : "");
-                if(fm.width((*modeListIter).name()) + 70 > theKCMLircBase->theModes->columnWidth(0)){
-                	theKCMLircBase->theModes->setColumnWidth(0, fm.width((*modeListIter).name()) + 70);
+                if (fm.width((*modeListIter).name()) + 70 > theKCMLircBase->theModes->columnWidth(0)) {
+                    theKCMLircBase->theModes->setColumnWidth(0, fm.width((*modeListIter).name()) + 70);
                 }
                 QTreeWidgetItem *modeWidgetItem = new QTreeWidgetItem(remoteTreeWidgetIcon, modeList);
                 tFont.setBold(allModes.isDefault(*modeListIter));
@@ -520,7 +521,7 @@ void KCMLirc::updateModes()
         remoteTreeWidgetIcon->sortChildren(0, Qt::AscendingOrder);
     }
     if (theKCMLircBase->theModes->currentItem() == 0) {
-      theKCMLircBase->theModes->setCurrentItem(theKCMLircBase->theModes->topLevelItem(0));
+        theKCMLircBase->theModes->setCurrentItem(theKCMLircBase->theModes->topLevelItem(0));
     }
     theKCMLircBase->theModes->currentItem()->setSelected(true);
     updateModesStatus();
@@ -536,7 +537,7 @@ void KCMLirc::updateExtensions()
         a->setExpanded(true);
 
         profileMap.clear();
-        foreach(Profile *tmp, ProfileServer::profileServer()->profiles()){
+        foreach(Profile *tmp, ProfileServer::profileServer()->profiles()) {
             profileMap[new QTreeWidgetItem(a, (QStringList()<< tmp->name()))] = tmp->id();
         }
         a->sortChildren(1, Qt::AscendingOrder);

@@ -28,20 +28,17 @@
 #define NEWMODEDIALOG_H
 
 #include "ui_newmode.h"
-
-class Mode;
-class QStringList;
+#include "mode.h"
+#include <QStringList>
 
 class NewModeBaseWidget : public QWidget, public Ui::NewMode
 {
 public:
-  NewModeBaseWidget(QWidget *parent = 0) : QWidget(parent)
-  {
-    setupUi(this);
-  }
+    NewModeBaseWidget(QWidget *parent = 0) : QWidget(parent)
+    {
+        setupUi(this);
+    }
 };
-
-
 
 
 class NewModeDialog : public KDialog
@@ -53,7 +50,7 @@ public:
     ~NewModeDialog();
 
 private:
-  NewModeBaseWidget *newModeBaseWidget;
+    NewModeBaseWidget *newModeBaseWidget;
 
 
 private slots:
@@ -61,9 +58,8 @@ private slots:
     void slotRemoteChanged(QTreeWidgetItem* qTreeWidgetItem);
 
 public:
-  Mode getMode();
-  bool isDefaultMode();
-  void setSelectedRemote(QString remote);
+    Mode getMode();
+    bool isDefaultMode();
 };
 
 #endif /* NEWMODEDIALOG_H */

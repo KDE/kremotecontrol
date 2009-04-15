@@ -62,7 +62,7 @@ private:
     QButtonGroup mainGroup;
     void connectSignalsAndSlots();
     QStandardItemModel *argumentsModel;
-   QStandardItemModel *dbusServiceModel;
+    QStandardItemModel *dbusServiceModel;
     inline QString getCurrentDbusApp() {
         return  editActionBaseWidget->theDBusApplications->itemData(editActionBaseWidget->theDBusApplications->currentIndex(),Qt::UserRole).toString();
     }

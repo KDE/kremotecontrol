@@ -34,9 +34,9 @@
 @author Gav Wood
 */
 
-class Arguments : public QObject
+class Arguments //: public QObject
 {
-  Q_OBJECT
+    //Q_OBJECT
 public:
     const QString toString() const;
 

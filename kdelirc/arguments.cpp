@@ -30,7 +30,7 @@ KDE_EXPORT Arguments::Arguments()
 {
 }
 
-KDE_EXPORT Arguments::Arguments(const Arguments &args){
+KDE_EXPORT Arguments::Arguments(const Arguments &args) {
     arguments = args.getArgumentsList();
 }
 
@@ -38,7 +38,7 @@ KDE_EXPORT Arguments::~Arguments()
 {
 }
 
-KDE_EXPORT QList<QVariant> Arguments::getArgumentsList() const{
+KDE_EXPORT QList<QVariant> Arguments::getArgumentsList() const {
     return arguments;
 }
 
@@ -60,19 +60,19 @@ KDE_EXPORT const QString Arguments::toString() const
 }
 
 KDE_EXPORT void Arguments::clear() {
-  arguments.clear();
+    arguments.clear();
 }
 
 KDE_EXPORT void Arguments::append(const QVariant& arg) {
-  arguments.append(arg);
+    arguments.append(arg);
 }
 
 KDE_EXPORT int Arguments::count() const {
-  return arguments.count();
+    return arguments.count();
 }
 
 KDE_EXPORT QVariant Arguments::at(int i) const {
-  return arguments.at(i);
+    return arguments.at(i);
 }
 
 KDE_EXPORT QVariant Arguments::back() {

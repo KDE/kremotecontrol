@@ -69,8 +69,6 @@ IRKick::IRKick(const QString &obj) :
 
     theTrayIcon->contextMenu()->setTitle("IRKick");
     theTrayIcon->contextMenu()->addAction(SmallIcon("configure"), i18n("&Configure..."), this, SLOT(slotConfigure()));
-    QAction *helpAction = new QAction(SmallIcon("help-contents"), i18n("&Help"), theTrayIcon->contextMenu());
-
     KHelpMenu *helpMenu = new  KHelpMenu(0, KGlobal::mainComponent().aboutData());
     theTrayIcon->contextMenu()->addAction(KIcon("help-contents"), i18n("&Help"), helpMenu, SLOT(appHelpActivated()));
     theTrayIcon->contextMenu()->addAction(KIcon("irkick"), i18n("&About"), helpMenu, SLOT(aboutApplication()));
@@ -141,7 +139,7 @@ void IRKick::doQuit()
 
 void IRKick::resetModes()
 {
-kDebug()<< "resseting modes";
+    kDebug()<< "resseting modes";
     if (theResetCount > 1) {
         KNotification::event("global_event", i18n("Resetting all modes."),
                              SmallIcon("irkick"), theTrayIcon->parentWidget());
@@ -167,8 +165,8 @@ void IRKick::slotReloadConfiguration()
     KConfig theConfig("irkickrc");
     allActions.loadFromConfig(theConfig);
     allModes.loadFromConfig(theConfig);
-    if (currentModes.count() && theResetCount){
-      kDebug()<< "reloading conf";
+    if (currentModes.count() && theResetCount) {
+        kDebug()<< "reloading conf";
         resetModes();
     }
 }
@@ -180,34 +178,34 @@ void IRKick::slotConfigure()
 
 void IRKick::updateTray()
 {
-  QString toolTip="<qt><nobr>";
-  QString icon = QString("irkick");
-  if(!theClient->isConnected()){
-    toolTip += i18n("Lirc daemon is currently not available.");
-    toolTip+="</nobr";
-    icon = "irkickoff";
-  }else if(currentModes.size() == 0){
-    toolTip += i18n("KDE Lirc Server: No infra-red remote controls found.");
-    toolTip+="</nobr";
-  }else{
-    toolTip+="<nobr><b><u>";
-    toolTip += i18n("KDE Lirc Server: Ready.");
-    toolTip+="</u></b></nobr>";
-    for (QMap<QString, QString>::iterator i = currentModes.begin(); i != currentModes.end(); ++i) {
-      Mode mode = allModes.getMode(i.key(), i.value());
-      toolTip+="<br><nobr>";
-      if( !mode.iconFile().isEmpty()) {
-        QString iconPath = KIconLoader::global()->iconPath( mode.iconFile(), KIconLoader::Small,false );
-        toolTip += QString(" <img src=\"%1\"></img> ").arg(iconPath);
-      }
-      toolTip += "<b>"+ mode.remoteName() + "</b> <i>(";
-      toolTip += mode.name().isEmpty() ? i18n("Master") : mode.name();
-      toolTip +=")</i></nobr></br>";
-  }
-    toolTip+="</qt>";
-  }
-  theTrayIcon->setToolTip(toolTip);
-  theTrayIcon->setIcon(theTrayIcon->loadIcon(icon));
+    QString toolTip="<qt><nobr>";
+    QString icon = QString("irkick");
+    if (!theClient->isConnected()) {
+        toolTip += i18n("Lirc daemon is currently not available.");
+        toolTip+="</nobr";
+        icon = "irkickoff";
+    } else if (currentModes.size() == 0) {
+        toolTip += i18n("KDE Lirc Server: No infra-red remote controls found.");
+        toolTip+="</nobr";
+    } else {
+        toolTip+="<nobr><b><u>";
+        toolTip += i18n("KDE Lirc Server: Ready.");
+        toolTip+="</u></b></nobr>";
+        for (QMap<QString, QString>::iterator i = currentModes.begin(); i != currentModes.end(); ++i) {
+            Mode mode = allModes.getMode(i.key(), i.value());
+            toolTip+="<br><nobr>";
+            if ( !mode.iconFile().isEmpty()) {
+                QString iconPath = KIconLoader::global()->iconPath( mode.iconFile(), KIconLoader::Small,false );
+                toolTip += QString(" <img src=\"%1\"></img> ").arg(iconPath);
+            }
+            toolTip += "<b>"+ mode.remoteName() + "</b> <i>(";
+            toolTip += mode.name().isEmpty() ? i18n("Master") : mode.name();
+            toolTip +=")</i></nobr></br>";
+        }
+        toolTip+="</qt>";
+    }
+    theTrayIcon->setToolTip(toolTip);
+    theTrayIcon->setIcon(theTrayIcon->loadIcon(icon));
 }
 
 bool IRKick::searchForProgram(const IRAction &action, QStringList &programs)
@@ -222,8 +220,8 @@ bool IRKick::searchForProgram(const IRAction &action, QStringList &programs)
             kDebug() << "adding Program: " << action.program();
             programs += action.program();
         } else {
-	    kDebug() << "nope... " + action.program() + " not here.";
-	}
+            kDebug() << "nope... " + action.program() + " not here.";
+        }
     } else {
 
         // find all instances...
@@ -304,8 +302,8 @@ void IRKick::executeAction(const IRAction& action) {
                                                    action.application()), SmallIcon("irkick"));
             kDebug() << "starting service:" << sname;
             QString error;
-            if(KToolInvocation::startServiceByDesktopName(sname, QString(), &error)){
-            	kDebug() << "starting " + sname + " failed: " << error;
+            if (KToolInvocation::startServiceByDesktopName(sname, QString(), &error)) {
+                kDebug() << "starting " + sname + " failed: " << error;
             }
         } else if (action.program().contains(QRegExp("org.[a-zA-Z0-9]*."))) {
             QString runCommand = action.program();
@@ -345,7 +343,7 @@ void IRKick::executeAction(const IRAction& action) {
 }
 
 void IRKick::gotMessage(const QString &theRemote, const QString &theButton,
-                   int theRepeatCounter)
+                        int theRepeatCounter)
 {
     kDebug() << "Got message: " << theRemote << ": " << theButton << " (" << theRepeatCounter << ")";
     theTrayIcon->setIcon(theTrayIcon->loadIcon("irkickflash"));

@@ -31,10 +31,10 @@
 #include <QVariant>
 #include <KLocale>
 #include <QSpinBox>
-#include <QLineEdit>
+#include <KLineEdit>
 #include <QCheckBox>
 #include <QDoubleSpinBox>
-#include <QComboBox>
+#include <KComboBox>
 
 
 
@@ -47,14 +47,14 @@ DBusServiceItem
 
 
 DBusServiceItem::DBusServiceItem(const QString &item) {
-    setData(item, Qt::UserRole);  
+    setData(item, Qt::UserRole);
     setFlags(Qt::ItemIsEnabled);
 }
 
-DBusServiceItem::DBusServiceItem(const QString &item,  QStringList &objects)  {
-  new DBusServiceItem(item);
-    foreach(QString object, objects) {
-	  this->appendRow(new QStandardItem(object));
+DBusServiceItem::DBusServiceItem(const QString &item,  const QStringList &objects)  {
+    new DBusServiceItem(item);
+    foreach(QString object,  objects) { // krazy:exclude=[foreach]
+        this->appendRow(new QStandardItem(object));
     }
 }
 
@@ -77,7 +77,7 @@ QString DBusServiceItem::trimAppname(const QString& appName) {
         QString domainName = appName;
         s.remove(0, lastIndex);
         domainName.remove(lastIndex -1, domainName.length());
-        return  s + " (" + domainName+")";
+        return  s.append(" (").append( domainName).append(')');;
     }
     return appName;
 }
@@ -135,7 +135,7 @@ bool DBusFunctionModel::setData(const QModelIndex &index,  const QVariant &value
 
 bool DBusFunctionModel::insertRows(int position, int rows, const QModelIndex &parent)
 {
-    beginInsertRows(parent, position, position+rows-1);    
+    beginInsertRows(parent, position, position+rows-1);
     for (int row = 0; row < rows; ++row) {
         theProtoTypeList.insert(position, Prototype());
     }
@@ -146,6 +146,7 @@ bool DBusFunctionModel::insertRows(int position, int rows, const QModelIndex &pa
 
 bool DBusFunctionModel::removeRows(int position, int rows, const QModelIndex &parent)
 {
+    Q_UNUSED(parent)
     beginRemoveRows(QModelIndex(), position, position+rows-1);
 
     for (int row = 0; row < rows; ++row) {
@@ -159,6 +160,7 @@ bool DBusFunctionModel::removeRows(int position, int rows, const QModelIndex &pa
 
 Qt::ItemFlags DBusFunctionModel::flags(const QModelIndex &index) const
 {
+    Q_UNUSED(index)
     return   Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
@@ -168,6 +170,8 @@ QModelIndexList DBusFunctionModel::match(const QModelIndex &start, int role,
         const QVariant &value, int hits,
         Qt::MatchFlags flags) const
 {
+    Q_UNUSED(role)
+    Q_UNUSED(flags)
     QModelIndexList result;
 
     bool allHits = (hits == -1);
@@ -187,6 +191,7 @@ QModelIndexList DBusFunctionModel::match(const QModelIndex &start, int role,
 
 
 void DBusFunctionModel::sort(int column, Qt::SortOrder order) {
+    Q_UNUSED(column)
     emit layoutAboutToBeChanged();
     QList<Prototype>  tList = QList<Prototype>(theProtoTypeList);
     if (order == Qt::AscendingOrder)
@@ -248,10 +253,10 @@ QWidget *ArgumentDelegate::createEditor(QWidget *parent,
         editor = new QDoubleSpinBox(parent);
         break;
     case QVariant::Bool:
-        editor = new QComboBox(parent);
+        editor = new KComboBox(parent);
         break;
     case QVariant::StringList: {
-        QLineEdit *lineEdit = new QLineEdit(parent);
+        KLineEdit *lineEdit = new KLineEdit(parent);
         lineEdit->setToolTip(i18n("A comma-separated list of Strings"));
         editor = lineEdit;
     }
@@ -259,7 +264,7 @@ QWidget *ArgumentDelegate::createEditor(QWidget *parent,
     case QVariant::ByteArray:
     case QVariant::String:
     default:
-        editor = new QLineEdit(parent);
+        editor = new KLineEdit(parent);
     }
     return editor;
 }
@@ -281,19 +286,19 @@ void ArgumentDelegate::setEditorData(QWidget *editor,
         doubleSpinBox->setValue(index.model()->data(index, Qt::EditRole).toDouble(NULL));
     }
     case QVariant::Bool: {
-        QComboBox *comboBox = static_cast<QComboBox*>(editor);
-        comboBox->addItem(i18n("True"));
-        comboBox->addItem(i18n("False"));
+        KComboBox *comboBox = static_cast<KComboBox*>(editor);
+        comboBox->addItem(i18nc("True", "Value is true"));
+        comboBox->addItem(i18nc("False", "Value is false"));
         comboBox->setCurrentIndex(index.model()->data(index, Qt::EditRole).toBool() ? 0 : 1);
     }
     break;
     case QVariant::StringList: {
-        QLineEdit *listLineEdit = static_cast<QLineEdit*>(editor);
+        KLineEdit *listLineEdit = static_cast<KLineEdit*>(editor);
         QString value;
         value.clear();
-        foreach(QString tmp, index.model()->data(index, Qt::EditRole).toStringList()) {
+        foreach(QString tmp, index.model()->data(index, Qt::EditRole).toStringList()) {// krazy:exclude=[foreach]
             if (!value.isEmpty()) {
-                value += ",";
+                value.append(',');
             }
             value += tmp;
         }
@@ -303,7 +308,7 @@ void ArgumentDelegate::setEditorData(QWidget *editor,
     case QVariant::ByteArray:
     case QVariant::String:
     default: {
-        QLineEdit *lineEdit = static_cast<QLineEdit*>(editor);
+        KLineEdit *lineEdit = static_cast<KLineEdit*>(editor);
         lineEdit->setText(index.model()->data(index, Qt::EditRole).toString());
     }
     }
@@ -324,15 +329,15 @@ void ArgumentDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
         value = QVariant(static_cast<QDoubleSpinBox*>(editor)->value());
         break;
     case QVariant::Bool:
-        value = QVariant(static_cast<QComboBox*>(editor)->currentIndex() == 0 ? true : false);
+        value = QVariant(static_cast<KComboBox*>(editor)->currentIndex() == 0 ? true : false);
         break;
     case QVariant::StringList:
-        value = QVariant(static_cast<QLineEdit*>(editor)->text().split(','));
+        value = QVariant(static_cast<KLineEdit*>(editor)->text().split(','));
         break;
     case QVariant::ByteArray:
     case QVariant::String:
     default: {
-        value = QVariant(static_cast<QLineEdit*>(editor)->text());
+        value = QVariant(static_cast<KLineEdit*>(editor)->text());
     }
     }
 //    kDebug() << "setting value" << value;
@@ -371,9 +376,9 @@ QVariant ArgumentsModelItem::data ( int role ) const {
     if (role == Qt::DisplayRole && (QStandardItem::data(role).type() == QVariant::StringList)) {
         QString retList;
         retList.clear();
-        foreach(QString tmp, QStandardItem::data(role).toStringList()) {
+        foreach(QString tmp, QStandardItem::data(role).toStringList()) {// krazy:exclude=[foreach]
             if (!retList.isEmpty()) {
-                retList += ",";
+                retList.append(',');
             }
             retList += tmp;
         }

@@ -72,7 +72,7 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMo
 //    connect(theParameters, SIGNAL(itemSelectionChanged()), this, SLOT(updateParameter()));
     connect(theSwitchMode, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
     connect(theExitMode, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
-    connect(theUseDBus, SIGNAL(clicked()), this, SLOT(updateButtonStates()));    
+    connect(theUseDBus, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
 
     connect(theUseProfile, SIGNAL(toggled(bool)), theProfiles, SLOT(setEnabled(bool)));
     connect(theUseProfile, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
@@ -127,32 +127,32 @@ void AddAction::slotModeSelected()
 
 int AddAction::nextId() const
 {
-    if(currentId() == START){
-      return SELECT_BUTTON;
+    if (currentId() == START) {
+        return SELECT_BUTTON;
     }
 
-    if(currentId() == SELECT_BUTTON){
-      if(theUseProfile->isChecked()){
-	return SELECT_FUNCTION_PROFILE;
-      }
+    if (currentId() == SELECT_BUTTON) {
+        if (theUseProfile->isChecked()) {
+            return SELECT_FUNCTION_PROFILE;
+        }
 
-      if(theUseDBus->isChecked()){
-	return SELECT_FUNCTION_DBUS;
-      }
+        if (theUseDBus->isChecked()) {
+            return SELECT_FUNCTION_DBUS;
+        }
 
-      return SELECT_MODE;
+        return SELECT_MODE;
     }
 
-    if(currentId() == SELECT_FUNCTION_PROFILE){
-      return ACTION_ARGUMENTS;
+    if (currentId() == SELECT_FUNCTION_PROFILE) {
+        return ACTION_ARGUMENTS;
     }
 
-    if(currentId() == SELECT_FUNCTION_DBUS){
-      return ACTION_ARGUMENTS;
+    if (currentId() == SELECT_FUNCTION_DBUS) {
+        return ACTION_ARGUMENTS;
     }
 
-    if(currentId() == ACTION_ARGUMENTS){
-      return ACTION_OPTIONS;
+    if (currentId() == ACTION_ARGUMENTS) {
+        return ACTION_OPTIONS;
     }
 
     return -1;
@@ -172,11 +172,8 @@ void AddAction::updateButton(const QString &remote, const QString &button)
 
 void AddAction::updateButtons()
 {
-
-
-
     theButtons->clear();
-    foreach(QString buttonName, DBusInterface::getInstance()->getButtons(theMode.remote())) {
+    foreach(QString buttonName, DBusInterface::getInstance()->getButtons(theMode.remote())) {// krazy:exclude=[foreach]
         kDebug() << "foud buttonName " << buttonName;
         QListWidgetItem *tItem =  new  QListWidgetItem(RemoteServer::remoteServer()->getButtonName(theMode.remote(), buttonName),theButtons);
         tItem->setData(Qt::UserRole,buttonName);
@@ -186,17 +183,17 @@ void AddAction::updateButtons()
 
 void AddAction::updateForPageChange()
 {
-    if (currentId() == SELECT_BUTTON){
-	DBusInterface::getInstance()->requestNextKeyPress();
-    } else if (currentId() == SELECT_FUNCTION_PROFILE || currentId() == SELECT_FUNCTION_DBUS || currentId() == SELECT_MODE){
-	DBusInterface::getInstance()->cancelKeyPressRequest();
-	if(currentId() == SELECT_FUNCTION_PROFILE){
-	    updateProfileFunctions();
-	} else if(currentId() == SELECT_FUNCTION_DBUS){
-	    updateDBusApplications();
-	}
-    } else if(currentId() == ACTION_ARGUMENTS){
-	updateArguments();
+    if (currentId() == SELECT_BUTTON) {
+        DBusInterface::getInstance()->requestNextKeyPress();
+    } else if (currentId() == SELECT_FUNCTION_PROFILE || currentId() == SELECT_FUNCTION_DBUS || currentId() == SELECT_MODE) {
+        DBusInterface::getInstance()->cancelKeyPressRequest();
+        if (currentId() == SELECT_FUNCTION_PROFILE) {
+            updateProfileFunctions();
+        } else if (currentId() == SELECT_FUNCTION_DBUS) {
+            updateDBusApplications();
+        }
+    } else if (currentId() == ACTION_ARGUMENTS) {
+        updateArguments();
     }
     updateButtonStates();
 }
@@ -236,9 +233,9 @@ void AddAction::updateProfiles()
     theProfiles->clear();
 
     foreach (Profile *tmp, ProfileServer::profileServer()->profiles()) {
-	QListWidgetItem *item = new QListWidgetItem(tmp->name());
-	item->setData(Qt::UserRole, tmp->id());
-	theProfiles->addItem(item);
+        QListWidgetItem *item = new QListWidgetItem(tmp->name());
+        item->setData(Qt::UserRole, tmp->id());
+        theProfiles->addItem(item);
     }
 }
 
@@ -248,8 +245,8 @@ void AddAction::updateOptions()
     if (theUseProfile->isChecked()) {
         ProfileServer *theServer = ProfileServer::profileServer();
         if (!theProfiles->currentItem()) {
-	    return;
-	}
+            return;
+        }
         const Profile *p = theServer->getProfileById(theProfiles->currentItem()->data(Qt::UserRole).toString() );
         im = p->ifMulti();
         isUnique = p->unique();
@@ -307,8 +304,8 @@ void AddAction::updateProfileFunctions()
         QStringList parameters;
         parameters << i.value()->name() << QString().setNum(i.value()->arguments().count()) << i.value()->comment();
         QTreeWidgetItem *item = new QTreeWidgetItem(theProfileFunctions, parameters);
-	kDebug() << "inserting profile function" << i.key();
-	item->setData(0, Qt::UserRole, i.key());
+        kDebug() << "inserting profile function" << i.key();
+        item->setData(0, Qt::UserRole, i.key());
     }
 }
 
@@ -317,32 +314,32 @@ void AddAction::updateArguments()
     kDebug() << "updating arguments";
     argumentsModel->clear();
     QStringList headerLabels;
-    headerLabels << i18n("Name") << i18n("Value");
+    headerLabels << i18nc("Name", "The name of the argument") << i18nc("Value", "The value of the argument");
     argumentsModel->setHorizontalHeaderLabels(headerLabels);
 
-    if(theUseProfile->isChecked()){
-	kDebug() << "profile function";
-	QString application = theProfiles->currentItem()->data(Qt::UserRole).toString();
-	QString function = theProfileFunctions->currentItem()->data(0, Qt::UserRole).toString();
-	const ProfileAction *profileAction =  ProfileServer::profileServer()->getAction(application, function);
+    if (theUseProfile->isChecked()) {
+        kDebug() << "profile function";
+        QString application = theProfiles->currentItem()->data(Qt::UserRole).toString();
+        QString function = theProfileFunctions->currentItem()->data(0, Qt::UserRole).toString();
+        const ProfileAction *profileAction =  ProfileServer::profileServer()->getAction(application, function);
 
-	const QList<ProfileActionArgument> &profileActionArguments = profileAction->arguments();
-	for (int i = 0; i < profileActionArguments.count(); ++i) {
-	    kDebug() << "inserting arg:" << profileActionArguments.at(i).comment();
-	    QList<QStandardItem*> tmp;
-	    tmp.append(new ArgumentsModelItem(profileActionArguments.at(i).comment() + " (" + profileActionArguments.at(i).type() + ")"));
-	    tmp.append(new ArgumentsModelItem(profileActionArguments.at(i).getDefault()));
-	    argumentsModel->appendRow(tmp);
-	}
-    } else if( theUseDBus->isChecked()) {
-	kDebug() << "dbus function";
-	Prototype p = theDBusFunctions->model()->data(theDBusFunctions->currentIndex(), Qt::UserRole).value<Prototype>().prototype();
-	for(int i = 0; i < p.getArguments().size(); ++i){
-	    QList<QStandardItem*> tmp;
-	    tmp.append(new ArgumentsModelItem(p.getArguments().at(i).second + " (" + QVariant::typeToName(p.getArguments().at(i).first) + ")"));
-	    tmp.append(new ArgumentsModelItem(QVariant(p.getArguments().at(i).first)));
-	    argumentsModel->appendRow(tmp);
-	}
+        const QList<ProfileActionArgument> &profileActionArguments = profileAction->arguments();
+        for (int i = 0; i < profileActionArguments.count(); ++i) {
+            kDebug() << "inserting arg:" << profileActionArguments.at(i).comment();
+            QList<QStandardItem*> tmp;
+            tmp.append(new ArgumentsModelItem(profileActionArguments.at(i).comment() + " (" + profileActionArguments.at(i).type() + ")"));// krazy:exclude=[doublequote_chars]
+            tmp.append(new ArgumentsModelItem(profileActionArguments.at(i).getDefault()));
+            argumentsModel->appendRow(tmp);
+        }
+    } else if ( theUseDBus->isChecked()) {
+        kDebug() << "dbus function";
+        Prototype p = theDBusFunctions->model()->data(theDBusFunctions->currentIndex(), Qt::UserRole).value<Prototype>().prototype();
+        for (int i = 0; i < p.getArguments().size(); ++i) {
+            QList<QStandardItem*> tmp;
+            tmp.append(new ArgumentsModelItem(p.getArguments().at(i).second + " (" + QVariant::typeToName(p.getArguments().at(i).first) + ")"));// krazy:exclude=[doublequote_chars]
+            tmp.append(new ArgumentsModelItem(QVariant(p.getArguments().at(i).first)));
+            argumentsModel->appendRow(tmp);
+        }
     }
     argumentsView->resizeColumnsToContents();
     argumentsView->resizeRowsToContents();
@@ -350,24 +347,24 @@ void AddAction::updateArguments()
 
 void AddAction::updateDBusApplications()
 {
-    foreach(QString item, DBusInterface::getInstance()->getRegisteredPrograms()) {
+    foreach(QString item, DBusInterface::getInstance()->getRegisteredPrograms()) {// krazy:exclude=[foreach]
         DBusServiceItem *tServiceItem = new DBusServiceItem(item);
-	tServiceItem->setEditable(false);
+        tServiceItem->setEditable(false);
         dbusAppsModel->appendRow(tServiceItem);
-        foreach(QString object, DBusInterface::getInstance()->getObjects(item)) {
+        foreach(QString object, DBusInterface::getInstance()->getObjects(item)) {// krazy:exclude=[foreach]
             tServiceItem->appendRow(new QStandardItem(object));
         }
     }
     dbusAppsModel->sort(0, Qt::AscendingOrder);
 }
 
-  
+
 void AddAction::updateDBusFunctions(QModelIndex pIndex) {
     QModelIndex tParent = pIndex.parent();
     if (tParent.isValid()) {
         QList<Prototype> tList = DBusInterface::getInstance()->getFunctions(dbusAppsModel->data(tParent, Qt::UserRole).toString(), dbusAppsModel->data(pIndex).toString() );
         theDBusFunctions->model()->removeRows(0, theDBusFunctions->model()->rowCount());
-	theDBusFunctions->model()->insertRows(0, tList.size());
+        theDBusFunctions->model()->insertRows(0, tList.size());
         for (int i = 0; i < tList.size(); i++) {
             theDBusFunctions->model()->setData(theDBusFunctions->model()->index(i,0),qVariantFromValue( tList.at(i)), Qt::UserRole);
         }
@@ -410,12 +407,12 @@ IRAction* AddAction::getAction()
     // DBus?
     else if (theUseDBus->isChecked()) {
         action->setProgram(dbusAppsModel->data(theDBusApplications->currentIndex().parent(), Qt::UserRole).toString());
-	action->setObject(dbusAppsModel->data(theDBusApplications->currentIndex(), Qt::DisplayRole).toString());
+        action->setObject(dbusAppsModel->data(theDBusApplications->currentIndex(), Qt::DisplayRole).toString());
         Prototype p =  theDBusFunctions->model()->data(theDBusFunctions->currentIndex(), Qt::UserRole).value<Prototype>();
         action->setMethod(p.prototype());
         action->setArguments(getCurrentArgs());
-    } else if (theUseProfile->isChecked() && !theProfiles->selectedItems().isEmpty() && 
-		     (!theProfileFunctions->selectedItems().isEmpty() || theJustStart->isChecked())) {
+    } else if (theUseProfile->isChecked() && !theProfiles->selectedItems().isEmpty() &&
+               (!theProfileFunctions->selectedItems().isEmpty() || theJustStart->isChecked())) {
         ProfileServer *theServer = ProfileServer::profileServer();
 
         if (theNotJustStart->isChecked()) {

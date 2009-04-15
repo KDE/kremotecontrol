@@ -56,11 +56,11 @@ private:
 
     void autoPopulate(const Profile &profile, const Remote &remote, const QString &mode);
 
-     inline IRAction *currentAction(){
-       IRAction *tAction = theKCMLircBase->theActions->currentItem()->data(0, Qt::UserRole).value<IRAction*>();
-       return tAction;
-       
-     }
+    inline IRAction *currentAction() {
+        IRAction *tAction = theKCMLircBase->theActions->currentItem()->data(0, Qt::UserRole).value<IRAction*>();
+        return tAction;
+
+    }
 
 public slots:
     void updateActions();

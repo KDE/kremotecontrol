@@ -61,7 +61,7 @@ EditMode::~EditMode()
 Mode EditMode::getMode(){
   Mode mode;
   mode.setIconFile(editModeBaseWidget->checkBox->isChecked()  ?
-      editModeBaseWidget->theIcon->icon() : QString::null);
+      editModeBaseWidget->theIcon->icon() : QString());
   mode.setName(editModeBaseWidget->theName->text());
   return mode;
 }

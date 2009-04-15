@@ -204,8 +204,8 @@ public:
         theIfMulti = a;
     }
     const QString &serviceName() const {
-        if (!theServiceName.isNull()){
-          return theServiceName;
+        if (!theServiceName.isNull()) {
+            return theServiceName;
         }
         return theName;
     }
@@ -230,7 +230,8 @@ class ProfileServer
 
 public:
     static ProfileServer *profileServer() {
-        if (!theInstance) theInstance = new ProfileServer(); return theInstance;
+        if (!theInstance) theInstance = new ProfileServer();
+        return theInstance;
     }
     const QList<Profile*> profiles() const {
         return theProfiles;
@@ -238,7 +239,7 @@ public:
     const Profile *getProfileById(const QString &profileId) const;
     const ProfileAction *getAction(const QString &appId, const QString &objId, const QString &prototype) const;
     const ProfileAction *getAction(const QString &appId, const QString &actionId) const;
-    const QString &getServiceName(const QString &appId) const;
+    const QString getServiceName(const QString &appId) const;
 
     ProfileServer();
     ~ProfileServer();
