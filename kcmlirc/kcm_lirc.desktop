@@ -1,5 +1,5 @@
 [Desktop Entry]
-Icon=irkick
+Icon=infrared-remote
 Exec=kcmshell4 kcm_lirc
 
 Type=Service

@@ -1,3 +1,4 @@
+add_subdirectory( icons )
 
 include_directories( 
 	${CMAKE_SOURCE_DIR}/kdelirc/
