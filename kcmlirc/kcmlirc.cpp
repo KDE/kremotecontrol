@@ -115,28 +115,31 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
     QStringList headers = (QStringList() << i18nc("Column which shows the available remotes on system", "Remote") << i18n("Used Extension"));
     theKCMLircBase->theModes->setHeaderLabels(headers);
     layout->addWidget(widget);
+    connectSignalsAndSlots();
+    load();
+}
 
-
-
-
+void KCMLirc::connectSignalsAndSlots() {
     connect(theKCMLircBase->theModes, SIGNAL(itemSelectionChanged()), this, SLOT(updateActions()));
     connect(theKCMLircBase->theModes, SIGNAL(itemSelectionChanged()), this, SLOT(updateModesStatus()));
     connect(theKCMLircBase->theActions, SIGNAL(itemSelectionChanged()), this, SLOT(updateActionsStatus()));
+    connect(theKCMLircBase->theActions, SIGNAL(doubleClicked(QModelIndex)),this,SLOT(slotEditAction()));
+    //connect(theKCMLircBase->theModes, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slotEditMode()));
+
     connect(theKCMLircBase->theExtensions, SIGNAL(itemSelectionChanged()), this, SLOT(updateInformation()));
-    connect(
-        theKCMLircBase->theModes,
-        SIGNAL(dropped(QTreeWidget*, QDropEvent*, QTreeWidgetItem*, QTreeWidgetItem*)), this,
-        SLOT(slotDrop(QTreeWidget*, QDropEvent*, QTreeWidgetItem*, QTreeWidgetItem*)));
-    connect((QObject *)(theKCMLircBase->theAddActions), SIGNAL(clicked()), this, SLOT(slotAddActions()));
-    connect((QObject *)(theKCMLircBase->theAddAction), SIGNAL(clicked()), this, SLOT(slotAddAction()));
-    connect((QObject *)(theKCMLircBase->theEditAction), SIGNAL(clicked()), this, SLOT(slotEditAction()));
-    connect((QObject *)(theKCMLircBase->theActions), SIGNAL(doubleClicked(QTreeWidgetItem *)), this, SLOT(slotEditAction()));
-    connect((QObject *)(theKCMLircBase->theRemoveAction), SIGNAL(clicked()), this, SLOT(slotRemoveAction()));
-    connect((QObject *)(theKCMLircBase->theAddMode), SIGNAL(clicked()), this, SLOT(slotAddMode()));
-    connect((QObject *)(theKCMLircBase->theEditMode), SIGNAL(clicked()), this, SLOT(slotEditMode()));
-    connect((QObject *)(theKCMLircBase->theRemoveMode), SIGNAL(clicked()), this, SLOT(slotRemoveMode()));
-    load();
+
+    connect(theKCMLircBase->theAddActions, SIGNAL(clicked()), this, SLOT(slotAddActions()));
+    connect(theKCMLircBase->theAddAction, SIGNAL(clicked()), this, SLOT(slotAddAction()));
+    connect(theKCMLircBase->theEditAction, SIGNAL(clicked()), this, SLOT(slotEditAction()));
+
+    connect(theKCMLircBase->theRemoveAction, SIGNAL(clicked()), this, SLOT(slotRemoveAction()));
+    connect(theKCMLircBase->theAddMode, SIGNAL(clicked()), this, SLOT(slotAddMode()));
+    connect(theKCMLircBase->theEditMode, SIGNAL(clicked()), this, SLOT(slotEditMode()));
+    connect(theKCMLircBase->theRemoveMode, SIGNAL(clicked()), this, SLOT(slotRemoveMode()));
+
 }
+
+
 
 KCMLirc::~KCMLirc()
 {
@@ -172,11 +175,14 @@ void KCMLirc::slotEditAction()
     if (item->parent())
         item = item->parent();
     QStringList modeList;
-    for (int i = 0; i < item->childCount(); i++)
+    for (int i = 0; i < item->childCount(); i++) {
         modeList << item->child(i)->text(0);
+    }
     EditAction theDialog(currentAction(), modeList);
     if (theDialog.exec() == QDialog::Accepted) {
-        theDialog.writeBack();
+        kDebug() << "allActions" << allActions;
+        allActions[allActions.indexOf(currentAction())] = theDialog.getAction();
+        kDebug() << "allActions" << allActions;
         emit changed(true);
         updateActions();
     }
@@ -358,11 +364,32 @@ void KCMLirc::slotEditMode()
 
 void KCMLirc::slotRemoveMode()
 {
+
+    Mode tMode = theKCMLircBase->theModes->currentItem()->data(0, Qt::UserRole).value<Mode>();
     if (KMessageBox::warningContinueCancel(this, i18n(
                                                "Are you sure you want to remove %1 and all its actions?",
-                                               theKCMLircBase->theModes->selectedItems().first()->text(0)), i18n(
+                                               tMode.name()), i18n(
                                                "Erase Actions?")) == KMessageBox::Continue) {
-        allModes.erase(theKCMLircBase->theModes->currentItem()->data(0, Qt::UserRole).value<Mode>());
+        theKCMLircBase->theModes->clear();
+        kDebug()<< "model is cleared";
+        IRActions allActionsList = allActions.findByMode(tMode);
+        foreach(IRAction *tAction, allActionsList) {
+            allActions.erase(tAction);
+        }
+        kDebug()<< "actions are cleared";
+
+        allModes.erase(tMode);
+        tMode.setName("");
+        foreach (IRAction *tAction ,  allActions.findByMode(tMode)) {
+            if (tAction->isModeChange() &&  tAction->mode() == tMode.name()) {
+                tAction->setProgram("");
+                tAction->setObject("");
+                tAction->setAutoStart(false);
+                tAction->setRepeat(false);
+            }
+        }
+
+
         updateModes();
         emit changed(true);
     }
@@ -408,7 +435,7 @@ void KCMLirc::slotDrop(QTreeWidget *, QDropEvent *, QTreeWidgetItem *,
 
 void KCMLirc::updateActions()
 {
-
+    kDebug() << "update actions called";
     if (!theKCMLircBase->theModes->currentItem()) {
         return;
     }
@@ -422,7 +449,9 @@ void KCMLirc::updateActions()
     theKCMLircBase->theModeLabel->setText(m.remoteName() + ": "
                                           + (m.name().isEmpty() ? i18n("Actions <i>always</i> available") : i18n(
                                                  "Actions available only in mode <b>%1</b>", m.name())));
+    kDebug()<<"name <<<<<<<" << m.name();
     IRActions allActionsList = allActions.findByMode(m);
+
     foreach(IRAction *tmp, allActionsList) {
         QStringList row;
         row << tmp->buttonName() << tmp->application() << tmp->function() << tmp->arguments().toString() << tmp->notes();

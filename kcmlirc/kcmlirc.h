@@ -60,6 +60,7 @@ private:
         return tAction;
 
     }
+  void connectSignalsAndSlots();
 
 public slots:
     void updateActions();

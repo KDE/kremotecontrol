@@ -57,8 +57,8 @@ EditAction::EditAction(IRAction *action, const QStringList &modeList, QWidget *p
 
 
     editActionBaseWidget->theModes->addItem(i18n("[Exit current mode]"));
-    foreach(QString mode, modeList){
-	editActionBaseWidget->theModes->addItem(mode);
+    foreach(QString mode, modeList) {
+        editActionBaseWidget->theModes->addItem(mode);
     }
 
     updateApplications();
@@ -149,10 +149,10 @@ void EditAction::readFrom()
 
     if (theAction->isModeChange()) { // change mode
         editActionBaseWidget->theChangeMode->setChecked(true);
-	kDebug() << "is Mode change:" << theAction->object() << "at index" << editActionBaseWidget->theModes->findText(theAction->object());
-	for(int i = 0; i < editActionBaseWidget->theModes->count(); ++i){
-	  kDebug() << "combobox contents:" << editActionBaseWidget->theModes->itemText(i);
-	}
+        kDebug() << "is Mode change:" << theAction->object() << "at index" << editActionBaseWidget->theModes->findText(theAction->object());
+        for (int i = 0; i < editActionBaseWidget->theModes->count(); ++i) {
+            kDebug() << "combobox contents:" << editActionBaseWidget->theModes->itemText(i);
+        }
         if (theAction->object().isEmpty())
             editActionBaseWidget->theModes->setCurrentIndex(editActionBaseWidget->theModes->findText(i18n("[Exit current mode]")));
         else
@@ -170,50 +170,54 @@ void EditAction::readFrom()
     }
 }
 
-void EditAction::writeBack()
+IRAction* EditAction::getAction()
 {
+    IRAction* tAction = new IRAction();
+    tAction->setRemote(theAction->remote());
+    tAction->setMode(theAction->mode());
+    tAction->setButton(theAction->button());
     if (editActionBaseWidget->theChangeMode->isChecked()) {
-        theAction->setProgram("");
+        tAction->setProgram("");
         if (editActionBaseWidget->theModes->currentText() == i18n("[Exit current mode]"))
-            theAction->setObject("");
+            tAction->setObject("");
         else
-            theAction->setObject(editActionBaseWidget->theModes->currentText());
-        theAction->setDoBefore(editActionBaseWidget->theDoBefore->isChecked());
-        theAction->setDoAfter(editActionBaseWidget->theDoAfter->isChecked());
+            tAction->setObject(editActionBaseWidget->theModes->currentText());
+        tAction->setDoBefore(editActionBaseWidget->theDoBefore->isChecked());
+        tAction->setDoAfter(editActionBaseWidget->theDoAfter->isChecked());
     } else if (editActionBaseWidget->theUseProfile->isChecked()) {
         QString application = editActionBaseWidget->theApplications->itemData(editActionBaseWidget->theApplications->currentIndex()).toString();
         QString function = editActionBaseWidget->theFunctions->itemData(editActionBaseWidget->theFunctions->currentIndex()).toString();
         const ProfileAction *profileAction = ProfileServer::profileServer()->getAction(application, function);
         if ( profileAction  || (editActionBaseWidget->theJustStart->isChecked() &&  ProfileServer::profileServer()->getProfileById(application))) {
-            theAction->setProgram(ProfileServer::profileServer()->getProfileById(application)->id());
+            tAction->setProgram(ProfileServer::profileServer()->getProfileById(application)->id());
             if (editActionBaseWidget->theJustStart->isChecked()) {
-                theAction->setObject("");
+                tAction->setObject("");
             } else {
-                kDebug() << "wrote back: " << application;
-                theAction->setObject(profileAction->objId());
-                theAction->setMethod(profileAction->prototype());
-                theAction->setArguments(getCurrentArgs());
+                tAction->setObject(profileAction->objId());
+                tAction->setMethod(profileAction->prototype());
+                tAction->setArguments(getCurrentArgs());
             }
         }
     } else {
-        theAction->setProgram(getCurrentDbusApp());
-        theAction->setObject(editActionBaseWidget->theDBusObjects->currentText());
-        theAction->setMethod(getCurrentDBusFunction());
-        theAction->setArguments(getCurrentArgs());
+        tAction->setProgram(getCurrentDbusApp());
+        tAction->setObject(editActionBaseWidget->theDBusObjects->currentText());
+        tAction->setMethod(getCurrentDBusFunction());
+        tAction->setArguments(getCurrentArgs());
     }
-    theAction->setRepeat(editActionBaseWidget->theRepeat->isChecked());
-    theAction->setAutoStart(editActionBaseWidget->theAutoStart->isChecked());
-    theAction->setUnique(isUnique);
+    tAction->setRepeat(editActionBaseWidget->theRepeat->isChecked());
+    tAction->setAutoStart(editActionBaseWidget->theAutoStart->isChecked());
+    tAction->setUnique(isUnique);
 
     if (editActionBaseWidget->theDontSend->isChecked()) {
-        theAction->setIfMulti(IM_DONTSEND);
+        tAction->setIfMulti(IM_DONTSEND);
     } else if ( editActionBaseWidget->theSendToTop->isChecked()) {
-        theAction->setIfMulti(IM_SENDTOTOP);
+        tAction->setIfMulti(IM_SENDTOTOP);
     } else if ( editActionBaseWidget->theSendToBottom->isChecked()) {
-        theAction->setIfMulti(IM_SENDTOBOTTOM);
+        tAction->setIfMulti(IM_SENDTOBOTTOM);
     } else {
-        theAction->setIfMulti(IM_SENDTOALL);
+        tAction->setIfMulti(IM_SENDTOALL);
     }
+    return tAction;
 }
 
 void EditAction::updateArguments()

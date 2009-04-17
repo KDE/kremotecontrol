@@ -77,8 +77,7 @@ public:
     explicit EditAction(IRAction *action, const QStringList &modeList, QWidget *parent = 0, const bool &modal = false);
     ~EditAction();
 
-
-    void writeBack();
+    IRAction* getAction();
     void readFrom();
     void addItem(QString item);
 
