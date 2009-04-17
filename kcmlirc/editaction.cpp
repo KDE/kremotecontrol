@@ -38,7 +38,7 @@
 #include <keditlistbox.h>
 #include <QStandardItemModel>
 
-EditAction::EditAction(IRAction *action, QWidget *parent, const bool &modal): KDialog(parent)
+EditAction::EditAction(IRAction *action, const QStringList &modeList, QWidget *parent, const bool &modal): KDialog(parent)
 {
     theAction = action;
     editActionBaseWidget = new EditActionBaseWidget();
@@ -56,7 +56,10 @@ EditAction::EditAction(IRAction *action, QWidget *parent, const bool &modal): KD
     mainGroup.addButton(editActionBaseWidget->theChangeMode);
 
 
-
+    editActionBaseWidget->theModes->addItem(i18n("[Exit current mode]"));
+    foreach(QString mode, modeList){
+	editActionBaseWidget->theModes->addItem(mode);
+    }
 
     updateApplications();
     connectSignalsAndSlots();
@@ -146,6 +149,10 @@ void EditAction::readFrom()
 
     if (theAction->isModeChange()) { // change mode
         editActionBaseWidget->theChangeMode->setChecked(true);
+	kDebug() << "is Mode change:" << theAction->object() << "at index" << editActionBaseWidget->theModes->findText(theAction->object());
+	for(int i = 0; i < editActionBaseWidget->theModes->count(); ++i){
+	  kDebug() << "combobox contents:" << editActionBaseWidget->theModes->itemText(i);
+	}
         if (theAction->object().isEmpty())
             editActionBaseWidget->theModes->setCurrentIndex(editActionBaseWidget->theModes->findText(i18n("[Exit current mode]")));
         else

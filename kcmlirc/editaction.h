@@ -74,7 +74,7 @@ private:
 
 
 public:
-    explicit EditAction(IRAction *action, QWidget *parent = 0, const bool &modal = false);
+    explicit EditAction(IRAction *action, const QStringList &modeList, QWidget *parent = 0, const bool &modal = false);
     ~EditAction();
 
 

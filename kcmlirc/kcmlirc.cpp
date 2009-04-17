@@ -168,14 +168,13 @@ void KCMLirc::updateActionsStatus()
 
 void KCMLirc::slotEditAction()
 {
-    EditAction theDialog(currentAction());
     QTreeWidgetItem *item = theKCMLircBase->theModes->selectedItems().first();
     if (item->parent())
         item = item->parent();
-    //TODO: this in not nice should be rewritten
-    theDialog.addItem(i18n("[Exit current mode]"));
+    QStringList modeList;
     for (int i = 0; i < item->childCount(); i++)
-        theDialog.addItem(item->child(i)->text(0));
+        modeList << item->child(i)->text(0);
+    EditAction theDialog(currentAction(), modeList);
     if (theDialog.exec() == QDialog::Accepted) {
         theDialog.writeBack();
         emit changed(true);
