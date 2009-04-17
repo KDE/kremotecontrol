@@ -60,12 +60,7 @@ KDE_EXPORT IRAction *IRAction::loadFromConfig(KConfig &theConfig, int index)
     action->theArguments.clear();
     for (int j = 0; j < numArguments; j++) {
         QVariant::Type theType = QVariant::nameToType(actionGroup.readEntry(Binding + "ArgumentType" + QString().setNum(j), QString().toLocal8Bit()));
-        kDebug() << "Readentry type is:" << actionGroup.readEntry(Binding + "ArgumentType" + QString().setNum(j), QString().toLocal8Bit());
-	QVariant newArg = actionGroup.readEntry(Binding + "Argument" + QString().setNum(j), QString().toLocal8Bit());
-        if (newArg.isNull()) {
-            newArg == "";
-        }
-	newArg.convert(theType);
+	QVariant newArg = actionGroup.readEntry(Binding + "Argument" + QString().setNum(j), QVariant(theType));
         action->theArguments.append(newArg);
     }
 
