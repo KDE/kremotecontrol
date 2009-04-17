@@ -51,7 +51,6 @@ private:
     Ui::KCMLircBase *theKCMLircBase;
     IRActions allActions;
     Modes allModes;
-//    QMap<QTreeWidgetItem *, Mode> modeMap;
     QMap<QTreeWidgetItem *, QString> profileMap, remoteMap;
 
     void autoPopulate(const Profile &profile, const Remote &remote, const QString &mode);

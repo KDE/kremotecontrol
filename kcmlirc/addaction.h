@@ -60,6 +60,7 @@ private:
         Arguments retList;
         foreach(QStandardItem *item, argumentsModel->takeColumn(1)) {
             retList.append(item->data(Qt::EditRole));
+	    kDebug() << "got argument" << item->data(Qt::EditRole);
         }
         return retList;
     }

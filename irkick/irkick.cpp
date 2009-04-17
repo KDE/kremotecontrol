@@ -280,7 +280,7 @@ bool IRKick::searchForProgram(const IRAction &action, QStringList &programs)
 
 
 void IRKick::executeAction(const IRAction& action) {
-    kDebug() << "executeAction called";
+    kDebug() << "executeAction called with action:" << action.arguments().getArgumentsList();
     QDBusConnectionInterface *dBusIface =
         QDBusConnection::sessionBus().interface();
 
@@ -327,11 +327,10 @@ void IRKick::executeAction(const IRAction& action) {
             QDBusMessage m = QDBusMessage::createMethodCall(program, '/'
                              + action.object(), "", action.method().prototypeNR());
 
-            for (QList<QVariant>::const_iterator j = action.arguments().getArgumentsList().constBegin(); j
-                    != action.arguments().getArgumentsList().constEnd(); ++j) {
-                kDebug() << "Got argument:" << (*j).type();
+            foreach(QVariant arg, action.arguments().getArgumentsList()){
+                kDebug() << "Got argument:" << arg.type() << "value" << arg;
                 //    m << (*j).toString();
-                m << (*j);
+                m << arg;
             }
             //   theDC->send(program.utf8(), action.object().utf8(), action.method().prototypeNR().utf8(), data);
             QDBusMessage response = QDBusConnection::sessionBus().call(m);

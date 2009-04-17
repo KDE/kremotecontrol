@@ -61,15 +61,15 @@ KDE_EXPORT IRAction *IRAction::loadFromConfig(KConfig &theConfig, int index)
     for (int j = 0; j < numArguments; j++) {
         QVariant::Type theType = QVariant::nameToType(actionGroup.readEntry(Binding + "ArgumentType" + QString().setNum(j), QString().toLocal8Bit()));
         kDebug() << "Readentry type is:" << actionGroup.readEntry(Binding + "ArgumentType" + QString().setNum(j), QString().toLocal8Bit());
-//  theArguments += actionGroup.readEntry(Binding + "Argument" + QString().setNum(j), theType == QVariant::CString ? QVariant::String : theType);
-        action->theArguments.append(actionGroup.readEntry(Binding + "Argument" + QString().setNum(j), QString().toLocal8Bit()));
-        if (action->theArguments.at(action->theArguments.count() - 1).isNull()) {
-            action->theArguments.at(action->theArguments.count() - 1) == "";
+	QVariant newArg = actionGroup.readEntry(Binding + "Argument" + QString().setNum(j), QString().toLocal8Bit());
+        if (newArg.isNull()) {
+            newArg == "";
         }
-        action->theArguments.at(action->theArguments.count() - 1).convert(theType);
+	newArg.convert(theType);
+        action->theArguments.append(newArg);
     }
 
-//    kDebug() << "Arguments: " << action->theArguments;
+    kDebug() << "Arguments: " << action->theArguments.getArgumentsList();
 
     action->theProgram = actionGroup.readEntry(Binding + "Program", QString());
     action->theObject = actionGroup.readEntry(Binding + "Object", QString());
