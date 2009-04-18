@@ -48,7 +48,6 @@ KDE_EXPORT void ProfileServer::loadProfiles()
 {
     QStringList theFiles = KGlobal::dirs()->findAllResources("data", "profiles/*.profile.xml");
     for (QStringList::iterator i = theFiles.begin(); i != theFiles.end(); ++i) {
-        kDebug() << "Found data file: " << *i ;
         Profile *p = new Profile();
         p->loadFromFile(*i);
         theProfiles.append(p);
@@ -76,10 +75,7 @@ KDE_EXPORT Profile::Profile()
 
 KDE_EXPORT const ProfileAction *Profile::searchClass(const QString &c) const
 {
-    kDebug() << "Actionscount: " << theActions.size();
     for (QHash<QString, ProfileAction*>::const_iterator i = theActions.constBegin(); i != theActions.constEnd(); ++i) {
-        kDebug() << "value:" << i.value();
-        kDebug() << "Class: " << i.value()->getClass();
         if (i.value()->getClass() == c) {
             return i.value();
         }
@@ -102,7 +98,6 @@ KDE_EXPORT void Profile::loadFromFile(const QString &fileName)
 
 KDE_EXPORT const ProfileAction *ProfileServer::getAction(const QString &appId, const QString &actionId) const
 {
-    kDebug() << "Profile to search:" << appId << actionId;
     if (getProfileById(appId)) {
         if (getProfileById(appId)->actions()[actionId]) {
             return getProfileById(appId)->actions()[actionId];
@@ -140,7 +135,6 @@ KDE_EXPORT bool Profile::startElement(const QString &, const QString &, const QS
         curPA->setObjId(attributes.value("objid"));
         curPA->setPrototype(attributes.value("prototype"));
         curPA->setClass(attributes.value("class"));
-        kDebug() << "adding action class: " << curPA->getClass();
         curPA->setMultiplier(attributes.value("multiplier").isEmpty() ? 1.0 : attributes.value("multiplier").toFloat());
         curPA->setRepeat(attributes.value("repeat") == "1");
         curPA->setAutoStart(attributes.value("autostart") == "1");
@@ -153,9 +147,7 @@ KDE_EXPORT bool Profile::startElement(const QString &, const QString &, const QS
         curPAA->setAction(curPA);
         curPAA->setType(attributes.value("type"));
         QVariant tmpArg(attributes.value("default"));
-        kDebug() << "created arg of type" << tmpArg;
         tmpArg.convert(QVariant::nameToType(attributes.value("type").toLocal8Bit()));
-        kDebug() << "read default" << tmpArg << "type is" << attributes.value("type");
         curPAA->setDefault(tmpArg);
     } else if (name == "range" && curPAA)
         curPAA->setRange(qMakePair(attributes.value("min").toInt(), attributes.value("max").toInt()));
@@ -182,7 +174,6 @@ KDE_EXPORT bool Profile::endElement(const QString &, const QString &, const QStr
     else if (name == "action") {
         curPA->setProfile(this);
         theActions.insert(curPA->objId() + "::" + curPA->prototype(), curPA);
-        kDebug() << "theActions"  << theActions;
         curPA = 0;
     } else if (name == "argument")
         curPAA = 0;

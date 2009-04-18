@@ -214,6 +214,8 @@ void AddAction::updateForPageChange()
         }
     } else if (currentId() == ACTION_ARGUMENTS) {
         updateArguments();
+    } else if (currentId() == ACTION_OPTIONS ){
+	updateOptions();
     }
     updateButtonStates();
 }
@@ -261,7 +263,7 @@ void AddAction::updateProfiles()
 
 void AddAction::updateOptions()
 {
-    IfMulti im;
+    IfMulti im = IM_SENDTOTOP;
     if (theUseProfile->isChecked()) {
         ProfileServer *theServer = ProfileServer::profileServer();
         if (!theProfiles->currentItem()) {
@@ -271,19 +273,12 @@ void AddAction::updateOptions()
         im = p->ifMulti();
         isUnique = p->unique();
     } else if (theUseDBus->isChecked()) {
-        //TODO: rewrite
-        /*if (!theObjects->selectedItems().first()) return;
-        QTreeWidgetItem* i = theObjects->selectedItems().first()->parent();
-        */
-//        if (!i) return;
-        /*        isUnique = uniqueProgramMap[i];
-                QRegExp r("(.*)-[0-9]+");
-                program = r.exactMatch(nameProgramMap[i]) ? r.cap(1) : nameProgramMap[i];
-                im = IM_DONTSEND;*/
+	QString currentDBusApp = dbusAppsModel->data(theDBusApplications->currentIndex().parent(), Qt::UserRole).toString();
+        isUnique = DBusInterface::getInstance()->isUnique(currentDBusApp);
     } else return;
 
     theIMLabel->setEnabled(!isUnique);
-// theIMGroup->setEnabled(!isUnique);
+//    theIMGroup->setEnabled(!isUnique);
     theIMLine->setEnabled(!isUnique);
     theIMTop->setEnabled(!isUnique);
     theDontSend->setEnabled(!isUnique);

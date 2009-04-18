@@ -80,7 +80,6 @@ QStringList DBusInterface::getRegisteredPrograms()
 
     //Throw out invalid entries
     for (int i = 0; i < allServices.size(); ++i) {
-        kDebug() << "Service: " << allServices.at(i);
 
         QString tmp = allServices.at(i);
 
@@ -112,12 +111,10 @@ QStringList DBusInterface::getObjects(const QString &program) {
     domDoc.setContent(response);
     if (domDoc.toString().isEmpty()) { // No reply... perhaps a multi-instance...
         QStringList instances = getAllRegisteredPrograms().filter(program);
-        kDebug() << "instances of " + program << instances;
         if (!instances.isEmpty()) {
             QDBusInterface iFace(instances.first(), "/", "org.freedesktop.DBus.Introspectable");
             response = iFace.call("Introspect");
             domDoc.setContent(response);
-            kDebug() << "new DBus response:" << response;
         }
     }
 
@@ -134,7 +131,6 @@ QStringList DBusInterface::getObjects(const QString &program) {
         }
         child = child.nextSiblingElement();
     }
-    kDebug() << "returning Object list: " << returnList;
     return returnList;
 }
 
@@ -142,18 +138,15 @@ QList<Prototype> DBusInterface::getFunctions(const QString &program, const QStri
     QDBusInterface dBusIface(program, '/' + object, "org.freedesktop.DBus.Introspectable");
     QDBusReply<QString> response = dBusIface.call("Introspect");
 
-//   kDebug() << response;
     QDomDocument domDoc;
     domDoc.setContent(response);
 
     if (domDoc.toString().isEmpty()) { // No reply... perhaps a multi-instance...
         QStringList instances = getAllRegisteredPrograms().filter(program);
-        kDebug() << "instances of " + program << instances;
         if (!instances.isEmpty()) {
             QDBusInterface iFace(instances.first(), '/' + object, "org.freedesktop.DBus.Introspectable");
             response = iFace.call("Introspect");
             domDoc.setContent(response);
-            kDebug() << "new DBus response:" << response;
         }
     }
 
@@ -251,12 +244,10 @@ QStringList DBusInterface::getRemotes() {
 
 
 void DBusInterface::requestNextKeyPress() {
-    kDebug() << "Requesting next press from irkick";
     QDBusMessage m = QDBusMessage::createMethodCall("org.kde.irkick", "/IRKick", "", "stealNextPress");
     m << "org.kde.kcmshell_kcm_lirc";
     m << "/KCMLirc";
     m << "gotButton";
-    kDebug() << "arguments are:" << m;
     QDBusMessage response = QDBusConnection::sessionBus().call(m);
     if (response.type() == QDBusMessage::ErrorMessage) {
         kDebug() << response.errorMessage();
@@ -264,7 +255,6 @@ void DBusInterface::requestNextKeyPress() {
 }
 
 void DBusInterface::cancelKeyPressRequest() {
-    kDebug() << "Cancelling keypress request";
     QDBusMessage m = QDBusMessage::createMethodCall("org.kde.irkick", "/IRKick", "", "dontStealNextPress");
     QDBusMessage response = QDBusConnection::sessionBus().call(m);
     if (response.type() == QDBusMessage::ErrorMessage) {
@@ -280,7 +270,6 @@ QStringList DBusInterface::getButtons(const QString& remoteName) {
     if (response.type() == QDBusMessage::ErrorMessage) {
         kDebug() << response.errorMessage();
     }
-    kDebug() << "Got response: " << response.arguments();
     return response.arguments().at(0).toStringList();
 }
 
@@ -301,6 +290,26 @@ bool DBusInterface::isProgramRunning(const QString &program) {
         return true;
     }
     return false;
+}
+
+bool DBusInterface::isUnique(const QString &program){
+    QStringList instances = getAllRegisteredPrograms().filter(program);
+    kDebug() << "instances of " + program << instances;
+
+    // If there are more than 1 it is oviously not unique
+    // If there are 0 we cannot know... Return false so the user can at least try to specify what he likes.
+    if(instances.count() != 1){
+	return false;
+    }
+
+    // So... we have exactly one instance...
+    // check if there are any trailing numbers. If yes, it is a multi-instance-app
+    QRegExp r2("[a-zA-Z0-9_\\.-]+-[0-9]+");
+    if(r2.exactMatch(instances.first())){
+	return false;
+    }
+
+    return true;
 }
 
 void DBusInterface::gotButton(QString remote, QString button)

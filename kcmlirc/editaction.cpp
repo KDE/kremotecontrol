@@ -127,6 +127,7 @@ void EditAction::connectSignalsAndSlots() {
     connect(editActionBaseWidget->theDBusApplications,SIGNAL(currentIndexChanged ( QString)),this,SLOT(updateDBusObjects()));
     connect(editActionBaseWidget->theDBusObjects,SIGNAL(currentIndexChanged ( QString)),this,SLOT(updateDBusFunctions()));
     connect(editActionBaseWidget->theDBusFunctions,SIGNAL(currentIndexChanged ( QString)),this,SLOT(updateArguments()));
+    connect(editActionBaseWidget->theDBusFunctions,SIGNAL(currentIndexChanged ( QString)),this,SLOT(updateInstancesOptions()));
 
     //Mode Action
     connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),editActionBaseWidget->argumentsView ,SLOT(setDisabled(bool)));
@@ -296,11 +297,11 @@ void EditAction::updateInstancesOptions()
         const Profile *p = theServer->getProfileById(editActionBaseWidget->theApplications->itemData(editActionBaseWidget->theApplications->currentIndex()).toString());
         isUnique = p->unique();
     } else if ( editActionBaseWidget->theUseDBus->isChecked()) {
-        program =  editActionBaseWidget->theDBusApplications->currentText();
+        program =  getCurrentDbusApp();
         if ( program.isNull() ||  program.isEmpty()) {
             return;
         }
-        isUnique = uniqueProgramMap[program];
+        isUnique = DBusInterface::getInstance()->isUnique(program);
     } else
         isUnique = true;
 

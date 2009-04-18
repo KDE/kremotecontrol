@@ -49,6 +49,7 @@ public:
   ~DBusInterface();
 
   bool isProgramRunning(const QString &program);
+  bool isUnique(const QString &program);
 
   QStringList getRegisteredPrograms();
   QStringList getObjects(const QString &program);

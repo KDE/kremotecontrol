@@ -9,7 +9,7 @@
 	<button id="PLAY" class="play"><name>Play</name></button>
 	<button id="VOLUP" class="volumeup"><name>Volume Up</name></button>
 	<button id="VOLDOWN" class="volumedown"><name>Volume Down</name></button>
-	<button id="BACKWARD" class="rewind"><name>Rewind</name></button>
-	<button id="FORWARD" class="forward"><name>Forward</name></button>
+	<button id="BACKWARD" class="previous"><name>Rewind</name></button>
+	<button id="FORWARD" class="next"><name>Forward</name></button>
 	
 </remote>
