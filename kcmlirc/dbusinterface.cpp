@@ -211,8 +211,8 @@ QList<Prototype> DBusInterface::getFunctions(const QString &program, const QStri
                         }
                         arg = arg.nextSiblingElement();
                     }
-                    function = retArg + " " + function;//krazy:exclude=[doublequote_chars]
-                    function += "(" + argStr + ")";// krazy:exclude=[doublequote_chars]
+                    function = retArg + ' ' + function;
+                    function += '(' + argStr + ')';
                 }
                 subChild = subChild.nextSiblingElement();
                 if (!funcList.contains(function) && !function.isEmpty()) {
@@ -223,7 +223,7 @@ QList<Prototype> DBusInterface::getFunctions(const QString &program, const QStri
         child = child.nextSiblingElement();
     }
     QList<Prototype> ret;
-    foreach(QString tmp, funcList) {// krazy:exclude=[foreach]
+    foreach(const QString &tmp, funcList) {
         ret.append(Prototype(tmp));
     }
     return ret;

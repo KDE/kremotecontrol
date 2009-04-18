@@ -63,13 +63,7 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMo
     connect(this, SIGNAL(currentIdChanged(int)), SLOT(updateForPageChange()));
     connect(this, SIGNAL(currentIdChanged(int)), SLOT(slotCorrectPage()));
 
-//    connect(theValueDoubleNumInput, SIGNAL(valueChanged(double)), this, SLOT(slotParameterChanged()));
-//    connect(theValueIntNumInput, SIGNAL(valueChanged(int)), this, SLOT(slotParameterChanged()));
-//    connect(theValueLineEdit, SIGNAL(textChanged(QString)), this, SLOT(slotParameterChanged()));
-//    connect(theValueCheckBox, SIGNAL(toggled(bool)), this, SLOT(slotParameterChanged()));
-//    connect(theValueEditListBox, SIGNAL(changed()), this, SLOT(slotParameterChanged()));
     connect(theChangeMode, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
-//    connect(theParameters, SIGNAL(itemSelectionChanged()), this, SLOT(updateParameter()));
     connect(theSwitchMode, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
     connect(theExitMode, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
     connect(theUseDBus, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
@@ -180,7 +174,7 @@ int AddAction::nextId() const
 
 void AddAction::updateButton(const QString &remote, const QString &button)
 {
-    if (theMode.remote() == remote) { // note this isn't the "correct" way of doing it; really i should iterate throughg the items and try to find the item which when put through buttonMap[item] returns the current button name. but i cant be arsed.
+    if (theMode.remote() == remote) {
         theButtons->setCurrentItem(theButtons->findItems(RemoteServer::remoteServer()->getButtonName(remote, button), 0).first());
         theButtons->scrollToItem(theButtons->findItems(RemoteServer::remoteServer()->getButtonName(remote, button), 0).first());
     } else {
@@ -193,7 +187,7 @@ void AddAction::updateButton(const QString &remote, const QString &button)
 void AddAction::updateButtons()
 {
     theButtons->clear();
-    foreach(QString buttonName, DBusInterface::getInstance()->getButtons(theMode.remote())) {// krazy:exclude=[foreach]
+    foreach(const QString &buttonName, DBusInterface::getInstance()->getButtons(theMode.remote())) {
         kDebug() << "foud buttonName " << buttonName;
         QListWidgetItem *tItem =  new  QListWidgetItem(RemoteServer::remoteServer()->getButtonName(theMode.remote(), buttonName),theButtons);
         tItem->setData(Qt::UserRole,buttonName);
@@ -278,7 +272,6 @@ void AddAction::updateOptions()
     } else return;
 
     theIMLabel->setEnabled(!isUnique);
-//    theIMGroup->setEnabled(!isUnique);
     theIMLine->setEnabled(!isUnique);
     theIMTop->setEnabled(!isUnique);
     theDontSend->setEnabled(!isUnique);
@@ -326,32 +319,28 @@ void AddAction::updateProfileFunctions()
 
 void AddAction::updateArguments()
 {
-    kDebug() << "updating arguments";
     argumentsModel->clear();
     QStringList headerLabels;
-    headerLabels << i18nc("Name", "The name of the argument") << i18nc("Value", "The value of the argument");
+    headerLabels << i18n("Argument name") << i18nc("The value of an argument", "Value");
     argumentsModel->setHorizontalHeaderLabels(headerLabels);
 
     if (theUseProfile->isChecked()) {
-        kDebug() << "profile function";
         QString application = theProfiles->currentItem()->data(Qt::UserRole).toString();
         QString function = theProfileFunctions->currentItem()->data(0, Qt::UserRole).toString();
         const ProfileAction *profileAction =  ProfileServer::profileServer()->getAction(application, function);
 
         const QList<ProfileActionArgument> &profileActionArguments = profileAction->arguments();
         for (int i = 0; i < profileActionArguments.count(); ++i) {
-            kDebug() << "inserting arg:" << profileActionArguments.at(i).comment();
             QList<QStandardItem*> tmp;
-            tmp.append(new ArgumentsModelItem(profileActionArguments.at(i).comment() + " (" + profileActionArguments.at(i).type() + ")"));// krazy:exclude=[doublequote_chars]
+            tmp.append(new ArgumentsModelItem(profileActionArguments.at(i).comment() + " (" + profileActionArguments.at(i).type() + ')'));
             tmp.append(new ArgumentsModelItem(profileActionArguments.at(i).getDefault()));
             argumentsModel->appendRow(tmp);
         }
     } else if ( theUseDBus->isChecked()) {
-        kDebug() << "dbus function";
         Prototype p = theDBusFunctions->model()->data(theDBusFunctions->currentIndex(), Qt::UserRole).value<Prototype>().prototype();
         for (int i = 0; i < p.getArguments().size(); ++i) {
             QList<QStandardItem*> tmp;
-            tmp.append(new ArgumentsModelItem(p.getArguments().at(i).second + " (" + QVariant::typeToName(p.getArguments().at(i).first) + ")"));// krazy:exclude=[doublequote_chars]
+            tmp.append(new ArgumentsModelItem(p.getArguments().at(i).second + " (" + QVariant::typeToName(p.getArguments().at(i).first) + ')'));
             tmp.append(new ArgumentsModelItem(QVariant(p.getArguments().at(i).first)));
             argumentsModel->appendRow(tmp);
         }
@@ -362,11 +351,12 @@ void AddAction::updateArguments()
 
 void AddAction::updateDBusApplications()
 {
-    foreach(QString item, DBusInterface::getInstance()->getRegisteredPrograms()) {// krazy:exclude=[foreach]
+    dbusAppsModel->clear();
+    foreach(const QString &item, DBusInterface::getInstance()->getRegisteredPrograms()) {
         DBusServiceItem *tServiceItem = new DBusServiceItem(item);
         tServiceItem->setEditable(false);
         dbusAppsModel->appendRow(tServiceItem);
-        foreach(QString object, DBusInterface::getInstance()->getObjects(item)) {// krazy:exclude=[foreach]
+        foreach(const QString &object, DBusInterface::getInstance()->getObjects(item)) {
             tServiceItem->appendRow(new QStandardItem(object));
         }
     }

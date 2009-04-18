@@ -53,7 +53,7 @@ DBusServiceItem::DBusServiceItem(const QString &item) {
 
 DBusServiceItem::DBusServiceItem(const QString &item,  const QStringList &objects)  {
     new DBusServiceItem(item);
-    foreach(QString object,  objects) { // krazy:exclude=[foreach]
+    foreach(const QString &object,  objects) {
         this->appendRow(new QStandardItem(object));
     }
 }
@@ -296,7 +296,7 @@ void ArgumentDelegate::setEditorData(QWidget *editor,
         KLineEdit *listLineEdit = static_cast<KLineEdit*>(editor);
         QString value;
         value.clear();
-        foreach(QString tmp, index.model()->data(index, Qt::EditRole).toStringList()) {// krazy:exclude=[foreach]
+        foreach(const QString &tmp, index.model()->data(index, Qt::EditRole).toStringList()) {
             if (!value.isEmpty()) {
                 value.append(',');
             }
@@ -376,7 +376,7 @@ QVariant ArgumentsModelItem::data ( int role ) const {
     if (role == Qt::DisplayRole && (QStandardItem::data(role).type() == QVariant::StringList)) {
         QString retList;
         retList.clear();
-        foreach(QString tmp, QStandardItem::data(role).toStringList()) {// krazy:exclude=[foreach]
+        foreach(const QString &tmp, QStandardItem::data(role).toStringList()) {
             if (!retList.isEmpty()) {
                 retList.append(',');
             }

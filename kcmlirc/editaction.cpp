@@ -57,7 +57,7 @@ EditAction::EditAction(IRAction *action, const QStringList &modeList, QWidget *p
 
 
     editActionBaseWidget->theModes->addItem(i18n("[Exit current mode]"));
-    foreach(QString mode, modeList) {
+    foreach(const QString &mode, modeList) {
         editActionBaseWidget->theModes->addItem(mode);
     }
 
@@ -244,18 +244,18 @@ void EditAction::updateArguments()
         if (profileAction && (profileAction->profile()->name() == theAction->application()) &&
                 profileAction->name() == theAction->function())
         {
-            for (int i = 0; i < profileAction->arguments().count(); ++i) {// krazy:exclude=[foreach]
+            for (int i = 0; i < profileAction->arguments().count(); ++i) {
                 QList<QStandardItem*> tmp;
-                tmp.append(new ArgumentsModelItem(profileAction->arguments().at(i).comment() + " (" + profileAction->arguments().at(i).type() + ")"));// krazy:exclude=[doublequote_chars]
+                tmp.append(new ArgumentsModelItem(profileAction->arguments().at(i).comment() + " (" + profileAction->arguments().at(i).type() + ')'));
                 tmp.append(new ArgumentsModelItem(theAction->arguments().at(i)));
                 argumentsModel->appendRow(tmp);
             }
 
         } else {
             const QList<ProfileActionArgument> &profileActionArguments = profileAction->arguments();
-            for (int i = 0; i < profileActionArguments.count(); ++i) {// krazy:exclude=[foreach]
+            for (int i = 0; i < profileActionArguments.count(); ++i) {
                 QList<QStandardItem*> tmp;
-                tmp.append(new ArgumentsModelItem(profileActionArguments.at(i).comment() + " (" + profileActionArguments.at(i).type() + ")"));// krazy:exclude=[doublequote_chars]
+                tmp.append(new ArgumentsModelItem(profileActionArguments.at(i).comment() + " (" + profileActionArguments.at(i).type() + ')'));
                 tmp.append(new ArgumentsModelItem(profileActionArguments.at(i).getDefault()));
                 argumentsModel->appendRow(tmp);
             }
@@ -271,14 +271,14 @@ void EditAction::updateArguments()
                 getCurrentDBusFunction() == theAction->method().prototype()) { // And also the Function. Fill in the arguments
             for (int i = 0; i < theAction->arguments().size(); ++i) {
                 QList<QStandardItem*> tmp;
-                tmp.append(new ArgumentsModelItem(p.getArguments().at(i).second + " (" + QVariant::typeToName(p.getArguments().at(i).first) + ")"));// krazy:exclude=[doublequote_chars]
+                tmp.append(new ArgumentsModelItem(p.getArguments().at(i).second + " (" + QVariant::typeToName(p.getArguments().at(i).first) + ')'));
                 tmp.append(new ArgumentsModelItem(theAction->arguments().at(i)));
                 argumentsModel->appendRow(tmp);
             }
         } else {
             for (int i = 0; i < p.getArguments().size(); ++i) {
                 QList<QStandardItem*> tmp;
-                tmp.append(new ArgumentsModelItem(p.getArguments().at(i).second + " (" + QVariant::typeToName(p.getArguments().at(i).first) + ")"));// krazy:exclude=[doublequote_chars]
+                tmp.append(new ArgumentsModelItem(p.getArguments().at(i).second + " (" + QVariant::typeToName(p.getArguments().at(i).first) + ')'));
                 tmp.append(new ArgumentsModelItem(QVariant(p.getArguments().at(i).first)));
                 argumentsModel->appendRow(tmp);
             }
@@ -349,20 +349,22 @@ void EditAction::updateFunctions()
         int index = editActionBaseWidget->theFunctions->findText(action->name());
         editActionBaseWidget->theFunctions->setCurrentIndex(index < 0 ? 0 : index);
     }
+
+    updateArguments();
 }
 
 void EditAction::updateDBusApplications()
 {
     kDebug()<< "update dbus applications";
     editActionBaseWidget->theDBusApplications->clear();
-    //editActionBaseWidget->theDBusApplications->addItems(DBusInterface::getInstance()->getRegisteredPrograms());
 
-    foreach(QString item, DBusInterface::getInstance()->getRegisteredPrograms()) {// krazy:exclude=[foreach]
+    foreach(const QString &item, DBusInterface::getInstance()->getRegisteredPrograms()) {
         dbusServiceModel->appendRow(new DBusServiceItem(item));
     }
 
     if (!ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype()) &&
-            !DBusInterface::getInstance()->isProgramRunning(theAction->program())) {
+            !DBusInterface::getInstance()->isProgramRunning(theAction->program()) && 
+	    !theAction->isModeChange()) {
         dbusServiceModel->appendRow(new DBusServiceItem(theAction->program()));
     }
     editActionBaseWidget->theDBusApplications->model()->sort( Qt::AscendingOrder);
@@ -395,7 +397,7 @@ void EditAction::updateDBusFunctions()
     editActionBaseWidget->theDBusFunctions->clear();
 
     const QList<Prototype> tList = DBusInterface::getInstance()->getFunctions(getCurrentDbusApp(), editActionBaseWidget->theDBusObjects->currentText());
-    foreach(Prototype tType, tList) {// krazy:exclude=[foreach]
+    foreach(const Prototype &tType, tList) {
         editActionBaseWidget->theDBusFunctions->addItem(0, qVariantFromValue(tType));
     }
 
@@ -418,6 +420,8 @@ void EditAction::updateDBusFunctions()
     kDebug() << "searching for" << theAction->method().prototype();
     int ti =editActionBaseWidget->theDBusFunctions->findData(qVariantFromValue(theAction->method()), Qt::EditRole);
     editActionBaseWidget->theDBusFunctions->setCurrentIndex(ti == -1 ? 0 : ti);
+
+    updateArguments();
 }
 
 void EditAction::addItem(QString item)

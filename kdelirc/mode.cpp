@@ -29,7 +29,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 
-KDE_EXPORT Mode::Mode() : theName(QString::null) //krazy:exclude=nullstrassign for old broken gcc
+KDE_EXPORT Mode::Mode() : theName(QString())
 {
 }
 

@@ -45,7 +45,7 @@
 #include <khelpmenu.h>
 
 IRKick::IRKick(const QString &obj) :
-        QObject(), npApp(QString::null) //krazy:exclude=nullstrassign for old broken gcc
+        QObject(), npApp(QString())
 {
     Q_UNUSED(obj)
     new IrkickAdaptor(this);
@@ -327,9 +327,8 @@ void IRKick::executeAction(const IRAction& action) {
             QDBusMessage m = QDBusMessage::createMethodCall(program, '/'
                              + action.object(), "", action.method().prototypeNR());
 
-            foreach(QVariant arg, action.arguments().getArgumentsList()){
+            foreach(const QVariant &arg, action.arguments().getArgumentsList()){
                 kDebug() << "Got argument:" << arg.type() << "value" << arg;
-                //    m << (*j).toString();
                 m << arg;
             }
             //   theDC->send(program.utf8(), action.object().utf8(), action.method().prototypeNR().utf8(), data);
@@ -347,7 +346,7 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton,
     kDebug() << "Got message: " << theRemote << ": " << theButton << " (" << theRepeatCounter << ")";
     theTrayIcon->setIcon(theTrayIcon->loadIcon("irkickflash"));
     theFlashOff->start(200);
-    if (!npApp.isNull()) {
+    if (!npApp.isEmpty()) {
         QString theApp = npApp;
         npApp.clear();
         // send notifier by DBUS to npApp/npModule/npMethod(theRemote, theButton);
