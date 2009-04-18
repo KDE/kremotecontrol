@@ -14,8 +14,7 @@ set(kcm_lirc_PART_SRCS
    kcmlirc.cpp 
    addaction.cpp 
    editmode.cpp 
-   editaction.cpp 
-   modeslist.cpp
+   editaction.cpp
    newmodedialog.cpp
    model.cpp 
    dbusinterface.cpp)

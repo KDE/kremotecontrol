@@ -31,13 +31,11 @@
 #include "remoteserver.h"
 #include "editaction.h"
 #include "editmode.h"
-#include "modeslist.h"
 #include "dbusinterface.h"
 #include "model.h"
 
 #include <qevent.h>
 #include <QHBoxLayout>
-#include <QDropEvent>
 #include <QWidget>
 #include <kapplication.h>
 #include <klocale.h>
@@ -403,33 +401,6 @@ void KCMLirc::slotSetDefaultMode()
     emit changed(true);
 }
 
-void KCMLirc::slotDrop(QTreeWidget *, QDropEvent *, QTreeWidgetItem *,
-                       QTreeWidgetItem *after)
-
-{
-    Q_UNUSED(after)
-//TODO: drag and drop of actions to modes
-//     Mode m = modeMap[after];
-//
-//     if (modeMap[theKCMLircBase->theModes->selectedItems().first()].remote()
-//             != m.remote()) {
-//         KMessageBox::error(
-//             this,
-//             i18n(
-//                 "You may only drag the selected items onto a mode of the same remote control"),
-//             i18n("You May Not Drag Here"));
-//         return;
-//     }
-//     for (int i = 0; i < theKCMLircBase->theActions->topLevelItemCount(); i++) {
-//         if (theKCMLircBase->theActions->currentIndex().isValid()){
-//             currenttAction()->setMode(m.name());
-// 	}
-//     }
-//
-//     updateActions();
-//     emit changed(true);
-}
-
 void KCMLirc::updateActions()
 {
     kDebug() << "update actions called";
@@ -693,14 +664,5 @@ void KCMLirc::configChanged()
     // insert your saving code here...
     emit changed(true);
 }
-
-// TODO: Take this out when I know how
-//extern "C"
-//{
-// KDE_EXPORT KCModule *create_kcmlirc(QWidget *parent, const char *)
-// KGlobal::locale()->insertCatalog("kcmlirc");
-//  return new KCMLirc(parent);
-// }
-//}
 
 #include "kcmlirc.moc"

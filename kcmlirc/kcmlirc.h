@@ -76,7 +76,6 @@ public slots:
     void slotAddActions();
     void slotEditAction();
     void slotRemoveAction();
-    void slotDrop(QTreeWidget *, QDropEvent *, QTreeWidgetItem *, QTreeWidgetItem *after);
     void slotEditMode();
 
 public:
