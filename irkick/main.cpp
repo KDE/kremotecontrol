@@ -33,8 +33,7 @@
 extern "C" KDE_EXPORT int kdemain(int argc, char *argv[])
 {
 
-    //FIXME: What to do with VERSION???
-    KAboutData *aboutData = new KAboutData("irkick", 0, ki18n("IRKick"), "x.x", ki18n("The KDE Infrared Remote Control Server"), KAboutData::License_GPL, ki18n("(c) 2003, Gav Wood"), ki18n("text"), "gav@kde.org");
+    KAboutData *aboutData = new KAboutData("irkick", 0, ki18n("IRKick"), KDE::versionString(), ki18n("The KDE Infrared Remote Control Server"), KAboutData::License_GPL, ki18n("(c) 2003, Gav Wood"), ki18n("Control your desktop with your remote."), "gav@kde.org");
     aboutData->addAuthor(ki18n("Gav Wood"), ki18n("Author"), "gav@kde.org");
     aboutData->addCredit(ki18n("Malte Starostik"), ki18n("Original LIRC interface code"), "malte.starostik@t-online.de");
     aboutData->addCredit(ki18n("Dirk Ziegelmeier"), ki18n("Ideas, concept code"), "dirk@ziegelmeier.net");
@@ -49,9 +48,9 @@ extern "C" KDE_EXPORT int kdemain(int argc, char *argv[])
     KUniqueApplication app;
     KGlobal::locale()->insertCatalog("kdelirc");
     app.disableSessionManagement();
-    IRKick *theIRKick = new IRKick("/irkick");
-
+    IRKick *theIRKick = new IRKick();
     int ret = app.exec();
+    kDebug() << "exec finished";
     delete theIRKick;
     return ret;
 }

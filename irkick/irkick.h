@@ -33,22 +33,6 @@
 #include <ksystemtrayicon.h>
 #include <kaboutdata.h>
 
-class IRKTrayIcon: public KSystemTrayIcon
-{
-
-public:
-    QMenu* contextMenu() const {
-        return KSystemTrayIcon::contextMenu();
-    }
-    KActionCollection* actionCollection() {
-        return KSystemTrayIcon::actionCollection();
-    }
-
-    explicit IRKTrayIcon(QWidget *parent = 0, const char *name = 0): KSystemTrayIcon(parent) {
-        Q_UNUSED(name)
-    }
-};
-
 class IRKick: public QObject
 {
     Q_OBJECT
@@ -57,12 +41,11 @@ class IRKick: public QObject
 
     QString npApp, npModule, npMethod;
     QMap<QString, QString> currentModes;
-    QMap<QString, IRKTrayIcon *> currentModeIcons;
     IRActions allActions;
     int theResetCount;
     Modes allModes;
 
-    IRKTrayIcon *theTrayIcon;
+    KSystemTrayIcon *theTrayIcon;
     KAboutData *aboutData;
     QTimer *theFlashOff;
 
@@ -145,7 +128,7 @@ private slots:
     void slotClosed();
 
 public:
-    explicit IRKick(const QString &obj);
+    explicit IRKick();
     virtual ~IRKick();
 };
 

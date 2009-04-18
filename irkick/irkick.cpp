@@ -44,17 +44,16 @@
 #include <ktoolinvocation.h>
 #include <khelpmenu.h>
 
-IRKick::IRKick(const QString &obj) :
+IRKick::IRKick():
         QObject(), npApp(QString())
 {
-    Q_UNUSED(obj)
     new IrkickAdaptor(this);
     QDBusConnection dBusConnection = QDBusConnection::sessionBus();
     dBusConnection.registerObject("/IRKick", this,
                                   QDBusConnection::ExportAllSlots);
     theClient = new KLircClient();
 
-    theTrayIcon = new IRKTrayIcon();
+    theTrayIcon = new KSystemTrayIcon();
     if (! theClient->isConnected()) {
         QTimer::singleShot(10000, this, SLOT(checkLirc()));
     }
@@ -69,12 +68,12 @@ IRKick::IRKick(const QString &obj) :
 
     theTrayIcon->contextMenu()->setTitle("IRKick");
     theTrayIcon->contextMenu()->addAction(SmallIcon("configure"), i18n("&Configure..."), this, SLOT(slotConfigure()));
-    KHelpMenu *helpMenu = new  KHelpMenu(0, KGlobal::mainComponent().aboutData());
+    KHelpMenu *helpMenu = new  KHelpMenu(theTrayIcon->parentWidget(), KGlobal::mainComponent().aboutData());
     theTrayIcon->contextMenu()->addAction(KIcon("help-contents"), i18n("&Help"), helpMenu, SLOT(appHelpActivated()));
     theTrayIcon->contextMenu()->addAction(KIcon("irkick"), i18n("&About"), helpMenu, SLOT(aboutApplication()));
 
     theTrayIcon->contextMenu()->addSeparator();
-    theTrayIcon->actionCollection()->action("file_quit")->disconnect(SIGNAL(activated()));
+    theTrayIcon->actionCollection()->action("file_quit")->disconnect();
     connect(theTrayIcon->actionCollection()->action("file_quit"), SIGNAL(activated()), SLOT(doQuit()));
     theTrayIcon->show();
     updateTray();
@@ -83,10 +82,6 @@ IRKick::IRKick(const QString &obj) :
 IRKick::~IRKick()
 {
     delete theTrayIcon;
-    for (QMap<QString, IRKTrayIcon *>::iterator i = currentModeIcons.begin(); i
-            != currentModeIcons.end(); ++i)
-        if (*i)
-            delete *i;
 }
 
 void IRKick::slotClosed()
@@ -134,7 +129,8 @@ void IRKick::doQuit()
     case KMessageBox::Cancel:
         return;
     }
-    KApplication::kApplication()->quit();
+    kDebug();
+//    KApplication::kApplication()->quit();
 }
 
 void IRKick::resetModes()
@@ -151,9 +147,6 @@ void IRKick::resetModes()
     QStringList remotes = theClient->remotes();
     for (QStringList::iterator i = remotes.begin(); i != remotes.end(); ++i) {
         currentModes[*i] = allModes.getDefault(*i).name();
-        if (theResetCount && currentModeIcons[*i])
-            delete currentModeIcons[*i];
-        currentModeIcons[*i] = 0;
     }
     updateTray();
     ++theResetCount;
