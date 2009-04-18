@@ -29,6 +29,7 @@
 
 #include "ui_newmode.h"
 #include "mode.h"
+#include "modes.h"
 #include <QStringList>
 
 class NewModeBaseWidget : public QWidget, public Ui::NewMode
@@ -46,16 +47,15 @@ class NewModeDialog : public KDialog
     Q_OBJECT
 
 public:
-    explicit NewModeDialog(QStringList remotesList, QWidget *parent = 0, const bool &modal = false);
+    explicit NewModeDialog(const Modes &allModes, QWidget *parent = 0, const bool &modal = false);
     ~NewModeDialog();
 
 private:
     NewModeBaseWidget *newModeBaseWidget;
-
+    Modes allModes;
 
 private slots:
-    void slotTextChanged(const QString& newText);
-    void slotRemoteChanged(QTreeWidgetItem* qTreeWidgetItem);
+    void checkForComplete();
 
 public:
     Mode getMode();

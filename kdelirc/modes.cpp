@@ -127,9 +127,14 @@ KDE_EXPORT Mode Modes::getMode(const QString &remote, const QString &mode) const
 KDE_EXPORT ModeList Modes::getModes(const QString &remote) const
 {
     ModeList ret;
-    for (QMap<QString, Mode>::const_iterator i = operator[](remote).begin(); i != operator[](remote).end(); ++i)
+    for (QMap<QString, Mode>::const_iterator i = operator[](remote).begin(); i != operator[](remote).end(); ++i){
         ret += *i;
-    return ret;
+    }
+   return ret;
+}
+
+KDE_EXPORT QStringList Modes::getRemotes() const{
+    return keys();
 }
 
 KDE_EXPORT void Modes::erase(const Mode &mode)

@@ -27,7 +27,7 @@
 #include "newmodedialog.h"
 #include "mode.h"
 
-NewModeDialog::NewModeDialog(QStringList remoteList, QWidget *parent, const bool &modal): KDialog(parent)
+NewModeDialog::NewModeDialog(const Modes &allModes, QWidget *parent, const bool &modal): KDialog(parent), allModes(allModes)
 {
     newModeBaseWidget = new NewModeBaseWidget();
     setMainWidget(newModeBaseWidget);
@@ -35,14 +35,14 @@ NewModeDialog::NewModeDialog(QStringList remoteList, QWidget *parent, const bool
     setDefaultButton(Ok);
     setModal(modal);
 
+    QStringList remoteList = allModes.getRemotes();
     remoteList.sort();
     for (QStringList::iterator it = remoteList.begin(); it != remoteList.end(); ++it) {
         new QTreeWidgetItem(newModeBaseWidget->theRemotes, (QStringList() << *it));
     }
     newModeBaseWidget->theIcon->setIcon("irkick");
-    connect(newModeBaseWidget->theName, SIGNAL(textChanged(const QString&)),
-            this, SLOT(slotTextChanged(const QString&)));
-    connect(newModeBaseWidget->theRemotes, SIGNAL(itemActivated(QTreeWidgetItem*,int)), this, SLOT(slotRemoteChanged(QTreeWidgetItem*)));
+    connect(newModeBaseWidget->theName, SIGNAL(textChanged(const QString&)), this, SLOT(checkForComplete()));
+    connect(newModeBaseWidget->theRemotes, SIGNAL(itemActivated(QTreeWidgetItem*,int)), this, SLOT(checkForComplete()));
     connect(newModeBaseWidget->checkBox, SIGNAL(toggled(bool)),  newModeBaseWidget->theIcon, SLOT(setEnabled(bool)));
     enableButtonOk(false);
 }
@@ -51,14 +51,19 @@ NewModeDialog::~NewModeDialog()
 {
 }
 
-void NewModeDialog::slotRemoteChanged(QTreeWidgetItem* qTreeWidgetItem)
+void NewModeDialog::checkForComplete()
 {
-    enableButtonOk(qTreeWidgetItem != 0);
-}
-
-void NewModeDialog::slotTextChanged(const QString& newText)
-{
-    enableButtonOk(!newText.isEmpty() && newModeBaseWidget->theRemotes->currentItem() != 0);
+    if(newModeBaseWidget->theRemotes->currentItem() && !newModeBaseWidget->theName->text().isEmpty()){
+	foreach(const Mode &mode, allModes.getModes(newModeBaseWidget->theRemotes->currentItem()->text(0))){
+	    if(mode.name() == newModeBaseWidget->theName->text()){
+		enableButtonOk(false);
+		return;
+	    }
+	}
+	enableButtonOk(true);
+	return;
+    }
+    enableButtonOk(false);
 }
 
 Mode NewModeDialog::getMode()

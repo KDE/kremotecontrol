@@ -28,8 +28,8 @@
 
 
 #include "ui_editmodebase.h"
-
-class Mode;
+#include "mode.h"
+#include "modes.h"
 
 class EditModeBaseWidget : public QWidget, public Ui::EditModeBase
 {
@@ -47,9 +47,11 @@ class EditMode : public KDialog
 
 private:
     EditModeBaseWidget *editModeBaseWidget;
+    Mode mode;
+    Modes allModes;
 
 public:
-    explicit EditMode(Mode mode, bool isDefault, QWidget *parent = 0, const bool &modal = false);
+    explicit EditMode(Mode mode,const Modes &allModes, QWidget *parent = 0, const bool &modal = false);
     void clearIcon();
     bool isDefaultMode();
     Mode getMode();

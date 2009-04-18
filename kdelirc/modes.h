@@ -52,6 +52,7 @@ public:
 
     Mode getMode(const QString &remote, const QString &mode) const;
     ModeList getModes(const QString &remote) const;
+    QStringList getRemotes() const;
     const Mode getDefault(const QString &remote) const;
     bool isDefault(const Mode &mode) const;
 

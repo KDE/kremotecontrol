@@ -319,14 +319,11 @@ void KCMLirc::slotAddMode()
     for (int i = 0; i < theKCMLircBase->theModes->topLevelItemCount(); i++) {
         remotesList << theKCMLircBase->theModes->topLevelItem(i)->text(0);
     }
-    NewModeDialog theDialog(remotesList, this,0);
+    kDebug() << allModes.getRemotes();
+    NewModeDialog theDialog(allModes, this,0);
 
 
     if (theDialog.exec() == QDialog::Accepted) {
-        //TODO: What when mode with same name currently exists?
-        //MessageBox with warning or shall okButton in the Dialog be disabled when typing?
-        //What meant that newmode must know about all modes of the remote
-        // Same todo in editMode
         Mode mode = theDialog.getMode();
         allModes.add(mode);
         if (theDialog.isDefaultMode()) {
@@ -343,7 +340,7 @@ void KCMLirc::slotEditMode()
         return;
 
     Mode mode = theKCMLircBase->theModes->currentItem()->data(0, Qt::UserRole).value<Mode>();
-    EditMode theDialog(mode,allModes.isDefault(mode), this, 0);
+    EditMode theDialog(mode,allModes, this, 0);
 
     if (theDialog.exec() == QDialog::Accepted) {
         Mode newMode = theDialog.getMode();

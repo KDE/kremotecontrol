@@ -25,10 +25,9 @@
 
 
 #include "editmode.h"
-#include "mode.h"
 
 
-EditMode::EditMode(Mode mode, bool isDefault, QWidget *parent, const bool &modal): KDialog(parent)
+EditMode::EditMode(Mode mode, const Modes &allModes, QWidget *parent, const bool &modal): KDialog(parent), mode(mode), allModes(allModes)
 {
     editModeBaseWidget = new EditModeBaseWidget();
     setMainWidget(editModeBaseWidget);
@@ -47,8 +46,8 @@ EditMode::EditMode(Mode mode, bool isDefault, QWidget *parent, const bool &modal
     } else {
         clearIcon();
     }
-    editModeBaseWidget->theDefault->setChecked(isDefault);
-    editModeBaseWidget->theDefault->setEnabled(!isDefault);
+    editModeBaseWidget->theDefault->setChecked(allModes.isDefault(mode));
+    editModeBaseWidget->theDefault->setEnabled(!allModes.isDefault(mode));
 
     connect(editModeBaseWidget->theName, SIGNAL(textChanged(QString)), this, SLOT(slotCheckText(QString)));
     connect(editModeBaseWidget->checkBox, SIGNAL(toggled(bool)),  editModeBaseWidget->theIcon, SLOT(setEnabled(bool)));
@@ -78,7 +77,19 @@ void EditMode::clearIcon()
 
 void EditMode::slotCheckText(const QString &newText)
 {
-  enableButtonOk(!newText.isEmpty());
+    if(newText == mode.name()){
+	enableButtonOk(true);
+	return;
+    }
+
+    foreach(const Mode &tmpMode, allModes.getModes(mode.remote())){
+	if(tmpMode.name() == newText){
+	    enableButtonOk(false);
+	    return;
+	}
+    }
+    enableButtonOk(true);
+    return;
 }
 
 #include "editmode.moc"
