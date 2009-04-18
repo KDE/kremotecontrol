@@ -144,11 +144,31 @@ int AddAction::nextId() const
     }
 
     if (currentId() == SELECT_FUNCTION_PROFILE) {
+	if(!theProfileFunctions->currentItem()){
+	    return ACTION_OPTIONS;
+	}
+	QString application = theProfiles->currentItem()->data(Qt::UserRole).toString();
+	QString function = theProfileFunctions->currentItem()->data(0, Qt::UserRole).toString();
+	const ProfileAction *profileAction =  ProfileServer::profileServer()->getAction(application, function);
+
+	const QList<ProfileActionArgument> &profileActionArguments = profileAction->arguments();
+	kDebug() << "argcount" << profileActionArguments.count();
+	if(profileActionArguments.count() == 0){
+	    return ACTION_OPTIONS;
+	}
         return ACTION_ARGUMENTS;
     }
 
     if (currentId() == SELECT_FUNCTION_DBUS) {
-        return ACTION_ARGUMENTS;
+	if(!theDBusFunctions->currentIndex().isValid()){
+	    return ACTION_OPTIONS;
+	}
+	Prototype p = theDBusFunctions->model()->data(theDBusFunctions->currentIndex(), Qt::UserRole).value<Prototype>().prototype();
+	kDebug() << "argcount" << p.getArguments().size();
+	if(p.getArguments().size() == 0){
+	    return ACTION_OPTIONS;
+	}
+	return ACTION_ARGUMENTS;
     }
 
     if (currentId() == ACTION_ARGUMENTS) {
