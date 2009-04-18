@@ -68,9 +68,9 @@ IRKick::IRKick():
 
     theTrayIcon->contextMenu()->setTitle("IRKick");
     theTrayIcon->contextMenu()->addAction(SmallIcon("configure"), i18n("&Configure..."), this, SLOT(slotConfigure()));
-    KHelpMenu *helpMenu = new  KHelpMenu(theTrayIcon->parentWidget(), KGlobal::mainComponent().aboutData());
+    KHelpMenu *helpMenu = new  KHelpMenu(0, KGlobal::mainComponent().aboutData());
     theTrayIcon->contextMenu()->addAction(KIcon("help-contents"), i18n("&Help"), helpMenu, SLOT(appHelpActivated()));
-    theTrayIcon->contextMenu()->addAction(KIcon("irkick"), i18n("&About"), helpMenu, SLOT(aboutApplication()));
+    theTrayIcon->contextMenu()->addAction(KIcon("irkick"), i18n("&About"), helpMenu,SLOT(aboutApplication()));
 
     theTrayIcon->contextMenu()->addSeparator();
     theTrayIcon->actionCollection()->action("file_quit")->disconnect();
@@ -129,8 +129,7 @@ void IRKick::doQuit()
     case KMessageBox::Cancel:
         return;
     }
-    kDebug();
-//    KApplication::kApplication()->quit();
+    KApplication::kApplication()->quit();
 }
 
 void IRKick::resetModes()

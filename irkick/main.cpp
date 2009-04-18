@@ -46,11 +46,11 @@ extern "C" KDE_EXPORT int kdemain(int argc, char *argv[])
     KCmdLineArgs::init(argc, argv, aboutData);
     KUniqueApplication::addCmdLineOptions();
     KUniqueApplication app;
+    app.setQuitOnLastWindowClosed(false);
     KGlobal::locale()->insertCatalog("kdelirc");
     app.disableSessionManagement();
     IRKick *theIRKick = new IRKick();
     int ret = app.exec();
-    kDebug() << "exec finished";
     delete theIRKick;
     return ret;
 }
