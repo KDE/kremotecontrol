@@ -365,6 +365,7 @@ ArgumentsModelItem::ArgumentsModelItem ( const QString & text ):QStandardItem(te
 
 ArgumentsModelItem::ArgumentsModelItem ( const QVariant &data ) {
     setData(data, Qt::EditRole);
+    kDebug() << "creating model item:" << data;
     if (data.type() == QVariant::StringList) {
         setToolTip(i18n("A comma-separated list of Strings"));
     }

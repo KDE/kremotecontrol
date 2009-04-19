@@ -178,9 +178,7 @@ void KCMLirc::slotEditAction()
     }
     EditAction theDialog(currentAction(), modeList);
     if (theDialog.exec() == QDialog::Accepted) {
-        kDebug() << "allActions" << allActions;
         allActions[allActions.indexOf(currentAction())] = theDialog.getAction();
-        kDebug() << "allActions" << allActions;
         emit changed(true);
         updateActions();
     }
@@ -223,7 +221,6 @@ void KCMLirc::slotAddAction()
     if (theKCMLircBase->theModes->selectedItems().isEmpty())
         return;
     Mode m = theKCMLircBase->theModes->currentItem()->data(0, Qt::UserRole).value<Mode>();
-    kDebug() << "Calling AddAction with Mode: " << m.name();
     AddAction theDialog(this, 0, m);
 
     // populate the modes list box
@@ -317,7 +314,6 @@ void KCMLirc::slotAddMode()
     for (int i = 0; i < theKCMLircBase->theModes->topLevelItemCount(); i++) {
         remotesList << theKCMLircBase->theModes->topLevelItem(i)->text(0);
     }
-    kDebug() << allModes.getRemotes();
     NewModeDialog theDialog(allModes, this,0);
 
 
@@ -342,7 +338,6 @@ void KCMLirc::slotEditMode()
 
     if (theDialog.exec() == QDialog::Accepted) {
         Mode newMode = theDialog.getMode();
-        kDebug() << "Setting icon : " << newMode.iconFile();
         mode.setIconFile(newMode.iconFile());
         if (!mode.name().isEmpty()) {
             allActions.renameMode(mode, newMode.name());
@@ -366,12 +361,10 @@ void KCMLirc::slotRemoveMode()
                                                tMode.name()), i18n(
                                                "Erase Actions?")) == KMessageBox::Continue) {
         theKCMLircBase->theModes->clear();
-        kDebug()<< "model is cleared";
         IRActions allActionsList = allActions.findByMode(tMode);
         foreach(IRAction *tAction, allActionsList) {
             allActions.erase(tAction);
         }
-        kDebug()<< "actions are cleared";
 
         allModes.erase(tMode);
         tMode.setName("");
@@ -403,7 +396,6 @@ void KCMLirc::slotSetDefaultMode()
 
 void KCMLirc::updateActions()
 {
-    kDebug() << "update actions called";
     if (!theKCMLircBase->theModes->currentItem()) {
         return;
     }
@@ -417,7 +409,6 @@ void KCMLirc::updateActions()
     theKCMLircBase->theModeLabel->setText(m.remoteName() + ": "
                                           + (m.name().isEmpty() ? i18n("Actions <i>always</i> available") : i18n(
                                                  "Actions available only in mode <b>%1</b>", m.name())));
-    kDebug()<<"name <<<<<<<" << m.name();
     IRActions allActionsList = allActions.findByMode(m);
 
     foreach(IRAction *tmp, allActionsList) {
@@ -439,7 +430,6 @@ void KCMLirc::updateModes()
 
     theKCMLircBase->theModes->clear();
 
-    kDebug() << "updating Modes";
 
     QStringList remotes = DBusInterface::getInstance()->getRemotes();
 
@@ -453,7 +443,6 @@ void KCMLirc::updateModes()
 
     for (QStringList::iterator i = remotes.begin(); i != remotes.end(); ++i) {
         Mode mode = allModes.getMode(*i, "");
-        kDebug() << "got mode.name" << mode.name() << "mode.remote" << mode.remote() << " for remote " << *i;
         if (mode.remote().isEmpty()) {
             mode.setRemote(*i);
             allModes.add(mode);
@@ -472,8 +461,6 @@ void KCMLirc::updateModes()
                 theKCMLircBase->theModes->setColumnWidth(0, fm.width(remoteName) + 40);
             }
         }
-
-        kDebug() << "Remote Service ";
 
         QFont tFont = QFont();
         tFont.setBold(allModes.isDefault(mode));
@@ -494,7 +481,6 @@ void KCMLirc::updateModes()
         ModeList modeList = allModes.getModes(*i);
         for (ModeList::iterator modeListIter = modeList.begin(); modeListIter != modeList.end(); ++modeListIter)
             if (! modeListIter->name().isEmpty()) {
-                kDebug() << "Mode is" << (*modeListIter).name();
                 QStringList modeList;
                 modeList << (*modeListIter).name();
                 modeList << (modeListIter->iconFile().isNull() ? "" : "");
@@ -548,7 +534,6 @@ void KCMLirc::updateExtensions()
         QHash<QString, Remote*>::const_iterator i;
         for (i = dict.constBegin(); i != dict.constEnd(); ++i) {
             remoteMap[new QTreeWidgetItem(a, QStringList(i.value()->name()))] = i.key();
-            kDebug() << "Remote map kde" << i.key() << i.value()->name();
         }
         a->sortChildren(1, Qt::AscendingOrder);
     }

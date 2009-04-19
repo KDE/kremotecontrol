@@ -68,8 +68,8 @@ EditAction::EditAction(IRAction *action, const QStringList &modeList, QWidget *p
     argumentsModel = new QStandardItemModel(editActionBaseWidget->argumentsView);
     editActionBaseWidget->argumentsView->setModel(argumentsModel);
     editActionBaseWidget->argumentsView->setItemDelegate(new ArgumentDelegate());
-    argumentsModel->setHeaderData(0, Qt::Horizontal, i18nc("Name", "The name of the argument"));
-    argumentsModel->setHeaderData(1, Qt::Horizontal, i18nc("Value", "The value of the argument"));
+    argumentsModel->setHeaderData(0, Qt::Horizontal, i18n("Argument name"));
+    argumentsModel->setHeaderData(1, Qt::Horizontal, i18nc("The value of an argument", "Value"));
 
     readFrom();
 

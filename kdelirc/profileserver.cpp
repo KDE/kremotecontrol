@@ -125,7 +125,7 @@ KDE_EXPORT bool Profile::characters(const QString &data)
     return true;
 }
 
-KDE_EXPORT bool Profile::startElement(const QString &, const QString &, const QString &name, const QXmlAttributes &attributes)
+bool Profile::startElement(const QString &, const QString &, const QString &name, const QXmlAttributes &attributes)
 {
     if (name == "profile") {
         theId = attributes.value("id");
@@ -134,6 +134,7 @@ KDE_EXPORT bool Profile::startElement(const QString &, const QString &, const QS
         curPA = new ProfileAction;
         curPA->setObjId(attributes.value("objid"));
         curPA->setPrototype(attributes.value("prototype"));
+ kDebug() << "loading function:" << attributes.value("prototype");
         curPA->setClass(attributes.value("class"));
         curPA->setMultiplier(attributes.value("multiplier").isEmpty() ? 1.0 : attributes.value("multiplier").toFloat());
         curPA->setRepeat(attributes.value("repeat") == "1");
@@ -146,8 +147,11 @@ KDE_EXPORT bool Profile::startElement(const QString &, const QString &, const QS
         curPAA = &(curPA->theArguments.last());
         curPAA->setAction(curPA);
         curPAA->setType(attributes.value("type"));
-        QVariant tmpArg(attributes.value("default"));
-        tmpArg.convert(QVariant::nameToType(attributes.value("type").toLocal8Bit()));
+        QVariant tmpArg(QVariant::nameToType(attributes.value("type").toLocal8Bit()));
+//        tmpArg.convert();
+	kDebug() << "***********************************";
+	kDebug() << "type:" << attributes.value("type");
+	kDebug() << "tmpArg:" << tmpArg;
         curPAA->setDefault(tmpArg);
     } else if (name == "range" && curPAA)
         curPAA->setRange(qMakePair(attributes.value("min").toInt(), attributes.value("max").toInt()));
@@ -156,7 +160,7 @@ KDE_EXPORT bool Profile::startElement(const QString &, const QString &, const QS
     return true;
 }
 
-KDE_EXPORT bool Profile::endElement(const QString &, const QString &, const QString &name)
+bool Profile::endElement(const QString &, const QString &, const QString &name)
 {
     if (name == "name")
         if (curPA)
@@ -167,9 +171,24 @@ KDE_EXPORT bool Profile::endElement(const QString &, const QString &, const QStr
         theAuthor = charBuffer;
     else if (name == "comment" && curPA && !curPAA)
         curPA->setComment(charBuffer);
-    else if (name == "default" && curPA && curPAA)
-        curPAA->setDefault(charBuffer);
-    else if (name == "comment" && curPA && curPAA)
+    else if (name == "default" && curPA && curPAA) {
+	if (curPAA->theDefault.type() == QVariant::Int) {
+	    curPAA->theDefault.setValue(charBuffer.toInt());
+	} else if (curPAA->theDefault.type() == QVariant::UInt) {
+	    curPAA->theDefault.setValue(charBuffer.toUInt());
+	} else if (curPAA->theDefault.type() == QVariant::Bool) {
+	    curPAA->theDefault.setValue(charBuffer == "true" ? true : false);
+	} else if (curPAA->theDefault.type() == QVariant::Double) {
+	    curPAA->theDefault.setValue(charBuffer.toDouble());
+	} else if (curPAA->theDefault.type() == QVariant::StringList) {
+	    curPAA->theDefault.setValue(charBuffer.split(','));
+	} else if (curPAA->theDefault.type() == QVariant::ByteArray) {
+	    curPAA->theDefault.setValue(charBuffer.toLocal8Bit());
+	} else {
+	    curPAA->theDefault.setValue(charBuffer);
+	}
+
+    } else if (name == "comment" && curPA && curPAA)
         curPAA->setComment(charBuffer);
     else if (name == "action") {
         curPA->setProfile(this);
