@@ -1,9 +1,10 @@
 add_subdirectory( icons )
 
 include_directories( 
-	${CMAKE_SOURCE_DIR}/kdelirc/
-	${CMAKE_SOURCE_DIR}/kcmlirc/	
+	${CMAKE_CURRENT_SOURCE_DIR}/kdelirc/
+	${CMAKE_CURRENT_SOURCE_DIR}/kcmlirc/	
 	${CMAKE_CURRENT_BINARY_DIR}
+	../kdelirc/
 	${KDE4_INCLUDES}
 	${QT_INCLUDES} )
 

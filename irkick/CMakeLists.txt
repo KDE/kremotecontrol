@@ -3,6 +3,7 @@ add_subdirectory( icons )
 
 include_directories(
 	${CMAKE_SOURCE_DIR}/kdelirc/
+	../kdelirc/
 	${CMAKE_CURRENT_SOURCE_DIR}
 	${CMAKE_CURRENT_BINARY_DIR}
 	${KDE4_INCLUDES}
