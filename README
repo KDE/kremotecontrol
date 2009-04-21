@@ -9,7 +9,7 @@ two aims:
 	b) Actual remote controls installed (i.e. lirc configuration).
 
 2. Provide a system-tray applet to act as a proxy between the LIRC system and
-	KDE (applications), in order to launch DCOP requests (and potentially
+	KDE (applications), in order to launch D-Bus requests (and potentially
 	other IPC signals) to applications (and potentially collect/display
 	results).
 
@@ -50,6 +50,6 @@ features are.
 
 The system tray applet interfaces with LIRC in order to catch key presses on
 remote controls. It is then able to communicate with and potentially start
-applications through DCOP.
+applications through D-Bus.
 
 Gav Wood, 2003 (gav at kde dot org).

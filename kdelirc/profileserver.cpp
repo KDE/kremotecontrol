@@ -98,9 +98,10 @@ KDE_EXPORT void Profile::loadFromFile(const QString &fileName)
 
 KDE_EXPORT const ProfileAction *ProfileServer::getAction(const QString &appId, const QString &actionId) const
 {
-    if (getProfileById(appId)) {
-        if (getProfileById(appId)->actions()[actionId]) {
-            return getProfileById(appId)->actions()[actionId];
+    const Profile *profile = getProfileById(appId);
+    if (profile) {
+        if (profile->actions()[actionId]) {
+            return profile->actions()[actionId];
         }
     }
     return 0;
@@ -108,8 +109,9 @@ KDE_EXPORT const ProfileAction *ProfileServer::getAction(const QString &appId, c
 
 KDE_EXPORT const QString ProfileServer::getServiceName(const QString &appId) const
 {
-    if (getProfileById(appId)) {
-        return getProfileById(appId)->serviceName();
+    const Profile *profile = getProfileById(appId);
+    if (profile) {
+        return profile->serviceName();
     }
     return QString();
 }

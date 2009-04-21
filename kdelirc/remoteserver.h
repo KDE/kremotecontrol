@@ -110,6 +110,8 @@ public:
     ~Remote();
 };
 
+class RemoteServerPrivate;
+
 class RemoteServer
 {
     static RemoteServer *theInstance;
@@ -117,9 +119,7 @@ class RemoteServer
     QHash<QString, Remote *> theRemotes;
 
 public:
-    static RemoteServer *remoteServer() {
-        if (!theInstance) theInstance = new RemoteServer(); return theInstance;
-    }
+    static RemoteServer *remoteServer();
 
     const QHash<QString, Remote*> &remotes() const {
         return theRemotes;

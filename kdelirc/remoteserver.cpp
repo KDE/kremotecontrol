@@ -30,11 +30,21 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 
-KDE_EXPORT RemoteServer *RemoteServer::theInstance = 0;
+class RemoteServerPrivate
+{
+public:
+     RemoteServer instance;
+};
+
+K_GLOBAL_STATIC(RemoteServerPrivate, theInstancePrivate);
 
 KDE_EXPORT RemoteServer::RemoteServer()
 {
     loadRemotes();
+}
+
+KDE_EXPORT RemoteServer *RemoteServer::remoteServer() {
+   return &theInstancePrivate->instance;
 }
 
 RemoteServer::~RemoteServer()

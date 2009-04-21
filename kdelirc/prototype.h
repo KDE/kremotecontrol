@@ -70,7 +70,7 @@ public:
     }
     const QString argumentList() const;
     const QString argumentListNN() const;
-    int argumentCount() {
+    int argumentCount() const {
         return theTypes.count();
     }
     const QString prototypeNR() const {
@@ -81,7 +81,7 @@ public:
         original = source;
         parse();
     }
-    const QList<QPair<QVariant::Type, QString> >& getArguments() {
+    const QList<QPair<QVariant::Type, QString> >& getArguments() const {
         return argumentTypes;
     }
     QVariant::Type getReturnType() const  {
