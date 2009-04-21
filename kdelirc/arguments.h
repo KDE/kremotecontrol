@@ -28,7 +28,7 @@
 #define ARGUMENTS_H
 
 #include <QVariant>
-#include <KApplication>
+#include <kdemacros.h>
 
 /**
 @author Gav Wood
