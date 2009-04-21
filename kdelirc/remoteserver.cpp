@@ -36,7 +36,7 @@ public:
      RemoteServer instance;
 };
 
-K_GLOBAL_STATIC(RemoteServerPrivate, theInstancePrivate);
+K_GLOBAL_STATIC(RemoteServerPrivate, theInstancePrivate)
 
 KDE_EXPORT RemoteServer::RemoteServer()
 {
