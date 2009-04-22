@@ -20,5 +20,11 @@ X-KDE-Keywords[x-test]=xxKCMLirc,kcmlircxx
 
 
 Name=Remote Controls
+Name[sv]=Fjärrkontroller
+Name[uk]=Елементи дистанційного керування
+Name[zh_TW]=遙控鍵
 
 Comment=Configure your remote controls for use with applications
+Comment[sv]=Anpassa fjärrkontroller för att använda med program
+Comment[uk]=Налаштування елементів дистанційного керування для використання з програмами
+Comment[zh_TW]=設定您要啟動應用程式的遙控鍵
