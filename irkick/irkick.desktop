@@ -7,6 +7,7 @@ GenericName[de]=LIRC-Server für KDE
 GenericName[pt]=Servidor de LIRC para o KDE
 GenericName[pt_BR]=Servidor de LIRC para o KDE
 GenericName[sv]=KDE:s LIRC-server
+GenericName[tr]=KDE LIRC Sunucusu
 GenericName[uk]=Сервер LIRC для KDE
 GenericName[zh_TW]=KDE LIRC 伺服器
 
@@ -25,6 +26,7 @@ Comment[de]=Der KDE-Server für Infrarot-Fernbedienungen
 Comment[pt]=Servidor de controlo dos comandos por infra-vermelhos em Linux para o KDE.
 Comment[pt_BR]=Servidor de controlo dos comandos por infra-vermelhos em Linux para o KDE.
 Comment[sv]=KDE:s infraröda fjärrkontrollserver för Linux
+Comment[tr]=KDE Linux kızılötesi uzaktan denetim sunucusu.
 Comment[uk]=Сервер дистанційного керування інфрачервоними пристроями для Linux та KDE.
 Comment[zh_TW]=KDE Linux 紅外線遙控伺服器。
 
