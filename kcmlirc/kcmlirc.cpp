@@ -98,8 +98,8 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
                             this,
                             i18n(
                                 "Would you like the infrared remote control software to start automatically when you begin KDE?"),
-                            i18n("Automatically Start?"), KGuiItem("Start Automatically"),
-                            KGuiItem("Do Not Start")) == KMessageBox::Yes)
+                            i18n("Automatically Start?"), KGuiItem(i18n("Start Automatically")),
+                            KGuiItem(i18n("Do Not Start"))) == KMessageBox::Yes)
                     generalGroup.writeEntry("AutoStart", true);
         }
     }
