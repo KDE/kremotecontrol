@@ -65,7 +65,7 @@ EditAction::EditAction(IRAction *action, const QStringList &modeList, QWidget *p
     connectSignalsAndSlots();
     //initDBusApplications();
 
-    argumentsModel = new QStandardItemModel(editActionBaseWidget->argumentsView);
+    argumentsModel = new QStandardItemModel(editActionBaseWidget->argumentsView);    
     editActionBaseWidget->argumentsView->setModel(argumentsModel);
     editActionBaseWidget->argumentsView->setItemDelegate(new ArgumentDelegate());
     argumentsModel->setHeaderData(0, Qt::Horizontal, i18n("Argument name"));
@@ -226,7 +226,7 @@ void EditAction::updateArguments()
     editActionBaseWidget->argumentsView->setEnabled(true);
     argumentsModel->clear();
     QStringList headerLabels;
-    headerLabels << i18nc("Name", "Name of the argument" ) << i18nc("Value", "Value of the argument");
+    headerLabels << i18n("Argument name") << i18nc("Value of the argument", "Value");
     argumentsModel->setHorizontalHeaderLabels(headerLabels);
 
     if (editActionBaseWidget->theUseProfile->isChecked()) {

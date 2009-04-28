@@ -52,8 +52,7 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMo
     theDBusFunctions->setSelectionBehavior(QAbstractItemView::SelectRows);
     theDBusFunctions->setSelectionMode(QAbstractItemView::SingleSelection);
     //theFunctions->setShowGrid(false);
-    dbusAppsModel = new QStandardItemModel(theDBusApplications);
-    dbusAppsModel->setHorizontalHeaderLabels(QStringList() << i18n("D-Bus applications"));
+    dbusAppsModel = new QStandardItemModel(theDBusApplications);    
     theDBusApplications->setEditTriggers(QAbstractItemView::NoEditTriggers);
     theDBusApplications->setModel(dbusAppsModel);
 
@@ -344,14 +343,16 @@ void AddAction::updateArguments()
             tmp.append(new ArgumentsModelItem(QVariant(p.getArguments().at(i).first)));
             argumentsModel->appendRow(tmp);
         }
-    }
+    }    
     argumentsView->resizeColumnsToContents();
-    argumentsView->resizeRowsToContents();
+    argumentsView->resizeRowsToContents();    
+    argumentsView->horizontalHeader()->stretchLastSection();
 }
 
 void AddAction::updateDBusApplications()
 {
     dbusAppsModel->clear();
+    dbusAppsModel->setHorizontalHeaderLabels(QStringList() << i18n("D-Bus applications"));
     foreach(const QString &item, DBusInterface::getInstance()->getRegisteredPrograms()) {
         DBusServiceItem *tServiceItem = new DBusServiceItem(item);
         tServiceItem->setEditable(false);
