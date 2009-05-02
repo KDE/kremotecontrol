@@ -57,7 +57,7 @@ Infrared Remote Control functionality.</para></abstract>
 
 <para>
 For the KDELirc framework to be utilised you must have setup a LIRC
-on your KDE machine. If it is properly set up, the &kdelirc; icon in
+on your computer. If it is properly set up, the &kdelirc; icon in
 the system tray (show icon here) will light up red. If not, it will
 be grey and crossed out.
 </para>
@@ -97,7 +97,7 @@ The list contains any remote controls detected on your system. Modes may be adde
 <title>Action-Button Bindings</title>
 
 <para>
-An action/button binding ("action") is a connection between a button press and an effect. The effect may be to switch modes, to start a KDE program or to execute a function in a KDE program (using DCOP).
+An action/button binding ("action") is a connection between a button press and an effect. The effect may be to switch modes, to start a program or to execute a function in a program (using D-Bus).
 </para>
 
 <para>

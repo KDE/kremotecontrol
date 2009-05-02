@@ -53,8 +53,8 @@ component of that infrastructure.</para></abstract>
 
 <para>
 &irkick; is a background server that provides the 'glue' between
-the operating system and your KDE applications for the purpose of
-controlling KDE applications with your infrared remote controls.
+the operating system and your applications for the purpose of
+controlling applications with your infrared remote controls.
 </para>
 
 <para>
@@ -67,13 +67,13 @@ KDE Control Center or directly from the menu of &irkick;.
 
 <para>
 For the KDELirc framework to be utilised you must have setup a LIRC
-on your KDE machine. If it is properly set up, the &irkick; icon in
+on your computer. If it is properly set up, the &irkick; icon in
 the system tray will light up red. If not, it will be grey and crossed
 out.
 </para>
 
 <para>
-For more information about LIRC, visit their website at http://www.lirc.org.
+For more information about LIRC, visit the project's website at <ulink url="http://www.lirc.org/">www.lirc.org</ulink>.
 </para>
 
 </sect1>
