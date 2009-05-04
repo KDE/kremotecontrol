@@ -33,7 +33,7 @@
 extern "C" KDE_EXPORT int kdemain(int argc, char *argv[])
 {
 
-    KAboutData *aboutData = new KAboutData("irkick", 0, ki18n("IRKick"), KDE::versionString(), ki18n("The KDE Infrared Remote Control Server"), KAboutData::License_GPL, ki18n("(c) 2003, Gav Wood"), ki18n("Control your desktop with your remote."), "gav@kde.org");
+    KAboutData *aboutData = new KAboutData("irkick", 0, ki18n("IRKick"), KDE::versionString(), ki18n("The KDE Infrared Remote Control Server"), KAboutData::License_GPL, ki18n("(c) 2003, Gav Wood"), ki18n("Control your desktop with your remote."), "http://utils.kde.org/projects/kdelirc");
     aboutData->addAuthor(ki18n("Gav Wood"), ki18n("Author"), "gav@kde.org");
     aboutData->addCredit(ki18n("Malte Starostik"), ki18n("Original LIRC interface code"), "malte.starostik@t-online.de");
     aboutData->addCredit(ki18n("Dirk Ziegelmeier"), ki18n("Ideas, concept code"), "dirk@ziegelmeier.net");
