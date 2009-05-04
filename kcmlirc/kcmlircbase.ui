@@ -277,14 +277,14 @@ p, li { white-space: pre-wrap; }
      </widget>
      <widget class="QWidget" name="tab">
       <attribute name="title">
-       <string>Extension overview</string>
+       <string>Extension Overview</string>
       </attribute>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
         <widget class="QTreeWidget" name="theExtensions">
          <column>
           <property name="text">
-           <string>Available extensions</string>
+           <string>Available Extensions</string>
           </property>
          </column>
         </widget>
