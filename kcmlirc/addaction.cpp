@@ -33,6 +33,7 @@
 #include "model.h"
 #include "dbusinterface.h"
 #include <QRegExp>
+#include <QHeaderView>
 
 #include <kdebug.h>
 #include <klineedit.h>
