@@ -5,16 +5,41 @@ Comment=Irkick
 
 [Event/global_event]
 Name=Irkick notification
+Name[es]=Notificación de Irkick
+Name[pt_BR]=Notificação do Irkick
+Name[sv]=Underrättelse från Irkick
+Name[uk]=Сповіщення Irkick
+Name[zh_TW]=Irkick 通知
 Comment=Irkick global notification event
+Comment[pt_BR]=Evento de notificação global do Irkick
+Comment[sv]=Irkick global underrättelsehändelse
+Comment[uk]=Подія загального сповіщення Irkick
+Comment[zh_TW]=Irkick 全域通知事件
 Action=Popup
 
 
 [Event/mode_event]
 Name=Mode event
+Name[pt_BR]=Evento de modo
+Name[sv]=Lägeshändelse
+Name[uk]=Подія режиму
+Name[zh_TW]=模式事件
 Comment=Mode has changed
+Comment[pt_BR]=O modo foi alterado
+Comment[sv]=Läge har ändrats
+Comment[uk]=Відбулася зміна режиму
+Comment[zh_TW]=模式已變更
 Action=Popup
 
 [Event/app_event]
 Name=Application event
+Name[pt_BR]=Evento do aplicativo
+Name[sv]=Programhändelse
+Name[uk]=Подія програми
+Name[zh_TW]=應用程式事件
 Comment=Irkick has triggered an application
+Comment[pt_BR]=O Irkick disparou um aplicativo
+Comment[sv]=Irkick har utlöst ett program
+Comment[uk]=Irkick увімкнула програму
+Comment[zh_TW]=Irkick 已觸發一應用程式
 Action=Popup
