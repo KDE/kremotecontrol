@@ -29,7 +29,7 @@ target_link_libraries(kdeinit_irkick  ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} kdelir
 install(TARGETS kdeinit_irkick ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 target_link_libraries(irkick kdeinit_irkick)
-install(TARGETS irkick DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS irkick ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
