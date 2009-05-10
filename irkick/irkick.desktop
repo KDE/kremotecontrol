@@ -33,6 +33,7 @@ GenericName[tr]=KDE LIRC Sunucusu
 GenericName[uk]=Сервер LIRC для KDE
 GenericName[uz]=KDE LIRC serveri
 GenericName[uz@cyrillic]=KDE LIRC сервери
+GenericName[zh_CN]=KDE LIRC 服务
 GenericName[zh_TW]=KDE LIRC 伺服器
 
 X-KDE-Library=irkick
@@ -77,5 +78,6 @@ Comment[uk]=Сервер дистанційного керування інфр�
 Comment[uz]=Infraqizil nur bilan masofadan boshqarish serveri
 Comment[uz@cyrillic]=Инфрақизил нур билан масофадан бошқариш сервери
 Comment[vi]=Trình phục vụ điều khiển bằng tia hồng ngoại.
+Comment[zh_CN]=KDE Linux 红外远程控制服务。
 Comment[zh_TW]=KDE Linux 紅外線遙控伺服器。
 
