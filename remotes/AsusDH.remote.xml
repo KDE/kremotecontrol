@@ -3,7 +3,7 @@
 
 <remote id="AsusDH">
         <name>Asus Digital Home</name>
-        <author>Gioacchino Mazzurco</author>
+        <author>Gioacchino Mazzurco [gmazzurco89@gmail.com]</author>
         <information>Bundled with all Asus Digital Home motherboard series</information>
         <button id="POWER" class="off"><name>Power off</name></button>
         <button id="QUICK_POWER" class="on"><name>Quick Power</name></button>
