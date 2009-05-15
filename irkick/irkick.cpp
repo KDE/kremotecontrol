@@ -58,6 +58,7 @@ IRKick::IRKick():
         QTimer::singleShot(10000, this, SLOT(checkLirc()));
     }
     theFlashOff = new QTimer(theTrayIcon);
+    theFlashOff->setSingleShot(true);
     connect(theFlashOff, SIGNAL(timeout()), SLOT(flashOff()));
 
     theResetCount = 0;
