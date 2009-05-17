@@ -1,4 +1,15 @@
 Todos / Bugs
 -------------------
-* check why not ask if you want start it on kde startup when you close irkick
-* check why not autostart if set it in systemsetting as autostart with KDE ( if we fix the first point this is not needed... )
+*Look for a way to do more complex action into profile not calling only one simple dbus method 
+  at moment we can't do something like increase volume on amarok because we need to do something like: VolumeSet(VolumeGet() + 10);
+  It should be something like:
+    <action objid="Player" class="volumeup">
+        <name>Increase volume</name>
+        <comment></comment>
+	<someNewTagName>
+	  VolumeSet(VolumeGet() + 10);
+	</someNewTagName>
+    </action>
+
+  
+  
