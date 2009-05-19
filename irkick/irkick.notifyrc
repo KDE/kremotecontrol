@@ -29,6 +29,7 @@ Action=Popup
 
 [Event/mode_event]
 Name=Mode event
+Name[es]=Evento de modo
 Name[et]=Režiimi sündmus
 Name[nb]=Modus-hendelse
 Name[pt]=Evento do modo
