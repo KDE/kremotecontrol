@@ -1,6 +1,7 @@
 [Global]
 IconName=irkick
 Comment=Irkick
+Comment[nds]=IRKick
 
 
 [Event/global_event]
@@ -8,6 +9,7 @@ Name=Irkick notification
 Name[es]=Notificación de Irkick
 Name[et]=Irkicki märguanne
 Name[nb]=Irkick-varsling
+Name[nds]=IRKick-Bescheed
 Name[pt]=Notificação do Irkick
 Name[pt_BR]=Notificação do Irkick
 Name[sv]=Underrättelse från Irkick
@@ -18,6 +20,7 @@ Comment=Irkick global notification event
 Comment[es]=Evento de notificación global de Irkick
 Comment[et]=Irkick globaalne märguandesündmus
 Comment[nb]=Global Irkick varslingshendelse
+Comment[nds]=Globaal IRKick-Begeefnis
 Comment[pt]=Evento de notificação global do Irkick
 Comment[pt_BR]=Evento de notificação global do Irkick
 Comment[sv]=Irkick global underrättelsehändelse
@@ -32,6 +35,7 @@ Name=Mode event
 Name[es]=Evento de modo
 Name[et]=Režiimi sündmus
 Name[nb]=Modus-hendelse
+Name[nds]=Bedrief-Begeefnis
 Name[pt]=Evento do modo
 Name[pt_BR]=Evento de modo
 Name[sv]=Lägeshändelse
@@ -42,6 +46,7 @@ Comment=Mode has changed
 Comment[es]=El modo ha cambiado
 Comment[et]=Režiimi on muudetud
 Comment[nb]=Modus er endret
+Comment[nds]=Bedriefoort hett sik ännert
 Comment[pt]=O modo foi alterado
 Comment[pt_BR]=O modo foi alterado
 Comment[sv]=Läge har ändrats
@@ -55,6 +60,7 @@ Name=Application event
 Name[es]=Evento de aplicación
 Name[et]=Rakenduse sündmus
 Name[nb]=Programhendelse
+Name[nds]=Programm-Begeefnis
 Name[pt]=Evento da aplicação
 Name[pt_BR]=Evento do aplicativo
 Name[sv]=Programhändelse
@@ -65,6 +71,7 @@ Comment=Irkick has triggered an application
 Comment[es]=Irkick ha lanzado una aplicación
 Comment[et]=Irkick on käivitanud rakenduse
 Comment[nb]=Irkick har utløst et program.
+Comment[nds]=IRKick hett en Programm opropen
 Comment[pt]=O Irkick despoletou uma aplicação
 Comment[pt_BR]=O Irkick disparou um aplicativo
 Comment[sv]=Irkick har utlöst ett program
