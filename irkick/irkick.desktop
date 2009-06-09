@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=IRKick
+Name[x-test]=xxIRKickxx
 GenericName=KDE LIRC Server
 GenericName[ar]=خادم LIRC لكدى
 GenericName[br]=Servijer LIRC KDE
@@ -20,6 +21,7 @@ GenericName[is]=KDE LIRC þjónn
 GenericName[kk]=KDE LIRC сервері
 GenericName[km]=ម៉ាស៊ីន​បម្រើ KDE LIRC
 GenericName[lt]=KDE LIRC serveris
+GenericName[lv]=KDE LIRC serveris
 GenericName[nb]=KDE LIRC-tjener
 GenericName[nds]=KDE LIRC-Server
 GenericName[ne]=KDE LIRC सर्भर
@@ -34,6 +36,7 @@ GenericName[tr]=KDE LIRC Sunucusu
 GenericName[uk]=Сервер LIRC для KDE
 GenericName[uz]=KDE LIRC serveri
 GenericName[uz@cyrillic]=KDE LIRC сервери
+GenericName[x-test]=xxKDE LIRC Serverxx
 GenericName[zh_CN]=KDE LIRC 服务
 GenericName[zh_TW]=KDE LIRC 伺服器
 
@@ -63,6 +66,7 @@ Comment[is]=KDE Linux innrauða fjarstýringarstjórnborðið
 Comment[kk]=KDE Linux инфрақызыл порт арқылы басқару сервері.
 Comment[km]=ម៉ាស៊ីន​បម្រើ​វត្ថុ​បញ្ជា​ពី​ចម្ងាយ​អ៊ិនហ្វ្រា​របស់​លីនុច​របស់ KDE ។
 Comment[lt]=KDE Linux infraraudonųjų spindulių sąsajos nuotolinio valdymo serveris
+Comment[lv]=KDE Linux infrasarkanās pults kontroles serveris.
 Comment[nb]=KDE Linux-tjener for infrarød fjernkontroll.
 Comment[nds]=KDE-Linux Infraroot-Feernbedeenkuntrullserver
 Comment[ne]=केडीई लिनक्स अवरक्त टाढाको नियन्त्रण सर्भर ।
@@ -81,6 +85,7 @@ Comment[uk]=Сервер дистанційного керування інфр�
 Comment[uz]=Infraqizil nur bilan masofadan boshqarish serveri
 Comment[uz@cyrillic]=Инфрақизил нур билан масофадан бошқариш сервери
 Comment[vi]=Trình phục vụ điều khiển bằng tia hồng ngoại.
+Comment[x-test]=xxKDE Linux infrared remote control server.xx
 Comment[zh_CN]=KDE Linux 红外远程控制服务。
 Comment[zh_TW]=KDE Linux 紅外線遙控伺服器。
 
