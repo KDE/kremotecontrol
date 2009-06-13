@@ -74,6 +74,7 @@ Action=Popup
 
 [Event/app_event]
 Name=Application event
+Name[de]=Programmereignis
 Name[es]=Evento de aplicación
 Name[et]=Rakenduse sündmus
 Name[km]=ព្រឹត្តិការណ៍​កម្មវិធី
