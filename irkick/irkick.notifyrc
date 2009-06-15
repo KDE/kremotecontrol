@@ -1,12 +1,14 @@
 [Global]
 IconName=irkick
 Comment=Irkick
+Comment[da]=IRKick
 Comment[nds]=IRKick
 Comment[x-test]=xxIrkickxx
 
 
 [Event/global_event]
 Name=Irkick notification
+Name[da]=IRKick-bekendtgørelse
 Name[es]=Notificación de Irkick
 Name[et]=Irkicki märguanne
 Name[km]=កា​រជូន​ដំណឹង​របស់ Irkick
@@ -22,6 +24,7 @@ Name[x-test]=xxIrkick notificationxx
 Name[zh_CN]=Irkick 通知
 Name[zh_TW]=Irkick 通知
 Comment=Irkick global notification event
+Comment[da]=IRKick global bekendtgørelseshændelse
 Comment[es]=Evento de notificación global de Irkick
 Comment[et]=Irkick globaalne märguandesündmus
 Comment[km]=ព្រឹត្តិការណ៍​ជូនដំណឹង​សកល​របស់ Irkick
@@ -41,6 +44,7 @@ Action=Popup
 
 [Event/mode_event]
 Name=Mode event
+Name[da]=Tilstandshændelse
 Name[es]=Evento de modo
 Name[et]=Režiimi sündmus
 Name[km]=ព្រឹត្តិការណ៍​របៀប
@@ -56,6 +60,7 @@ Name[x-test]=xxMode eventxx
 Name[zh_CN]=模式事件
 Name[zh_TW]=模式事件
 Comment=Mode has changed
+Comment[da]=Tilstand er ændret
 Comment[es]=El modo ha cambiado
 Comment[et]=Režiimi on muudetud
 Comment[km]=បានផ្លាស់ប្ដូរ​របៀប​
@@ -74,6 +79,7 @@ Action=Popup
 
 [Event/app_event]
 Name=Application event
+Name[da]=Programhændelse
 Name[de]=Programmereignis
 Name[es]=Evento de aplicación
 Name[et]=Rakenduse sündmus
@@ -90,6 +96,7 @@ Name[x-test]=xxApplication eventxx
 Name[zh_CN]=应用程序事件
 Name[zh_TW]=應用程式事件
 Comment=Irkick has triggered an application
+Comment[da]=IRKick har startet et program
 Comment[es]=Irkick ha lanzado una aplicación
 Comment[et]=Irkick on käivitanud rakenduse
 Comment[km]=Irkick បានកេះ​កម្មវិធី
