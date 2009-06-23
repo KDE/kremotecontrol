@@ -338,7 +338,7 @@ void EditAction::updateFunctions()
         return;
     }
 
-    QString application = editActionBaseWidget->theApplications->itemData(editActionBaseWidget->theApplications->currentIndex()).toString();
+    const QString application = editActionBaseWidget->theApplications->itemData(editActionBaseWidget->theApplications->currentIndex()).toString();
     kDebug() << "app:" << application;
     QHash<QString, ProfileAction*> dict = ProfileServer::profileServer()->getProfileById(application)->actions();
     QHash<QString, ProfileAction*>::const_iterator i;

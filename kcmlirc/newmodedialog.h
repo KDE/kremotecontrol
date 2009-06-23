@@ -59,7 +59,7 @@ private slots:
 
 public:
     Mode getMode();
-    bool isDefaultMode();
+    bool isDefaultMode() const;
 };
 
 #endif /* NEWMODEDIALOG_H */

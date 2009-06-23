@@ -37,7 +37,7 @@ NewModeDialog::NewModeDialog(const Modes &allModes, QWidget *parent, const bool 
 
     QStringList remoteList = allModes.getRemotes();
     remoteList.sort();
-    for (QStringList::iterator it = remoteList.begin(); it != remoteList.end(); ++it) {
+    for (QStringList::const_iterator it = remoteList.constBegin(); it != remoteList.constEnd(); ++it) {
         new QTreeWidgetItem(newModeBaseWidget->theRemotes, (QStringList() << *it));
     }
     newModeBaseWidget->theIcon->setIcon("irkick");
@@ -77,7 +77,7 @@ Mode NewModeDialog::getMode()
     return mode;
 }
 
-bool NewModeDialog::isDefaultMode()
+bool NewModeDialog::isDefaultMode() const
 {
     return newModeBaseWidget->theDefault->isChecked();
 }
