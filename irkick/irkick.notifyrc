@@ -9,6 +9,7 @@ Comment[x-test]=xxIrkickxx
 [Event/global_event]
 Name=Irkick notification
 Name[ca]=Notificació de l'Irkick
+Name[cs]=Oznámení Irkick
 Name[da]=IRKick-bekendtgørelse
 Name[es]=Notificación de Irkick
 Name[et]=Irkicki märguanne
@@ -53,6 +54,7 @@ Action=Popup
 [Event/mode_event]
 Name=Mode event
 Name[ca]=Esdeveniment de mode
+Name[cs]=Událost režimu
 Name[da]=Tilstandshændelse
 Name[es]=Evento de modo
 Name[et]=Režiimi sündmus
@@ -73,6 +75,7 @@ Name[zh_CN]=模式事件
 Name[zh_TW]=模式事件
 Comment=Mode has changed
 Comment[ca]=El mode ha canviat
+Comment[cs]=Režim se změnil
 Comment[da]=Tilstand er ændret
 Comment[es]=El modo ha cambiado
 Comment[et]=Režiimi on muudetud
@@ -96,6 +99,7 @@ Action=Popup
 [Event/app_event]
 Name=Application event
 Name[ca]=Esdeveniment d'aplicació
+Name[cs]=Událost aplikace
 Name[da]=Programhændelse
 Name[de]=Programmereignis
 Name[es]=Evento de aplicación
