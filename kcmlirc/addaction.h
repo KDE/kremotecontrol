@@ -65,10 +65,11 @@ private:
         return retList;
     }
 
+protected:
+    virtual void initializePage(int id);
 
 public slots:
     virtual void slotModeSelected();
-    virtual void updateForPageChange();
     virtual void updateButtonStates();
     virtual void updateButton(const QString &remote, const QString &button);
     virtual void updateButtons();

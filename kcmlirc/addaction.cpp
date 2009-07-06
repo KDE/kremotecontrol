@@ -60,9 +60,7 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMo
     argumentsModel = new QStandardItemModel(argumentsView);
     argumentsView->setModel(argumentsModel);
 
-    connect(this, SIGNAL(currentIdChanged(int)), SLOT(updateForPageChange()));
-    connect(this, SIGNAL(currentIdChanged(int)), SLOT(slotCorrectPage()));
-
+    connect(this, SIGNAL(currentIdChanged(int)), this, SLOT(updateButtonStates()));
     connect(theChangeMode, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
     connect(theSwitchMode, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
     connect(theExitMode, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
@@ -94,13 +92,10 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMo
     connect(theButtons, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(next()));
 
     connect(theProfileFunctions, SIGNAL(itemSelectionChanged()), this, SLOT(updateButtonStates()));
-    connect(theProfileFunctions, SIGNAL(itemSelectionChanged()), this, SLOT(updateParameter()));
-    connect(theProfileFunctions, SIGNAL(itemSelectionChanged()), this, SLOT(updateInstancesOptions()));
     connect(theProfileFunctions, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(next()));
 
 
     connect(theDBusFunctions, SIGNAL(clicked(QModelIndex)), this, SLOT(updateButtonStates()));
-    connect(theDBusFunctions, SIGNAL(clicked(QModelIndex)), this, SLOT(updateInstancesOptions()));
     connect(theDBusFunctions,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(next()));
 
     connect(DBusInterface::getInstance(), SIGNAL(haveButton(const QString &, const QString &)), this, SLOT(updateButton(const QString &, const QString &)));
@@ -195,20 +190,20 @@ void AddAction::updateButtons()
     }
 }
 
-void AddAction::updateForPageChange()
+void AddAction::initializePage(int id)
 {
-    if (currentId() == SELECT_BUTTON) {
+    if (id == SELECT_BUTTON) {
         DBusInterface::getInstance()->requestNextKeyPress();
-    } else if (currentId() == SELECT_FUNCTION_PROFILE || currentId() == SELECT_FUNCTION_DBUS || currentId() == SELECT_MODE) {
+    } else if (id == SELECT_FUNCTION_PROFILE || id == SELECT_FUNCTION_DBUS || id == SELECT_MODE) {
         DBusInterface::getInstance()->cancelKeyPressRequest();
-        if (currentId() == SELECT_FUNCTION_PROFILE) {
+        if (id == SELECT_FUNCTION_PROFILE) {
             updateProfileFunctions();
-        } else if (currentId() == SELECT_FUNCTION_DBUS) {
+        } else if (id == SELECT_FUNCTION_DBUS) {
             updateDBusApplications();
         }
-    } else if (currentId() == ACTION_ARGUMENTS) {
+    } else if (id == ACTION_ARGUMENTS) {
         updateArguments();
-    } else if (currentId() == ACTION_OPTIONS ){
+    } else if (id == ACTION_OPTIONS ){
 	updateOptions();
     }
     updateButtonStates();
@@ -225,7 +220,7 @@ void AddAction::updateButtonStates()
         button(QWizard::NextButton)->setEnabled(!theButtons->selectedItems().isEmpty());
         break;
     case SELECT_FUNCTION_DBUS:
-        button(QWizard::NextButton)->setEnabled(theDBusFunctions->currentIndex().isValid());
+        button(QWizard::NextButton)->setEnabled(theDBusApplications->currentIndex().isValid() && theDBusFunctions->currentIndex().isValid());
         break;
     case SELECT_FUNCTION_PROFILE:
         button(QWizard::NextButton)->setEnabled(theProfileFunctions->currentItem() != 0 || theJustStart->isChecked());
@@ -347,7 +342,7 @@ void AddAction::updateArguments()
     }    
     argumentsView->resizeColumnsToContents();
     argumentsView->resizeRowsToContents();    
-    argumentsView->horizontalHeader()->stretchLastSection();
+    argumentsView->horizontalHeader()->setStretchLastSection(true);
 }
 
 void AddAction::updateDBusApplications()
@@ -363,14 +358,15 @@ void AddAction::updateDBusApplications()
         }
     }
     dbusAppsModel->sort(0, Qt::AscendingOrder);
+    updateDBusFunctions(QModelIndex());
 }
 
 
 void AddAction::updateDBusFunctions(QModelIndex pIndex) {
+    theDBusFunctions->model()->removeRows(0, theDBusFunctions->model()->rowCount());
     QModelIndex tParent = pIndex.parent();
     if (tParent.isValid()) {
         QList<Prototype> tList = DBusInterface::getInstance()->getFunctions(dbusAppsModel->data(tParent, Qt::UserRole).toString(), dbusAppsModel->data(pIndex).toString() );
-        theDBusFunctions->model()->removeRows(0, theDBusFunctions->model()->rowCount());
         theDBusFunctions->model()->insertRows(0, tList.size());
         for (int i = 0; i < tList.size(); i++) {
             theDBusFunctions->model()->setData(theDBusFunctions->model()->index(i,0),qVariantFromValue( tList.at(i)), Qt::UserRole);
@@ -380,6 +376,7 @@ void AddAction::updateDBusFunctions(QModelIndex pIndex) {
     }
     theDBusFunctions->resizeColumnsToContents();
     theDBusFunctions->resizeRowsToContents();
+    updateButtonStates();
 }
 
 
