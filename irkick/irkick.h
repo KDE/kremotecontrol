@@ -30,10 +30,14 @@
 #include "iractions.h"
 #include "klircclient.h"
 
-#include <ksystemtrayicon.h>
+#include <knotificationitem-1/knotificationitem.h>
 #include <kaboutdata.h>
 
-class IRKick: public QObject
+class QTimer;
+
+using namespace Experimental;
+
+class IRKick: public KNotificationItem
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.irkick")
@@ -44,8 +48,7 @@ class IRKick: public QObject
     IRActions allActions;
     int theResetCount;
     Modes allModes;
-
-    KSystemTrayIcon *theTrayIcon;
+    KMenu *m_menu;
     KAboutData *aboutData;
     QTimer *theFlashOff;
 
@@ -119,7 +122,6 @@ public Q_SLOTS: //dbus slot
 private slots:
     void gotMessage(const QString &theRemote, const QString &theButton, int theRepeatCounter);
     void resetModes();
-    void doQuit();
     void flashOff();
     void checkLirc();
 

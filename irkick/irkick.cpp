@@ -45,19 +45,22 @@
 #include <khelpmenu.h>
 
 IRKick::IRKick():
-        QObject(), npApp(QString())
+        KNotificationItem(), npApp(QString())
 {
+
+    setIconByName("irkick");
+    setCategory(Hardware);
+  
     new IrkickAdaptor(this);
     QDBusConnection dBusConnection = QDBusConnection::sessionBus();
     dBusConnection.registerObject("/IRKick", this,
                                   QDBusConnection::ExportAllSlots);
     theClient = new KLircClient();
 
-    theTrayIcon = new KSystemTrayIcon();
     if (! theClient->isConnected()) {
         QTimer::singleShot(10000, this, SLOT(checkLirc()));
     }
-    theFlashOff = new QTimer(theTrayIcon);
+    theFlashOff = new QTimer(this);
     theFlashOff->setSingleShot(true);
     connect(theFlashOff, SIGNAL(timeout()), SLOT(flashOff()));
 
@@ -67,27 +70,25 @@ IRKick::IRKick():
     connect(theClient, SIGNAL(remotesRead()), this, SLOT(resetModes()));
     connect(theClient, SIGNAL(commandReceived(const QString &, const QString &, int)), this, SLOT(gotMessage(const QString &, const QString &, int)));
 
-    theTrayIcon->contextMenu()->setTitle("IRKick");
-    theTrayIcon->contextMenu()->addAction(SmallIcon("configure"), i18n("&Configure..."), this, SLOT(slotConfigure()));
+    m_menu = new KMenu(associatedWidget());
+    setContextMenu(m_menu);
+    m_menu->addTitle(KIcon("infrared-remote"), "IRKick");
+    m_menu->addAction(SmallIcon("configure"), i18n("&Configure..."), this, SLOT(slotConfigure()));
     KHelpMenu *helpMenu = new  KHelpMenu(0, KGlobal::mainComponent().aboutData());
-    theTrayIcon->contextMenu()->addAction(KIcon("help-contents"), i18n("&Help"), helpMenu, SLOT(appHelpActivated()));
-    theTrayIcon->contextMenu()->addAction(KIcon("irkick"), i18n("&About"), helpMenu,SLOT(aboutApplication()));
+    m_menu->addAction(KIcon("help-contents"), i18n("&Help"), helpMenu, SLOT(appHelpActivated()));
+    m_menu->addAction(KIcon("irkick"), i18n("&About"), helpMenu,SLOT(aboutApplication()));
 
-    theTrayIcon->contextMenu()->addSeparator();
-    theTrayIcon->actionCollection()->action("file_quit")->disconnect();
-    connect(theTrayIcon->actionCollection()->action("file_quit"), SIGNAL(activated()), SLOT(doQuit()));
-    theTrayIcon->show();
+    m_menu->addSeparator();
     updateTray();
 }
 
 IRKick::~IRKick()
 {
-    delete theTrayIcon;
 }
 
 void IRKick::slotClosed()
 {
-    KNotification::event("global_event", i18n("The infrared system has severed its connection. Remote controls are no longer available."), SmallIcon("irkick"), theTrayIcon->parentWidget());
+    KNotification::event("global_event", i18n("The infrared system has severed its connection. Remote controls are no longer available."), SmallIcon("irkick"), associatedWidget());
     QTimer::singleShot(1000, this, SLOT(checkLirc()));
     updateTray();
 }
@@ -97,7 +98,7 @@ void IRKick::checkLirc()
     if (!theClient->isConnected()) {
         if (theClient->connectToLirc()) {
             KNotification::event("global_event", i18n("A connection to the infrared system has been made. Remote controls may now be available."),
-                                 SmallIcon("irkick"), theTrayIcon->parentWidget());
+                                 SmallIcon("irkick"), associatedWidget());
             updateTray();
         } else {
             QTimer::singleShot(10000, this, SLOT(checkLirc()));
@@ -107,30 +108,7 @@ void IRKick::checkLirc()
 
 void IRKick::flashOff()
 {
-    theTrayIcon->setIcon(theTrayIcon->loadIcon("irkick"));
-}
-
-void IRKick::doQuit()
-{
-    kDebug() << "doQuit called";
-    KConfig theConfig("irkickrc");
-    KConfigGroup generalGroup = theConfig.group("General");
-    switch (KMessageBox::questionYesNoCancel(
-                0,
-                i18n(
-                    "Should the Infrared Remote Control server start automatically when you begin KDE?"),
-                i18n("Automatically Start?"), KGuiItem(i18n("Start Automatically")),
-                KGuiItem(i18n("Do Not Start")))) {
-    case KMessageBox::No:
-        generalGroup.writeEntry("AutoStart", false);
-        break;
-    case KMessageBox::Yes:
-        generalGroup.writeEntry("AutoStart", true);
-        break;
-    case KMessageBox::Cancel:
-        return;
-    }
-    KApplication::kApplication()->quit();
+    setIconByName("irkick");
 }
 
 void IRKick::resetModes()
@@ -138,7 +116,7 @@ void IRKick::resetModes()
     kDebug()<< "resseting modes";
     if (theResetCount > 1) {
         KNotification::event("global_event", i18n("Resetting all modes."),
-                             SmallIcon("irkick"), theTrayIcon->parentWidget());
+                             SmallIcon("irkick"), associatedWidget());
     }
 
     if (!theResetCount)
@@ -171,34 +149,30 @@ void IRKick::slotConfigure()
 
 void IRKick::updateTray()
 {
-    QString toolTip="<qt><nobr>";
-    QString icon = QString("irkick");
+    QString toolTipHeader = i18n("KDE Lirc Server: ");
+    QString toolTip;
+    QString icon = "irkick";
     if (!theClient->isConnected()) {
+        toolTipHeader += i18nc("The state of kdelirc", "Stopped");
         toolTip += i18n("Lirc daemon is currently not available.");
-        toolTip+="</nobr";
         icon = "irkickoff";
+        setStatus(Passive);
     } else if (currentModes.size() == 0) {
-        toolTip += i18n("KDE Lirc Server: No infra-red remote controls found.");
-        toolTip+="</nobr";
+        toolTipHeader += i18nc("The state of kdelirc", "Stopped");
+        toolTip += i18n("No infra-red remote controls found.");
+        setStatus(Passive);
     } else {
-        toolTip+="<nobr><b><u>";
-        toolTip += i18n("KDE Lirc Server: Ready.");
-        toolTip+="</u></b></nobr>";
+        toolTipHeader += i18nc("The state of kdelirc", "Ready");
         for (QMap<QString, QString>::iterator i = currentModes.begin(); i != currentModes.end(); ++i) {
             Mode mode = allModes.getMode(i.key(), i.value());
-            toolTip+="<br><nobr>";
-            if ( !mode.iconFile().isEmpty()) {
-                QString iconPath = KIconLoader::global()->iconPath( mode.iconFile(), KIconLoader::Small,false );
-                toolTip += QString(" <img src=\"%1\"></img> ").arg(iconPath);
-            }
-            toolTip += "<b>"+ mode.remoteName() + "</b> <i>(";
+            toolTip += mode.remoteName() + " <i>(";
             toolTip += mode.name().isEmpty() ? i18n("Master") : mode.name();
-            toolTip +=")</i></nobr></br>";
+            toolTip +=")</i><br>";
         }
-        toolTip+="</qt>";
+        setStatus(Active);
     }
-    theTrayIcon->setToolTip(toolTip);
-    theTrayIcon->setIcon(theTrayIcon->loadIcon(icon));
+    setToolTip("infrared-remote", toolTipHeader, toolTip);
+    setIconByName(icon);
 }
 
 bool IRKick::searchForProgram(const IRAction &action, QStringList &programs)
@@ -337,8 +311,6 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton,
                         int theRepeatCounter)
 {
     kDebug() << "Got message: " << theRemote << ": " << theButton << " (" << theRepeatCounter << ")";
-    theTrayIcon->setIcon(theTrayIcon->loadIcon("irkickflash"));
-    theFlashOff->start(200);
     if (!npApp.isEmpty()) {
         QString theApp = npApp;
         npApp.clear();
@@ -367,10 +339,10 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton,
                 doBefore = l.at(i)->doBefore();
                 doAfter = l.at(i)->doAfter();
                 KNotification::event(
-                               "mode_event",
-                               i18n("Mode switched to %1", currentModes[theRemote] == "" ? i18nc("Default mode in notification", "Default") : currentModes[theRemote]),
+                               "mode_event", "<b>" + mode.remoteName() + ":</b><br>" +
+                               i18n("Mode switched to %1" , currentModes[theRemote] == "" ? i18nc("Default mode in notification", "Default") : currentModes[theRemote]),
                                DesktopIcon(mode.iconFile().isEmpty() ? "infrared-remote" : mode.iconFile()),
-                               theTrayIcon->parentWidget());
+                               associatedWidget());
                 break;
             }
 
@@ -389,6 +361,8 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton,
             }
         }
     }
+    setIconByName("irkickflash");
+    theFlashOff->start(200);
 }
 
 void IRKick::stealNextPress(QString app, QString module, QString method)
