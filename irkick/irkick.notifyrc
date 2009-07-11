@@ -8,6 +8,7 @@ Comment[x-test]=xxIrkickxx
 
 [Event/global_event]
 Name=Irkick notification
+Name[ar]=اشعارات Irkick
 Name[ca]=Notificació de l'Irkick
 Name[cs]=Oznámení Irkick
 Name[da]=IRKick-bekendtgørelse
@@ -29,6 +30,7 @@ Name[x-test]=xxIrkick notificationxx
 Name[zh_CN]=Irkick 通知
 Name[zh_TW]=Irkick 通知
 Comment=Irkick global notification event
+Comment[ar]=حدث اشعار عام لـ Irkick 
 Comment[ca]=Esdeveniment de notificació global de l'Irkick
 Comment[da]=IRKick global bekendtgørelseshændelse
 Comment[es]=Evento de notificación global de Irkick
@@ -53,6 +55,7 @@ Action=Popup
 
 [Event/mode_event]
 Name=Mode event
+Name[ar]=نمط الأحداث
 Name[ca]=Esdeveniment de mode
 Name[cs]=Událost režimu
 Name[da]=Tilstandshændelse
@@ -74,6 +77,7 @@ Name[x-test]=xxMode eventxx
 Name[zh_CN]=模式事件
 Name[zh_TW]=模式事件
 Comment=Mode has changed
+Comment[ar]=غير النمط
 Comment[ca]=El mode ha canviat
 Comment[cs]=Režim se změnil
 Comment[da]=Tilstand er ændret
@@ -98,6 +102,7 @@ Action=Popup
 
 [Event/app_event]
 Name=Application event
+Name[ar]=حدث التطبيق
 Name[ca]=Esdeveniment d'aplicació
 Name[cs]=Událost aplikace
 Name[da]=Programhændelse
@@ -120,6 +125,7 @@ Name[x-test]=xxApplication eventxx
 Name[zh_CN]=应用程序事件
 Name[zh_TW]=應用程式事件
 Comment=Irkick has triggered an application
+Comment[ar]=أطلق Irkick  تطبيق
 Comment[ca]=L'Irkick ha activat una aplicació
 Comment[da]=IRKick har startet et program
 Comment[es]=Irkick ha lanzado una aplicación
