@@ -110,7 +110,6 @@ public:
     ~Remote();
 };
 
-class RemoteServerPrivate;
 
 class RemoteServer
 {

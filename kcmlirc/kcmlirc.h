@@ -37,7 +37,6 @@
 #include <QStandardItemModel>
 #include <kcmodule.h>
 
-class QDropEvent;
 class Profile;
 class Remote;
 
