@@ -9,7 +9,7 @@ install( FILES
     okular.profile.xml
     noatun.profile.xml
     klauncher.profile.xml
-    konqueror.profile.xml 
+    #konqueror.profile.xml 
     suspend.profile.xml
     shutdown.profile.xml
     DESTINATION ${DATA_INSTALL_DIR}/profiles)
