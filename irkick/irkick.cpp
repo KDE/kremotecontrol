@@ -122,8 +122,8 @@ void IRKick::resetModes()
     if (!theResetCount)
         allModes.generateNulls(theClient->remotes());
 
-    QStringList remotes = theClient->remotes();
-    for (QStringList::iterator i = remotes.begin(); i != remotes.end(); ++i) {
+    const QStringList remotes = theClient->remotes();
+    for (QStringList::const_iterator i = remotes.constBegin(); i != remotes.constEnd(); ++i) {
         currentModes[*i] = allModes.getDefault(*i).name();
     }
     updateTray();
@@ -163,7 +163,7 @@ void IRKick::updateTray()
         setStatus(Passive);
     } else {
         toolTipHeader += i18nc("The state of kdelirc", "Ready");
-        for (QMap<QString, QString>::iterator i = currentModes.begin(); i != currentModes.end(); ++i) {
+        for (QMap<QString, QString>::const_iterator i = currentModes.constBegin(); i != currentModes.constEnd(); ++i) {
             Mode mode = allModes.getMode(i.key(), i.value());
             toolTip += mode.remoteName() + " <i>(";
             toolTip += mode.name().isEmpty() ? i18n("Master") : mode.name();
@@ -192,9 +192,9 @@ bool IRKick::searchForProgram(const IRAction &action, QStringList &programs)
     } else {
 
         // find all instances...
-        QStringList buf = dBusIface->registeredServiceNames();
+        const QStringList buf = dBusIface->registeredServiceNames();
 
-        for (QStringList::iterator i = buf.begin(); i != buf.end(); ++i) {
+        for (QStringList::const_iterator i = buf.constBegin(); i != buf.constEnd(); ++i) {
             QString program = *i;
             if (program.contains(action.program()))
                 programs += program;
