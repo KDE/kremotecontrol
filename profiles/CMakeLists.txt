@@ -7,7 +7,6 @@ install( FILES
     vlc.profile.xml
     kmix.profile.xml
     okular.profile.xml
-    noatun.profile.xml
     klauncher.profile.xml
     #konqueror.profile.xml 
     suspend.profile.xml
