@@ -155,7 +155,7 @@ KDE_EXPORT const QString IRAction::application() const
 {
     ProfileServer *theServer = ProfileServer::profileServer();
     if (theProgram.isEmpty())
-        return "";
+        return QString();
     else {
 	const Profile *a = theServer->getProfileById(theProgram);
         if (a)

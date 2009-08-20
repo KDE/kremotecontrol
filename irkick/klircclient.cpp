@@ -76,8 +76,7 @@ bool KLircClient::connectToLirc()
 
 KLircClient::~KLircClient()
 {
-    if (theSocket)
-        delete theSocket;
+   delete theSocket;
 }
 
 void KLircClient::slotClosed()
@@ -88,7 +87,7 @@ void KLircClient::slotClosed()
 const QStringList KLircClient::remotes() const
 {
     QStringList remotes;
-    for (QMap<QString, QStringList>::ConstIterator i = theRemotes.begin(); i != theRemotes.end(); ++i) {
+    for (QMap<QString, QStringList>::ConstIterator i = theRemotes.constBegin(); i != theRemotes.constEnd(); ++i) {
         kDebug() << "Remote: " << i.key();
         remotes.append(i.key());
     }
