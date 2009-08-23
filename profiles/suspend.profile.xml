@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE profile SYSTEM "profile.dtd">
-<profile id="org.kde.klauncher" servicename="Suspend">
+<profile id="Suspend" servicename="org.kde.klauncher">
 	<name>Supend or Hibernate</name>
 	<author>Michael Zanetti</author>
 	<action objid="KLauncher" prototype="void kdeinit_exec(QString, QStringList, QStringList, QString)" repeat="0" autostart="0">

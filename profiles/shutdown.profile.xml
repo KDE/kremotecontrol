@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE profile SYSTEM "profile.dtd">
-<profile id="org.kde.ksmserver" servicename="Shutdown">
+<profile id="Shutdown" servicename="org.kde.ksmserver">
 	<name>Shutdown or reboot</name>
 	<author>Michael Zanetti</author>
 	<action objid="KSMServer" prototype="void logout(int, int, int)" repeat="0" autostart="0">

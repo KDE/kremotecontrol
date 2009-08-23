@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE profile SYSTEM "profile.dtd">
-<profile id="org.kde.klauncher" servicename="KLauncher">
+<profile id="KLauncher" servicename="org.kde.klauncher">
 	<name>KDE Program Launcher</name>
 	<author>Gav Wood</author>
 	<action objid="KLauncher" prototype="void kdeinit_exec(QString, QStringList, QStringList, QString)" repeat="0" autostart="0">
