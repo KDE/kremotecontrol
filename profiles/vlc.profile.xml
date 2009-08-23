@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE profile SYSTEM "profile.dtd">
-<profile id="org.mpris.vlc" servicename="vlc">
+<profile id="vlc" servicename="org.mpris.vlc">
     <name>VLC videolan player</name>
     <author>Gioacchino Mazzurco [gmazzurco89@gmail.com]</author>
     <instances unique="0" ifmulti="sendtoone"/>

@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE profile SYSTEM "profile.dtd">
-<profile id="org.kde.kmix" servicename="kmix">
+<profile id="kmix" servicename="org.kde.kmix">
     <name>Sound Mixer</name>
     <author>Michael Zanetti</author>
     <instances unique="1"/>
@@ -20,8 +20,8 @@
             <default>Master:0</default>
         </argument>
     </action>
-    <action objid="Mixer0" prototype="void mute(QString)" class="mute">
-        <name>Mute</name>
+    <action objid="Mixer0" prototype="void toggleMute(QString)" class="mute">
+        <name>Toggle Mute</name>
         <comment></comment>
         <argument type="QString">
             <comment>The name slider you want to mute and its index separated by a colon (eg. Master:0)</comment>

@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE profile SYSTEM "profile.dtd">
-<profile id="org.mpris.amarok" servicename="amarok">
+<profile id="amarok" servicename="org.mpris.amarok">
     <name>Amarok</name>
     <author>Dirk Ziegelmeier</author>
     <instances unique="1"/>

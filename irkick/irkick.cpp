@@ -208,12 +208,17 @@ bool IRKick::searchForProgram(const IRAction &action, QStringList &programs)
     programs.clear();
 
     if (action.unique()) {
-        kDebug() << "searching for prog:" << action.program();
-        if (dBusIface->isServiceRegistered(action.program())) {
-            kDebug() << "adding Program: " << action.program();
-            programs += action.program();
+	QString service = ProfileServer::profileServer()->getServiceName(action.program());
+	if(service.isNull()){
+	    service = action.program();
+	}
+	
+	kDebug() << "searching for prog:" << service;
+	if (dBusIface->isServiceRegistered(service)) {
+	    kDebug() << "adding Program: " << service;
+	    programs += service;
         } else {
-            kDebug() << "nope... " + action.program() + " not here.";
+	    kDebug() << "nope... " + service + " not here.";
         }
     } else {
 
@@ -293,10 +298,10 @@ void IRKick::executeAction(const IRAction& action) {
         if (!sname.isNull()) {
             KNotification::event("app_event", i18n("Starting <b>%1</b>...",
                                                    action.application()), SmallIcon("irkick"));
-            kDebug() << "starting service:" << sname;
+            kDebug() << "starting service:" << action.program();
             QString error;
-            if (KToolInvocation::startServiceByDesktopName(sname, QString(), &error)) {
-                kDebug() << "starting " + sname + " failed: " << error;
+	    if (KToolInvocation::startServiceByDesktopName(action.program(), QString(), &error)) {
+		kDebug() << "starting " + action.program() + " failed: " << error;
             }
         } else if (action.program().contains(QRegExp("org.[a-zA-Z0-9]*."))) {
             QString runCommand = action.program();
