@@ -52,37 +52,16 @@ public:
     virtual QVariant data(int  role) const;
 };
 
-class DBusFunctionModel : public  QAbstractListModel
+class DBusFunctionModel: public QStandardItemModel
 {
-private:
-    QList <Prototype>  theProtoTypeList;
-
-public:
-
-    DBusFunctionModel (QObject * parent );
-
-
-    virtual QVariant data( const QModelIndex & index, int  role) const;
-    virtual bool setData(const QModelIndex &index,  const QVariant &value, int role);
-    bool insertRows(int position, int rows, const QModelIndex &parent);
-    bool removeRows(int position, int rows, const QModelIndex &parent);
-    void setPrototypes( const QList <Prototype>  protoTypeList);
-
-    int rowCount(const QModelIndex &parent) const {
-        Q_UNUSED(parent)
-        return theProtoTypeList.size();
-    }
-
-    int columnCount(const QModelIndex &parent) const {
-        Q_UNUSED(parent)
-        return 3;
-    }
-
-    QModelIndexList match(const QModelIndex &start, int role, const QVariant &value, int hits, Qt::MatchFlags flags =0) const;
-
-    Qt::ItemFlags flags(const QModelIndex &index) const;
-    void sort(int column, Qt::SortOrder order);
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+    public:
+	DBusFunctionModel(QObject *parent);
+	
+	void appendRow ( const Prototype &item );
+	
+	Prototype getPrototype( int index ) const;
+	QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+	
 };
 
 class ArgumentsModelItem: public QStandardItem

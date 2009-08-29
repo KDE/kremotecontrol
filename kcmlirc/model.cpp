@@ -88,143 +88,43 @@ DBusFunctionModel
 ***********************************
 */
 
-DBusFunctionModel::DBusFunctionModel(QObject* parent ) : QAbstractListModel(parent) {
+DBusFunctionModel::DBusFunctionModel(QObject *parent):QStandardItemModel(parent){
     qRegisterMetaType<Prototype>("Prototype");
 }
 
-QVariant DBusFunctionModel::data(const QModelIndex & index, int role = Qt::DisplayRole) const
-{
-
-    if (!index.isValid()) {
-//        kDebug() << " Index invalid Row" << index.row() << " Col " << index.column();
-        return QVariant();
-    }
-    if (index.row() >= 0 || index.row() <= theProtoTypeList.size()) {
-        if (role == Qt::DisplayRole || role == Qt::EditRole) {
-            switch (index.column())  {
-            case 0:
-                return theProtoTypeList.at(index.row()).name();
-            case 1:
-                return theProtoTypeList.at(index.row()).argumentList();
-            case 2:
-                return theProtoTypeList.at(index.row()).prototype();
-            }
-        }
-        if (role == Qt::UserRole) {
-            return qVariantFromValue(theProtoTypeList.at(index.row()));
-        }
-    }
-    return QVariant();
-
+void DBusFunctionModel::appendRow ( const Prototype &prototype ){
+    QList<QStandardItem*> itemList;
+    QStandardItem *item = new QStandardItem(prototype.name());
+    item->setData(qVariantFromValue(prototype), Qt::UserRole);
+    itemList.append(item);
+    itemList.append(new QStandardItem(prototype.argumentList()));
+    itemList.append(new QStandardItem(prototype.prototype()));
+    QStandardItemModel::appendRow(itemList);
 }
 
-bool DBusFunctionModel::setData(const QModelIndex &index,  const QVariant &value, int role)
-{
-    if (!index.isValid()) {
-        return false;
-    }
-
-    if (role == Qt::UserRole && value.canConvert<Prototype>()) {
-        Prototype tType =value.value<Prototype>();
-        theProtoTypeList.replace(index.row(), tType);
-        emit dataChanged(index, index);
-        return true;
-    }
-    return false;
+Prototype DBusFunctionModel::getPrototype(int index) const{
+    return QStandardItemModel::item(index)->data(Qt::UserRole).value<Prototype>();
 }
-
-bool DBusFunctionModel::insertRows(int position, int rows, const QModelIndex &parent)
-{
-    beginInsertRows(parent, position, position+rows-1);
-    for (int row = 0; row < rows; ++row) {
-        theProtoTypeList.insert(position, Prototype());
-    }
-    endInsertRows();
-    return true;
-}
-
-
-bool DBusFunctionModel::removeRows(int position, int rows, const QModelIndex &parent)
-{
-    Q_UNUSED(parent)
-    beginRemoveRows(QModelIndex(), position, position+rows-1);
-
-    for (int row = 0; row < rows; ++row) {
-        theProtoTypeList.removeAt(position);
-    }
-
-    endRemoveRows();
-    return true;
-}
-
-
-Qt::ItemFlags DBusFunctionModel::flags(const QModelIndex &index) const
-{
-    Q_UNUSED(index)
-    return   Qt::ItemIsEnabled | Qt::ItemIsSelectable;
-}
-
-
-
-QModelIndexList DBusFunctionModel::match(const QModelIndex &start, int role,
-        const QVariant &value, int hits,
-        Qt::MatchFlags flags) const
-{
-    Q_UNUSED(role)
-    Q_UNUSED(flags)
-    QModelIndexList result;
-
-    bool allHits = (hits == -1);
-    int from = start.row();
-    int to = theProtoTypeList.size();
-    for (int r = from; (r < to) && (allHits || result.count() < hits); ++r) {
-        QModelIndex idx = index(r);
-        if (idx.isValid() && value.canConvert<Prototype>() ) {
-            Prototype tPrototypeValue = value.value<Prototype>();
-            if (theProtoTypeList.at(r)  == tPrototypeValue  ) {
-                result.append(idx);
-            }
-        }
-    }
-    return result;
-}
-
-
-void DBusFunctionModel::sort(int column, Qt::SortOrder order) {
-    Q_UNUSED(column)
-    emit layoutAboutToBeChanged();
-    QList<Prototype>  tList = QList<Prototype>(theProtoTypeList);
-    if (order == Qt::AscendingOrder)
-        qSort(tList.begin(), tList.end());
-    else
-        qSort(tList.begin(), tList.end());
-    theProtoTypeList = tList;
-    emit layoutChanged();
-}
-
 
 QVariant DBusFunctionModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal) {
-        if (role == Qt::DisplayRole) {
-//            kDebug()<< "section is " << section;
-            switch (section) {
-            case 0:
-                return i18n("Function");
-            case 1:
-                return i18n("Parameter");
-            case 2:
-                return i18n("Prototype");
-            default:
-                return QVariant();
-            }
-        }
+	if (role == Qt::DisplayRole) {
+	    //            kDebug()<< "section is " << section;
+	    switch (section) {
+		case 0:
+		    return i18n("Function");
+		case 1:
+		    return i18n("Parameter");
+		case 2:
+		    return i18n("Prototype");
+		default:
+		    return QVariant();
+	    }
+	}
     }
     return QVariant();
 }
-
-
-
 
 /*
 ***********************************
