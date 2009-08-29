@@ -45,6 +45,7 @@ private:
     Mode theMode;
     QStandardItemModel *dbusAppsModel;
     QStandardItemModel *argumentsModel;
+    DBusFunctionModel *dbusFunctionModel;
     enum  {
         START =0,
         SELECT_BUTTON =1,

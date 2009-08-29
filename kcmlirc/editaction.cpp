@@ -50,8 +50,6 @@ EditAction::EditAction(IRAction *action, const QStringList &modeList, QWidget *p
     //editActionBaseWidget->theDBusApplications->setModel(new DBusServiceModel(0));
     dbusServiceModel = new QStandardItemModel(editActionBaseWidget->theDBusApplications);
     editActionBaseWidget->theDBusApplications->setModel(dbusServiceModel);
-    editActionBaseWidget->theDBusFunctions->setModel(new DBusFunctionModel(0));
-    editActionBaseWidget->theDBusFunctions->setModelColumn(2);
     mainGroup.addButton(editActionBaseWidget->theUseDBus);
     mainGroup.addButton(editActionBaseWidget->theUseProfile);
     mainGroup.addButton(editActionBaseWidget->theChangeMode);
@@ -262,7 +260,7 @@ void EditAction::updateArguments()
             }
         }
     } else if ( editActionBaseWidget->theUseDBus->isChecked()) {
-        Prototype p = editActionBaseWidget->theDBusFunctions->itemData(editActionBaseWidget->theDBusFunctions->currentIndex(), Qt::UserRole).value<Prototype>().prototype();
+        Prototype p = editActionBaseWidget->theDBusFunctions->itemData(editActionBaseWidget->theDBusFunctions->currentIndex(), Qt::UserRole).value<Prototype>();
 
 
         // Check if the current selected function is the configured one
@@ -396,10 +394,10 @@ void EditAction::updateDBusObjects()
 void EditAction::updateDBusFunctions()
 {
     editActionBaseWidget->theDBusFunctions->clear();
-
+    
     const QList<Prototype> tList = DBusInterface::getInstance()->getFunctions(getCurrentDbusApp(), editActionBaseWidget->theDBusObjects->currentText());
     foreach(const Prototype &tType, tList) {
-        editActionBaseWidget->theDBusFunctions->addItem(0, qVariantFromValue(tType));
+        editActionBaseWidget->theDBusFunctions->addItem(tType.prototype(), qVariantFromValue(tType));
     }
 
     // Check if configured Action is a DBus Action but not running
@@ -411,15 +409,14 @@ void EditAction::updateDBusFunctions()
             kDebug() << "current selected" << editActionBaseWidget->theDBusObjects->currentText();
             if (editActionBaseWidget->theDBusObjects->currentText() ==
                     theAction->object()) { // And the Object is selected too!
-                editActionBaseWidget->theDBusFunctions->addItem(0, qVariantFromValue(Prototype(theAction->function())));
+		editActionBaseWidget->theDBusFunctions->addItem(theAction->function(), qVariantFromValue(Prototype(theAction->function())));
             }
         }
     }
 
 
-    editActionBaseWidget->theDBusFunctions->model()->sort( Qt::AscendingOrder);
     kDebug() << "searching for" << theAction->method().prototype();
-    int ti =editActionBaseWidget->theDBusFunctions->findData(qVariantFromValue(theAction->method()), Qt::EditRole);
+    int ti =editActionBaseWidget->theDBusFunctions->findData(theAction->method().prototype(), Qt::DisplayRole);
     editActionBaseWidget->theDBusFunctions->setCurrentIndex(ti == -1 ? 0 : ti);
 
     updateArguments();

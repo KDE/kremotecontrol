@@ -49,7 +49,8 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMo
     Q_UNUSED(parent)
     setupUi(this);
 
-    theDBusFunctions->setModel(new DBusFunctionModel(theDBusFunctions));
+    dbusFunctionModel = new DBusFunctionModel(theDBusFunctions);
+    theDBusFunctions->setModel(dbusFunctionModel);
     theDBusFunctions->setSelectionBehavior(QAbstractItemView::SelectRows);
     theDBusFunctions->setSelectionMode(QAbstractItemView::SingleSelection);
     //theFunctions->setShowGrid(false);
@@ -152,7 +153,7 @@ int AddAction::nextId() const
 	if(!theDBusFunctions->currentIndex().isValid()){
 	    return ACTION_OPTIONS;
 	}
-	Prototype p = theDBusFunctions->model()->data(theDBusFunctions->currentIndex(), Qt::UserRole).value<Prototype>().prototype();
+	Prototype p = dbusFunctionModel->getPrototype(theDBusFunctions->currentIndex().row());
 	kDebug() << "argcount" << p.getArguments().size();
 	if(p.getArguments().size() == 0){
 	    return ACTION_OPTIONS;
@@ -332,7 +333,7 @@ void AddAction::updateArguments()
             argumentsModel->appendRow(tmp);
         }
     } else if ( theUseDBus->isChecked()) {
-        Prototype p = theDBusFunctions->model()->data(theDBusFunctions->currentIndex(), Qt::UserRole).value<Prototype>().prototype();
+        Prototype p = dbusFunctionModel->getPrototype(theDBusFunctions->currentIndex().row());
         for (int i = 0; i < p.getArguments().size(); ++i) {
             QList<QStandardItem*> tmp;
             tmp.append(new ArgumentsModelItem(p.getArguments().at(i).second + " (" + QVariant::typeToName(p.getArguments().at(i).first) + ')'));
@@ -363,13 +364,12 @@ void AddAction::updateDBusApplications()
 
 
 void AddAction::updateDBusFunctions(QModelIndex pIndex) {
-    theDBusFunctions->model()->removeRows(0, theDBusFunctions->model()->rowCount());
+    dbusFunctionModel->clear();
     QModelIndex tParent = pIndex.parent();
     if (tParent.isValid()) {
         QList<Prototype> tList = DBusInterface::getInstance()->getFunctions(dbusAppsModel->data(tParent, Qt::UserRole).toString(), dbusAppsModel->data(pIndex).toString() );
-        theDBusFunctions->model()->insertRows(0, tList.size());
         for (int i = 0; i < tList.size(); i++) {
-            theDBusFunctions->model()->setData(theDBusFunctions->model()->index(i,0),qVariantFromValue( tList.at(i)), Qt::UserRole);
+	    dbusFunctionModel->appendRow(tList.at(i));
         }
         theDBusFunctions->model()->sort(0, Qt::AscendingOrder);
 
@@ -412,7 +412,7 @@ IRAction* AddAction::getAction()
     else if (theUseDBus->isChecked()) {
         action->setProgram(dbusAppsModel->data(theDBusApplications->currentIndex().parent(), Qt::UserRole).toString());
         action->setObject(dbusAppsModel->data(theDBusApplications->currentIndex(), Qt::DisplayRole).toString());
-        Prototype p =  theDBusFunctions->model()->data(theDBusFunctions->currentIndex(), Qt::UserRole).value<Prototype>();
+        Prototype p =  dbusFunctionModel->getPrototype(theDBusFunctions->currentIndex().row());
         action->setMethod(p.prototype());
         action->setArguments(getCurrentArgs());
     } else if (theUseProfile->isChecked() && !theProfiles->selectedItems().isEmpty() &&
