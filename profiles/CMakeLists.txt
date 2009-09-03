@@ -11,7 +11,6 @@ install( FILES
     konqueror.profile.xml 
     suspend.profile.xml
     shutdown.profile.xml
-    kscd.profile.xml
     DESTINATION ${DATA_INSTALL_DIR}/profiles)
 
 
