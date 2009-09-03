@@ -30,12 +30,10 @@
 #include "iractions.h"
 #include "klircclient.h"
 
-#include <knotificationitem-1/knotificationitem.h>
+#include <knotificationitem.h>
 #include <kaboutdata.h>
 
 class QTimer;
-
-using namespace Experimental;
 
 class IRKick: public KNotificationItem
 {
