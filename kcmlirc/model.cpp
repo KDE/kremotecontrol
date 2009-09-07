@@ -143,11 +143,21 @@ QWidget *ArgumentDelegate::createEditor(QWidget *parent,
                                         const QModelIndex &index) const
 {
     QWidget *editor;
+    unsigned int maxInt = -1;
 //    kDebug() << "creaing edtor for:" << index.model()->data(index, Qt::EditRole);
     switch (index.model()->data(index, Qt::EditRole).type()) {
-    case QVariant::Int:
-    case QVariant::UInt:
-        editor = new QSpinBox(parent);
+    case QVariant::Int: {
+        QSpinBox *spinBox = new QSpinBox(parent);
+        spinBox->setMaximum(maxInt/2);
+        spinBox->setMinimum(-maxInt/2);
+        editor = spinBox;
+        }
+        break;
+    case QVariant::UInt: {
+        QSpinBox *spinBox = new QSpinBox(parent);
+        spinBox->setMaximum(maxInt/2);
+        editor = spinBox;
+        }
         break;
     case QVariant::Double:
         editor = new QDoubleSpinBox(parent);
