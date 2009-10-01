@@ -53,17 +53,32 @@ bool KLircClient::connectToLirc()
 
     sockaddr_un addr;
     addr.sun_family = AF_UNIX;
-    strcpy(addr.sun_path, "/dev/lircd");
+    // Try to open lircd socket for lirc >= 0.8.6
+    strcpy(addr.sun_path, "/var/run/lirc/lircd");
     if (::connect(sock, (struct sockaddr *)(&addr), sizeof(addr)) == -1) {
         ::close(sock);
-        // in case of mandrake...
-        strcpy(addr.sun_path, "/tmp/.lircd");
+        // for lirc < 0.8.6
+        sock = ::socket(PF_UNIX, SOCK_STREAM, 0);
+        strcpy(addr.sun_path, "/dev/lircd");
         if (::connect(sock, (struct sockaddr *)(&addr), sizeof(addr)) == -1) {
             ::close(sock);
-            return false;
+            // in case of mandrake...
+            sock = ::socket(PF_UNIX, SOCK_STREAM, 0);
+            strcpy(addr.sun_path, "/tmp/.lircd");
+            if (::connect(sock, (struct sockaddr *)(&addr), sizeof(addr)) == -1) {
+                ::close(sock);
+                kDebug() << "no lircd socket found...";
+                return false;
+            } else {
+                kDebug() << "Mandrake lircd socket found...";
+            }
+        } else {
+            kDebug() << "lircd < 0.8.6 socket found...";
         }
+    } else {
+        kDebug() << "lircd >= 0.8.6 socket found...";
     }
-
+    
     if(!theSocket){
     	theSocket = new QLocalSocket();
         connect(theSocket, SIGNAL(readyRead()), SLOT(slotRead()));
