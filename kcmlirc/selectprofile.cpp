@@ -1,6 +1,5 @@
 /*
-    <one line to give the program's name and a brief idea of what it does.>
-    Copyright (C) <year>  <name of author>
+    Copyright (C) <2009>  <Frank Scheffold (fscheffold@googlemail.com)>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,15 +19,18 @@
 #include "selectprofile.h"
 #include "dbusinterface.h"
 #include <QTreeWidgetItem>
+#include <klocale.h>
 
-SelectProfileWidget::SelectProfileWidget (QWidget *parent) : QWidget(parent){
-     QTreeWidget *theProfiles = new QTreeWidget();
-     profilesWidget = new QTreeWidget();
-//     setHeaderLabel(i18n("Select a profile"));
-//     setRootIsDecorated(false);
-//     setMainWidget(theProfiles);
-//     setWindowTitle(i18n("Auto-Populate"));
 
+SelectProfileWidget::SelectProfileWidget (QWidget *parent) : QWidget(parent) {
+    selectionLabel = new QLabel();
+    profilesWidget = new QTreeWidget();
+    layout = new QVBoxLayout(this);
+    layout->addWidget(new QLabel(i18n("Select profile")));
+    profilesWidget->setHeaderLabel(i18n("Availale profiles with button actions"));
+    layout->addWidget(profilesWidget);
+    layout->addWidget(selectionLabel);
+    
 }
 
 SelectProfile::SelectProfile(QString remoteName, QWidget *parent, const bool &modal): KDialog(parent)
@@ -39,15 +41,20 @@ SelectProfile::SelectProfile(QString remoteName, QWidget *parent, const bool &mo
     setButtons( Ok | Cancel);
     setDefaultButton(Ok);
     setModal(modal);
+    setMainWidget(selectProfileWidget);
+    setWindowTitle(i18n("Auto-Populate"));
+
+    connect(selectProfileWidget->profilesWidget,SIGNAL(itemActivated(QTreeWidgetItem*,int)), this, SLOT(checkForUpdate(QTreeWidgetItem*,int)));
+    kDebug()<< "remote  " << remoteName;
     QList<Profile*> profiles = ProfileServer::getInstance()->profiles();
+    QStringList solidButtons = DBusInterface::getInstance()->getButtons(remoteName);
     foreach(Profile* profile, profiles) {
-        ProfileServer::ProfileSupportedByRemote tSupported;
-        tSupported = ProfileServer::getInstance()->isProfileAvailableForRemote(profile, DBusInterface::getInstance()->getButtons(remoteName));
-        if (! tSupported == ProfileServer::NO_ACTIONS_DEFINED) {
+        ProfileServer::ProfileSupportedByRemote tSupported = ProfileServer::getInstance()->isProfileAvailableForRemote(profile, solidButtons);
+	  kDebug()<< "support "<< tSupported;
+        if ( tSupported != ProfileServer::NO_ACTIONS_DEFINED) {	
             ProfileWrapper wrapper = ProfileWrapper(profile, tSupported);
-            QTreeWidgetItem* tTreewidget = new QTreeWidgetItem(selectProfileWidget->profilesWidget);
-            tTreewidget->setText(0, profile->name());
-            tTreewidget->setData(0,Qt::DisplayRole,qVariantFromValue<ProfileWrapper>(wrapper));
+            QTreeWidgetItem* tTreewidget = new QTreeWidgetItem(selectProfileWidget->profilesWidget,QStringList()<< profile->name());
+            tTreewidget->setData(0,Qt::UserRole,qVariantFromValue<ProfileWrapper>(wrapper));
             KIcon tIcon;
             switch (tSupported) {
             case ProfileServer::FULL_SUPPORTED :
@@ -61,13 +68,42 @@ SelectProfile::SelectProfile(QString remoteName, QWidget *parent, const bool &mo
             }
             tTreewidget->setIcon(0, tIcon);
         }
-
     }
-
+     enableButtonOk(false);
 }
 
 
-const Profile* SelectProfile::getSelectedProfile()
+
+void SelectProfile::checkForUpdate(QTreeWidgetItem* widgetItem, int col)
+{
+    if (col == -1) {
+        selectProfileWidget->selectionLabel->setText(QString());
+        enableButtonOk(false);
+        return;
+    }
+    ProfileServer::ProfileSupportedByRemote tSupported =  widgetItem->data(0, Qt::UserRole).value<ProfileWrapper>().getSupported();
+
+    switch (tSupported) {
+    case ProfileServer::FULL_SUPPORTED :
+        selectProfileWidget->selectionLabel->setText(i18n("Remote supports all defined buttons in selected profile"));
+        enableButtonOk(true);
+        break;
+    case ProfileServer::PARTIAL_SUPPORTED :
+        selectProfileWidget->selectionLabel->setText(i18n("Remote does not support all defined buttons in selected profile"));
+        enableButtonOk(true);
+        break;
+    case ProfileServer::NOT_SUPPORTED :
+        selectProfileWidget->selectionLabel->setText(i18n("Remote supports none of the defined buttons in selected profile"));
+        enableButtonOk(false);
+        break;
+    default:
+        selectProfileWidget->selectionLabel->setText(QString());
+        enableButtonOk(false);
+    }
+}
+
+
+Profile* SelectProfile::getSelectedProfile()
 {
     return selectProfileWidget->profilesWidget->currentItem()->data(0, Qt::UserRole).value<ProfileWrapper>().getProfile();
 }

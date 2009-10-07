@@ -153,7 +153,6 @@ bool Profile::startElement(const QString &, const QString &, const QString &name
         curPA->setObjId(attributes.value("objid"));
         curPA->setPrototype(attributes.value("prototype"));
         kDebug() << "loading function:" << attributes.value("prototype");
-        curPA->setClass(attributes.value("class"));
         curPA->setButtonName(attributes.value("button"));
         curPA->setMultiplier(attributes.value("multiplier").isEmpty() ? 1.0 : attributes.value("multiplier").toFloat());
         curPA->setRepeat(attributes.value("repeat") == "1");
@@ -250,8 +249,8 @@ KDE_EXPORT ProfileServer::ProfileSupportedByRemote ProfileServer::isProfileAvail
     }
     int found=0;
 
-    foreach(const QString solidButtonName, solidButtonNames) {
-        if ( tProfilActionNames.contains(solidButtonName)) {
+    foreach(const QString tProfilActionName, tProfilActionNames) {
+        if ( solidButtonNames.contains(tProfilActionName)) {
             found++;
         }
     }

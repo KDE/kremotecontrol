@@ -52,7 +52,7 @@ private:
     Modes allModes;
     QMap<QTreeWidgetItem *, QString> profileMap, remoteMap;
 
-    void autoPopulate(const Profile &profile, const Mode &mode);
+    void autoPopulate(const Profile *profile, const Mode &mode);
 
     inline IRAction *currentAction() {
         IRAction *tAction = theKCMLircBase->theActions->currentItem()->data(0, Qt::UserRole).value<IRAction*>();

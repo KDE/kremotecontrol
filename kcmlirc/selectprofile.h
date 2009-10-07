@@ -1,6 +1,5 @@
 /*
-    <one line to give the program's name and a brief idea of what it does.>
-    Copyright (C) <year>  <name of author>
+    Copyright (C) <2009>  <Frank Scheffold (fscheffold@googlemail.com)>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,15 +20,13 @@
 #define SELECTPROFILE_H
 
 #include "profileserver.h"
+
 #include <QtGui/QWidget>
-#include <QMap>
-#include <QPair>
-#include "kicondialog.h"
 #include <QTreeWidget>
-#include <qlabel.h>
+#include <QLabel>
+#include <QVBoxLayout>
 
-
-
+#include <kdialog.h>
 
 class SelectProfileWidget : public QWidget
 {
@@ -38,6 +35,7 @@ private:
 public:
     QTreeWidget *profilesWidget;
     QLabel *selectionLabel;
+    QVBoxLayout *layout;
     
     SelectProfileWidget (QWidget *parent = 0);
     
@@ -54,8 +52,10 @@ class SelectProfile : public KDialog
     
   public:	
     SelectProfile(QString remoteName, QWidget *parent = 0, const bool &modal = false);
-    const Profile *getSelectedProfile();
+    Profile *getSelectedProfile();
     
+  public slots:
+    void checkForUpdate(QTreeWidgetItem*, int);
 };
 
 class ProfileWrapper 
@@ -76,7 +76,7 @@ class ProfileWrapper
       supported = pSupported;
     };
     
-    const Profile *getProfile() {
+    Profile *getProfile() {
       return profile;
     };
     

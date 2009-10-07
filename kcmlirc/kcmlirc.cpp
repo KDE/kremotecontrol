@@ -56,6 +56,7 @@
 
 // typedef KGenericFactory<KCMLirc, QWidget> theFactory;
 // K_EXPORT_COMPONENT_FACTORY(kcm_lirc, theFactory("kcmlirc"))
+#include "selectprofile.h"
 
 K_PLUGIN_FACTORY( KCMLircFactory, registerPlugin<KCMLirc>();)
 K_EXPORT_PLUGIN( KCMLircFactory( "kcm_lirc" ) )
@@ -134,8 +135,8 @@ void KCMLirc::connectSignalsAndSlots() {
     connect(theKCMLircBase->theAddMode, SIGNAL(clicked()), this, SLOT(slotAddMode()));
     connect(theKCMLircBase->theEditMode, SIGNAL(clicked()), this, SLOT(slotEditMode()));
     connect(theKCMLircBase->theRemoveMode, SIGNAL(clicked()), this, SLOT(slotRemoveMode()));
-    
-    
+
+
 
 }
 
@@ -148,9 +149,9 @@ KCMLirc::~KCMLirc()
 void KCMLirc::updateModesStatus()
 {
     if (! theKCMLircBase->theModes->selectedItems().isEmpty()) {
-	QTreeWidgetItem *item = theKCMLircBase->theModes->selectedItems().first();
-	bool remoteSelected = item->isSelected();
-	theKCMLircBase->theAddActions->setEnabled(remoteSelected && ProfileServer::getInstance()->profiles().count());
+        QTreeWidgetItem *item = theKCMLircBase->theModes->selectedItems().first();
+        bool remoteSelected = item->isSelected();
+        theKCMLircBase->theAddActions->setEnabled(remoteSelected && ProfileServer::getInstance()->profiles().count());
         theKCMLircBase->theAddAction->setEnabled(remoteSelected);
         theKCMLircBase->theAddMode->setEnabled(remoteSelected);
         theKCMLircBase->theRemoveMode->setEnabled(item->parent() != 0);
@@ -176,8 +177,8 @@ void KCMLirc::slotEditAction()
     EditAction theDialog(currentAction(), modeList);
     if (theDialog.exec() == QDialog::Accepted) {
         allActions[allActions.indexOf(currentAction())] = theDialog.getAction();
-        emit changed(true);
         updateActions();
+	emit changed(true);
     }
 }
 
@@ -186,49 +187,21 @@ void KCMLirc::slotAddActions()
     if (theKCMLircBase->theModes->selectedItems().isEmpty()) {
         return;
     }
-    Mode m = theKCMLircBase->theModes->currentItem()->data(0, Qt::UserRole).value<Mode>();
-    KDialog *theDialog = new KDialog(this);
-    QTreeWidget *theProfiles = new QTreeWidget();
-    theProfiles->setHeaderLabel(i18n("Select a profile"));
-    theProfiles->setRootIsDecorated(false);
-    theDialog->setMainWidget(theProfiles);
-    theDialog->setWindowTitle(i18n("Auto-Populate"));
-
-    QMap<QTreeWidgetItem *, Profile *> profileMap;
-    
-    foreach(Profile *profile, ProfileServer::getInstance()->profiles()) {
-      kDebug()<< "remote nanme "  << m.remote() << "profile " << profile->id();
-	ProfileServer::ProfileSupportedByRemote tSupport = isProfileAvailableForRemote(profile->id(), m.remote());
-	if(tSupport == ProfileServer::NO_ACTIONS_DEFINED){
-	  continue;
-	}
-        QStringList profileList;
-        profileList << profile->name();
-	QTreeWidgetItem* tTreewidget = new QTreeWidgetItem(theProfiles, profileList);
-	KIcon tIcon;
-	switch(tSupport){
-	  case ProfileServer::FULL_SUPPORTED : tIcon = KIcon("flag-green");
-	  break;
-	  case ProfileServer::PARTIAL_SUPPORTED : tIcon = KIcon("flag-yellow");
-	  break;
-	  default: tIcon = KIcon("flag-red");
-	}
-	tTreewidget->setIcon(0, tIcon);
-        profileMap[tTreewidget] = profile;
-    }
-
-    if (theDialog->exec() == QDialog::Accepted && theProfiles->currentItem()) {
-        autoPopulate(*(profileMap[theProfiles->currentItem()]),m);
-        updateActions();
-        emit changed(true);
+    Mode mode = theKCMLircBase->theModes->currentItem()->data(0, Qt::UserRole).value<Mode>();
+     SelectProfile *tDialog = new SelectProfile( mode.remote());
+    if (tDialog->exec() == QDialog::Accepted) {
+      autoPopulate(tDialog->getSelectedProfile(),mode);	
+      updateActions();
+      emit changed(true);
     }
 }
 
 void KCMLirc::slotAddAction()
 {
     kDebug();
-    if (theKCMLircBase->theModes->selectedItems().isEmpty())
+    if (theKCMLircBase->theModes->selectedItems().isEmpty()){
         return;
+    }
     Mode m = theKCMLircBase->theModes->currentItem()->data(0, Qt::UserRole).value<Mode>();
     AddAction theDialog(this, 0, m);
 
@@ -251,7 +224,7 @@ void KCMLirc::slotAddAction()
         allActions.addAction(theDialog.getAction());
         updateActions();
         emit changed(true);
-    }
+    }    
 }
 
 void KCMLirc::slotRemoveAction()
@@ -261,12 +234,12 @@ void KCMLirc::slotRemoveAction()
     emit changed(true);
 }
 
-void KCMLirc::autoPopulate(const Profile &profile,const Mode &mode)
+void KCMLirc::autoPopulate(const Profile *profile,const Mode &mode)
 {
     QStringList buttonList = DBusInterface::getInstance()->getButtons(mode.remote());
-    
+
     foreach (QString button, buttonList ) {
-        const ProfileAction *pa = profile.getProfileActionByButton(button);
+        const ProfileAction *pa = profile->getProfileActionByButton(button);
         if (pa) {
             IRAction *action = new IRAction();
             action->setRemote(mode.remote());
@@ -283,16 +256,16 @@ void KCMLirc::autoPopulate(const Profile &profile,const Mode &mode)
             kDebug() << "Argumentcount" << Prototype(pa->prototype()).argumentCount();
 
             for (int j = 0; j < pa->arguments().size(); ++j) {
-		ProfileActionArgument tArgument= pa->arguments().at(j);
-		QVariant tVariant;
+                ProfileActionArgument tArgument= pa->arguments().at(j);
+                QVariant tVariant;
                 if (!tArgument.getDefault().toString().isEmpty()) {
-		    tVariant = tArgument.getDefault();
-		    tVariant.convert(QVariant::nameToType(tArgument.type().toLocal8Bit()));
+                    tVariant = tArgument.getDefault();
+                    tVariant.convert(QVariant::nameToType(tArgument.type().toLocal8Bit()));
                 } else {
-		    tVariant = QString().setNum(pa->multiplier());
+                    tVariant = QString().setNum(pa->multiplier());
                     tVariant.convert(QVariant::nameToType(Prototype(pa->prototype()).type(0).toLocal8Bit()));
                 }
-		arguments.append(tVariant);
+                arguments.append(tVariant);
                 kDebug() << "added argument: " << tVariant;
             }
             action->setArguments(arguments);
@@ -569,7 +542,7 @@ void KCMLirc::updateInformation()
         new QTreeWidgetItem(theKCMLircBase->theInformation, infoList);
         theKCMLircBase->theInformationLabel->setText(i18n(
                     "Information on <b>%1</b>:", p->name()));
-    } 
+    }
 }
 
 void KCMLirc::load()
@@ -616,24 +589,24 @@ void KCMLirc::configChanged()
 
 ProfileServer::ProfileSupportedByRemote KCMLirc::isProfileAvailableForRemote(const QString profileName, const QString remoteName)
 {
-  QStringList tProfilActionNames = ProfileServer::getInstance()->getAllButtonNamesById(profileName);
-  if(tProfilActionNames.size() == 0){
-    return ProfileServer::NO_ACTIONS_DEFINED;
-  }
-  QStringList solidButtonNames = DBusInterface::getInstance()->getButtons(remoteName);  
-  int found=0;
-  
-  foreach(const QString solidButtonName, solidButtonNames){
-    if( tProfilActionNames.contains(solidButtonName)){
-      found++;
+    QStringList tProfilActionNames = ProfileServer::getInstance()->getAllButtonNamesById(profileName);
+    if (tProfilActionNames.size() == 0) {
+        return ProfileServer::NO_ACTIONS_DEFINED;
     }
-  }
-  if(found == 0){
-      return ProfileServer::NOT_SUPPORTED;
-  }else if (found != tProfilActionNames.size()){
-    return ProfileServer::PARTIAL_SUPPORTED;
-  }
-  return ProfileServer::FULL_SUPPORTED;
+    QStringList solidButtonNames = DBusInterface::getInstance()->getButtons(remoteName);
+    int found=0;
+
+    foreach(const QString solidButtonName, solidButtonNames) {
+        if ( tProfilActionNames.contains(solidButtonName)) {
+            found++;
+        }
+    }
+    if (found == 0) {
+        return ProfileServer::NOT_SUPPORTED;
+    } else if (found != tProfilActionNames.size()) {
+        return ProfileServer::PARTIAL_SUPPORTED;
+    }
+    return ProfileServer::FULL_SUPPORTED;
 }
 
 #include "kcmlirc.moc"
