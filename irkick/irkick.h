@@ -81,9 +81,7 @@ public Q_SLOTS: //dbus slot
      *
      * @returns said list.
      */
-    const QStringList buttons(QString theRemote) {
-	return Solid::Control::RemoteControlManager::remoteControl(theRemote)->buttons();
-    }
+    const QStringList buttons(QString theRemote); 
 
     /**
      * Sends next keypress to given application by DBUS.
