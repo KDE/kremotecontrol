@@ -88,7 +88,7 @@ public:
 
 class ProfileAction
 {
-    QString theObjId, thePrototype, theName, theComment, theClass, theButtonName;
+    QString theObjId, thePrototype, theName, theComment, theButtonName;
     float theMultiplier;
     const Profile *parent;
     bool theRepeat, theAutoStart;
@@ -127,13 +127,7 @@ public:
     }
     void setComment(const QString &a) {
         theComment = a;
-    }
-    const QString &getClass() const {
-        return theClass;
-    }
-    void setClass(const QString &a) {
-        theClass = a;
-    }
+    }    
     float multiplier() const {
         return theMultiplier;
     }
@@ -223,7 +217,6 @@ public:
     const QHash<QString, ProfileAction*> &actions() const {
         return theActions;
     }
-    const ProfileAction *searchClass(const QString &c) const;
     const ProfileAction *getProfileActionByButton(const QString &buttonName) const;
     void loadFromFile(const QString &fileName);
 

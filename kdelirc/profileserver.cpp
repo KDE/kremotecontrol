@@ -77,17 +77,6 @@ KDE_EXPORT Profile::~Profile()
 {
 }
 
-KDE_EXPORT const ProfileAction *Profile::searchClass(const QString &buttonName) const
-{
-    for (QHash<QString, ProfileAction*>::const_iterator i = theActions.constBegin(); i != theActions.constEnd(); ++i) {
-        if (i.value()->getClass()  == buttonName) {
-            return i.value();
-        }
-    }
-    return 0;
-}
-
-
 KDE_EXPORT const ProfileAction *Profile::getProfileActionByButton(const QString &c) const
 {
     for (QHash<QString, ProfileAction*>::const_iterator i = theActions.constBegin(); i != theActions.constEnd(); ++i) {
