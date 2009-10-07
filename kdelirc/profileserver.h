@@ -93,7 +93,7 @@ class ProfileAction
     const Profile *parent;
     bool theRepeat, theAutoStart;
     QList<ProfileActionArgument> theArguments;
-    
+
 
     friend class Profile;
 public:
@@ -118,13 +118,13 @@ public:
     const QString &comment() const {
         return theComment;
     }
-    
-    const QString &buttonName() const{
-     return theButtonName; 
+
+    const QString &buttonName() const {
+        return theButtonName;
     }
-    void setButtonName(const QString buttonName){
-     theButtonName  = buttonName; 
-    } 
+    void setButtonName(const QString buttonName) {
+        theButtonName  = buttonName;
+    }
     void setComment(const QString &a) {
         theComment = a;
     }
@@ -176,7 +176,7 @@ class Profile : public QXmlDefaultHandler
     QHash<QString, ProfileAction*> theActions;  // objid+"::"+prototype => ProfileAction
 
     friend class ProfileServer;
-public:     
+public:
     bool characters(const QString &data);
     bool startElement(const QString &, const QString &, const QString &name, const QXmlAttributes &attributes);
     bool endElement(const QString &, const QString &, const QString &name);
@@ -228,6 +228,7 @@ public:
     void loadFromFile(const QString &fileName);
 
     Profile();
+    ~Profile();
 };
 
 class ProfileServer
@@ -237,11 +238,11 @@ class ProfileServer
     QList<Profile*> theProfiles;
 
 public:
-    enum ProfileSupportedByRemote{
-      FULL_SUPPORTED,
-      PARTIAL_SUPPORTED,
-      NOT_SUPPORTED,
-      NO_ACTIONS_DEFINED    
+    enum ProfileSupportedByRemote {
+        FULL_SUPPORTED,
+        PARTIAL_SUPPORTED,
+        NOT_SUPPORTED,
+        NO_ACTIONS_DEFINED
     };
     static ProfileServer *getInstance() {
         if (!theInstance) theInstance = new ProfileServer();
@@ -255,6 +256,7 @@ public:
     const ProfileAction *getAction(const QString &appId, const QString &actionId) const;
     const QString getServiceName(const QString &appId) const;
     const QStringList getAllButtonNamesById(const QString &profileId) const;
+    ProfileServer::ProfileSupportedByRemote isProfileAvailableForRemote(const Profile *profile, const QStringList &solidButtonNames);
     ProfileServer();
     ~ProfileServer();
 };

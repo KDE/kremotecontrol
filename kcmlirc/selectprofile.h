@@ -20,27 +20,35 @@
 #ifndef SELECTPROFILE_H
 #define SELECTPROFILE_H
 
+#include "profileserver.h"
 #include <QtGui/QWidget>
+#include <QMap>
+#include <QPair>
 #include "kicondialog.h"
 
 
 class SelectProfileWidget : public QWidget
 {
+private:
+  
 public:
     SelectProfileWidget (QWidget *parent = 0) : QWidget(parent)
     {
-      
+
     }
 };
 
 
 class SelectProfile : public KDialog
 {
-  Q_OBJECT
-  
-  SelectProfileWidget *selectProfileWidget;
-  
-  SelectProfile(QWidget *parent = 0, const bool &modal = false);
+    Q_OBJECT
+
+  private:
+    SelectProfileWidget *selectProfileWidget;
+      QMap<QString, QPair<Profile*, ProfileServer::ProfileSupportedByRemote> > theProfiles;
+    
+  public:	
+    SelectProfile(QString remoteName, QWidget *parent = 0, const bool &modal = false);
 };
 
 #endif // SELECTPROFILE_H

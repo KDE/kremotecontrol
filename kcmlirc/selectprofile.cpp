@@ -18,16 +18,27 @@
 */
 
 #include "selectprofile.h"
+#include "dbusinterface.h"
 
 
 
-SelectProfile::SelectProfile(QWidget *parent, const bool &modal): KDialog(parent)
+SelectProfile::SelectProfile(QString remoteName, QWidget *parent, const bool &modal): KDialog(parent)
 {
     selectProfileWidget = new SelectProfileWidget;
-  
+
     setMainWidget(selectProfileWidget);
     setButtons( Ok | Cancel);
     setDefaultButton(Ok);
     setModal(modal);
+    QList<Profile*> profiles = ProfileServer::getInstance()->profiles();
+    foreach(Profile* profile, profiles) {
+        ProfileServer::ProfileSupportedByRemote tSupported;
+        tSupported = ProfileServer::getInstance()->isProfileAvailableForRemote(profile, DBusInterface::getInstance()->getButtons(remoteName));
+        if (! tSupported == ProfileServer::NO_ACTIONS_DEFINED){
+            theProfiles.insert(profile->name(), qMakePair(profile, tSupported));
+        }
+
+    }
+
 }
 

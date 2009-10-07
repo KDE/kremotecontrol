@@ -24,7 +24,7 @@
   */
 
 #include "profileserver.h"
-
+//
 #include <QFile>
 
 #include <kglobal.h>
@@ -71,6 +71,10 @@ KDE_EXPORT Profile::Profile()
     theIfMulti = IM_DONTSEND;
 
 // theActions.setAutoDelete(true);
+}
+
+KDE_EXPORT Profile::~Profile()
+{
 }
 
 KDE_EXPORT const ProfileAction *Profile::searchClass(const QString &buttonName) const
@@ -148,9 +152,9 @@ bool Profile::startElement(const QString &, const QString &, const QString &name
         curPA = new ProfileAction;
         curPA->setObjId(attributes.value("objid"));
         curPA->setPrototype(attributes.value("prototype"));
- kDebug() << "loading function:" << attributes.value("prototype");
+        kDebug() << "loading function:" << attributes.value("prototype");
         curPA->setClass(attributes.value("class"));
-	curPA->setButtonName(attributes.value("button"));
+        curPA->setButtonName(attributes.value("button"));
         curPA->setMultiplier(attributes.value("multiplier").isEmpty() ? 1.0 : attributes.value("multiplier").toFloat());
         curPA->setRepeat(attributes.value("repeat") == "1");
         curPA->setAutoStart(attributes.value("autostart") == "1");
@@ -164,9 +168,9 @@ bool Profile::startElement(const QString &, const QString &, const QString &name
         curPAA->setType(attributes.value("type"));
         QVariant tmpArg(QVariant::nameToType(attributes.value("type").toLocal8Bit()));
 //        tmpArg.convert();
-	kDebug() << "***********************************";
-	kDebug() << "type:" << attributes.value("type");
-	kDebug() << "tmpArg:" << tmpArg;
+        kDebug() << "***********************************";
+        kDebug() << "type:" << attributes.value("type");
+        kDebug() << "tmpArg:" << tmpArg;
         curPAA->setDefault(tmpArg);
     } else if (name == "range" && curPAA)
         curPAA->setRange(qMakePair(attributes.value("min").toInt(), attributes.value("max").toInt()));
@@ -187,21 +191,21 @@ bool Profile::endElement(const QString &, const QString &, const QString &name)
     else if (name == "comment" && curPA && !curPAA)
         curPA->setComment(charBuffer);
     else if (name == "default" && curPA && curPAA) {
-	if (curPAA->theDefault.type() == QVariant::Int) {
-	    curPAA->theDefault.setValue(charBuffer.toInt());
-	} else if (curPAA->theDefault.type() == QVariant::UInt) {
-	    curPAA->theDefault.setValue(charBuffer.toUInt());
-	} else if (curPAA->theDefault.type() == QVariant::Bool) {
-	    curPAA->theDefault.setValue(charBuffer == "true" ? true : false);
-	} else if (curPAA->theDefault.type() == QVariant::Double) {
-	    curPAA->theDefault.setValue(charBuffer.toDouble());
-	} else if (curPAA->theDefault.type() == QVariant::StringList) {
-	    curPAA->theDefault.setValue(charBuffer.split(','));
-	} else if (curPAA->theDefault.type() == QVariant::ByteArray) {
-	    curPAA->theDefault.setValue(charBuffer.toLocal8Bit());
-	} else {
-	    curPAA->theDefault.setValue(charBuffer);
-	}
+        if (curPAA->theDefault.type() == QVariant::Int) {
+            curPAA->theDefault.setValue(charBuffer.toInt());
+        } else if (curPAA->theDefault.type() == QVariant::UInt) {
+            curPAA->theDefault.setValue(charBuffer.toUInt());
+        } else if (curPAA->theDefault.type() == QVariant::Bool) {
+            curPAA->theDefault.setValue(charBuffer == "true" ? true : false);
+        } else if (curPAA->theDefault.type() == QVariant::Double) {
+            curPAA->theDefault.setValue(charBuffer.toDouble());
+        } else if (curPAA->theDefault.type() == QVariant::StringList) {
+            curPAA->theDefault.setValue(charBuffer.split(','));
+        } else if (curPAA->theDefault.type() == QVariant::ByteArray) {
+            curPAA->theDefault.setValue(charBuffer.toLocal8Bit());
+        } else {
+            curPAA->theDefault.setValue(charBuffer);
+        }
 
     } else if (name == "comment" && curPA && curPAA)
         curPAA->setComment(charBuffer);
@@ -219,15 +223,42 @@ bool Profile::endElement(const QString &, const QString &, const QString &name)
 
 KDE_EXPORT const QStringList ProfileServer::getAllButtonNamesById(const QString& profileId) const
 {
-  QStringList tReturn;
-  const Profile *profile = getProfileById(profileId);
+    QStringList tReturn;
+    const Profile *profile = getProfileById(profileId);
     if (profile) {
-        foreach(const ProfileAction *profileAction, profile->actions().values()){
-	  if(! profileAction->buttonName().isEmpty()){
-	    tReturn << profileAction->buttonName();
-	  }
-      }
+        foreach(const ProfileAction *profileAction, profile->actions().values()) {
+            if (! profileAction->buttonName().isEmpty()) {
+                tReturn << profileAction->buttonName();
+            }
+        }
     }
-    return tReturn; 
+    return tReturn;
 }
 
+
+KDE_EXPORT ProfileServer::ProfileSupportedByRemote ProfileServer::isProfileAvailableForRemote(const Profile *profile, const QStringList &solidButtonNames)
+{
+    QStringList tProfilActionNames;
+
+    foreach(const ProfileAction *profileAction, profile->actions().values()) {
+        if (! profileAction->buttonName().isEmpty()) {
+            tProfilActionNames << profileAction->buttonName();
+        }
+    }
+    if (tProfilActionNames.size() == 0) {
+        return ProfileServer::NO_ACTIONS_DEFINED;
+    }
+    int found=0;
+
+    foreach(const QString solidButtonName, solidButtonNames) {
+        if ( tProfilActionNames.contains(solidButtonName)) {
+            found++;
+        }
+    }
+    if (found == 0) {
+        return ProfileServer::NOT_SUPPORTED;
+    } else if (found != tProfilActionNames.size()) {
+        return ProfileServer::PARTIAL_SUPPORTED;
+    }
+    return ProfileServer::FULL_SUPPORTED;
+}
