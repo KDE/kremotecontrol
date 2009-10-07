@@ -579,7 +579,7 @@ void KCMLirc::load()
 
     allActions.loadFromConfig(theConfig);
     allModes.loadFromConfig(theConfig);
-    QStringList remotes = DBusInterface::getInstance()->getRegisteredPrograms();
+    QStringList remotes = DBusInterface::getInstance()->getRemotes();
 
     allModes.generateNulls(remotes);
 
