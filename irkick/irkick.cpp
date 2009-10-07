@@ -385,6 +385,14 @@ void IRKick::gotMessage(const RemoteControlButton &button)
     theFlashOff->start(200);
 }
 
+const QStringList IRKick::buttons(QString theRemote) {
+    QStringList retList;
+    foreach(const Solid::Control::RemoteControlButton &button, Solid::Control::RemoteControlManager::remoteControl(theRemote)->buttons()){
+        retList.append(button.name());
+    }
+    return retList;
+}
+
 void IRKick::stealNextPress(QString app, QString module, QString method)
 {
     npApp = app;
