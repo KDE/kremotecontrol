@@ -6,23 +6,23 @@
     <instances unique="1"/>
 
     <!-- Playback actions -->
-    <action objid="Player" prototype="void Play()" class="play">
+    <action objid="Player" prototype="void Play()" class="play" button="Play">
         <name>Start playing</name>
         <comment></comment>
     </action>
-    <action objid="Player" prototype="void Stop()" class="stop">
+    <action objid="Player" prototype="void Stop()" class="stop" button="Stop">
         <name>Stop playing</name>
         <comment></comment>
     </action>
-    <action objid="Player" prototype="void Pause()" class="pause">
+    <action objid="Player" prototype="void Pause()" class="pause" button="PlayPause">
         <name>Pause playing</name>
         <comment></comment>
     </action>
-    <action objid="Player" prototype="void Next()" class="next">
+    <action objid="Player" prototype="void Next()" class="next" button="SkipForward">
         <name>Advance to next track</name>
         <comment></comment>
     </action>
-    <action objid="Player" prototype="void Prev()" class="previous">
+    <action objid="Player" prototype="void Prev()" class="previous" button ="SkipBackward">
         <name>Go to previous track</name>
         <comment></comment>
     </action>

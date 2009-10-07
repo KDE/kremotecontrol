@@ -28,10 +28,13 @@
 
 #include "modes.h"
 #include "iractions.h"
-#include "klircclient.h"
+//#include "klircclient.h"
 
 #include <knotificationitem.h>
 #include <kaboutdata.h>
+
+#include <solid/control/remotecontrolmanager.h>
+#include <solid/control/remotecontrol.h>
 
 class QTimer;
 
@@ -54,9 +57,6 @@ class IRKick: public KNotificationItem
     bool searchForProgram(const IRAction &action, QStringList &programs);
     void executeAction(const IRAction &action);
 
-protected:
-    KLircClient *theClient;
-
 public Q_SLOTS: //dbus slot
     /**
      * Query status of connection.
@@ -64,18 +64,7 @@ public Q_SLOTS: //dbus slot
      * @returns true if connected to lircd.
      */
     bool isConnected() {
-        return theClient->isConnected();
-    }
-
-    /**
-     * Query status of remote list.
-     *
-     * Make sure this is true before calling remotes()/buttons(...).
-     *
-     * @returns true if up to date.
-     */
-    bool haveFullList() {
-        return theClient->haveFullList();
+        return Solid::Control::RemoteControlManager::connected();
     }
 
     /**
@@ -84,7 +73,7 @@ public Q_SLOTS: //dbus slot
      * @returns said list.
      */
     const QStringList remotes() {
-        return theClient->remotes();
+        return Solid::Control::RemoteControlManager::remoteNames();
     }
 
     /**
@@ -93,11 +82,11 @@ public Q_SLOTS: //dbus slot
      * @returns said list.
      */
     const QStringList buttons(QString theRemote) {
-        return theClient->buttons(theRemote);
+	return Solid::Control::RemoteControlManager::remoteControl(theRemote)->buttons();
     }
 
     /**
-     * Sends next keypress to given application by DCOP.
+     * Sends next keypress to given application by DBUS.
      *
      * @param The receiving application.
      * @param The receiving application module.
@@ -118,14 +107,13 @@ public Q_SLOTS: //dbus slot
     }
 
 private slots:
-    void gotMessage(const QString &theRemote, const QString &theButton, int theRepeatCounter);
+    void gotMessage(const Solid::Control::RemoteControlButton &button);
     void resetModes();
     void flashOff();
-    void checkLirc();
 
     void slotConfigure();
     void slotReloadConfiguration();
-    void slotClosed();
+    void slotStatusChanged(bool connected);
 
 public:
     explicit IRKick();

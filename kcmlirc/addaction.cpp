@@ -139,7 +139,7 @@ int AddAction::nextId() const
 	}
 	QString application = theProfiles->currentItem()->data(Qt::UserRole).toString();
 	QString function = theProfileFunctions->currentItem()->data(0, Qt::UserRole).toString();
-	const ProfileAction *profileAction =  ProfileServer::profileServer()->getAction(application, function);
+	const ProfileAction *profileAction =  ProfileServer::getInstance()->getAction(application, function);
 
 	const QList<ProfileActionArgument> &profileActionArguments = profileAction->arguments();
 	kDebug() << "argcount" << profileActionArguments.count();
@@ -244,7 +244,7 @@ void AddAction::updateProfiles()
 {
     theProfiles->clear();
 
-    foreach (Profile *tmp, ProfileServer::profileServer()->profiles()) {
+    foreach (Profile *tmp, ProfileServer::getInstance()->profiles()) {
         QListWidgetItem *item = new QListWidgetItem(tmp->name());
         item->setData(Qt::UserRole, tmp->id());
         theProfiles->addItem(item);
@@ -255,7 +255,7 @@ void AddAction::updateOptions()
 {
     IfMulti im = IM_SENDTOTOP;
     if (theUseProfile->isChecked()) {
-        ProfileServer *theServer = ProfileServer::profileServer();
+        ProfileServer *theServer = ProfileServer::getInstance();
         if (!theProfiles->currentItem()) {
             return;
         }
@@ -293,7 +293,7 @@ void AddAction::updateOptions()
 void AddAction::updateProfileFunctions()
 {
     kDebug() << "updateProfileFunctions called";
-    ProfileServer *theServer = ProfileServer::profileServer();
+    ProfileServer *theServer = ProfileServer::getInstance();
     theProfileFunctions->clear();
     if (!theProfiles->currentItem()) {
         return;
@@ -323,7 +323,7 @@ void AddAction::updateArguments()
     if (theUseProfile->isChecked()) {
         QString application = theProfiles->currentItem()->data(Qt::UserRole).toString();
         QString function = theProfileFunctions->currentItem()->data(0, Qt::UserRole).toString();
-        const ProfileAction *profileAction =  ProfileServer::profileServer()->getAction(application, function);
+        const ProfileAction *profileAction =  ProfileServer::getInstance()->getAction(application, function);
 
         const QList<ProfileActionArgument> &profileActionArguments = profileAction->arguments();
         for (int i = 0; i < profileActionArguments.count(); ++i) {
@@ -417,7 +417,7 @@ IRAction* AddAction::getAction()
         action->setArguments(getCurrentArgs());
     } else if (theUseProfile->isChecked() && !theProfiles->selectedItems().isEmpty() &&
                (!theProfileFunctions->selectedItems().isEmpty() || theJustStart->isChecked())) {
-        ProfileServer *theServer = ProfileServer::profileServer();
+        ProfileServer *theServer = ProfileServer::getInstance();
 
         if (theNotJustStart->isChecked()) {
             const ProfileAction

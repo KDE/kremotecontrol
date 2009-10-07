@@ -52,7 +52,7 @@ private:
     Modes allModes;
     QMap<QTreeWidgetItem *, QString> profileMap, remoteMap;
 
-    void autoPopulate(const Profile &profile, const Remote &remote, const QString &mode);
+    void autoPopulate(const Profile &profile, const Mode &mode);
 
     inline IRAction *currentAction() {
         IRAction *tAction = theKCMLircBase->theActions->currentItem()->data(0, Qt::UserRole).value<IRAction*>();
@@ -82,7 +82,7 @@ public:
     virtual void save();
     virtual void defaults();
     virtual void configChanged();
-
+    ProfileServer::ProfileSupportedByRemote isProfileAvailableForRemote(const QString profileName, const QString remoteName);
     explicit KCMLirc(QWidget *parent = 0, const QVariantList &args = QVariantList());
     ~KCMLirc();
 

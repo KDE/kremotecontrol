@@ -159,10 +159,10 @@ void EditAction::readFrom()
             editActionBaseWidget->theModes->setCurrentIndex(editActionBaseWidget->theModes->findText(theAction->object()));
     } else if (theAction->isJustStart()) { // profile action
         editActionBaseWidget->theUseProfile->setChecked(true);
-        const Profile *p = ProfileServer::profileServer()->getProfileById(theAction->program());
+        const Profile *p = ProfileServer::getInstance()->getProfileById(theAction->program());
         editActionBaseWidget->theApplications->setCurrentIndex(editActionBaseWidget->theApplications->findText(p->name()));
         editActionBaseWidget->theJustStart->setChecked(true);
-    } else if (ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype())) { // profile action
+    } else if (ProfileServer::getInstance()->getAction(theAction->program(), theAction->object(), theAction->method().prototype())) { // profile action
         editActionBaseWidget->theUseProfile->setChecked(true);
         editActionBaseWidget->thePerformFunction->setChecked(true);
     } else { // DBus action
@@ -187,9 +187,9 @@ IRAction* EditAction::getAction()
     } else if (editActionBaseWidget->theUseProfile->isChecked()) {
         QString application = editActionBaseWidget->theApplications->itemData(editActionBaseWidget->theApplications->currentIndex()).toString();
         QString function = editActionBaseWidget->theFunctions->itemData(editActionBaseWidget->theFunctions->currentIndex()).toString();
-        const ProfileAction *profileAction = ProfileServer::profileServer()->getAction(application, function);
-        if ( profileAction  || (editActionBaseWidget->theJustStart->isChecked() &&  ProfileServer::profileServer()->getProfileById(application))) {
-            tAction->setProgram(ProfileServer::profileServer()->getProfileById(application)->id());
+        const ProfileAction *profileAction = ProfileServer::getInstance()->getAction(application, function);
+        if ( profileAction  || (editActionBaseWidget->theJustStart->isChecked() &&  ProfileServer::getInstance()->getProfileById(application))) {
+            tAction->setProgram(ProfileServer::getInstance()->getProfileById(application)->id());
             if (editActionBaseWidget->theJustStart->isChecked()) {
                 tAction->setObject("");
             } else {
@@ -231,7 +231,7 @@ void EditAction::updateArguments()
     if (editActionBaseWidget->theUseProfile->isChecked()) {
         QString function = editActionBaseWidget->theFunctions->itemData(editActionBaseWidget->theFunctions->currentIndex()).toString();
         QString application = editActionBaseWidget->theApplications->itemData(editActionBaseWidget->theApplications->currentIndex()).toString();
-        const ProfileAction *profileAction = ProfileServer::profileServer()->getAction(application, function);
+        const ProfileAction *profileAction = ProfileServer::getInstance()->getAction(application, function);
 
         // No profile action configured or theJustStart is checked... No need for arguments
         if (!profileAction ||  editActionBaseWidget->theJustStart->isChecked()) {
@@ -264,7 +264,7 @@ void EditAction::updateArguments()
 
 
         // Check if the current selected function is the configured one
-        if (!ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype()) &&
+        if (!ProfileServer::getInstance()->getAction(theAction->program(), theAction->object(), theAction->method().prototype()) &&
                 getCurrentDbusApp() == theAction->program() && // The correct app is selected!
                 editActionBaseWidget->theDBusObjects->currentText() == theAction->object() && // And the Object is selected too!
                 getCurrentDBusFunction() == theAction->method().prototype()) { // And also the Function. Fill in the arguments
@@ -291,7 +291,7 @@ void EditAction::updateArguments()
 void EditAction::updateInstancesOptions()
 {
     if (editActionBaseWidget->theUseProfile->isChecked()) {
-        ProfileServer *theServer = ProfileServer::profileServer();
+        ProfileServer *theServer = ProfileServer::getInstance();
         if (editActionBaseWidget->theApplications->currentIndex() == -1) return;
         const Profile *p = theServer->getProfileById(editActionBaseWidget->theApplications->itemData(editActionBaseWidget->theApplications->currentIndex()).toString());
         isUnique = p->unique();
@@ -315,12 +315,12 @@ void EditAction::updateInstancesOptions()
 void EditAction::updateApplications()
 {
     editActionBaseWidget->theApplications->clear();
-    foreach(Profile *tmp, ProfileServer::profileServer()->profiles()) {
+    foreach(Profile *tmp, ProfileServer::getInstance()->profiles()) {
         editActionBaseWidget->theApplications->addItem(tmp->name(), tmp->id());
     }
     editActionBaseWidget->theApplications->model()->sort(0);
 
-    const ProfileAction *profileAction = ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype());
+    const ProfileAction *profileAction = ProfileServer::getInstance()->getAction(theAction->program(), theAction->object(), theAction->method().prototype());
     if (profileAction) {
         int index = editActionBaseWidget->theApplications->findText(profileAction->profile()->name());
         editActionBaseWidget->theApplications->setCurrentIndex(index < 0 ? 0: index);
@@ -338,12 +338,12 @@ void EditAction::updateFunctions()
 
     const QString application = editActionBaseWidget->theApplications->itemData(editActionBaseWidget->theApplications->currentIndex()).toString();
     kDebug() << "app:" << application;
-    QHash<QString, ProfileAction*> dict = ProfileServer::profileServer()->getProfileById(application)->actions();
+    QHash<QString, ProfileAction*> dict = ProfileServer::getInstance()->getProfileById(application)->actions();
     QHash<QString, ProfileAction*>::const_iterator i;
     for (i = dict.constBegin(); i != dict.constEnd(); ++i) {
         editActionBaseWidget->theFunctions->addItem(i.value()->name(), i.key());
     }
-    const ProfileAction *action = ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype());
+    const ProfileAction *action = ProfileServer::getInstance()->getAction(theAction->program(), theAction->object(), theAction->method().prototype());
     if (action && (action->profile()->name() == editActionBaseWidget->theApplications->currentText())) {
         int index = editActionBaseWidget->theFunctions->findText(action->name());
         editActionBaseWidget->theFunctions->setCurrentIndex(index < 0 ? 0 : index);
@@ -361,7 +361,7 @@ void EditAction::updateDBusApplications()
         dbusServiceModel->appendRow(new DBusServiceItem(item));
     }
 
-    if (!ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype()) &&
+    if (!ProfileServer::getInstance()->getAction(theAction->program(), theAction->object(), theAction->method().prototype()) &&
             !DBusInterface::getInstance()->isProgramRunning(theAction->program()) && 
 	    !theAction->isModeChange()) {
         dbusServiceModel->appendRow(new DBusServiceItem(theAction->program()));
@@ -378,7 +378,7 @@ void EditAction::updateDBusObjects()
     editActionBaseWidget->theDBusObjects->insertItems(0, DBusInterface::getInstance()->getObjects(getCurrentDbusApp()));
     kDebug() << "Currnet app " << getCurrentDbusApp();
     // Check if configured Action is a DBus Action but not running
-    if (!ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype()) &&
+    if (!ProfileServer::getInstance()->getAction(theAction->program(), theAction->object(), theAction->method().prototype()) &&
             !DBusInterface::getInstance()->isProgramRunning(theAction->program())) {
         if (editActionBaseWidget->theDBusApplications->itemData(editActionBaseWidget->theDBusApplications->currentIndex()).toString() ==
                 theAction->program()) { // Is selected!
@@ -401,7 +401,7 @@ void EditAction::updateDBusFunctions()
     }
 
     // Check if configured Action is a DBus Action but not running
-    if (!ProfileServer::profileServer()->getAction(theAction->program(), theAction->object(), theAction->method().prototype()) &&
+    if (!ProfileServer::getInstance()->getAction(theAction->program(), theAction->object(), theAction->method().prototype()) &&
             !DBusInterface::getInstance()->isProgramRunning(theAction->program())) {
         if (editActionBaseWidget->theDBusApplications->itemData(editActionBaseWidget->theDBusApplications->currentIndex()).toString() ==
                 theAction->program()) { // The correct app is selected!

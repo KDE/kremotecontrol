@@ -73,15 +73,27 @@ KDE_EXPORT Profile::Profile()
 // theActions.setAutoDelete(true);
 }
 
-KDE_EXPORT const ProfileAction *Profile::searchClass(const QString &c) const
+KDE_EXPORT const ProfileAction *Profile::searchClass(const QString &buttonName) const
 {
     for (QHash<QString, ProfileAction*>::const_iterator i = theActions.constBegin(); i != theActions.constEnd(); ++i) {
-        if (i.value()->getClass() == c) {
+        if (i.value()->getClass()  == buttonName) {
             return i.value();
         }
     }
     return 0;
 }
+
+
+KDE_EXPORT const ProfileAction *Profile::getProfileActionByButton(const QString &c) const
+{
+    for (QHash<QString, ProfileAction*>::const_iterator i = theActions.constBegin(); i != theActions.constEnd(); ++i) {
+        if (i.value()->buttonName() == c) {
+            return i.value();
+        }
+    }
+    return 0;
+}
+
 
 KDE_EXPORT void Profile::loadFromFile(const QString &fileName)
 {
@@ -138,6 +150,7 @@ bool Profile::startElement(const QString &, const QString &, const QString &name
         curPA->setPrototype(attributes.value("prototype"));
  kDebug() << "loading function:" << attributes.value("prototype");
         curPA->setClass(attributes.value("class"));
+	curPA->setButtonName(attributes.value("button"));
         curPA->setMultiplier(attributes.value("multiplier").isEmpty() ? 1.0 : attributes.value("multiplier").toFloat());
         curPA->setRepeat(attributes.value("repeat") == "1");
         curPA->setAutoStart(attributes.value("autostart") == "1");
@@ -202,3 +215,19 @@ bool Profile::endElement(const QString &, const QString &, const QString &name)
     charBuffer = "";
     return true;
 }
+
+
+KDE_EXPORT const QStringList ProfileServer::getAllButtonNamesById(const QString& profileId) const
+{
+  QStringList tReturn;
+  const Profile *profile = getProfileById(profileId);
+    if (profile) {
+        foreach(const ProfileAction *profileAction, profile->actions().values()){
+	  if(! profileAction->buttonName().isEmpty()){
+	    tReturn << profileAction->buttonName();
+	  }
+      }
+    }
+    return tReturn; 
+}
+

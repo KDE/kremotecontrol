@@ -4,7 +4,7 @@
     <name>Sound Mixer</name>
     <author>Michael Zanetti</author>
     <instances unique="1"/>
-    <action objid="Mixer0" prototype="void increaseVolume(QString)" class="volumeup" repeat="1">
+    <action objid="Mixer0" prototype="void increaseVolume(QString)" class="volumeup" repeat="1" button="VolumeUp">
         <name>Increase Volume</name>
         <comment></comment>
         <argument type="QString">
@@ -12,7 +12,7 @@
             <default>Master:0</default>
         </argument>
     </action>
-    <action objid="Mixer0" prototype="void decreaseVolume(QString)" class="volumedown" repeat="1">
+    <action objid="Mixer0" prototype="void decreaseVolume(QString)" class="volumedown" repeat="1" button="VolumeDown">
         <name>Decrease Volume</name>
         <comment></comment>
         <argument type="QString">
@@ -20,7 +20,7 @@
             <default>Master:0</default>
         </argument>
     </action>
-    <action objid="Mixer0" prototype="void toggleMute(QString)" class="mute">
+    <action objid="Mixer0" prototype="void toggleMute(QString)" class="mute" button="Mute">
         <name>Toggle Mute</name>
         <comment></comment>
         <argument type="QString">

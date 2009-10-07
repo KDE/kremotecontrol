@@ -15,7 +15,7 @@ include_directories(
 set(libirkick_common_SRCS
         main.cpp 
         irkick.cpp 
-        klircclient.cpp
+#        klircclient.cpp
 )
 
 
@@ -25,7 +25,7 @@ QT4_ADD_DBUS_ADAPTOR(irkick_KDEINIT_SRCS org.kde.irkick.xml irkick.h IRKick)
 
 kde4_add_kdeinit_executable( irkick ${irkick_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_irkick  ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} kdelirc_shared)
+target_link_libraries(kdeinit_irkick  ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${KDE4_SOLID_LIBS} solidcontrol kdelirc_shared)
 install(TARGETS kdeinit_irkick ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 target_link_libraries(irkick kdeinit_irkick)

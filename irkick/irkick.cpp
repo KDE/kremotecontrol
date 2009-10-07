@@ -44,6 +44,8 @@
 #include <ktoolinvocation.h>
 #include <khelpmenu.h>
 
+using namespace Solid::Control;
+
 IRKick::IRKick():
         KNotificationItem(), npApp(QString())
 {
@@ -55,20 +57,30 @@ IRKick::IRKick():
     QDBusConnection dBusConnection = QDBusConnection::sessionBus();
     dBusConnection.registerObject("/IRKick", this,
                                   QDBusConnection::ExportAllSlots);
-    theClient = new KLircClient();
 
-    if (! theClient->isConnected()) {
-        QTimer::singleShot(10000, this, SLOT(checkLirc()));
+    
+
+    kDebug() << "loading solid";
+                                  
+    if (!Solid::Control::RemoteControlManager::connected()) {
+        kDebug() << "Lirc not ready yet...";
     }
     theFlashOff = new QTimer(this);
     theFlashOff->setSingleShot(true);
     connect(theFlashOff, SIGNAL(timeout()), SLOT(flashOff()));
 
     theResetCount = 0;
+    resetModes();
     slotReloadConfiguration();
-    connect(theClient, SIGNAL(connectionClosed()), this, SLOT(slotClosed()));
-    connect(theClient, SIGNAL(remotesRead()), this, SLOT(resetModes()));
-    connect(theClient, SIGNAL(commandReceived(const QString &, const QString &, int)), this, SLOT(gotMessage(const QString &, const QString &, int)));
+    connect(RemoteControlManager::notifier(), SIGNAL(statusChanged(bool)), this, SLOT(slotStatusChanged(bool)));
+    foreach(const QString &remote, RemoteControlManager::remoteNames()){
+        RemoteControl *rc = RemoteControlManager::remoteControl(remote);
+        kDebug() << "connecting to remote" << remote;
+        connect(rc, 
+                SIGNAL(buttonPressed(const Solid::Control::RemoteControlButton &)), 
+                this, 
+                SLOT(gotMessage(const Solid::Control::RemoteControlButton &)));
+    }
 
     m_menu = new KMenu(associatedWidget());
     setContextMenu(m_menu);
@@ -86,23 +98,25 @@ IRKick::~IRKick()
 {
 }
 
-void IRKick::slotClosed()
+void IRKick::slotStatusChanged(bool connected)
 {
-    KNotification::event("global_event", i18n("The infrared system has severed its connection. Remote controls are no longer available."), SmallIcon("irkick"), associatedWidget());
-    QTimer::singleShot(1000, this, SLOT(checkLirc()));
+  
+    if(connected){
+    KNotification::event("global_event", i18n("A connection to the infrared system has been made. Remote controls may now be available."),
+                SmallIcon("irkick"), associatedWidget());
     updateTray();
-}
-
-void IRKick::checkLirc()
-{
-    if (!theClient->isConnected()) {
-        if (theClient->connectToLirc()) {
-            KNotification::event("global_event", i18n("A connection to the infrared system has been made. Remote controls may now be available."),
-                                 SmallIcon("irkick"), associatedWidget());
-            updateTray();
-        } else {
-            QTimer::singleShot(10000, this, SLOT(checkLirc()));
-        }
+    foreach(const QString &remote, RemoteControlManager::remoteNames()){
+        RemoteControl *rc = RemoteControlManager::remoteControl(remote);
+        kDebug() << "connecting to remote" << remote;
+        connect(rc, 
+                SIGNAL(buttonPressed(const Solid::Control::RemoteControlButton &)), 
+                this, 
+                SLOT(gotMessage(const Solid::Control::RemoteControlButton &)));
+    }
+    resetModes();
+    } else {
+      KNotification::event("global_event", i18n("The infrared system has severed its connection. Remote controls are no longer available."), SmallIcon("irkick"), associatedWidget());
+      updateTray();
     }
 }
 
@@ -120,11 +134,11 @@ void IRKick::resetModes()
     }
 
     if (!theResetCount)
-        allModes.generateNulls(theClient->remotes());
+        allModes.generateNulls(Solid::Control::RemoteControlManager::remoteNames());
 
-    const QStringList remotes = theClient->remotes();
-    for (QStringList::const_iterator i = remotes.constBegin(); i != remotes.constEnd(); ++i) {
-        currentModes[*i] = allModes.getDefault(*i).name();
+    foreach (const QString &remote, Solid::Control::RemoteControlManager::remoteNames()) {
+        kDebug() << "adding remote" << remote << "to modes";
+        currentModes[remote] = allModes.getDefault(remote).name();
     }
     updateTray();
     ++theResetCount;
@@ -152,7 +166,7 @@ void IRKick::updateTray()
     QString toolTipHeader = i18n("KDE Lirc Server: ");
     QString toolTip;
     QString icon = "irkick";
-    if (!theClient->isConnected()) {
+    if (!Solid::Control::RemoteControlManager::connected()) {
         toolTipHeader += i18nc("The state of kdelirc", "Stopped");
         toolTip += i18n("Lirc daemon is currently not available.");
         icon = "irkickoff";
@@ -182,7 +196,7 @@ bool IRKick::searchForProgram(const IRAction &action, QStringList &programs)
     programs.clear();
 
     if (action.unique()) {
-	QString service = ProfileServer::profileServer()->getServiceName(action.program());
+	QString service = ProfileServer::getInstance()->getServiceName(action.program());
 	if(service.isNull()){
 	    service = action.program();
 	}
@@ -267,7 +281,7 @@ void IRKick::executeAction(const IRAction& action) {
     kDebug() << "programs.size: " << programs.size();
     if (action.autoStart() && !programs.size()) {
         kDebug() << "Should start " << action.program();
-        QString sname = ProfileServer::profileServer()->getServiceName(
+        QString sname = ProfileServer::getInstance()->getServiceName(
                             action.program());
         if (!sname.isNull()) {
             KNotification::event("app_event", i18n("Starting <b>%1</b>...",
@@ -312,40 +326,41 @@ void IRKick::executeAction(const IRAction& action) {
     }
 }
 
-void IRKick::gotMessage(const QString &theRemote, const QString &theButton,
-                        int theRepeatCounter)
+void IRKick::gotMessage(const RemoteControlButton &button)
 {
-    kDebug() << "Got message: " << theRemote << ": " << theButton << " (" << theRepeatCounter << ")";
+    kDebug() << "Got message: " << button.remoteName() << ": " << button.name() << " (" << button.repeatCounter() << ")";
     if (!npApp.isEmpty()) {
         QString theApp = npApp;
         npApp.clear();
         // send notifier by DBUS to npApp/npModule/npMethod(theRemote, theButton);
         kDebug() << "Sending keypress to: " << theApp << ":" << npModule << ":" << npMethod;
-        kDebug() << "Parameters: " << theRemote << theButton;
+        kDebug() << "Parameters: " << button.remoteName() << button.name();
         QDBusMessage m = QDBusMessage::createMethodCall(theApp, npModule, "",
                          npMethod);
-        m << theRemote << theButton;
+        m << button.remoteName() << button.name();
         QDBusMessage response = QDBusConnection::sessionBus().call(m);
         if (response.type() == QDBusMessage::ErrorMessage) {
             kDebug() << response.errorMessage();
         }
     } else {
-        if (currentModes[theRemote].isNull()) currentModes[theRemote] = "";
-        kDebug() << "current mode:" << currentModes[theRemote];
-        IRActions l = allActions.findByModeButton(Mode(theRemote, currentModes[theRemote]), theButton);
-        if (!currentModes[theRemote].isEmpty())
-            l += allActions.findByModeButton(Mode(theRemote, ""), theButton);
+        if (currentModes[button.remoteName()].isNull()) {
+            currentModes[button.remoteName()] = "";
+        }
+        kDebug() << "current mode:" << currentModes[button.remoteName()];
+        IRActions l = allActions.findByModeButton(Mode(button.remoteName(), currentModes[button.remoteName()]), button.name());
+        if (!currentModes[button.remoteName()].isEmpty())
+            l += allActions.findByModeButton(Mode(button.remoteName(), ""), button.name());
         bool doBefore = true, doAfter = false;
         for (int i = 0; i < l.size(); ++i)
-            if (l.at(i)->isModeChange() && !theRepeatCounter) { // mode switch
-                currentModes[theRemote] = l.at(i)->modeChange();
-                Mode mode = allModes.getMode(theRemote, l.at(i)->modeChange());
+            if (l.at(i)->isModeChange() && !button.repeatCounter()) { // mode switch
+                currentModes[button.remoteName()] = l.at(i)->modeChange();
+                Mode mode = allModes.getMode(button.remoteName(), l.at(i)->modeChange());
                 updateTray();
                 doBefore = l.at(i)->doBefore();
                 doAfter = l.at(i)->doAfter();
                 KNotification::event(
                                "mode_event", "<b>" + mode.remoteName() + ":</b><br>" +
-                               i18n("Mode switched to %1" , currentModes[theRemote] == "" ? i18nc("Default mode in notification", "Default") : currentModes[theRemote]),
+                               i18n("Mode switched to %1" , currentModes[button.remoteName()] == "" ? i18nc("Default mode in notification", "Default") : currentModes[button.remoteName()]),
                                DesktopIcon(mode.iconFile().isEmpty() ? "infrared-remote" : mode.iconFile()),
                                associatedWidget());
                 break;
@@ -354,14 +369,14 @@ void IRKick::gotMessage(const QString &theRemote, const QString &theButton,
         for (int after = 0; after < 2; after++) {
             if ((doBefore && !after) || (doAfter && after))
                 for (int i = 0; i < l.size(); ++i) {
-                    if (!l.at(i)->isModeChange() && (l.at(i)->repeat() || !theRepeatCounter)) {
+                    if (!l.at(i)->isModeChange() && (l.at(i)->repeat() || !button.repeatCounter())) {
                         executeAction(*l.at(i));
                     }
                 }
             if (!after && doAfter) {
-                l = allActions.findByModeButton(Mode(theRemote, currentModes[theRemote]), theButton);
-                if (!currentModes[theRemote].isEmpty()) {
-                    l += allActions.findByModeButton(Mode(theRemote, ""), theButton);
+                l = allActions.findByModeButton(Mode(button.remoteName(), currentModes[button.remoteName()]), button.name());
+                if (!currentModes[button.remoteName()].isEmpty()) {
+                    l += allActions.findByModeButton(Mode(button.remoteName(), ""), button.name());
                 }
             }
         }

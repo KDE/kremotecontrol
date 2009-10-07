@@ -116,7 +116,7 @@ KDE_EXPORT void IRAction::saveToConfig(KConfig &theConfig, int index) const
 
 KDE_EXPORT const QString IRAction::function() const
 {
-    ProfileServer *theServer = ProfileServer::profileServer();
+    ProfileServer *theServer = ProfileServer::getInstance();
     if (theProgram.isEmpty())
         if (theObject.isEmpty())
             return i18n("Exit mode");
@@ -153,7 +153,7 @@ KDE_EXPORT const QString IRAction::notes() const
 
 KDE_EXPORT const QString IRAction::application() const
 {
-    ProfileServer *theServer = ProfileServer::profileServer();
+    ProfileServer *theServer = ProfileServer::getInstance();
     if (theProgram.isEmpty())
         return QString();
     else {

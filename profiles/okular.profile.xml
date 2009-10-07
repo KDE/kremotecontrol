@@ -4,23 +4,23 @@
     <name>Okular</name>
     <author>Pino Toscano</author>
     <instances unique="0" ifmulti="sendtotop"/>
-    <action objid="okular" prototype="void slotPreviousPage()" repeat="0" autostart="0" class="rewind">
+    <action objid="okular" prototype="void slotPreviousPage()" repeat="0" autostart="0" class="rewind" button="Rewind">
         <name>Back</name>
         <comment>Goes to the previous page</comment>
     </action>
-    <action objid="okular" prototype="void slotNextPage()" repeat="0" autostart="0" class="forward">
+    <action objid="okular" prototype="void slotNextPage()" repeat="0" autostart="0" class="forward" button="FastForward">
         <name>Forward</name>
         <comment>Goes to the next page</comment>
     </action>
-    <action objid="okular" prototype="void slotGotoFirst()" repeat="0" autostart="0" class="previous">
+    <action objid="okular" prototype="void slotGotoFirst()" repeat="0" autostart="0" class="previous" button="SkipBackward">
         <name>First</name>
         <comment>Goes to the first page</comment>
     </action>
-    <action objid="okular" prototype="void slotGotoLast()" repeat="0" autostart="0" class="next">
+    <action objid="okular" prototype="void slotGotoLast()" repeat="0" autostart="0" class="next" button="SkipForward">
         <name>Last</name>
         <comment>Goes to the last page</comment>
     </action>
-    <action objid="okular" prototype="void slotTogglePresentation()" repeat="0" autostart="0" class="play">
+    <action objid="okular" prototype="void slotTogglePresentation()" repeat="0" autostart="0" class="PlayPause">
         <name>Presentation</name>
         <comment>Starts/stops presentation</comment>
     </action>

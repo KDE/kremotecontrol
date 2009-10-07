@@ -4,9 +4,6 @@
     <method name="isConnected">
       <arg type="b" direction="out"/>
     </method>
-    <method name="haveFullList">
-      <arg type="b" direction="out"/>
-    </method>
     <method name="remotes">
       <arg type="as" direction="out"/>
     </method>

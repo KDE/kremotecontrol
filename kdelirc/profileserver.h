@@ -88,11 +88,12 @@ public:
 
 class ProfileAction
 {
-    QString theObjId, thePrototype, theName, theComment, theClass;
+    QString theObjId, thePrototype, theName, theComment, theClass, theButtonName;
     float theMultiplier;
     const Profile *parent;
     bool theRepeat, theAutoStart;
     QList<ProfileActionArgument> theArguments;
+    
 
     friend class Profile;
 public:
@@ -117,6 +118,13 @@ public:
     const QString &comment() const {
         return theComment;
     }
+    
+    const QString &buttonName() const{
+     return theButtonName; 
+    }
+    void setButtonName(const QString buttonName){
+     theButtonName  = buttonName; 
+    } 
     void setComment(const QString &a) {
         theComment = a;
     }
@@ -168,7 +176,7 @@ class Profile : public QXmlDefaultHandler
     QHash<QString, ProfileAction*> theActions;  // objid+"::"+prototype => ProfileAction
 
     friend class ProfileServer;
-public:
+public:     
     bool characters(const QString &data);
     bool startElement(const QString &, const QString &, const QString &name, const QXmlAttributes &attributes);
     bool endElement(const QString &, const QString &, const QString &name);
@@ -216,7 +224,7 @@ public:
         return theActions;
     }
     const ProfileAction *searchClass(const QString &c) const;
-
+    const ProfileAction *getProfileActionByButton(const QString &buttonName) const;
     void loadFromFile(const QString &fileName);
 
     Profile();
@@ -229,7 +237,13 @@ class ProfileServer
     QList<Profile*> theProfiles;
 
 public:
-    static ProfileServer *profileServer() {
+    enum ProfileSupportedByRemote{
+      FULL_SUPPORTED,
+      PARTIAL_SUPPORTED,
+      NOT_SUPPORTED,
+      NO_ACTIONS_DEFINED    
+    };
+    static ProfileServer *getInstance() {
         if (!theInstance) theInstance = new ProfileServer();
         return theInstance;
     }
@@ -240,7 +254,7 @@ public:
     const ProfileAction *getAction(const QString &appId, const QString &objId, const QString &prototype) const;
     const ProfileAction *getAction(const QString &appId, const QString &actionId) const;
     const QString getServiceName(const QString &appId) const;
-
+    const QStringList getAllButtonNamesById(const QString &profileId) const;
     ProfileServer();
     ~ProfileServer();
 };
