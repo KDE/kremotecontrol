@@ -25,6 +25,10 @@
 #include <QMap>
 #include <QPair>
 #include "kicondialog.h"
+#include <QTreeWidget>
+#include <qlabel.h>
+
+
 
 
 class SelectProfileWidget : public QWidget
@@ -32,10 +36,11 @@ class SelectProfileWidget : public QWidget
 private:
   
 public:
-    SelectProfileWidget (QWidget *parent = 0) : QWidget(parent)
-    {
-
-    }
+    QTreeWidget *profilesWidget;
+    QLabel *selectionLabel;
+    
+    SelectProfileWidget (QWidget *parent = 0);
+    
 };
 
 
@@ -45,10 +50,41 @@ class SelectProfile : public KDialog
 
   private:
     SelectProfileWidget *selectProfileWidget;
-      QMap<QString, QPair<Profile*, ProfileServer::ProfileSupportedByRemote> > theProfiles;
+    
     
   public:	
     SelectProfile(QString remoteName, QWidget *parent = 0, const bool &modal = false);
+    const Profile *getSelectedProfile();
+    
 };
+
+class ProfileWrapper 
+{
+  private:
+    Profile *profile;
+    ProfileServer::ProfileSupportedByRemote supported;
+  
+  public:
+  ProfileWrapper(){
+  qRegisterMetaType<ProfileWrapper>("ProfileWrapper");
+  };
+    
+    ProfileWrapper( Profile * pProfile, ProfileServer::ProfileSupportedByRemote pSupported){
+      ProfileWrapper();
+      
+      profile = pProfile;
+      supported = pSupported;
+    };
+    
+    const Profile *getProfile() {
+      return profile;
+    };
+    
+     ProfileServer::ProfileSupportedByRemote getSupported() {
+      return supported;
+    };
+};
+
+Q_DECLARE_METATYPE(ProfileWrapper)
 
 #endif // SELECTPROFILE_H
