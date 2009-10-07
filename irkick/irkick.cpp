@@ -73,8 +73,8 @@ IRKick::IRKick():
     resetModes();
     slotReloadConfiguration();
     connect(RemoteControlManager::notifier(), SIGNAL(statusChanged(bool)), this, SLOT(slotStatusChanged(bool)));
-    foreach(const QString &remote, RemoteControlManager::remoteNames()){
-        RemoteControl *rc = RemoteControlManager::remoteControl(remote);
+    foreach(const QString &remote, RemoteControl::allRemoteNames()){
+        RemoteControl *rc = new RemoteControl(remote);
         kDebug() << "connecting to remote" << remote;
         connect(rc, 
                 SIGNAL(buttonPressed(const Solid::Control::RemoteControlButton &)), 
@@ -105,8 +105,8 @@ void IRKick::slotStatusChanged(bool connected)
     KNotification::event("global_event", i18n("A connection to the infrared system has been made. Remote controls may now be available."),
                 SmallIcon("irkick"), associatedWidget());
     updateTray();
-    foreach(const QString &remote, RemoteControlManager::remoteNames()){
-        RemoteControl *rc = RemoteControlManager::remoteControl(remote);
+    foreach(const QString &remote, RemoteControl::allRemoteNames()){
+        RemoteControl *rc = new RemoteControl(remote);
         kDebug() << "connecting to remote" << remote;
         connect(rc, 
                 SIGNAL(buttonPressed(const Solid::Control::RemoteControlButton &)), 
@@ -134,9 +134,9 @@ void IRKick::resetModes()
     }
 
     if (!theResetCount)
-        allModes.generateNulls(Solid::Control::RemoteControlManager::remoteNames());
+        allModes.generateNulls(Solid::Control::RemoteControl::allRemoteNames());
 
-    foreach (const QString &remote, Solid::Control::RemoteControlManager::remoteNames()) {
+    foreach (const QString &remote, Solid::Control::RemoteControl::allRemoteNames()) {
         kDebug() << "adding remote" << remote << "to modes";
         currentModes[remote] = allModes.getDefault(remote).name();
     }
@@ -387,7 +387,7 @@ void IRKick::gotMessage(const RemoteControlButton &button)
 
 const QStringList IRKick::buttons(QString theRemote) {
     QStringList retList;
-    foreach(const Solid::Control::RemoteControlButton &button, Solid::Control::RemoteControlManager::remoteControl(theRemote)->buttons()){
+    foreach(const Solid::Control::RemoteControlButton &button, Solid::Control::RemoteControl(theRemote).buttons()){
         retList.append(button.name());
     }
     return retList;

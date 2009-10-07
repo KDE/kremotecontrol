@@ -73,7 +73,7 @@ public Q_SLOTS: //dbus slot
      * @returns said list.
      */
     const QStringList remotes() {
-        return Solid::Control::RemoteControlManager::remoteNames();
+        return Solid::Control::RemoteControl::allRemoteNames();
     }
 
     /**
