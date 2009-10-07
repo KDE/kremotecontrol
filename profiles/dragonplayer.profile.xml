@@ -6,23 +6,23 @@
     <instances unique="0" ifmulti="sendtoone"/>
 
     <!-- Playback actions -->
-    <action objid="Player" prototype="void Play()" class="play" button="Play">
+    <action objid="Player" prototype="void Play()" button="Play">
         <name>Start playing</name>
         <comment></comment>
     </action>
-    <action objid="Player" prototype="void Stop()" class="stop" button="Stop">
+    <action objid="Player" prototype="void Stop()" button="Stop">
         <name>Stop playing</name>
         <comment></comment>
     </action>
-    <action objid="Player" prototype="void Pause()" class="pause" button="PlayPause">
+    <action objid="Player" prototype="void Pause()" button="PlayPause">
         <name>Pause playing</name>
         <comment></comment>
     </action>
-    <action objid="Player" prototype="void Next()" class="next" button="SkipForward">
+    <action objid="Player" prototype="void Next()" button="SkipForward">
         <name>Advance to next track</name>
         <comment></comment>
     </action>
-    <action objid="Player" prototype="void Prev()" class="previous" button="SkipBackward">
+    <action objid="Player" prototype="void Prev()"  button="SkipBackward">
         <name>Go to previous track</name>
         <comment></comment>
     </action>

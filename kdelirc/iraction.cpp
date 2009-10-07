@@ -25,7 +25,6 @@
 
 #include "iraction.h"
 #include "profileserver.h"
-#include "remoteserver.h"
 
 #include <QVariant>
 
@@ -167,11 +166,11 @@ KDE_EXPORT const QString IRAction::application() const
 
 const QString IRAction::remoteName() const
 {
-    return RemoteServer::remoteServer()->getRemoteName(theRemote);
+    return theRemote;
 }
 
 KDE_EXPORT const QString IRAction::buttonName() const
 {
-    return RemoteServer::remoteServer()->getButtonName(theRemote, theButton);
+    return theButton;
 }
 

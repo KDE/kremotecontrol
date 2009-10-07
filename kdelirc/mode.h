@@ -27,8 +27,7 @@
 #define MODE_H
 
 
-
-#include "remoteserver.h"
+#include <QString>
 
 /**
 @author Gav Wood
@@ -59,9 +58,6 @@ public:
     }
     const QString &iconFile() const {
         return theIconFile;
-    }
-    const QString &remoteName() const {
-        return RemoteServer::remoteServer()->getRemoteName(theRemote);
     }
 
     const Mode &loadFromConfig(KConfig &theConfig, int index);

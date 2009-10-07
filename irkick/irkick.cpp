@@ -179,7 +179,7 @@ void IRKick::updateTray()
         toolTipHeader += i18nc("The state of kdelirc", "Ready");
         for (QMap<QString, QString>::const_iterator i = currentModes.constBegin(); i != currentModes.constEnd(); ++i) {
             Mode mode = allModes.getMode(i.key(), i.value());
-            toolTip += mode.remoteName() + " <i>(";
+            toolTip += mode.remote() + " <i>(";
             toolTip += mode.name().isEmpty() ? i18n("Master") : mode.name();
             toolTip +=")</i><br>";
         }
@@ -359,7 +359,7 @@ void IRKick::gotMessage(const RemoteControlButton &button)
                 doBefore = l.at(i)->doBefore();
                 doAfter = l.at(i)->doAfter();
                 KNotification::event(
-                               "mode_event", "<b>" + mode.remoteName() + ":</b><br>" +
+                               "mode_event", "<b>" + mode.remote() + ":</b><br>" +
                                i18n("Mode switched to %1" , currentModes[button.remoteName()] == "" ? i18nc("Default mode in notification", "Default") : currentModes[button.remoteName()]),
                                DesktopIcon(mode.iconFile().isEmpty() ? "infrared-remote" : mode.iconFile()),
                                associatedWidget());

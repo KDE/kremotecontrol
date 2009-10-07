@@ -14,8 +14,7 @@ set(kdelirc_shared_LIB_SRCS
 	modes.cpp 
 	arguments.cpp 
 	mode.cpp 
-	profileserver.cpp 
-	remoteserver.cpp
+	profileserver.cpp 	
 )
 
 kde4_add_library(kdelirc_shared SHARED ${kdelirc_shared_LIB_SRCS})

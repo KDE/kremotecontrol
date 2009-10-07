@@ -35,7 +35,7 @@ EditMode::EditMode(Mode mode, const Modes &allModes, QWidget *parent, const bool
     setDefaultButton(Ok);
     setModal(modal);
 
-    editModeBaseWidget->theName->setText(mode.name().isEmpty() ? mode.remoteName() : mode.name());
+    editModeBaseWidget->theName->setText(mode.name().isEmpty() ? mode.remote() : mode.name());
     editModeBaseWidget->theName->setEnabled(! mode.name().isEmpty());
 
     editModeBaseWidget->theIcon->setIconType(KIconLoader::Panel, KIconLoader::Any);

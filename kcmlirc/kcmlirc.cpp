@@ -28,7 +28,7 @@
 #include "addaction.h"
 #include "newmodedialog.h"
 #include "profileserver.h"
-#include "remoteserver.h"
+
 #include "editaction.h"
 #include "editmode.h"
 #include "dbusinterface.h"
@@ -147,13 +147,13 @@ KCMLirc::~KCMLirc()
 
 void KCMLirc::updateModesStatus()
 {
-    if (!theKCMLircBase->theModes->selectedItems().isEmpty()) {
+    if (! theKCMLircBase->theModes->selectedItems().isEmpty()) {
 	QTreeWidgetItem *item = theKCMLircBase->theModes->selectedItems().first();
 	bool remoteSelected = item->isSelected();
 	theKCMLircBase->theAddActions->setEnabled(remoteSelected && ProfileServer::getInstance()->profiles().count());
         theKCMLircBase->theAddAction->setEnabled(remoteSelected);
         theKCMLircBase->theAddMode->setEnabled(remoteSelected);
-        theKCMLircBase->theRemoveMode->setEnabled(remoteSelected && item->parent()->isSelected());
+        theKCMLircBase->theRemoveMode->setEnabled(item->parent() != 0);
         theKCMLircBase->theEditMode->setEnabled(remoteSelected);
     }
 }
@@ -410,7 +410,7 @@ void KCMLirc::updateActions()
     }
     theKCMLircBase->theActions->clear();
     Mode m = theKCMLircBase->theModes->currentItem()->data(0, Qt::UserRole).value<Mode>();
-    theKCMLircBase->theModeLabel->setText(m.remoteName() + ": "
+    theKCMLircBase->theModeLabel->setText(m.remote() + ": "
                                           + (m.name().isEmpty() ? i18n("Actions <i>always</i> available") : i18n(
                                                  "Actions available only in mode <b>%1</b>", m.name())));
     IRActions allActionsList = allActions.findByMode(m);
@@ -453,19 +453,11 @@ void KCMLirc::updateModes()
         }
         QStringList remoteList;
 
-        QString remoteName = RemoteServer::remoteServer()->getRemoteName(*i);
         remoteList << *i;
 
         QFont font = KApplication::font();
         font.setBold(true);
         QFontMetrics fm(font);
-        if (remoteName.compare(*i) != 0) {
-            remoteList << remoteName;
-            if (fm.width(remoteName) + 40 > theKCMLircBase->theModes->columnWidth(0)) {
-                theKCMLircBase->theModes->setColumnWidth(0, fm.width(remoteName) + 40);
-            }
-        }
-
         QFont tFont = QFont();
         tFont.setBold(allModes.isDefault(mode));
         QTreeWidgetItem *remoteTreeWidgetIcon = new QTreeWidgetItem(theKCMLircBase->theModes, remoteList);
@@ -528,19 +520,6 @@ void KCMLirc::updateExtensions()
         }
         a->sortChildren(1, Qt::AscendingOrder);
     }
-    {
-        RemoteServer *theServer = RemoteServer::remoteServer();
-        QTreeWidgetItem *a = new QTreeWidgetItem(theKCMLircBase->theExtensions,
-                (QStringList() << i18n("Remote Controls")));
-        a->setExpanded(true);
-        remoteMap.clear();
-        QHash<QString, Remote*> dict = theServer->remotes();
-        QHash<QString, Remote*>::const_iterator i;
-        for (i = dict.constBegin(); i != dict.constEnd(); ++i) {
-            remoteMap[new QTreeWidgetItem(a, QStringList(i.value()->name()))] = i.key();
-        }
-        a->sortChildren(1, Qt::AscendingOrder);
-    }
     theKCMLircBase->theExtensions->setCurrentItem(theKCMLircBase->theExtensions->topLevelItem(0));
     updateInformation();
 }
@@ -590,27 +569,7 @@ void KCMLirc::updateInformation()
         new QTreeWidgetItem(theKCMLircBase->theInformation, infoList);
         theKCMLircBase->theInformationLabel->setText(i18n(
                     "Information on <b>%1</b>:", p->name()));
-    } else if (theKCMLircBase->theExtensions->selectedItems().first()->parent()->text(
-                   0) == i18n("Remote Controls")) {
-        RemoteServer *theServer = RemoteServer::remoteServer();
-        const Remote
-        *p = theServer->remotes()[remoteMap[theKCMLircBase->theExtensions->selectedItems().first()]];
-        QStringList infoList;
-        infoList << i18n("Extension Name") << p->name();
-        new QTreeWidgetItem(theKCMLircBase->theInformation, infoList);
-        infoList.clear();
-        infoList << i18n("Extension Author") << p->author();
-        new QTreeWidgetItem(theKCMLircBase->theInformation, infoList);
-        infoList.clear();
-        infoList << i18n("Remote Control Identifier") << p->id();
-        new QTreeWidgetItem(theKCMLircBase->theInformation, infoList);
-        infoList.clear();
-        infoList << i18n("Number of Buttons") << QString().setNum(
-            p->buttons().count());
-        new QTreeWidgetItem(theKCMLircBase->theInformation, infoList);
-        theKCMLircBase->theInformationLabel->setText(i18n(
-                    "Information on <b>%1</b>:", p->name()));
-    }
+    } 
 }
 
 void KCMLirc::load()

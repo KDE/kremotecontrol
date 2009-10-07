@@ -16,7 +16,6 @@
 <!ATTLIST argument type (int|QString|QCString|QStringList|bool|double) #REQUIRED>
 <!ATTLIST range min CDATA #REQUIRED>
 <!ATTLIST range max CDATA #REQUIRED>
-<!ATTLIST action class (captions|teletext|fullscreen|scan|finetuneup|finetunedown|recall|enter|number|play|stop|pause|record|previous|next|rewind|forward|eject|mute|volumedown|volumeup|channeldown|channelup|red|yellow|green|blue|on|off) #IMPLIED>
 <!ATTLIST action button CDATA>
 <!ATTLIST action multiplier CDATA "1">
 <!ATTLIST action repeat (0|1) "0">

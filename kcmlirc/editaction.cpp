@@ -26,7 +26,6 @@
 #include "editaction.h"
 #include "prototype.h"
 #include "profileserver.h"
-#include "remoteserver.h"
 #include "addaction.h"
 #include "dbusinterface.h"
 

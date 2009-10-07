@@ -11,7 +11,8 @@ include_directories(
 #link_directories(${KDE4_LIB_DIR} ${CMAKE_CURRENT_BINARY_DIR}  ${CMAKE_BINARY_DIR}/lib)
 ########### next target ###############
 
-set(kcm_lirc_PART_SRCS
+set(kcm_lirc_PART_SRCS 
+   selectprofile.cpp
    kcmlirc.cpp 
    addaction.cpp 
    editmode.cpp 

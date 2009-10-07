@@ -26,7 +26,6 @@
 #include "addaction.h"
 #include "prototype.h"
 #include "profileserver.h"
-#include "remoteserver.h"
 #include "mode.h"
 #include "arguments.h"
 #include "iraction.h"
@@ -171,11 +170,11 @@ int AddAction::nextId() const
 void AddAction::updateButton(const QString &remote, const QString &button)
 {
     if (theMode.remote() == remote) {
-        theButtons->setCurrentItem(theButtons->findItems(RemoteServer::remoteServer()->getButtonName(remote, button), 0).first());
-        theButtons->scrollToItem(theButtons->findItems(RemoteServer::remoteServer()->getButtonName(remote, button), 0).first());
+        theButtons->setCurrentItem(theButtons->findItems(button, 0).first());
+        theButtons->scrollToItem(theButtons->findItems(button, 0).first());
     } else {
         KMessageBox::error(0, i18n("You did not select a mode of that remote control. Please use %1, "
-                                   "or revert back to select a different mode.", theMode.remoteName()),
+                                   "or revert back to select a different mode.", theMode.remote()),
                            i18n("Incorrect Remote Control Detected"));
     }
 }
@@ -185,7 +184,7 @@ void AddAction::updateButtons()
     theButtons->clear();
     foreach(const QString &buttonName, DBusInterface::getInstance()->getButtons(theMode.remote())) {
         kDebug() << "foud buttonName " << buttonName;
-        QListWidgetItem *tItem =  new  QListWidgetItem(RemoteServer::remoteServer()->getButtonName(theMode.remote(), buttonName),theButtons);
+        QListWidgetItem *tItem =  new  QListWidgetItem(buttonName,theButtons);
         tItem->setData(Qt::UserRole,buttonName);
 
     }
