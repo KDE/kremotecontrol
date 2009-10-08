@@ -27,7 +27,7 @@ SelectProfileWidget::SelectProfileWidget (QWidget *parent) : QWidget(parent) {
     profilesWidget = new QTreeWidget();
     layout = new QVBoxLayout(this);
     layout->addWidget(new QLabel(i18n("Select profile")));
-    profilesWidget->setHeaderLabel(i18n("Availale profiles with button actions"));
+    profilesWidget->setHeaderLabel(i18n("Available profiles with button actions"));
     layout->addWidget(profilesWidget);
     layout->addWidget(selectionLabel);
     
