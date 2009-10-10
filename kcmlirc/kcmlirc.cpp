@@ -54,8 +54,6 @@
 
 #define VERSION "version name goes here"
 
-// typedef KGenericFactory<KCMLirc, QWidget> theFactory;
-// K_EXPORT_COMPONENT_FACTORY(kcm_lirc, theFactory("kcmlirc"))
 #include "selectprofile.h"
 
 K_PLUGIN_FACTORY( KCMLircFactory, registerPlugin<KCMLirc>();)
@@ -123,7 +121,6 @@ void KCMLirc::connectSignalsAndSlots() {
     connect(theKCMLircBase->theModes, SIGNAL(itemSelectionChanged()), this, SLOT(updateModesStatus()));
     connect(theKCMLircBase->theActions, SIGNAL(itemSelectionChanged()), this, SLOT(updateActionsStatus()));
     connect(theKCMLircBase->theActions, SIGNAL(doubleClicked(QModelIndex)),this,SLOT(slotEditAction()));
-    //connect(theKCMLircBase->theModes, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slotEditMode()));
 
     connect(theKCMLircBase->theExtensions, SIGNAL(itemSelectionChanged()), this, SLOT(updateInformation()));
 
@@ -135,9 +132,6 @@ void KCMLirc::connectSignalsAndSlots() {
     connect(theKCMLircBase->theAddMode, SIGNAL(clicked()), this, SLOT(slotAddMode()));
     connect(theKCMLircBase->theEditMode, SIGNAL(clicked()), this, SLOT(slotEditMode()));
     connect(theKCMLircBase->theRemoveMode, SIGNAL(clicked()), this, SLOT(slotRemoveMode()));
-
-
-
 }
 
 
@@ -279,21 +273,7 @@ void KCMLirc::slotAddMode()
     if (theKCMLircBase->theModes->selectedItems().isEmpty()) {
         return;
     }
-
-    // NewModeDialog theDialog(this);
-    QMap<QTreeWidgetItem *, QString> remoteMap;
-    theKCMLircBase->theModes->sortByColumn(0);
-    QTreeWidgetItem *tr = theKCMLircBase->theModes->selectedItems().first();
-    if (tr && tr->parent()) {
-        tr = tr->parent();
-    }
-    QStringList remotesList;
-    for (int i = 0; i < theKCMLircBase->theModes->topLevelItemCount(); i++) {
-        remotesList << theKCMLircBase->theModes->topLevelItem(i)->text(0);
-    }
     NewModeDialog theDialog(allModes, this,0);
-
-
     if (theDialog.exec() == QDialog::Accepted) {
         Mode mode = theDialog.getMode();
         allModes.add(mode);
@@ -353,8 +333,6 @@ void KCMLirc::slotRemoveMode()
                 tAction->setRepeat(false);
             }
         }
-
-
         updateModes();
         emit changed(true);
     }
@@ -482,17 +460,15 @@ void KCMLirc::updateModes()
 void KCMLirc::updateExtensions()
 {
     theKCMLircBase->theExtensions->clear();
-    {
-        QTreeWidgetItem *a = new QTreeWidgetItem(theKCMLircBase->theExtensions,
-                (QStringList() << i18n("Applications")));
-        a->setExpanded(true);
-
-        profileMap.clear();
-        foreach(Profile *tmp, ProfileServer::getInstance()->profiles()) {
-            profileMap[new QTreeWidgetItem(a, (QStringList()<< tmp->name()))] = tmp->id();
-        }
-        a->sortChildren(1, Qt::AscendingOrder);
+    QTreeWidgetItem *a = new QTreeWidgetItem(theKCMLircBase->theExtensions, (QStringList() << i18n("Applications")));
+    a->setExpanded(true);
+    foreach(Profile *tmp, ProfileServer::getInstance()->profiles()) {
+	QTreeWidgetItem *item = new  QTreeWidgetItem(a, (QStringList()<< tmp->name())); 
+	//QListWidgetItem *item = new QListWidgetItem(tmp->name());
+        item->setData(0,Qt::UserRole, tmp->id());
+	
     }
+    a->sortChildren(1, Qt::AscendingOrder);
     theKCMLircBase->theExtensions->setCurrentItem(theKCMLircBase->theExtensions->topLevelItem(0));
     updateInformation();
 }
@@ -526,7 +502,7 @@ void KCMLirc::updateInformation()
     } else if (theKCMLircBase->theExtensions->selectedItems().first()->parent()->text(
                    0) == i18n("Applications")) {
         ProfileServer *theServer = ProfileServer::getInstance();
-        const Profile *p = theServer->getProfileById(profileMap[theKCMLircBase->theExtensions->selectedItems().first()]);
+        const Profile *p = theServer->getProfileById(theKCMLircBase->theExtensions->selectedItems().first()->data(0, Qt::UserRole).toString());
         QStringList infoList;
         infoList << i18n("Extension Name") << p->name();
         new QTreeWidgetItem(theKCMLircBase->theInformation, infoList);
@@ -548,8 +524,6 @@ void KCMLirc::updateInformation()
 void KCMLirc::load()
 {
     KConfig theConfig("irkickrc");
-// KConfigGroup generalGroup = theConfig.group("General");
-
     allActions.loadFromConfig(theConfig);
     allModes.loadFromConfig(theConfig);
     QStringList remotes = DBusInterface::getInstance()->getRemotes();
@@ -585,28 +559,4 @@ void KCMLirc::configChanged()
     // insert your saving code here...
     emit changed(true);
 }
-
-
-ProfileServer::ProfileSupportedByRemote KCMLirc::isProfileAvailableForRemote(const QString profileName, const QString remoteName)
-{
-    QStringList tProfilActionNames = ProfileServer::getInstance()->getAllButtonNamesById(profileName);
-    if (tProfilActionNames.size() == 0) {
-        return ProfileServer::NO_ACTIONS_DEFINED;
-    }
-    QStringList solidButtonNames = DBusInterface::getInstance()->getButtons(remoteName);
-    int found=0;
-
-    foreach(const QString solidButtonName, solidButtonNames) {
-        if ( tProfilActionNames.contains(solidButtonName)) {
-            found++;
-        }
-    }
-    if (found == 0) {
-        return ProfileServer::NOT_SUPPORTED;
-    } else if (found != tProfilActionNames.size()) {
-        return ProfileServer::PARTIAL_SUPPORTED;
-    }
-    return ProfileServer::FULL_SUPPORTED;
-}
-
 #include "kcmlirc.moc"
