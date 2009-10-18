@@ -40,8 +40,6 @@
 class Profile;
 class Remote;
 
-Q_DECLARE_METATYPE(Mode)
-
 class KCMLirc: public KCModule
 {
     Q_OBJECT

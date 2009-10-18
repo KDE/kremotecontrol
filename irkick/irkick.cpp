@@ -52,7 +52,10 @@ IRKick::IRKick():
 
     setIconByName("irkick");
     setCategory(Hardware);
-  
+
+    m_menu = new KMenu(associatedWidget());
+    setContextMenu(m_menu);
+
     new IrkickAdaptor(this);
     QDBusConnection dBusConnection = QDBusConnection::sessionBus();
     dBusConnection.registerObject("/IRKick", this,
@@ -82,16 +85,6 @@ IRKick::IRKick():
                 SLOT(gotMessage(const Solid::Control::RemoteControlButton &)));
     }
 
-    m_menu = new KMenu(associatedWidget());
-    setContextMenu(m_menu);
-    m_menu->addTitle(KIcon("infrared-remote"), "IRKick");
-    m_menu->addAction(SmallIcon("configure"), i18n("&Configure..."), this, SLOT(slotConfigure()));
-    KHelpMenu *helpMenu = new  KHelpMenu(0, KGlobal::mainComponent().aboutData());
-    m_menu->addAction(KIcon("help-contents"), i18n("&Help"), helpMenu, SLOT(appHelpActivated()));
-    m_menu->addAction(KIcon("irkick"), i18n("&About"), helpMenu,SLOT(aboutApplication()));
-
-    m_menu->addSeparator();
-    updateTray();
 }
 
 IRKick::~IRKick()
@@ -140,6 +133,7 @@ void IRKick::resetModes()
         kDebug() << "adding remote" << remote << "to modes";
         currentModes[remote] = allModes.getDefault(remote).name();
     }
+    updateContextMenu();
     updateTray();
     ++theResetCount;
 }
@@ -159,6 +153,13 @@ void IRKick::slotReloadConfiguration()
 void IRKick::slotConfigure()
 {
     KToolInvocation::startServiceByDesktopName("kcm_lirc");
+}
+
+void IRKick::slotModeSelected(QAction *action)
+{
+    Mode mode = qVariantValue<Mode>(action->data());
+    currentModes[mode.remote()] = mode.name();
+    action->setChecked(true);
 }
 
 void IRKick::updateTray()
@@ -324,6 +325,37 @@ void IRKick::executeAction(const IRAction& action) {
             }
         }
     }
+}
+
+void IRKick::updateContextMenu(){
+    m_menu->clear();
+    m_menu->addTitle(KIcon("infrared-remote"), "IRKick");
+    m_menu->addAction(SmallIcon("configure"), i18n("&Configure..."), this, SLOT(slotConfigure()));
+
+    foreach(const QString &remote, RemoteControl::allRemoteNames()){
+        KMenu *modeMenu = new KMenu(remote, m_menu);
+        QActionGroup *actionGroup = new QActionGroup(modeMenu);
+        actionGroup->setExclusive(true);
+        modeMenu->addTitle(KIcon("infrared-remote"), i18n("Switch mode to"));
+        foreach(const Mode &mode, allModes.getModes(remote)){
+            QAction *entry = modeMenu->addAction(mode.name().isEmpty() ? i18n("Master") : mode.name());
+            entry->setActionGroup(actionGroup);
+            entry->setCheckable(true);
+            if(currentModes[remote] == mode.name()){
+                entry->setChecked(true);
+            }
+            entry->setData(qVariantFromValue(mode));
+        }
+        m_menu->addMenu(modeMenu);
+        connect(modeMenu, SIGNAL(triggered(QAction*)), this, SLOT(slotModeSelected(QAction*)));
+
+    }
+
+    KHelpMenu *helpMenu = new  KHelpMenu(0, KGlobal::mainComponent().aboutData());
+    m_menu->addAction(KIcon("help-contents"), i18n("&Help"), helpMenu, SLOT(appHelpActivated()));
+    m_menu->addAction(KIcon("irkick"), i18n("&About"), helpMenu,SLOT(aboutApplication()));
+
+    m_menu->addSeparator();
 }
 
 void IRKick::gotMessage(const RemoteControlButton &button)

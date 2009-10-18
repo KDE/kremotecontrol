@@ -28,6 +28,7 @@
 
 
 #include <QString>
+#include <qmetatype.h>
 
 /**
 @author Gav Wood
@@ -72,4 +73,5 @@ public:
     ~Mode();
 };
 
+Q_DECLARE_METATYPE(Mode)
 #endif

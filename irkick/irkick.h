@@ -37,6 +37,7 @@
 #include <solid/control/remotecontrol.h>
 
 class QTimer;
+class QAction;
 
 class IRKick: public KNotificationItem
 {
@@ -56,6 +57,7 @@ class IRKick: public KNotificationItem
     void updateTray();
     bool searchForProgram(const IRAction &action, QStringList &programs);
     void executeAction(const IRAction &action);
+    void updateContextMenu();
 
 public Q_SLOTS: //dbus slot
     /**
@@ -112,6 +114,7 @@ private slots:
     void slotConfigure();
     void slotReloadConfiguration();
     void slotStatusChanged(bool connected);
+    void slotModeSelected(QAction *action);
 
 public:
     explicit IRKick();
