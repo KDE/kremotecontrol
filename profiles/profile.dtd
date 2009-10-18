@@ -16,6 +16,11 @@
 <!ATTLIST argument type (int|QString|QCString|QStringList|bool|double) #REQUIRED>
 <!ATTLIST range min CDATA #REQUIRED>
 <!ATTLIST range max CDATA #REQUIRED>
+<!--
+Here you can define the solid button name which triggers the action
+To get a list  of all available button names please look at
+http://api.kde.org/4.x-api/kdebase-workspace-apidocs/libs/solid/html/classSolid_1_1Control_1_1RemoteControlButton.html
+-->
 <!ATTLIST action button CDATA>
 <!ATTLIST action multiplier CDATA "1">
 <!ATTLIST action repeat (0|1) "0">

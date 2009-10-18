@@ -6,14 +6,14 @@ by Gav Wood, 2003.
 Introduction
 ------------
 
-All DCOP-using applications under KDE have basic lirc support, since KDELirc has
-the ability to interface any button to any DCOP call. However, to give your
+All DBus-using applications under KDE have basic lirc support, since KDELirc has
+the ability to interface any button to any DBus call. However, to give your
 application the real professional touch when using it with KDELirc, I recommend
 you create a profile for it.
 
-A profile tells KDELirc (and the user!) what the various DCOP calls do.
-Essentially this is a kind of documentation for the DCOP calls. You don't have
-to include all DCOP calls - just the ones that you feel would benefit end-users
+A profile tells KDELirc (and the user!) what the various DBus calls do.
+Essentially this is a kind of documentation for the DBus calls. You don't have
+to include all DBus calls - just the ones that you feel would benefit end-users
 the most (usually "interface adjusting" calls rather the "information gathering"
 calls).
 
@@ -21,27 +21,21 @@ calls).
 Method
 ------
 
-1. DCOP
+1. DBus
 
-The first thing to do is to give your application DCOP functionality. This is
-*very* easy and essentially amounts to adding a declaration to each object you
-want to give DCOP accessibility and adding an entry to your Makefile. I wont go
-into it here as the KDE documentation already provides a suitable resource for
-such information.
-
-Ensure you provide a full accessibility to your application's interface by DCOP,
-and especially in the case of IR-interfacing, try not to have functions with too
-many parameters, or with exotic types (stick to ints and QStrings where
-necessary).
+Make sure the application you want to profile provides method calls over dbus.
+You can find this out by using the qdbusviewer application which is shipped with your 
+qt4 installation. For your own application please take a look at the developer howtos
+and kde/qt documentation how to implement this.
 
 2. Create a profile
 
-Having coded the necessary DCOP functionality into your application, the only
+Having coded the necessary DBus functionality into your application, the only
 other thing to do is describe how it works to the user. This is done by means of
 a .profile.xml document, examples of which may be found in the kdelirc/profiles
 directory. A quick guide is given here:
 
-a) First create top level "profile" tags with the DCOP application id and KDE
+a) First create top level "profile" tags with the DBus application id and KDE
 service name (found in the .desktop file) as attributes of them:
 
 	<?xml version="1.0" ?>
@@ -66,11 +60,10 @@ is "dontsend", however, "sendtoone" may be the most useful in many circumstances
 		<instances unique="0" ifmulti="sendtoone"/>
 	</profile>
 
-c) Populate the profile with action tags, for each DCOP action you want to be
-available to the user. Each action tag should have DCOP object name and function
+c) Populate the profile with action tags, for each DBus action you want to be
+available to the user. Each action tag should have DBus object name and function
 prototype.
-   Several optional attrubutes to specify are the key-class (an identifier to
-act as an abstract binding between remote controls and applications). There are
+   Several optional attributes to specify are the key-class. There are
 several defined; see the DTD files for a current list. The other options, repeat
 and autostart are boolean specificers to tell whether the action should repeat
 or automatically start the program by default.
@@ -122,6 +115,11 @@ default tags:
 			</argument>
 		</action>
 	</profile>
+
+If you want to to provide the action for the autopopulate function you have to define the button attribute,
+The button attribute you specify the solid button name which is used to execute the action.
+To get a list  of all available button names please look at
+http://api.kde.org/4.x-api/kdebase-workspace-apidocs/libs/solid/html/classSolid_1_1Control_1_1RemoteControlButton.html
 
 When you have created your profile.xml file, put in your project's main source
 tree.
