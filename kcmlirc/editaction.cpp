@@ -35,6 +35,7 @@
 #include <kmessagebox.h>
 #include <knuminput.h>
 #include <keditlistbox.h>
+#include <solid/control/remotecontrol.h>
 #include <QStandardItemModel>
 #include <QHeaderView>
 
@@ -58,6 +59,11 @@ EditAction::EditAction(IRAction *action, const QStringList &modeList, QWidget *p
     foreach(const QString &mode, modeList) {
         editActionBaseWidget->theModes->addItem(mode);
     }
+
+    foreach(const Solid::Control::RemoteControlButton &button, Solid::Control::RemoteControl(theAction->remote()).buttons()){
+        editActionBaseWidget->theButtons->addItem(button.description(), button.name());
+    }
+    editActionBaseWidget->theButtons->setCurrentIndex(editActionBaseWidget->theButtons->findData(theAction->button()));
 
     updateApplications();
     connectSignalsAndSlots();
@@ -174,7 +180,7 @@ IRAction* EditAction::getAction()
     IRAction* tAction = new IRAction();
     tAction->setRemote(theAction->remote());
     tAction->setMode(theAction->mode());
-    tAction->setButton(theAction->button());
+    tAction->setButton(editActionBaseWidget->theButtons->itemData(editActionBaseWidget->theButtons->currentIndex()).toString());
     if (editActionBaseWidget->theChangeMode->isChecked()) {
         tAction->setProgram("");
         if (editActionBaseWidget->theModes->currentText() == i18n("[Exit current mode]"))
