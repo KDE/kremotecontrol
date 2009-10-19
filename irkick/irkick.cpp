@@ -20,7 +20,7 @@
 
 
 /**
-  * @author Gav Wood
+  * @author Gav Wood, Michael Zanetti
   */
 
 // irkick.cpp  -  Implementation of the main window
@@ -160,6 +160,7 @@ void IRKick::slotModeSelected(QAction *action)
     Mode mode = qVariantValue<Mode>(action->data());
     currentModes[mode.remote()] = mode.name();
     action->setChecked(true);
+    updateTray();
 }
 
 void IRKick::updateTray()
@@ -356,6 +357,7 @@ void IRKick::updateContextMenu(){
     m_menu->addAction(KIcon("irkick"), i18n("&About"), helpMenu,SLOT(aboutApplication()));
 
     m_menu->addSeparator();
+    m_menu->addAction(actionCollection()->action(KStandardAction::name(KStandardAction::Quit)));
 }
 
 void IRKick::gotMessage(const RemoteControlButton &button)
