@@ -50,13 +50,20 @@
     <item>
      <widget class="QLabel" name="theButtonText">
       <property name="text">
-       <string>You are attempting to configure an action for a button on [remote] (in mode [mode]). Press a button on this remote control or select from the list.</string>
+       <string/>
       </property>
       <property name="alignment">
        <set>Qt::AlignVCenter</set>
       </property>
       <property name="wordWrap">
        <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string> Press a button on this remote control or select one from the list.</string>
       </property>
      </widget>
     </item>

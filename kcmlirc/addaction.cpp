@@ -181,6 +181,9 @@ void AddAction::updateButton(const QString &remote, const QString &button)
 
 void AddAction::updateButtons()
 {
+    kDebug() << "Mode:" << theMode.name() << "remote:" << theMode.remote();
+    theButtonText->setText(i18n("You are attempting to configure an action for a button on %1 (in mode %2).")
+                                .arg(theMode.remote()).arg(theMode.name().isEmpty() ? i18n("Master") : theMode.name()));
     theButtons->clear();
     foreach(const QString &buttonName, DBusInterface::getInstance()->getButtons(theMode.remote())) {
         kDebug() << "foud buttonName " << buttonName;

@@ -164,7 +164,7 @@ public:
     
     IRAction() {
         theProgram.clear();
-    };
+    }
 
 };
 
