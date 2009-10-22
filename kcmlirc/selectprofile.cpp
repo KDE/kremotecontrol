@@ -44,7 +44,7 @@ SelectProfile::SelectProfile(QString remoteName, QWidget *parent, const bool &mo
     setMainWidget(selectProfileWidget);
     setWindowTitle(i18n("Auto-Populate"));
 
-    connect(selectProfileWidget->profilesWidget,SIGNAL(itemActivated(QTreeWidgetItem*,int)), this, SLOT(checkForUpdate(QTreeWidgetItem*,int)));
+    connect(selectProfileWidget->profilesWidget,SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(checkForUpdate(QTreeWidgetItem*,int)));
     kDebug()<< "remote  " << remoteName;
     QList<Profile*> profiles = ProfileServer::getInstance()->profiles();
     QStringList solidButtons = DBusInterface::getInstance()->getButtons(remoteName);

@@ -185,8 +185,7 @@ void AddAction::updateButtons()
     theButtonText->setText(i18n("You are attempting to configure an action for a button on %1 (in mode %2).")
                                 .arg(theMode.remote()).arg(theMode.name().isEmpty() ? i18n("Master") : theMode.name()));
     theButtons->clear();
-    foreach(const QString &buttonName, DBusInterface::getInstance()->getButtons(theMode.remote())) {
-        kDebug() << "foud buttonName " << buttonName;
+    foreach(const QString &buttonName, DBusInterface::getInstance()->getButtons(theMode.remote())) {	
         QListWidgetItem *tItem =  new  QListWidgetItem(buttonName,theButtons);
         tItem->setData(Qt::UserRole,buttonName);
 
@@ -384,10 +383,8 @@ void AddAction::updateDBusFunctions(QModelIndex pIndex) {
 
 IRAction* AddAction::getAction()
 {
-    IRAction *action = new IRAction();
-    action->setRemote(theMode.remote());
+    IRAction *action = new IRAction(theMode.remote(), theButtons->currentItem()->data(Qt::UserRole).toString());
     action->setMode(theMode.name());
-    action->setButton(theButtons->currentItem()->data(Qt::UserRole).toString());
     action->setRepeat(theRepeat->isChecked());
     action->setAutoStart(theAutoStart->isChecked());
     action->setDoBefore(theDoBefore->isChecked());

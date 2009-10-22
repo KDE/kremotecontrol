@@ -81,7 +81,7 @@ IRActions IRActions::findByButton(const QString &remote, const QString &button)
 {
     IRActions ret;
     for (iterator i = begin(); i != end(); ++i)
-        if ((*i)->remote() == remote && (*i)->button() == button)
+        if ((*i)->remote() == remote && (*i)->button()== button)
             ret += *i;
     return ret;
 }
@@ -89,7 +89,7 @@ IRActions IRActions::findByButton(const QString &remote, const QString &button)
 KDE_EXPORT void IRActions::renameMode(const Mode &mode, const QString &to)
 {
     for (iterator i = begin(); i != end(); ++i) {
-        if ((*i)->remote() == mode.remote() && (*i)->mode() == mode.name())(*i)->setMode(to);
+        if ((*i)->button() == mode.remote() && (*i)->mode() == mode.name())(*i)->setMode(to);
         if ((*i)->isModeChange() && (*i)->modeChange() == mode.name())(*i)->setModeChange(to);
     }
 }

@@ -177,10 +177,8 @@ void EditAction::readFrom()
 
 IRAction* EditAction::getAction()
 {
-    IRAction* tAction = new IRAction();
-    tAction->setRemote(theAction->remote());
+    IRAction* tAction = new IRAction(theAction->remote(), editActionBaseWidget->theButtons->itemData(editActionBaseWidget->theButtons->currentIndex()).toString());
     tAction->setMode(theAction->mode());
-    tAction->setButton(editActionBaseWidget->theButtons->itemData(editActionBaseWidget->theButtons->currentIndex()).toString());
     if (editActionBaseWidget->theChangeMode->isChecked()) {
         tAction->setProgram("");
         if (editActionBaseWidget->theModes->currentText() == i18n("[Exit current mode]"))

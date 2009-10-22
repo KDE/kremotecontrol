@@ -109,7 +109,7 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
     theKCMLircBase = new Ui::KCMLircBase();
     theKCMLircBase->setupUi(widget);
 
-    QStringList headers = (QStringList() << i18nc("Column which shows the available remotes on system", "Remote") << i18n("Used Extension"));
+    QStringList headers = (QStringList() << i18nc("Column which shows the available remotes on system", "Remote"));
     theKCMLircBase->theModes->setHeaderLabels(headers);
     layout->addWidget(widget);
     connectSignalsAndSlots();
@@ -235,10 +235,8 @@ void KCMLirc::autoPopulate(const Profile *profile,const Mode &mode)
     foreach (QString button, buttonList ) {
         const ProfileAction *pa = profile->getProfileActionByButton(button);
         if (pa) {
-            IRAction *action = new IRAction();
-            action->setRemote(mode.remote());
+            IRAction *action = new IRAction(mode.remote(),button);
             action->setMode(mode.name());
-            action->setButton(button);
             action->setRepeat(pa->repeat());
             action->setAutoStart(pa->autoStart());
             action->setProgram(pa->profile()->id());
@@ -368,12 +366,36 @@ void KCMLirc::updateActions()
 
     foreach(IRAction *tmp, allActionsList) {
         QStringList row;
-        row << tmp->buttonName() << tmp->application() << tmp->function() << tmp->arguments().toString() << tmp->notes();
+	if(tmp->getButton().id() == RemoteControlButton::Unknown){
+	  row << tmp->button(); 
+	}else{
+	  row << tmp->button() + " (" +tmp->getButton().description() + ")";
+	}
+	
+	row << tmp->application() << tmp->function() << tmp->arguments().toString() << notes(tmp);
         QTreeWidgetItem *actionItem = new  QTreeWidgetItem(row);
         actionItem->setData(0, Qt::UserRole, qVariantFromValue(tmp));
         theKCMLircBase->theActions->addTopLevelItem(actionItem);
     }
     updateActionsStatus();
+}
+
+
+const QString KCMLirc::notes(IRAction *action) const
+{
+
+    if (action->isModeChange())
+        return QString(action->doBefore() ? i18n("Do actions before. ") : "") +
+               QString(action->doAfter() ? i18n("Do actions after. ") : "");
+    else if (action->isJustStart())
+        return "";
+    else
+        return QString(action->autoStart() ? i18n("Auto-start. ") : "")
+               + QString(action->repeat() ? i18n("Repeatable. ") : "")
+               + QString(!action->unique() ? (action->ifMulti() == IM_DONTSEND ? i18n("Do nothing if many instances. ")
+                                       : action->ifMulti()== IM_SENDTOTOP ? i18n("Send to top instance. ")
+                                       : action->ifMulti() == IM_SENDTOBOTTOM ? i18n("Send to bottom instance. ") : i18n("Send to all instances. "))
+                                 : "");
 }
 
 void KCMLirc::updateModes()

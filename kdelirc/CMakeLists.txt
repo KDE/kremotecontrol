@@ -20,7 +20,7 @@ set(kdelirc_shared_LIB_SRCS
 kde4_add_library(kdelirc_shared SHARED ${kdelirc_shared_LIB_SRCS})
 set_target_properties(kdelirc_shared PROPERTIES VERSION 1.0.0 SOVERSION 1)
 
-target_link_libraries(kdelirc_shared ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS})
+target_link_libraries(kdelirc_shared ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} solidcontrol)
 
 
 install(TARGETS kdelirc_shared ${INSTALL_TARGETS_DEFAULT_ARGS})

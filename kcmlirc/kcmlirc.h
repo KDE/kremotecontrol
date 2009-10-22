@@ -78,6 +78,7 @@ public:
     virtual void save();
     virtual void defaults();
     virtual void configChanged();
+    const QString notes(IRAction *action) const;
     explicit KCMLirc(QWidget *parent = 0, const QVariantList &args = QVariantList());
     ~KCMLirc();
 

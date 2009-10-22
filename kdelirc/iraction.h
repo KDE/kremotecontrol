@@ -33,33 +33,40 @@
 #include "profileserver.h"
 
 #include <kdebug.h>
+#include <solid/control/remotecontrolbutton.h>
+
 
 /**
 @author Gav Wood
 */
 
+
+using namespace Solid::Control;
 class KConfig;
 
 class IRAction
 {
-    QString theProgram, theObject, theRemote, theButton, theMode;
+  
+ 
+  
+    QString theProgram, theObject, theMode;
     Prototype theMethod;
     Arguments theArguments;
     bool theRepeat, theAutoStart, theDoBefore, theDoAfter;
     IfMulti theIfMulti;
     bool theUnique;
+    RemoteControlButton theRemoteButton;
+  
 
 public:
     // load/save convenience functions
     static IRAction *loadFromConfig(KConfig &theConfig, int index);
     void saveToConfig(KConfig &theConfig, int index) const;
 
+    
+     const QString application() const;
     // may be changed to a profile-based representation in the future.
     const QString function() const;
-    const QString application() const;
-    const QString buttonName() const;
-    const QString remoteName() const;
-    const QString notes() const;
 
     // bog standard raw DCOP stuff
     const QString &program() const {
@@ -71,15 +78,11 @@ public:
     const Prototype &method() const {
         return theMethod;
     }
-    const QString &remote() const {
-        return theRemote;
-    }
+  
     const QString &mode() const {
         return theMode;
     }
-    const QString &button() const {
-        return theButton;
-    }
+    
     const Arguments arguments() const {
         if (theProgram.isEmpty() && theObject.isEmpty()) {
           return Arguments();
@@ -126,15 +129,11 @@ public:
     void setMethod(const Prototype &newMethod) {
         theMethod = newMethod;
     }
-    void setRemote(const QString &newRemote) {
-        theRemote = newRemote;
-    }
+    
     void setMode(const QString &newMode) {
         theMode = newMode;
     }
-    void setButton(const QString &newButton) {
-        theButton = newButton;
-    }
+ 
     void setArguments(const Arguments &newArguments) {
         theArguments = newArguments;
     }
@@ -160,12 +159,29 @@ public:
         theUnique = a;
     }
 
-    IRAction(const QString &newProgram, const QString &newObject, const QString &newMethod, const Arguments &newArguments, const QString &newRemote, const QString &newMode, const QString &newButton, const bool newRepeat, const bool newAutoStart, const bool newDoBefore, const bool newDoAfter, const bool newUnique, const IfMulti newIfMulti);
+    const RemoteControlButton  getButton() const{
+    return theRemoteButton;
+    }
     
-    IRAction() {
-        theProgram.clear();
+    void setButton(const RemoteControlButton &button){
+   theRemoteButton= button;
+ }
+  
+    IRAction( const RemoteControlButton button) :   theRemoteButton(button) {
+       theProgram.clear();
     }
 
+    IRAction( QString remote, QString button) :   theRemoteButton(remote, button,0) {
+       theProgram.clear();
+    };
+    
+    QString button(){
+	  return theRemoteButton.name();
+    }
+    
+    QString remote(){
+      return theRemoteButton.remoteName();
+    }
 };
 
 #endif
