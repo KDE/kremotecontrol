@@ -80,7 +80,7 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
             "http://utils.kde.org/projects/kdelirc"));
     setQuickHelp(
         i18n(
-            "<h1>Remote Controls</h1><p>This module allows you to configure bindings between your remote controls and KDE applications. Simply select your remote control and click Add under the Actions/Buttons list. If you want KDE to attempt to automatically assign buttons to a supported application's actions, try clicking the Auto-Populate button.</p><p>To view the recognised applications and remote controls, simply select the <em>Loaded Extensions</em> tab.</p>"));
+            "<h1>Remote Controls</h1><p>This module allows you to configure bindings between your remote controls and KDE applications. Simply select your remote control and click Add under the Actions/Buttons list. If you want KDE to attempt to automatically assign buttons to a supported application's actions, try clicking the Auto-Populate button.</p><p>To view the recognised applications and remote controls, simply select the <em>Loaded Profiles</em> tab.</p>"));
 
     if (!DBusInterface::getInstance()->isProgramRunning("org.kde.irkick")) {
         if (KMessageBox::questionYesNo(
@@ -122,7 +122,7 @@ void KCMLirc::connectSignalsAndSlots() {
     connect(theKCMLircBase->theActions, SIGNAL(itemSelectionChanged()), this, SLOT(updateActionsStatus()));
     connect(theKCMLircBase->theActions, SIGNAL(doubleClicked(QModelIndex)),this,SLOT(slotEditAction()));
 
-    connect(theKCMLircBase->theExtensions, SIGNAL(itemSelectionChanged()), this, SLOT(updateInformation()));
+    connect(theKCMLircBase->theAvailableProfiles, SIGNAL(itemSelectionChanged()), this, SLOT(updateInformation()));
 
     connect(theKCMLircBase->theAddActions, SIGNAL(clicked()), this, SLOT(slotAddActions()));
     connect(theKCMLircBase->theAddAction, SIGNAL(clicked()), this, SLOT(slotAddAction()));
@@ -481,8 +481,8 @@ void KCMLirc::updateModes()
 
 void KCMLirc::updateExtensions()
 {
-    theKCMLircBase->theExtensions->clear();
-    QTreeWidgetItem *a = new QTreeWidgetItem(theKCMLircBase->theExtensions, (QStringList() << i18n("Applications")));
+    theKCMLircBase->theAvailableProfiles->clear();
+    QTreeWidgetItem *a = new QTreeWidgetItem(theKCMLircBase->theAvailableProfiles, (QStringList() << i18n("Applications")));
     a->setExpanded(true);
     foreach(Profile *tmp, ProfileServer::getInstance()->profiles()) {
 	QTreeWidgetItem *item = new  QTreeWidgetItem(a, (QStringList()<< tmp->name())); 
@@ -491,7 +491,7 @@ void KCMLirc::updateExtensions()
 	
     }
     a->sortChildren(1, Qt::AscendingOrder);
-    theKCMLircBase->theExtensions->setCurrentItem(theKCMLircBase->theExtensions->topLevelItem(0));
+    theKCMLircBase->theAvailableProfiles->setCurrentItem(theKCMLircBase->theAvailableProfiles->topLevelItem(0));
     updateInformation();
 }
 
@@ -500,36 +500,36 @@ void KCMLirc::updateInformation()
     theKCMLircBase->theInformation->clear();
     theKCMLircBase->theInformationLabel->setText("");
 
-    if (theKCMLircBase->theExtensions->selectedItems().isEmpty()) {
+    if (theKCMLircBase->theAvailableProfiles->selectedItems().isEmpty()) {
         return;
     }
 
-    if (!theKCMLircBase->theExtensions->selectedItems().first()->parent()) {
+    if (!theKCMLircBase->theAvailableProfiles->selectedItems().first()->parent()) {
         theKCMLircBase->theInformationLabel->setText(i18n(
                     "Information on <b>%1</b>:",
-                    theKCMLircBase->theExtensions->selectedItems().first()->text(0)));
-        if (theKCMLircBase->theExtensions->selectedItems().first()->text(0) == i18n(
+                    theKCMLircBase->theAvailableProfiles->selectedItems().first()->text(0)));
+        if (theKCMLircBase->theAvailableProfiles->selectedItems().first()->text(0) == i18n(
                     "Applications")) {
             QStringList infoList;
             infoList << i18n("Number of Applications") << QString().setNum(
-                theKCMLircBase->theExtensions->selectedItems().first()->childCount());
+                theKCMLircBase->theAvailableProfiles->selectedItems().first()->childCount());
             new QTreeWidgetItem(theKCMLircBase->theInformation, infoList);
-        } else if (theKCMLircBase->theExtensions->selectedItems().first()->text(0)
+        } else if (theKCMLircBase->theAvailableProfiles->selectedItems().first()->text(0)
                    == i18n("Remote Controls")) {
             QStringList infoList;
             infoList << i18n("Number of Remote Controls") << QString().setNum(
-                theKCMLircBase->theExtensions->selectedItems().first()->childCount());
+                theKCMLircBase->theAvailableProfiles->selectedItems().first()->childCount());
             new QTreeWidgetItem(theKCMLircBase->theInformation, infoList);
         }
-    } else if (theKCMLircBase->theExtensions->selectedItems().first()->parent()->text(
+    } else if (theKCMLircBase->theAvailableProfiles->selectedItems().first()->parent()->text(
                    0) == i18n("Applications")) {
         ProfileServer *theServer = ProfileServer::getInstance();
-        const Profile *p = theServer->getProfileById(theKCMLircBase->theExtensions->selectedItems().first()->data(0, Qt::UserRole).toString());
+        const Profile *p = theServer->getProfileById(theKCMLircBase->theAvailableProfiles->selectedItems().first()->data(0, Qt::UserRole).toString());
         QStringList infoList;
-        infoList << i18n("Extension Name") << p->name();
+        infoList << i18n("Profile Name") << p->name();
         new QTreeWidgetItem(theKCMLircBase->theInformation, infoList);
         infoList.clear();
-        infoList << i18n("Extension Author") << p->author();
+        infoList << i18n("Profile Author") << p->author();
         new QTreeWidgetItem(theKCMLircBase->theInformation, infoList);
         infoList.clear();
         infoList << i18n("Application Identifier") << p->id();

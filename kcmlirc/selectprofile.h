@@ -25,6 +25,7 @@
 #include <QTreeWidget>
 #include <QLabel>
 #include <QVBoxLayout>
+#include <KTextEdit>
 
 #include <kdialog.h>
 
@@ -34,7 +35,7 @@ private:
   
 public:
     QTreeWidget *profilesWidget;
-    QLabel *selectionLabel;
+    KTextEdit *selectionLabel;
     QVBoxLayout *layout;
     
     SelectProfileWidget (QWidget *parent = 0);

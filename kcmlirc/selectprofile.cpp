@@ -22,8 +22,12 @@
 #include <klocale.h>
 
 
+
 SelectProfileWidget::SelectProfileWidget (QWidget *parent) : QWidget(parent) {
-    selectionLabel = new QLabel();
+    selectionLabel = new KTextEdit();
+    selectionLabel->setReadOnly(true);
+    selectionLabel->setFixedHeight(40);
+
     profilesWidget = new QTreeWidget();
     layout = new QVBoxLayout(this);
     layout->addWidget(new QLabel(i18n("Select profile")));
