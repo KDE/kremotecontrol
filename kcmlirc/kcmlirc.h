@@ -62,8 +62,10 @@ public slots:
     void updateModesStatus();
     void updateActionsStatus();
     void updateModes();
-    void updateExtensions();
-    void updateInformation();
+    void updateProfileInfo();
+    void updateProfileDetails(QModelIndex);
+    void updateRemoteInfo();
+    void updateRemoteDetails(QModelIndex);
     void slotAddMode();
     void slotRemoveMode();
     void slotSetDefaultMode();

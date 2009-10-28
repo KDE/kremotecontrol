@@ -381,17 +381,17 @@ void IRKick::gotMessage(const RemoteControlButton &button)
             currentModes[button.remoteName()] = "";
         }
         kDebug() << "current mode:" << currentModes[button.remoteName()];
-        IRActions l = allActions.findByModeButton(Mode(button.remoteName(), currentModes[button.remoteName()]), button.name());
+        IRActions tActions = allActions.findByModeButton(Mode(button.remoteName(), currentModes[button.remoteName()]), button.name());
         if (!currentModes[button.remoteName()].isEmpty())
-            l += allActions.findByModeButton(Mode(button.remoteName(), ""), button.name());
+            tActions += allActions.findByModeButton(Mode(button.remoteName(), ""), button.name());
         bool doBefore = true, doAfter = false;
-        for (int i = 0; i < l.size(); ++i)
-            if (l.at(i)->isModeChange() && !button.repeatCounter()) { // mode switch
-                currentModes[button.remoteName()] = l.at(i)->modeChange();
-                Mode mode = allModes.getMode(button.remoteName(), l.at(i)->modeChange());
+        for (int i = 0; i < tActions.size(); ++i)
+            if (tActions.at(i)->isModeChange() && !button.repeatCounter()) { // mode switch
+                currentModes[button.remoteName()] = tActions.at(i)->modeChange();
+                Mode mode = allModes.getMode(button.remoteName(), tActions.at(i)->modeChange());
                 updateTray();
-                doBefore = l.at(i)->doBefore();
-                doAfter = l.at(i)->doAfter();
+                doBefore = tActions.at(i)->doBefore();
+                doAfter = tActions.at(i)->doAfter();
                 KNotification::event(
                                "mode_event", "<b>" + mode.remote() + ":</b><br>" +
                                i18n("Mode switched to %1" , currentModes[button.remoteName()] == "" ? i18nc("Default mode in notification", "Default") : currentModes[button.remoteName()]),
@@ -402,15 +402,15 @@ void IRKick::gotMessage(const RemoteControlButton &button)
 
         for (int after = 0; after < 2; after++) {
             if ((doBefore && !after) || (doAfter && after))
-                for (int i = 0; i < l.size(); ++i) {
-                    if (!l.at(i)->isModeChange() && (l.at(i)->repeat() || !button.repeatCounter())) {
-                        executeAction(*l.at(i));
+                for (int i = 0; i < tActions.size(); ++i) {
+                    if (!tActions.at(i)->isModeChange() && (tActions.at(i)->repeat() || !button.repeatCounter())) {
+                        executeAction(*tActions.at(i));
                     }
                 }
             if (!after && doAfter) {
-                l = allActions.findByModeButton(Mode(button.remoteName(), currentModes[button.remoteName()]), button.name());
+                tActions = allActions.findByModeButton(Mode(button.remoteName(), currentModes[button.remoteName()]), button.name());
                 if (!currentModes[button.remoteName()].isEmpty()) {
-                    l += allActions.findByModeButton(Mode(button.remoteName(), ""), button.name());
+                    tActions += allActions.findByModeButton(Mode(button.remoteName(), ""), button.name());
                 }
             }
         }

@@ -47,7 +47,6 @@ EditAction::EditAction(IRAction *action, const QStringList &modeList, QWidget *p
     setButtons( Ok | Cancel);
     setDefaultButton(Ok);
     setModal(modal);
-    //editActionBaseWidget->theDBusApplications->setModel(new DBusServiceModel(0));
     dbusServiceModel = new QStandardItemModel(editActionBaseWidget->theDBusApplications);
     editActionBaseWidget->theDBusApplications->setModel(dbusServiceModel);
     mainGroup.addButton(editActionBaseWidget->theUseDBus);
@@ -59,15 +58,11 @@ EditAction::EditAction(IRAction *action, const QStringList &modeList, QWidget *p
     foreach(const QString &mode, modeList) {
         editActionBaseWidget->theModes->addItem(mode);
     }
-
-    foreach(const Solid::Control::RemoteControlButton &button, Solid::Control::RemoteControl(theAction->remote()).buttons()){
-        editActionBaseWidget->theButtons->addItem(button.description(), button.name());
-    }
-    editActionBaseWidget->theButtons->setCurrentIndex(editActionBaseWidget->theButtons->findData(theAction->button()));
+    editActionBaseWidget->theButtons->setModel(new RemoteButtonModel(Solid::Control::RemoteControl(theAction->remote()).buttons(), this));
+    editActionBaseWidget->theButtons->setCurrentIndex(editActionBaseWidget->theButtons->findData(theAction->button(), Qt::DisplayRole));
 
     updateApplications();
     connectSignalsAndSlots();
-    //initDBusApplications();
 
     argumentsModel = new QStandardItemModel(editActionBaseWidget->argumentsView);    
     editActionBaseWidget->argumentsView->setModel(argumentsModel);
@@ -339,14 +334,11 @@ void EditAction::updateFunctions()
         return;
     }
 
-    const QString application = editActionBaseWidget->theApplications->itemData(editActionBaseWidget->theApplications->currentIndex()).toString();
-    kDebug() << "app:" << application;
-    QHash<QString, ProfileAction*> dict = ProfileServer::getInstance()->getProfileById(application)->actions();
-    QHash<QString, ProfileAction*>::const_iterator i;
-    for (i = dict.constBegin(); i != dict.constEnd(); ++i) {
-        editActionBaseWidget->theFunctions->addItem(i.value()->name(), i.key());
-    }
+     const QString application = editActionBaseWidget->theApplications->itemData(editActionBaseWidget->theApplications->currentIndex()).toString();
+     Profile *tProfile =const_cast<Profile*> (ProfileServer::getInstance()->getProfileById(application));
+     editActionBaseWidget->theFunctions->setModel(new ProfileModel(tProfile, this));
     const ProfileAction *action = ProfileServer::getInstance()->getAction(theAction->program(), theAction->object(), theAction->method().prototype());
+    
     if (action && (action->profile()->name() == editActionBaseWidget->theApplications->currentText())) {
         int index = editActionBaseWidget->theFunctions->findText(action->name());
         editActionBaseWidget->theFunctions->setCurrentIndex(index < 0 ? 0 : index);

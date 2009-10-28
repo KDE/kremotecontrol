@@ -7,300 +7,168 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>749</width>
-    <height>482</height>
+    <width>677</width>
+    <height>530</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Linux Infrared Remote Control</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout">
-   <property name="margin">
-    <number>0</number>
-   </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <widget class="KTabWidget" name="tabWidget2">
-     <property name="currentIndex">
-      <number>0</number>
+    <widget class="QLabel" name="theMainLabel">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
-     <widget class="QWidget" name="tab">
-      <attribute name="title">
-       <string>Controller Functions</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout_2">
-       <item row="0" column="0" colspan="2">
-        <widget class="QLabel" name="theMainLabel">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="font">
-          <font>
-           <weight>75</weight>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
-         </property>
-         <property name="text">
-          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="text">
+      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:10pt; font-weight:600; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;There are currently no remote controls available. You must first set up LIRC correctly. Find more information on &lt;a href=&quot;http://www.lirc.org&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#3c7dbe;&quot;&gt;www.lirc.org&lt;/span&gt;&lt;/a&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignTop</set>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-         <property name="margin">
-          <number>1</number>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <layout class="QGridLayout" name="gridLayout">
-         <item row="0" column="0" colspan="3">
-          <widget class="QLabel" name="theRemotesLabel">
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Remote controls and modes:</string>
-           </property>
-           <property name="wordWrap">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0" colspan="4">
-          <widget class="QTreeWidget" name="theModes">
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="columnCount">
-            <number>0</number>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="KPushButton" name="theAddMode">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>&amp;Add...</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="KPushButton" name="theEditMode">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>&amp;Edit...</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="2">
-          <widget class="KPushButton" name="theRemoveMode">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>&amp;Remove</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="3">
-          <spacer name="horizontalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Preferred</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>50</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
-       </item>
-       <item row="1" column="1">
-        <layout class="QVBoxLayout">
-         <property name="margin">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QLabel" name="theModeLabel">
-           <property name="text">
-            <string/>
-           </property>
-           <property name="wordWrap">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QTreeWidget" name="theActions">
-           <property name="rootIsDecorated">
-            <bool>false</bool>
-           </property>
-           <column>
-            <property name="text">
-             <string notr="true">Button</string>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string>Application</string>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string>Function</string>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string>Arguments</string>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string>Notes</string>
-            </property>
-           </column>
-          </widget>
-         </item>
-         <item>
-          <layout class="QHBoxLayout">
-           <item>
-            <layout class="QGridLayout">
-             <item row="0" column="1" colspan="3">
-              <widget class="KPushButton" name="theAddActions">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="text">
-                <string>Auto-Populate...</string>
-               </property>
-               <property name="shortcut">
-                <string/>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="KPushButton" name="theAddAction">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="text">
-                <string>A&amp;dd...</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="2">
-              <widget class="QPushButton" name="theEditAction">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="text">
-                <string>Ed&amp;it...</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="3">
-              <widget class="KPushButton" name="theRemoveAction">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="text">
-                <string>Re&amp;move</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <spacer name="horizontalSpacer">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tab">
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignTop</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+     <property name="margin">
+      <number>1</number>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="KTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tab_0">
       <attribute name="title">
-       <string>Profiles Overview</string>
+       <string>Controller Functions</string>
       </attribute>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
-        <widget class="QTreeWidget" name="theAvailableProfiles">
-         <column>
-          <property name="text">
-           <string>Available Profiles</string>
-          </property>
-         </column>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSplitter" name="splitter5">
+        <widget class="QSplitter" name="splitter_4">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
-         <widget class="QWidget" name="layout9">
+         <widget class="QWidget" name="layoutWidget">
+          <layout class="QGridLayout" name="gridLayout">
+           <item row="0" column="0" colspan="3">
+            <widget class="QLabel" name="theModesLabel">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Configured Modes:</string>
+             </property>
+             <property name="wordWrap">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0" colspan="4">
+            <widget class="QTreeWidget" name="theModes">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="columnCount">
+              <number>0</number>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="KPushButton" name="theAddMode">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>&amp;Add...</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="KPushButton" name="theEditMode">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>&amp;Edit...</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="KPushButton" name="theRemoveMode">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>&amp;Remove</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="3">
+            <spacer name="horizontalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Preferred</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>50</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="layoutWidget">
           <layout class="QVBoxLayout">
            <property name="margin">
             <number>0</number>
            </property>
            <item>
-            <widget class="QLabel" name="theInformationLabel">
+            <widget class="QLabel" name="theModeLabel">
              <property name="text">
               <string/>
              </property>
@@ -310,26 +178,261 @@ p, li { white-space: pre-wrap; }
             </widget>
            </item>
            <item>
-            <widget class="QTreeWidget" name="theInformation">
+            <widget class="QTreeWidget" name="theActions">
              <property name="rootIsDecorated">
               <bool>false</bool>
              </property>
-             <property name="columnCount">
-              <number>2</number>
+             <property name="sortingEnabled">
+              <bool>false</bool>
              </property>
+             <attribute name="headerShowSortIndicator" stdset="0">
+              <bool>false</bool>
+             </attribute>
+             <attribute name="headerShowSortIndicator" stdset="0">
+              <bool>false</bool>
+             </attribute>
              <column>
               <property name="text">
-               <string>Information</string>
+               <string notr="true">Button</string>
               </property>
              </column>
              <column>
               <property name="text">
-               <string>Value</string>
+               <string>Application</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Function</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Arguments</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Notes</string>
               </property>
              </column>
             </widget>
            </item>
+           <item>
+            <layout class="QHBoxLayout">
+             <item>
+              <layout class="QGridLayout">
+               <item row="0" column="1" colspan="3">
+                <widget class="KPushButton" name="theAddActions">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
+                 <property name="text">
+                  <string>Auto-Populate...</string>
+                 </property>
+                 <property name="shortcut">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="KPushButton" name="theAddAction">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
+                 <property name="text">
+                  <string>A&amp;dd...</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="2">
+                <widget class="QPushButton" name="theEditAction">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
+                 <property name="text">
+                  <string>Ed&amp;it...</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="3">
+                <widget class="KPushButton" name="theRemoveAction">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
+                 <property name="text">
+                  <string>Re&amp;move</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <spacer name="horizontalSpacer">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </item>
           </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_1">
+      <attribute name="title">
+       <string>Profiles Overview</string>
+      </attribute>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QSplitter" name="splitter_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <widget class="QTreeView" name="theAvailableProfiles">
+          <property name="sortingEnabled">
+           <bool>false</bool>
+          </property>
+          <attribute name="headerShowSortIndicator" stdset="0">
+           <bool>false</bool>
+          </attribute>
+          <attribute name="headerShowSortIndicator" stdset="0">
+           <bool>false</bool>
+          </attribute>
+         </widget>
+         <widget class="QGroupBox" name="theInformationBox">
+          <property name="title">
+           <string>Profile details</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_5">
+           <item>
+            <widget class="QSplitter" name="splitter_2">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <widget class="QTreeWidget" name="theProfileInformation">
+              <property name="rootIsDecorated">
+               <bool>false</bool>
+              </property>
+              <property name="sortingEnabled">
+               <bool>false</bool>
+              </property>
+              <property name="columnCount">
+               <number>2</number>
+              </property>
+              <attribute name="headerShowSortIndicator" stdset="0">
+               <bool>false</bool>
+              </attribute>
+              <attribute name="headerShowSortIndicator" stdset="0">
+               <bool>false</bool>
+              </attribute>
+              <column>
+               <property name="text">
+                <string>Information</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Value</string>
+               </property>
+              </column>
+             </widget>
+             <widget class="QFrame" name="actionFrame">
+              <property name="frameShape">
+               <enum>QFrame::NoFrame</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Plain</enum>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout">
+               <property name="margin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="label">
+                 <property name="text">
+                  <string>Available actions:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QTreeView" name="theProfileActions">
+                 <property name="rootIsDecorated">
+                  <bool>false</bool>
+                 </property>
+                 <property name="itemsExpandable">
+                  <bool>false</bool>
+                 </property>
+                 <property name="sortingEnabled">
+                  <bool>false</bool>
+                 </property>
+                 <property name="expandsOnDoubleClick">
+                  <bool>false</bool>
+                 </property>
+                 <attribute name="headerShowSortIndicator" stdset="0">
+                  <bool>false</bool>
+                 </attribute>
+                 <attribute name="headerShowSortIndicator" stdset="0">
+                  <bool>false</bool>
+                 </attribute>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
+       <string>Available Remotes</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QSplitter" name="splitter">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <widget class="QTreeView" name="theRemotes">
+          <property name="sortingEnabled">
+           <bool>false</bool>
+          </property>
+          <attribute name="headerShowSortIndicator" stdset="0">
+           <bool>false</bool>
+          </attribute>
+          <attribute name="headerShowSortIndicator" stdset="0">
+           <bool>false</bool>
+          </attribute>
+         </widget>
+         <widget class="QTreeView" name="theRemoteButtons">
+          <property name="rootIsDecorated">
+           <bool>false</bool>
+          </property>
+          <property name="itemsExpandable">
+           <bool>false</bool>
+          </property>
+          <property name="sortingEnabled">
+           <bool>false</bool>
+          </property>
+          <attribute name="headerShowSortIndicator" stdset="0">
+           <bool>false</bool>
+          </attribute>
+          <attribute name="headerShowSortIndicator" stdset="0">
+           <bool>false</bool>
+          </attribute>
          </widget>
         </widget>
        </item>

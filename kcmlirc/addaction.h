@@ -46,6 +46,9 @@ private:
     QStandardItemModel *dbusAppsModel;
     QStandardItemModel *argumentsModel;
     DBusFunctionModel *dbusFunctionModel;
+    ProfileModel *profileModel;
+    RemoteButtonModel *remoteButtonModel;
+    
     enum  {
         START =0,
         SELECT_BUTTON =1,
@@ -82,19 +85,11 @@ public slots:
     virtual void updateOptions();
 
 public:
-//    Arguments theArguments;
     bool isUnique;
-
     static const QStringList getFunctions(const QString app, const QString obj);
-    void updateArgument(QTreeWidgetItem *theItem);
     IRAction * getAction();
-
-//    QMap<QListWidgetItem *, QString> profileMap;
-//    QMap<QTreeWidgetItem *, QString> profileFunctionMap;
-
     AddAction(QWidget *parent, const char *name, const Mode &mode);
     ~AddAction();
-
 
     virtual int nextId () const;
 };

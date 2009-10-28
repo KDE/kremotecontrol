@@ -33,11 +33,15 @@
 #include "iraction.h"
 #include <QItemDelegate>
 #include <QStandardItem>
+#include <solid/control/remotecontrol.h>
 
 
-
+using namespace Solid::Control;
 Q_DECLARE_METATYPE(Prototype)
 Q_DECLARE_METATYPE(IRAction*)
+Q_DECLARE_METATYPE(ProfileAction*)
+Q_DECLARE_METATYPE(RemoteControlButton*)
+
 
 class DBusServiceItem : public QStandardItem
 {
@@ -69,7 +73,7 @@ class ArgumentsModelItem: public QStandardItem
 public:
     ArgumentsModelItem ( const QString & text );
     ArgumentsModelItem ( const QVariant &data);
-    virtual QVariant data ( int role = Qt::UserRole + 1 ) const;
+         virtual QVariant data ( int role = Qt::UserRole + 1 ) const;
 
 private:
 
@@ -95,6 +99,31 @@ public:
 
 };
 
+
+class ProfileModel: public QStandardItemModel
+{
+    public:
+      ProfileModel(QObject *parent=0);
+	ProfileModel(const Profile *profile, QObject *parent=0);
+	
+	ProfileAction* getProfileAction( int index ) const;
+	QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+	void appendRow(ProfileAction *action);
+	Qt::ItemFlags flags(const QModelIndex& index) const;
+};
+
+
+
+class RemoteButtonModel: public QStandardItemModel
+{
+    public:
+      	RemoteButtonModel(QObject *parent=0);
+	RemoteButtonModel(QList<RemoteControlButton> buttonList , QObject *parent=0);
+	RemoteControlButton* getButton( int index ) const;
+	QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+	void appendRow( RemoteControlButton *button);
+	Qt::ItemFlags flags(const QModelIndex& index) const;
+};
 
 #endif /* MODEL_H_ */
 

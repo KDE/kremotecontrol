@@ -68,7 +68,7 @@
      </widget>
     </item>
     <item>
-     <widget class="KListWidget" name="theButtons"/>
+     <widget class="QTreeView" name="theButtons"/>
     </item>
    </layout>
   </widget>
@@ -91,7 +91,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QTableView" name="theDBusFunctions">
+     <widget class="QTreeView" name="theDBusFunctions">
       <property name="sizePolicy">
        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -101,8 +101,14 @@
       <property name="editTriggers">
        <set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::EditKeyPressed</set>
       </property>
-      <property name="sortingEnabled">
-       <bool>true</bool>
+      <property name="rootIsDecorated">
+       <bool>false</bool>
+      </property>
+      <property name="itemsExpandable">
+       <bool>false</bool>
+      </property>
+      <property name="expandsOnDoubleClick">
+       <bool>false</bool>
       </property>
      </widget>
     </item>
@@ -121,28 +127,22 @@
      </widget>
     </item>
     <item>
-     <widget class="QTreeWidget" name="theProfileFunctions">
+     <widget class="QTreeView" name="theProfileFunctions">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>7</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <column>
-       <property name="text">
-        <string>Function</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Options</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Description</string>
-       </property>
-      </column>
+      <property name="rootIsDecorated">
+       <bool>false</bool>
+      </property>
+      <property name="itemsExpandable">
+       <bool>false</bool>
+      </property>
+      <property name="expandsOnDoubleClick">
+       <bool>false</bool>
+      </property>
      </widget>
     </item>
     <item>

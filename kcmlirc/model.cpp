@@ -110,7 +110,6 @@ QVariant DBusFunctionModel::headerData(int section, Qt::Orientation orientation,
 {
     if (orientation == Qt::Horizontal) {
 	if (role == Qt::DisplayRole) {
-	    //            kDebug()<< "section is " << section;
 	    switch (section) {
 		case 0:
 		    return i18n("Function");
@@ -118,8 +117,6 @@ QVariant DBusFunctionModel::headerData(int section, Qt::Orientation orientation,
 		    return i18n("Parameter");
 		case 2:
 		    return i18n("Prototype");
-		default:
-		    return QVariant();
 	    }
 	}
     }
@@ -298,3 +295,144 @@ QVariant ArgumentsModelItem::data ( int role ) const {
         return QStandardItem::data(role);
     }
 }
+
+/*
+***********************************
+ProfileModel
+***********************************
+*/
+
+
+
+ProfileModel::ProfileModel(QObject* parent): QStandardItemModel(parent)
+{
+  qRegisterMetaType<ProfileAction*>("ProfileAction*");
+}
+
+ProfileModel::ProfileModel(const Profile* profile, QObject* parent): QStandardItemModel(parent)
+{
+    ProfileModel();
+     foreach(ProfileAction *action, profile->actions()){
+       appendRow(action);
+     }
+     sort(0, Qt::DescendingOrder);
+}
+
+QVariant ProfileModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if (orientation == Qt::Horizontal) {
+	if (role == Qt::DisplayRole) {
+	    switch (section) {
+		case 0:
+		    return i18n("Name");
+		case 1:
+		    return i18n("Options");
+		case 2:
+		    return i18n("Comment");
+		case 3:
+		    return i18n("Mapped remote button");
+	    }
+	}
+    }
+     return QVariant();
+}
+
+ProfileAction* ProfileModel::getProfileAction(int index) const
+{
+    return QStandardItemModel::item(index)->data(Qt::UserRole).value<ProfileAction*>();
+}
+
+
+void ProfileModel::appendRow(ProfileAction *action)
+{
+  QList<QStandardItem*> row;
+  QStandardItem *item = new QStandardItem(action->name());
+    item->setData(qVariantFromValue(action), Qt::UserRole);
+      row.append(item);
+      row.append(new QStandardItem(QString::number(action->arguments().size())));
+      if(!(action->comment().isEmpty())){
+	QStandardItem *tItem = new  QStandardItem(action->comment());
+	tItem->setToolTip(action->comment());
+	row.append(tItem);
+      }else{
+	  row.append(new QStandardItem("-"));
+      }
+      if(!action->buttonName().isEmpty()){
+	  row.append(new QStandardItem(action->buttonName()));
+      }else{
+	  row.append(new QStandardItem("-"));
+      }     
+      QStandardItemModel::appendRow(row);
+}
+
+Qt::ItemFlags ProfileModel::flags(const QModelIndex& index) const
+{
+   return (QStandardItemModel::flags(index) & ~Qt::ItemIsEditable);
+}
+
+
+/*
+***********************************
+RemoteButtonModel
+***********************************
+*/
+
+
+RemoteButtonModel::RemoteButtonModel(QObject* parent): QStandardItemModel(parent)
+{
+  qRegisterMetaType<RemoteControlButton*>("RemoteControlButton*");
+}
+
+
+RemoteButtonModel::RemoteButtonModel( QList<RemoteControlButton> buttonList, QObject* parent): QStandardItemModel(parent)
+{
+  RemoteButtonModel();
+  foreach(RemoteControlButton tButton, buttonList){
+    appendRow(&tButton);
+  }
+      sort(0, Qt::AscendingOrder);
+}
+
+
+void RemoteButtonModel::appendRow( RemoteControlButton* button)
+{
+  QList<QStandardItem*> row;  
+ QStandardItem *item = new QStandardItem(button->name());
+  item->setData(qVariantFromValue(button), Qt::UserRole); 
+  row.append(item);
+  if(button->id() == RemoteControlButton::Unknown){
+      row.append(new QStandardItem(button->description()));
+  }
+  QStandardItemModel::appendRow(row);
+}
+
+
+
+Solid::Control::RemoteControlButton* RemoteButtonModel::getButton(int index) const
+{
+   return QStandardItemModel::item(index)->data(Qt::UserRole).value<RemoteControlButton*>();
+}
+
+
+Qt::ItemFlags RemoteButtonModel::flags(const QModelIndex& index) const
+{
+  return (QStandardItemModel::flags(index) & ~Qt::ItemIsEditable);
+}
+
+
+QVariant RemoteButtonModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+  if (orientation == Qt::Horizontal) {
+	if (role == Qt::DisplayRole) {
+	    switch (section) {
+		case 0:
+		    return i18n("Name");
+		case 1:
+		    return i18n("Description");
+	    }
+	}
+    }
+     return QVariant();
+}
+
+

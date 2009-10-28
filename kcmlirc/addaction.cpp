@@ -41,6 +41,7 @@
 #include <knuminput.h>
 #include <keditlistbox.h>
 #include <klocale.h>
+#include <solid/control/remotecontrol.h>
 
 AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMode(mode)
 {
@@ -89,10 +90,10 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMo
     connect(theModes, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(next()));
 
     connect(theButtons, SIGNAL(itemSelectionChanged()), this, SLOT(updateButtonStates()));
-    connect(theButtons, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(next()));
+    connect(theButtons, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(next()));
 
     connect(theProfileFunctions, SIGNAL(itemSelectionChanged()), this, SLOT(updateButtonStates()));
-    connect(theProfileFunctions, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(next()));
+    connect(theProfileFunctions, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(next()));
 
 
     connect(theDBusFunctions, SIGNAL(clicked(QModelIndex)), this, SLOT(updateButtonStates()));
@@ -133,15 +134,12 @@ int AddAction::nextId() const
     }
 
     if (currentId() == SELECT_FUNCTION_PROFILE) {
-	if(!theProfileFunctions->currentItem()){
+      int tRowIndex=theProfileFunctions->currentIndex().row();
+	if(tRowIndex == -1){
 	    return ACTION_OPTIONS;
 	}
-	QString application = theProfiles->currentItem()->data(Qt::UserRole).toString();
-	QString function = theProfileFunctions->currentItem()->data(0, Qt::UserRole).toString();
-	const ProfileAction *profileAction =  ProfileServer::getInstance()->getAction(application, function);
-
+	const ProfileAction *profileAction =  profileModel->getProfileAction(tRowIndex);
 	const QList<ProfileActionArgument> &profileActionArguments = profileAction->arguments();
-	kDebug() << "argcount" << profileActionArguments.count();
 	if(profileActionArguments.count() == 0){
 	    return ACTION_OPTIONS;
 	}
@@ -170,8 +168,10 @@ int AddAction::nextId() const
 void AddAction::updateButton(const QString &remote, const QString &button)
 {
     if (theMode.remote() == remote) {
-        theButtons->setCurrentItem(theButtons->findItems(button, 0).first());
-        theButtons->scrollToItem(theButtons->findItems(button, 0).first());
+	kDebug()<< "name of the button is "<< button;
+      QModelIndex tIndex = ((QStandardItemModel*)theButtons->model())->findItems(button).first()->index();
+        theButtons->scrollTo(tIndex);
+	theButtons->setCurrentIndex(tIndex);
     } else {
         KMessageBox::error(0, i18n("You did not select a mode of that remote control. Please use %1, "
                                    "or revert back to select a different mode.", theMode.remote()),
@@ -184,12 +184,14 @@ void AddAction::updateButtons()
     kDebug() << "Mode:" << theMode.name() << "remote:" << theMode.remote();
     theButtonText->setText(i18n("You are attempting to configure an action for a button on %1 (in mode %2).")
                                 .arg(theMode.remote()).arg(theMode.name().isEmpty() ? i18n("Master") : theMode.name()));
-    theButtons->clear();
+    remoteButtonModel = new RemoteButtonModel(Solid::Control::RemoteControl(theMode.remote()).buttons());
+    theButtons->setModel(remoteButtonModel);
+				/*    theButtons->clear();
     foreach(const QString &buttonName, DBusInterface::getInstance()->getButtons(theMode.remote())) {	
         QListWidgetItem *tItem =  new  QListWidgetItem(buttonName,theButtons);
         tItem->setData(Qt::UserRole,buttonName);
 
-    }
+    }*/
 }
 
 void AddAction::initializePage(int id)
@@ -219,13 +221,13 @@ void AddAction::updateButtonStates()
         button(QWizard::NextButton)->setEnabled(theProfiles->currentItem() || !theUseProfile->isChecked());
         break;
     case SELECT_BUTTON:
-        button(QWizard::NextButton)->setEnabled(!theButtons->selectedItems().isEmpty());
+        button(QWizard::NextButton)->setEnabled(theButtons->currentIndex().isValid());
         break;
     case SELECT_FUNCTION_DBUS:
         button(QWizard::NextButton)->setEnabled(theDBusApplications->currentIndex().isValid() && theDBusFunctions->currentIndex().isValid());
         break;
     case SELECT_FUNCTION_PROFILE:
-        button(QWizard::NextButton)->setEnabled(theProfileFunctions->currentItem() != 0 || theJustStart->isChecked());
+        button(QWizard::NextButton)->setEnabled(theProfileFunctions->currentIndex().row() != 0 || theJustStart->isChecked());
         break;
     case ACTION_ARGUMENTS:
         button(QWizard::NextButton)->setEnabled(true);
@@ -295,23 +297,14 @@ void AddAction::updateProfileFunctions()
 {
     kDebug() << "updateProfileFunctions called";
     ProfileServer *theServer = ProfileServer::getInstance();
-    theProfileFunctions->clear();
     if (!theProfiles->currentItem()) {
         return;
     }
-
     const Profile *p = theServer->getProfileById(theProfiles->currentItem()->data(Qt::UserRole).toString());
-    QHash<QString, ProfileAction*> dict = p->actions();
-    kDebug() << "actions: " << p->actions();
-    QHash<QString, ProfileAction*>::const_iterator i;
-    for (i = dict.constBegin(); i != dict.constEnd(); ++i) {
-        kDebug() << "got function: " << i.value()->name();
-        QStringList parameters;
-        parameters << i.value()->name() << QString().setNum(i.value()->arguments().count()) << i.value()->comment();
-        QTreeWidgetItem *item = new QTreeWidgetItem(theProfileFunctions, parameters);
-        kDebug() << "inserting profile function" << i.key();
-        item->setData(0, Qt::UserRole, i.key());
-    }
+    profileModel = new ProfileModel(p, this);
+    
+    theProfileFunctions->setModel(profileModel);
+    theProfileFunctions->setColumnHidden(3, true);
 }
 
 void AddAction::updateArguments()
@@ -322,10 +315,7 @@ void AddAction::updateArguments()
     argumentsModel->setHorizontalHeaderLabels(headerLabels);
 
     if (theUseProfile->isChecked()) {
-        QString application = theProfiles->currentItem()->data(Qt::UserRole).toString();
-        QString function = theProfileFunctions->currentItem()->data(0, Qt::UserRole).toString();
-        const ProfileAction *profileAction =  ProfileServer::getInstance()->getAction(application, function);
-
+        const ProfileAction *profileAction =  profileModel->getProfileAction(theProfileFunctions->currentIndex().row());
         const QList<ProfileActionArgument> &profileActionArguments = profileAction->arguments();
         for (int i = 0; i < profileActionArguments.count(); ++i) {
             QList<QStandardItem*> tmp;
@@ -375,15 +365,14 @@ void AddAction::updateDBusFunctions(QModelIndex pIndex) {
         theDBusFunctions->model()->sort(0, Qt::AscendingOrder);
 
     }
-    theDBusFunctions->resizeColumnsToContents();
-    theDBusFunctions->resizeRowsToContents();
     updateButtonStates();
 }
 
 
 IRAction* AddAction::getAction()
 {
-    IRAction *action = new IRAction(theMode.remote(), theButtons->currentItem()->data(Qt::UserRole).toString());
+  RemoteControlButton *tButton = remoteButtonModel->getButton(theButtons->currentIndex().row());
+  IRAction *action = new IRAction(tButton->remoteName(), tButton->name());
     action->setMode(theMode.name());
     action->setRepeat(theRepeat->isChecked());
     action->setAutoStart(theAutoStart->isChecked());
@@ -415,12 +404,9 @@ IRAction* AddAction::getAction()
         action->setMethod(p.prototype());
         action->setArguments(getCurrentArgs());
     } else if (theUseProfile->isChecked() && !theProfiles->selectedItems().isEmpty() &&
-               (!theProfileFunctions->selectedItems().isEmpty() || theJustStart->isChecked())) {
-        ProfileServer *theServer = ProfileServer::getInstance();
-
+               (theProfileFunctions->currentIndex().isValid() || theJustStart->isChecked())) {
         if (theNotJustStart->isChecked()) {
-            const ProfileAction
-            *theAction = theServer->getAction(theProfiles->currentItem()->data(Qt::UserRole).toString(), theProfileFunctions->currentItem()->data(0, Qt::UserRole).toString());
+            const ProfileAction *theAction= profileModel->getProfileAction(theProfileFunctions->currentIndex().row());
             action->setProgram(theAction->profile()->id());
             action->setObject(theAction->objId());
             action->setMethod(theAction->prototype());
