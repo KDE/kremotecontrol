@@ -47,7 +47,7 @@
 using namespace Solid::Control;
 
 IRKick::IRKick():
-        KNotificationItem(), npApp(QString())
+        KStatusNotifierItem(), npApp(QString())
 {
 
     setIconByName("irkick");

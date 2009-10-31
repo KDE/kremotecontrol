@@ -30,7 +30,7 @@
 #include "iractions.h"
 //#include "klircclient.h"
 
-#include <knotificationitem.h>
+#include <kstatusnotifieritem.h>
 #include <kaboutdata.h>
 
 #include <solid/control/remotecontrolmanager.h>
@@ -39,7 +39,7 @@
 class QTimer;
 class QAction;
 
-class IRKick: public KNotificationItem
+class IRKick: public KStatusNotifierItem
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.irkick")
