@@ -53,7 +53,7 @@ p, li { white-space: pre-wrap; }
    <item>
     <widget class="KTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tab_0">
       <attribute name="title">
@@ -188,9 +188,6 @@ p, li { white-space: pre-wrap; }
              <attribute name="headerShowSortIndicator" stdset="0">
               <bool>false</bool>
              </attribute>
-             <attribute name="headerShowSortIndicator" stdset="0">
-              <bool>false</bool>
-             </attribute>
              <column>
               <property name="text">
                <string notr="true">Button</string>
@@ -305,9 +302,6 @@ p, li { white-space: pre-wrap; }
           <attribute name="headerShowSortIndicator" stdset="0">
            <bool>false</bool>
           </attribute>
-          <attribute name="headerShowSortIndicator" stdset="0">
-           <bool>false</bool>
-          </attribute>
          </widget>
          <widget class="QGroupBox" name="theInformationBox">
           <property name="title">
@@ -329,9 +323,6 @@ p, li { white-space: pre-wrap; }
               <property name="columnCount">
                <number>2</number>
               </property>
-              <attribute name="headerShowSortIndicator" stdset="0">
-               <bool>false</bool>
-              </attribute>
               <attribute name="headerShowSortIndicator" stdset="0">
                <bool>false</bool>
               </attribute>
@@ -381,9 +372,6 @@ p, li { white-space: pre-wrap; }
                  <attribute name="headerShowSortIndicator" stdset="0">
                   <bool>false</bool>
                  </attribute>
-                 <attribute name="headerShowSortIndicator" stdset="0">
-                  <bool>false</bool>
-                 </attribute>
                 </widget>
                </item>
               </layout>
@@ -407,12 +395,15 @@ p, li { white-space: pre-wrap; }
           <enum>Qt::Horizontal</enum>
          </property>
          <widget class="QTreeView" name="theRemotes">
+          <property name="rootIsDecorated">
+           <bool>false</bool>
+          </property>
+          <property name="itemsExpandable">
+           <bool>false</bool>
+          </property>
           <property name="sortingEnabled">
            <bool>false</bool>
           </property>
-          <attribute name="headerShowSortIndicator" stdset="0">
-           <bool>false</bool>
-          </attribute>
           <attribute name="headerShowSortIndicator" stdset="0">
            <bool>false</bool>
           </attribute>
@@ -427,9 +418,6 @@ p, li { white-space: pre-wrap; }
           <property name="sortingEnabled">
            <bool>false</bool>
           </property>
-          <attribute name="headerShowSortIndicator" stdset="0">
-           <bool>false</bool>
-          </attribute>
           <attribute name="headerShowSortIndicator" stdset="0">
            <bool>false</bool>
           </attribute>

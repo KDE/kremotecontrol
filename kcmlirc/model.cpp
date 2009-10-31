@@ -400,7 +400,7 @@ void RemoteButtonModel::appendRow( RemoteControlButton* button)
  QStandardItem *item = new QStandardItem(button->name());
   item->setData(qVariantFromValue(button), Qt::UserRole); 
   row.append(item);
-  if(button->id() == RemoteControlButton::Unknown){
+  if(button->id() != RemoteControlButton::Unknown){
       row.append(new QStandardItem(button->description()));
   }
   QStandardItemModel::appendRow(row);
@@ -436,3 +436,20 @@ QVariant RemoteButtonModel::headerData(int section, Qt::Orientation orientation,
 }
 
 
+
+RemoteModel::RemoteModel(QObject* parent): QStringListModel(parent)
+{
+}
+
+RemoteModel::RemoteModel(const QStringList &strings, QObject *parent) : QStringListModel(strings, parent)
+{
+    QStringListModel::sort(0, Qt::AscendingOrder);
+}
+
+QVariant RemoteModel::headerData(int section, Qt::Orientation o, int role) const
+{
+    if (role == Qt::DisplayRole){
+      return i18n("Remote");
+    }
+  return QAbstractListModel::headerData(section,o,role);
+}

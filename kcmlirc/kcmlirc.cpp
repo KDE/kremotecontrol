@@ -492,9 +492,8 @@ void KCMLirc::updateModes()
 
 void KCMLirc::updateProfileInfo()
 {
-    QStandardItemModel *tModel = new QStandardItemModel();
+    QStandardItemModel *tModel = new QStandardItemModel( theKCMLircBase->theAvailableProfiles);
     foreach(Profile *tmp, ProfileServer::getInstance()->profiles()) {
-      kDebug()<< "name "<< tmp->name();
       QStandardItem *tItem = new QStandardItem();
       tItem->setData(tmp->name(), Qt::DisplayRole);
       tItem->setData(tmp->id(), Qt::UserRole);
@@ -526,7 +525,7 @@ void KCMLirc::updateProfileDetails(QModelIndex index)
     infoList.clear();
     infoList << i18n("Number of Actions") << QString().setNum(tProfile->actions().count());
     new QTreeWidgetItem(theKCMLircBase->theProfileInformation, infoList);
-    theKCMLircBase->theProfileActions->setModel(new ProfileModel(tProfile, this));
+    theKCMLircBase->theProfileActions->setModel(new ProfileModel(tProfile, theKCMLircBase->theProfileActions));
   }
 
 
@@ -534,20 +533,13 @@ void KCMLirc::updateProfileDetails(QModelIndex index)
 void KCMLirc::updateRemoteDetails(QModelIndex index)
 {
   QString tSelectedRemote = theKCMLircBase->theRemotes->model()->data(index).toString();
-  theKCMLircBase->theRemoteButtons->setModel(new RemoteButtonModel(Solid::Control::RemoteControl(tSelectedRemote).buttons(), this));
+  theKCMLircBase->theRemoteButtons->setModel(new RemoteButtonModel(Solid::Control::RemoteControl(tSelectedRemote).buttons(), theKCMLircBase->theRemoteButtons));
 }
 
 
 void KCMLirc::updateRemoteInfo()
 {
-  QStringListModel *tModel = new   QStringListModel(Solid::Control::RemoteControl::allRemoteNames(), this);
-  tModel->sort(0, Qt::AscendingOrder);
-  bool t = tModel->setHeaderData(0,Qt::Horizontal, i18n("Remote"), Qt::DisplayRole);
-  kDebug()<< "boolean ada sad " << t;
-  theKCMLircBase->theRemotes->setModel(tModel);
-   t =  theKCMLircBase->theRemotes->model()->setHeaderData(0,Qt::Horizontal, i18n("Remote"), Qt::DisplayRole);
-   kDebug()<< "boolean ........... " << t;
-  theKCMLircBase->theRemoteButtons->setModel(new RemoteButtonModel( this));
+  theKCMLircBase->theRemotes->setModel(new  RemoteModel(Solid::Control::RemoteControl::allRemoteNames(), theKCMLircBase->theRemoteButtons));
 }
 
 
@@ -564,13 +556,10 @@ void KCMLirc::load()
     updateModes();
      updateActions();
      updateRemoteInfo();
-     theKCMLircBase->theProfileActions->setModel(new ProfileModel( this));
-    theKCMLircBase->theRemoteButtons->setModel(new RemoteButtonModel(this));
 }
 
 void KCMLirc::defaults()
 {
-    // insert your default settings code here...
     emit changed(true);
 }
 

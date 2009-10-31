@@ -58,7 +58,7 @@ EditAction::EditAction(IRAction *action, const QStringList &modeList, QWidget *p
     foreach(const QString &mode, modeList) {
         editActionBaseWidget->theModes->addItem(mode);
     }
-    editActionBaseWidget->theButtons->setModel(new RemoteButtonModel(Solid::Control::RemoteControl(theAction->remote()).buttons(), this));
+    editActionBaseWidget->theButtons->setModel(new RemoteButtonModel(Solid::Control::RemoteControl(theAction->remote()).buttons(), editActionBaseWidget->theButtons));
     editActionBaseWidget->theButtons->setCurrentIndex(editActionBaseWidget->theButtons->findData(theAction->button(), Qt::DisplayRole));
 
     updateApplications();
@@ -336,7 +336,7 @@ void EditAction::updateFunctions()
 
      const QString application = editActionBaseWidget->theApplications->itemData(editActionBaseWidget->theApplications->currentIndex()).toString();
      Profile *tProfile =const_cast<Profile*> (ProfileServer::getInstance()->getProfileById(application));
-     editActionBaseWidget->theFunctions->setModel(new ProfileModel(tProfile, this));
+     editActionBaseWidget->theFunctions->setModel(new ProfileModel(tProfile, editActionBaseWidget->theFunctions));
     const ProfileAction *action = ProfileServer::getInstance()->getAction(theAction->program(), theAction->object(), theAction->method().prototype());
     
     if (action && (action->profile()->name() == editActionBaseWidget->theApplications->currentText())) {

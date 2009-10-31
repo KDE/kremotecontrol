@@ -184,14 +184,8 @@ void AddAction::updateButtons()
     kDebug() << "Mode:" << theMode.name() << "remote:" << theMode.remote();
     theButtonText->setText(i18n("You are attempting to configure an action for a button on %1 (in mode %2).")
                                 .arg(theMode.remote()).arg(theMode.name().isEmpty() ? i18n("Master") : theMode.name()));
-    remoteButtonModel = new RemoteButtonModel(Solid::Control::RemoteControl(theMode.remote()).buttons());
+    remoteButtonModel = new RemoteButtonModel(Solid::Control::RemoteControl(theMode.remote()).buttons(), theButtons);
     theButtons->setModel(remoteButtonModel);
-				/*    theButtons->clear();
-    foreach(const QString &buttonName, DBusInterface::getInstance()->getButtons(theMode.remote())) {	
-        QListWidgetItem *tItem =  new  QListWidgetItem(buttonName,theButtons);
-        tItem->setData(Qt::UserRole,buttonName);
-
-    }*/
 }
 
 void AddAction::initializePage(int id)
@@ -301,7 +295,7 @@ void AddAction::updateProfileFunctions()
         return;
     }
     const Profile *p = theServer->getProfileById(theProfiles->currentItem()->data(Qt::UserRole).toString());
-    profileModel = new ProfileModel(p, this);
+    profileModel = new ProfileModel(p,  theProfileFunctions);
     
     theProfileFunctions->setModel(profileModel);
     theProfileFunctions->setColumnHidden(3, true);

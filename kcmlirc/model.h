@@ -34,7 +34,7 @@
 #include <QItemDelegate>
 #include <QStandardItem>
 #include <solid/control/remotecontrol.h>
-
+#include <QStringListModel>
 
 using namespace Solid::Control;
 Q_DECLARE_METATYPE(Prototype)
@@ -125,5 +125,13 @@ class RemoteButtonModel: public QStandardItemModel
 	Qt::ItemFlags flags(const QModelIndex& index) const;
 };
 
+
+class RemoteModel : public QStringListModel
+{
+  public:
+        RemoteModel(const QStringList &strings, QObject *parent = 0);
+    	RemoteModel(QObject *parent=0);
+         QVariant headerData(int section, Qt::Orientation o, int role) const;
+};
 #endif /* MODEL_H_ */
 
