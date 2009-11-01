@@ -26,4 +26,20 @@
         <name>Go to previous track</name>
         <comment></comment>
     </action>
+    <action objid="Player" prototype="void Forward(int)" button="Forward">
+        <name>Fast Forward</name>
+        <argument type="int">
+            <comment>Amount to fast forward in ms</comment>
+            <default>10000</default>
+        </argument>
+        <comment></comment>
+    </action>
+    <action objid="Player" prototype="void Backward(int)"  button ="Rewind">
+        <name>Rewind</name>
+        <argument type="int">
+            <comment>Amount to rewind in ms</comment>
+            <default>10000</default>
+        </argument>
+        <comment></comment>
+    </action>
 </profile>

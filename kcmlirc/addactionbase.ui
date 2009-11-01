@@ -68,7 +68,14 @@
      </widget>
     </item>
     <item>
-     <widget class="QTreeView" name="theButtons"/>
+     <widget class="QTreeView" name="theButtons">
+      <property name="rootIsDecorated">
+       <bool>false</bool>
+      </property>
+      <property name="itemsExpandable">
+       <bool>false</bool>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

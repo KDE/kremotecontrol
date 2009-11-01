@@ -88,11 +88,11 @@ DBusFunctionModel
 ***********************************
 */
 
-DBusFunctionModel::DBusFunctionModel(QObject *parent):QStandardItemModel(parent){
+DBusFunctionModel::DBusFunctionModel(QObject *parent):QStandardItemModel(parent) {
     qRegisterMetaType<Prototype>("Prototype");
 }
 
-void DBusFunctionModel::appendRow ( const Prototype &prototype ){
+void DBusFunctionModel::appendRow ( const Prototype &prototype ) {
     QList<QStandardItem*> itemList;
     QStandardItem *item = new QStandardItem(prototype.name());
     item->setData(qVariantFromValue(prototype), Qt::UserRole);
@@ -102,23 +102,23 @@ void DBusFunctionModel::appendRow ( const Prototype &prototype ){
     QStandardItemModel::appendRow(itemList);
 }
 
-Prototype DBusFunctionModel::getPrototype(int index) const{
+Prototype DBusFunctionModel::getPrototype(int index) const {
     return QStandardItemModel::item(index)->data(Qt::UserRole).value<Prototype>();
 }
 
 QVariant DBusFunctionModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal) {
-	if (role == Qt::DisplayRole) {
-	    switch (section) {
-		case 0:
-		    return i18n("Function");
-		case 1:
-		    return i18n("Parameter");
-		case 2:
-		    return i18n("Prototype");
-	    }
-	}
+        if (role == Qt::DisplayRole) {
+            switch (section) {
+            case 0:
+                return i18n("Function");
+            case 1:
+                return i18n("Parameter");
+            case 2:
+                return i18n("Prototype");
+            }
+        }
     }
     return QVariant();
 }
@@ -148,14 +148,14 @@ QWidget *ArgumentDelegate::createEditor(QWidget *parent,
         spinBox->setMaximum(maxInt/2);
         spinBox->setMinimum(-maxInt/2);
         editor = spinBox;
-        }
-        break;
+    }
+    break;
     case QVariant::UInt: {
         QSpinBox *spinBox = new QSpinBox(parent);
         spinBox->setMaximum(maxInt/2);
         editor = spinBox;
-        }
-        break;
+    }
+    break;
     case QVariant::Double:
         editor = new QDoubleSpinBox(parent);
         break;
@@ -247,7 +247,7 @@ void ArgumentDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
         value = QVariant(static_cast<KLineEdit*>(editor)->text());
     }
     }
-//    kDebug() << "setting value" << value;
+    kDebug() << "setting value" << value;
     model->setData(index, value, Qt::EditRole);
 }
 
@@ -306,35 +306,35 @@ ProfileModel
 
 ProfileModel::ProfileModel(QObject* parent): QStandardItemModel(parent)
 {
-  qRegisterMetaType<ProfileAction*>("ProfileAction*");
+    qRegisterMetaType<ProfileAction*>("ProfileAction*");
 }
 
 ProfileModel::ProfileModel(const Profile* profile, QObject* parent): QStandardItemModel(parent)
 {
     ProfileModel();
-     foreach(ProfileAction *action, profile->actions()){
-       appendRow(action);
-     }
-     sort(0, Qt::DescendingOrder);
+    foreach(ProfileAction *action, profile->actions()) {
+        appendRow(action);
+    }
+    sort(0, Qt::DescendingOrder);
 }
 
 QVariant ProfileModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (orientation == Qt::Horizontal) {
-	if (role == Qt::DisplayRole) {
-	    switch (section) {
-		case 0:
-		    return i18n("Name");
-		case 1:
-		    return i18n("Options");
-		case 2:
-		    return i18n("Comment");
-		case 3:
-		    return i18n("Mapped remote button");
-	    }
-	}
+        if (role == Qt::DisplayRole) {
+            switch (section) {
+            case 0:
+                return i18n("Name");
+            case 1:
+                return i18n("Options");
+            case 2:
+                return i18n("Comment");
+            case 3:
+                return i18n("Mapped remote button");
+            }
+        }
     }
-     return QVariant();
+    return QVariant();
 }
 
 ProfileAction* ProfileModel::getProfileAction(int index) const
@@ -345,29 +345,29 @@ ProfileAction* ProfileModel::getProfileAction(int index) const
 
 void ProfileModel::appendRow(ProfileAction *action)
 {
-  QList<QStandardItem*> row;
-  QStandardItem *item = new QStandardItem(action->name());
+    QList<QStandardItem*> row;
+    QStandardItem *item = new QStandardItem(action->name());
     item->setData(qVariantFromValue(action), Qt::UserRole);
-      row.append(item);
-      row.append(new QStandardItem(QString::number(action->arguments().size())));
-      if(!(action->comment().isEmpty())){
-	QStandardItem *tItem = new  QStandardItem(action->comment());
-	tItem->setToolTip(action->comment());
-	row.append(tItem);
-      }else{
-	  row.append(new QStandardItem("-"));
-      }
-      if(!action->buttonName().isEmpty()){
-	  row.append(new QStandardItem(action->buttonName()));
-      }else{
-	  row.append(new QStandardItem("-"));
-      }     
-      QStandardItemModel::appendRow(row);
+    row.append(item);
+    row.append(new QStandardItem(QString::number(action->arguments().size())));
+    if (!(action->comment().isEmpty())) {
+        QStandardItem *tItem = new  QStandardItem(action->comment());
+        tItem->setToolTip(action->comment());
+        row.append(tItem);
+    } else {
+        row.append(new QStandardItem("-"));
+    }
+    if (!action->buttonName().isEmpty()) {
+        row.append(new QStandardItem(action->buttonName()));
+    } else {
+        row.append(new QStandardItem("-"));
+    }
+    QStandardItemModel::appendRow(row);
 }
 
 Qt::ItemFlags ProfileModel::flags(const QModelIndex& index) const
 {
-   return (QStandardItemModel::flags(index) & ~Qt::ItemIsEditable);
+    return (QStandardItemModel::flags(index) & ~Qt::ItemIsEditable);
 }
 
 
@@ -380,59 +380,60 @@ RemoteButtonModel
 
 RemoteButtonModel::RemoteButtonModel(QObject* parent): QStandardItemModel(parent)
 {
-  qRegisterMetaType<RemoteControlButton*>("RemoteControlButton*");
+    qRegisterMetaType<RemoteControlButton*>("RemoteControlButton*");
 }
 
 
-RemoteButtonModel::RemoteButtonModel( QList<RemoteControlButton> buttonList, QObject* parent): QStandardItemModel(parent)
+RemoteButtonModel::RemoteButtonModel( const QList<RemoteControlButton> &buttonList, QObject* parent): QStandardItemModel(parent)
 {
-  RemoteButtonModel();
-  foreach(RemoteControlButton tButton, buttonList){
-    appendRow(&tButton);
-  }
-      sort(0, Qt::AscendingOrder);
+    RemoteButtonModel();
+    foreach(const RemoteControlButton &tButton, buttonList) {
+        appendRow(tButton);
+    }
+    sort(0, Qt::AscendingOrder);
 }
 
 
-void RemoteButtonModel::appendRow( RemoteControlButton* button)
+void RemoteButtonModel::appendRow( const RemoteControlButton &button)
 {
-  QList<QStandardItem*> row;  
- QStandardItem *item = new QStandardItem(button->name());
-  item->setData(qVariantFromValue(button), Qt::UserRole); 
-  row.append(item);
-  if(button->id() != RemoteControlButton::Unknown){
-      row.append(new QStandardItem(button->description()));
-  }
-  QStandardItemModel::appendRow(row);
+    QList<QStandardItem*> row;
+    m_buttonList.append(button);
+    QStandardItem *item = new QStandardItem(m_buttonList.last().description());
+    item->setData(qVariantFromValue(&m_buttonList.last()), Qt::UserRole);
+    row.append(item);
+    if (m_buttonList.last().id() != RemoteControlButton::Unknown) {
+        row.append(new QStandardItem(m_buttonList.last().name()));
+    }
+    QStandardItemModel::appendRow(row);
 }
 
 
 
 Solid::Control::RemoteControlButton* RemoteButtonModel::getButton(int index) const
 {
-   return QStandardItemModel::item(index)->data(Qt::UserRole).value<RemoteControlButton*>();
+    return QStandardItemModel::item(index)->data(Qt::UserRole).value<RemoteControlButton*>();
 }
 
 
 Qt::ItemFlags RemoteButtonModel::flags(const QModelIndex& index) const
 {
-  return (QStandardItemModel::flags(index) & ~Qt::ItemIsEditable);
+    return (QStandardItemModel::flags(index) & ~Qt::ItemIsEditable);
 }
 
 
 QVariant RemoteButtonModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-  if (orientation == Qt::Horizontal) {
-	if (role == Qt::DisplayRole) {
-	    switch (section) {
-		case 0:
-		    return i18n("Name");
-		case 1:
-		    return i18n("Description");
-	    }
-	}
+    if (orientation == Qt::Horizontal) {
+        if (role == Qt::DisplayRole) {
+            switch (section) {
+            case 0:
+                return i18n("Button");
+            case 1:
+                return i18n("Identifier");
+            }
+        }
     }
-     return QVariant();
+    return QVariant();
 }
 
 
@@ -448,8 +449,8 @@ RemoteModel::RemoteModel(const QStringList &strings, QObject *parent) : QStringL
 
 QVariant RemoteModel::headerData(int section, Qt::Orientation o, int role) const
 {
-    if (role == Qt::DisplayRole){
-      return i18n("Remote");
+    if (role == Qt::DisplayRole) {
+        return i18n("Remote");
     }
-  return QAbstractListModel::headerData(section,o,role);
+    return QAbstractListModel::headerData(section,o,role);
 }

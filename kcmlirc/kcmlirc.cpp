@@ -366,20 +366,15 @@ void KCMLirc::updateActions()
     }
     theKCMLircBase->theActions->clear();
     Mode m = theKCMLircBase->theModes->currentItem()->data(0, Qt::UserRole).value<Mode>();
-  theKCMLircBase->theModeLabel->setText(m.remote() + ": "
+    theKCMLircBase->theModeLabel->setText(m.remote() + ": "
                                           + (m.name().isEmpty() ? i18n("Actions <i>always</i> available") :
-					  i18n("Actions available only in mode <b>%1</b>", m.name())));
+                                             i18n("Actions available only in mode <b>%1</b>", m.name())));
     IRActions allActionsList = allActions.findByMode(m);
 
     foreach(IRAction *tAction, allActionsList) {
         QStringList tActionRow;
-	if(tAction->getButton().id() == RemoteControlButton::Unknown){
-	  tActionRow << tAction->button(); 
-	}else{
-	  tActionRow << tAction->button() + " (" +tAction->getButton().description() + ")";
-	}
-	
-	tActionRow << tAction->application() << tAction->function() << tAction->arguments().toString() << notes(tAction);
+        tActionRow << tAction->getButton().description();
+        tActionRow << tAction->application() << tAction->function() << tAction->arguments().toString() << notes(tAction);
         QTreeWidgetItem *tActionItem = new  QTreeWidgetItem(tActionRow);
         tActionItem->setData(0, Qt::UserRole, qVariantFromValue(tAction));
         theKCMLircBase->theActions->addTopLevelItem(tActionItem);

@@ -55,7 +55,10 @@ IRKick::IRKick():
 
     m_menu = new KMenu(associatedWidget());
     setContextMenu(m_menu);
-
+    
+    // We'll add the quit action ourselves because we have to clear() and repopulate the menu later
+    setStandardActionsEnabled(false); 
+    
     new IrkickAdaptor(this);
     QDBusConnection dBusConnection = QDBusConnection::sessionBus();
     dBusConnection.registerObject("/IRKick", this,

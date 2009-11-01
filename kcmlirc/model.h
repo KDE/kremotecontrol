@@ -58,14 +58,14 @@ public:
 
 class DBusFunctionModel: public QStandardItemModel
 {
-    public:
-	DBusFunctionModel(QObject *parent);
-	
-	void appendRow ( const Prototype &item );
-	
-	Prototype getPrototype( int index ) const;
-	QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-	
+public:
+    DBusFunctionModel(QObject *parent);
+
+    void appendRow ( const Prototype &item );
+
+    Prototype getPrototype( int index ) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+
 };
 
 class ArgumentsModelItem: public QStandardItem
@@ -73,7 +73,7 @@ class ArgumentsModelItem: public QStandardItem
 public:
     ArgumentsModelItem ( const QString & text );
     ArgumentsModelItem ( const QVariant &data);
-         virtual QVariant data ( int role = Qt::UserRole + 1 ) const;
+    virtual QVariant data ( int role = Qt::UserRole + 1 ) const;
 
 private:
 
@@ -102,36 +102,38 @@ public:
 
 class ProfileModel: public QStandardItemModel
 {
-    public:
-      ProfileModel(QObject *parent=0);
-	ProfileModel(const Profile *profile, QObject *parent=0);
-	
-	ProfileAction* getProfileAction( int index ) const;
-	QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-	void appendRow(ProfileAction *action);
-	Qt::ItemFlags flags(const QModelIndex& index) const;
+public:
+    ProfileModel(QObject *parent=0);
+    ProfileModel(const Profile *profile, QObject *parent=0);
+
+    ProfileAction* getProfileAction( int index ) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+    void appendRow(ProfileAction *action);
+    Qt::ItemFlags flags(const QModelIndex& index) const;
 };
 
 
 
 class RemoteButtonModel: public QStandardItemModel
 {
-    public:
-      	RemoteButtonModel(QObject *parent=0);
-	RemoteButtonModel(QList<RemoteControlButton> buttonList , QObject *parent=0);
-	RemoteControlButton* getButton( int index ) const;
-	QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-	void appendRow( RemoteControlButton *button);
-	Qt::ItemFlags flags(const QModelIndex& index) const;
+private:
+    QList<RemoteControlButton> m_buttonList;
+public:
+    RemoteButtonModel(QObject *parent=0);
+    RemoteButtonModel(const QList<RemoteControlButton> &buttonList , QObject *parent=0);
+    RemoteControlButton* getButton( int index ) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+    void appendRow( const RemoteControlButton &button);
+    Qt::ItemFlags flags(const QModelIndex& index) const;
 };
 
 
 class RemoteModel : public QStringListModel
 {
-  public:
-        RemoteModel(const QStringList &strings, QObject *parent = 0);
-    	RemoteModel(QObject *parent=0);
-         QVariant headerData(int section, Qt::Orientation o, int role) const;
+public:
+    RemoteModel(const QStringList &strings, QObject *parent = 0);
+    RemoteModel(QObject *parent=0);
+    QVariant headerData(int section, Qt::Orientation o, int role) const;
 };
 #endif /* MODEL_H_ */
 

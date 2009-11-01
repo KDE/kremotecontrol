@@ -186,6 +186,7 @@ void AddAction::updateButtons()
                                 .arg(theMode.remote()).arg(theMode.name().isEmpty() ? i18n("Master") : theMode.name()));
     remoteButtonModel = new RemoteButtonModel(Solid::Control::RemoteControl(theMode.remote()).buttons(), theButtons);
     theButtons->setModel(remoteButtonModel);
+    theButtons->setColumnHidden(1, true);
 }
 
 void AddAction::initializePage(int id)
@@ -299,6 +300,7 @@ void AddAction::updateProfileFunctions()
     
     theProfileFunctions->setModel(profileModel);
     theProfileFunctions->setColumnHidden(3, true);
+    theProfileFunctions->resizeColumnToContents(0);
 }
 
 void AddAction::updateArguments()
