@@ -24,9 +24,8 @@
 
 
 SelectProfileWidget::SelectProfileWidget (QWidget *parent) : QWidget(parent) {
-    selectionLabel = new KTextEdit();
-    selectionLabel->setReadOnly(true);
-    selectionLabel->setFixedHeight(40);
+    selectionLabel = new QLabel();
+    selectionLabel->setWordWrap(true);
 
     profilesWidget = new QTreeWidget();
     layout = new QVBoxLayout(this);

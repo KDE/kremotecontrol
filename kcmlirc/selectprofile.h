@@ -35,7 +35,7 @@ private:
   
 public:
     QTreeWidget *profilesWidget;
-    KTextEdit *selectionLabel;
+    QLabel *selectionLabel;
     QVBoxLayout *layout;
     
     SelectProfileWidget (QWidget *parent = 0);
