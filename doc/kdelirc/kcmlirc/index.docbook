@@ -73,7 +73,7 @@ For more information about LIRC, visit their website at http://www.lirc.org.
 <title>Usage</title>
 
 <para>
-There are several sections of the configuration. The list on the left details the remote controls and modes. The selection of that dictates the contents of the right-most list, which shows button/action bindings. Flicking the main tab over to Loaded Extensions will show a list of applications and remote controls that are recognised for the advanced functionality; some data is also viewable by selecting one of the items.
+There are several sections of the configuration. The list on the left details the remote controls and modes. The selection of that dictates the contents of the right-most list, which shows button/action bindings. Flicking the main tab over to Loaded Extensions will show a list of applications and remote controls that are recognized for the advanced functionality; some data is also viewable by selecting one of the items.
 </para>
 
 <sect1 id="modes">
