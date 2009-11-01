@@ -82,7 +82,7 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
             "http://utils.kde.org/projects/kdelirc"));
     setQuickHelp(
         i18n(
-            "<h1>Remote Controls</h1><p>This module allows you to configure bindings between your remote controls and KDE applications. Simply select your remote control and click Add under the Actions/Buttons list. If you want KDE to attempt to automatically assign buttons to a supported application's actions, try clicking the Auto-Populate button.</p><p>To view the ecognized applications and remote controls, simply select the <em>Loaded Profiles</em> tab.</p>"));
+            "<h1>Remote Controls</h1><p>This module allows you to configure bindings between your remote controls and KDE applications. Simply select your remote control and click Add under the Actions/Buttons list. If you want KDE to attempt to automatically assign buttons to a supported application's actions, try clicking the Auto-Populate button.</p><p>To view the recognized applications and remote controls, simply select the <em>Loaded Profiles</em> tab.</p>"));
 
     if (!DBusInterface::getInstance()->isProgramRunning("org.kde.irkick")) {
         if (KMessageBox::questionYesNo(
