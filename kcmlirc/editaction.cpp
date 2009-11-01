@@ -58,8 +58,10 @@ EditAction::EditAction(IRAction *action, const QStringList &modeList, QWidget *p
     foreach(const QString &mode, modeList) {
         editActionBaseWidget->theModes->addItem(mode);
     }
-    editActionBaseWidget->theButtons->setModel(new RemoteButtonModel(Solid::Control::RemoteControl(theAction->remote()).buttons(), editActionBaseWidget->theButtons));
-    editActionBaseWidget->theButtons->setCurrentIndex(editActionBaseWidget->theButtons->findData(theAction->button(), Qt::DisplayRole));
+    buttonModel = new RemoteButtonModel(Solid::Control::RemoteControl(theAction->remote()).buttons(), editActionBaseWidget->theButtons);
+    editActionBaseWidget->theButtons->setModel(buttonModel);
+    
+    editActionBaseWidget->theButtons->setCurrentIndex(buttonModel->indexOfButtonName(theAction->button()));
 
     updateApplications();
     connectSignalsAndSlots();
@@ -172,7 +174,8 @@ void EditAction::readFrom()
 
 IRAction* EditAction::getAction()
 {
-    IRAction* tAction = new IRAction(theAction->remote(), editActionBaseWidget->theButtons->itemData(editActionBaseWidget->theButtons->currentIndex()).toString());
+    RemoteControlButton *tButton = buttonModel->getButton( editActionBaseWidget->theButtons->currentIndex());
+    IRAction* tAction = new IRAction(tButton->remoteName(), tButton->name());
     tAction->setMode(theAction->mode());
     if (editActionBaseWidget->theChangeMode->isChecked()) {
         tAction->setProgram("");
@@ -183,9 +186,8 @@ IRAction* EditAction::getAction()
         tAction->setDoBefore(editActionBaseWidget->theDoBefore->isChecked());
         tAction->setDoAfter(editActionBaseWidget->theDoAfter->isChecked());
     } else if (editActionBaseWidget->theUseProfile->isChecked()) {
-        QString application = editActionBaseWidget->theApplications->itemData(editActionBaseWidget->theApplications->currentIndex()).toString();
-        QString function = editActionBaseWidget->theFunctions->itemData(editActionBaseWidget->theFunctions->currentIndex()).toString();
-        const ProfileAction *profileAction = ProfileServer::getInstance()->getAction(application, function);
+        QString application = editActionBaseWidget->theApplications->itemData(editActionBaseWidget->theApplications->currentIndex()).toString();       
+        ProfileAction *profileAction = profileModel->getProfileAction(editActionBaseWidget->theFunctions->currentIndex());
         if ( profileAction  || (editActionBaseWidget->theJustStart->isChecked() &&  ProfileServer::getInstance()->getProfileById(application))) {
             tAction->setProgram(ProfileServer::getInstance()->getProfileById(application)->id());
             if (editActionBaseWidget->theJustStart->isChecked()) {
@@ -336,9 +338,9 @@ void EditAction::updateFunctions()
 
      const QString application = editActionBaseWidget->theApplications->itemData(editActionBaseWidget->theApplications->currentIndex()).toString();
      Profile *tProfile =const_cast<Profile*> (ProfileServer::getInstance()->getProfileById(application));
+     profileModel = new ProfileModel(tProfile, editActionBaseWidget->theFunctions);
      editActionBaseWidget->theFunctions->setModel(new ProfileModel(tProfile, editActionBaseWidget->theFunctions));
-    const ProfileAction *action = ProfileServer::getInstance()->getAction(theAction->program(), theAction->object(), theAction->method().prototype());
-    
+     const ProfileAction *action = ProfileServer::getInstance()->getAction(theAction->program(), theAction->object(), theAction->method().prototype());   
     if (action && (action->profile()->name() == editActionBaseWidget->theApplications->currentText())) {
         int index = editActionBaseWidget->theFunctions->findText(action->name());
         editActionBaseWidget->theFunctions->setCurrentIndex(index < 0 ? 0 : index);

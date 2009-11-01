@@ -63,6 +63,8 @@ private:
     void connectSignalsAndSlots();
     QStandardItemModel *argumentsModel;
     QStandardItemModel *dbusServiceModel;
+    ProfileModel *profileModel;
+    RemoteButtonModel *buttonModel;
     inline QString getCurrentDbusApp() {
         return  editActionBaseWidget->theDBusApplications->itemData(editActionBaseWidget->theDBusApplications->currentIndex(),Qt::UserRole).toString();
     }
