@@ -437,7 +437,7 @@ QVariant RemoteButtonModel::headerData(int section, Qt::Orientation orientation,
 }
 
 
-int RemoteButtonModel::indexOfButtonName(QString button)
+int RemoteButtonModel::indexOfButtonName(const QString &button)
 {
   
   for(int rowCount = 0; rowCount < QStandardItemModel::rowCount(); ++rowCount){
