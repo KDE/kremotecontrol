@@ -229,9 +229,7 @@ void EditAction::updateArguments()
     argumentsModel->setHorizontalHeaderLabels(headerLabels);
 
     if (editActionBaseWidget->theUseProfile->isChecked()) {
-        QString function = editActionBaseWidget->theFunctions->itemData(editActionBaseWidget->theFunctions->currentIndex()).toString();
-        QString application = editActionBaseWidget->theApplications->itemData(editActionBaseWidget->theApplications->currentIndex()).toString();
-        const ProfileAction *profileAction = ProfileServer::getInstance()->getAction(application, function);
+        ProfileAction *profileAction = profileModel->getProfileAction(editActionBaseWidget->theFunctions->currentIndex());
 
         // No profile action configured or theJustStart is checked... No need for arguments
         if (!profileAction ||  editActionBaseWidget->theJustStart->isChecked()) {
@@ -244,24 +242,23 @@ void EditAction::updateArguments()
                 profileAction->name() == theAction->function())
         {
             for (int i = 0; i < profileAction->arguments().count(); ++i) {
-                QList<QStandardItem*> tmp;
-                tmp.append(new ArgumentsModelItem(profileAction->arguments().at(i).comment() + " (" + profileAction->arguments().at(i).type() + ')'));
-                tmp.append(new ArgumentsModelItem(theAction->arguments().at(i)));
-                argumentsModel->appendRow(tmp);
+                QList<QStandardItem*> tItemList;
+                tItemList.append(new ArgumentsModelItem(profileAction->arguments().at(i).comment() + " (" + profileAction->arguments().at(i).type() + ')'));
+                tItemList.append(new ArgumentsModelItem(theAction->arguments().at(i)));
+                argumentsModel->appendRow(tItemList);
             }
 
         } else {
             const QList<ProfileActionArgument> &profileActionArguments = profileAction->arguments();
             for (int i = 0; i < profileActionArguments.count(); ++i) {
-                QList<QStandardItem*> tmp;
-                tmp.append(new ArgumentsModelItem(profileActionArguments.at(i).comment() + " (" + profileActionArguments.at(i).type() + ')'));
-                tmp.append(new ArgumentsModelItem(profileActionArguments.at(i).getDefault()));
-                argumentsModel->appendRow(tmp);
+                QList<QStandardItem*> tItemlist;
+                tItemlist.append(new ArgumentsModelItem(profileActionArguments.at(i).comment() + " (" + profileActionArguments.at(i).type() + ')'));
+                tItemlist.append(new ArgumentsModelItem(profileActionArguments.at(i).getDefault()));
+                argumentsModel->appendRow(tItemlist);
             }
         }
     } else if ( editActionBaseWidget->theUseDBus->isChecked()) {
         Prototype p = editActionBaseWidget->theDBusFunctions->itemData(editActionBaseWidget->theDBusFunctions->currentIndex(), Qt::UserRole).value<Prototype>();
-
 
         // Check if the current selected function is the configured one
         if (!ProfileServer::getInstance()->getAction(theAction->program(), theAction->object(), theAction->method().prototype()) &&
@@ -269,17 +266,17 @@ void EditAction::updateArguments()
                 editActionBaseWidget->theDBusObjects->currentText() == theAction->object() && // And the Object is selected too!
                 getCurrentDBusFunction() == theAction->method().prototype()) { // And also the Function. Fill in the arguments
             for (int i = 0; i < theAction->arguments().size(); ++i) {
-                QList<QStandardItem*> tmp;
-                tmp.append(new ArgumentsModelItem(p.getArguments().at(i).second + " (" + QVariant::typeToName(p.getArguments().at(i).first) + ')'));
-                tmp.append(new ArgumentsModelItem(theAction->arguments().at(i)));
-                argumentsModel->appendRow(tmp);
+                QList<QStandardItem*> tItemlist;
+                tItemlist.append(new ArgumentsModelItem(p.getArguments().at(i).second + " (" + QVariant::typeToName(p.getArguments().at(i).first) + ')'));
+                tItemlist.append(new ArgumentsModelItem(theAction->arguments().at(i)));
+                argumentsModel->appendRow(tItemlist);
             }
         } else {
             for (int i = 0; i < p.getArguments().size(); ++i) {
-                QList<QStandardItem*> tmp;
-                tmp.append(new ArgumentsModelItem(p.getArguments().at(i).second + " (" + QVariant::typeToName(p.getArguments().at(i).first) + ')'));
-                tmp.append(new ArgumentsModelItem(QVariant(p.getArguments().at(i).first)));
-                argumentsModel->appendRow(tmp);
+                QList<QStandardItem*> tItemlist;
+                tItemlist.append(new ArgumentsModelItem(p.getArguments().at(i).second + " (" + QVariant::typeToName(p.getArguments().at(i).first) + ')'));
+                tItemlist.append(new ArgumentsModelItem(QVariant(p.getArguments().at(i).first)));
+                argumentsModel->appendRow(tItemlist);
             }
         }
     }

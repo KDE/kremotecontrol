@@ -338,8 +338,8 @@ QVariant ProfileModel::headerData(int section, Qt::Orientation orientation, int 
 }
 
 ProfileAction* ProfileModel::getProfileAction(int index) const
-{
-    return QStandardItemModel::item(index)->data(Qt::UserRole).value<ProfileAction*>();
+{	
+    return index == -1 ? 0 : QStandardItemModel::item(index)->data(Qt::UserRole).value<ProfileAction*>();
 }
 
 
@@ -411,7 +411,7 @@ void RemoteButtonModel::appendRow( const RemoteControlButton &button)
 
 Solid::Control::RemoteControlButton* RemoteButtonModel::getButton(int index) const
 {
-    return QStandardItemModel::item(index)->data(Qt::UserRole).value<RemoteControlButton*>();
+  return index == -1 ? 0 : QStandardItemModel::item(index)->data(Qt::UserRole).value<RemoteControlButton*>();
 }
 
 
@@ -438,8 +438,7 @@ QVariant RemoteButtonModel::headerData(int section, Qt::Orientation orientation,
 
 
 int RemoteButtonModel::indexOfButtonName(const QString &button)
-{
-  
+{  
   for(int rowCount = 0; rowCount < QStandardItemModel::rowCount(); ++rowCount){
     if  (button == getButton(rowCount)->name()){
       return rowCount;
