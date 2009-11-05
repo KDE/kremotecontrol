@@ -2,6 +2,7 @@
 IconName=irkick
 Comment=Irkick
 Comment[ca]=Irkick
+Comment[cs]=Irkick
 Comment[da]=IRKick
 Comment[de]=Irkick
 Comment[en_GB]=Irkick
@@ -35,6 +36,7 @@ Comment[zh_TW]=Irkick
 [Event/global_event]
 Name=Irkick notification
 Name[ca]=Notificació de l'Irkick
+Name[cs]=Oznámení Irkick
 Name[da]=IRKick-bekendtgørelse
 Name[de]=Irkick-Hinweis
 Name[en_GB]=Irkick notification
@@ -99,6 +101,7 @@ Action=Popup
 [Event/mode_event]
 Name=Mode event
 Name[ca]=Esdeveniment de mode
+Name[cs]=Událost režimu
 Name[da]=Tilstandshændelse
 Name[de]=Modus-Ereignis
 Name[en_GB]=Mode event
@@ -129,6 +132,7 @@ Name[zh_CN]=模式事件
 Name[zh_TW]=模式事件
 Comment=Mode has changed
 Comment[ca]=El mode ha canviat
+Comment[cs]=Režim se změnil
 Comment[da]=Tilstand er ændret
 Comment[de]=Der Modus wurde geändert
 Comment[en_GB]=Mode has changed
@@ -162,6 +166,7 @@ Action=Popup
 [Event/app_event]
 Name=Application event
 Name[ca]=Esdeveniment d'aplicació
+Name[cs]=Událost aplikace
 Name[da]=Programhændelse
 Name[de]=Programmereignis
 Name[en_GB]=Application event
