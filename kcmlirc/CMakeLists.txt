@@ -1,14 +1,14 @@
 add_subdirectory( icons )
 
 include_directories( 
-	${CMAKE_CURRENT_BINARY_DIR}
-	${CMAKE_CURRENT_SOURCE_DIR}
-	${CMAKE_CURRENT_SOURCE_DIR}/../kdelirc
-	${CMAKE_CURRENT_BINARY_DIR}/../kdelirc
-	${KDE4_INCLUDES}
-	${QT_INCLUDES} )
+   ${CMAKE_CURRENT_BINARY_DIR}
+   ${CMAKE_CURRENT_SOURCE_DIR}
+   ${CMAKE_CURRENT_SOURCE_DIR}/../kdelirc
+   ${CMAKE_CURRENT_BINARY_DIR}/../kdelirc
+   ${KDE4_INCLUDES}
+   ${QT_INCLUDES}
+   ${KDE4WORKSPACE_INCLUDE_DIR} )
 
-#link_directories(${KDE4_LIB_DIR} ${CMAKE_CURRENT_BINARY_DIR}  ${CMAKE_BINARY_DIR}/lib)
 ########### next target ###############
 
 set(kcm_lirc_PART_SRCS 
@@ -21,13 +21,13 @@ set(kcm_lirc_PART_SRCS
    model.cpp 
    dbusinterface.cpp)
 
-QT4_ADD_DBUS_ADAPTOR(kcm_lirc_PART_SRCS org.kde.kcmlirc.xml dbusinterface.h DBusInterface)
+qt4_add_dbus_adaptor(kcm_lirc_PART_SRCS org.kde.kcmlirc.xml dbusinterface.h DBusInterface)
 
 kde4_add_ui_files(kcm_lirc_PART_SRCS addactionbase.ui newmode.ui editactionbase.ui editmodebase.ui kcmlircbase.ui )
 
 kde4_add_plugin(kcm_lirc ${kcm_lirc_PART_SRCS})
 
-target_link_libraries(kcm_lirc ${KDE4_KIO_LIBS} solidcontrol kdelirc_shared)
+target_link_libraries(kcm_lirc ${KDE4_KIO_LIBS} ${KDE4WORKSPACE_SOLIDCONTROL_LIBRARY} kdelirc_shared)
 
 install(TARGETS kcm_lirc DESTINATION ${PLUGIN_INSTALL_DIR})
 

@@ -2,12 +2,13 @@
 add_subdirectory( icons ) 
 
 include_directories(
-	${CMAKE_SOURCE_DIR}/kdelirc/
-	../kdelirc/
-	${CMAKE_CURRENT_SOURCE_DIR}
-	${CMAKE_CURRENT_BINARY_DIR}
-	${KDE4_INCLUDES}
-	${QT_INCLUDES})
+   ${CMAKE_SOURCE_DIR}/kdelirc/
+   ../kdelirc/
+   ${CMAKE_CURRENT_SOURCE_DIR}
+   ${CMAKE_CURRENT_BINARY_DIR}
+   ${KDE4_INCLUDES}
+   ${QT_INCLUDES}
+   ${KDE4WORKSPACE_INCLUDE_DIR} )
 
 ########### next target ###############
 
@@ -21,11 +22,12 @@ set(libirkick_common_SRCS
 
 set(irkick_KDEINIT_SRCS ${libirkick_common_SRCS})
 
-QT4_ADD_DBUS_ADAPTOR(irkick_KDEINIT_SRCS org.kde.irkick.xml irkick.h IRKick) 
+qt4_add_dbus_adaptor(irkick_KDEINIT_SRCS org.kde.irkick.xml irkick.h IRKick) 
 
 kde4_add_kdeinit_executable( irkick ${irkick_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_irkick  ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${KDE4_SOLID_LIBS} solidcontrol kdelirc_shared)
+target_link_libraries(kdeinit_irkick  ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${KDE4_SOLID_LIBS} 
+                                      ${KDE4WORKSPACE_SOLIDCONTROL_LIBRARY} kdelirc_shared)
 install(TARGETS kdeinit_irkick ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 target_link_libraries(irkick kdeinit_irkick)
