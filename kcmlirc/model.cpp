@@ -141,37 +141,61 @@ QWidget *ArgumentDelegate::createEditor(QWidget *parent,
 {
     QWidget *editor;
     unsigned int maxInt = -1;
-//    kDebug() << "creaing edtor for:" << index.model()->data(index, Qt::EditRole);
+    kDebug() << "creaing edtor for:" << index.model()->data(index, Qt::EditRole) << "type:" << index.model()->data(index, Qt::EditRole).type();
     switch (index.model()->data(index, Qt::EditRole).type()) {
-    case QVariant::Int: {
+    case QVariant::Int: 
+    case QVariant::LongLong: {
         QSpinBox *spinBox = new QSpinBox(parent);
         spinBox->setMaximum(maxInt/2);
         spinBox->setMinimum(-maxInt/2);
+        spinBox->setValue(index.model()->data(index, Qt::EditRole).toInt());
         editor = spinBox;
-    }
-    break;
+        }
+        break;
     case QVariant::UInt: {
         QSpinBox *spinBox = new QSpinBox(parent);
         spinBox->setMaximum(maxInt/2);
+        spinBox->setValue(index.model()->data(index, Qt::EditRole).toUInt());
         editor = spinBox;
-    }
-    break;
-    case QVariant::Double:
-        editor = new QDoubleSpinBox(parent);
+        }
         break;
-    case QVariant::Bool:
-        editor = new KComboBox(parent);
+    case QVariant::Double: {
+        QDoubleSpinBox *dSpinBox = new QDoubleSpinBox(parent);
+        dSpinBox->setValue(index.model()->data(index, Qt::EditRole).toDouble(NULL));
+        editor = dSpinBox;
+        }
+        break;
+    case QVariant::Bool: {
+        KComboBox *comboBox = new KComboBox(parent);
+        comboBox->addItem(i18nc("True", "Value is true"));
+        comboBox->addItem(i18nc("False", "Value is false"));
+        comboBox->setCurrentIndex(index.model()->data(index, Qt::EditRole).toBool() ? 0 : 1);
+        editor = comboBox;
+        }
         break;
     case QVariant::StringList: {
-        KLineEdit *lineEdit = new KLineEdit(parent);
-        lineEdit->setToolTip(i18n("A comma-separated list of Strings"));
-        editor = lineEdit;
-    }
-    break;
+        KLineEdit *listLineEdit = new KLineEdit(parent);
+        listLineEdit->setToolTip(i18n("A comma-separated list of Strings"));
+        QString value;
+        value.clear();
+        foreach(const QString &tmp, index.model()->data(index, Qt::EditRole).toStringList()) {
+            if (!value.isEmpty()) {
+                value.append(',');
+            }
+            value += tmp;
+        }
+        listLineEdit->setText(value);
+        
+        editor = listLineEdit;
+        }
+        break;
     case QVariant::ByteArray:
     case QVariant::String:
-    default:
-        editor = new KLineEdit(parent);
+    default: {
+        KLineEdit *lineEdit = new KLineEdit(parent);
+        lineEdit->setText(index.model()->data(index, Qt::EditRole).toString());
+        editor = lineEdit;
+        }
     }
     return editor;
 }
@@ -183,7 +207,8 @@ void ArgumentDelegate::setEditorData(QWidget *editor,
 
     switch (index.model()->data(index, Qt::EditRole).type()) {
     case QVariant::UInt:
-    case QVariant::Int: {
+    case QVariant::Int:
+    case QVariant::LongLong: {
         QSpinBox *spinBox = static_cast<QSpinBox*>(editor);
         spinBox->setValue(index.model()->data(index, Qt::EditRole).toInt());
     }
@@ -194,8 +219,6 @@ void ArgumentDelegate::setEditorData(QWidget *editor,
     }
     case QVariant::Bool: {
         KComboBox *comboBox = static_cast<KComboBox*>(editor);
-        comboBox->addItem(i18nc("True", "Value is true"));
-        comboBox->addItem(i18nc("False", "Value is false"));
         comboBox->setCurrentIndex(index.model()->data(index, Qt::EditRole).toBool() ? 0 : 1);
     }
     break;
@@ -230,6 +253,7 @@ void ArgumentDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
     switch (index.model()->data(index, Qt::EditRole).type()) {
     case QVariant::Int:
     case QVariant::UInt:
+    case QVariant::LongLong:
         value = QVariant(static_cast<QSpinBox*>(editor)->value());
         break;
     case QVariant::Double:
@@ -272,7 +296,7 @@ ArgumentsModelItem::ArgumentsModelItem ( const QString & text ):QStandardItem(te
 
 ArgumentsModelItem::ArgumentsModelItem ( const QVariant &data ) {
     setData(data, Qt::EditRole);
-    kDebug() << "creating model item:" << data;
+    kDebug() << "creating model item:" << data << "type:" << data.type();
     if (data.type() == QVariant::StringList) {
         setToolTip(i18n("A comma-separated list of Strings"));
     }

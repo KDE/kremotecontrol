@@ -179,6 +179,8 @@ QList<Prototype> DBusInterface::getFunctions(const QString &program, const QStri
                                 tmpArg = "int";
                             } else if (tmpArg == "u") {
                                 tmpArg = "uint";
+                            } else if (tmpArg == "x") {
+                                tmpArg = "qlonglong";
                             } else if (tmpArg == "s") {
                                 tmpArg = "QString";
                             } else if (tmpArg == "b") {

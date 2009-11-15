@@ -8,7 +8,7 @@
         <name>Increase Volume</name>
         <comment></comment>
         <argument type="QString">
-            <comment>The name slider you want to move and its index separated by a colon (eg. Master:0)</comment>
+            <comment>The name of the slider you want to move and its index separated by a colon (eg. Master:0)</comment>
             <default>Master:0</default>
         </argument>
     </action>
@@ -16,7 +16,7 @@
         <name>Decrease Volume</name>
         <comment></comment>
         <argument type="QString">
-            <comment>The name slider you want to move and its index separated by a colon (eg. Master:0)</comment>
+            <comment>The name of the slider you want to move and its index separated by a colon (eg. Master:0)</comment>
             <default>Master:0</default>
         </argument>
     </action>
@@ -24,7 +24,7 @@
         <name>Toggle Mute</name>
         <comment></comment>
         <argument type="QString">
-            <comment>The name slider you want to mute and its index separated by a colon (eg. Master:0)</comment>
+            <comment>The name of the slider you want to mute and its index separated by a colon (eg. Master:0)</comment>
             <default>Master:0</default>
         </argument>
     </action>
