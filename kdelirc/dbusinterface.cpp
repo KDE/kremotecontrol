@@ -45,11 +45,6 @@ static DBusInterface *theInstance = NULL;
 
 DBusInterface::DBusInterface()
 {
-
-    QDBusConnection dBusConnection = QDBusConnection::sessionBus();
-    dBusConnection.registerObject("/KCMLirc", this,
-                                  QDBusConnection::ExportAllSlots);
-
 }
 
 DBusInterface *DBusInterface::getInstance() {
@@ -314,8 +309,139 @@ bool DBusInterface::isUnique(const QString &program){
     return true;
 }
 
-void DBusInterface::gotButton(QString remote, QString button)
+bool DBusInterface::searchForProgram(const IRAction &action, QStringList &programs)
 {
-    emit haveButton(remote, button);
+    QDBusConnectionInterface *dBusIface =
+        QDBusConnection::sessionBus().interface();
+    programs.clear();
+
+    if (action.unique()) {
+	QString service = ProfileServer::getInstance()->getServiceName(action.program());
+	if(service.isNull()){
+	    service = action.program();
+	}
+	
+	kDebug() << "searching for prog:" << service;
+	if (dBusIface->isServiceRegistered(service)) {
+	    kDebug() << "adding Program: " << service;
+	    programs += service;
+        } else {
+	    kDebug() << "nope... " + service + " not here.";
+        }
+    } else {
+
+        // find all instances...
+        const QStringList buf = dBusIface->registeredServiceNames();
+
+        for (QStringList::const_iterator i = buf.constBegin(); i != buf.constEnd(); ++i) {
+            QString program = *i;
+            if (program.contains(action.program()))
+                programs += program;
+        }
+
+        if (programs.size() == 1) {
+            kDebug() << "Yeah! found it!";
+        } else if (programs.size() == 0) {
+            kDebug() << "Nope... not here...";
+        } else {
+            kDebug() << "found multiple instances...";
+        }
+
+        if (programs.size() > 1 && action.ifMulti() == IM_DONTSEND) {
+            kDebug() << "size:" << programs.size() << "ifmulti:" << action.ifMulti();
+            return false;
+        } else if (programs.size() > 1 && action.ifMulti() == IM_SENDTOTOP) {
+            ;
+            QList<WId> s = KWindowSystem::stackingOrder();
+            // go through all the (ordered) window pids
+            for (int i = 0; i < s.size(); i++) {
+                int p = KWindowSystem::windowInfo(s.at(i), NET::WMPid).win();
+                QString id = action.program() + '-' + QString().setNum(p);
+                if (programs.contains(id)) {
+                    programs.clear();
+                    programs += id;
+                    break;
+                }
+            }
+            while (programs.size() > 1) programs.removeFirst();
+        } else if (programs.size() > 1 && action.ifMulti() == IM_SENDTOBOTTOM) {
+            ;
+            QList<WId> s = KWindowSystem::stackingOrder();
+            // go through all the (ordered) window pids
+            for (int i = 0; i < s.size(); ++i) {
+                int p = KWindowSystem::windowInfo(s.at(i), NET::WMPid).win();
+                QString id = action.program() + '-' + QString().setNum(p);
+                if (programs.contains(id)) {
+                    programs.clear();
+                    programs += id;
+                    break;
+                }
+            }
+            while (programs.size() > 1) programs.removeFirst();
+        }
+    }
+    kDebug() << "returning true";
+    return true;
 }
 
+
+void DBusInterface::executeAction(const IRAction& action) {
+    kDebug() << "executeAction called with action:" << action.arguments().getArgumentsList();
+    QDBusConnectionInterface *dBusIface =
+        QDBusConnection::sessionBus().interface();
+
+    QStringList programs;
+
+    if (!searchForProgram(action, programs)) {
+        return;
+    }
+
+    // if programs.size()==0 here, then the app is definately not running.
+    kDebug() << "Autostart: " << action.autoStart();
+    kDebug() << "programs.size: " << programs.size();
+    if (action.autoStart() && !programs.size()) {
+        kDebug() << "Should start " << action.program();
+        QString sname = ProfileServer::getInstance()->getServiceName(
+                            action.program());
+        if (!sname.isNull()) {
+            KNotification::event("app_event", i18n("Starting <b>%1</b>...",
+                                                   action.application()), SmallIcon("irkick"));
+            kDebug() << "starting service:" << action.program();
+            QString error;
+	    if (KToolInvocation::startServiceByDesktopName(action.program(), QString(), &error)) {
+		kDebug() << "starting " + action.program() + " failed: " << error;
+            }
+        } else if (action.program().contains(QRegExp("org.[a-zA-Z0-9]*."))) {
+            QString runCommand = action.program();
+            runCommand.remove(QRegExp("org.[a-zA-Z0-9]*."));
+            kDebug() << "runCommand" << runCommand;
+            KToolInvocation::startServiceByDesktopName(runCommand);
+        }
+    }
+    if (action.isJustStart())
+        return;
+
+    if (!searchForProgram(action, programs))
+        return;
+
+    for (QStringList::iterator i = programs.begin(); i != programs.end(); ++i) {
+        const QString &program = *i;
+        kDebug() << "Searching DBus for program:" << program;
+        if (dBusIface->isServiceRegistered(program)) {
+            kDebug() << "Sending data (" << program << ", " << '/' + action.object() << ", " << action.method().prototypeNR();
+
+            QDBusMessage m = QDBusMessage::createMethodCall(program, '/'
+                             + action.object(), "", action.method().prototypeNR());
+
+            foreach(const QVariant &arg, action.arguments().getArgumentsList()){
+                kDebug() << "Got argument:" << arg.type() << "value" << arg;
+                m << arg;
+            }
+            //   theDC->send(program.utf8(), action.object().utf8(), action.method().prototypeNR().utf8(), data);
+            QDBusMessage response = QDBusConnection::sessionBus().call(m);
+            if (response.type() == QDBusMessage::ErrorMessage) {
+                kDebug() << response.errorMessage();
+            }
+        }
+    }
+}

@@ -43,7 +43,8 @@ class Remote;
 class KCMLirc: public KCModule
 {
     Q_OBJECT
-
+    Q_CLASSINFO("KCMLirc", "org.kde.kcmlirc")
+    
 private:
     Ui::KCMLircBase *theKCMLircBase;
     IRActions allActions;
@@ -55,8 +56,17 @@ private:
         return tAction;
 
     }
-  void connectSignalsAndSlots();
+    void connectSignalsAndSlots();
 
+public:
+    virtual void load();
+    virtual void save();
+    virtual void defaults();
+    virtual void configChanged();
+    const QString notes(IRAction *action) const;
+    explicit KCMLirc(QWidget *parent = 0, const QVariantList &args = QVariantList());
+    ~KCMLirc();
+    
 public slots:
     void updateActions();
     void updateModesStatus();
@@ -75,14 +85,11 @@ public slots:
     void slotRemoveAction();
     void slotEditMode();
 
-public:
-    virtual void load();
-    virtual void save();
-    virtual void defaults();
-    virtual void configChanged();
-    const QString notes(IRAction *action) const;
-    explicit KCMLirc(QWidget *parent = 0, const QVariantList &args = QVariantList());
-    ~KCMLirc();
+signals:
+    void haveButton(const QString &remote, const QString &button);
+
+public Q_SLOTS:
+    void gotButton(QString remote, QString button);
 
 };
 

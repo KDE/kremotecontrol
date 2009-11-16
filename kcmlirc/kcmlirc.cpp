@@ -34,9 +34,6 @@
 #include "dbusinterface.h"
 #include "model.h"
 
-#include <qevent.h>
-#include <QHBoxLayout>
-#include <QWidget>
 #include <kapplication.h>
 #include <klocale.h>
 #include <kglobal.h>
@@ -50,9 +47,14 @@
 #include <kpushbutton.h>
 #include <ktoolinvocation.h>
 #include <kaboutdata.h>
-#include<QStandardItemModel>
-#include <QListWidget>
 #include <solid/control/remotecontrol.h>
+
+#include <QStandardItemModel>
+#include <QListWidget>
+#include <QEvent>
+#include <QHBoxLayout>
+#include <QWidget>
+#include <QDBusInterface>
 
 #define VERSION "version name goes here"
 
@@ -64,6 +66,10 @@ K_EXPORT_PLUGIN( KCMLircFactory( "kcm_lirc" ) )
 KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
         KCModule(KCMLircFactory::componentData(), parent, args)
 {
+
+    QDBusConnection dBusConnection = QDBusConnection::sessionBus();
+    dBusConnection.registerObject("/KCMLirc", this,
+                                  QDBusConnection::ExportAllSlots);
 
     qRegisterMetaType<IRAction*>("IRAction*");
     qRegisterMetaType<Mode>("Mode");
@@ -576,4 +582,10 @@ void KCMLirc::configChanged()
     // insert your saving code here...
     emit changed(true);
 }
+
+void KCMLirc::gotButton(QString remote, QString button)
+{
+    emit haveButton(remote, button);
+}
+
 #include "kcmlirc.moc"

@@ -100,7 +100,7 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMo
     connect(theDBusFunctions, SIGNAL(clicked(QModelIndex)), this, SLOT(updateButtonStates()));
     connect(theDBusFunctions,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(next()));
 
-    connect(DBusInterface::getInstance(), SIGNAL(haveButton(const QString &, const QString &)), this, SLOT(updateButton(const QString &, const QString &)));
+    connect(parent, SIGNAL(haveButton(const QString &, const QString &)), this, SLOT(updateButton(const QString &, const QString &)));
 
 
     updateProfiles();
@@ -169,10 +169,10 @@ int AddAction::nextId() const
 void AddAction::updateButton(const QString &remote, const QString &button)
 {
     if (theMode.remote() == remote) {
-	kDebug()<< "name of the button is "<< button;
-      QModelIndex tIndex = ((QStandardItemModel*)theButtons->model())->findItems(button).first()->index();
+        kDebug()<< "name of the button is "<< button;
+        QModelIndex tIndex = dynamic_cast<RemoteButtonModel*>(theButtons->model())->indexOfButtonName(button);
         theButtons->scrollTo(tIndex);
-	theButtons->setCurrentIndex(tIndex);
+        theButtons->setCurrentIndex(tIndex);
     } else {
         KMessageBox::error(0, i18n("You did not select a mode of that remote control. Please use %1, "
                                    "or revert back to select a different mode.", theMode.remote()),

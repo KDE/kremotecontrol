@@ -32,18 +32,16 @@
 
 #include <QStringList>
 
-class DBusInterface: public QObject
+class KDE_EXPORT DBusInterface: public QObject
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "org.kde.kcmlirc")
 
 private:
   DBusInterface();
 
   QStringList getAllRegisteredPrograms();
-
+  bool searchForProgram(const IRAction &action, QStringList &programs);
 public:
-
 
   static DBusInterface *getInstance();
   ~DBusInterface();
@@ -61,14 +59,7 @@ public:
   void reloadIRKick();
 
   QStringList getButtons(const QString &remoteName);
-  
-
-signals:
-    void haveButton(const QString &remote, const QString &button);
-
-public Q_SLOTS:
-    void gotButton(QString remote, QString button);
-
+  void executeAction(const IRAction &action);  
 
 };
 

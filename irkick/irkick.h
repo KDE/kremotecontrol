@@ -55,8 +55,7 @@ class IRKick: public KStatusNotifierItem
     QTimer *theFlashOff;
 
     void updateTray();
-    bool searchForProgram(const IRAction &action, QStringList &programs);
-    void executeAction(const IRAction &action);
+
     void updateContextMenu();
 
 public Q_SLOTS: //dbus slot

@@ -15,6 +15,7 @@ set(kdelirc_shared_LIB_SRCS
    arguments.cpp 
    mode.cpp 
    profileserver.cpp
+   dbusinterface.cpp
 )
 
 kde4_add_library(kdelirc_shared SHARED ${kdelirc_shared_LIB_SRCS})

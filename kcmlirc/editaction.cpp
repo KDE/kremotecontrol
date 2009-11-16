@@ -61,7 +61,7 @@ EditAction::EditAction(IRAction *action, const QStringList &modeList, QWidget *p
     buttonModel = new RemoteButtonModel(Solid::Control::RemoteControl(theAction->remote()).buttons(), editActionBaseWidget->theButtons);
     editActionBaseWidget->theButtons->setModel(buttonModel);
     
-    editActionBaseWidget->theButtons->setCurrentIndex(buttonModel->indexOfButtonName(theAction->button()));
+    editActionBaseWidget->theButtons->setCurrentIndex(buttonModel->indexOfButtonName(theAction->button()).row());
 
     updateApplications();
     connectSignalsAndSlots();

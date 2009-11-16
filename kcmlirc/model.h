@@ -125,7 +125,7 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
     void appendRow( const RemoteControlButton &button);
     Qt::ItemFlags flags(const QModelIndex& index) const;
-    int indexOfButtonName(const QString &button);
+    QModelIndex indexOfButtonName(const QString &button);
 };
 
 
