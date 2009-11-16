@@ -91,7 +91,7 @@ private slots:
     void updateDBusApplications();
     void updateDBusObjects();
     void updateDBusFunctions();
-
+    void tryAction();
 
 };
 #endif

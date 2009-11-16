@@ -33,6 +33,7 @@
 #include "dbusinterface.h"
 #include <QRegExp>
 #include <QHeaderView>
+#include <QPushButton>
 
 #include <kdebug.h>
 #include <klineedit.h>
@@ -48,6 +49,9 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMo
     Q_UNUSED(name)
     Q_UNUSED(parent)
     setupUi(this);
+
+    button(QWizard::CustomButton1)->setText(i18nc("Try-Button in Wizard", "Try"));
+    connect(this, SIGNAL(customButtonClicked(int)), this, SLOT(tryAction()));
 
     dbusFunctionModel = new DBusFunctionModel(theDBusFunctions);
     theDBusFunctions->setModel(dbusFunctionModel);
@@ -221,16 +225,20 @@ void AddAction::updateButtonStates()
         break;
     case SELECT_FUNCTION_DBUS:
         button(QWizard::NextButton)->setEnabled(theDBusApplications->currentIndex().isValid() && theDBusFunctions->currentIndex().isValid());
+        setOption(QWizard::HaveCustomButton1, false);
         break;
     case SELECT_FUNCTION_PROFILE:
         button(QWizard::NextButton)->setEnabled(theProfileFunctions->currentIndex().row() != 0 || theJustStart->isChecked());
+        setOption(QWizard::HaveCustomButton1, false);
         break;
     case ACTION_ARGUMENTS:
         button(QWizard::NextButton)->setEnabled(true);
+        setOption(QWizard::HaveCustomButton1, false);
         break;
     case ACTION_OPTIONS:
         button(QWizard::NextButton)->setEnabled(true);
         button(QWizard::FinishButton)->setEnabled(true);
+        setOption(QWizard::HaveCustomButton1);
         break;
     case SELECT_MODE:
         button(QWizard::NextButton)->setEnabled(false);
@@ -414,6 +422,10 @@ IRAction* AddAction::getAction()
         }
     }
     return action;
+}
+
+void AddAction::tryAction(){
+    DBusInterface::getInstance()->executeAction(*getAction());
 }
 
 #include "addaction.moc"

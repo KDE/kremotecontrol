@@ -72,17 +72,19 @@ private:
 protected:
     virtual void initializePage(int id);
 
-public slots:
-    virtual void slotModeSelected();
-    virtual void updateButtonStates();
-    virtual void updateButton(const QString &remote, const QString &button);
-    virtual void updateButtons();
-    virtual void updateDBusApplications();
-    virtual void updateDBusFunctions(QModelIndex);
-    virtual void updateProfiles();
-    virtual void updateProfileFunctions();
-    virtual void updateArguments();
-    virtual void updateOptions();
+private slots:
+    void slotModeSelected();
+    void updateButtonStates();
+    void updateButton(const QString &remote, const QString &button);
+    void updateButtons();
+    void updateDBusApplications();
+    void updateDBusFunctions(QModelIndex);
+    void updateProfiles();
+    void updateProfileFunctions();
+    void updateArguments();
+    void updateOptions();
+    void tryAction();
+    
 
 public:
     bool isUnique;

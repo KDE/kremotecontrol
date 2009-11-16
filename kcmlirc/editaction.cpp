@@ -44,7 +44,7 @@ EditAction::EditAction(IRAction *action, const QStringList &modeList, QWidget *p
     theAction = action;
     editActionBaseWidget = new EditActionBaseWidget();
     setMainWidget(editActionBaseWidget);
-    setButtons( Ok | Cancel);
+    setButtons( Ok | Cancel | Try);
     setDefaultButton(Ok);
     setModal(modal);
     dbusServiceModel = new QStandardItemModel(editActionBaseWidget->theDBusApplications);
@@ -136,6 +136,8 @@ void EditAction::connectSignalsAndSlots() {
     connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),editActionBaseWidget->theDoBefore,SLOT(setEnabled(bool)));
     connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),editActionBaseWidget->theModes,SLOT(setEnabled(bool)));
     connect(editActionBaseWidget->theChangeMode,SIGNAL(toggled(bool)),this,SLOT(updateInstancesOptions()));
+
+    connect(this, SIGNAL(tryClicked()), this, SLOT(tryAction()));
 }
 
 void EditAction::readFrom()
@@ -427,6 +429,10 @@ Arguments EditAction::getCurrentArgs() {
         retList.append(item->data(Qt::EditRole));
     }
     return retList;
+}
+
+void EditAction::tryAction() {
+    DBusInterface::getInstance()->executeAction(*getAction());
 }
 
 #include "editaction.moc"
