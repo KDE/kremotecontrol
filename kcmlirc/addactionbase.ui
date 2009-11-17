@@ -7,8 +7,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1019</width>
-    <height>558</height>
+    <width>860</width>
+    <height>541</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -84,7 +84,7 @@
     <item>
      <widget class="QTreeView" name="theDBusApplications">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
         <horstretch>0</horstretch>
         <verstretch>1</verstretch>
        </sizepolicy>

@@ -370,6 +370,7 @@ void AddAction::updateDBusFunctions(QModelIndex pIndex) {
         theDBusFunctions->model()->sort(0, Qt::AscendingOrder);
 
     }
+    theDBusFunctions->resizeColumnToContents(0);
     updateButtonStates();
 }
 
