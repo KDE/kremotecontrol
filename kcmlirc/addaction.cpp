@@ -60,6 +60,7 @@ AddAction::AddAction(QWidget *parent, const char *name, const Mode &mode): theMo
 
     argumentsModel = new QStandardItemModel(argumentsView);
     argumentsView->setModel(argumentsModel);
+    argumentsView->setItemDelegate(new ArgumentDelegate());
 
     connect(this, SIGNAL(currentIdChanged(int)), this, SLOT(updateButtonStates()));
     connect(theChangeMode, SIGNAL(clicked()), this, SLOT(updateButtonStates()));
