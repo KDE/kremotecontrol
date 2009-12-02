@@ -187,8 +187,9 @@ void AddAction::updateButton(const QString &remote, const QString &button)
 void AddAction::updateButtons()
 {
     kDebug() << "Mode:" << theMode.name() << "remote:" << theMode.remote();
-    theButtonText->setText(i18n("You are attempting to configure an action for a button on %1 (in mode %2).")
-                                .arg(theMode.remote()).arg(theMode.name().isEmpty() ? i18n("Master") : theMode.name()));
+    theButtonText->setText(i18n("You are attempting to configure an action for a button on %1 (in mode %2).",
+                                theMode.remote(),
+				theMode.name().isEmpty() ? i18n("Master") : theMode.name()));
     remoteButtonModel = new RemoteButtonModel(Solid::Control::RemoteControl(theMode.remote()).buttons(), theButtons);
     theButtons->setModel(remoteButtonModel);
     theButtons->setColumnHidden(1, true);

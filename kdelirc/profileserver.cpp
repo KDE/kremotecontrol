@@ -214,7 +214,7 @@ KDE_EXPORT const QStringList ProfileServer::getAllButtonNamesById(const QString&
     QStringList tReturn;
     const Profile *profile = getProfileById(profileId);
     if (profile) {
-        foreach(const ProfileAction *profileAction, profile->actions().values()) {
+       foreach( ProfileAction *profileAction , profile->actions()) {	 
             if (! profileAction->buttonName().isEmpty()) {
                 tReturn << profileAction->buttonName();
             }
@@ -227,8 +227,7 @@ KDE_EXPORT const QStringList ProfileServer::getAllButtonNamesById(const QString&
 KDE_EXPORT ProfileServer::ProfileSupportedByRemote ProfileServer::isProfileAvailableForRemote(const Profile *profile, const QStringList &solidButtonNames)
 {
     QStringList tProfilActionNames;
-
-    foreach(const ProfileAction *profileAction, profile->actions().values()) {
+    foreach(const ProfileAction *profileAction, profile->actions()) {	
         if (! profileAction->buttonName().isEmpty()) {
             tProfilActionNames << profileAction->buttonName();
         }
@@ -238,7 +237,7 @@ KDE_EXPORT ProfileServer::ProfileSupportedByRemote ProfileServer::isProfileAvail
     }
     int found=0;
 
-    foreach(const QString tProfilActionName, tProfilActionNames) {
+    foreach(const QString & tProfilActionName, tProfilActionNames) {
         if ( solidButtonNames.contains(tProfilActionName)) {
             found++;
         }

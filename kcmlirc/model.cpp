@@ -348,7 +348,7 @@ QVariant ProfileModel::headerData(int section, Qt::Orientation orientation, int 
         if (role == Qt::DisplayRole) {
             switch (section) {
             case 0:
-                return i18n("Name");
+                return i18nc("Remote button name", "Name");
             case 1:
                 return i18n("Options");
             case 2:
@@ -484,7 +484,7 @@ RemoteModel::RemoteModel(const QStringList &strings, QObject *parent) : QStringL
 QVariant RemoteModel::headerData(int section, Qt::Orientation o, int role) const
 {
     if (role == Qt::DisplayRole) {
-        return i18n("Remote");
+        return i18nc("Remote name", "Remote");
     }
     return QAbstractListModel::headerData(section,o,role);
 }

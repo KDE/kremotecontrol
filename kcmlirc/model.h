@@ -104,7 +104,7 @@ class ProfileModel: public QStandardItemModel
 {
 public:
     ProfileModel(QObject *parent=0);
-    ProfileModel(const Profile *profile, QObject *parent=0);
+    explicit ProfileModel(const Profile *profile, QObject *parent=0);
 
     ProfileAction* getProfileAction( int index ) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
@@ -120,7 +120,7 @@ private:
     QList<RemoteControlButton> m_buttonList;
 public:
     RemoteButtonModel(QObject *parent=0);
-    RemoteButtonModel(const QList<RemoteControlButton> &buttonList , QObject *parent=0);
+    explicit RemoteButtonModel(const QList<RemoteControlButton> &buttonList , QObject *parent=0);
     RemoteControlButton* getButton( int index ) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
     void appendRow( const RemoteControlButton &button);
@@ -132,7 +132,7 @@ public:
 class RemoteModel : public QStringListModel
 {
 public:
-    RemoteModel(const QStringList &strings, QObject *parent = 0);
+    explicit RemoteModel(const QStringList &strings, QObject *parent = 0);
     RemoteModel(QObject *parent=0);
     QVariant headerData(int section, Qt::Orientation o, int role) const;
 };

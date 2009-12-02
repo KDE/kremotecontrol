@@ -95,8 +95,8 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
                     this,
                     i18n(
                         "The Infrared Remote Control software is not currently running. This configuration module will not work properly without it. Would you like to start it now?"),
-                    i18n("Software Not Running"), KGuiItem(i18n("Start")), KGuiItem(
-                        i18n("Do Not Start"))) == KMessageBox::Yes) {
+                    i18n("Software Not Running"), KGuiItem(i18nc("Start irkick daemon","Start")), KGuiItem(
+                        i18nc("Do not start irkick daemon", "Do Not Start"))) == KMessageBox::Yes) {
             kDebug() << "S" << KToolInvocation::startServiceByDesktopName("irkick");
             KConfig theConfig("irkickrc");
             KConfigGroup generalGroup = theConfig.group("General");
@@ -245,7 +245,7 @@ void KCMLirc::autoPopulate(const Profile *profile,const Mode &mode)
 {
     QStringList buttonList = DBusInterface::getInstance()->getButtons(mode.remote());
 
-    foreach (QString button, buttonList ) {
+    foreach (const QString &button, buttonList ) {
         const ProfileAction *pa = profile->getProfileActionByButton(button);
         if (pa) {
             IRAction *action = new IRAction(mode.remote(),button);

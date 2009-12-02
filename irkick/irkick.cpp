@@ -261,7 +261,7 @@ void IRKick::gotMessage(const RemoteControlButton &button)
                 doAfter = tActions.at(i)->doAfter();
                 KNotification::event(
                                "mode_event", "<b>" + mode.remote() + ":</b><br>" +
-                               i18n("Mode switched to %1" , currentModes[button.remoteName()] == "" ? i18nc("Default mode in notification", "Default") : currentModes[button.remoteName()]),
+                               i18n("Mode switched to %1" , currentModes[button.remoteName()].isEmpty() ? i18nc("Default mode in notification", "Default") : currentModes[button.remoteName()]),
                                DesktopIcon(mode.iconFile().isEmpty() ? "infrared-remote" : mode.iconFile()),
                                associatedWidget());
                 break;
