@@ -181,9 +181,9 @@ void KCMLirc::slotEditAction()
     for (int i = 0; i < item->childCount(); i++) {
         modeList << item->child(i)->text(0);
     }
-    EditAction theDialog(currentAction(), modeList);
-    if (theDialog.exec() == QDialog::Accepted) {
-        allActions[allActions.indexOf(currentAction())] = theDialog.getAction();
+    QPointer<EditAction > theDialog = new EditAction(currentAction(), modeList,this);
+    if (theDialog->exec() == QDialog::Accepted) {
+        allActions[allActions.indexOf(currentAction())] = theDialog->getAction();
         updateActions();
 	emit changed(true);
     }
@@ -195,7 +195,7 @@ void KCMLirc::slotAddActions()
         return;
     }
     Mode mode = theKCMLircBase->theModes->currentItem()->data(0, Qt::UserRole).value<Mode>();
-     SelectProfile *tDialog = new SelectProfile( mode.remote());
+     QPointer<SelectProfile> tDialog = new SelectProfile( mode.remote(),this);
     if (tDialog->exec() == QDialog::Accepted) {
       autoPopulate(tDialog->getSelectedProfile(),mode);	
       updateActions();
@@ -210,25 +210,25 @@ void KCMLirc::slotAddAction()
         return;
     }
     Mode m = theKCMLircBase->theModes->currentItem()->data(0, Qt::UserRole).value<Mode>();
-    AddAction theDialog(this, 0, m);
+    QPointer<AddAction> theDialog = new AddAction(this, 0, m);
 
     // populate the modes list box
     QTreeWidgetItem *item = theKCMLircBase->theModes->selectedItems().first();
     if (item->parent())
         item = item->parent();
-    theDialog.theModes->setEnabled(item->child(0));
-    theDialog.theSwitchMode->setEnabled(item->child(0));
+    theDialog->theModes->setEnabled(item->child(0));
+    theDialog->theSwitchMode->setEnabled(item->child(0));
     for (int i = 0; i < item->childCount(); i++) {
         QListWidgetItem *a = new QListWidgetItem(item->child(i)->text(0),
-                theDialog.theModes);
+                theDialog->theModes);
         if (item->isSelected()) {
             a->setSelected(true);
-            theDialog.theModes->setCurrentItem(a);
+            theDialog->theModes->setCurrentItem(a);
         }
     }
 
-    if (theDialog.exec() == QDialog::Accepted) {
-        allActions.addAction(theDialog.getAction());
+    if (theDialog->exec() == QDialog::Accepted) {
+        allActions.addAction(theDialog->getAction());
         updateActions();
         emit changed(true);
     }    
@@ -284,11 +284,11 @@ void KCMLirc::slotAddMode()
     if (theKCMLircBase->theModes->selectedItems().isEmpty()) {
         return;
     }
-    NewModeDialog theDialog(allModes, this,0);
-    if (theDialog.exec() == QDialog::Accepted) {
-        Mode mode = theDialog.getMode();
+    QPointer<NewModeDialog>  theDialog = new NewModeDialog(allModes, this,0);
+    if (theDialog->exec() == QDialog::Accepted) {
+        Mode mode = theDialog->getMode();
         allModes.add(mode);
-        if (theDialog.isDefaultMode()) {
+        if (theDialog->isDefaultMode()) {
             allModes.setDefault(mode);
         }
         updateModes();
@@ -302,16 +302,16 @@ void KCMLirc::slotEditMode()
         return;
 
     Mode mode = theKCMLircBase->theModes->currentItem()->data(0, Qt::UserRole).value<Mode>();
-    EditMode theDialog(mode,allModes, this, 0);
+    QPointer<EditMode> theDialog = new EditMode(mode,allModes, this, 0);
 
-    if (theDialog.exec() == QDialog::Accepted) {
-        Mode newMode = theDialog.getMode();
+    if (theDialog->exec() == QDialog::Accepted) {
+        Mode newMode = theDialog->getMode();
         mode.setIconFile(newMode.iconFile());
         if (!mode.name().isEmpty()) {
             allActions.renameMode(mode, newMode.name());
             allModes.rename(mode, newMode.name());
         }
-        if (theDialog.isDefaultMode()) {
+        if (theDialog->isDefaultMode()) {
             allModes.setDefault(mode);
         }
         allModes.updateMode(mode);
