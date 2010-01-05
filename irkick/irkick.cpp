@@ -200,9 +200,12 @@ void IRKick::updateContextMenu(){
     m_menu->addTitle(KIcon("infrared-remote"), "IRKick");
     m_menu->addAction(SmallIcon("configure"), i18n("&Configure..."), this, SLOT(slotConfigure()));
 
+    modeActions.clear();
+    
     foreach(const QString &remote, RemoteControl::allRemoteNames()){
         KMenu *modeMenu = new KMenu(remote, m_menu);
         QActionGroup *actionGroup = new QActionGroup(modeMenu);
+	modeActions.insert(remote, actionGroup);
         actionGroup->setExclusive(true);
         modeMenu->addTitle(KIcon("infrared-remote"), i18n("Switch mode to"));
         foreach(const Mode &mode, allModes.getModes(remote)){
@@ -257,6 +260,11 @@ void IRKick::gotMessage(const RemoteControlButton &button)
                 currentModes[button.remoteName()] = tActions.at(i)->modeChange();
                 Mode mode = allModes.getMode(button.remoteName(), tActions.at(i)->modeChange());
                 updateTray();
+                foreach(QAction *action, modeActions[mode.remote()]->actions()){
+                    if(qVariantValue<Mode>(action->data()) == mode){
+                        action->setChecked(true);
+                    }
+                }
                 doBefore = tActions.at(i)->doBefore();
                 doAfter = tActions.at(i)->doAfter();
                 KNotification::event(

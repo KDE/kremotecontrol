@@ -38,6 +38,7 @@
 
 class QTimer;
 class QAction;
+class QActionGroup;
 
 class IRKick: public KStatusNotifierItem
 {
@@ -47,6 +48,7 @@ class IRKick: public KStatusNotifierItem
 
     QString npApp, npModule, npMethod;
     QMap<QString, QString> currentModes;
+    QMap<QString, QActionGroup*> modeActions;
     IRActions allActions;
     int theResetCount;
     Modes allModes;
