@@ -8,6 +8,13 @@ include_directories(
 
 
 set(kdelirc_shared_LIB_SRCS
+   action.cpp
+   dbusaction.cpp
+   modeswitchaction.cpp
+   profileaction.cpp
+   profileactiontemplate.cpp
+#   profile.cpp
+
    iraction.cpp 
    iractions.cpp 
    prototype.cpp 
