@@ -19,10 +19,11 @@
 
 #include "actiondelegator.h"
 
+#include <kdebug.h>
 
 ActionDelegator::ActionDelegator()
 {
-  registerAction(IRAction::staticMetaObject, new IRActionExcecutor());
+  registerAction(Action::staticMetaObject, new ActionExcecutor());
 }
 
 
@@ -30,16 +31,16 @@ ActionDelegator::ActionDelegator()
 void ActionDelegator::registerAction( const QMetaObject metaObject,   ActionExecutor* actionExecutor)
 {
   kDebug() << "metaObject " << QString(metaObject.superClass()->className()) ;
-  kDebug()<< "super iraction class " << QString(IRAction::staticMetaObject.className());
+  kDebug()<< "super iraction class " << QString(Action::staticMetaObject.className());
   
-  if(QString(metaObject.superClass()->className())   == QString(IRAction::staticMetaObject.className())){  
+  if(QString(metaObject.superClass()->className())   == QString(Action::staticMetaObject.className())){  
     executors.insert(QString(metaObject.className()), actionExecutor);
   }else{
     kDebug() << "class is no superclass of iraction";
  }
 }
 
-void ActionDelegator::executeAction(const IRAction* action)
+void ActionDelegator::executeAction(const Action* action)
 {
  ActionExecutor * executor = executors.value(QString(action->metaObject()->className()));
  if(executor != 0){

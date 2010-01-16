@@ -24,13 +24,15 @@
 
 #include <solid/control/remotecontrolbutton.h>
 
-class Action
+class Action: public QObject
 {
+  Q_OBJECT
   
   public:
     enum ActionType {ModeSwitchAction, DBusAction, ProfileAction};
   
     Action(ActionType type, const Solid::Control::RemoteControlButton &button);
+    Action(const Action &action);
   
     ActionType type() const;
     Solid::Control::RemoteControlButton button() const;

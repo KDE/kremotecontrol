@@ -20,7 +20,7 @@
 #ifndef ACTIONEXECUTOR_H
 #define ACTIONEXECUTOR_H
 
-class IRAction;
+class Action;
 
 class ActionExecutor
 {
@@ -28,18 +28,18 @@ class ActionExecutor
     ActionExecutor(){};
   ~ActionExecutor(){};
   
-  virtual void execute( const IRAction *action)=0;
+  virtual void execute( const Action *action)=0;
   
 };
 
 
-class IRActionExcecutor : public ActionExecutor {
+class ActionExcecutor : public ActionExecutor {
  
   public:
-    IRActionExcecutor(){};
-  ~IRActionExcecutor(){};
+    ActionExcecutor(){};
+  ~ActionExcecutor(){};
   
-  void execute( const IRAction *action); 
+  void execute( const Action *action); 
   
 };
 

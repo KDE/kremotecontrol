@@ -18,11 +18,11 @@
 */
 
 #include "actionexecutor.h"
-#include "iraction.h"
+#include "action.h"
 
 
 
-void IRActionExcecutor::execute(const IRAction* action)
+void ActionExcecutor::execute(const Action* action)
 {
  
 }

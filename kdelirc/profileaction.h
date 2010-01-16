@@ -20,7 +20,7 @@
 #ifndef PROFILEACTION_H
 #define PROFILEACTION_H
 
-#include <dbusaction.h>
+#include "dbusaction.h"
 
 
 class ProfileAction : public DBusAction

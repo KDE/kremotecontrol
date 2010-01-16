@@ -22,6 +22,10 @@
 Action::Action(ActionType type, const Solid::Control::RemoteControlButton &button): m_type(type), m_button(button){
 }
 
+Action::Action(const Action& action): m_button(action.button()){
+  m_type = action.type();
+}
+
 Action::ActionType Action::type() const{
   return m_type;
 }

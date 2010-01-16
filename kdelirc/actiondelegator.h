@@ -21,7 +21,7 @@
 #define ACTIONDELEGATOR_H
 #include <qmap.h>
 #include <QPair>
-#include "iraction.h"
+#include "action.h"
 #include "actionexecutor.h"
 
 class ActionDelegator
@@ -31,7 +31,7 @@ class ActionDelegator
   public:
   ActionDelegator();  
   void registerAction( const QMetaObject metaObject,  ActionExecutor* actionExecutor);
-  void executeAction(const IRAction *action);
+  void executeAction(const Action *action);
 };
 
 #endif // ACTIONDELEGATOR_H

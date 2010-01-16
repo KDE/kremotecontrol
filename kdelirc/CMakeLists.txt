@@ -13,6 +13,8 @@ set(kdelirc_shared_LIB_SRCS
    modeswitchaction.cpp
    profileaction.cpp
    profileactiontemplate.cpp
+   actionexecutor.cpp
+   actiondelegator.cpp
 #   profile.cpp
 
    iraction.cpp 
