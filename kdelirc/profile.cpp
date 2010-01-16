@@ -19,8 +19,17 @@
 
 #include "profile.h"
 
-NewProfile::NewProfile() {
-  
+NewProfile::NewProfile(const QString &name) {
+  m_name = name;
+}
+
+QString NewProfile::name() const
+{
+  return m_name;
+}
+
+void NewProfile::addTemplate(const ProfileActionTemplate &applicationTemplate) {
+  m_actionTemplates.append(applicationTemplate);
 }
 
 QList< ProfileActionTemplate > NewProfile::actionTemplates() const {

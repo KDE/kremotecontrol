@@ -25,11 +25,11 @@
 class NewProfile
 {
   public:
-    NewProfile();
+    NewProfile(const QString &name);
     
     QString name() const;
     QList<ProfileActionTemplate> actionTemplates() const;
-    
+    void addTemplate(const ProfileActionTemplate &actionTemplate);
     
   protected:
     QString m_name;

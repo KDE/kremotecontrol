@@ -28,27 +28,61 @@ QString DBusAction::application() const{
   return m_application;
 }
 
+void DBusAction::setApplication(const QString& application)
+{
+  m_application = application;
+}
+
 QString DBusAction::node() const{
   return m_node;
+}
+
+void DBusAction::setNode(const QString& node)
+{
+  m_node = node;
 }
 
 Prototype DBusAction::function() const{
   return m_function;
 }
 
-Arguments DBusAction::arguments() const{
+void DBusAction::setFunction(const Prototype& function)
+{
+  m_function = function;
+}
+
+QList<NewArgument> DBusAction::arguments() const{
   return m_arguments;
+}
+
+void DBusAction::setArguments(const QList< NewArgument >& arguments)
+{
+  m_arguments = arguments;
 }
 
 bool DBusAction::repeat() const{
   return m_repeat;
 }
 
+void DBusAction::setRepeat(bool repeat)
+{
+  m_repeat = repeat;
+}
+
 bool DBusAction::autostart() const{
   return m_autostart;
+}
+
+void DBusAction::setAutostart(bool autostart)
+{
+  m_autostart = autostart;
 }
 
 DBusAction::ActionDestination DBusAction::destination() const{
   return m_destination;
 }
 
+void DBusAction::setDestination(DBusAction::ActionDestination destination)
+{
+  m_destination = destination;
+}

@@ -22,7 +22,7 @@
 
 #include "action.h"
 #include "prototype.h"
-#include "arguments.h"
+#include "newargument.h"
 
 #include <solid/control/remotecontrolbutton.h>
 
@@ -36,17 +36,30 @@ class DBusAction : public Action
     DBusAction(const Solid::Control::RemoteControlButton &button);
     
     QString application() const;
+    void setApplication(const QString &application);
+    
     QString node() const;
+    void setNode(const QString &node);
+    
     Prototype function() const;
-    Arguments arguments() const;
+    void setFunction(const Prototype &function);
+    
+    QList<NewArgument> arguments() const;
+    void setArguments(const QList<NewArgument> &arguments);
+    
     bool repeat() const;
+    void setRepeat(bool repeat);
+    
     bool autostart() const;
+    void setAutostart(bool autostart);
+    
     ActionDestination destination() const;
+    void setDestination(ActionDestination destination);
     
   protected:
     QString m_application, m_node;
     Prototype m_function;
-    Arguments m_arguments;
+    QList<NewArgument> m_arguments;
     bool m_repeat, m_autostart;
     ActionDestination m_destination;
 };

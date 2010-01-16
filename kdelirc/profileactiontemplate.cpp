@@ -20,8 +20,28 @@
 #include "profileactiontemplate.h"
 
 
-ProfileActionTemplate::ProfileActionTemplate() {
+ProfileActionTemplate::ProfileActionTemplate(const QString& profile, const QString& templateID, const QString& application, const QString& appName, const QString& node, const Prototype& function, const QString& description, const QList< NewArgument >& defaultArguments, ProfileAction::ActionDestination destination, bool autostart, bool repeat) {
+  m_profile = profile;
+  m_templateID = templateID;
+  m_application = application;
+  m_node = node;
+  m_appName = appName;
+  m_function = function;
+  m_description = description;
+  m_defaultArguments = defaultArguments;
+  m_description = destination;
+  m_autostart = autostart;
+  m_repeat = repeat;
+}
 
+QString ProfileActionTemplate::profile() const
+{
+  return m_profile;
+}
+
+QString ProfileActionTemplate::templateID() const
+{
+  return m_templateID;
 }
 
 QString ProfileActionTemplate::appName() const {
@@ -32,8 +52,35 @@ QString ProfileActionTemplate::description() const {
   return m_description;
 }
 
+QList<NewArgument> ProfileActionTemplate::defaultArguments() const
+{
+  return m_defaultArguments;
+}
+
+DBusAction::ActionDestination ProfileActionTemplate::destination() const
+{
+  return m_destination;
+}
+
+bool ProfileActionTemplate::autostart() const
+{
+  return m_autostart;
+}
+
+bool ProfileActionTemplate::repeat() const
+{
+  return m_repeat;
+}
+
 ProfileAction ProfileActionTemplate::createAction(const Solid::Control::RemoteControlButton& button) const
 {
-  return ProfileAction(button);
+  ProfileAction action(button, m_profile, m_templateID);
+  action.setApplication(m_application);
+  action.setNode(m_node);
+  action.setFunction(m_function);
+  action.setArguments(m_defaultArguments);
+  action.setDestination(m_destination);
+  action.setAutostart(m_autostart);
+  action.setRepeat(m_repeat);
 }
 

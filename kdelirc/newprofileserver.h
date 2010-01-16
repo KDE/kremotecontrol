@@ -25,12 +25,19 @@
 class NewProfileServer
 {
   public:
-    NewProfileServer();
+    static NewProfileServer *self();
+    ~NewProfileServer();
+    void addProfile(const NewProfile &profile);
     
-    QList<NewProfile> allProfiles();
+    QList<NewProfile> allProfiles() const;
     
   protected:
+    static NewProfileServer *m_self;
     QList<NewProfile> m_allProfiles;
+    
+  private:
+    NewProfileServer();
+
 };
 
 #endif // NEWPROFILESERVER_H

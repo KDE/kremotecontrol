@@ -19,12 +19,26 @@
 
 #include "newprofileserver.h"
 
+NewProfileServer *NewProfileServer::m_self = 0;
+
+NewProfileServer* NewProfileServer::self()
+{
+  return m_self ? m_self : m_self = new NewProfileServer();
+}
+
+NewProfileServer::~NewProfileServer() {
+  m_self = 0;
+}
+
 NewProfileServer::NewProfileServer()
 {
 //load all profiles from config
 }
 
-QList< NewProfile > NewProfileServer::allProfiles()
-{
+void NewProfileServer::addProfile(const NewProfile& profile) {
+  m_allProfiles.append(profile);
+}
+
+QList< NewProfile > NewProfileServer::allProfiles() const {
   return m_allProfiles;
 }

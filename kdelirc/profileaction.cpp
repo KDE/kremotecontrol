@@ -19,16 +19,21 @@
 
 #include "profileaction.h"
 
-ProfileAction::ProfileAction(const Solid::Control::RemoteControlButton& button): DBusAction(button)
+ProfileAction::ProfileAction(const Solid::Control::RemoteControlButton& button, const QString &profile, const QString &actionTemplate): DBusAction(button)
 {
   //change type from DBusAction (c'tor) to ProfileAction
   m_type = Action::ProfileAction;
+  m_profile = profile;
+  m_template = actionTemplate;
 }
 
-QString ProfileAction::appName() const {
-  return m_appName;
+QString ProfileAction::profile() const
+{
+  return m_profile;
 }
 
-QString ProfileAction::description() const {
-  return m_description;
+QString ProfileAction::actionTemplate() const
+{
+  return m_template;
 }
+

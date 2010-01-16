@@ -17,22 +17,35 @@
 
 */
 
-#ifndef PROFILEACTION_H
-#define PROFILEACTION_H
+#include "newargument.h"
 
-#include "dbusaction.h"
-
-class ProfileAction : public DBusAction
+NewArgument::NewArgument()
 {
-  public:
-    ProfileAction(const Solid::Control::RemoteControlButton& button, const QString &profile, const QString &actionTemplate);
 
-    QString profile() const;
-    QString actionTemplate() const;
-    
-  protected:
-    QString m_profile;
-    QString m_template;
-};
+}
 
-#endif // PROFILEACTION_H
+NewArgument::NewArgument(const QVariant& value)
+{
+  m_value = value;
+}
+
+NewArgument::NewArgument(const QVariant& defaultValue, const QString& description)
+{
+  m_defaultValue = defaultValue;
+  m_description = description;
+}
+
+QVariant NewArgument::value() const
+{
+  return m_value;
+}
+
+QVariant NewArgument::defaultValue() const
+{
+  return m_defaultValue;
+}
+
+QString NewArgument::description() const
+{
+  return m_description;
+}

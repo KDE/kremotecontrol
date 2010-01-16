@@ -27,18 +27,42 @@
 class ProfileActionTemplate
 {
   public:
-    ProfileActionTemplate();
-    
+    ProfileActionTemplate(const QString &profile,
+			  const QString &templateID,
+			  const QString &application,
+			  const QString &appName,
+			  const QString &node,
+			  const Prototype &function,
+			  const QString &description,
+			  const QList<NewArgument> &arguments,
+			  const ProfileAction::ActionDestination,
+			  bool autostart,
+			  bool repeat);
+			  
+    QString profile() const;
+    QString templateID() const;
     QString appName() const;
     QString description() const;
+    QList<NewArgument> defaultArguments() const;
+    ProfileAction::ActionDestination destination() const;
+    bool autostart() const;
+    bool repeat() const;
     
     ProfileAction createAction(const Solid::Control::RemoteControlButton &button) const;
     
   protected:
-    QString m_appName;
-    QString m_description;
-    
-    
+    QString m_profile; // e.g. Multimedia
+    QString m_templateID; // e.g. ??? define in profile.xml or autogenerate in readFromConfig?
+    QString m_application; // e.g. org.kde.amarok
+    QString m_node; // e.g. Player
+    QString m_appName; // e.g. Amarok
+    Prototype m_function;
+    QString m_description; // e.g. Amarok Music Player
+    QList<NewArgument> m_defaultArguments;
+    ProfileAction::ActionDestination m_destination;
+    bool m_autostart;
+    bool m_repeat;
+
 };
 
 #endif // ACTIONTEMPLATE_H
