@@ -29,7 +29,7 @@
 
 #include "prototype.h"
 #include "iraction.h"
-
+#include "modes.h"
 #include <QStringList>
 
 class KDE_EXPORT DBusInterface: public QObject
@@ -38,6 +38,7 @@ class KDE_EXPORT DBusInterface: public QObject
 
 private:
   DBusInterface();
+   Modes allModes;
 
   QStringList getAllRegisteredPrograms();
   bool searchForProgram(const IRAction &action, QStringList &programs);

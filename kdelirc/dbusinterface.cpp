@@ -33,6 +33,8 @@
 #include <QDBusInterface>
 #include <QDomDocument>
 
+#include <QtDBus/qdbusconnection.h>
+
 #include <kdebug.h>
 #include <kwindowsystem.h>
 #include <knotification.h>
@@ -40,14 +42,14 @@
 #include <kiconloader.h>
 #include <ktoolinvocation.h>
 
-static DBusInterface *theInstance = NULL;
+  static DBusInterface *theInstance = NULL;
 
 
-DBusInterface::DBusInterface()
+KDE_EXPORT DBusInterface::DBusInterface()
 {
 }
 
-DBusInterface *DBusInterface::getInstance() {
+KDE_EXPORT DBusInterface *DBusInterface::getInstance() {
     if (!theInstance) {
         theInstance = new DBusInterface();
     }
@@ -61,13 +63,13 @@ DBusInterface::~DBusInterface()
     //DBusInterface::theInstance = 0;
 }
 
-QStringList DBusInterface::getAllRegisteredPrograms() {
+KDE_EXPORT QStringList DBusInterface::getAllRegisteredPrograms() {
     QDBusConnectionInterface *dBusIface = QDBusConnection::sessionBus().interface();
     return dBusIface->registeredServiceNames();
 }
 
 
-QStringList DBusInterface::getRegisteredPrograms()
+KDE_EXPORT QStringList DBusInterface::getRegisteredPrograms()
 {
     QStringList returnList;
 
@@ -98,7 +100,7 @@ QStringList DBusInterface::getRegisteredPrograms()
     return returnList;
 }
 
-QStringList DBusInterface::getObjects(const QString &program) {
+KDE_EXPORT QStringList DBusInterface::getObjects(const QString &program) {
     QDBusInterface dBusIface(program, "/", "org.freedesktop.DBus.Introspectable");
     QDBusReply<QString> response = dBusIface.call("Introspect");
 
@@ -129,7 +131,7 @@ QStringList DBusInterface::getObjects(const QString &program) {
     return returnList;
 }
 
-QList<Prototype> DBusInterface::getFunctions(const QString &program, const QString &object) {
+KDE_EXPORT QList<Prototype> DBusInterface::getFunctions(const QString &program, const QString &object) {
     QDBusInterface dBusIface(program, '/' + object, "org.freedesktop.DBus.Introspectable");
     QDBusReply<QString> response = dBusIface.call("Introspect");
 
@@ -226,7 +228,7 @@ QList<Prototype> DBusInterface::getFunctions(const QString &program, const QStri
     return ret;
 }
 
-QStringList DBusInterface::getRemotes() {
+KDE_EXPORT QStringList DBusInterface::getRemotes() {
     QStringList remotes;
     QDBusMessage m = QDBusMessage::createMethodCall("org.kde.irkick", "/IRKick",
                      "", "remotes");
@@ -240,7 +242,7 @@ QStringList DBusInterface::getRemotes() {
 }
 
 
-void DBusInterface::requestNextKeyPress() {
+KDE_EXPORT void DBusInterface::requestNextKeyPress() {
     QDBusMessage m = QDBusMessage::createMethodCall("org.kde.irkick", "/IRKick", "", "stealNextPress");
     m << "org.kde.kcmshell_kcm_lirc";
     m << "/KCMLirc";
@@ -251,7 +253,7 @@ void DBusInterface::requestNextKeyPress() {
     }
 }
 
-void DBusInterface::cancelKeyPressRequest() {
+KDE_EXPORT void DBusInterface::cancelKeyPressRequest() {
     QDBusMessage m = QDBusMessage::createMethodCall("org.kde.irkick", "/IRKick", "", "dontStealNextPress");
     QDBusMessage response = QDBusConnection::sessionBus().call(m);
     if (response.type() == QDBusMessage::ErrorMessage) {
@@ -259,7 +261,7 @@ void DBusInterface::cancelKeyPressRequest() {
     }
 }
 
-QStringList DBusInterface::getButtons(const QString& remoteName) {
+KDE_EXPORT QStringList DBusInterface::getButtons(const QString& remoteName) {
     QDBusMessage m = QDBusMessage::createMethodCall("org.kde.irkick", "/IRKick", "", "buttons");
     m << remoteName;
     QDBusMessage response = QDBusConnection::sessionBus().call(m);
@@ -270,7 +272,7 @@ QStringList DBusInterface::getButtons(const QString& remoteName) {
     return response.arguments().at(0).toStringList();
 }
 
-void DBusInterface::reloadIRKick() {
+KDE_EXPORT void DBusInterface::reloadIRKick() {
     QDBusMessage m = QDBusMessage::createMethodCall("org.kde.irkick", "/IRKick",
                      "", "reloadConfiguration");
     QDBusMessage response = QDBusConnection::sessionBus().call(m);
@@ -281,7 +283,7 @@ void DBusInterface::reloadIRKick() {
 }
 
 
-bool DBusInterface::isProgramRunning(const QString &program) {
+KDE_EXPORT bool DBusInterface::isProgramRunning(const QString &program) {
     QDBusConnectionInterface *dBusIface = QDBusConnection::sessionBus().interface();
     if (dBusIface->isServiceRegistered(program)) {
         return true;
@@ -289,7 +291,7 @@ bool DBusInterface::isProgramRunning(const QString &program) {
     return false;
 }
 
-bool DBusInterface::isUnique(const QString &program){
+KDE_EXPORT bool DBusInterface::isUnique(const QString &program){
     QStringList instances = getAllRegisteredPrograms().filter(program);
     kDebug() << "instances of " + program << instances;
 

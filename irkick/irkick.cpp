@@ -44,6 +44,7 @@
 #include <knotification.h>
 #include <ktoolinvocation.h>
 #include <khelpmenu.h>
+#include <kdelirc/kdelirc/dbusinterface.h>
 
 using namespace Solid::Control;
 
