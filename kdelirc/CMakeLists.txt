@@ -15,7 +15,8 @@ set(kdelirc_shared_LIB_SRCS
    profileactiontemplate.cpp
    actionexecutor.cpp
    actiondelegator.cpp
-#   profile.cpp
+   profile.cpp
+   newprofileserver.cpp
 
    iraction.cpp 
    iractions.cpp 

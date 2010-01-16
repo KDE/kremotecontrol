@@ -17,12 +17,14 @@
 
 */
 
-#include "profile.h"
+#include "newprofileserver.h"
 
-NewProfile::NewProfile() {
-  
+NewProfileServer::NewProfileServer()
+{
+//load all profiles from config
 }
 
-QList< ProfileActionTemplate > NewProfile::actionTemplates() const {
-  return m_actionTemplates;
+QList< NewProfile > NewProfileServer::allProfiles()
+{
+  return m_allProfiles;
 }

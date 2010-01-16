@@ -17,12 +17,20 @@
 
 */
 
+#ifndef NEWPROFILESERVER_H
+#define NEWPROFILESERVER_H
+
 #include "profile.h"
 
-NewProfile::NewProfile() {
-  
-}
+class NewProfileServer
+{
+  public:
+    NewProfileServer();
+    
+    QList<NewProfile> allProfiles();
+    
+  protected:
+    QList<NewProfile> m_allProfiles;
+};
 
-QList< ProfileActionTemplate > NewProfile::actionTemplates() const {
-  return m_actionTemplates;
-}
+#endif // NEWPROFILESERVER_H
