@@ -21,8 +21,9 @@
 #define NEWPROFILEACTION_H
 
 #include "dbusaction.h"
+#include "kdelirc_export.h"
 
-class NewProfileAction : public DBusAction
+class KDELIRC_EXPORT NewProfileAction : public DBusAction
 {
   public:
     NewProfileAction(const Solid::Control::RemoteControlButton& button, const QString &profile, const QString &actionTemplate);

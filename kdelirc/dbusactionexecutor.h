@@ -1,5 +1,6 @@
 /*
-    Copyright (C) 2010  Michael Zanetti <michael_zanetti@gmx.net>
+    <one line to give the program's name and a brief idea of what it does.>
+    Copyright (C) <year>  <name of author>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,25 +18,14 @@
 
 */
 
-#ifndef PROFILE_H
-#define PROFILE_H
+#ifndef DBUSACTIONEXECUTOR_H
+#define DBUSACTIONEXECUTOR_H
 
-#include "profileactiontemplate.h"
-#include "kdelirc_export.h"
+#include "actionexecutor.h"
 
-class KDELIRC_EXPORT NewProfile
+class DBusActionExecutor: public ActionExecutor
 {
-  public:
-    NewProfile(const QString &name);
-    
-    QString name() const;
-    QList<ProfileActionTemplate> actionTemplates() const;
-    ProfileActionTemplate actionTemplate(const QString &templateID) const;
-    void addTemplate(const ProfileActionTemplate &actionTemplate);
-    
-  protected:
-    QString m_name;
-    QList<ProfileActionTemplate> m_actionTemplates;
+  virtual void execute(Action *action);
 };
 
-#endif // PROFILE_H
+#endif // DBUSACTIONEXECUTOR_H

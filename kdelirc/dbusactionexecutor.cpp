@@ -1,5 +1,6 @@
 /*
-    Copyright (C) 2010  Michael Zanetti <michael_zanetti@gmx.net>
+    <one line to give the program's name and a brief idea of what it does.>
+    Copyright (C) <year>  <name of author>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,25 +18,18 @@
 
 */
 
-#ifndef PROFILE_H
-#define PROFILE_H
+#include "dbusactionexecutor.h"
+#include "dbusaction.h"
 
-#include "profileactiontemplate.h"
-#include "kdelirc_export.h"
+#include <kdebug.h>
+#include "dbusinterface.h"
 
-class KDELIRC_EXPORT NewProfile
+void DBusActionExecutor::execute(Action* action)
 {
-  public:
-    NewProfile(const QString &name);
-    
-    QString name() const;
-    QList<ProfileActionTemplate> actionTemplates() const;
-    ProfileActionTemplate actionTemplate(const QString &templateID) const;
-    void addTemplate(const ProfileActionTemplate &actionTemplate);
-    
-  protected:
-    QString m_name;
-    QList<ProfileActionTemplate> m_actionTemplates;
-};
-
-#endif // PROFILE_H
+  DBusAction *dbusAction = dynamic_cast<DBusAction*>(action);
+  if(dbusAction){
+    DBusInterface::getInstance()->executeAction(dbusAction);
+  } else {
+     kDebug() << "DBusActionExecutor: action does not appear to be a DBusAction";
+  }
+}

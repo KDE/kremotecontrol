@@ -23,12 +23,13 @@
 #include "action.h"
 #include "prototype.h"
 #include "newargument.h"
+#include "kdelirc_export.h"
 
 #include <solid/control/remotecontrolbutton.h>
 
 #include <QString>
 
-class DBusAction : public Action
+class KDELIRC_EXPORT DBusAction : public Action
 {
   public:
     enum ActionDestination {Unique, Top, Bottom, None, All};

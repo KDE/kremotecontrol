@@ -21,11 +21,12 @@
 #define ACTION_H
 
 #include "mode.h"
+#include "kdelirc_export.h"
 
 #include <solid/control/remotecontrolbutton.h>
 #include <solid/control/remotecontrol.h>
 
-class Action: public QObject
+class KDELIRC_EXPORT Action: public QObject
 {
   Q_OBJECT
   

@@ -17,21 +17,16 @@
 
 */
 
-#ifndef ACTIONDELEGATOR_H
-#define ACTIONDELEGATOR_H
+#ifndef EXECUTIONENGINE_H
+#define EXECUTIONENGINE_H
 #include <qmap.h>
 #include <QPair>
 #include "action.h"
 #include "actionexecutor.h"
 
-class ActionDelegator
+namespace ExecutionEngine
 {
-  private:
-    QMap<QString, ActionExecutor*> executors;
-  public:
-  ActionDelegator();  
-  void registerAction( const QMetaObject metaObject,  ActionExecutor* actionExecutor);
-  void executeAction(const Action *action);
+    void executeAction(Action *action);
 };
 
 #endif // ACTIONDELEGATOR_H

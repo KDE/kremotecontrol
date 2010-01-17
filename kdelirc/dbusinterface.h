@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright            : (C) 2003 by Gav Wood <gav@kde.org>             *
+ * Copyright: (C) 2009 Michael Zanetti <michael_zanetti@gmx.net>         *
  *                                                                       *
  * This program is free software; you can redistribute it and/or         *
  * modify it under the terms of the GNU General Public License as        *
@@ -29,6 +29,7 @@
 
 #include "prototype.h"
 #include "iraction.h"
+#include "dbusaction.h"
 #include "modes.h"
 #include <QStringList>
 
@@ -42,6 +43,7 @@ private:
 
   QStringList getAllRegisteredPrograms();
   bool searchForProgram(const IRAction &action, QStringList &programs);
+  bool searchForProgram(const DBusAction *action, QStringList &programs);
 public:
 
   static DBusInterface *getInstance();
@@ -61,6 +63,7 @@ public:
 
   QStringList getButtons(const QString &remoteName);
   void executeAction(const IRAction &action);  
+  void executeAction(const DBusAction *action);
 
 };
 

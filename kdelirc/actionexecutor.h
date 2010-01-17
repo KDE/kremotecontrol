@@ -28,18 +28,7 @@ class ActionExecutor
     ActionExecutor(){};
   ~ActionExecutor(){};
   
-  virtual void execute( const Action *action)=0;
-  
-};
-
-
-class ActionExcecutor : public ActionExecutor {
- 
-  public:
-    ActionExcecutor(){};
-  ~ActionExcecutor(){};
-  
-  void execute( const Action *action); 
+  virtual void execute(Action *action)=0;
   
 };
 

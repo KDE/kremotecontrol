@@ -21,10 +21,11 @@
 #define ACTIONTEMPLATE_H
 
 #include "profileaction.h"
+#include "kdelirc_export.h"
 
 #include <solid/control/remotecontrolbutton.h>
 
-class ProfileActionTemplate
+class KDELIRC_EXPORT ProfileActionTemplate
 {
   public:
     ProfileActionTemplate(const QString &profile,

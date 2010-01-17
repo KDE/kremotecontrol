@@ -21,8 +21,9 @@
 #define ACTIONLIST_H
 
 #include "action.h"
+#include "kdelirc_export.h"
 
-class ActionList
+class KDELIRC_EXPORT ActionList
 {
   public:
     ActionList();

@@ -20,9 +20,3 @@
 #include "actionexecutor.h"
 #include "action.h"
 
-
-
-void ActionExcecutor::execute(const Action* action)
-{
- 
-}

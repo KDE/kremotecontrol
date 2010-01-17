@@ -21,6 +21,7 @@
 #define NEWPROFILESERVER_H
 
 #include "profile.h"
+#include "kdelirc_export.h"
 
 namespace NewProfileServer
 {

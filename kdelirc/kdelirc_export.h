@@ -17,25 +17,24 @@
 
 */
 
-#ifndef PROFILE_H
-#define PROFILE_H
+#ifndef KDELIRC_EXPORT_H
+#define KDELIRC_EXPORT_H
 
-#include "profileactiontemplate.h"
-#include "kdelirc_export.h"
 
-class KDELIRC_EXPORT NewProfile
-{
-  public:
-    NewProfile(const QString &name);
-    
-    QString name() const;
-    QList<ProfileActionTemplate> actionTemplates() const;
-    ProfileActionTemplate actionTemplate(const QString &templateID) const;
-    void addTemplate(const ProfileActionTemplate &actionTemplate);
-    
-  protected:
-    QString m_name;
-    QList<ProfileActionTemplate> m_actionTemplates;
-};
+#if defined Q_OS_WIN
 
-#endif // PROFILE_H
+#ifndef KDELIRC_EXPORT
+#  ifdef MAKE_KDELIRC_LIB
+#    define KDELIRC_EXPORT KDE_EXPORT
+#  else
+#    define KDELIRC_EXPORT KDE_IMPORT
+#  endif
+#endif
+
+#else
+
+#define KDELIRC_EXPORT KDE_EXPORT
+
+#endif
+
+#endif // KDELIRC_EXPORT_H

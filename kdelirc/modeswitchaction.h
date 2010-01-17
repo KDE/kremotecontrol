@@ -22,8 +22,9 @@
 
 #include "action.h"
 #include "mode.h"
+#include "kdelirc_export.h"
 
-class ModeSwitchAction : public Action
+class KDELIRC_EXPORT ModeSwitchAction : public Action
 {
   
   public:

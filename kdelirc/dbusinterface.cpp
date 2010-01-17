@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright            : (C) 2003 by Gav Wood <gav@kde.org>             *
+ * Copyright: (C) 2009 Michael Zanetti <michael_zanetti@gmx.net          *
  *                                                                       *
  * This program is free software; you can redistribute it and/or         *
  * modify it under the terms of the GNU General Public License as        *
@@ -386,6 +386,79 @@ bool DBusInterface::searchForProgram(const IRAction &action, QStringList &progra
     return true;
 }
 
+bool DBusInterface::searchForProgram(const DBusAction *action, QStringList &programs)
+{
+    QDBusConnectionInterface *dBusIface = QDBusConnection::sessionBus().interface();
+    programs.clear();
+
+    if (action->destination() == DBusAction::Unique) {
+	QString service = ProfileServer::getInstance()->getServiceName(action->application());
+	if(service.isNull()){
+	    service = action->application();
+	}
+	
+	kDebug() << "searching for prog:" << service;
+	if (dBusIface->isServiceRegistered(service)) {
+	    kDebug() << "adding Program: " << service;
+	    programs += service;
+        } else {
+	    kDebug() << "nope... " + service + " not here.";
+        }
+    } else {
+
+        // find all instances...
+        const QStringList buf = dBusIface->registeredServiceNames();
+
+        for (QStringList::const_iterator i = buf.constBegin(); i != buf.constEnd(); ++i) {
+            QString program = *i;
+            if (program.contains(action->application()))
+                programs += program;
+        }
+
+        if (programs.size() == 1) {
+            kDebug() << "Yeah! found it!";
+        } else if (programs.size() == 0) {
+            kDebug() << "Nope... not here...";
+        } else {
+            kDebug() << "found multiple instances...";
+        }
+
+        if (programs.size() > 1 && action->destination() == DBusAction::None) {
+            kDebug() << "Multiple instances of" << action->application() << "found but destination is set to None";
+            return false;
+        } else if (programs.size() > 1 && action->destination() == DBusAction::Top) {
+            ;
+            QList<WId> s = KWindowSystem::stackingOrder();
+            // go through all the (ordered) window pids
+            for (int i = 0; i < s.size(); i++) {
+                int p = KWindowSystem::windowInfo(s.at(i), NET::WMPid).win();
+                QString id = action->application() + '-' + QString().setNum(p);
+                if (programs.contains(id)) {
+                    programs.clear();
+                    programs += id;
+                    break;
+                }
+            }
+            while (programs.size() > 1) programs.removeFirst();
+        } else if (programs.size() > 1 && action->destination() == DBusAction::Bottom) {
+            ;
+            QList<WId> s = KWindowSystem::stackingOrder();
+            // go through all the (ordered) window pids
+            for (int i = 0; i < s.size(); ++i) {
+                int p = KWindowSystem::windowInfo(s.at(i), NET::WMPid).win();
+                QString id = action->application() + '-' + QString().setNum(p);
+                if (programs.contains(id)) {
+                    programs.clear();
+                    programs += id;
+                    break;
+                }
+            }
+            while (programs.size() > 1) programs.removeFirst();
+        }
+    }
+    kDebug() << "returning true";
+    return true;
+}
 
 void DBusInterface::executeAction(const IRAction& action) {
     kDebug() << "executeAction called with action:" << action.arguments().getArgumentsList();
@@ -446,4 +519,54 @@ void DBusInterface::executeAction(const IRAction& action) {
             }
         }
     }
+}
+
+void DBusInterface::executeAction(const DBusAction* action) {
+  kDebug() << "executeAction called";
+    QDBusConnectionInterface *dBusIface = QDBusConnection::sessionBus().interface();
+
+    QStringList programs;
+
+    if (!searchForProgram(action, programs)) {
+        return;
+    }
+
+    // if programs.size()==0 here, then the app is definately not running.
+    kDebug() << "Autostart: " << action->autostart();
+    kDebug() << "programs.size: " << programs.size();
+    if (action->autostart() && !programs.size()) {
+      kDebug() << "Should start " << action->application();
+      QString runCommand = action->application();
+      runCommand.remove(QRegExp("org.[a-zA-Z0-9]*."));
+      kDebug() << "runCommand" << runCommand;
+      KToolInvocation::startServiceByDesktopName(runCommand);
+    }
+    if (action->function().name().isEmpty()) // Just start
+        return;
+
+    if (!searchForProgram(action, programs)) {
+      kDebug() << "Failed to start the application" << action->application();
+      return;
+    }
+
+    for (QStringList::iterator i = programs.begin(); i != programs.end(); ++i) {
+        const QString &program = *i;
+        kDebug() << "Searching DBus for program:" << program;
+        if (dBusIface->isServiceRegistered(program)) {
+            kDebug() << "Sending data (" << program << ", " << '/' + action->node() << ", " << action->function().prototypeNR();
+
+            QDBusMessage m = QDBusMessage::createMethodCall(program, '/'
+                             + action->node(), "", action->function().prototypeNR());
+
+            foreach(const NewArgument &arg, action->arguments()){
+                kDebug() << "Got argument:" << arg.value().type() << "value" << arg.value();
+                m << arg.value();
+            }
+            //   theDC->send(program.utf8(), action.object().utf8(), action.method().prototypeNR().utf8(), data);
+            QDBusMessage response = QDBusConnection::sessionBus().call(m);
+            if (response.type() == QDBusMessage::ErrorMessage) {
+                kDebug() << response.errorMessage();
+            }
+        }
+    }  
 }

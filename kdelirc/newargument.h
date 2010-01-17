@@ -19,9 +19,12 @@
 
 #ifndef NEWARGUMENT_H
 #define NEWARGUMENT_H
+
+#include <kdemacros.h>
+
 #include <QVariant>
 
-class NewArgument
+class KDE_EXPORT NewArgument
 {
   public:
     NewArgument();
