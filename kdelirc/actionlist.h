@@ -28,6 +28,9 @@ class KDELIRC_EXPORT ActionList
   public:
     ActionList();
     
+    void loadFromConfig();
+    void saveToConfig();
+    
     QList<Action*> allActions() const;
     QList<Action*> findActions(const QString &remote) const;
     QList<Action*> findActions(const QString &remote, const Mode &mode) const;

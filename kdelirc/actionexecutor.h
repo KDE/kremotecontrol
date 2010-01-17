@@ -26,9 +26,9 @@ class ActionExecutor
 {
   public:
     ActionExecutor(){};
-  ~ActionExecutor(){};
+    virtual ~ActionExecutor(){};
   
-  virtual void execute(Action *action)=0;
+    virtual void execute(Action *action)=0;
   
 };
 

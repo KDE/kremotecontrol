@@ -24,6 +24,18 @@ ActionList::ActionList()
 
 }
 
+void ActionList::loadFromConfig()
+{
+  m_actions.clear();
+  // Load actions from config into m_actions
+  
+}
+
+void ActionList::saveToConfig()
+{
+  // Save m_actions into config
+}
+
 QList<Action*> ActionList::allActions() const
 {
   return m_actions;
