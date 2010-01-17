@@ -29,6 +29,7 @@ class NewProfile
     
     QString name() const;
     QList<ProfileActionTemplate> actionTemplates() const;
+    ProfileActionTemplate actionTemplate(const QString &templateID) const;
     void addTemplate(const ProfileActionTemplate &actionTemplate);
     
   protected:

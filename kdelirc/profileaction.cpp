@@ -19,33 +19,33 @@
 
 #include "profileaction.h"
 
-NewProfileAction::NewProfileAction(const Solid::Control::RemoteControlButton& button, const QString &profile, const QString &actionTemplate): DBusAction(button)
+NewProfileAction::NewProfileAction(const Solid::Control::RemoteControlButton& button, const QString &profileName, const QString &actionTemplate): DBusAction(button)
 {
   //change type from DBusAction (c'tor) to ProfileAction
   m_type = Action::ProfileAction;
-  m_profile = profile;
+  m_profileName = profileName;
   m_template = actionTemplate;
 }
 
-QString NewProfileAction::profile() const
+QString NewProfileAction::profileName() const
 {
-  return m_profile;
+  return m_profileName;
 }
 
-QString NewProfileAction::actionTemplate() const
+QString NewProfileAction::actionTemplateID() const
 {
   return m_template;
 }
 
 void NewProfileAction::operator=(const NewProfileAction& action) {
   DBusAction::operator=(action);
-  m_profile = action.profile();
-  m_template = action.actionTemplate();
+  m_profileName = action.profileName();
+  m_template = action.actionTemplateID();
 }
 
 bool NewProfileAction::operator==(const NewProfileAction& other) const {
   return DBusAction::operator==(other) &&
-	  m_profile == other.profile() &&
-	  m_template == other.actionTemplate();
+	  m_profileName == other.profileName() &&
+	  m_template == other.actionTemplateID();
 }
 

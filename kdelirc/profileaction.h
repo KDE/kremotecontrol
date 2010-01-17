@@ -27,14 +27,14 @@ class NewProfileAction : public DBusAction
   public:
     NewProfileAction(const Solid::Control::RemoteControlButton& button, const QString &profile, const QString &actionTemplate);
 
-    QString profile() const;
-    QString actionTemplate() const;
+    QString profileName() const;
+    QString actionTemplateID() const;
     
     virtual void operator=(const NewProfileAction &action);
     virtual bool operator==(const NewProfileAction &other) const;
     
   protected:
-    QString m_profile;
+    QString m_profileName;
     QString m_template;
 };
 

@@ -35,3 +35,13 @@ void NewProfile::addTemplate(const ProfileActionTemplate &applicationTemplate) {
 QList< ProfileActionTemplate > NewProfile::actionTemplates() const {
   return m_actionTemplates;
 }
+
+ProfileActionTemplate NewProfile::actionTemplate(const QString& templateID) const
+{
+  foreach(const ProfileActionTemplate &actionTemplate, m_actionTemplates){
+    if(actionTemplate.templateID() == templateID){
+      return actionTemplate;
+    }
+  }
+  return ProfileActionTemplate();
+}

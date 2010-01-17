@@ -22,21 +22,20 @@
 
 
 #include <kdebug.h>
+#include <kglobal.h>
 #include "modeswitchaction.h"
 #include "actionlist.h"
 
-NewProfileServer *NewProfileServer::m_self = 0;
-
-NewProfileServer* NewProfileServer::self()
+class NewProfileServerPrivate
 {
-  return m_self ? m_self : m_self = new NewProfileServer();
-}
+  public:
+    NewProfileServerPrivate();
+    QList<NewProfile> m_allProfiles;
+};
 
-NewProfileServer::~NewProfileServer() {
-  m_self = 0;
-}
+K_GLOBAL_STATIC(NewProfileServerPrivate, instance)
 
-NewProfileServer::NewProfileServer()
+NewProfileServerPrivate::NewProfileServerPrivate()
 {
 //load all profiles from config here...
 
@@ -70,7 +69,7 @@ NewProfileServer::NewProfileServer()
   
   // test for actionTemaplateList() (aka. Autopopulate)
   NewProfileAction *origProfileAction;
-  foreach(const ProfileActionTemplate &tmp, actionTemplateList(remote, profile)){
+  foreach(const ProfileActionTemplate &tmp, NewProfileServer::actionTemplateList(remote, profile)){
     kDebug() << "ActionTemplate " << tmp.templateID() << "matches";
     origProfileAction = tmp.createAction(Solid::Control::RemoteControlButton(remote,"Menu"));
   }
@@ -115,15 +114,24 @@ NewProfileServer::NewProfileServer()
 }
 
 void NewProfileServer::addProfile(const NewProfile& profile) {
-  m_allProfiles.append(profile);
+  instance->m_allProfiles.append(profile);
 }
 
-QList< NewProfile > NewProfileServer::allProfiles() const {
-  return m_allProfiles;
+QList< NewProfile > NewProfileServer::allProfiles() {
+  return instance->m_allProfiles;
 }
 
-QList< ProfileActionTemplate > NewProfileServer::actionTemplateList(const QString& remote, const NewProfile& profile)
-{
+NewProfile NewProfileServer::profile(const QString& profileName) {
+  foreach(const NewProfile &profile, instance->m_allProfiles){
+    if(profile.name() == profileName){
+      return profile;
+    }
+  }
+  kDebug() << "Warning: profile" << profileName << "not found. Creating empty one.";
+  return NewProfile(profileName);
+}
+
+QList< ProfileActionTemplate > NewProfileServer::actionTemplateList(const QString& remote, const NewProfile& profile) {
   QList<ProfileActionTemplate> retList;
   foreach(const ProfileActionTemplate &actionTemplate, profile.actionTemplates()){
     kDebug() << "got template" << actionTemplate.templateID() << "with button" << actionTemplate.buttonName();
@@ -135,4 +143,8 @@ QList< ProfileActionTemplate > NewProfileServer::actionTemplateList(const QStrin
     }
   }
   return retList;
+}
+
+ProfileActionTemplate NewProfileServer::actionTemplate(const NewProfileAction* action) {
+  return profile(action->profileName()).actionTemplate(action->actionTemplateID());
 }

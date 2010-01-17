@@ -22,24 +22,17 @@
 
 #include "profile.h"
 
-class NewProfileServer
+namespace NewProfileServer
 {
-  public:
-    static NewProfileServer *self();
-    ~NewProfileServer();
     void addProfile(const NewProfile &profile);
     
-    QList<NewProfile> allProfiles() const;
+    QList<NewProfile> allProfiles();
+    NewProfile profile(const QString &profileName);
     
     QList<ProfileActionTemplate> actionTemplateList(const QString &remote, const NewProfile &profile);
-    
-  protected:
-    static NewProfileServer *m_self;
-    QList<NewProfile> m_allProfiles;
-    
-  private:
-    NewProfileServer();
 
+    ProfileActionTemplate actionTemplate(const NewProfileAction* action);
+    
 };
 
 #endif // NEWPROFILESERVER_H

@@ -38,8 +38,10 @@ class ProfileActionTemplate
 			  const NewProfileAction::ActionDestination,
 			  bool autostart,
 			  bool repeat,
-			  const QString &buttonID = QString());
+			  const QString &buttonName = QString());
 			  
+    ProfileActionTemplate() {};
+
     QString profile() const;
     QString templateID() const;
     QString appName() const;
