@@ -23,24 +23,19 @@
 #include "action.h"
 #include "kremotecontrol_export.h"
 
-class KDELIRC_EXPORT ActionList
+#include <kconfig.h>
+
+class KREMOTECONTROL_EXPORT ActionList: public QList<Action*>
 {
   public:
     ActionList();
     
-    void loadFromConfig();
-    void saveToConfig();
+    void loadFromConfig(const KConfig &config);
+    void saveToConfig(const KConfig &config);
     
-    QList<Action*> allActions() const;
-    QList<Action*> findActions(const QString &remote) const;
-    QList<Action*> findActions(const QString &remote, const Mode &mode) const;
-    QList<Action*> findActions(const QString &remote, const Mode &mode, const Solid::Control::RemoteControlButton &button) const;
-    
-    void addAction(Action *action);
-    void remove(Action *action);
-    
-  protected:
-    QList<Action*> m_actions;
+    ActionList findActions(const QString &remote);
+    ActionList findActions(const Mode &mode);
+    ActionList findActions(const Mode &mode, const Solid::Control::RemoteControlButton &button);
 };
 
 #endif // ACTIONLIST_H

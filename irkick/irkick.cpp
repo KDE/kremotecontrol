@@ -1,5 +1,6 @@
 /*************************************************************************
- * Copyright            : (C) 2002 by Gav Wood <gav@kde.org>             *
+ * Copyright: (C) 2002 by Gav Wood <gav@kde.org>                         *
+ * Copyright: (C) 2010 by Michael Zanetti <michael_zanetti@gmx.net>      *
  *                                                                       *
  * This program is free software; you can redistribute it and/or         *
  * modify it under the terms of the GNU General Public License as        *
@@ -23,10 +24,8 @@
   * @author Gav Wood, Michael Zanetti
   */
 
-// irkick.cpp  -  Implementation of the main window
 
 #include "irkick.h"
-#include "profileserver.h"
 #include "irkickadaptor.h"
 #include "dbusinterface.h"
 #include "profile.h"
@@ -57,7 +56,7 @@ using namespace Solid::Control;
 IRKick::IRKick():
         KStatusNotifierItem(), npApp(QString())
 {
-
+  
     setIconByName("irkick");
     setCategory(Hardware);
 
@@ -96,15 +95,11 @@ IRKick::IRKick():
                 SLOT(gotMessage(const Solid::Control::RemoteControlButton &)));
     }
 
+}
 
 
 
-
-
-
-
-
-
+void IRKick::generateDemoActions() {
 
 // this is some test and sample code for the new Action/Profile framework
 // create a new  ProfileActionTemplate
@@ -118,7 +113,7 @@ IRKick::IRKick():
   ProfileActionTemplate actionTemplate(profile.name(),
 				 "testtemplate",
 				 "org.kde.plasma-desktop",
-				 "Desktop",
+				 "",
 				 "App",
 				 prototype,
 				 "A simplete test function",
@@ -126,7 +121,7 @@ IRKick::IRKick():
 				 NewProfileAction::Unique,
 				 true,
 				 true,
-				 "Menu");
+				 "Play");
   profile.addTemplate(actionTemplate);
   
   QString remote = Solid::Control::RemoteControl::allRemotes().first()->name();
@@ -136,22 +131,25 @@ IRKick::IRKick():
   NewProfileAction *origProfileAction;
   foreach(const ProfileActionTemplate &tmp, NewProfileServer::actionTemplateList(remote, profile)){
     kDebug() << "ActionTemplate " << tmp.templateID() << "matches";
-    origProfileAction = tmp.createAction(Solid::Control::RemoteControlButton(remote,"Menu"));
+    origProfileAction = tmp.createAction(Solid::Control::RemoteControlButton(remote,"Play"), Mode("",remote));
   }
   
   // Test for ModeSwitchAction
-  ModeSwitchAction *origModeSwitchAction = new ModeSwitchAction(Solid::Control::RemoteControlButton(remote,"Menu"));
-  origModeSwitchAction->setNewMode(Mode(remote,"Testmode"));
-  origModeSwitchAction->setExecuteActionsAfterSwitch(true);
+  ModeSwitchAction *origModeSwitchAction = new ModeSwitchAction(Solid::Control::RemoteControlButton(remote,"Menu"), Mode("",remote));
+  origModeSwitchAction->setNewMode(Mode("Testmode", remote));
+  origModeSwitchAction->setExecuteActionsAfterSwitch(false);
+  ModeSwitchAction *origModeSwitchAction2 = new ModeSwitchAction(Solid::Control::RemoteControlButton(remote,"Menu"), Mode("Testmode",remote));
+  origModeSwitchAction2->setNewMode(Mode("", remote));
+  origModeSwitchAction2->setExecuteActionsAfterSwitch(false);
+
   
   // Testind ActionList
-  ActionList actionList;
-  actionList.loadFromConfig();
-  actionList.addAction(origProfileAction);
-  actionList.addAction(origModeSwitchAction);
+  m_actionList.append(origProfileAction);
+  m_actionList.append(origModeSwitchAction);
+  m_actionList.append(origModeSwitchAction2);
   
   // Test for casting Actions
-  foreach(Action *action, actionList.allActions()){
+  foreach(Action *action, m_actionList){
     switch(action->type()){
       case Action::ModeSwitchAction:{
 	kDebug() << "Action is a ModeSwitchAction";
@@ -176,19 +174,9 @@ IRKick::IRKick():
       
     }
   }
-  delete origProfileAction;
-  delete origModeSwitchAction;
-
-
-
-
-
-
-
-
-
-
-
+  
+  m_allModes.append(Mode("",remote));
+  m_allModes.append(Mode("Testmode",remote));
 }
 
 IRKick::~IRKick()
@@ -230,12 +218,12 @@ void IRKick::resetModes()
                              SmallIcon("irkick"), associatedWidget());
     }
 
-    if (!theResetCount)
-        allModes.generateNulls(Solid::Control::RemoteControl::allRemoteNames());
+//     if (!theResetCount)
+//         allModes.generateNulls(Solid::Control::RemoteControl::allRemoteNames());
 
     foreach (const QString &remote, Solid::Control::RemoteControl::allRemoteNames()) {
         kDebug() << "adding remote" << remote << "to modes";
-        currentModes[remote] = allModes.getDefault(remote).name();
+        currentModes[remote] = m_allModes.defaultMode(remote);
     }
     updateContextMenu();
     updateTray();
@@ -246,8 +234,9 @@ void IRKick::slotReloadConfiguration()
 {
     // load configuration from config file
     KConfig theConfig("irkickrc");
-    allActions.loadFromConfig(theConfig);
-    allModes.loadFromConfig(theConfig);
+    m_actionList.loadFromConfig(theConfig);
+    m_allModes.loadFromConfig(theConfig);
+    generateDemoActions();
     if (currentModes.count() && theResetCount) {
         kDebug()<< "reloading conf";
         resetModes();
@@ -262,7 +251,7 @@ void IRKick::slotConfigure()
 void IRKick::slotModeSelected(QAction *action)
 {
     Mode mode = qVariantValue<Mode>(action->data());
-    currentModes[mode.remote()] = mode.name();
+    currentModes[mode.remote()] = mode;
     action->setChecked(true);
     updateTray();
 }
@@ -283,8 +272,7 @@ void IRKick::updateTray()
         setStatus(Passive);
     } else {
         toolTipHeader += i18nc("The state of kdelirc", "Ready");
-        for (QMap<QString, QString>::const_iterator i = currentModes.constBegin(); i != currentModes.constEnd(); ++i) {
-            Mode mode = allModes.getMode(i.key(), i.value());
+        foreach(const Mode &mode, currentModes) {
             toolTip += mode.remote() + " <i>(";
             toolTip += mode.name().isEmpty() ? i18n("Master") : mode.name();
             toolTip +=")</i><br>";
@@ -308,11 +296,11 @@ void IRKick::updateContextMenu(){
 	modeActions.insert(remote, actionGroup);
         actionGroup->setExclusive(true);
         modeMenu->addTitle(KIcon("infrared-remote"), i18n("Switch mode to"));
-        foreach(const Mode &mode, allModes.getModes(remote)){
+        foreach(const Mode &mode, m_allModes){
             QAction *entry = modeMenu->addAction(mode.name().isEmpty() ? i18n("Master") : mode.name());
             entry->setActionGroup(actionGroup);
             entry->setCheckable(true);
-            if(currentModes[remote] == mode.name()){
+            if(currentModes[remote] == mode){
                 entry->setChecked(true);
             }
             entry->setData(qVariantFromValue(mode));
@@ -347,48 +335,47 @@ void IRKick::gotMessage(const RemoteControlButton &button)
             kDebug() << response.errorMessage();
         }
     } else {
-        if (currentModes[button.remoteName()].isNull()) {
-            currentModes[button.remoteName()] = "";
+        if(!currentModes.contains(button.remoteName())) {
+            currentModes[button.remoteName()] = Mode();
         }
-        kDebug() << "current mode:" << currentModes[button.remoteName()];
-        IRActions tActions = allActions.findByModeButton(Mode(button.remoteName(), currentModes[button.remoteName()]), button.name());
-        if (!currentModes[button.remoteName()].isEmpty())
-            tActions += allActions.findByModeButton(Mode(button.remoteName(), ""), button.name());
+        kDebug() << "current mode:" << currentModes[button.remoteName()].name();
+        ActionList actionList = m_actionList.findActions(currentModes[button.remoteName()], button);
+	kDebug() << "found" << actionList.count() << "actions out of" << m_actionList.count();
+	// If this is not the Master mode we have to add also actions from Master mode
+        if(!currentModes[button.remoteName()].name().isEmpty())
+            actionList.append(m_actionList.findActions(Mode(button.remoteName(), ""), button));
         bool doBefore = true, doAfter = false;
-        for (int i = 0; i < tActions.size(); ++i)
-            if (tActions.at(i)->isModeChange() && !button.repeatCounter()) { // mode switch
-                currentModes[button.remoteName()] = tActions.at(i)->modeChange();
-                Mode mode = allModes.getMode(button.remoteName(), tActions.at(i)->modeChange());
+        for (int i = 0; i < actionList.size(); ++i) {
+            if (actionList.at(i)->type() == Action::ModeSwitchAction && !button.repeatCounter()) { // mode switch
+	        ModeSwitchAction *modeSwitchAction = dynamic_cast<ModeSwitchAction*>(actionList.at(i));
+                Mode mode = modeSwitchAction->newMode();
+                currentModes[button.remoteName()] = mode;
                 updateTray();
+		kDebug() << "have Modeactions for" << modeActions.keys() << "searching for" << mode.remote();
                 foreach(QAction *action, modeActions[mode.remote()]->actions()){
                     if(qVariantValue<Mode>(action->data()) == mode){
                         action->setChecked(true);
                     }
                 }
-                doBefore = tActions.at(i)->doBefore();
-                doAfter = tActions.at(i)->doAfter();
+//                doBefore = tActions.at(i)->doBefore();
+                doAfter = modeSwitchAction->executeActionsAfterSwitch();
                 KNotification::event(
                                "mode_event", "<b>" + mode.remote() + ":</b><br>" +
-                               i18n("Mode switched to %1" , currentModes[button.remoteName()].isEmpty() ? i18nc("Default mode in notification", "Default") : currentModes[button.remoteName()]),
-                               DesktopIcon(mode.iconFile().isEmpty() ? "infrared-remote" : mode.iconFile()),
+                               i18n("Mode switched to %1" , (mode.name().isEmpty() ? i18nc("Default mode in notification", "Default") : mode.name())),
+                               DesktopIcon(mode.iconName().isEmpty() ? "infrared-remote" : mode.iconName()),
                                associatedWidget());
                 break;
             }
+	}
 
-        for (int after = 0; after < 2; after++) {
-            if ((doBefore && !after) || (doAfter && after))
-                for (int i = 0; i < tActions.size(); ++i) {
-                    if (!tActions.at(i)->isModeChange() && (tActions.at(i)->repeat() || !button.repeatCounter())) {
-                        DBusInterface::getInstance()->executeAction(*tActions.at(i));
-                    }
-                }
-            if (!after && doAfter) {
-                tActions = allActions.findByModeButton(Mode(button.remoteName(), currentModes[button.remoteName()]), button.name());
-                if (!currentModes[button.remoteName()].isEmpty()) {
-                    tActions += allActions.findByModeButton(Mode(button.remoteName(), ""), button.name());
-                }
-            }
-        }
+	foreach(Action *action, actionList) {
+	    if (action->type() != Action::ModeSwitchAction && (dynamic_cast<DBusAction*>(action)->repeat() || !button.repeatCounter())) {
+		ExecutionEngine::executeAction(action);
+	    }
+	}
+	if(doAfter) {
+	  gotMessage(button);
+	}
     }
     setIconByName("irkickflash");
     theFlashOff->start(200);

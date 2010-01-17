@@ -20,7 +20,7 @@
 #include "modeswitchaction.h"
 
 
-ModeSwitchAction::ModeSwitchAction(const Solid::Control::RemoteControlButton &button): Action(Action::ModeSwitchAction, button)
+ModeSwitchAction::ModeSwitchAction(const Solid::Control::RemoteControlButton &button, const Mode &mode): Action(Action::ModeSwitchAction, button, mode)
 {
 
 }

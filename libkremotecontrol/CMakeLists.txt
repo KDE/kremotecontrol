@@ -19,10 +19,10 @@ set(libkremotecontrol_LIB_SRCS
    actionlist.cpp
    executionengine.cpp
    actionexecutor.cpp
+   mode.cpp
+   modelist.cpp
    dbusactionexecutor.cpp
-
    prototype.cpp 
-   mode.cpp 
    dbusinterface.cpp
 )
 

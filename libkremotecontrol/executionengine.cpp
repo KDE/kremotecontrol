@@ -42,7 +42,7 @@ ExecutionEnginePrivate::ExecutionEnginePrivate() {
   executors.insert(Action::ProfileAction, executors.value(Action::DBusAction)); // copy registration for DBusAction
 }
 
-void KDELIRC_EXPORT ExecutionEngine::executeAction(Action* action) {
+void KREMOTECONTROL_EXPORT ExecutionEngine::executeAction(Action* action) {
   ActionExecutor *executor = executionEnginePrivate->executors.value(action->type());
   if(executor != 0){
     executor->execute(action);

@@ -19,7 +19,7 @@
 
 #include "action.h"
 
-Action::Action(ActionType type, const Solid::Control::RemoteControlButton &button): m_type(type), m_button(button){
+Action::Action(ActionType type, const Solid::Control::RemoteControlButton &button, const Mode &mode): m_type(type), m_button(button), m_mode(mode){
 }
 
 Action::Action(const Action& action): m_button(action.button()){

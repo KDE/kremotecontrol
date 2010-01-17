@@ -23,7 +23,7 @@
 #include "profileactiontemplate.h"
 #include "kremotecontrol_export.h"
 
-class KDELIRC_EXPORT NewProfile
+class KREMOTECONTROL_EXPORT NewProfile
 {
   public:
     NewProfile(const QString &name);

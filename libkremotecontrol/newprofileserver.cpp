@@ -62,7 +62,7 @@ NewProfile NewProfileServer::profile(const QString& profileName) {
   return NewProfile(profileName);
 }
 
-QList< ProfileActionTemplate > KDELIRC_EXPORT NewProfileServer::actionTemplateList(const QString& remote, const NewProfile& profile) {
+QList< ProfileActionTemplate > KREMOTECONTROL_EXPORT NewProfileServer::actionTemplateList(const QString& remote, const NewProfile& profile) {
   QList<ProfileActionTemplate> retList;
   foreach(const ProfileActionTemplate &actionTemplate, profile.actionTemplates()){
     kDebug() << "got template" << actionTemplate.templateID() << "with button" << actionTemplate.buttonName();

@@ -25,7 +25,7 @@
 
 #include <solid/control/remotecontrolbutton.h>
 
-class KDELIRC_EXPORT ProfileActionTemplate
+class KREMOTECONTROL_EXPORT ProfileActionTemplate
 {
   public:
     ProfileActionTemplate(const QString &profile,
@@ -53,7 +53,7 @@ class KDELIRC_EXPORT ProfileActionTemplate
     bool repeat() const;
     QString buttonName() const;
     
-    NewProfileAction *createAction(const Solid::Control::RemoteControlButton &button) const;
+    NewProfileAction *createAction(const Solid::Control::RemoteControlButton &button, const Mode &mode) const;
     
   protected:
     QString m_profile; // e.g. Multimedia

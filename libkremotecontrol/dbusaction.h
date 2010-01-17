@@ -29,12 +29,12 @@
 
 #include <QString>
 
-class KDELIRC_EXPORT DBusAction : public Action
+class KREMOTECONTROL_EXPORT DBusAction : public Action
 {
   public:
     enum ActionDestination {Unique, Top, Bottom, None, All};
     
-    DBusAction(const Solid::Control::RemoteControlButton &button);
+    DBusAction(const Solid::Control::RemoteControlButton &button, const Mode &mode);
     
     QString application() const;
     void setApplication(const QString &application);

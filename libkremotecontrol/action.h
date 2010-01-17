@@ -26,14 +26,14 @@
 #include <solid/control/remotecontrolbutton.h>
 #include <solid/control/remotecontrol.h>
 
-class KDELIRC_EXPORT Action: public QObject
+class KREMOTECONTROL_EXPORT Action: public QObject
 {
   Q_OBJECT
   
   public:
     enum ActionType {ModeSwitchAction, DBusAction, ProfileAction};
   
-    Action(ActionType type, const Solid::Control::RemoteControlButton &button);
+    Action(ActionType type, const Solid::Control::RemoteControlButton &button, const Mode &mode);
     Action(const Action &action);
   
     ActionType type() const;

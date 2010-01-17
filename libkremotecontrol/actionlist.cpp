@@ -19,72 +19,53 @@
 
 #include "actionlist.h"
 
+#include <kdebug.h>
+
 ActionList::ActionList()
 {
 
 }
 
-void ActionList::loadFromConfig()
+void ActionList::loadFromConfig(const KConfig &config)
 {
-  m_actions.clear();
+  clear();
   // Load actions from config into m_actions
   
 }
 
-void ActionList::saveToConfig()
+void ActionList::saveToConfig(const KConfig &config)
 {
   // Save m_actions into config
 }
 
-QList<Action*> ActionList::allActions() const
-{
-  return m_actions;
-}
-
-QList<Action*> ActionList::findActions(const QString& remote) const
-{
-  QList<Action*> retList;
-  foreach(Action *action, m_actions){
-    if(action->remote() == remote){
-      retList.append(action);
+ActionList ActionList::findActions(const QString& remote) {
+  ActionList retList;
+  for(ActionList::iterator i = begin(); i != end(); ++i){
+    if((*i)->remote() == remote){
+      retList.append(*i);
     }
   }
   return retList;
 }
 
-QList<Action*> ActionList::findActions(const QString& remote, const Mode& mode) const
-{
-  QList<Action*> retList;
-  foreach(Action *action, m_actions){
-    if(action->remote() == remote && action->mode() == mode){
-      retList.append(action);
+ActionList ActionList::findActions(const Mode& mode) {
+  ActionList retList;
+  for(ActionList::iterator i = begin(); i != end(); ++i){
+    if((*i)->mode() == mode){
+      retList.append(*i);
     }
   }
   return retList;
 }
 
-QList<Action*> ActionList::findActions(const QString& remote, const Mode& mode, const Solid::Control::RemoteControlButton& button) const
-{
-  QList<Action*> retList;
-  foreach(Action *action, m_actions){
-    if(action->remote() == remote && action->mode() == mode && action->button().id() == button.id() && action->button().remoteName() == button.remoteName()){
-      retList.append(action);
+ActionList ActionList::findActions(const Mode& mode, const Solid::Control::RemoteControlButton& button) {
+  ActionList retList;
+  kDebug() << "searching for action with mode" << mode.name() << "remote" << mode.remote() << "and button" << button.name();
+  for(ActionList::iterator i = begin(); i != end(); ++i){
+    kDebug() << "searching in action with mode" << (*i)->mode().name() << "remote" << (*i)->remote() << " and button:" << (*i)->button().name();
+    if((*i)->mode() == mode && (*i)->button().id() == button.id() && (*i)->button().remoteName() == button.remoteName()){
+      retList.append(*i);
     }
   }
   return retList;
-}
-
-void ActionList::addAction(Action *action)
-{
-  m_actions.append(action);
-}
-
-void ActionList::remove(Action* action)
-{
-  for(int i = 0; i < m_actions.size(); i++){
-    if(m_actions.at(i) == action){
-      m_actions.removeAt(i);
-      break;
-    }
-  }
 }

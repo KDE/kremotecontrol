@@ -24,11 +24,11 @@
 #include "mode.h"
 #include "kremotecontrol_export.h"
 
-class KDELIRC_EXPORT ModeSwitchAction : public Action
+class KREMOTECONTROL_EXPORT ModeSwitchAction : public Action
 {
   
   public:
-    ModeSwitchAction(const Solid::Control::RemoteControlButton &button);
+    ModeSwitchAction(const Solid::Control::RemoteControlButton &button, const Mode &mode);
     
     Mode newMode() const;
     void setNewMode(const Mode &mode);

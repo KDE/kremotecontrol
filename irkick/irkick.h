@@ -1,5 +1,6 @@
 /*************************************************************************
- * Copyright            : (C) 2002 by Gav Wood <gav@kde.org>             *
+ * Copyright: (C) 2002 by Gav Wood <gav@kde.org>                         *
+ * Copyright: (C) 2010 by Michael Zanetti <michael_zanetti@gmx.net>      *
  *                                                                       *
  * This program is free software; you can redistribute it and/or         *
  * modify it under the terms of the GNU General Public License as        *
@@ -20,15 +21,14 @@
 
 
 /**
-  * @author Gav Wood
+  * @author Gav Wood, Michael Zanetti
   */
 
 #ifndef IRKICK_H
 #define IRKICK_H
 
-#include "modes.h"
-#include "iractions.h"
-//#include "klircclient.h"
+#include "actionlist.h"
+#include "modelist.h"
 
 #include <kstatusnotifieritem.h>
 #include <kaboutdata.h>
@@ -47,11 +47,11 @@ class IRKick: public KStatusNotifierItem
 
 
     QString npApp, npModule, npMethod;
-    QMap<QString, QString> currentModes;
+    QMap<QString, Mode> currentModes;
     QMap<QString, QActionGroup*> modeActions;
-    IRActions allActions;
+    ActionList m_actionList;
     int theResetCount;
-    Modes allModes;
+    ModeList m_allModes;
     KMenu *m_menu;
     KAboutData *aboutData;
     QTimer *theFlashOff;
@@ -106,6 +106,8 @@ public Q_SLOTS: //dbus slot
     void reloadConfiguration() {
         slotReloadConfiguration();
     }
+    
+    void generateDemoActions();
 
 private slots:
     void gotMessage(const Solid::Control::RemoteControlButton &button);

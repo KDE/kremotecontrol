@@ -23,10 +23,10 @@
 #include "dbusaction.h"
 #include "kremotecontrol_export.h"
 
-class KDELIRC_EXPORT NewProfileAction : public DBusAction
+class KREMOTECONTROL_EXPORT NewProfileAction : public DBusAction
 {
   public:
-    NewProfileAction(const Solid::Control::RemoteControlButton& button, const QString &profile, const QString &actionTemplate);
+    NewProfileAction(const Solid::Control::RemoteControlButton& button, const Mode &mode, const QString &profile, const QString &actionTemplate);
 
     QString profileName() const;
     QString actionTemplateID() const;

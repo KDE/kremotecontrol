@@ -19,7 +19,7 @@
 
 #include "dbusaction.h"
 
-DBusAction::DBusAction(const Solid::Control::RemoteControlButton &button): Action(Action::DBusAction, button)
+DBusAction::DBusAction(const Solid::Control::RemoteControlButton &button, const Mode &mode): Action(Action::DBusAction, button, mode)
 {
 
 }
