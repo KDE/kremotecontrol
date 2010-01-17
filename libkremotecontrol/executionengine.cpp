@@ -19,7 +19,7 @@
 
 #include "executionengine.h"
 #include "dbusactionexecutor.h"
-#include "kdelirc_export.h"
+#include "kremotecontrol_export.h"
 
 #include <kglobal.h>
 #include <kdebug.h>

@@ -17,32 +17,25 @@
 
 */
 
-#ifndef MODESWITCHACTION_H
-#define MODESWITCHACTION_H
+#ifndef PROFILE_H
+#define PROFILE_H
 
-#include "action.h"
-#include "mode.h"
-#include "kdelirc_export.h"
+#include "profileactiontemplate.h"
+#include "kremotecontrol_export.h"
 
-class KDELIRC_EXPORT ModeSwitchAction : public Action
+class KDELIRC_EXPORT NewProfile
 {
-  
   public:
-    ModeSwitchAction(const Solid::Control::RemoteControlButton &button);
+    NewProfile(const QString &name);
     
-    Mode newMode() const;
-    void setNewMode(const Mode &mode);
+    QString name() const;
+    QList<ProfileActionTemplate> actionTemplates() const;
+    ProfileActionTemplate actionTemplate(const QString &templateID) const;
+    void addTemplate(const ProfileActionTemplate &actionTemplate);
     
-    bool executeActionsAfterSwitch() const;
-    void setExecuteActionsAfterSwitch(bool execute);
-    
-    void operator=(const ModeSwitchAction &action);
-    bool operator==(const ModeSwitchAction &other) const;
-  
   protected:
-    Mode m_mode;
-    bool m_executeActionsAfterSwitch;
-    
+    QString m_name;
+    QList<ProfileActionTemplate> m_actionTemplates;
 };
 
-#endif // MODESWITCHACTION_H
+#endif // PROFILE_H

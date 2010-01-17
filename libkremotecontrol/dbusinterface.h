@@ -28,8 +28,7 @@
 #define DBUSINTERFACE_H
 
 #include "prototype.h"
-#include "iraction.h"
-#include "modes.h"
+#include "dbusaction.h"
 #include <QStringList>
 
 class KDE_EXPORT DBusInterface: public QObject
@@ -38,10 +37,10 @@ class KDE_EXPORT DBusInterface: public QObject
 
 private:
   DBusInterface();
-   Modes allModes;
+//   Modes allModes;
 
   QStringList getAllRegisteredPrograms();
-  bool searchForProgram(const IRAction &action, QStringList &programs);
+  bool searchForProgram(const DBusAction *action, QStringList &programs);
 public:
 
   static DBusInterface *getInstance();
@@ -60,7 +59,7 @@ public:
   void reloadIRKick();
 
   QStringList getButtons(const QString &remoteName);
-  void executeAction(const IRAction &action);  
+  void executeAction(const DBusAction *action);
 
 };
 

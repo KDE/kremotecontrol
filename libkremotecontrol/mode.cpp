@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright: (C) 2009 Michael Zanetti <michael_zanetti@gmx.net>         *
+ * Copyright            : (C) 2003 by Gav Wood <gav@kde.org>             *
  *                                                                       *
  * This program is free software; you can redistribute it and/or         *
  * modify it under the terms of the GNU General Public License as        *
@@ -17,51 +17,50 @@
  * You should have received a copy of the GNU General Public License     *
  * along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  *************************************************************************/
-/*
- * dbusinterface.h
- *
- *  Created on: 14.02.2009
- *      Author: Michael Zanetti
- */
 
-#ifndef DBUSINTERFACE_H
-#define DBUSINTERFACE_H
 
-#include "prototype.h"
-#include "iraction.h"
-#include "modes.h"
-#include <QStringList>
+/**
+  * @author Gav Wood
+  */
 
-class KDE_EXPORT DBusInterface: public QObject
+#include "mode.h"
+//#include "modes.h"
+
+#include <kconfig.h>
+#include <kconfiggroup.h>
+
+KDE_EXPORT Mode::Mode() : theName(QString())
 {
-    Q_OBJECT
+}
 
-private:
-  DBusInterface();
-   Modes allModes;
+KDE_EXPORT Mode::Mode(const QString &remote, const QString &name, const QString &iconFile)
+{
+    theRemote = remote;
+    theName = name;
+    theIconFile = iconFile;
+}
 
-  QStringList getAllRegisteredPrograms();
-  bool searchForProgram(const IRAction &action, QStringList &programs);
-public:
+KDE_EXPORT Mode::~Mode()
+{
+}
 
-  static DBusInterface *getInstance();
-  ~DBusInterface();
+KDE_EXPORT const Mode &Mode::loadFromConfig(KConfig &theConfig, int index)
+{
+    KConfigGroup modesGroup = theConfig.group("Modes");
+    QString Prefix = "Mode" + QString().setNum(index);
+    theName = modesGroup.readEntry(Prefix + "Name", QString());
+    theRemote = modesGroup.readEntry(Prefix + "Remote", QString());
+    theIconFile = modesGroup.readEntry(Prefix + "IconFile", QString());
+    if (theIconFile.isEmpty()) theIconFile.clear();
+    return *this;
+}
 
-  bool isProgramRunning(const QString &program);
-  bool isUnique(const QString &program);
+KDE_EXPORT void Mode::saveToConfig(KConfig &theConfig, int index)
+{
+    KConfigGroup modesGroup = theConfig.group("Modes");
+    QString Prefix = "Mode" + QString().setNum(index);
+    modesGroup.writeEntry(Prefix + "Name", theName);
+    modesGroup.writeEntry(Prefix + "Remote", theRemote);
+    modesGroup.writeEntry(Prefix + "IconFile", theIconFile);
+}
 
-  QStringList getRegisteredPrograms();
-  QStringList getObjects(const QString &program);
-  QList<Prototype> getFunctions(const QString &program, const QString &object);
-
-  QStringList getRemotes();
-  void requestNextKeyPress();
-  void cancelKeyPressRequest();
-  void reloadIRKick();
-
-  QStringList getButtons(const QString &remoteName);
-  void executeAction(const IRAction &action);  
-
-};
-
-#endif

@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright: (C) 2009 Michael Zanetti <michael_zanetti@gmx.net>         *
+ * Copyright            : (C) 2003 by Gav Wood <gav@kde.org>             *
  *                                                                       *
  * This program is free software; you can redistribute it and/or         *
  * modify it under the terms of the GNU General Public License as        *
@@ -17,51 +17,61 @@
  * You should have received a copy of the GNU General Public License     *
  * along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  *************************************************************************/
-/*
- * dbusinterface.h
- *
- *  Created on: 14.02.2009
- *      Author: Michael Zanetti
- */
 
-#ifndef DBUSINTERFACE_H
-#define DBUSINTERFACE_H
 
-#include "prototype.h"
-#include "iraction.h"
-#include "modes.h"
-#include <QStringList>
+/**
+  * @author Gav Wood
+  */
 
-class KDE_EXPORT DBusInterface: public QObject
+#ifndef MODE_H
+#define MODE_H
+
+
+#include <QString>
+#include <qmetatype.h>
+
+/**
+@author Gav Wood
+*/
+
+class KConfig;
+
+class Mode
 {
-    Q_OBJECT
+    QString theName, theRemote, theIconFile;
 
-private:
-  DBusInterface();
-   Modes allModes;
-
-  QStringList getAllRegisteredPrograms();
-  bool searchForProgram(const IRAction &action, QStringList &programs);
 public:
+    void setName(const QString &a) {
+        theName = a;
+    }
+    void setRemote(const QString &a) {
+        theRemote = a;
+    }
+    void setIconFile(const QString &a) {
+        theIconFile = a;
+    }
 
-  static DBusInterface *getInstance();
-  ~DBusInterface();
+    const QString &name() const {
+        return theName;
+    }
+    const QString &remote() const {
+        return theRemote;
+    }
+    const QString &iconFile() const {
+        return theIconFile;
+    }
 
-  bool isProgramRunning(const QString &program);
-  bool isUnique(const QString &program);
+    const Mode &loadFromConfig(KConfig &theConfig, int index);
+    void saveToConfig(KConfig &theConfig, int index);
 
-  QStringList getRegisteredPrograms();
-  QStringList getObjects(const QString &program);
-  QList<Prototype> getFunctions(const QString &program, const QString &object);
+    bool operator==(const Mode &mode) const {
+        return mode.theName == theName && mode.theRemote == theRemote;
+    }
 
-  QStringList getRemotes();
-  void requestNextKeyPress();
-  void cancelKeyPressRequest();
-  void reloadIRKick();
-
-  QStringList getButtons(const QString &remoteName);
-  void executeAction(const IRAction &action);  
-
+    Mode();
+    Mode(const QString &remote, const QString &name, const QString &iconFile = QString());
+    ~Mode();
 };
 
+Q_DECLARE_METATYPE(Mode)
 #endif

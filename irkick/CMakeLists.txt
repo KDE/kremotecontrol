@@ -4,6 +4,8 @@ add_subdirectory( icons )
 include_directories(
    ${CMAKE_SOURCE_DIR}/kdelirc/
    ../kdelirc/
+   ${CMAKE_SOURCE_DIR}/libkremotecontrol/
+   ../libkremotecontrol/
    ${CMAKE_CURRENT_SOURCE_DIR}
    ${CMAKE_CURRENT_BINARY_DIR}
    ${KDE4_INCLUDES}
@@ -27,7 +29,7 @@ qt4_add_dbus_adaptor(irkick_KDEINIT_SRCS org.kde.irkick.xml irkick.h IRKick)
 kde4_add_kdeinit_executable( irkick ${irkick_KDEINIT_SRCS})
 
 target_link_libraries(kdeinit_irkick  ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${KDE4_SOLID_LIBS} 
-                                      ${KDE4WORKSPACE_SOLIDCONTROL_LIBRARY} kdelirc_shared)
+                                      ${KDE4WORKSPACE_SOLIDCONTROL_LIBRARY} kdelirc_shared libkremotecontrol)
 install(TARGETS kdeinit_irkick ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 target_link_libraries(irkick kdeinit_irkick)

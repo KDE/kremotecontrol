@@ -24,7 +24,6 @@
   */
 
 #include "profileserver.h"
-#include "newprofileserver.h"
 //
 #include <QFile>
 
@@ -40,7 +39,6 @@ KDE_EXPORT ProfileServer::ProfileServer()
 // theProfiles.setAutoDelete(true);
     loadProfiles();
     kDebug() << "ProfileServer started up. Starting NewProfileServer";
-    NewProfileServer::allProfiles();
 }
 
 KDE_EXPORT ProfileServer::~ProfileServer()

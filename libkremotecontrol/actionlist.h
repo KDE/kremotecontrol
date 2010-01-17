@@ -17,25 +17,30 @@
 
 */
 
-#ifndef PROFILE_H
-#define PROFILE_H
+#ifndef ACTIONLIST_H
+#define ACTIONLIST_H
 
-#include "profileactiontemplate.h"
-#include "kdelirc_export.h"
+#include "action.h"
+#include "kremotecontrol_export.h"
 
-class KDELIRC_EXPORT NewProfile
+class KDELIRC_EXPORT ActionList
 {
   public:
-    NewProfile(const QString &name);
+    ActionList();
     
-    QString name() const;
-    QList<ProfileActionTemplate> actionTemplates() const;
-    ProfileActionTemplate actionTemplate(const QString &templateID) const;
-    void addTemplate(const ProfileActionTemplate &actionTemplate);
+    void loadFromConfig();
+    void saveToConfig();
+    
+    QList<Action*> allActions() const;
+    QList<Action*> findActions(const QString &remote) const;
+    QList<Action*> findActions(const QString &remote, const Mode &mode) const;
+    QList<Action*> findActions(const QString &remote, const Mode &mode, const Solid::Control::RemoteControlButton &button) const;
+    
+    void addAction(Action *action);
+    void remove(Action *action);
     
   protected:
-    QString m_name;
-    QList<ProfileActionTemplate> m_actionTemplates;
+    QList<Action*> m_actions;
 };
 
-#endif // PROFILE_H
+#endif // ACTIONLIST_H

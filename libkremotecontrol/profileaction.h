@@ -21,7 +21,7 @@
 #define NEWPROFILEACTION_H
 
 #include "dbusaction.h"
-#include "kdelirc_export.h"
+#include "kremotecontrol_export.h"
 
 class KDELIRC_EXPORT NewProfileAction : public DBusAction
 {

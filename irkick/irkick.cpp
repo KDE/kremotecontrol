@@ -29,6 +29,12 @@
 #include "profileserver.h"
 #include "irkickadaptor.h"
 #include "dbusinterface.h"
+#include "profile.h"
+#include "newprofileserver.h"
+#include "modeswitchaction.h"
+#include "profileaction.h"
+#include "actionlist.h"
+#include "executionengine.h"
 
 #include <QtDBus/qdbusconnection.h>
 
@@ -89,6 +95,99 @@ IRKick::IRKick():
                 this, 
                 SLOT(gotMessage(const Solid::Control::RemoteControlButton &)));
     }
+
+
+
+
+
+
+
+
+
+
+
+// this is some test and sample code for the new Action/Profile framework
+// create a new  ProfileActionTemplate
+  NewProfile profile("testprofile");
+  Prototype prototype("void toggleDashboard()");
+  QList<NewArgument> argumentList;
+  QVariant parameter(QVariant::Bool);
+  parameter.setValue(true);
+  NewArgument argument(parameter, "This is the testparm for testfunc. True or False");
+//  argumentList.append(argument);
+  ProfileActionTemplate actionTemplate(profile.name(),
+				 "testtemplate",
+				 "org.kde.plasma-desktop",
+				 "Desktop",
+				 "App",
+				 prototype,
+				 "A simplete test function",
+				 argumentList,
+				 NewProfileAction::Unique,
+				 true,
+				 true,
+				 "Menu");
+  profile.addTemplate(actionTemplate);
+  
+  QString remote = Solid::Control::RemoteControl::allRemotes().first()->name();
+  
+  
+  // test for actionTemaplateList() (aka. Autopopulate)
+  NewProfileAction *origProfileAction;
+  foreach(const ProfileActionTemplate &tmp, NewProfileServer::actionTemplateList(remote, profile)){
+    kDebug() << "ActionTemplate " << tmp.templateID() << "matches";
+    origProfileAction = tmp.createAction(Solid::Control::RemoteControlButton(remote,"Menu"));
+  }
+  
+  // Test for ModeSwitchAction
+  ModeSwitchAction *origModeSwitchAction = new ModeSwitchAction(Solid::Control::RemoteControlButton(remote,"Menu"));
+  origModeSwitchAction->setNewMode(Mode(remote,"Testmode"));
+  origModeSwitchAction->setExecuteActionsAfterSwitch(true);
+  
+  // Testind ActionList
+  ActionList actionList;
+  actionList.loadFromConfig();
+  actionList.addAction(origProfileAction);
+  actionList.addAction(origModeSwitchAction);
+  
+  // Test for casting Actions
+  foreach(Action *action, actionList.allActions()){
+    switch(action->type()){
+      case Action::ModeSwitchAction:{
+	kDebug() << "Action is a ModeSwitchAction";
+	ModeSwitchAction *modeSwitchAction = dynamic_cast<ModeSwitchAction*>(action);
+	kDebug() << "Modeswitch to:" << modeSwitchAction->newMode().name() << "executeAfter:" << modeSwitchAction->executeActionsAfterSwitch();
+	}
+	break;
+      case Action::DBusAction:
+      case Action::ProfileAction:
+	kDebug() << "Action is a DBusAction";
+	DBusAction *dbusAction = dynamic_cast<DBusAction*>(action);
+	if(dbusAction){
+	  kDebug() << "cast ok";
+	  kDebug() << "function prototype is: " << dbusAction->function().prototype();
+//	  kDebug() << "argument is" << dbusAction->arguments().first().value() << dbusAction->arguments().first().description();
+	} 
+	ExecutionEngine::executeAction(dbusAction);
+	  
+	
+	break;
+	
+      
+    }
+  }
+  delete origProfileAction;
+  delete origModeSwitchAction;
+
+
+
+
+
+
+
+
+
+
 
 }
 

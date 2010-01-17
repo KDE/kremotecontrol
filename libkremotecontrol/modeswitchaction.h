@@ -17,39 +17,32 @@
 
 */
 
-#ifndef ACTION_H
-#define ACTION_H
+#ifndef MODESWITCHACTION_H
+#define MODESWITCHACTION_H
 
+#include "action.h"
 #include "mode.h"
-#include "kdelirc_export.h"
+#include "kremotecontrol_export.h"
 
-#include <solid/control/remotecontrolbutton.h>
-#include <solid/control/remotecontrol.h>
-
-class KDELIRC_EXPORT Action: public QObject
+class KDELIRC_EXPORT ModeSwitchAction : public Action
 {
-  Q_OBJECT
   
   public:
-    enum ActionType {ModeSwitchAction, DBusAction, ProfileAction};
-  
-    Action(ActionType type, const Solid::Control::RemoteControlButton &button);
-    Action(const Action &action);
-  
-    ActionType type() const;
-    QString remote() const;
-    Solid::Control::RemoteControlButton button() const;
-    Mode mode() const;
+    ModeSwitchAction(const Solid::Control::RemoteControlButton &button);
     
-    virtual void operator=(const Action &action);
-    virtual bool operator==(const Action &action) const;
+    Mode newMode() const;
+    void setNewMode(const Mode &mode);
     
+    bool executeActionsAfterSwitch() const;
+    void setExecuteActionsAfterSwitch(bool execute);
+    
+    void operator=(const ModeSwitchAction &action);
+    bool operator==(const ModeSwitchAction &other) const;
+  
   protected:
-    ActionType m_type;
-    QString m_remote;
-    Solid::Control::RemoteControlButton m_button;
     Mode m_mode;
+    bool m_executeActionsAfterSwitch;
     
 };
 
-#endif // ACTION_H
+#endif // MODESWITCHACTION_H

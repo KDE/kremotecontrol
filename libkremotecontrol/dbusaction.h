@@ -23,7 +23,7 @@
 #include "action.h"
 #include "prototype.h"
 #include "newargument.h"
-#include "kdelirc_export.h"
+#include "kremotecontrol_export.h"
 
 #include <solid/control/remotecontrolbutton.h>
 

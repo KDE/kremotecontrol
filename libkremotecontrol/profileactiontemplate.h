@@ -21,7 +21,7 @@
 #define ACTIONTEMPLATE_H
 
 #include "profileaction.h"
-#include "kdelirc_export.h"
+#include "kremotecontrol_export.h"
 
 #include <solid/control/remotecontrolbutton.h>
 

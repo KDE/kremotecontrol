@@ -17,23 +17,39 @@
 
 */
 
-#ifndef NEWPROFILESERVER_H
-#define NEWPROFILESERVER_H
+#ifndef ACTION_H
+#define ACTION_H
 
-#include "profile.h"
-#include "kdelirc_export.h"
+#include "mode.h"
+#include "kremotecontrol_export.h"
 
-namespace NewProfileServer
+#include <solid/control/remotecontrolbutton.h>
+#include <solid/control/remotecontrol.h>
+
+class KDELIRC_EXPORT Action: public QObject
 {
-    void addProfile(const NewProfile &profile);
+  Q_OBJECT
+  
+  public:
+    enum ActionType {ModeSwitchAction, DBusAction, ProfileAction};
+  
+    Action(ActionType type, const Solid::Control::RemoteControlButton &button);
+    Action(const Action &action);
+  
+    ActionType type() const;
+    QString remote() const;
+    Solid::Control::RemoteControlButton button() const;
+    Mode mode() const;
     
-    QList<NewProfile> allProfiles();
-    NewProfile profile(const QString &profileName);
+    virtual void operator=(const Action &action);
+    virtual bool operator==(const Action &action) const;
     
-    QList<ProfileActionTemplate> actionTemplateList(const QString &remote, const NewProfile &profile);
-
-    ProfileActionTemplate actionTemplate(const NewProfileAction* action);
+  protected:
+    ActionType m_type;
+    QString m_remote;
+    Solid::Control::RemoteControlButton m_button;
+    Mode m_mode;
     
 };
 
-#endif // NEWPROFILESERVER_H
+#endif // ACTION_H
