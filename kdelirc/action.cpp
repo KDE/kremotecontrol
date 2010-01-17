@@ -30,11 +30,31 @@ Action::ActionType Action::type() const{
   return m_type;
 }
 
+QString Action::remote() const
+{
+  return m_remote;
+}
+
 Solid::Control::RemoteControlButton Action::button() const {
   return m_button;
 }
 
 Mode Action::mode() const {
   return m_mode;
+}
+
+void Action::operator=(const Action& action) {
+  m_type = action.type();
+  m_remote = action.remote();
+  m_mode = action.mode();
+  m_button = action.button();
+}
+
+bool Action::operator==(const Action& action) const {
+  return m_type == action.type() &&
+	  m_remote == action.remote() &&
+	  m_mode == action.mode() &&
+	  m_button.id() == action.button().id() &&
+	  m_button.remoteName() == action.button().remoteName();
 }
 

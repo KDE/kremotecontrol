@@ -17,25 +17,26 @@
 
 */
 
-#ifndef PROFILEACTION_H
-#define PROFILEACTION_H
+#ifndef ACTIONLIST_H
+#define ACTIONLIST_H
 
-#include "dbusaction.h"
+#include "action.h"
 
-class ProfileAction : public DBusAction
+class ActionList
 {
   public:
-    ProfileAction(const Solid::Control::RemoteControlButton& button, const QString &profile, const QString &actionTemplate);
-
-    QString profile() const;
-    QString actionTemplate() const;
+    ActionList();
     
-    virtual void operator=(const ProfileAction &action);
-    virtual bool operator==(const ProfileAction &other) const;
+    QList<Action> allActions() const;
+    QList<Action> findActions(const QString &remote) const;
+    QList<Action> findActions(const QString &remote, const Mode &mode) const;
+    QList<Action> findActions(const QString &remote, const Mode &mode, const Solid::Control::RemoteControlButton &button) const;
+    
+    void addAction(const Action &action);
+    void remove(const Action &action);
     
   protected:
-    QString m_profile;
-    QString m_template;
+    QList<Action> m_actions;
 };
 
-#endif // PROFILEACTION_H
+#endif // ACTIONLIST_H

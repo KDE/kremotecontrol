@@ -31,6 +31,9 @@ class ModeSwitchAction : public Action
     
     Mode newMode() const;
     bool executeActionsAfterSwitch() const;
+    
+    void operator=(const ModeSwitchAction &action);
+    bool operator==(const ModeSwitchAction &other) const;
   
   protected:
     Mode m_mode;

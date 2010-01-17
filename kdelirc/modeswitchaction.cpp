@@ -28,3 +28,19 @@ ModeSwitchAction::ModeSwitchAction(const Solid::Control::RemoteControlButton &bu
 bool ModeSwitchAction::executeActionsAfterSwitch() const{
   return m_executeActionsAfterSwitch;
 }
+
+Mode ModeSwitchAction::newMode() const {
+  return m_mode;
+}
+
+void ModeSwitchAction::operator=(const ModeSwitchAction& action) {
+  Action::operator=(action);
+  m_mode = action.newMode();
+  m_executeActionsAfterSwitch = action.executeActionsAfterSwitch();
+}
+
+bool ModeSwitchAction::operator==(const ModeSwitchAction& other) const {
+  return Action::operator==(other) &&
+	  m_mode == other.mode() &&
+	  m_executeActionsAfterSwitch == other.executeActionsAfterSwitch();
+}

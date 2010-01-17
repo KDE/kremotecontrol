@@ -82,5 +82,6 @@ ProfileAction ProfileActionTemplate::createAction(const Solid::Control::RemoteCo
   action.setDestination(m_destination);
   action.setAutostart(m_autostart);
   action.setRepeat(m_repeat);
+  return action;
 }
 

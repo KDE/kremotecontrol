@@ -49,3 +49,11 @@ QString NewArgument::description() const
 {
   return m_description;
 }
+
+bool NewArgument::operator==(const NewArgument& other) const
+{
+  return m_value == other.value() &&
+	  m_description == other.description() &&
+	  m_defaultValue == other.defaultValue();
+}
+

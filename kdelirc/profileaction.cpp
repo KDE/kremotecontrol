@@ -37,3 +37,15 @@ QString ProfileAction::actionTemplate() const
   return m_template;
 }
 
+void ProfileAction::operator=(const ProfileAction& action) {
+  DBusAction::operator=(action);
+  m_profile = action.profile();
+  m_template = action.actionTemplate();
+}
+
+bool ProfileAction::operator==(const ProfileAction& other) const {
+  return DBusAction::operator==(other) &&
+	  m_profile == other.profile() &&
+	  m_template == other.actionTemplate();
+}
+

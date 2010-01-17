@@ -32,6 +32,8 @@ class NewArgument
     QVariant defaultValue() const;
     QString description() const;
     
+    bool operator==(const NewArgument &other) const;
+    
   protected:
     QVariant m_value;
     QVariant m_defaultValue;

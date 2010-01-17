@@ -23,6 +23,7 @@
 #include "mode.h"
 
 #include <solid/control/remotecontrolbutton.h>
+#include <solid/control/remotecontrol.h>
 
 class Action: public QObject
 {
@@ -35,11 +36,16 @@ class Action: public QObject
     Action(const Action &action);
   
     ActionType type() const;
+    QString remote() const;
     Solid::Control::RemoteControlButton button() const;
     Mode mode() const;
     
+    virtual void operator=(const Action &action);
+    virtual bool operator==(const Action &action) const;
+    
   protected:
     ActionType m_type;
+    QString m_remote;
     Solid::Control::RemoteControlButton m_button;
     Mode m_mode;
     

@@ -56,6 +56,9 @@ class DBusAction : public Action
     ActionDestination destination() const;
     void setDestination(ActionDestination destination);
     
+    virtual void operator=(const DBusAction &action);
+    virtual bool operator==(const DBusAction &action) const;
+    
   protected:
     QString m_application, m_node;
     Prototype m_function;
