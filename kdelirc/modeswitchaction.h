@@ -30,7 +30,10 @@ class ModeSwitchAction : public Action
     ModeSwitchAction(const Solid::Control::RemoteControlButton &button);
     
     Mode newMode() const;
+    void setNewMode(const Mode &mode);
+    
     bool executeActionsAfterSwitch() const;
+    void setExecuteActionsAfterSwitch(bool execute);
     
     void operator=(const ModeSwitchAction &action);
     bool operator==(const ModeSwitchAction &other) const;

@@ -17,21 +17,21 @@
 
 */
 
-#ifndef PROFILEACTION_H
-#define PROFILEACTION_H
+#ifndef NEWPROFILEACTION_H
+#define NEWPROFILEACTION_H
 
 #include "dbusaction.h"
 
-class ProfileAction : public DBusAction
+class NewProfileAction : public DBusAction
 {
   public:
-    ProfileAction(const Solid::Control::RemoteControlButton& button, const QString &profile, const QString &actionTemplate);
+    NewProfileAction(const Solid::Control::RemoteControlButton& button, const QString &profile, const QString &actionTemplate);
 
     QString profile() const;
     QString actionTemplate() const;
     
-    virtual void operator=(const ProfileAction &action);
-    virtual bool operator==(const ProfileAction &other) const;
+    virtual void operator=(const NewProfileAction &action);
+    virtual bool operator==(const NewProfileAction &other) const;
     
   protected:
     QString m_profile;

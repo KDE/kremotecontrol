@@ -35,20 +35,22 @@ class ProfileActionTemplate
 			  const Prototype &function,
 			  const QString &description,
 			  const QList<NewArgument> &arguments,
-			  const ProfileAction::ActionDestination,
+			  const NewProfileAction::ActionDestination,
 			  bool autostart,
-			  bool repeat);
+			  bool repeat,
+			  const QString &buttonID = QString());
 			  
     QString profile() const;
     QString templateID() const;
     QString appName() const;
     QString description() const;
     QList<NewArgument> defaultArguments() const;
-    ProfileAction::ActionDestination destination() const;
+    NewProfileAction::ActionDestination destination() const;
     bool autostart() const;
     bool repeat() const;
+    QString buttonName() const;
     
-    ProfileAction createAction(const Solid::Control::RemoteControlButton &button) const;
+    NewProfileAction *createAction(const Solid::Control::RemoteControlButton &button) const;
     
   protected:
     QString m_profile; // e.g. Multimedia
@@ -59,9 +61,10 @@ class ProfileActionTemplate
     Prototype m_function;
     QString m_description; // e.g. Amarok Music Player
     QList<NewArgument> m_defaultArguments;
-    ProfileAction::ActionDestination m_destination;
+    NewProfileAction::ActionDestination m_destination;
     bool m_autostart;
     bool m_repeat;
+    QString m_buttonName;
 
 };
 

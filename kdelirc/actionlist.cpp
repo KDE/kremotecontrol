@@ -24,50 +24,50 @@ ActionList::ActionList()
 
 }
 
-QList< Action > ActionList::allActions() const
+QList<Action*> ActionList::allActions() const
 {
   return m_actions;
 }
 
-QList< Action > ActionList::findActions(const QString& remote) const
+QList<Action*> ActionList::findActions(const QString& remote) const
 {
-  QList<Action> retList;
-  foreach(const Action &action, m_actions){
-    if(action.remote() == remote){
+  QList<Action*> retList;
+  foreach(Action *action, m_actions){
+    if(action->remote() == remote){
       retList.append(action);
     }
   }
   return retList;
 }
 
-QList< Action > ActionList::findActions(const QString& remote, const Mode& mode) const
+QList<Action*> ActionList::findActions(const QString& remote, const Mode& mode) const
 {
-  QList<Action> retList;
-  foreach(const Action &action, m_actions){
-    if(action.remote() == remote && action.mode() == mode){
+  QList<Action*> retList;
+  foreach(Action *action, m_actions){
+    if(action->remote() == remote && action->mode() == mode){
       retList.append(action);
     }
   }
   return retList;
 }
 
-QList< Action > ActionList::findActions(const QString& remote, const Mode& mode, const Solid::Control::RemoteControlButton& button) const
+QList<Action*> ActionList::findActions(const QString& remote, const Mode& mode, const Solid::Control::RemoteControlButton& button) const
 {
-  QList<Action> retList;
-  foreach(const Action &action, m_actions){
-    if(action.remote() == remote && action.mode() == mode && action.button().id() == button.id() && action.button().remoteName() == button.remoteName()){
+  QList<Action*> retList;
+  foreach(Action *action, m_actions){
+    if(action->remote() == remote && action->mode() == mode && action->button().id() == button.id() && action->button().remoteName() == button.remoteName()){
       retList.append(action);
     }
   }
   return retList;
 }
 
-void ActionList::addAction(const Action& action)
+void ActionList::addAction(Action *action)
 {
   m_actions.append(action);
 }
 
-void ActionList::remove(const Action& action)
+void ActionList::remove(Action* action)
 {
   for(int i = 0; i < m_actions.size(); i++){
     if(m_actions.at(i) == action){

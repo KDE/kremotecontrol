@@ -27,16 +27,16 @@ class ActionList
   public:
     ActionList();
     
-    QList<Action> allActions() const;
-    QList<Action> findActions(const QString &remote) const;
-    QList<Action> findActions(const QString &remote, const Mode &mode) const;
-    QList<Action> findActions(const QString &remote, const Mode &mode, const Solid::Control::RemoteControlButton &button) const;
+    QList<Action*> allActions() const;
+    QList<Action*> findActions(const QString &remote) const;
+    QList<Action*> findActions(const QString &remote, const Mode &mode) const;
+    QList<Action*> findActions(const QString &remote, const Mode &mode, const Solid::Control::RemoteControlButton &button) const;
     
-    void addAction(const Action &action);
-    void remove(const Action &action);
+    void addAction(Action *action);
+    void remove(Action *action);
     
   protected:
-    QList<Action> m_actions;
+    QList<Action*> m_actions;
 };
 
 #endif // ACTIONLIST_H

@@ -20,7 +20,7 @@
 #include "profileactiontemplate.h"
 
 
-ProfileActionTemplate::ProfileActionTemplate(const QString& profile, const QString& templateID, const QString& application, const QString& appName, const QString& node, const Prototype& function, const QString& description, const QList< NewArgument >& defaultArguments, ProfileAction::ActionDestination destination, bool autostart, bool repeat) {
+ProfileActionTemplate::ProfileActionTemplate(const QString& profile, const QString& templateID, const QString& application, const QString& appName, const QString& node, const Prototype& function, const QString& description, const QList< NewArgument >& defaultArguments, NewProfileAction::ActionDestination destination, bool autostart, bool repeat, const QString &buttonName) {
   m_profile = profile;
   m_templateID = templateID;
   m_application = application;
@@ -32,6 +32,7 @@ ProfileActionTemplate::ProfileActionTemplate(const QString& profile, const QStri
   m_description = destination;
   m_autostart = autostart;
   m_repeat = repeat;
+  m_buttonName = buttonName;
 }
 
 QString ProfileActionTemplate::profile() const
@@ -72,16 +73,25 @@ bool ProfileActionTemplate::repeat() const
   return m_repeat;
 }
 
-ProfileAction ProfileActionTemplate::createAction(const Solid::Control::RemoteControlButton& button) const
+QString ProfileActionTemplate::buttonName() const
 {
-  ProfileAction action(button, m_profile, m_templateID);
-  action.setApplication(m_application);
-  action.setNode(m_node);
-  action.setFunction(m_function);
-  action.setArguments(m_defaultArguments);
-  action.setDestination(m_destination);
-  action.setAutostart(m_autostart);
-  action.setRepeat(m_repeat);
+  return m_buttonName;
+}
+
+NewProfileAction *ProfileActionTemplate::createAction(const Solid::Control::RemoteControlButton& button) const
+{
+  NewProfileAction *action = new NewProfileAction(button, m_profile, m_templateID);
+  action->setApplication(m_application);
+  action->setNode(m_node);
+  action->setFunction(m_function);
+  QList<NewArgument> newArgs;
+  foreach(const NewArgument &arg, m_defaultArguments){
+    newArgs.append(NewArgument(arg.defaultValue()));
+  }
+  action->setArguments(newArgs);
+  action->setDestination(m_destination);
+  action->setAutostart(m_autostart);
+  action->setRepeat(m_repeat);
   return action;
 }
 

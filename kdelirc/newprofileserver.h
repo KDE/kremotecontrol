@@ -31,6 +31,8 @@ class NewProfileServer
     
     QList<NewProfile> allProfiles() const;
     
+    QList<ProfileActionTemplate> actionTemplateList(const QString &remote, const NewProfile &profile);
+    
   protected:
     static NewProfileServer *m_self;
     QList<NewProfile> m_allProfiles;

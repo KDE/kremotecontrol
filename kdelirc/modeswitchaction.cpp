@@ -29,8 +29,18 @@ bool ModeSwitchAction::executeActionsAfterSwitch() const{
   return m_executeActionsAfterSwitch;
 }
 
+void ModeSwitchAction::setExecuteActionsAfterSwitch(bool execute)
+{
+  m_executeActionsAfterSwitch = execute;
+}
+
 Mode ModeSwitchAction::newMode() const {
   return m_mode;
+}
+
+void ModeSwitchAction::setNewMode(const Mode& mode)
+{
+  m_mode = mode;
 }
 
 void ModeSwitchAction::operator=(const ModeSwitchAction& action) {
