@@ -30,13 +30,11 @@ class ModeSwitchAction : public Action
     ModeSwitchAction(const Solid::Control::RemoteControlButton &button);
     
     Mode newMode() const;
-    bool executeBefore() const;
-    bool executeAfter() const;
+    bool executeActionsAfterSwitch() const;
   
   protected:
     Mode m_mode;
-    bool m_executeBefore;
-    bool m_executeAfter;
+    bool m_executeActionsAfterSwitch;
     
 };
 

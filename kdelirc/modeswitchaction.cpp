@@ -25,10 +25,6 @@ ModeSwitchAction::ModeSwitchAction(const Solid::Control::RemoteControlButton &bu
 
 }
 
-bool ModeSwitchAction::executeBefore() const{
-  return m_executeBefore;
-}
-
-bool ModeSwitchAction::executeAfter() const{
-  return m_executeAfter;
+bool ModeSwitchAction::executeActionsAfterSwitch() const{
+  return m_executeActionsAfterSwitch;
 }
