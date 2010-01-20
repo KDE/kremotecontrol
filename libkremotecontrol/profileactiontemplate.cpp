@@ -20,7 +20,7 @@
 #include "profileactiontemplate.h"
 
 
-ProfileActionTemplate::ProfileActionTemplate(const QString& profile, const QString& templateID, const QString& application, const QString& appName, const QString& node, const Prototype& function, const QString& description, const QList< NewArgument >& defaultArguments, NewProfileAction::ActionDestination destination, bool autostart, bool repeat, const QString &buttonName) {
+ProfileActionTemplate::ProfileActionTemplate(const QString& profile, const QString& templateID, const QString& application, const QString& appName, const QString& node, const QString& function, const QString& description, const QList< NewArgument >& defaultArguments, NewProfileAction::ActionDestination destination, bool autostart, bool repeat, const QString &buttonName) {
   m_profile = profile;
   m_templateID = templateID;
   m_application = application;

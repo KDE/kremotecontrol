@@ -131,7 +131,7 @@ KDE_EXPORT QStringList DBusInterface::getObjects(const QString &program) {
     return returnList;
 }
 
-KDE_EXPORT QList<Prototype> DBusInterface::getFunctions(const QString &program, const QString &object) {
+KDE_EXPORT QStringList DBusInterface::getFunctions(const QString &program, const QString &object) {
     QDBusInterface dBusIface(program, '/' + object, "org.freedesktop.DBus.Introspectable");
     QDBusReply<QString> response = dBusIface.call("Introspect");
 
@@ -221,11 +221,7 @@ KDE_EXPORT QList<Prototype> DBusInterface::getFunctions(const QString &program, 
         }
         child = child.nextSiblingElement();
     }
-    QList<Prototype> ret;
-    foreach(const QString &tmp, funcList) {
-        ret.append(Prototype(tmp));
-    }
-    return ret;
+    return funcList;
 }
 
 KDE_EXPORT QStringList DBusInterface::getRemotes() {
@@ -403,7 +399,7 @@ void DBusInterface::executeAction(const DBusAction* action) {
       kDebug() << "runCommand" << runCommand;
       KToolInvocation::startServiceByDesktopName(runCommand);
     }
-    if (action->function().name().isEmpty()) // Just start
+    if (action->function().isEmpty()) // Just start
         return;
 
     if (!searchForProgram(action, programs)) {
@@ -415,10 +411,10 @@ void DBusInterface::executeAction(const DBusAction* action) {
         const QString &program = *i;
         kDebug() << "Searching DBus for program:" << program;
         if (dBusIface->isServiceRegistered(program)) {
-            kDebug() << "Sending data (" << program << ", " << '/' + action->node() << ", " << action->function().prototypeNR();
+            kDebug() << "Sending data (" << program << ", " << '/' + action->node() << ", " << action->function();
 
             QDBusMessage m = QDBusMessage::createMethodCall(program, '/'
-                             + action->node(), "", action->function().prototypeNR());
+                             + action->node(), "", action->function());
 
             foreach(const NewArgument &arg, action->arguments()){
                 kDebug() << "Got argument:" << arg.value().type() << "value" << arg.value();

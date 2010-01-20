@@ -33,7 +33,7 @@ class KREMOTECONTROL_EXPORT ProfileActionTemplate
 			  const QString &application,
 			  const QString &appName,
 			  const QString &node,
-			  const Prototype &function,
+			  const QString &function,
 			  const QString &description,
 			  const QList<NewArgument> &arguments,
 			  const NewProfileAction::ActionDestination,
@@ -61,7 +61,7 @@ class KREMOTECONTROL_EXPORT ProfileActionTemplate
     QString m_application; // e.g. org.kde.amarok
     QString m_node; // e.g. Player
     QString m_appName; // e.g. Amarok
-    Prototype m_function;
+    QString m_function; // play
     QString m_description; // e.g. Amarok Music Player
     QList<NewArgument> m_defaultArguments;
     NewProfileAction::ActionDestination m_destination;

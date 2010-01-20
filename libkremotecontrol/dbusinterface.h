@@ -27,7 +27,6 @@
 #ifndef DBUSINTERFACE_H
 #define DBUSINTERFACE_H
 
-#include "prototype.h"
 #include "dbusaction.h"
 #include <QStringList>
 
@@ -51,7 +50,7 @@ public:
 
   QStringList getRegisteredPrograms();
   QStringList getObjects(const QString &program);
-  QList<Prototype> getFunctions(const QString &program, const QString &object);
+  QStringList getFunctions(const QString &program, const QString &object);
 
   QStringList getRemotes();
   void requestNextKeyPress();

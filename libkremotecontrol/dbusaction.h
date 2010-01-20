@@ -21,7 +21,6 @@
 #define DBUSACTION_H
 
 #include "action.h"
-#include "prototype.h"
 #include "newargument.h"
 #include "kremotecontrol_export.h"
 
@@ -42,8 +41,8 @@ class KREMOTECONTROL_EXPORT DBusAction : public Action
     QString node() const;
     void setNode(const QString &node);
     
-    Prototype function() const;
-    void setFunction(const Prototype &function);
+    QString function() const;
+    void setFunction(const QString &function);
     
     QList<NewArgument> arguments() const;
     void setArguments(const QList<NewArgument> &arguments);
@@ -61,8 +60,9 @@ class KREMOTECONTROL_EXPORT DBusAction : public Action
     virtual bool operator==(const DBusAction &action) const;
     
   protected:
-    QString m_application, m_node;
-    Prototype m_function;
+    QString m_application;
+    QString m_node;
+    QString m_function;
     QList<NewArgument> m_arguments;
     bool m_repeat, m_autostart;
     ActionDestination m_destination;

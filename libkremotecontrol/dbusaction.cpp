@@ -42,11 +42,11 @@ void DBusAction::setNode(const QString& node)
   m_node = node;
 }
 
-Prototype DBusAction::function() const{
+QString DBusAction::function() const{
   return m_function;
 }
 
-void DBusAction::setFunction(const Prototype& function)
+void DBusAction::setFunction(const QString& function)
 {
   m_function = function;
 }

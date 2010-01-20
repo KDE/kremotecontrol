@@ -22,7 +22,6 @@ set(libkremotecontrol_LIB_SRCS
    mode.cpp
    modelist.cpp
    dbusactionexecutor.cpp
-   prototype.cpp 
    dbusinterface.cpp
 )
 
