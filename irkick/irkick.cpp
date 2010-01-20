@@ -103,7 +103,7 @@ void IRKick::generateDemoActions() {
 
 // this is some test and sample code for the new Action/Profile framework
 // create a new  ProfileActionTemplate
-  NewProfile profile("testprofile");
+  NewProfile profile("testprofile", "author1", "This is a simple testprofile");
   Prototype prototype("void toggleDashboard()");
   QList<NewArgument> argumentList;
   QVariant parameter(QVariant::Bool);

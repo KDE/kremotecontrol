@@ -59,7 +59,7 @@ NewProfile NewProfileServer::profile(const QString& profileName) {
     }
   }
   kDebug() << "Warning: profile" << profileName << "not found. Creating empty one.";
-  return NewProfile(profileName);
+  return NewProfile(profileName, "");
 }
 
 QList< ProfileActionTemplate > KREMOTECONTROL_EXPORT NewProfileServer::actionTemplateList(const QString& remote, const NewProfile& profile) {

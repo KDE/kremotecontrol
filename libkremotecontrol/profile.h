@@ -26,15 +26,19 @@
 class KREMOTECONTROL_EXPORT NewProfile
 {
   public:
-    NewProfile(const QString &name);
+    NewProfile(const QString &name, const QString &author, const QString &description = QString());
     
     QString name() const;
+    QString author() const;
+    QString description() const;
     QList<ProfileActionTemplate> actionTemplates() const;
     ProfileActionTemplate actionTemplate(const QString &templateID) const;
     void addTemplate(const ProfileActionTemplate &actionTemplate);
     
   protected:
     QString m_name;
+    QString m_author;
+    QString m_description;
     QList<ProfileActionTemplate> m_actionTemplates;
 };
 

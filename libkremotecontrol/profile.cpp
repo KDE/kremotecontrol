@@ -19,8 +19,10 @@
 
 #include "profile.h"
 
-NewProfile::NewProfile(const QString &name) {
+NewProfile::NewProfile(const QString &name, const QString &author, const QString &description) {
   m_name = name;
+  m_author = author;
+  m_description = description;
 }
 
 QString NewProfile::name() const
