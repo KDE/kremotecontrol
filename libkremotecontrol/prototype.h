@@ -17,35 +17,21 @@
 
 */
 
-#include "modelist.h"
+#ifndef PROTOTYPE_H
+#define PROTOTYPE_H
+#include "newargument.h"
 
-ModeList::ModeList() {
+class Prototype
+{
+  public:
+    Prototype(const QString &name, QList<NewArgument> args);
+    
+    QString name() const;
+    QList<NewArgument> args() const;
+    
+  private:
+    QString m_name;
+    QList<NewArgument> m_args;
+};
 
-}
-
-void ModeList::loadFromConfig(const KConfig& config) {
-  // load configured modes here with append(mode)
-  
-}
-
-void ModeList::saveToConfig(const KConfig& config) {
-  for(ModeList::iterator i = begin(); i != end(); ++i){
-    // save (*i) into config
-  }
-}
-
-ModeList ModeList::findModes(const QString& remote) {
-  ModeList retList;
-  for(ModeList::iterator i = begin(); i != end(); ++i){
-    if((*i).remote() == remote){
-      retList.append(*i);
-    }
-  }
-}
-
-Mode ModeList::defaultMode(const QString& remote) {
-  if(m_defaultModes.contains(remote)){
-    return m_defaultModes.value(remote);
-  }
-  return Mode("", remote);
-}
+#endif // PROTOTYPE_H

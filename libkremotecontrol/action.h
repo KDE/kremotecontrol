@@ -52,4 +52,6 @@ class KREMOTECONTROL_EXPORT Action: public QObject
     
 };
 
+Q_DECLARE_METATYPE(Action*)
+
 #endif // ACTION_H

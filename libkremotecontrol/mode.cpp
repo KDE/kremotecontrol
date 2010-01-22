@@ -23,19 +23,14 @@ Mode::Mode() {
 
 }
 
-Mode::Mode(const QString &name, const QString &remote, const QString &iconName)
+Mode::Mode(const QString &name, const QString &iconName)
 {
   m_name = name;
-  m_remote = remote;
   m_iconName = iconName;
 }
 
 QString Mode::name() const {
   return m_name;
-}
-
-QString Mode::remote() const {
-  return m_remote;
 }
 
 QString Mode::iconName() const {
@@ -46,15 +41,11 @@ void Mode::setName(const QString& name) {
   m_name = name;
 }
 
-void Mode::setRemote(const QString& remote) {
-  m_remote = remote;
-}
-
 void Mode::setIconName(const QString& iconName)
 {
   m_iconName = iconName;
 }
 
 bool Mode::operator==(const Mode& mode) const {
-  return m_name == mode.name() && m_remote == mode.remote() && m_iconName == mode.iconName();
+  return m_name == mode.name() && m_iconName == mode.iconName();
 }

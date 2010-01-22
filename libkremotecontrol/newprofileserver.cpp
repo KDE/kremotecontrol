@@ -24,7 +24,6 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include "modeswitchaction.h"
-#include "actionlist.h"
 #include "executionengine.h"
 
 class NewProfileServerPrivate

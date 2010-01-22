@@ -8,19 +8,19 @@ include_directories(
 
 
 set(libkremotecontrol_LIB_SRCS
+   remote.cpp
+   mode.cpp
    action.cpp
+   prototype.cpp
+   newargument.cpp
    dbusaction.cpp
    modeswitchaction.cpp
    profileaction.cpp
    profileactiontemplate.cpp
    profile.cpp
    newprofileserver.cpp
-   newargument.cpp
-   actionlist.cpp
    executionengine.cpp
    actionexecutor.cpp
-   mode.cpp
-   modelist.cpp
    dbusactionexecutor.cpp
    dbusinterface.cpp
 )

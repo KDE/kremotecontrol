@@ -1,5 +1,6 @@
 /*
-    Copyright (C) 2010  Michael Zanetti <michael_zanetti@gmx.net>
+    <one line to give the program's name and a brief idea of what it does.>
+    Copyright (C) <year>  <name of author>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,29 +18,27 @@
 
 */
 
-#ifndef MODELIST_H
-#define MODELIST_H
+#ifndef REMOTE_H
+#define REMOTE_H
 
 #include "mode.h"
-#include "kremotecontrol_export.h"
 
-#include <kconfig.h>
+#include <solid/control/remotecontrol.h>
 
-#include <QMap>
-
-class KREMOTECONTROL_EXPORT ModeList: public QList<Mode>
+class Remote
 {
   public:
-    ModeList();
-    
-    void loadFromConfig(const KConfig &config);
-    void saveToConfig(const KConfig &config);
-    
-    ModeList findModes(const QString &remote);
-    Mode defaultMode(const QString &remote);
+    Remote();
+  
+    Solid::Control::RemoteControl remote();
+    QList<Mode> allModes() const;
+    Mode defaultMode() const;
     
   private:
-    QMap<QString, Mode> m_defaultModes;
+    Solid::Control::RemoteControl m_remote();
+    QList<Mode> m_modeList;
+    QString m_defaultModeName;
+    
 };
 
-#endif // MODELIST_H
+#endif // REMOTE_H

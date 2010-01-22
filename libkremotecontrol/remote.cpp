@@ -1,5 +1,6 @@
 /*
-    Copyright (C) 2010  Michael Zanetti <michael_zanetti@gmx.net>
+    <one line to give the program's name and a brief idea of what it does.>
+    Copyright (C) <year>  <name of author>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,36 +18,5 @@
 
 */
 
-#ifndef MODE_H
-#define MODE_H
+#include "remote.h"
 
-#include "kremotecontrol_export.h"
-
-#include <QString>
-#include <qmetatype.h>
-
-class Action;
-
-class KREMOTECONTROL_EXPORT Mode
-{
-  public:
-    Mode();
-    Mode(const QString &name, const QString &iconName = QString());
-    
-    QString name() const;
-    QString iconName() const;
-    
-    void setName(const QString &name);
-    void setIconName(const QString &iconName);
-
-    bool operator==(const Mode &mode) const;
-    
-  protected:
-    QString m_name;
-    QString m_iconName;
-    QList<Action*> m_actionList;
-};
-
-Q_DECLARE_METATYPE(Mode)
-
-#endif

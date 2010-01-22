@@ -1,5 +1,6 @@
 /*
-    Copyright (C) 2010  Michael Zanetti <michael_zanetti@gmx.net>
+    <one line to give the program's name and a brief idea of what it does.>
+    Copyright (C) <year>  <name of author>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,25 +18,17 @@
 
 */
 
-#ifndef ACTIONLIST_H
-#define ACTIONLIST_H
+#include "prototype.h"
 
-#include "action.h"
-#include "kremotecontrol_export.h"
+Prototype::Prototype(const QString& name, QList< NewArgument > args) {
+  m_name = name;
+  m_args = args;
+}
 
-#include <kconfig.h>
+QString Prototype::name() const {
+  return m_name;
+}
 
-class KREMOTECONTROL_EXPORT ActionList: public QList<Action*>
-{
-  public:
-    ActionList();
-    
-    void loadFromConfig(const KConfig &config);
-    void saveToConfig(const KConfig &config);
-    
-    ActionList findActions(const QString &remote);
-    ActionList findActions(const Mode &mode);
-    ActionList findActions(const Mode &mode, const Solid::Control::RemoteControlButton &button);
-};
-
-#endif // ACTIONLIST_H
+QList< NewArgument > Prototype::args() const {
+  return m_args;
+}
