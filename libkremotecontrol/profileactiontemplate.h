@@ -34,11 +34,11 @@ class KREMOTECONTROL_EXPORT ProfileActionTemplate
 			  const QString &appName,
 			  const QString &node,
 			  const QString &function,
-			  const QString &description,
 			  const QList<NewArgument> &arguments,
 			  const NewProfileAction::ActionDestination,
 			  bool autostart,
 			  bool repeat,
+			  const QString &description = QString(),
 			  const QString &buttonName = QString());
 			  
     ProfileActionTemplate() {};
@@ -57,7 +57,7 @@ class KREMOTECONTROL_EXPORT ProfileActionTemplate
     
   protected:
     QString m_profile; // e.g. Multimedia
-    QString m_templateID; // e.g. ??? define in profile.xml or autogenerate in readFromConfig?
+    QString m_templateID; // e.g. multimedia-amarok-1
     QString m_application; // e.g. org.kde.amarok
     QString m_node; // e.g. Player
     QString m_appName; // e.g. Amarok
