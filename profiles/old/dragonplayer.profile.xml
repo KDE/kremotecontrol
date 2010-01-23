@@ -3,7 +3,7 @@
 <profile id="dragonplayer" servicename="org.mpris.dragonplayer">
     <name>Dragon Player</name>
     <author>Gioacchino Mazzurco [gmazzurco89@gmail.com]</author>
-    <instances unique="0" ifmulti="sendtoone"/>
+    <instances unique="0" ifmulti="sendtotop"/>
 
     <!-- Playback actions -->
     <action objid="Player" prototype="void Play()" button="Play">
