@@ -20,7 +20,7 @@
         <name>Last</name>
         <comment>Goes to the last page</comment>
     </action>
-    <action objid="okular" prototype="void slotTogglePresentation()" repeat="0" autostart="0" class="PlayPause">
+    <action objid="okular" prototype="void slotTogglePresentation()" repeat="0" autostart="0" button="PlayPause">
         <name>Presentation</name>
         <comment>Starts/stops presentation</comment>
     </action>
