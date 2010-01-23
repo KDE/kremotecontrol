@@ -19,13 +19,14 @@
 
 #include "newprofileserver.h"
 #include "profileactiontemplate.h"
-
-
-#include <kdebug.h>
-#include <kglobal.h>
 #include "modeswitchaction.h"
 #include "executionengine.h"
 #include "dbusaction.h"
+
+#include <kdebug.h>
+#include <kglobal.h>
+
+
 #include <QXmlSchemaValidator>
 #include <QXmlSchema>
 #include <kstandarddirs.h>
@@ -54,11 +55,28 @@ K_GLOBAL_STATIC(NewProfileServerPrivate, instance)
 NewProfileServerPrivate::NewProfileServerPrivate()
 {
   NewProfileServer::ProfileXmlContentHandler *handler = new NewProfileServer::ProfileXmlContentHandler(QUrl::fromLocalFile(KGlobal::dirs()->findResource("data","profiles/profile.xsd")));
-  handler->loadProfilesFromFiles(KGlobal::dirs()->findAllResources("data", "profiles/*.profile.xml"));
+  foreach(const NewProfile &profile, handler->loadProfilesFromFiles(KGlobal::dirs()->findAllResources("data", "profiles/*.profile.xml"))){
+    NewProfileServer::addProfile(profile);
+  }
 }
 
 KDE_EXPORT void NewProfileServer::addProfile(const NewProfile& profile) {
-  instance->m_allProfiles.append(profile);
+  for(int i =0; i< instance->m_allProfiles.size(); i++){
+    NewProfile tProfile = instance->m_allProfiles.at(i);
+   
+    if(profile.profileId() == tProfile.profileId()){
+      if( 1 ==  profile.compareVersion(tProfile)){
+	// new profileversion is greater as current -> replace
+	instance->m_allProfiles.replace(i, profile);
+	return;
+      }else {
+	// in this case keep profile (first come first served...)
+	return;
+      }
+    }
+    //Profile is no in list. Append
+    instance->m_allProfiles.append(profile);
+  }
 }
 
 KDE_EXPORT QList< NewProfile > NewProfileServer::allProfiles() {
@@ -72,7 +90,7 @@ KDE_EXPORT NewProfile NewProfileServer::profile(const QString& profileName) {
     }
   }
   kDebug() << "Warning: profile" << profileName << "not found. Creating empty one.";
-  return NewProfile(profileName, "0.1", "");
+  return NewProfile("id", profileName, "0.0", "");
 }
 
  QList< ProfileActionTemplate > KREMOTECONTROL_EXPORT NewProfileServer::actionTemplateList(const QString& remote, const NewProfile& profile) {

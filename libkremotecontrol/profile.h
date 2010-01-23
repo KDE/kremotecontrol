@@ -25,23 +25,43 @@
 
 class KREMOTECONTROL_EXPORT NewProfile
 {
+
+
+  private:
+    class ProfileVersion {
+
+      private:
+	int m_major;
+	int m_minor;
+
+      public:
+	ProfileVersion(){};
+	ProfileVersion(const QString &version);
+	const int operator==(const ProfileVersion &other) const;
+	QString toString() const;
+    };
+  
   public:
-    NewProfile(const QString &name, const QString &version, const QString &author, const QString &description = QString());
+    NewProfile(const QString &profileId, const QString &name, const QString &version, const QString &author, const QString &description = QString());
     NewProfile(){};
     QString name() const;
     QString author() const;
     QString version() const;
     QString description() const;
+    QString profileId() const;
     QList<ProfileActionTemplate> actionTemplates() const;
-    ProfileActionTemplate actionTemplate(const QString &templateID) const;
+    ProfileActionTemplate actionTemplate(const QString& actionTemplateID) const;
     void addTemplate(const ProfileActionTemplate &actionTemplate);
+    int compareVersion(const NewProfile& other) const;
     
   protected:
+    QString m_profileId;
     QString m_name;
-    QString m_version;
+    ProfileVersion m_version;
     QString m_author;
     QString m_description;
     QList<ProfileActionTemplate> m_actionTemplates;
+
 };
 
 #endif // PROFILE_H
