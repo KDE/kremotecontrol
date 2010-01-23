@@ -18,39 +18,23 @@
 */
 
 
-#include "kdelirctest.h"
-#include "profiletest.h"
+#ifndef KDELIRCTEST_H
+#define KDELIRCTEST_H
 
-#include <QtTest>
-#include <QtCore>
-#include <kdebug.h>
+#include <QObject>
 
-
-
-void KdelLircTest::cleanup()
-{
-
-}
-
-
-void KdelLircTest::runAll()
+class KdelLircTest : public QObject
 {
   
-}
+ Q_OBJECT
+  
+  public:
+    void setup();
+    void runAll();
+    void cleanup();
+  
+    //tests
+  void testActionDelegator();  
 
-
-void KdelLircTest::setup()
-{
-
-}
-
-int main()
-{
-
-   // KdelLircTest test;
-    //test.runAll();
-    ProfileTest profiletest;
-    profiletest.testVersion();
-    kDebug() <<"All tests OK.";
-    return 0;
-}
+};
+#endif // KDELIRCTEST_H
