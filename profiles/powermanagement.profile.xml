@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<profile xmlns="urn:org-kde-kremotecontrol" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="urn:org-kde-kremotecontrol file:profile.xsd">
+    <name>Power management</name>
+    <version>0.1</version>
+    <author>Michael Zanetti</author>
+    <description>Shutdown, suspend or reboot</description>
+    <action id="suspend2Ram">
+        <name>To RAM</name>
+        <description>Suspends your computer to RAM</description>
+        <prototype>
+            <serviceName>org.kde.klauncher</serviceName>
+            <node>KLauncher</node>
+            <function>void kdeinit_exec(QString, QStringList, QStringList, QString)</function>
+            <arguments>
+                <argument type="QString">
+                    <comment>System command to use for suspend</comment>
+                    <default>solid-powermanagement</default>
+                </argument>
+                <argument type="QStringList">
+                    <comment>Parameters for the suspend commands</comment>
+                    <default>suspend,to_ram</default>
+                </argument>
+                <argument type="QStringList">
+                    <comment>Environment variables</comment>
+                </argument>
+                <argument type="QString">
+                    <comment>Startup ID</comment>
+                </argument>
+            </arguments>
+
+        </prototype>
+    </action>
+    <action id="suspend2Disk">
+        <name>To disk</name>
+        <description>Suspends your computer disk (hibernate)</description>
+        <prototype>
+            <serviceName>org.kde.klauncher</serviceName>
+            <node>KLauncher</node>
+            <function>void kdeinit_exec_wait(QString, QStringList, QStringList, QString)</function>
+            <arguments>
+                <argument type="QString">
+                    <comment>System command to use for suspend</comment>
+                    <default>solid-powermanagement</default>
+                </argument>
+                <argument type="QStringList">
+                    <comment>Parameters for the suspend commands</comment>
+                    <default>suspend,to_disk</default>
+                </argument>
+                <argument type="QStringList">
+                    <comment>Environment variables</comment>
+                </argument>
+                <argument type="QString">
+                    <comment>Startup ID</comment>
+                </argument>
+            </arguments>
+        </prototype>
+    </action>
+    
+    <action id="logout">
+        <name>logout</name>
+        <description>Logout and shutdown or reboot your computer</description>
+        <prototype>                       
+            <serviceName>org.kde.ksmserver</serviceName>
+            <node>KSMServer</node>
+            <function>void logout(int, int, int)</function>
+            <arguments>
+                <argument type="int">
+                    <comment>Ask for confirmation? 1 = No, 2 = Yes</comment>
+                    <default>2</default>
+                </argument>
+                <argument type="int">
+                    <comment>Shutdown? 1 = Reboot, 2 = Halt, 3 = Logout</comment>
+                    <default>2</default>
+                </argument>
+                <argument type="int">
+                    <comment>When? 0 = When ready, 1 = Try now, 2 = Force now, 3 = Interactive</comment>
+                    <default>2</default>
+                </argument>
+            </arguments>
+        </prototype>
+    </action>
+</profile>

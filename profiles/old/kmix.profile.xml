@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<!DOCTYPE profile SYSTEM "profile.dtd">
+<profile id="kmix" servicename="org.kde.kmix">
+    <name>Sound Mixer</name>
+    <author>Michael Zanetti</author>
+    <instances unique="1"/>
+    <action objid="Mixer0" prototype="void increaseVolume(QString)" repeat="1" button="VolumeUp">
+        <name>Increase Volume</name>
+        <comment></comment>
+        <argument type="QString">
+            <comment>The name of the slider you want to move and its index separated by a colon (eg. Master:0)</comment>
+            <default>Master:0</default>
+        </argument>
+    </action>
+    <action objid="Mixer0" prototype="void decreaseVolume(QString)" repeat="1" button="VolumeDown">
+        <name>Decrease Volume</name>
+        <comment></comment>
+        <argument type="QString">
+            <comment>The name of the slider you want to move and its index separated by a colon (eg. Master:0)</comment>
+            <default>Master:0</default>
+        </argument>
+    </action>
+    <action objid="Mixer0" prototype="void toggleMute(QString)" button="Mute">
+        <name>Toggle Mute</name>
+        <comment></comment>
+        <argument type="QString">
+            <comment>The name of the slider you want to mute and its index separated by a colon (eg. Master:0)</comment>
+            <default>Master:0</default>
+        </argument>
+    </action>
+</profile>

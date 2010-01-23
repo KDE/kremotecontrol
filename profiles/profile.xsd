@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+*************************************************************************
+* Copyright: (C) 2010 Frank Scheffold <fscheffold@googlemail.com>       *
+*                                                                       *
+* This program is free software; you can redistribute it and/or         *
+* modify it under the terms of the GNU General Public License as        *
+* published by the Free Software Foundation; either version 2 of        *
+* the License or (at your option) version 3 or any later version        *
+* accepted by the membership of KDE e.V. (or its successor approved     *
+* by the membership of KDE e.V.), which shall act as a proxy            *
+* defined in Section 14 of version 3 of the license.                    *
+*                                                                       *
+* This program is distributed in the hope that it will be useful,       *
+* but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+* GNU General Public License for more details.                          *
+*                                                                       *
+* You should have received a copy of the GNU General Public License     *
+* along with this program.  If not, see <http://www.gnu.org/licenses/>. *
+*************************************************************************
+
+  Created on:   09.01.2009
+  Author:       Frank Scheffold
+
+-->
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ps="urn:org-kde-kremotecontrol"
+  targetNamespace="urn:org-kde-kremotecontrol" elementFormDefault="qualified">
+
+
+  <xs:element name="profile" type="ps:profile">
+    <xs:unique name="buttonId">
+      <xs:selector xpath="ps:action"/>
+      <xs:field xpath="@button"/>
+    </xs:unique>
+    <xs:unique name="actionId">
+      <xs:selector xpath="ps:action"/>
+      <xs:field xpath="@id"/>
+    </xs:unique>
+  </xs:element>
+
+
+  <xs:complexType name="profile">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string"/>
+      <xs:element name="version">
+        <xs:simpleType>          
+          <xs:restriction base="xs:string">
+            <xs:pattern value="[0-9]+\.[0-9]+(-[0-9]+){0,1}"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="author" type="xs:string"/>
+      <xs:element name="description" type="xs:string" minOccurs="0"/>
+      <xs:element name="action" type="ps:action" minOccurs="1" maxOccurs="unbounded"
+      > </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+
+  <xs:complexType name="action">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string"/>
+      <xs:element name="description" type="xs:string" minOccurs="0"/>
+      <xs:element name="prototype" type="ps:prototype"/>
+      <xs:element name="ifmulti" type="ps:ifmulti" default="dontsend" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation> TODO: Document me! </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" use="required"/>
+    <xs:attribute name="button" type="ps:button" use="optional"/>
+    <xs:attribute name="start" type="xs:boolean" use="optional"/>
+    <xs:attribute name="repeat" type="xs:boolean" use="optional"/>
+  </xs:complexType>
+
+
+
+  <xs:complexType name="prototype">
+    <xs:sequence>
+      <xs:element name="serviceName" type="xs:string"/>
+      <xs:element name="node" type="xs:string"/>
+      <xs:element name="function" type="xs:string"/>  
+      <xs:element name="return" type="xs:string" default="void" minOccurs="0"/>
+      <xs:element name="arguments" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>            
+            <xs:element name="argument" type="ps:argument" minOccurs="1" maxOccurs="unbounded"/>                        
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  
+  <xs:complexType name="argument">
+    <xs:sequence>
+      <xs:element name="comment" type="xs:string" minOccurs="0"/>
+      <xs:element name="default" type="xs:string" minOccurs="0"></xs:element>
+    </xs:sequence>
+    <xs:attribute name="type" type="ps:argument.type" use="required"/>
+  </xs:complexType>
+
+  <xs:simpleType name="argument.type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="int"/>
+      <xs:enumeration value="uint"/>
+      <xs:enumeration value="QString"/>
+      <xs:enumeration value="QCString"/>
+      <xs:enumeration value="QStringList"/>
+      <xs:enumeration value="bool"/>
+      <xs:enumeration value="double"/>
+      <xs:enumeration value="QByteArray"/>      
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="ifmulti">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="sendtotop"/>
+      <xs:enumeration value="sendtobottom"/>
+      <xs:enumeration value="sendtoall"/>
+      <xs:enumeration value="dontsend"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+
+  <xs:simpleType name="button">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Number0"/>
+      <xs:enumeration value="Number1"/>
+      <xs:enumeration value="Number2"/>
+      <xs:enumeration value="Number3"/>
+      <xs:enumeration value="Number4"/>
+      <xs:enumeration value="Number5"/>
+      <xs:enumeration value="Number6"/>
+      <xs:enumeration value="Number7"/>
+      <xs:enumeration value="Number8"/>
+      <xs:enumeration value="Number9"/>
+      <xs:enumeration value="Play"/>
+      <xs:enumeration value="Pause"/>
+      <xs:enumeration value="PlayPause"/>
+      <xs:enumeration value="Stop"/>
+      <xs:enumeration value="SkipForward"/>
+      <xs:enumeration value="SkipBackward"/>
+      <xs:enumeration value="FastForward"/>
+      <xs:enumeration value="Rewind"/>
+      <xs:enumeration value="ChannelDown"/>
+      <xs:enumeration value="ChannelUp"/>
+      <xs:enumeration value="VolumeDown"/>
+      <xs:enumeration value="VolumeUp"/>
+      <xs:enumeration value="Mute"/>
+      <xs:enumeration value="Info"/>
+      <xs:enumeration value="Eject"/>
+      <xs:enumeration value="Power"/>
+      <xs:enumeration value="Up"/>
+      <xs:enumeration value="Down"/>
+      <xs:enumeration value="Left"/>
+      <xs:enumeration value="Right"/>
+      <xs:enumeration value="Select"/>
+      <xs:enumeration value="Back"/>
+      <xs:enumeration value="Menu"/>
+      <xs:enumeration value="Aux"/>
+      <xs:enumeration value="CD"/>
+      <xs:enumeration value="DVD"/>
+      <xs:enumeration value="EPG"/>
+      <xs:enumeration value="Favorites"/>
+      <xs:enumeration value="Help"/>
+      <xs:enumeration value="Home"/>
+      <xs:enumeration value="Music"/>
+      <xs:enumeration value="Text"/>
+      <xs:enumeration value="TV"/>
+      <xs:enumeration value="Blue"/>
+      <xs:enumeration value="Green"/>
+      <xs:enumeration value="Red"/>
+      <xs:enumeration value="Yellow "/>
+    </xs:restriction>
+  </xs:simpleType>
+
+</xs:schema>

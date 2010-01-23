@@ -1,18 +1,39 @@
 <?xml version="1.0"?>
-<!DOCTYPE profile SYSTEM "profile.dtd">
 
-<profile id="konqueror" servicename="org.kde.konqueror">
+<profile xmlns="urn:org-kde-kremotecontrol" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="urn:org-kde-kremotecontrol file:profile.xsd">
 	<name>Konqueror</name>
+	<version>0.1</version>
 	<author>Gav Wood</author>
-	<instances unique="0" ifmulti="sendtotop"/>
-	<action objid="KonqMain" prototype="void openBrowserWindow(QString, QByteArray)" repeat="0" autostart="0">
+	
+	<action id="newWindow">
 		<name>Create New Window</name>
-		<comment>Creates a new window and loads an arbitrary URL.</comment>
-		<argument type="QString"><comment>The URL to load in the window initially.</comment></argument>
-		<argument type="QByteArray"><comment>Startup Id</comment></argument>
+		<description>Creates a new window and loads an arbitrary URL.</description>
+		
+		<prototype>
+			<serviceName>org.kde.konqueror</serviceName>
+			<node>KonqMain</node>			
+			<function>openBrowserWindow</function>
+			<arguments>
+				<argument type="QString">
+					<comment>The URL to load in the window initially.</comment>
+				</argument>
+				<argument type="QByteArray">
+					<comment>Startup Id</comment>
+					</argument>
+			</arguments>			
+		</prototype>
+		<ifmulti>sendtotop</ifmulti>
 	</action>
-	<action objid="MainApplication" prototype="void quit()" repeat="0" autostart="0">
+	
+	<action id="quit">
 		<name>Quit</name>
-		<comment>Closes the Konqueror window.</comment>
+		<description>Closes the Konqueror window.</description>
+		<prototype>
+			<serviceName>org.kde.konqueror</serviceName>
+			<node>MainApplication</node>
+			<function>quit</function>
+		</prototype>
+		<ifmulti>sendtotop</ifmulti>
 	</action>
 </profile>

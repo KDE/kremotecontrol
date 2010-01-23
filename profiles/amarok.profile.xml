@@ -1,45 +1,86 @@
 <?xml version="1.0" ?>
-<!DOCTYPE profile SYSTEM "profile.dtd">
-<profile id="amarok" servicename="org.mpris.amarok">
-    <name>Amarok</name>
-    <author>Dirk Ziegelmeier</author>
-    <instances unique="1"/>
 
+<profile xmlns="urn:org-kde-kremotecontrol" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="urn:org-kde-kremotecontrol file:profile.xsd">
+ 
+    <name>Amarok</name>
+    <version>0.1</version>
+    <author>Dirk Ziegelmeier</author>
+    
     <!-- Playback actions -->
-    <action objid="Player" prototype="void Play()" button="Play">
+    
+    <action id="play" button="Play">
         <name>Start playing</name>
-        <comment></comment>
+        <prototype>
+            <serviceName>org.mpris.amarok</serviceName>
+            <node>Player</node>
+            <function>Play</function>
+        </prototype>
     </action>
-    <action objid="Player" prototype="void Stop()" button="Stop">
-        <name>Stop playing</name>
-        <comment></comment>
+    
+    <action id="stop" button="Stop">
+        <name>Start playing</name>
+        <prototype>
+            <serviceName>org.mpris.amarok</serviceName>
+            <node>Player</node>
+            <function>Stop</function>
+        </prototype>
     </action>
-    <action objid="Player" prototype="void Pause()" button="PlayPause">
+    
+    <action id="pause" button="Pause" repeat="true">
         <name>Pause playing</name>
-        <comment></comment>
+        <prototype>
+            <serviceName>org.mpris.amarok</serviceName>
+            <node>Pause</node>
+            <function>Pause</function>
+        </prototype>
     </action>
-    <action objid="Player" prototype="void Next()" button="SkipForward">
+    
+    <action id="skipForward" button="SkipForward" repeat="true">
         <name>Advance to next track</name>
-        <comment></comment>
+        <prototype>
+            <serviceName>org.mpris.amarok</serviceName>
+            <node>Player</node>
+            <function>Next</function>
+        </prototype>
     </action>
-    <action objid="Player" prototype="void Prev()"  button ="SkipBackward">
+    
+    <action id="skipBackWard" button="SkipBackward" repeat="true">
         <name>Go to previous track</name>
-        <comment></comment>
+        <prototype>
+            <serviceName>org.mpris.amarok</serviceName>
+            <node>Player</node>
+            <function>Prev</function>
+        </prototype>
     </action>
-    <action objid="Player" prototype="void Forward(int)" button="Forward">
+   
+    <action id="fastForward" button="FastForward" repeat="true">
         <name>Fast Forward</name>
-        <argument type="int">
-            <comment>Amount to fast forward in ms</comment>
-            <default>10000</default>
-        </argument>
-        <comment></comment>
+        <prototype>
+            <serviceName>org.mpris.amarok</serviceName>
+            <node>Player</node>
+            <function>Forward</function>
+            <arguments>
+                <argument type="int">
+                    <comment>Amount to fast forward in ms</comment>
+                    <default>10000</default>
+                </argument>
+            </arguments>            
+        </prototype>
     </action>
-    <action objid="Player" prototype="void Backward(int)"  button ="Rewind">
+    
+    <action id="rewind" button="Rewind" repeat="true">
         <name>Rewind</name>
-        <argument type="int">
-            <comment>Amount to rewind in ms</comment>
-            <default>10000</default>
-        </argument>
-        <comment></comment>
+        <prototype>
+            <serviceName>org.mpris.amarok</serviceName>
+            <node>Player</node>
+            <function>Rewind</function>
+            <arguments>
+                <argument type="int">
+                    <comment>Amount to rewind in ms</comment>
+                    <default>10000</default>
+                </argument>
+            </arguments>            
+        </prototype>
     </action>
 </profile>

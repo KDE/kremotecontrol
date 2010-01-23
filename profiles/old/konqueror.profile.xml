@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE profile SYSTEM "profile.dtd">
+
+<profile id="konqueror" servicename="org.kde.konqueror">
+	<name>Konqueror</name>
+	<author>Gav Wood</author>
+	<instances unique="0" ifmulti="sendtotop"/>
+	<action objid="KonqMain" prototype="void openBrowserWindow(QString, QByteArray)" repeat="0" autostart="0">
+		<name>Create New Window</name>
+		<comment>Creates a new window and loads an arbitrary URL.</comment>
+		<argument type="QString"><comment>The URL to load in the window initially.</comment></argument>
+		<argument type="QByteArray"><comment>Startup Id</comment></argument>
+	</action>
+	<action objid="MainApplication" prototype="void quit()" repeat="0" autostart="0">
+		<name>Quit</name>
+		<comment>Closes the Konqueror window.</comment>
+	</action>
+</profile>

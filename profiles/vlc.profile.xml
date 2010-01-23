@@ -1,30 +1,60 @@
 <?xml version="1.0" ?>
-<!DOCTYPE profile SYSTEM "profile.dtd">
-<profile id="vlc" servicename="org.mpris.vlc">
-    <name>VLC videolan player</name>
-    <author>Gioacchino Mazzurco [gmazzurco89@gmail.com]</author>
-    <instances unique="0" ifmulti="sendtoone"/>
 
+<profile xmlns="urn:org-kde-kremotecontrol" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="urn:org-kde-kremotecontrol file:profile.xsd">
+    
+    <name>VLC videolan player</name>
+    <version>0.1</version>
+    <author>Gioacchino Mazzurco [gmazzurco89@gmail.com]</author>
+    
     <!-- Playback actions -->
-    <action objid="Player" prototype="void Play()" button="Play">
+    <action id="play" button="Play">
         <name>Start playing</name>
-        <comment></comment>
+        <prototype>
+            <serviceName>org.mpris.vlc</serviceName>
+            <node>Player</node>
+            <function>Play</function>
+        </prototype>
+        <ifmulti>sendtotop</ifmulti>
     </action>
-    <action objid="Player" prototype="void Stop()" button="Stop">
+    
+    <action id="stop" button="Stop">
         <name>Stop playing</name>
-        <comment></comment>
+        <prototype>
+            <serviceName>org.mpris.vlc</serviceName>
+            <node>Player</node>
+            <function>Stop</function>
+        </prototype>
+        <ifmulti>sendtotop</ifmulti>
     </action>
-    <action objid="Player" prototype="void Pause()" button="Pause">
+    
+    <action id="pause" button="Pause">
         <name>Pause playing</name>
-        <comment></comment>
+        <prototype>
+            <serviceName>org.mpris.vlc</serviceName>
+            <node>Player</node>
+            <function>Pause</function>
+        </prototype>
+        <ifmulti>sendtotop</ifmulti>
     </action>
-    <action objid="Player" prototype="void Next()" button="SkipForward">
+    
+    <action id="skipForward" button="SkipForward" repeat="true">
         <name>Advance to next track</name>
-        <comment></comment>
+        <prototype>
+            <serviceName>org.mpris.vlc</serviceName>
+            <node>Player</node>
+            <function>Next</function>
+        </prototype>
+        <ifmulti>sendtotop</ifmulti>
     </action>
-    <action objid="Player" prototype="void Prev()" button="SkipBackward">
+    
+    <action id="skipBackward" button="SkipBackward" repeat="true">
         <name>Go to previous track</name>
-        <comment></comment>
-    </action>
+        <prototype>
+            <serviceName>org.mpris.vlc</serviceName>
+            <node>Player</node>
+            <function>Prev</function>
+        </prototype>
+        <ifmulti>sendtotop</ifmulti>
+    </action>            
 </profile>
- 

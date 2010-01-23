@@ -1,20 +1,51 @@
 <?xml version="1.0" ?>
-<!DOCTYPE profile SYSTEM "profile.dtd">
-<profile id="KLauncher" servicename="org.kde.klauncher">
+<profile xmlns="urn:org-kde-kremotecontrol" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="urn:org-kde-kremotecontrol file:profile.xsd">
+
 	<name>KDE Program Launcher</name>
+	<version>0.1</version>
 	<author>Gav Wood</author>
-	<action objid="KLauncher" prototype="void kdeinit_exec(QString, QStringList, QStringList, QString)" repeat="0" autostart="0">
+	<description>Launch programs with klauncher</description>
+
+	<action id="execute">
 		<name>Execute</name>
-		<comment>Runs a program or script</comment>
-		<argument type="QString"><comment>The executable name and path of the program or script to run</comment></argument>
-		<argument type="QStringList"><comment>Parameters for the program or script</comment></argument>
-		<argument type="QStringList"><comment>Environment variables</comment></argument>
-		<argument type="QString"><comment>Startup ID</comment></argument>
+		<description>Runs a program or script</description>
+		<prototype>
+			<serviceName>org.kde.klauncher</serviceName>
+			<node>KLauncher</node>
+			<function>kdeinit_exec</function>
+			<arguments>
+				<argument type="QString">
+					<comment>The executable name and path of the program or script to run</comment>
+				</argument>
+				<argument type="QStringList">
+					<comment>Parameters for the program or script</comment>
+				</argument>
+				<argument type="QStringList">
+					<comment>Environment variables</comment>
+				</argument>
+				<argument type="QString">
+					<comment>Startup ID</comment>
+				</argument>
+			</arguments>
+		</prototype>
 	</action>
-	<action objid="KLauncher" prototype="void kdeinit_exec_wait(QString, QStringList)" repeat="0" autostart="0">
-		<name>Execute and Wait</name>
-		<comment>Runs a program or script and waits for it to finish</comment>
-		<argument type="QString"><comment>The executable name and path of the program or script to run</comment></argument>
-		<argument type="QStringList"><comment>Parameters for the program or script</comment></argument>
+
+	<action id="executeWait">
+		<name>Execute and wait</name>
+		<description>Runs a program or script and waits for it to finish</description>
+		<prototype>
+			<serviceName>org.kde.klauncher</serviceName>
+			<node>KLauncher</node>
+			<function>kdeinit_exec_wait</function>
+			<arguments>
+				<argument type="QString">
+					<comment>The executable name and path of the program or script to run</comment>
+				</argument>
+				<argument type="QStringList">
+					<comment>Parameters for the program or script</comment>
+				</argument>
+			</arguments>
+		</prototype>
 	</action>
 </profile>

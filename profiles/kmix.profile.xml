@@ -1,31 +1,58 @@
-<?xml version="1.0" ?>
-<!DOCTYPE profile SYSTEM "profile.dtd">
-<profile id="kmix" servicename="org.kde.kmix">
+<?xml version="1.0" encoding="UTF-8"?>
+
+<profile xmlns="urn:org-kde-kremotecontrol" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="urn:org-kde-kremotecontrol file:profile.xsd">
+
     <name>Sound Mixer</name>
+    <version>0.1</version>
     <author>Michael Zanetti</author>
-    <instances unique="1"/>
-    <action objid="Mixer0" prototype="void increaseVolume(QString)" repeat="1" button="VolumeUp">
+    <description>Volume control actions for kmix</description>
+    
+    <action id="volUp" repeat="true" button="VolumeUp">
         <name>Increase Volume</name>
-        <comment></comment>
-        <argument type="QString">
-            <comment>The name of the slider you want to move and its index separated by a colon (eg. Master:0)</comment>
-            <default>Master:0</default>
-        </argument>
+            <description>Increase Volume</description>
+        <prototype>
+            <serviceName>org.kde.kmix</serviceName>
+            <node>Mixer0</node>
+            <function>increaseVolume</function>
+            <arguments>
+                <argument type="QString">
+                    <comment>The name of the slider you want to move and its index separated by a colon (eg. Master:0)</comment>
+                    <default>Master:0</default>
+                </argument>
+            </arguments>
+        </prototype>
     </action>
-    <action objid="Mixer0" prototype="void decreaseVolume(QString)" repeat="1" button="VolumeDown">
+    
+    <action id="volDown" repeat="true" button="VolumeDown">
         <name>Decrease Volume</name>
-        <comment></comment>
-        <argument type="QString">
-            <comment>The name of the slider you want to move and its index separated by a colon (eg. Master:0)</comment>
-            <default>Master:0</default>
-        </argument>
+        <description>Decrease Volume</description>
+        <prototype>
+            <serviceName>org.kde.kmix</serviceName>
+            <node>Mixer0</node>
+            <function>decreaseVolume</function>
+            <arguments>
+                <argument type="QString">
+                    <comment>The name of the slider you want to move and its index separated by a colon (eg. Master:0)</comment>
+                    <default>Master:0</default>
+                </argument>
+            </arguments>
+        </prototype>
     </action>
-    <action objid="Mixer0" prototype="void toggleMute(QString)" button="Mute">
+    
+    <action id="toggleMute" button="Mute">
         <name>Toggle Mute</name>
-        <comment></comment>
-        <argument type="QString">
-            <comment>The name of the slider you want to mute and its index separated by a colon (eg. Master:0)</comment>
-            <default>Master:0</default>
-        </argument>
+        <description></description>
+        <prototype>
+            <serviceName>org.kde.kmix</serviceName>
+            <node>Mixer0</node>            
+            <function>toggleMute</function>
+            <arguments>
+                <argument type="QString">
+                    <comment>The name of the slider you want to mute and its index separated by a colon (eg. Master:0)</comment>
+                    <default>Master:0</default>
+                </argument>
+            </arguments>
+        </prototype>
     </action>
 </profile>

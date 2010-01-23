@@ -1,0 +1,41 @@
+<?xml version="1.0" ?>
+<!DOCTYPE profile SYSTEM "profile.dtd">
+<profile id="okular" servicename="org.kde.okular">
+    <name>Okular</name>
+    <author>Pino Toscano</author>
+    <instances unique="0" ifmulti="sendtotop"/>
+    <action objid="okular" prototype="void slotPreviousPage()" repeat="0" autostart="0" button="Rewind">
+        <name>Back</name>
+        <comment>Goes to the previous page</comment>
+    </action>
+    <action objid="okular" prototype="void slotNextPage()" repeat="0" autostart="0" button="FastForward">
+        <name>Forward</name>
+        <comment>Goes to the next page</comment>
+    </action>
+    <action objid="okular" prototype="void slotGotoFirst()" repeat="0" autostart="0" button="SkipBackward">
+        <name>First</name>
+        <comment>Goes to the first page</comment>
+    </action>
+    <action objid="okular" prototype="void slotGotoLast()" repeat="0" autostart="0" button="SkipForward">
+        <name>Last</name>
+        <comment>Goes to the last page</comment>
+    </action>
+    <action objid="okular" prototype="void slotTogglePresentation()" repeat="0" autostart="0" class="PlayPause">
+        <name>Presentation</name>
+        <comment>Starts/stops presentation</comment>
+    </action>
+    <action objid="okular" prototype="void reload()" repeat="0" autostart="0">
+        <name>Reload</name>
+        <comment>Reloads the open document</comment>
+    </action>
+    <action objid="okular" prototype="void goToPage(uint)" repeat="0" autostart="0">
+        <name>Go to Page</name>
+        <comment>Goes to the specified page</comment>
+        <argument type="uint"><comment>The page to choose</comment><default>1</default></argument>
+    </action>
+    <action objid="okular" prototype="void openDocument(QString)" repeat="0" autostart="0">
+        <name>Open document</name>
+        <comment>Opens a document</comment>
+        <argument type="QString"><comment>The document to be open</comment></argument>
+    </action>
+</profile>
