@@ -29,7 +29,7 @@ class KREMOTECONTROL_EXPORT ProfileActionTemplate
 {
   public:
     ProfileActionTemplate(const QString &profile,
-			  const QString &templateID,
+			  const QString &actionTemplateID,
 			  const QString &application,
 			  const QString &appName,
 			  const QString &node,
@@ -44,7 +44,7 @@ class KREMOTECONTROL_EXPORT ProfileActionTemplate
     ProfileActionTemplate() {};
 
     QString profile() const;
-    QString templateID() const;
+    QString actionTemplateID() const;
     QString appName() const;
     QString description() const;
     QList<NewArgument> defaultArguments() const;
@@ -57,7 +57,7 @@ class KREMOTECONTROL_EXPORT ProfileActionTemplate
     
   protected:
     QString m_profile; // e.g. Multimedia
-    QString m_templateID; // e.g. multimedia-amarok-1
+    QString m_actionTemplateID; // e.g. multimedia-amarok-1
     QString m_application; // e.g. org.kde.amarok
     QString m_node; // e.g. Player
     QString m_appName; // e.g. Amarok

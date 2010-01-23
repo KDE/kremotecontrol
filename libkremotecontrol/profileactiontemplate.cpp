@@ -20,9 +20,9 @@
 #include "profileactiontemplate.h"
 
 
-ProfileActionTemplate::ProfileActionTemplate(const QString& profile, const QString& templateID, const QString& application, const QString& appName, const QString& node, const QString& function, const QList< NewArgument >& defaultArguments, NewProfileAction::ActionDestination destination, bool autostart, bool repeat, const QString& description, const QString &buttonName) {
+ProfileActionTemplate::ProfileActionTemplate(const QString& profile, const QString& actionTemplateID, const QString& application, const QString& appName, const QString& node, const QString& function, const QList< NewArgument >& defaultArguments, NewProfileAction::ActionDestination destination, bool autostart, bool repeat, const QString& description, const QString &buttonName) {
   m_profile = profile;
-  m_templateID = templateID;
+  m_actionTemplateID = actionTemplateID;
   m_application = application;
   m_node = node;
   m_appName = appName;
@@ -40,9 +40,9 @@ QString ProfileActionTemplate::profile() const
   return m_profile;
 }
 
-QString ProfileActionTemplate::templateID() const
+QString ProfileActionTemplate::actionTemplateID() const
 {
-  return m_templateID;
+  return m_actionTemplateID;
 }
 
 QString ProfileActionTemplate::appName() const {
@@ -80,7 +80,7 @@ QString ProfileActionTemplate::buttonName() const
 
 NewProfileAction *ProfileActionTemplate::createAction(const Solid::Control::RemoteControlButton& button, const Mode &mode) const
 {
-  NewProfileAction *action = new NewProfileAction(button, mode, m_profile, m_templateID);
+  NewProfileAction *action = new NewProfileAction(button, mode, m_profile, QString());
   action->setApplication(m_application);
   action->setNode(m_node);
   action->setFunction(m_function);

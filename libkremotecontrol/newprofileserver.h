@@ -22,6 +22,10 @@
 
 #include "profile.h"
 #include "kremotecontrol_export.h"
+#include <QAbstractMessageHandler>
+#include  <QXmlDefaultHandler>
+#include <QDomDocument>
+#include <QXmlSchema>
 
 namespace NewProfileServer
 {
@@ -33,7 +37,31 @@ namespace NewProfileServer
     QList<ProfileActionTemplate> actionTemplateList(const QString &remote, const NewProfile &profile);
 
     ProfileActionTemplate actionTemplate(const NewProfileAction* action);
-    
+
+
+    class  ProfileXmlContentHandler    : public QAbstractMessageHandler {
+
+      private:
+        ProfileActionTemplate parseAction(QDomNode actionNode, const QString& profileId);
+	QXmlSchema *m_schema;
+	 
+	 NewProfile m_currentProfile;
+      public:
+	 ProfileXmlContentHandler(const QUrl& schema);
+	 ~ProfileXmlContentHandler();
+	 bool validateFile(const QString& fileName);
+	 bool  parseFile(const QString& fileName);
+	 QList<NewProfile> loadProfilesFromFiles(const QStringList& files);
+
+	 NewProfile getParsedProfile(){
+	    return m_currentProfile;
+	 }
+
+
+      protected:
+      virtual void handleMessage(QtMsgType type, const QString &description, const QUrl &identifier, const QSourceLocation &sourceLocation);
+
+    };
 };
 
 #endif // NEWPROFILESERVER_H

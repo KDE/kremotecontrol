@@ -19,8 +19,9 @@
 
 #include "profile.h"
 
-NewProfile::NewProfile(const QString &name, const QString &author, const QString &description) {
+NewProfile::NewProfile(const QString &name, const QString &version, const QString &author, const QString &description) {
   m_name = name;
+  m_version = version;
   m_author = author;
   m_description = description;
 }
@@ -41,7 +42,7 @@ QList< ProfileActionTemplate > NewProfile::actionTemplates() const {
 ProfileActionTemplate NewProfile::actionTemplate(const QString& templateID) const
 {
   foreach(const ProfileActionTemplate &actionTemplate, m_actionTemplates){
-    if(actionTemplate.templateID() == templateID){
+    if(actionTemplate.actionTemplateID() == templateID){
       return actionTemplate;
     }
   }
