@@ -35,7 +35,10 @@ class KREMOTECONTROL_EXPORT NewProfile
 	int m_minor;
 
       public:
-	ProfileVersion(){};
+	ProfileVersion(){
+	  m_major=0;
+	  m_minor=0;
+	};
 	ProfileVersion(const QString &version);
 	const int operator==(const ProfileVersion &other) const;
 	QString toString() const;

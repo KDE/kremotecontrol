@@ -25,12 +25,10 @@ class ProfileTest : public QObject
 
  Q_OBJECT
 
-  public:
-    void setup();
-    void runAll();
-    void cleanup();
+  private Q_SLOTS:
 
     void testVersion();
+    void testVersionString();
 };
 
 #endif // PROFILETEST_H

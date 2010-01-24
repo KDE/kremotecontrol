@@ -22,27 +22,31 @@
 #include <KDebug>
 #include <QTest>
 
-void ProfileTest::runAll()
-{
-
-}
-void ProfileTest::cleanup()
-{
-
-}
-void ProfileTest::setup()
-{
-
+void ProfileTest::testVersionString(){
+  NewProfile profile("id1", "name", "1.1","some author", "dummy 1" );
+  QVERIFY(profile.version() == "1.1");
+  profile =NewProfile("id1", "name", "0.1","some author", "dummy 1" );
+  QVERIFY(profile.version() == "0.1");
+  profile = NewProfile("id1", "name", "1.0","some author", "dummy 1" );
+  QVERIFY(profile.version() == "1.0");
 }
 
 void ProfileTest::testVersion()
 {
-  NewProfile profile1("id1", "name", "1.1","some autohor", "dummy 1" );
-  NewProfile profile2("id1", "name", "1.1","some autohor", "dummy 1" );
-  kDebug()<< profile1.compareVersion(profile2);
-//   QCOMPARE(0, profile1.compareVersion(profile2) );
-QWARN("Hallo welt ");
-QCOMPARE(0, 0);
-QCOMPARE(0, 0);
+  NewProfile profile_1("id1", "name", "1.1","some author", "dummy 1" );
+  NewProfile profile_2("id2", "name", "1.1","some author", "dummy 1" );
+  
+  QCOMPARE(0, profile_1.compareVersion(profile_2) );
+  
+  profile_2=NewProfile("id2", "name", "1.0","some author", "dummy 1" );
+  QCOMPARE(1, profile_1.compareVersion(profile_2) );
 
+  profile_2 =NewProfile("id2", "name", "1.2","some author", "dummy 1" );
+  QCOMPARE(-1, profile_1.compareVersion(profile_2) );
+
+  profile_2 =NewProfile("id2", "name", "2.0","some author", "dummy 1" );
+  QCOMPARE(-1, profile_1.compareVersion(profile_2) );
 }
+
+QTEST_MAIN( ProfileTest )
+

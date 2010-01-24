@@ -19,6 +19,9 @@
 
 #include "profile.h"
 
+
+#include <kdebug.h>
+
 NewProfile::NewProfile(const QString &profileId, const QString &name, const QString &version, const QString &author, const QString &description) {
   m_profileId = profileId;
   m_name = name;
@@ -79,7 +82,6 @@ int NewProfile::compareVersion(const NewProfile &other) const
 
 const int NewProfile::ProfileVersion::operator==(const NewProfile::ProfileVersion& other) const
 {
-  
   if(m_major == other.m_major){
     if(m_minor > other.m_minor){
       return 1;
@@ -101,11 +103,12 @@ const int NewProfile::ProfileVersion::operator==(const NewProfile::ProfileVersio
 NewProfile::ProfileVersion::ProfileVersion(const QString& version)
 {
   QStringList split=  version.split(".");
-  m_major = split.at(0).toInt();
+   m_major = split.at(0).toInt();
   m_minor = split.at(1).toInt();
 }
 
 QString NewProfile::ProfileVersion::toString() const
-{
-  return QString(m_major + "." + m_minor);
+{  
+  return  QString().setNum(m_major) + "." + QString().setNum(m_minor);
+  
 }
