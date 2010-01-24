@@ -27,8 +27,8 @@ class ProfileTest : public QObject
 
   private Q_SLOTS:
 
+    void testGetter();
     void testVersion();
-    void testVersionString();
 };
 
 #endif // PROFILETEST_H

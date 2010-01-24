@@ -22,13 +22,18 @@
 #include <KDebug>
 #include <QTest>
 
-void ProfileTest::testVersionString(){
+
+void ProfileTest::testGetter()
+{
   NewProfile profile("id1", "name", "1.1","some author", "dummy 1" );
-  QVERIFY(profile.version() == "1.1");
-  profile =NewProfile("id1", "name", "0.1","some author", "dummy 1" );
-  QVERIFY(profile.version() == "0.1");
-  profile = NewProfile("id1", "name", "1.0","some author", "dummy 1" );
-  QVERIFY(profile.version() == "1.0");
+  QCOMPARE(QString("id1"), profile.profileId());
+  QCOMPARE(QString("name"), profile.name());
+  QCOMPARE(QString("1.1"), profile.version());
+  QCOMPARE(QString("some author"), profile.author());
+  QCOMPARE(QString("dummy 1"), profile.description());
+
+  profile = NewProfile();
+  QCOMPARE(QString("0.0"), profile.version());
 }
 
 void ProfileTest::testVersion()
