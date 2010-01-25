@@ -107,7 +107,7 @@ KDE_EXPORT Profile ProfileServer::profile(const QString& profileName) {
   return retList;
 }
 
-KDE_EXPORT ProfileActionTemplate ProfileServer::actionTemplate(const NewProfileAction* action) {
+KDE_EXPORT ProfileActionTemplate ProfileServer::actionTemplate(const ProfileAction* action) {
   return profile(action->profileName()).actionTemplate(action->actionTemplateID());
 }
 

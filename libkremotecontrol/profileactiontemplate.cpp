@@ -20,7 +20,7 @@
 #include "profileactiontemplate.h"
 
 
-ProfileActionTemplate::ProfileActionTemplate(const QString& profile, const QString& actionTemplateID, const QString& application, const QString& appName, const QString& node, const QString& function, const QList< Argument >& defaultArguments, NewProfileAction::ActionDestination destination, bool autostart, bool repeat, const QString& description, const QString &buttonName) {
+ProfileActionTemplate::ProfileActionTemplate(const QString& profile, const QString& actionTemplateID, const QString& application, const QString& appName, const QString& node, const QString& function, const QList< Argument >& defaultArguments, ProfileAction::ActionDestination destination, bool autostart, bool repeat, const QString& description, const QString &buttonName) {
   m_profile = profile;
   m_actionTemplateID = actionTemplateID;
   m_application = application;
@@ -78,9 +78,9 @@ QString ProfileActionTemplate::buttonName() const
   return m_buttonName;
 }
 
-NewProfileAction *ProfileActionTemplate::createAction(const Solid::Control::RemoteControlButton& button, const Mode &mode) const
+ProfileAction *ProfileActionTemplate::createAction(const Solid::Control::RemoteControlButton& button, const Mode &mode) const
 {
-  NewProfileAction *action = new NewProfileAction(button, mode, m_profile, QString());
+  ProfileAction *action = new ProfileAction(button, mode, m_profile, QString());
   action->setApplication(m_application);
   action->setNode(m_node);
   action->setFunction(m_function);

@@ -35,7 +35,7 @@ class KREMOTECONTROL_EXPORT ProfileActionTemplate
 			  const QString &node,
 			  const QString &function,
 			  const QList<Argument> &arguments,
-			  const NewProfileAction::ActionDestination,
+			  const ProfileAction::ActionDestination,
 			  bool autostart,
 			  bool repeat,
 			  const QString &description = QString(),
@@ -48,12 +48,12 @@ class KREMOTECONTROL_EXPORT ProfileActionTemplate
     QString appName() const;
     QString description() const;
     QList<Argument> defaultArguments() const;
-    NewProfileAction::ActionDestination destination() const;
+    ProfileAction::ActionDestination destination() const;
     bool autostart() const;
     bool repeat() const;
     QString buttonName() const;
     
-    NewProfileAction *createAction(const Solid::Control::RemoteControlButton &button, const Mode &mode) const;
+    ProfileAction *createAction(const Solid::Control::RemoteControlButton &button, const Mode &mode) const;
     
   protected:
     QString m_profile; // e.g. Multimedia
@@ -64,7 +64,7 @@ class KREMOTECONTROL_EXPORT ProfileActionTemplate
     QString m_function; // play
     QString m_description; // e.g. Amarok Music Player
     QList<Argument> m_defaultArguments;
-    NewProfileAction::ActionDestination m_destination;
+    ProfileAction::ActionDestination m_destination;
     bool m_autostart;
     bool m_repeat;
     QString m_buttonName;

@@ -37,7 +37,7 @@ namespace ProfileServer
     
     QList<ProfileActionTemplate> actionTemplateList(const QString &remote, const Profile &profile);
 
-    ProfileActionTemplate actionTemplate(const NewProfileAction* action);
+    ProfileActionTemplate actionTemplate(const ProfileAction* action);
 
 
     class  ProfileXmlContentHandler    : public QAbstractMessageHandler {
