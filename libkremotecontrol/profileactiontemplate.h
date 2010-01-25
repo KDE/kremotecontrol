@@ -34,7 +34,7 @@ class KREMOTECONTROL_EXPORT ProfileActionTemplate
 			  const QString &appName,
 			  const QString &node,
 			  const QString &function,
-			  const QList<NewArgument> &arguments,
+			  const QList<Argument> &arguments,
 			  const NewProfileAction::ActionDestination,
 			  bool autostart,
 			  bool repeat,
@@ -47,7 +47,7 @@ class KREMOTECONTROL_EXPORT ProfileActionTemplate
     QString actionTemplateID() const;
     QString appName() const;
     QString description() const;
-    QList<NewArgument> defaultArguments() const;
+    QList<Argument> defaultArguments() const;
     NewProfileAction::ActionDestination destination() const;
     bool autostart() const;
     bool repeat() const;
@@ -63,7 +63,7 @@ class KREMOTECONTROL_EXPORT ProfileActionTemplate
     QString m_appName; // e.g. Amarok
     QString m_function; // play
     QString m_description; // e.g. Amarok Music Player
-    QList<NewArgument> m_defaultArguments;
+    QList<Argument> m_defaultArguments;
     NewProfileAction::ActionDestination m_destination;
     bool m_autostart;
     bool m_repeat;

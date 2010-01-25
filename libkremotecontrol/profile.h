@@ -23,7 +23,7 @@
 #include "profileactiontemplate.h"
 #include "kremotecontrol_export.h"
 
-class KREMOTECONTROL_EXPORT NewProfile
+class KREMOTECONTROL_EXPORT Profile
 {
 
 
@@ -45,8 +45,8 @@ class KREMOTECONTROL_EXPORT NewProfile
     };
   
   public:
-    NewProfile(const QString &profileId, const QString &name, const QString &version, const QString &author, const QString &description = QString());
-    NewProfile(){};
+    Profile(const QString &profileId, const QString &name, const QString &version, const QString &author, const QString &description = QString());
+    Profile(){};
     QString name() const;
     QString author() const;
     QString version() const;
@@ -55,7 +55,7 @@ class KREMOTECONTROL_EXPORT NewProfile
     QList<ProfileActionTemplate> actionTemplates() const;
     ProfileActionTemplate actionTemplate(const QString& actionTemplateID) const;
     void addTemplate(const ProfileActionTemplate &actionTemplate);
-    int compareVersion(const NewProfile& other) const;
+    int compareVersion(const Profile& other) const;
     
   protected:
     QString m_profileId;

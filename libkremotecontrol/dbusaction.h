@@ -21,7 +21,7 @@
 #define DBUSACTION_H
 
 #include "action.h"
-#include "newargument.h"
+#include "argument.h"
 #include "kremotecontrol_export.h"
 
 #include <solid/control/remotecontrolbutton.h>
@@ -44,8 +44,8 @@ class KREMOTECONTROL_EXPORT DBusAction : public Action
     QString function() const;
     void setFunction(const QString &function);
     
-    QList<NewArgument> arguments() const;
-    void setArguments(const QList<NewArgument> &arguments);
+    QList<Argument> arguments() const;
+    void setArguments(const QList<Argument> &arguments);
     
     bool repeat() const;
     void setRepeat(bool repeat);
@@ -63,7 +63,7 @@ class KREMOTECONTROL_EXPORT DBusAction : public Action
     QString m_application;
     QString m_node;
     QString m_function;
-    QList<NewArgument> m_arguments;
+    QList<Argument> m_arguments;
     bool m_repeat, m_autostart;
     ActionDestination m_destination;
 };

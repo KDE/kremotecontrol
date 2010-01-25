@@ -20,7 +20,7 @@
 #include "profileactiontemplate.h"
 
 
-ProfileActionTemplate::ProfileActionTemplate(const QString& profile, const QString& actionTemplateID, const QString& application, const QString& appName, const QString& node, const QString& function, const QList< NewArgument >& defaultArguments, NewProfileAction::ActionDestination destination, bool autostart, bool repeat, const QString& description, const QString &buttonName) {
+ProfileActionTemplate::ProfileActionTemplate(const QString& profile, const QString& actionTemplateID, const QString& application, const QString& appName, const QString& node, const QString& function, const QList< Argument >& defaultArguments, NewProfileAction::ActionDestination destination, bool autostart, bool repeat, const QString& description, const QString &buttonName) {
   m_profile = profile;
   m_actionTemplateID = actionTemplateID;
   m_application = application;
@@ -53,7 +53,7 @@ QString ProfileActionTemplate::description() const {
   return m_description;
 }
 
-QList<NewArgument> ProfileActionTemplate::defaultArguments() const
+QList<Argument> ProfileActionTemplate::defaultArguments() const
 {
   return m_defaultArguments;
 }
@@ -84,9 +84,9 @@ NewProfileAction *ProfileActionTemplate::createAction(const Solid::Control::Remo
   action->setApplication(m_application);
   action->setNode(m_node);
   action->setFunction(m_function);
-  QList<NewArgument> newArgs;
-  foreach(const NewArgument &arg, m_defaultArguments){
-    newArgs.append(NewArgument(arg.defaultValue()));
+  QList<Argument> newArgs;
+  foreach(const Argument &arg, m_defaultArguments){
+    newArgs.append(Argument(arg.defaultValue()));
   }
   action->setArguments(newArgs);
   action->setDestination(m_destination);

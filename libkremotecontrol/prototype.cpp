@@ -20,7 +20,7 @@
 
 #include "prototype.h"
 
-Prototype::Prototype(const QString& name, QList< NewArgument > args) {
+Prototype::Prototype(const QString& name, QList< Argument > args) {
   m_name = name;
   m_args = args;
 }
@@ -29,6 +29,6 @@ QString Prototype::name() const {
   return m_name;
 }
 
-QList< NewArgument > Prototype::args() const {
+QList< Argument > Prototype::args() const {
   return m_args;
 }

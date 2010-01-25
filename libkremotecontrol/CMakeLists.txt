@@ -12,13 +12,13 @@ set(libkremotecontrol_LIB_SRCS
    mode.cpp
    action.cpp
    prototype.cpp
-   newargument.cpp
+   argument.cpp
    dbusaction.cpp
    modeswitchaction.cpp
    profileaction.cpp
    profileactiontemplate.cpp
    profile.cpp
-   newprofileserver.cpp
+   profileserver.cpp
    executionengine.cpp
    actionexecutor.cpp
    dbusactionexecutor.cpp

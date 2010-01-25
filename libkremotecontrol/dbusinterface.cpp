@@ -416,7 +416,7 @@ void DBusInterface::executeAction(const DBusAction* action) {
             QDBusMessage m = QDBusMessage::createMethodCall(program, '/'
                              + action->node(), "", action->function());
 
-            foreach(const NewArgument &arg, action->arguments()){
+            foreach(const Argument &arg, action->arguments()){
                 kDebug() << "Got argument:" << arg.value().type() << "value" << arg.value();
                 m << arg.value();
             }

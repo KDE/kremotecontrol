@@ -17,30 +17,43 @@
 
 */
 
-#ifndef NEWARGUMENT_H
-#define NEWARGUMENT_H
+#include "argument.h"
 
-#include <kdemacros.h>
-
-#include <QVariant>
-
-class KDE_EXPORT NewArgument
+Argument::Argument()
 {
-  public:
-    NewArgument();
-    NewArgument(const QVariant &value);
-    NewArgument(const QVariant &defaultValue, const QString &description);
-    
-    QVariant value() const;
-    QVariant defaultValue() const;
-    QString description() const;
-    
-    bool operator==(const NewArgument &other) const;
-    
-  protected:
-    QVariant m_value;
-    QVariant m_defaultValue;
-    QString m_description;
-};
 
-#endif // NEWARGUMENT_H
+}
+
+Argument::Argument(const QVariant& value)
+{
+  m_value = value;
+}
+
+Argument::Argument(const QVariant& defaultValue, const QString& description)
+{
+  m_defaultValue = defaultValue;
+  m_description = description;
+}
+
+QVariant Argument::value() const
+{
+  return m_value;
+}
+
+QVariant Argument::defaultValue() const
+{
+  return m_defaultValue;
+}
+
+QString Argument::description() const
+{
+  return m_description;
+}
+
+bool Argument::operator==(const Argument& other) const
+{
+  return m_value == other.value() &&
+	  m_description == other.description() &&
+	  m_defaultValue == other.defaultValue();
+}
+

@@ -17,7 +17,7 @@
 
 */
 
-#include "newprofileserver.h"
+#include "profileserver.h"
 #include "profileactiontemplate.h"
 #include "modeswitchaction.h"
 #include "executionengine.h"
@@ -34,11 +34,11 @@
 #include <QXmlSimpleReader>
 #include <QFileInfo>
 
-class NewProfileServerPrivate
+class ProfileServerPrivate
 {
   public:
-    NewProfileServerPrivate();
-    QList<NewProfile> m_allProfiles;
+    ProfileServerPrivate();
+    QList<Profile> m_allProfiles;
 //     ~NewProfileServerPrivate() {
 //       while (!m_allProfiles.isEmpty()){
 // 	delete m_allProfiles.takeFirst();
@@ -48,21 +48,21 @@ class NewProfileServerPrivate
     
 
 
-K_GLOBAL_STATIC(NewProfileServerPrivate, instance)
+K_GLOBAL_STATIC(ProfileServerPrivate, instance)
 
 
 
-NewProfileServerPrivate::NewProfileServerPrivate()
+ProfileServerPrivate::ProfileServerPrivate()
 {
-  NewProfileServer::ProfileXmlContentHandler *handler = new NewProfileServer::ProfileXmlContentHandler(QUrl::fromLocalFile(KGlobal::dirs()->findResource("data","profiles/profile.xsd")));
-  foreach(const NewProfile &profile, handler->loadProfilesFromFiles(KGlobal::dirs()->findAllResources("data", "profiles/*.profile.xml"))){
-    NewProfileServer::addProfile(profile);
+  ProfileServer::ProfileXmlContentHandler *handler = new ProfileServer::ProfileXmlContentHandler(QUrl::fromLocalFile(KGlobal::dirs()->findResource("data","profiles/profile.xsd")));
+  foreach(const Profile &profile, handler->loadProfilesFromFiles(KGlobal::dirs()->findAllResources("data", "profiles/*.profile.xml"))){
+    ProfileServer::addProfile(profile);
   }
 }
 
-KDE_EXPORT void NewProfileServer::addProfile(const NewProfile& profile) {
+KDE_EXPORT void ProfileServer::addProfile(const Profile& profile) {
   for(int i =0; i< instance->m_allProfiles.size(); i++){
-    NewProfile tProfile = instance->m_allProfiles.at(i);
+    Profile tProfile = instance->m_allProfiles.at(i);
    
     if(profile.profileId() == tProfile.profileId()){
       if( 1 ==  profile.compareVersion(tProfile)){
@@ -79,21 +79,21 @@ KDE_EXPORT void NewProfileServer::addProfile(const NewProfile& profile) {
   }
 }
 
-KDE_EXPORT QList< NewProfile > NewProfileServer::allProfiles() {
+KDE_EXPORT QList< Profile > ProfileServer::allProfiles() {
   return instance->m_allProfiles;
 }
 
-KDE_EXPORT NewProfile NewProfileServer::profile(const QString& profileName) {
-  foreach(const NewProfile &profile, instance->m_allProfiles){
+KDE_EXPORT Profile ProfileServer::profile(const QString& profileName) {
+  foreach(const Profile &profile, instance->m_allProfiles){
     if(profile.name() == profileName){
       return profile;
     }
   }
   kDebug() << "Warning: profile" << profileName << "not found. Creating empty one.";
-  return NewProfile("id", profileName, "0.0", "");
+  return Profile("id", profileName, "0.0", "");
 }
 
- QList< ProfileActionTemplate > KREMOTECONTROL_EXPORT NewProfileServer::actionTemplateList(const QString& remote, const NewProfile& profile) {
+ QList< ProfileActionTemplate > KREMOTECONTROL_EXPORT ProfileServer::actionTemplateList(const QString& remote, const Profile& profile) {
   QList<ProfileActionTemplate> retList;
   foreach(const ProfileActionTemplate &actionTemplate, profile.actionTemplates()){
     kDebug() << "got template" << actionTemplate.actionTemplateID() << "with button" << actionTemplate.buttonName();
@@ -107,26 +107,26 @@ KDE_EXPORT NewProfile NewProfileServer::profile(const QString& profileName) {
   return retList;
 }
 
-KDE_EXPORT ProfileActionTemplate NewProfileServer::actionTemplate(const NewProfileAction* action) {
+KDE_EXPORT ProfileActionTemplate ProfileServer::actionTemplate(const NewProfileAction* action) {
   return profile(action->profileName()).actionTemplate(action->actionTemplateID());
 }
 
 
 
-NewProfileServer::ProfileXmlContentHandler::ProfileXmlContentHandler(const QUrl &schemaFile)
+ProfileServer::ProfileXmlContentHandler::ProfileXmlContentHandler(const QUrl &schemaFile)
 {
   m_schema = new QXmlSchema();
   m_schema->setMessageHandler(this);
   m_schema->load(schemaFile);
 }
 
-NewProfileServer::ProfileXmlContentHandler::~ProfileXmlContentHandler()
+ProfileServer::ProfileXmlContentHandler::~ProfileXmlContentHandler()
 {
   delete m_schema;
 }
 
 
- bool NewProfileServer::ProfileXmlContentHandler::validateFile(const QString& fileName)
+ bool ProfileServer::ProfileXmlContentHandler::validateFile(const QString& fileName)
 {
   if ( m_schema->isValid() ) {
         QStringList theFiles = KGlobal::dirs()->findAllResources("data", "profiles/*.profile.xml");
@@ -136,7 +136,7 @@ NewProfileServer::ProfileXmlContentHandler::~ProfileXmlContentHandler()
   return false;
 }
 
-void NewProfileServer::ProfileXmlContentHandler::handleMessage(QtMsgType type, const QString& description, const QUrl& identifier, const QSourceLocation& sourceLocation)
+void ProfileServer::ProfileXmlContentHandler::handleMessage(QtMsgType type, const QString& description, const QUrl& identifier, const QSourceLocation& sourceLocation)
 {
   QTextDocument document;
   document.setHtml(description);
@@ -144,9 +144,9 @@ void NewProfileServer::ProfileXmlContentHandler::handleMessage(QtMsgType type, c
 }
 
 
-QList<NewProfile> NewProfileServer::ProfileXmlContentHandler::loadProfilesFromFiles(const QStringList& files)
+QList<Profile> ProfileServer::ProfileXmlContentHandler::loadProfilesFromFiles(const QStringList& files)
 {
-  QList<NewProfile> profileList;
+  QList<Profile> profileList;
   foreach (QString file, files) {
     if ( validateFile(file) ) {
       if(parseFile(file)){
@@ -157,7 +157,7 @@ QList<NewProfile> NewProfileServer::ProfileXmlContentHandler::loadProfilesFromFi
   return profileList;
 }
 
-bool  NewProfileServer::ProfileXmlContentHandler::parseFile(const QString& fileName)
+bool  ProfileServer::ProfileXmlContentHandler::parseFile(const QString& fileName)
 {
   //QString id = fileName.left(filename.indexOf(".profile.xml"));
   QFile file( fileName );
@@ -180,7 +180,7 @@ bool  NewProfileServer::ProfileXmlContentHandler::parseFile(const QString& fileN
     kDebug() << "id " << profileId <<"name " << name << "description " << description;
     kDebug() << "id " << profileId <<"author" << author<< "version" << version;
    
-    m_currentProfile = NewProfile(name,version, author, description);
+    m_currentProfile = Profile(name,version, author, description);
     
     QDomNodeList actionNodeList = rootElement.elementsByTagName("action");
     for(int count = 0; count < actionNodeList.size(); ++count){
@@ -195,7 +195,7 @@ bool  NewProfileServer::ProfileXmlContentHandler::parseFile(const QString& fileN
 }
 
 
-ProfileActionTemplate NewProfileServer::ProfileXmlContentHandler::parseAction(QDomNode actionNode, const QString& profileId)
+ProfileActionTemplate ProfileServer::ProfileXmlContentHandler::parseAction(QDomNode actionNode, const QString& profileId)
 {
  
     QString buttonName;
@@ -258,7 +258,7 @@ ProfileActionTemplate NewProfileServer::ProfileXmlContentHandler::parseAction(QD
 
   
   
-    QList<NewArgument> arguments;
+    QList<Argument> arguments;
     if( ! prototypeNode.namedItem("attributes").isNull()){
       QDomNodeList attributeNodes = prototypeNode.namedItem("attributes").toElement().elementsByTagName("attribute");
       for(int attributeCount = 0; attributeCount < attributeNodes.size(); ++ attributeCount){
@@ -273,7 +273,7 @@ ProfileActionTemplate NewProfileServer::ProfileXmlContentHandler::parseAction(QD
 	if(attributeNode.toElement().namedItem("default").isNull()){
 	  description = attributeNode.toElement().namedItem("default").toElement().text();
 	}
-	arguments.append(NewArgument(variantType, description));
+	arguments.append(Argument(variantType, description));
 	kDebug()<< "		" << "type" << variantType;
 	kDebug()<< "		" << "description" << description;
 	kDebug()<< "		" << "default" << defaultValue;

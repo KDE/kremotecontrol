@@ -19,19 +19,19 @@
 
 #ifndef PROTOTYPE_H
 #define PROTOTYPE_H
-#include "newargument.h"
+#include "argument.h"
 
 class Prototype
 {
   public:
-    Prototype(const QString &name, QList<NewArgument> args);
+    Prototype(const QString &name, QList<Argument> args);
     
     QString name() const;
-    QList<NewArgument> args() const;
+    QList<Argument> args() const;
     
   private:
     QString m_name;
-    QList<NewArgument> m_args;
+    QList<Argument> m_args;
 };
 
 #endif // PROTOTYPE_H

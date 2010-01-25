@@ -17,24 +17,25 @@
 
 */
 
-#ifndef NEWPROFILESERVER_H
-#define NEWPROFILESERVER_H
+#ifndef PROFILESERVER_H
+#define PROFILESERVER_H
 
 #include "profile.h"
 #include "kremotecontrol_export.h"
+
 #include <QAbstractMessageHandler>
-#include  <QXmlDefaultHandler>
+#include <QXmlDefaultHandler>
 #include <QDomDocument>
 #include <QXmlSchema>
 
-namespace NewProfileServer
+namespace ProfileServer
 {
-    void addProfile(const NewProfile &profile);
+    void addProfile(const Profile &profile);
     
-    QList<NewProfile> allProfiles();
-    NewProfile profile(const QString &profileName);
+    QList<Profile> allProfiles();
+    Profile profile(const QString &profileName);
     
-    QList<ProfileActionTemplate> actionTemplateList(const QString &remote, const NewProfile &profile);
+    QList<ProfileActionTemplate> actionTemplateList(const QString &remote, const Profile &profile);
 
     ProfileActionTemplate actionTemplate(const NewProfileAction* action);
 
@@ -45,15 +46,15 @@ namespace NewProfileServer
         ProfileActionTemplate parseAction(QDomNode actionNode, const QString& profileId);
 	QXmlSchema *m_schema;
 	 
-	 NewProfile m_currentProfile;
+	 Profile m_currentProfile;
       public:
 	 ProfileXmlContentHandler(const QUrl& schema);
 	 ~ProfileXmlContentHandler();
 	 bool validateFile(const QString& fileName);
 	 bool  parseFile(const QString& fileName);
-	 QList<NewProfile> loadProfilesFromFiles(const QStringList& files);
+	 QList<Profile> loadProfilesFromFiles(const QStringList& files);
 
-	 NewProfile getParsedProfile(){
+	 Profile getParsedProfile(){
 	    return m_currentProfile;
 	 }
 
@@ -64,4 +65,4 @@ namespace NewProfileServer
     };
 };
 
-#endif // NEWPROFILESERVER_H
+#endif // PROFILESERVER_H

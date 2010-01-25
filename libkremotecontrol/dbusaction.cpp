@@ -51,11 +51,11 @@ void DBusAction::setFunction(const QString& function)
   m_function = function;
 }
 
-QList<NewArgument> DBusAction::arguments() const{
+QList<Argument> DBusAction::arguments() const{
   return m_arguments;
 }
 
-void DBusAction::setArguments(const QList< NewArgument >& arguments)
+void DBusAction::setArguments(const QList< Argument >& arguments)
 {
   m_arguments = arguments;
 }

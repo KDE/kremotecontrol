@@ -22,7 +22,7 @@
 
 #include <kdebug.h>
 
-NewProfile::NewProfile(const QString &profileId, const QString &name, const QString &version, const QString &author, const QString &description) {
+Profile::Profile(const QString &profileId, const QString &name, const QString &version, const QString &author, const QString &description) {
   m_profileId = profileId;
   m_name = name;
   m_version = ProfileVersion(version);
@@ -30,35 +30,35 @@ NewProfile::NewProfile(const QString &profileId, const QString &name, const QStr
   m_description = description;
 }
 
-QString NewProfile::name() const
+QString Profile::name() const
 {
   return m_name;
 }
 
-QString NewProfile::author() const
+QString Profile::author() const
 {
   return m_author;
 }
 
-QString NewProfile::description() const
+QString Profile::description() const
 {
   return m_description;
 }
 
-QString NewProfile::profileId() const
+QString Profile::profileId() const
 {
   return m_profileId;
 }
 
-void NewProfile::addTemplate(const ProfileActionTemplate &applicationTemplate) {
+void Profile::addTemplate(const ProfileActionTemplate &applicationTemplate) {
   m_actionTemplates.append(applicationTemplate);
 }
 
-QList< ProfileActionTemplate > NewProfile::actionTemplates() const {
+QList< ProfileActionTemplate > Profile::actionTemplates() const {
   return m_actionTemplates;
 }
 
-ProfileActionTemplate NewProfile::actionTemplate(const QString& actionTemplateID) const
+ProfileActionTemplate Profile::actionTemplate(const QString& actionTemplateID) const
 {
   foreach(const ProfileActionTemplate &actionTemplate, m_actionTemplates){
     if(actionTemplate.actionTemplateID() == actionTemplateID){
@@ -69,18 +69,18 @@ ProfileActionTemplate NewProfile::actionTemplate(const QString& actionTemplateID
 }
 
 
-QString NewProfile::version() const
+QString Profile::version() const
 {
   return m_version.toString();
 }
 
 
-int NewProfile::compareVersion(const NewProfile &other) const
+int Profile::compareVersion(const Profile &other) const
 {
   return m_version == other.version();
 }
 
-const int NewProfile::ProfileVersion::operator==(const NewProfile::ProfileVersion& other) const
+const int Profile::ProfileVersion::operator==(const Profile::ProfileVersion& other) const
 {
   if(m_major == other.m_major){
     if(m_minor > other.m_minor){
@@ -100,14 +100,14 @@ const int NewProfile::ProfileVersion::operator==(const NewProfile::ProfileVersio
   return 0;
 }
 
-NewProfile::ProfileVersion::ProfileVersion(const QString& version)
+Profile::ProfileVersion::ProfileVersion(const QString& version)
 {
   QStringList split=  version.split(".");
    m_major = split.at(0).toInt();
   m_minor = split.at(1).toInt();
 }
 
-QString NewProfile::ProfileVersion::toString() const
+QString Profile::ProfileVersion::toString() const
 {  
   return  QString().setNum(m_major) + "." + QString().setNum(m_minor);
   
