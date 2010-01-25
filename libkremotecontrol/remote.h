@@ -28,16 +28,19 @@
 class Remote
 {
   public:
-    Remote();
-  
+    
+//     Remote(const Solid::Control::RemoteControl &remote, const QList<Mode> &modes) ;
     Solid::Control::RemoteControl remote();
     QList<Mode> allModes() const;
-    Mode defaultMode() const;
+    Mode defaultMode();
+    void setDefaultMode(const Mode &mode );
+    void addMode(const Mode &mode) ;
     
   private:
-    Solid::Control::RemoteControl m_remote();
+    Solid::Control::RemoteControl m_remote;
     QList<Mode> m_modeList;
     QString m_defaultModeName;
+    
     
 };
 

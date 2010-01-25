@@ -20,3 +20,28 @@
 
 #include "remotelist.h"
 
+
+#include <kglobal.h>
+
+class RemotesPrivate
+{
+  public:
+   RemotesPrivate();
+    QList<Remote> m_remotes;
+//     ~NewProfileServerPrivate() {
+//       while (!m_allProfiles.isEmpty()){
+// 	delete m_allProfiles.takeFirst();
+//       }
+//     }
+};
+
+
+
+K_GLOBAL_STATIC(RemotesPrivate, instance)
+
+
+
+QList< Remote > Remotes::RemoteList::remotes()
+{
+  return instance.m_remotes;
+}

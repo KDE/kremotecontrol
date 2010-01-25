@@ -20,3 +20,44 @@
 
 #include "remote.h"
 
+#include <KLocale>
+
+/*
+Remote::Remote(const Solid::Control::RemoteControl &remote, const QList<Mode> &modes)
+{
+ m_remote = remote;
+  m_modeList = modes;
+}*/
+
+
+QList< Mode> Remote::allModes() const
+{
+  return m_modeList;	
+}
+
+void Remote::addMode(const Mode& mode)
+{
+  m_modeList.append(mode);
+}
+
+
+Mode Remote::defaultMode() 
+{
+ foreach(Mode mode, m_modeList){
+  if (mode.name() == m_defaultModeName){
+    return mode;
+  }
+  Mode master(i18n("Default mode"), QString());
+  m_modeList.append(master);
+  m_defaultModeName = master.name();  
+ } 
+}
+
+
+void Remote::setDefaultMode(const Mode &mode ) 
+{
+ if(m_modeList.contains(mode)){
+    m_defaultModeName = mode.name();
+ }
+}
+

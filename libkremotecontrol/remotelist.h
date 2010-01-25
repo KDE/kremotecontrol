@@ -23,12 +23,10 @@
 
 #include "remote.h"
 
+namespace Remotes {
 class RemoteList: public QList<Remote>
 {
-  public:
-    
-    void readFromConfig();
-    void saveToConfig();
+      QList<Remote> remotes();
 };
 
 #endif // REMOTELIST_H
