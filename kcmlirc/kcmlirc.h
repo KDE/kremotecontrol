@@ -28,10 +28,8 @@
 #define KCMLIRC_H
 
 #include "ui_kcmlircbase.h"
-#include "iractions.h"
-#include "modes.h"
 #include "model.h"
-#include "iraction.h"
+#include "action.h"
 #include <QMap>
 #include<QVariant>
 #include <QStandardItemModel>
@@ -40,6 +38,11 @@
 class Profile;
 class Remote;
 
+
+Q_DECLARE_METATYPE(Remote*)
+Q_DECLARE_METATYPE(Mode*)
+
+
 class KCMLirc: public KCModule
 {
     Q_OBJECT
@@ -47,12 +50,12 @@ class KCMLirc: public KCModule
     
 private:
     Ui::KCMLircBase *theKCMLircBase;
-    IRActions allActions;
-    Modes allModes;
-    void autoPopulate(const Profile *profile, const Mode &mode);
+    QList<Action*> m_actionList;
+    QList<Mode*> m_modeList;
+    void autoPopulate(const Profile& profile, const Remote& remote);
 
-    inline IRAction *currentAction() {
-        IRAction *tAction = theKCMLircBase->theActions->currentItem()->data(0, Qt::UserRole).value<IRAction*>();
+    inline Action *currentAction() {
+        Action *tAction = theKCMLircBase->theActions->currentItem()->data(0, Qt::UserRole).value<Action*>();
         return tAction;
 
     }
@@ -63,7 +66,7 @@ public:
     virtual void save();
     virtual void defaults();
     virtual void configChanged();
-    const QString notes(IRAction *action) const;
+    const QString notes(Action *action) const;
     explicit KCMLirc(QWidget *parent = 0, const QVariantList &args = QVariantList());
     ~KCMLirc();
     

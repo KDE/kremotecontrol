@@ -89,21 +89,21 @@ DBusFunctionModel
 */
 
 DBusFunctionModel::DBusFunctionModel(QObject *parent):QStandardItemModel(parent) {
-    qRegisterMetaType<Prototype>("Prototype");
+    qRegisterMetaType<Prototype*>("Prototype*");
 }
 
-void DBusFunctionModel::appendRow ( const Prototype &prototype ) {
+void DBusFunctionModel::appendRow (Prototype* prototype ) {
     QList<QStandardItem*> itemList;
-    QStandardItem *item = new QStandardItem(prototype.name());
+    QStandardItem *item = new QStandardItem(prototype->name());
     item->setData(qVariantFromValue(prototype), Qt::UserRole);
     itemList.append(item);
-    itemList.append(new QStandardItem(prototype.argumentList()));
-    itemList.append(new QStandardItem(prototype.prototype()));
+//     itemList.append(new QStandardItem(prototype.argumentList()));
+//     itemList.append(new QStandardItem(prototype.prototype()));
     QStandardItemModel::appendRow(itemList);
 }
 
-Prototype DBusFunctionModel::getPrototype(int index) const {
-    return QStandardItemModel::item(index)->data(Qt::UserRole).value<Prototype>();
+Prototype* DBusFunctionModel::getPrototype(int index) const {
+    return QStandardItemModel::item(index)->data(Qt::UserRole).value<Prototype*>();
 }
 
 QVariant DBusFunctionModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -330,14 +330,14 @@ ProfileModel
 
 ProfileModel::ProfileModel(QObject* parent): QStandardItemModel(parent)
 {
-    qRegisterMetaType<ProfileAction*>("ProfileAction*");
+    qRegisterMetaType<ProfileActionTemplate*>("ProfileActionTemplate*");
 }
 
-ProfileModel::ProfileModel(const Profile* profile, QObject* parent): QStandardItemModel(parent)
+ProfileModel::ProfileModel(Profile* profile, QObject* parent): QStandardItemModel(parent)
 {
     ProfileModel();
-    foreach(ProfileAction *action, profile->actions()) {
-        appendRow(action);
+    foreach(ProfileActionTemplate profileActionTemplate, profile->actionTemplates()){
+      appendRow(profileActionTemplate);
     }
     sort(0, Qt::DescendingOrder);
 }
@@ -361,28 +361,28 @@ QVariant ProfileModel::headerData(int section, Qt::Orientation orientation, int 
     return QVariant();
 }
 
-ProfileAction* ProfileModel::getProfileAction(int index) const
+ProfileActionTemplate* ProfileModel::getProfileActionTemlate(int index) const
 {	
-    return index == -1 ? 0 : QStandardItemModel::item(index)->data(Qt::UserRole).value<ProfileAction*>();
+    return index == -1 ? 0 : QStandardItemModel::item(index)->data(Qt::UserRole).value<ProfileActionTemplate*>();
 }
 
 
-void ProfileModel::appendRow(ProfileAction *action)
+void ProfileModel::appendRow(ProfileActionTemplate actionTemplate)
 {
     QList<QStandardItem*> row;
-    QStandardItem *item = new QStandardItem(action->name());
-    item->setData(qVariantFromValue(action), Qt::UserRole);
+    QStandardItem *item = new QStandardItem(actionTemplate.profile());
+    item->setData(qVariantFromValue(&actionTemplate), Qt::UserRole);
     row.append(item);
-    row.append(new QStandardItem(QString::number(action->arguments().size())));
-    if (!(action->comment().isEmpty())) {
-        QStandardItem *tItem = new  QStandardItem(action->comment());
-        tItem->setToolTip(action->comment());
+    row.append(new QStandardItem(QString::number(actionTemplate.defaultArguments().size())));
+    if (!(actionTemplate.description().isEmpty())) {
+        QStandardItem *tItem = new  QStandardItem(actionTemplate.description());
+        tItem->setToolTip(actionTemplate.description());
         row.append(tItem);
     } else {
         row.append(new QStandardItem("-"));
     }
-    if (!action->buttonName().isEmpty()) {
-        row.append(new QStandardItem(action->buttonName()));
+    if (!actionTemplate.buttonName().isEmpty()) {
+        row.append(new QStandardItem(actionTemplate.buttonName()));
     } else {
         row.append(new QStandardItem("-"));
     }

@@ -30,16 +30,20 @@
 
 
 #include "prototype.h"
-#include "iraction.h"
+#include "profileaction.h"
+#include "profile.h"
+
 #include <QItemDelegate>
 #include <QStandardItem>
 #include <solid/control/remotecontrol.h>
 #include <QStringListModel>
 
 using namespace Solid::Control;
-Q_DECLARE_METATYPE(Prototype)
-Q_DECLARE_METATYPE(IRAction*)
-Q_DECLARE_METATYPE(ProfileAction*)
+
+
+Q_DECLARE_METATYPE(Prototype*)
+// Q_DECLARE_METATYPE(IRAction*)
+Q_DECLARE_METATYPE(ProfileActionTemplate*)
 Q_DECLARE_METATYPE(RemoteControlButton*)
 
 
@@ -61,9 +65,9 @@ class DBusFunctionModel: public QStandardItemModel
 public:
     DBusFunctionModel(QObject *parent);
 
-    void appendRow ( const Prototype &item );
+    void appendRow (Prototype *item );
 
-    Prototype getPrototype( int index ) const;
+    Prototype* getPrototype( int index ) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
 };
@@ -104,11 +108,11 @@ class ProfileModel: public QStandardItemModel
 {
 public:
     ProfileModel(QObject *parent=0);
-    explicit ProfileModel(const Profile *profile, QObject *parent=0);
+    explicit ProfileModel(Profile *profile, QObject *parent=0);
 
-    ProfileAction* getProfileAction( int index ) const;
+    ProfileActionTemplate* getProfileActionTemlate(int index) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-    void appendRow(ProfileAction *action);
+    void appendRow(ProfileActionTemplate actionTemplate);
     Qt::ItemFlags flags(const QModelIndex& index) const;
 };
 
