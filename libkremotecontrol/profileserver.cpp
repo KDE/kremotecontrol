@@ -33,6 +33,7 @@
 #include <QTextDocument>
 #include <QXmlSimpleReader>
 #include <QFileInfo>
+#include "remote.h"
 
 class ProfileServerPrivate
 {
@@ -83,14 +84,14 @@ KDE_EXPORT QList< Profile > ProfileServer::allProfiles() {
   return instance->m_allProfiles;
 }
 
-KDE_EXPORT Profile ProfileServer::profile(const QString& profileName) {
+KDE_EXPORT Profile ProfileServer::profile(const QString& profileId) {
   foreach(const Profile &profile, instance->m_allProfiles){
-    if(profile.name() == profileName){
+    if(profile.profileId() == profileId){
       return profile;
     }
   }
-  kDebug() << "Warning: profile" << profileName << "not found. Creating empty one.";
-  return Profile("id", profileName, "0.0", "");
+  kDebug() << "Warning: profile" << profileId<< "not found. Creating empty one.";
+  return Profile(profileId, QString(), "0.0", QString());
 }
 
  QList< ProfileActionTemplate > KREMOTECONTROL_EXPORT ProfileServer::actionTemplateList(const QString& remote, const Profile& profile) {
@@ -143,6 +144,38 @@ void ProfileServer::ProfileXmlContentHandler::handleMessage(QtMsgType type, cons
   kDebug() << "Error validating xml file " << sourceLocation.uri().toString() << " Message " << document.toPlainText();
 }
 
+
+KDE_EXPORT  ProfileServer::ProfileSupportedByRemote ProfileServer::isProfileAvailableForRemote(const Profile& profile, const Remote& remote)
+{
+    QStringList tProfilActionNames;
+    foreach(const ProfileActionTemplate profileAction, profile.actionTemplates()) {
+        if (! profileAction.buttonName().isEmpty()) {
+            tProfilActionNames << profileAction.buttonName();
+        }
+    }
+    if (tProfilActionNames.size() == 0) {
+        return ProfileServer::NO_ACTIONS_DEFINED;
+    }
+    int found=0;
+    foreach(const QString & tProfilActionName, tProfilActionNames) {
+        if ( remote.buttonNames().contains(tProfilActionName)) {
+            found++;
+        }
+    }
+    if (found == 0) {
+        return ProfileServer::NOT_SUPPORTED;
+    } else if (found != tProfilActionNames.size()) {
+        return ProfileServer::PARTIAL_SUPPORTED;
+    }
+    return ProfileServer::FULL_SUPPORTED;
+}
+
+/*
+********************************************************************
+* ProfileServer::ProfileXmlContentHandler
+*
+********************************************************************
+*/
 
 QList<Profile> ProfileServer::ProfileXmlContentHandler::loadProfilesFromFiles(const QStringList& files)
 {

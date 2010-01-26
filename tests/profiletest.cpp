@@ -25,31 +25,31 @@
 
 void ProfileTest::testGetter()
 {
-  NewProfile profile("id1", "name", "1.1","some author", "dummy 1" );
+  Profile profile("id1", "name", "1.1","some author", "dummy 1" );
   QCOMPARE(QString("id1"), profile.profileId());
   QCOMPARE(QString("name"), profile.name());
   QCOMPARE(QString("1.1"), profile.version());
   QCOMPARE(QString("some author"), profile.author());
   QCOMPARE(QString("dummy 1"), profile.description());
 
-  profile = NewProfile();
+  profile = Profile();
   QCOMPARE(QString("0.0"), profile.version());
 }
 
 void ProfileTest::testVersion()
 {
-  NewProfile profile_1("id1", "name", "1.1","some author", "dummy 1" );
-  NewProfile profile_2("id2", "name", "1.1","some author", "dummy 1" );
+  Profile profile_1("id1", "name", "1.1","some author", "dummy 1" );
+  Profile profile_2("id2", "name", "1.1","some author", "dummy 1" );
   
   QCOMPARE(0, profile_1.compareVersion(profile_2) );
   
-  profile_2=NewProfile("id2", "name", "1.0","some author", "dummy 1" );
+  profile_2=Profile("id2", "name", "1.0","some author", "dummy 1" );
   QCOMPARE(1, profile_1.compareVersion(profile_2) );
 
-  profile_2 =NewProfile("id2", "name", "1.2","some author", "dummy 1" );
+  profile_2 =Profile("id2", "name", "1.2","some author", "dummy 1" );
   QCOMPARE(-1, profile_1.compareVersion(profile_2) );
 
-  profile_2 =NewProfile("id2", "name", "2.0","some author", "dummy 1" );
+  profile_2 =Profile("id2", "name", "2.0","some author", "dummy 1" );
   QCOMPARE(-1, profile_1.compareVersion(profile_2) );
 }
 

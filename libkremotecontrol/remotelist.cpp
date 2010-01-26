@@ -22,26 +22,26 @@
 
 
 #include <kglobal.h>
+#include <QList>
 
 class RemotesPrivate
 {
   public:
-   RemotesPrivate();
-    QList<Remote> m_remotes;
-//     ~NewProfileServerPrivate() {
-//       while (!m_allProfiles.isEmpty()){
-// 	delete m_allProfiles.takeFirst();
-//       }
-//     }
-};
+   RemotesPrivate(){};
 
+   QList<Remote> m_remotes;
+
+};
 
 
 K_GLOBAL_STATIC(RemotesPrivate, instance)
 
-
-
-QList< Remote > Remotes::RemoteList::remotes()
+KREMOTECONTROL_EXPORT QList< Remote > Remotes::remotes()
 {
-  return instance.m_remotes;
+  return instance->m_remotes;
+}
+
+KREMOTECONTROL_EXPORT void Remotes::addRemote(const Remote& remote)
+{
+  instance->m_remotes.append(remote);
 }

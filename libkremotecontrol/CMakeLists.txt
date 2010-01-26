@@ -23,6 +23,8 @@ set(libkremotecontrol_LIB_SRCS
    actionexecutor.cpp
    dbusactionexecutor.cpp
    dbusinterface.cpp
+   remote.cpp
+   remotelist.cpp
 )
 
 kde4_add_library(libkremotecontrol SHARED ${libkremotecontrol_LIB_SRCS})

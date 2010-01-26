@@ -22,11 +22,13 @@
 #define REMOTELIST_H
 
 #include "remote.h"
+#include "kremotecontrol_export.h"
 
-namespace Remotes {
-class RemoteList: public QList<Remote>
-{
+
+namespace  Remotes {
+
       QList<Remote> remotes();
+      void addRemote(const Remote &remote);
 };
 
 #endif // REMOTELIST_H

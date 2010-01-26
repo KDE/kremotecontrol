@@ -20,8 +20,9 @@
 #ifndef PROTOTYPE_H
 #define PROTOTYPE_H
 #include "argument.h"
+#include "kremotecontrol_export.h"
 
-class Prototype
+class KREMOTECONTROL_EXPORT Prototype
 {
   public:
     Prototype(const QString &name, QList<Argument> args);

@@ -25,23 +25,30 @@
 
 #include <solid/control/remotecontrol.h>
 
-class Remote
+
+#include <QSet>
+
+class KREMOTECONTROL_EXPORT Remote
 {
+  private:
+  QList<Mode> m_modeList;
+  QString m_defaultModeName;
+  QString m_remoteName;
+  QSet<QString> m_buttonNameSet;
+
+
+
   public:
     
-//     Remote(const Solid::Control::RemoteControl &remote, const QList<Mode> &modes) ;
-    Solid::Control::RemoteControl remote();
+    Remote(const Solid::Control::RemoteControl& remote, const QList<Mode>& modes = QList<Mode>() );
+    
     QList<Mode> allModes() const;
-    Mode defaultMode();
+    Mode  defaultMode() ;
     void setDefaultMode(const Mode &mode );
     void addMode(const Mode &mode) ;
-    
-  private:
-    Solid::Control::RemoteControl m_remote;
-    QList<Mode> m_modeList;
-    QString m_defaultModeName;
-    
-    
+    void removeMode(const Mode &mode);
+    QSet<QString> buttonNames() const;
+    QString remoteName();    
 };
 
 #endif // REMOTE_H

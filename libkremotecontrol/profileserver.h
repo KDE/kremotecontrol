@@ -21,6 +21,7 @@
 #define PROFILESERVER_H
 
 #include "profile.h"
+#include "remote.h"
 #include "kremotecontrol_export.h"
 
 #include <QAbstractMessageHandler>
@@ -30,15 +31,26 @@
 
 namespace ProfileServer
 {
+
+    enum ProfileSupportedByRemote {
+
+	  FULL_SUPPORTED,
+	  PARTIAL_SUPPORTED,
+	  NOT_SUPPORTED,
+	  NO_ACTIONS_DEFINED
+    };
+
     void addProfile(const Profile &profile);
     
     QList<Profile> allProfiles();
-    Profile profile(const QString &profileName);
+    Profile profile(const QString &profileId);
     
     QList<ProfileActionTemplate> actionTemplateList(const QString &remote, const Profile &profile);
-
+    ProfileServer::ProfileSupportedByRemote isProfileAvailableForRemote(const  Profile &profile, const Remote &remote);
     ProfileActionTemplate actionTemplate(const ProfileAction* action);
 
+
+    
 
     class  ProfileXmlContentHandler    : public QAbstractMessageHandler {
 

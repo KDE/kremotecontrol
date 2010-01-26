@@ -23,6 +23,8 @@
 #include "profileactiontemplate.h"
 #include "kremotecontrol_export.h"
 
+
+
 class KREMOTECONTROL_EXPORT Profile
 {
 
