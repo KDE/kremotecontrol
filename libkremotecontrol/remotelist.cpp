@@ -27,7 +27,8 @@
 class RemotesPrivate
 {
   public:
-   RemotesPrivate(){};
+   RemotesPrivate(){
+   };
 
    QList<Remote> m_remotes;
 

@@ -32,6 +32,8 @@
 namespace ProfileServer
 {
 
+
+
     enum ProfileSupportedByRemote {
 
 	  FULL_SUPPORTED,
@@ -41,23 +43,23 @@ namespace ProfileServer
     };
 
     void addProfile(const Profile &profile);
-    
+
     QList<Profile> allProfiles();
     Profile profile(const QString &profileId);
-    
+
     QList<ProfileActionTemplate> actionTemplateList(const QString &remote, const Profile &profile);
     ProfileServer::ProfileSupportedByRemote isProfileAvailableForRemote(const  Profile &profile, const Remote &remote);
     ProfileActionTemplate actionTemplate(const ProfileAction* action);
 
 
-    
+
 
     class  ProfileXmlContentHandler    : public QAbstractMessageHandler {
 
       private:
         ProfileActionTemplate parseAction(QDomNode actionNode, const QString& profileId);
 	QXmlSchema *m_schema;
-	 
+
 	 Profile m_currentProfile;
       public:
 	 ProfileXmlContentHandler(const QUrl& schema);

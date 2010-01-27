@@ -20,33 +20,53 @@
 #include "profileactiontemplate.h"
 
 
-ProfileActionTemplate::ProfileActionTemplate(const QString& profile, const QString& actionTemplateID, const QString& application, const QString& appName, const QString& node, const QString& function, const QList< Argument >& defaultArguments, ProfileAction::ActionDestination destination, bool autostart, bool repeat, const QString& description, const QString &buttonName) {
-  m_profile = profile;
-  m_actionTemplateID = actionTemplateID;
-  m_application = application;
+  ProfileActionTemplate::ProfileActionTemplate(
+	  const QString &profileId,
+	  const QString &actionTemplateId,
+	  const QString &actionName,
+	  const QString &serviceName,
+	  const QString &node,
+	  const QString &function,
+	  const QList<Argument> &arguments,
+	  const ProfileAction::ActionDestination destination,
+	  bool autostart,
+	  bool repeat,
+	  const QString &description,
+	  const QString &buttonName)
+  {
+  m_profileId = profileId;
+  m_actionTemplateId = actionTemplateId;
+  m_actionName = actionName;
   m_node = node;
-  m_appName = appName;
+  m_serviceName = m_serviceName;
   m_function = function;
   m_description = description;
-  m_defaultArguments = defaultArguments;
-  m_description = destination;
+  m_defaultArguments = arguments;
+  m_destination= destination;
   m_autostart = autostart;
   m_repeat = repeat;
   m_buttonName = buttonName;
 }
 
-QString ProfileActionTemplate::profile() const
+QString ProfileActionTemplate::profileId() const
 {
-  return m_profile;
+ return m_profileId;
 }
 
-QString ProfileActionTemplate::actionTemplateID() const
+
+QString ProfileActionTemplate::actionTemplateId() const
 {
-  return m_actionTemplateID;
+  return m_actionTemplateId;
 }
 
-QString ProfileActionTemplate::appName() const {
-  return m_appName;
+
+QString ProfileActionTemplate::actionName() const
+{
+  return m_actionName;
+}
+
+QString ProfileActionTemplate::serviceName() const {
+  return m_serviceName;
 }
 
 QString ProfileActionTemplate::description() const {
@@ -80,8 +100,8 @@ QString ProfileActionTemplate::buttonName() const
 
 ProfileAction *ProfileActionTemplate::createAction(const Solid::Control::RemoteControlButton& button, const Mode &mode) const
 {
-  ProfileAction *action = new ProfileAction(button, mode, m_profile, QString());
-  action->setApplication(m_application);
+  ProfileAction *action = new ProfileAction(button, mode, m_profileId, QString());
+  action->setApplication(m_actionName);
   action->setNode(m_node);
   action->setFunction(m_function);
   QList<Argument> newArgs;

@@ -69,9 +69,7 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
         KCModule(KCMLircFactory::componentData(), parent, args)
 {
 
-    QDBusConnection dBusConnection = QDBusConnection::sessionBus();
-    dBusConnection.registerObject("/KCMLirc", this,
-                                  QDBusConnection::ExportAllSlots);
+    QDBusConnection::sessionBus().registerObject("/KCMLirc", this, QDBusConnection::ExportAllSlots);
 
     qRegisterMetaType<Action*>("Action*");
     qRegisterMetaType<Mode*>("Mode*");
@@ -93,26 +91,26 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
         i18n(
             "<h1>Remote Controls</h1><p>This module allows you to configure bindings between your remote controls and KDE applications. Simply select your remote control and click Add under the Actions/Buttons list. If you want KDE to attempt to automatically assign buttons to a supported application's actions, try clicking the Auto-Populate button.</p><p>To view the recognized applications and remote controls, simply select the <em>Loaded Profiles</em> tab.</p>"));
 
-    if (!DBusInterface::getInstance()->isProgramRunning("org.kde.irkick")) {
-        if (KMessageBox::questionYesNo(
-                    this,
-                    i18n(
-                        "The Infrared Remote Control software is not currently running. This configuration module will not work properly without it. Would you like to start it now?"),
-                    i18n("Software Not Running"), KGuiItem(i18nc("Start irkick daemon","Start")), KGuiItem(
-                        i18nc("Do not start irkick daemon", "Do Not Start"))) == KMessageBox::Yes) {
-            kDebug() << "S" << KToolInvocation::startServiceByDesktopName("irkick");
-            KConfig theConfig("irkickrc");
-            KConfigGroup generalGroup = theConfig.group("General");
-            if (generalGroup.readEntry("AutoStart", true) == false)
-                if (KMessageBox::questionYesNo(
-                            this,
-                            i18n(
-                                "Would you like the infrared remote control software to start automatically when you begin KDE?"),
-                            i18n("Automatically Start?"), KGuiItem(i18n("Start Automatically")),
-                            KGuiItem(i18n("Do Not Start"))) == KMessageBox::Yes)
-                    generalGroup.writeEntry("AutoStart", true);
-        }
-    }
+//     if (!DBusInterface::getInstance()->isProgramRunning("org.kde.irkick")) {
+//         if (KMessageBox::questionYesNo(
+//                     this,
+//                     i18n(
+//                         "The Infrared Remote Control software is not currently running. This configuration module will not work properly without it. Would you like to start it now?"),
+//                     i18n("Software Not Running"), KGuiItem(i18nc("Start irkick daemon","Start")), KGuiItem(
+//                         i18nc("Do not start irkick daemon", "Do Not Start"))) == KMessageBox::Yes) {
+//             kDebug() << "S" << KToolInvocation::startServiceByDesktopName("irkick");
+//             KConfig theConfig("irkickrc");
+//             KConfigGroup generalGroup = theConfig.group("General");
+//             if (generalGroup.readEntry("AutoStart", true) == false)
+//                 if (KMessageBox::questionYesNo(
+//                             this,
+//                             i18n(
+//                                 "Would you like the infrared remote control software to start automatically when you begin KDE?"),
+//                             i18n("Automatically Start?"), KGuiItem(i18n("Start Automatically")),
+//                             KGuiItem(i18n("Do Not Start"))) == KMessageBox::Yes)
+//                     generalGroup.writeEntry("AutoStart", true);
+//         }
+//     }
 
     QHBoxLayout *layout = new QHBoxLayout(this);
 
@@ -123,12 +121,11 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
     QStringList headers = (QStringList() << i18nc("Column which shows the available remotes on system", "Remote"));
     theKCMLircBase->theModes->setHeaderLabels(headers);
     layout->addWidget(widget);
-    
-    
-    
+
     connectSignalsAndSlots();
     load();
 }
+
 
 void KCMLirc::connectSignalsAndSlots() {
     connect(theKCMLircBase->theModes, SIGNAL(itemSelectionChanged()), this, SLOT(updateActions()));
@@ -214,7 +211,7 @@ void KCMLirc::slotAddAction()
 //     }
 //     Mode m = theKCMLircBase->theModes->currentItem()->data(0, Qt::UserRole).value<Mode>();
 //     QPointer<AddAction> theDialog = new AddAction(this, 0, m);
-// 
+//
 //     // populate the modes list box
 //     QTreeWidgetItem *item = theKCMLircBase->theModes->selectedItems().first();
 //     if (item->parent())
@@ -229,12 +226,12 @@ void KCMLirc::slotAddAction()
 //             theDialog->theModes->setCurrentItem(a);
 //         }
 //     }
-// 
+//
 //     if (theDialog->exec() == QDialog::Accepted) {
 //         allActions.addAction(theDialog->getAction());
 //         updateActions();
 //         emit changed(true);
-//     }    
+//     }
 }
 
 void KCMLirc::slotRemoveAction()
@@ -248,7 +245,7 @@ void KCMLirc::slotRemoveAction()
 void KCMLirc::autoPopulate(const Profile &profile, const Remote &remote)
 {
  /*   QStringList buttonList = Remotes::remotes()
-    
+
     foreach (Solid::Control::RemoteControlButton button, remote.remote().buttons() ) {
         const ProfileAction *pa = profile->getProfileActionByButton(button);
 
@@ -308,10 +305,10 @@ void KCMLirc::slotEditMode()
 {
 //     if (theKCMLircBase->theModes->selectedItems().isEmpty())
 //         return;
-// 
+//
 //     Mode mode = theKCMLircBase->theModes->currentItem()->data(0, Qt::UserRole).value<Mode>();
 //     QPointer<EditMode> theDialog = new EditMode(mode,allModes, this, 0);
-// 
+//
 //     if (theDialog->exec() == QDialog::Accepted) {
 //         Mode newMode = theDialog->getMode();
 //         mode.setIconFile(newMode.iconFile());
@@ -363,7 +360,7 @@ void KCMLirc::updateActions()
         return;
     }
 
-  
+
 //     IRAction *oldCurrent = 0;
 //     if (theKCMLircBase->theActions->currentIndex().isValid()) {
 //         oldCurrent = currentAction();
@@ -374,7 +371,7 @@ void KCMLirc::updateActions()
 //                                           + (m.name().isEmpty() ? i18n("Actions <i>always</i> available") :
 //                                              i18n("Actions available only in mode <b>%1</b>", m.name())));
 //     IRActions allActionsList = m_actionList.findByMode(m);
-// 
+//
 //     foreach(IRAction *tAction, allActionsList) {
 //         QStringList tActionRow;
 //         tActionRow << tAction->getButton().description();
@@ -432,7 +429,7 @@ void KCMLirc::updateModes()
 	QTreeWidgetItem *remoteTreeWidgetIcon = new QTreeWidgetItem(theKCMLircBase->theModes, QStringList() << remote.remoteName());
 	tFont.setBold(true);
 	remoteTreeWidgetIcon->setFont(0, tFont);
-        remoteTreeWidgetIcon->setExpanded(true);	
+        remoteTreeWidgetIcon->setExpanded(true);
 	foreach(Mode mode, remote.allModes()){
 	  QTreeWidgetItem *modeWidgetItem = new QTreeWidgetItem(remoteTreeWidgetIcon, QStringList() << mode.name());
 	  if (! mode.iconName().isNull()) {
@@ -446,7 +443,7 @@ void KCMLirc::updateModes()
 	   if (mode.name() == currentSelectedMode->name()) {
             theKCMLircBase->theModes->setCurrentItem(modeWidgetItem);
            }
-          
+
 	}
 	remoteTreeWidgetIcon->sortChildren(0, Qt::AscendingOrder);
 // 	remoteTreeWidgetIcon->setData(0, Qt::UserRole, qVariantFromValue(remote));
@@ -454,7 +451,7 @@ void KCMLirc::updateModes()
 
     if (theKCMLircBase->theModes->currentItem() == 0) {
         theKCMLircBase->theModes->setCurrentItem(theKCMLircBase->theModes->topLevelItem(0));
-    }    
+    }
     theKCMLircBase->theModes->currentItem()->setSelected(true);
     updateModesStatus();
     updateActions();
@@ -464,7 +461,7 @@ void KCMLirc::updateModes()
 void KCMLirc::updateProfileInfo()
 {
     ProfileServer::allProfiles();
-    
+
     QStandardItemModel *tModel = new QStandardItemModel( theKCMLircBase->theAvailableProfiles);
     foreach(const Profile &profile , ProfileServer::allProfiles()) {
       QStandardItem *tItem = new QStandardItem();
@@ -496,6 +493,9 @@ void KCMLirc::updateProfileDetails(QModelIndex index)
     infoList << i18n("Profile Identifier") << tProfile.profileId();
     new QTreeWidgetItem(theKCMLircBase->theProfileInformation, infoList);
     infoList.clear();
+    infoList << i18n("Profile Version") << tProfile.version();
+    new QTreeWidgetItem(theKCMLircBase->theProfileInformation, infoList);
+    infoList.clear();
     infoList << i18n("Number of Actions") << QString().setNum(tProfile.actionTemplates().count());
     new QTreeWidgetItem(theKCMLircBase->theProfileInformation, infoList);
     theKCMLircBase->theProfileActions->setModel(new ProfileModel(&tProfile, theKCMLircBase->theProfileActions));
@@ -518,6 +518,9 @@ void KCMLirc::updateRemoteInfo()
 
 void KCMLirc::load()
 {
+  foreach(Solid::Control::RemoteControl *remote, Solid::Control::RemoteControl::allRemotes()){
+    Remotes::addRemote(*remote);
+  }
     KConfig theConfig("irkickrc");
 /*/*    m_actionList.loadFromConfig(theConfig);
     m_modeList.loadFromConfig(theConfig);*/
@@ -526,7 +529,7 @@ void KCMLirc::load()
 //     m_modeList.generateNulls(remotes);
 
      updateProfileInfo();
-    updateModes();
+     updateModes();
      updateActions();
      updateRemoteInfo();
 }

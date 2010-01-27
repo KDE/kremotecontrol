@@ -47,7 +47,7 @@ class KCMLirc: public KCModule
 {
     Q_OBJECT
     Q_CLASSINFO("KCMLirc", "org.kde.kcmlirc")
-    
+
 private:
     Ui::KCMLircBase *theKCMLircBase;
     QList<Action*> m_actionList;
@@ -69,7 +69,7 @@ public:
     const QString notes(Action *action) const;
     explicit KCMLirc(QWidget *parent = 0, const QVariantList &args = QVariantList());
     ~KCMLirc();
-    
+
 public slots:
     void updateActions();
     void updateModesStatus();
@@ -93,7 +93,6 @@ signals:
 
 public Q_SLOTS:
     void gotButton(QString remote, QString button);
-
 };
 
 #endif

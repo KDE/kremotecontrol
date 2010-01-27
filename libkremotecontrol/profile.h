@@ -45,7 +45,7 @@ class KREMOTECONTROL_EXPORT Profile
 	const int operator==(const ProfileVersion &other) const;
 	QString toString() const;
     };
-  
+
   public:
     Profile(const QString &profileId, const QString &name, const QString &version, const QString &author, const QString &description = QString());
     Profile(){};
@@ -55,10 +55,10 @@ class KREMOTECONTROL_EXPORT Profile
     QString description() const;
     QString profileId() const;
     QList<ProfileActionTemplate> actionTemplates() const;
-    ProfileActionTemplate actionTemplate(const QString& actionTemplateID) const;
+    ProfileActionTemplate actionTemplate(const QString& actionTemplateId) const;
     void addTemplate(const ProfileActionTemplate &actionTemplate);
     int compareVersion(const Profile& other) const;
-    
+
   protected:
     QString m_profileId;
     QString m_name;

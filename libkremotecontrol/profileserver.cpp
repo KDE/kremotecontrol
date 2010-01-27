@@ -37,55 +37,85 @@
 
 class ProfileServerPrivate
 {
+  private:
+   QList<Profile> m_allProfiles;
+
   public:
     ProfileServerPrivate();
-    QList<Profile> m_allProfiles;
+    void addProfile(const Profile& profile);
+    QList<Profile> allProfiles();
+
 //     ~NewProfileServerPrivate() {
 //       while (!m_allProfiles.isEmpty()){
 // 	delete m_allProfiles.takeFirst();
 //       }
 //     }
 };
-    
 
 
 K_GLOBAL_STATIC(ProfileServerPrivate, instance)
 
+
+QList< Profile > ProfileServerPrivate::allProfiles()
+{
+  return m_allProfiles;
+}
 
 
 ProfileServerPrivate::ProfileServerPrivate()
 {
   ProfileServer::ProfileXmlContentHandler *handler = new ProfileServer::ProfileXmlContentHandler(QUrl::fromLocalFile(KGlobal::dirs()->findResource("data","profiles/profile.xsd")));
   foreach(const Profile &profile, handler->loadProfilesFromFiles(KGlobal::dirs()->findAllResources("data", "profiles/*.profile.xml"))){
-    ProfileServer::addProfile(profile);
+   // ProfileServer::addProfile(profile);
+   m_allProfiles.append(profile);
   }
 }
 
-KDE_EXPORT void ProfileServer::addProfile(const Profile& profile) {
-  for(int i =0; i< instance->m_allProfiles.size(); i++){
-    Profile tProfile = instance->m_allProfiles.at(i);
-   
+void ProfileServerPrivate::addProfile(const Profile& profile)
+{
+   for(int i =0; i< m_allProfiles.size(); i++){
+    Profile tProfile = m_allProfiles.at(i);
     if(profile.profileId() == tProfile.profileId()){
       if( 1 ==  profile.compareVersion(tProfile)){
 	// new profileversion is greater as current -> replace
-	instance->m_allProfiles.replace(i, profile);
+	m_allProfiles.replace(i, profile);
 	return;
       }else {
 	// in this case keep profile (first come first served...)
 	return;
       }
     }
-    //Profile is no in list. Append
-    instance->m_allProfiles.append(profile);
   }
+  // Profile is no in list. Append
+  m_allProfiles.append(profile);
+}
+
+
+KDE_EXPORT void ProfileServer::addProfile(const Profile& profile) {
+//    for(int i =0; i< instance->allProfiles().size(); i++){
+//     Profile tProfile = instance->allProfiles().at(i);
+//
+//     if(profile.profileId() == tProfile.profileId()){
+//       if( 1 ==  profile.compareVersion(tProfile)){
+// 	// new profileversion is greater as current -> replace
+// 	instance->allProfiles().replace(i, profile);
+// 	return;
+//       }else {
+// 	// in this case keep profile (first come first served...)
+// 	return;
+//       }
+//     }
+//   }
+  //     Profile is no in list. Append
+  instance->addProfile(profile);
 }
 
 KDE_EXPORT QList< Profile > ProfileServer::allProfiles() {
-  return instance->m_allProfiles;
+  return instance->allProfiles();
 }
 
 KDE_EXPORT Profile ProfileServer::profile(const QString& profileId) {
-  foreach(const Profile &profile, instance->m_allProfiles){
+  foreach(const Profile &profile, instance->allProfiles()){
     if(profile.profileId() == profileId){
       return profile;
     }
@@ -97,7 +127,7 @@ KDE_EXPORT Profile ProfileServer::profile(const QString& profileId) {
  QList< ProfileActionTemplate > KREMOTECONTROL_EXPORT ProfileServer::actionTemplateList(const QString& remote, const Profile& profile) {
   QList<ProfileActionTemplate> retList;
   foreach(const ProfileActionTemplate &actionTemplate, profile.actionTemplates()){
-    kDebug() << "got template" << actionTemplate.actionTemplateID() << "with button" << actionTemplate.buttonName();
+    kDebug() << "got template" << actionTemplate.actionTemplateId() << "with button" << actionTemplate.buttonName();
     foreach(const Solid::Control::RemoteControlButton &button, Solid::Control::RemoteControl(remote).buttons()){
       kDebug() << "got button" << button.name();
       if(button.name() == actionTemplate.buttonName()){
@@ -186,7 +216,7 @@ QList<Profile> ProfileServer::ProfileXmlContentHandler::loadProfilesFromFiles(co
 	profileList.append(getParsedProfile());
 	}
       }
-    }  
+    }
   return profileList;
 }
 
@@ -194,7 +224,7 @@ bool  ProfileServer::ProfileXmlContentHandler::parseFile(const QString& fileName
 {
   //QString id = fileName.left(filename.indexOf(".profile.xml"));
   QFile file( fileName );
-  
+
   QString profileId = QFileInfo(fileName).fileName();
   profileId = profileId.left(profileId.indexOf(".profile.xml"));
   QDomDocument doc;
@@ -212,9 +242,9 @@ bool  ProfileServer::ProfileXmlContentHandler::parseFile(const QString& fileName
     kDebug()<< "***********************************************************************";
     kDebug() << "id " << profileId <<"name " << name << "description " << description;
     kDebug() << "id " << profileId <<"author" << author<< "version" << version;
-   
-    m_currentProfile = Profile(name,version, author, description);
-    
+
+    m_currentProfile = Profile(profileId, name ,version, author, description);
+
     QDomNodeList actionNodeList = rootElement.elementsByTagName("action");
     for(int count = 0; count < actionNodeList.size(); ++count){
 	m_currentProfile.addTemplate(parseAction(actionNodeList.at(count), profileId));
@@ -230,7 +260,7 @@ bool  ProfileServer::ProfileXmlContentHandler::parseFile(const QString& fileName
 
 ProfileActionTemplate ProfileServer::ProfileXmlContentHandler::parseAction(QDomNode actionNode, const QString& profileId)
 {
- 
+
     QString buttonName;
     bool autostart = false;
     bool repeat;
@@ -247,12 +277,12 @@ ProfileActionTemplate ProfileServer::ProfileXmlContentHandler::parseAction(QDomN
     }
 
     QString actionName = actionNode.namedItem("name").toElement().text().trimmed();
-    
+
     QString description;
     if( ! actionNode.namedItem("description").isNull()) {
       description = actionNode.namedItem("description").toElement().text().trimmed();
     }
-    
+
     DBusAction::ActionDestination actionType;
     if( ! actionNode.namedItem("ifmulti").isNull())  {
 	QString ifMultiTag = actionNode.namedItem("ifmulti").toElement().text().trimmed();
@@ -267,7 +297,7 @@ ProfileActionTemplate ProfileServer::ProfileXmlContentHandler::parseAction(QDomN
 	}
 	else {
 	  actionType = DBusAction::None;
-	}	
+	}
     }else{
       actionType = DBusAction::Unique;
     }
@@ -284,13 +314,13 @@ ProfileActionTemplate ProfileServer::ProfileXmlContentHandler::parseAction(QDomN
     kDebug()<< "	" << "description" << description;
     kDebug()<< "	" << "autostart" << autostart;
     kDebug()<< "	" << "repeat" << repeat;
-    kDebug()<< "	" << "ifmulti" << actionType;    
+    kDebug()<< "	" << "ifmulti" << actionType;
     kDebug()<< "	" << "ifmulti" << serviceName;
     kDebug()<< "	" << "ifmulti" << nodeName;
     kDebug()<< "	" << "ifmulti" << functionName;
 
-  
-  
+
+
     QList<Argument> arguments;
     if( ! prototypeNode.namedItem("attributes").isNull()){
       QDomNodeList attributeNodes = prototypeNode.namedItem("attributes").toElement().elementsByTagName("attribute");
@@ -311,7 +341,7 @@ ProfileActionTemplate ProfileServer::ProfileXmlContentHandler::parseAction(QDomN
 	kDebug()<< "		" << "description" << description;
 	kDebug()<< "		" << "default" << defaultValue;
       }
-      
+
     }
     return ProfileActionTemplate(
       profileId,

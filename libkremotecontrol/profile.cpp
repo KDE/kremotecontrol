@@ -58,10 +58,10 @@ QList< ProfileActionTemplate > Profile::actionTemplates() const {
   return m_actionTemplates;
 }
 
-ProfileActionTemplate Profile::actionTemplate(const QString& actionTemplateID) const
+ProfileActionTemplate Profile::actionTemplate(const QString& actionTemplateId) const
 {
   foreach(const ProfileActionTemplate &actionTemplate, m_actionTemplates){
-    if(actionTemplate.actionTemplateID() == actionTemplateID){
+    if(actionTemplate.actionTemplateId() == actionTemplateId){
       return actionTemplate;
     }
   }
@@ -108,7 +108,7 @@ Profile::ProfileVersion::ProfileVersion(const QString& version)
 }
 
 QString Profile::ProfileVersion::toString() const
-{  
+{
   return  QString().setNum(m_major) + "." + QString().setNum(m_minor);
-  
+
 }

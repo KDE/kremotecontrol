@@ -143,7 +143,7 @@ QWidget *ArgumentDelegate::createEditor(QWidget *parent,
     unsigned int maxInt = -1;
     kDebug() << "creaing edtor for:" << index.model()->data(index, Qt::EditRole) << "type:" << index.model()->data(index, Qt::EditRole).type();
     switch (index.model()->data(index, Qt::EditRole).type()) {
-    case QVariant::Int: 
+    case QVariant::Int:
     case QVariant::LongLong: {
         QSpinBox *spinBox = new QSpinBox(parent);
         spinBox->setMaximum(maxInt/2);
@@ -185,7 +185,7 @@ QWidget *ArgumentDelegate::createEditor(QWidget *parent,
             value += tmp;
         }
         listLineEdit->setText(value);
-        
+
         editor = listLineEdit;
         }
         break;
@@ -348,11 +348,11 @@ QVariant ProfileModel::headerData(int section, Qt::Orientation orientation, int 
         if (role == Qt::DisplayRole) {
             switch (section) {
             case 0:
-                return i18nc("Remote button name", "Name");
+                return i18nc("Profile name", "Name");
             case 1:
-                return i18n("Options");
+                return i18n("Description");
             case 2:
-                return i18n("Comment");
+                return i18n("Default argument count");
             case 3:
                 return i18n("Mapped remote button");
             }
@@ -362,7 +362,7 @@ QVariant ProfileModel::headerData(int section, Qt::Orientation orientation, int 
 }
 
 ProfileActionTemplate* ProfileModel::getProfileActionTemlate(int index) const
-{	
+{
     return index == -1 ? 0 : QStandardItemModel::item(index)->data(Qt::UserRole).value<ProfileActionTemplate*>();
 }
 
@@ -370,10 +370,10 @@ ProfileActionTemplate* ProfileModel::getProfileActionTemlate(int index) const
 void ProfileModel::appendRow(ProfileActionTemplate actionTemplate)
 {
     QList<QStandardItem*> row;
-    QStandardItem *item = new QStandardItem(actionTemplate.profile());
+    QStandardItem *item = new QStandardItem(actionTemplate.actionName());
     item->setData(qVariantFromValue(&actionTemplate), Qt::UserRole);
     row.append(item);
-    row.append(new QStandardItem(QString::number(actionTemplate.defaultArguments().size())));
+
     if (!(actionTemplate.description().isEmpty())) {
         QStandardItem *tItem = new  QStandardItem(actionTemplate.description());
         tItem->setToolTip(actionTemplate.description());
@@ -381,6 +381,7 @@ void ProfileModel::appendRow(ProfileActionTemplate actionTemplate)
     } else {
         row.append(new QStandardItem("-"));
     }
+    row.append(new QStandardItem(QString::number(actionTemplate.defaultArguments().size())));
     if (!actionTemplate.buttonName().isEmpty()) {
         row.append(new QStandardItem(actionTemplate.buttonName()));
     } else {
@@ -462,7 +463,7 @@ QVariant RemoteButtonModel::headerData(int section, Qt::Orientation orientation,
 
 
 QModelIndex RemoteButtonModel::indexOfButtonName(const QString &button)
-{  
+{
   for(int row = 0; row < QStandardItemModel::rowCount(); ++row){
     if(button == getButton(row)->name()){
       return indexFromItem(item(row));

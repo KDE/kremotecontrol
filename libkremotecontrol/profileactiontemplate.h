@@ -30,8 +30,8 @@ class KREMOTECONTROL_EXPORT ProfileActionTemplate
   public:
     ProfileActionTemplate(const QString &profile,
 			  const QString &actionTemplateID,
-			  const QString &application,
-			  const QString &appName,
+			  const QString &actionName,
+			  const QString &serviceName,
 			  const QString &node,
 			  const QString &function,
 			  const QList<Argument> &arguments,
@@ -40,29 +40,30 @@ class KREMOTECONTROL_EXPORT ProfileActionTemplate
 			  bool repeat,
 			  const QString &description = QString(),
 			  const QString &buttonName = QString());
-			  
+
     ProfileActionTemplate() {};
 
-    QString profile() const;
-    QString actionTemplateID() const;
-    QString appName() const;
+    QString profileId() const;
+    QString actionTemplateId() const;
+    QString actionName() const;
+    QString serviceName() const;
     QString description() const;
     QList<Argument> defaultArguments() const;
     ProfileAction::ActionDestination destination() const;
     bool autostart() const;
     bool repeat() const;
     QString buttonName() const;
-    
+
     ProfileAction *createAction(const Solid::Control::RemoteControlButton &button, const Mode &mode) const;
-    
+
   protected:
-    QString m_profile; // e.g. Multimedia
-    QString m_actionTemplateID; // e.g. multimedia-amarok-1
-    QString m_application; // e.g. org.kde.amarok
+    QString m_profileId; // e.g. multimedia
+    QString m_actionTemplateId; // e.g. amarokPlay
+    QString m_actionName; // e.g. Play
+    QString m_serviceName; // e.g. org.kde.amarok
     QString m_node; // e.g. Player
-    QString m_appName; // e.g. Amarok
     QString m_function; // play
-    QString m_description; // e.g. Amarok Music Player
+    QString m_description; // e.g. Start playing
     QList<Argument> m_defaultArguments;
     ProfileAction::ActionDestination m_destination;
     bool m_autostart;
