@@ -122,6 +122,16 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
     ui.pbAddAction->setIcon(KIcon("list-add"));
     ui.pbRemoveAction->setIcon(KIcon("list-remove"));
 
+    ui.pbEditMode->setIcon(KIcon("configure"));
+    ui.pbEditAction->setIcon(KIcon("configure"));
+    
+    ui.pbMoveModeUp->setIcon(KIcon("arrow-up"));
+    ui.pbMoveModeDown->setIcon(KIcon("arrow-down"));
+    ui.pbMoveActionUp->setIcon(KIcon("arrow-up"));
+    ui.pbMoveActionDown->setIcon(KIcon("arrow-down"));
+
+    ui.pbCopyAction->setIcon(KIcon("edit-copy"));
+
 
     QStringList headers = (QStringList() << i18nc("Column which shows the available remotes on system", "Remote"));
 //    ui.tvRemotes->setHeaderLabels(headers);

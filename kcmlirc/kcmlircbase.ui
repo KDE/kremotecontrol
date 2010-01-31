@@ -69,6 +69,9 @@
                <height>32</height>
               </size>
              </property>
+             <property name="toolTip">
+              <string>Add Mode</string>
+             </property>
             </widget>
            </item>
            <item>
@@ -84,6 +87,66 @@
                <width>32</width>
                <height>32</height>
               </size>
+             </property>
+             <property name="toolTip">
+              <string>Remove Mode</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="KPushButton" name="pbEditMode">
+             <property name="minimumSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>Edit Mode</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="KPushButton" name="pbMoveModeUp">
+             <property name="minimumSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>Move Mode up</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="KPushButton" name="pbMoveModeDown">
+             <property name="minimumSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>Move Mode down</string>
              </property>
             </widget>
            </item>
@@ -125,6 +188,9 @@
                <height>32</height>
               </size>
              </property>
+             <property name="toolTip">
+              <string>Add Action</string>
+             </property>
             </widget>
            </item>
            <item>
@@ -140,6 +206,85 @@
                <width>32</width>
                <height>32</height>
               </size>
+             </property>
+             <property name="toolTip">
+              <string>Remove Action</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="KPushButton" name="pbEditAction">
+             <property name="minimumSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>Edit Action</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="KPushButton" name="pbCopyAction">
+             <property name="minimumSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>Duplicate Action</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="KPushButton" name="pbMoveActionUp">
+             <property name="minimumSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>Move Action up</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="KPushButton" name="pbMoveActionDown">
+             <property name="minimumSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>32</width>
+               <height>32</height>
+              </size>
+             </property>
+             <property name="toolTip">
+              <string>Move Action down</string>
              </property>
             </widget>
            </item>
