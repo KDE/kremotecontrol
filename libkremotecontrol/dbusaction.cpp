@@ -42,22 +42,13 @@ void DBusAction::setNode(const QString& node)
   m_node = node;
 }
 
-QString DBusAction::function() const{
+Prototype DBusAction::function() const{
   return m_function;
 }
 
-void DBusAction::setFunction(const QString& function)
+void DBusAction::setFunction(const Prototype& function)
 {
   m_function = function;
-}
-
-QList<Argument> DBusAction::arguments() const{
-  return m_arguments;
-}
-
-void DBusAction::setArguments(const QList< Argument >& arguments)
-{
-  m_arguments = arguments;
 }
 
 bool DBusAction::repeat() const{
@@ -94,7 +85,6 @@ void DBusAction::operator=(const DBusAction& action) {
   m_button = action.button();
   m_application = action.application();
   m_function = action.function();
-  m_arguments = action.arguments();
   m_destination = action.destination();
   m_autostart = action.autostart();
   m_repeat = action.repeat();
@@ -103,7 +93,6 @@ void DBusAction::operator=(const DBusAction& action) {
 bool DBusAction::operator==(const DBusAction& action) const {
   return m_type == action.type() &&
 	  m_application == action.application() &&
-	  m_arguments == action.arguments() &&
 	  m_autostart == action.autostart() &&
 	  m_repeat == action.repeat() &&
 	  m_destination == action.destination() &&
@@ -111,4 +100,12 @@ bool DBusAction::operator==(const DBusAction& action) const {
 	  m_node == action.node() &&
 	  m_button.id() == action.button().id() &&
 	  m_button.remoteName() == action.button().remoteName();
+}
+
+QString DBusAction::name() const {
+  return m_application + ":" + m_node;
+}
+
+QString DBusAction::description() const {
+  return m_function.name();
 }

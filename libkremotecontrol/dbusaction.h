@@ -23,6 +23,7 @@
 #include "action.h"
 #include "argument.h"
 #include "kremotecontrol_export.h"
+#include "prototype.h"
 
 #include <solid/control/remotecontrolbutton.h>
 
@@ -41,11 +42,8 @@ class KREMOTECONTROL_EXPORT DBusAction : public Action
     QString node() const;
     void setNode(const QString &node);
     
-    QString function() const;
-    void setFunction(const QString &function);
-    
-    QList<Argument> arguments() const;
-    void setArguments(const QList<Argument> &arguments);
+    Prototype function() const;
+    void setFunction(const Prototype &function);
     
     bool repeat() const;
     void setRepeat(bool repeat);
@@ -59,11 +57,13 @@ class KREMOTECONTROL_EXPORT DBusAction : public Action
     virtual void operator=(const DBusAction &action);
     virtual bool operator==(const DBusAction &action) const;
     
+    virtual QString name() const;
+    virtual QString description() const;
+    
   protected:
     QString m_application;
     QString m_node;
-    QString m_function;
-    QList<Argument> m_arguments;
+    Prototype m_function;
     bool m_repeat, m_autostart;
     ActionDestination m_destination;
 };

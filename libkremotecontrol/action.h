@@ -44,6 +44,9 @@ class KREMOTECONTROL_EXPORT Action: public QObject
     virtual void operator=(const Action &action);
     virtual bool operator==(const Action &action) const;
     
+    virtual QString name() const = 0;
+    virtual QString description() const = 0;
+    
   protected:
     ActionType m_type;
     QString m_remote;

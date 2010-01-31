@@ -49,3 +49,10 @@ bool ProfileAction::operator==(const ProfileAction& other) const {
 	  m_template == other.actionTemplateID();
 }
 
+QString ProfileAction::name() const {
+  return m_template;
+}
+
+QString ProfileAction::description() const {
+  return m_function;
+}

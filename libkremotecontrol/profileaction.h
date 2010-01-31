@@ -34,6 +34,9 @@ class KREMOTECONTROL_EXPORT ProfileAction : public DBusAction
     virtual void operator=(const ProfileAction &action);
     virtual bool operator==(const ProfileAction &other) const;
     
+    virtual QString name() const;
+    virtual QString description() const;
+    
   protected:
     QString m_profileName;
     QString m_template;

@@ -25,10 +25,17 @@ Prototype::Prototype(const QString& name, QList< Argument > args) {
   m_args = args;
 }
 
+Prototype::Prototype() {  
+}
+
 QString Prototype::name() const {
   return m_name;
 }
 
-QList< Argument > Prototype::args() const {
+QList<Argument> Prototype::args() const {
   return m_args;
+}
+
+bool Prototype::operator==(const Prototype &other) const {
+  return m_name == other.name() && m_args == other.args();
 }

@@ -26,9 +26,12 @@ class KREMOTECONTROL_EXPORT Prototype
 {
   public:
     Prototype(const QString &name, QList<Argument> args);
+    Prototype();
     
     QString name() const;
     QList<Argument> args() const;
+    
+    bool operator==(const Prototype &other) const;
     
   private:
     QString m_name;
