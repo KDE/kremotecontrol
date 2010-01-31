@@ -1,0 +1,21 @@
+include_directories(
+   ${CMAKE_CURRENT_SOURCE_DIR}/../libkremotecontrol
+   )
+   ## next target: test service
+
+set(kded_kremotecontrol_SRCS
+   kremotecontroldaemon.cpp
+   )
+
+kde4_add_plugin(kded_kremotecontrol ${kded_kremotecontrol_SRCS})
+
+target_link_libraries(kded_kremotecontrol
+   ${KDE4_KDECORE_LIBS}
+  libkremotecontrol
+   )
+
+install(TARGETS kded_kremotecontrol DESTINATION ${PLUGIN_INSTALL_DIR})
+
+install( FILES kremotecontrol.desktop DESTINATION ${SERVICES_INSTALL_DIR}/kded)
+
+
