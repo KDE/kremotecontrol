@@ -47,19 +47,29 @@ class KREMOTECONTROL_EXPORT Profile
     };
 
   public:
-    Profile(const QString &profileId, const QString &name, const QString &version, const QString &author, const QString &description = QString());
-    Profile(){};
+    Profile();
+
+    Profile(const QString &profileId, const QString &name, const QString &version, const QString &author, const QString &description);
+
     QString name() const;
     QString author() const;
     QString version() const;
     QString description() const;
     QString profileId() const;
     QList<ProfileActionTemplate> actionTemplates() const;
-    ProfileActionTemplate actionTemplate(const QString& actionTemplateId) const;
-    void addTemplate(const ProfileActionTemplate &actionTemplate);
-    int compareVersion(const Profile& other) const;
 
-  protected:
+
+    void name(const QString &name);
+    void author(const QString &author);
+    void version(const QString &version);
+    void description(const QString & description);
+    void profileId(const QString & profileId);
+    void actionTemplates(const QList< ProfileActionTemplate >& actionTemplates);
+    ProfileActionTemplate getActionTemplate(const QString& actionTemplateId);
+    void addTemplate(const ProfileActionTemplate &actionTemplate);
+    int compareVersion(Profile* other) const;
+
+  private:
     QString m_profileId;
     QString m_name;
     ProfileVersion m_version;

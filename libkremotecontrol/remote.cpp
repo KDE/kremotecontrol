@@ -22,15 +22,36 @@
 
 #include <KLocale>
 
+Remote::Remote()
+{
+
+}
+
 
 Remote::Remote(const Solid::Control::RemoteControl &remote, const QList<Mode> &modes) //: m_remote(remote)
-{  
+{
   m_modeList = modes;
   m_remoteName = remote.name();
   foreach(Solid::Control::RemoteControlButton button, remote.buttons()){
     m_buttonNameSet.insert(button.name());
   }
 }
+
+
+void Remote::remote(const Solid::Control::RemoteControl& remote)
+{
+  m_remoteName = remote.name();
+}
+
+
+
+
+void Remote::modeList(QList< Mode > modeList)
+{
+  m_modeList = modeList;
+}
+
+
 
 QSet< QString > Remote::buttonNames() const
 {
@@ -44,7 +65,7 @@ QString Remote::remoteName()
 
 QList< Mode> Remote::allModes() const
 {
-  return m_modeList;	
+  return m_modeList;
 }
 
 void Remote::addMode(const Mode& mode)
@@ -66,12 +87,12 @@ Mode  Remote::defaultMode()
   }
   Mode master(i18n("Default mode"), QString());
   m_modeList.append(master);
-  m_defaultModeName = master.name();  
- } 
+  m_defaultModeName = master.name();
+ }
 }
 
 
-void Remote::setDefaultMode(const Mode &mode ) 
+void Remote::setDefaultMode(const Mode &mode )
 {
  if(m_modeList.contains(mode)){
     m_defaultModeName = mode.name();

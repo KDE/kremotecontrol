@@ -463,10 +463,10 @@ void KCMLirc::updateProfileInfo()
     ProfileServer::allProfiles();
 
     QStandardItemModel *tModel = new QStandardItemModel( theKCMLircBase->theAvailableProfiles);
-    foreach(const Profile &profile , ProfileServer::allProfiles()) {
+    foreach(Profile *profile , ProfileServer::allProfiles()) {
       QStandardItem *tItem = new QStandardItem();
-      tItem->setData(profile.name(), Qt::DisplayRole);
-      tItem->setData(profile.profileId(), Qt::UserRole);
+      tItem->setData(profile->name(), Qt::DisplayRole);
+      tItem->setData(profile->profileId(), Qt::UserRole);
       tModel->appendRow(tItem);
       tModel->setHorizontalHeaderLabels(QStringList()<< i18n("Profiles"));
     }
@@ -482,23 +482,25 @@ void KCMLirc::updateProfileDetails(QModelIndex index)
     if (!index.isValid()){
         return;
     }
-    Profile tProfile = ProfileServer::profile(theKCMLircBase->theAvailableProfiles->model()->data(index,Qt::UserRole).toString());
+    Profile *tProfile = ProfileServer::profile(theKCMLircBase->theAvailableProfiles->model()->data(index,Qt::UserRole).toString());
+    if(tProfile){
     QStringList infoList;
-    infoList << i18n("Profile Name") << tProfile.name();
+    infoList << i18n("Profile Name") << tProfile->name();
     new QTreeWidgetItem(theKCMLircBase->theProfileInformation, infoList);
     infoList.clear();
-    infoList << i18n("Profile Author") << tProfile.author();
+    infoList << i18n("Profile Author") << tProfile->author();
     new QTreeWidgetItem(theKCMLircBase->theProfileInformation, infoList);
     infoList.clear();
-    infoList << i18n("Profile Identifier") << tProfile.profileId();
+    infoList << i18n("Profile Identifier") << tProfile->profileId();
     new QTreeWidgetItem(theKCMLircBase->theProfileInformation, infoList);
     infoList.clear();
-    infoList << i18n("Profile Version") << tProfile.version();
+    infoList << i18n("Profile Version") << tProfile->version();
     new QTreeWidgetItem(theKCMLircBase->theProfileInformation, infoList);
     infoList.clear();
-    infoList << i18n("Number of Actions") << QString().setNum(tProfile.actionTemplates().count());
+    infoList << i18n("Number of Actions") << QString().setNum(tProfile->actionTemplates().count());
     new QTreeWidgetItem(theKCMLircBase->theProfileInformation, infoList);
-    theKCMLircBase->theProfileActions->setModel(new ProfileModel(&tProfile, theKCMLircBase->theProfileActions));
+    theKCMLircBase->theProfileActions->setModel(new ProfileModel(tProfile, theKCMLircBase->theProfileActions));
+    }
   }
 
 

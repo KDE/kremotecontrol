@@ -42,14 +42,12 @@ namespace ProfileServer
 	  NO_ACTIONS_DEFINED
     };
 
-    void addProfile(const Profile &profile);
+    void addProfile(Profile* profile);
 
-    QList<Profile> allProfiles();
-    Profile profile(const QString &profileId);
-
-    QList<ProfileActionTemplate> actionTemplateList(const QString &remote, const Profile &profile);
-    ProfileServer::ProfileSupportedByRemote isProfileAvailableForRemote(const  Profile &profile, const Remote &remote);
-    ProfileActionTemplate actionTemplate(const ProfileAction* action);
+    QList<Profile*> allProfiles();
+    Profile* profile(const QString& profileId);
+    QList<ProfileActionTemplate> actionTemplateList(const QString &remote, Profile *profile);
+    ProfileServer::ProfileSupportedByRemote isProfileAvailableForRemote(Profile *profile, const Remote &remote);
 
 
 
@@ -65,12 +63,9 @@ namespace ProfileServer
 	 ProfileXmlContentHandler(const QUrl& schema);
 	 ~ProfileXmlContentHandler();
 	 bool validateFile(const QString& fileName);
-	 bool  parseFile(const QString& fileName);
-	 QList<Profile> loadProfilesFromFiles(const QStringList& files);
+	 Profile *  parseFile(const QString& fileName);
+	 QList<Profile*> loadProfilesFromFiles(const QStringList& files);
 
-	 Profile getParsedProfile(){
-	    return m_currentProfile;
-	 }
 
 
       protected:

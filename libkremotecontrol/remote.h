@@ -39,16 +39,22 @@ class KREMOTECONTROL_EXPORT Remote
 
 
   public:
-    
+
+    Remote();
+
     Remote(const Solid::Control::RemoteControl& remote, const QList<Mode>& modes = QList<Mode>() );
-    
+
     QList<Mode> allModes() const;
     Mode  defaultMode() ;
     void setDefaultMode(const Mode &mode );
     void addMode(const Mode &mode) ;
     void removeMode(const Mode &mode);
     QSet<QString> buttonNames() const;
-    QString remoteName();    
+    QString remoteName();
+
+    void remote(const Solid::Control::RemoteControl& remote);
+    void modeList(QList< Mode > modeList);
+
 };
 
 #endif // REMOTE_H

@@ -22,12 +22,52 @@
 
 #include <kdebug.h>
 
+
+Profile::Profile()
+{
+
+}
+
+
 Profile::Profile(const QString &profileId, const QString &name, const QString &version, const QString &author, const QString &description) {
   m_profileId = profileId;
   m_name = name;
   m_version = ProfileVersion(version);
   m_author = author;
   m_description = description;
+}
+
+void Profile::profileId(const QString& profileId)
+{
+  m_profileId = profileId;
+}
+
+
+void Profile::name(const QString& name)
+{
+ m_name = name;
+}
+
+void Profile::version(const QString& version)
+{
+  m_version = ProfileVersion(version);
+}
+
+
+void Profile::author(const QString& author)
+{
+  m_author = author;
+}
+
+void Profile::description(const QString& description)
+{
+m_description = description;
+}
+
+
+void Profile::actionTemplates(const QList< ProfileActionTemplate >& actionTemplates)
+{
+    m_actionTemplates = actionTemplates;
 }
 
 QString Profile::name() const
@@ -58,7 +98,7 @@ QList< ProfileActionTemplate > Profile::actionTemplates() const {
   return m_actionTemplates;
 }
 
-ProfileActionTemplate Profile::actionTemplate(const QString& actionTemplateId) const
+ProfileActionTemplate Profile::getActionTemplate(const QString& actionTemplateId)
 {
   foreach(const ProfileActionTemplate &actionTemplate, m_actionTemplates){
     if(actionTemplate.actionTemplateId() == actionTemplateId){
@@ -75,9 +115,9 @@ QString Profile::version() const
 }
 
 
-int Profile::compareVersion(const Profile &other) const
+int Profile::compareVersion(Profile* other) const
 {
-  return m_version == other.version();
+  return m_version == other->version();
 }
 
 const int Profile::ProfileVersion::operator==(const Profile::ProfileVersion& other) const

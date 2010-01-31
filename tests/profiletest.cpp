@@ -38,19 +38,22 @@ void ProfileTest::testGetter()
 
 void ProfileTest::testVersion()
 {
-  Profile profile_1("id1", "name", "1.1","some author", "dummy 1" );
-  Profile profile_2("id2", "name", "1.1","some author", "dummy 1" );
-  
-  QCOMPARE(0, profile_1.compareVersion(profile_2) );
-  
-  profile_2=Profile("id2", "name", "1.0","some author", "dummy 1" );
-  QCOMPARE(1, profile_1.compareVersion(profile_2) );
+  Profile *profile_1 = new Profile("id1", "name", "1.1","some author", "dummy 1" );
+  Profile *profile_2 = new Profile("id2", "name", "1.1","some author", "dummy 1" );
 
-  profile_2 =Profile("id2", "name", "1.2","some author", "dummy 1" );
-  QCOMPARE(-1, profile_1.compareVersion(profile_2) );
+  QCOMPARE(0, profile_1->compareVersion(profile_2) );
 
-  profile_2 =Profile("id2", "name", "2.0","some author", "dummy 1" );
-  QCOMPARE(-1, profile_1.compareVersion(profile_2) );
+  profile_2=new Profile("id2", "name", "1.0","some author", "dummy 1" );
+  QCOMPARE(1, profile_1->compareVersion(profile_2) );
+
+  profile_2 = new Profile("id2", "name", "1.2","some author", "dummy 1" );
+  QCOMPARE(-1, profile_1->compareVersion(profile_2) );
+
+  profile_2 =new Profile("id2", "name", "2.0","some author", "dummy 1" );
+  QCOMPARE(-1, profile_1->compareVersion(profile_2) );
+
+  delete profile_1;
+  delete profile_2;
 }
 
 QTEST_MAIN( ProfileTest )
