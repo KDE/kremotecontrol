@@ -1,5 +1,6 @@
 /*
-    Copyright (C) <2010> Michael Zanetti <michael_zanetti@gmx.net>
+    <one line to give the program's name and a brief idea of what it does.>
+    Copyright (C) <year>  <name of author>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,18 +18,19 @@
 
 */
 
-#include "ui_addaction.h"
+#ifndef EDITDBUSACTION_H
+#define EDITDBUSACTION_H
 
-#include <action.h>
+#include "ui_editdbusaction.h"
 
-#include <kdialog.h>
-
-class AddAction: public KDialog
-{
-  public:
-    AddAction();
-    Action::ActionType getType();
+class EditDBusAction: public QWidget{
+  
+    public:
     
-  private:
-    Ui::AddAction ui;
+        EditDBusAction(QWidget* parent = 0, Qt::WFlags flags = 0);
+
+    private:
+        Ui::EditDBusAction ui;
 };
+
+#endif // EDITDBUSACTION_H

@@ -1,5 +1,6 @@
 /*
-    Copyright (C) <2010> Michael Zanetti <michael_zanetti@gmx.net>
+    <one line to give the program's name and a brief idea of what it does.>
+    Copyright (C) <year>  <name of author>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,18 +18,22 @@
 
 */
 
-#include "ui_addaction.h"
+#ifndef ACTIONCONTAINER_H
+#define ACTIONCONTAINER_H
 
-#include <action.h>
+#include "ui_actioncontainer.h"
 
 #include <kdialog.h>
+#include <action.h>
 
-class AddAction: public KDialog
-{
-  public:
-    AddAction();
-    Action::ActionType getType();
-    
-  private:
-    Ui::AddAction ui;
+
+class ActionContainer : public KDialog {
+  
+    public:
+        ActionContainer(Action::ActionType type, QWidget* parent = 0, Qt::WFlags flags = 0);
+        
+    private:
+        Ui::ActionContainer ui;
 };
+
+#endif // ACTIONCONTAINER_H

@@ -25,7 +25,9 @@
 
 
 #include "kcmlirc.h"
-// #include "addaction.h"
+#include "addaction.h"
+#include "actioncontainer.h"
+
 // #include "newmodedialog.h"
 #include "profileserver.h"
 // #include "selectprofile.h"
@@ -59,6 +61,7 @@
 
 #define VERSION "version name goes here"
 #include <remote.h>
+#include "actioncontainer.h"
 
 
 
@@ -142,6 +145,9 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
 
 
 void KCMLirc::connectSignalsAndSlots() {
+  
+  connect(ui.pbAddAction, SIGNAL(clicked(bool)), SLOT(addAction()));
+  
     connect(ui.tvRemotes, SIGNAL(itemSelectionChanged()), this, SLOT(updateActions()));
     connect(ui.tvRemotes, SIGNAL(itemSelectionChanged()), this, SLOT(updateModesStatus()));
 //     connect(ui.theActions, SIGNAL(itemSelectionChanged()), this, SLOT(updateActionsStatus()));
@@ -217,35 +223,13 @@ void KCMLirc::slotAddActions()
 //     }
 }
 
-void KCMLirc::slotAddAction()
+void KCMLirc::addAction()
 {
-//     kDebug();
-//     if (ui.theModes->selectedItems().isEmpty()){
-//         return;
-//     }
-//     Mode m = ui.theModes->currentItem()->data(0, Qt::UserRole).value<Mode>();
-//     QPointer<AddAction> theDialog = new AddAction(this, 0, m);
-//
-//     // populate the modes list box
-//     QTreeWidgetItem *item = ui.theModes->selectedItems().first();
-//     if (item->parent())
-//         item = item->parent();
-//     theDialog->theModes->setEnabled(item->child(0));
-//     theDialog->theSwitchMode->setEnabled(item->child(0));
-//     for (int i = 0; i < item->childCount(); i++) {
-//         QListWidgetItem *a = new QListWidgetItem(item->child(i)->text(0),
-//                 theDialog->theModes);
-//         if (item->isSelected()) {
-//             a->setSelected(true);
-//             theDialog->theModes->setCurrentItem(a);
-//         }
-//     }
-//
-//     if (theDialog->exec() == QDialog::Accepted) {
-//         allActions.addAction(theDialog->getAction());
-//         updateActions();
-//         emit changed(true);
-//     }
+    AddAction addActionDialog;
+    if(addActionDialog.exec() == KDialog::Accepted){
+        ActionContainer actionContainer(addActionDialog.getType());
+        actionContainer.exec();
+    }    
 }
 
 void KCMLirc::slotRemoveAction()

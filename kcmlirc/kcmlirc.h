@@ -82,12 +82,14 @@ public slots:
     void slotAddMode();
     void slotRemoveMode();
     void slotSetDefaultMode();
-    void slotAddAction();
     void slotAddActions();
     void slotEditAction();
     void slotRemoveAction();
     void slotEditMode();
 
+private slots:
+  void addAction();  
+    
 signals:
     void haveButton(const QString &remote, const QString &button);
 
