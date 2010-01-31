@@ -23,7 +23,12 @@
 
 #include <KCModuleInfo>
 #include <KDebug>
+#include <kdelirc/libkremotecontrol/dbusinterface.h>
+#include <kdelirc/libkremotecontrol/mode.h>
+#include <kdelirc/libkremotecontrol/action.h>
+#include <kdelirc/libkremotecontrol/executionengine.h>
 
+#include<QHash>
 
 K_PLUGIN_FACTORY(KRemoteControlDaemonFactory,
                  registerPlugin<KRemoteControlDaemon>();
@@ -37,6 +42,18 @@ class KRemoteControlDaemonPrivate
 
   KRemoteControlDaemonPrivate(){
     kDebug() << "hallIchBinDa";
+  };
+  private:
+
+  QHash<QString, Mode*> remoteModes;
+
+  public:
+
+  Mode* getMode(const QString& remoteName) {
+    if(remoteModes.contains(remoteName)){
+      return remoteModes[remoteName];
+    }
+    return 0;
   };
 
 
@@ -53,5 +70,17 @@ Q_D(KRemoteControlDaemon);
 
 KRemoteControlDaemon::~KRemoteControlDaemon()
 {
+
+}
+
+
+void KRemoteControlDaemon::gotMessage(const Solid::Control::RemoteControlButton& button)
+{
+  Mode *mode = d_ptr->getMode(button.name());
+  if(mode){
+    foreach(Action *action, mode->getActionsForButtonName(button.name())){
+	ExecutionEngine::executeAction(action);
+    }
+  }
 
 }

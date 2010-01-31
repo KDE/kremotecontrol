@@ -21,6 +21,10 @@
 #ifndef KREMOTECONTROLDAEMON_H
 #define KREMOTECONTROLDAEMON_H
 
+
+#include <solid/control/remotecontrolmanager.h>
+#include <solid/control/remotecontrol.h>
+
 #include <KDEDModule>
 
 #include <QVariant>
@@ -35,7 +39,18 @@ Q_DECLARE_PRIVATE(KRemoteControlDaemon)
 public:
     KRemoteControlDaemon(QObject * parent, const QVariantList&);
     virtual ~KRemoteControlDaemon();
-private:
+
+    bool isConnected() {
+        return Solid::Control::RemoteControlManager::connected();
+    }
+
+  private:
     KRemoteControlDaemonPrivate * d_ptr;
+
+
+  private slots:
+    void gotMessage(const Solid::Control::RemoteControlButton &button);
+
+
 };
 #endif // KREMOTECONTROLDAEMON_H
