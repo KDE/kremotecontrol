@@ -54,5 +54,5 @@ QString ProfileAction::name() const {
 }
 
 QString ProfileAction::description() const {
-  return m_function;
+  return m_function.name();
 }

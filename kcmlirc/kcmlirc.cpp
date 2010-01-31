@@ -71,9 +71,9 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
 
     QDBusConnection::sessionBus().registerObject("/KCMLirc", this, QDBusConnection::ExportAllSlots);
 
-    qRegisterMetaType<Action*>("Action*");
-    qRegisterMetaType<Mode*>("Mode*");
-    qRegisterMetaType<Remote*>("Remote*");
+//     qRegisterMetaType<Action*>("Action*");
+//     qRegisterMetaType<Mode*>("Mode*");
+//     qRegisterMetaType<Remote*>("Remote*");
 
     KGlobal::locale()->insertCatalog("kcm_lirc");
     setAboutData(
@@ -113,14 +113,18 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
 //     }
 
     QHBoxLayout *layout = new QHBoxLayout(this);
-
     QWidget *widget = new QWidget(this);
-    theKCMLircBase = new Ui::KCMLircBase();
-    theKCMLircBase->setupUi(widget);
+    ui.setupUi(widget);
+    layout->addWidget(widget);
+
+    ui.pbAddMode->setIcon(KIcon("list-add"));
+    ui.pbRemoveMode->setIcon(KIcon("list-remove"));
+    ui.pbAddAction->setIcon(KIcon("list-add"));
+    ui.pbRemoveAction->setIcon(KIcon("list-remove"));
+
 
     QStringList headers = (QStringList() << i18nc("Column which shows the available remotes on system", "Remote"));
-    theKCMLircBase->theModes->setHeaderLabels(headers);
-    layout->addWidget(widget);
+//    ui.tvRemotes->setHeaderLabels(headers);
 
     connectSignalsAndSlots();
     load();
@@ -128,23 +132,23 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
 
 
 void KCMLirc::connectSignalsAndSlots() {
-    connect(theKCMLircBase->theModes, SIGNAL(itemSelectionChanged()), this, SLOT(updateActions()));
-    connect(theKCMLircBase->theModes, SIGNAL(itemSelectionChanged()), this, SLOT(updateModesStatus()));
-    connect(theKCMLircBase->theActions, SIGNAL(itemSelectionChanged()), this, SLOT(updateActionsStatus()));
-    connect(theKCMLircBase->theActions, SIGNAL(doubleClicked(QModelIndex)),this,SLOT(slotEditAction()));
+    connect(ui.tvRemotes, SIGNAL(itemSelectionChanged()), this, SLOT(updateActions()));
+    connect(ui.tvRemotes, SIGNAL(itemSelectionChanged()), this, SLOT(updateModesStatus()));
+//     connect(ui.theActions, SIGNAL(itemSelectionChanged()), this, SLOT(updateActionsStatus()));
+//     connect(ui.theActions, SIGNAL(doubleClicked(QModelIndex)),this,SLOT(slotEditAction()));
 
-    connect(theKCMLircBase->theAvailableProfiles, SIGNAL(itemSelectionChanged()), this, SLOT(updateProfileDetails()));
+    connect(ui.theAvailableProfiles, SIGNAL(itemSelectionChanged()), this, SLOT(updateProfileDetails()));
 
-    connect(theKCMLircBase->theAddActions, SIGNAL(clicked()), this, SLOT(slotAddActions()));
-    connect(theKCMLircBase->theAddAction, SIGNAL(clicked()), this, SLOT(slotAddAction()));
-    connect(theKCMLircBase->theEditAction, SIGNAL(clicked()), this, SLOT(slotEditAction()));
+/*    connect(ui.theAddActions, SIGNAL(clicked()), this, SLOT(slotAddActions()));
+    connect(ui.theAddAction, SIGNAL(clicked()), this, SLOT(slotAddAction()));
+    connect(ui.theEditAction, SIGNAL(clicked()), this, SLOT(slotEditAction()));
 
-    connect(theKCMLircBase->theRemoveAction, SIGNAL(clicked()), this, SLOT(slotRemoveAction()));
-    connect(theKCMLircBase->theAddMode, SIGNAL(clicked()), this, SLOT(slotAddMode()));
-    connect(theKCMLircBase->theEditMode, SIGNAL(clicked()), this, SLOT(slotEditMode()));
-    connect(theKCMLircBase->theRemoveMode, SIGNAL(clicked()), this, SLOT(slotRemoveMode()));
-    connect(theKCMLircBase->theAvailableProfiles, SIGNAL(clicked(QModelIndex)), this, SLOT(updateProfileDetails(QModelIndex)));
-    connect(theKCMLircBase->theRemotes, SIGNAL(clicked(QModelIndex)), this, SLOT(updateRemoteDetails(QModelIndex)));
+    connect(ui.theRemoveAction, SIGNAL(clicked()), this, SLOT(slotRemoveAction()));
+    connect(ui.theAddMode, SIGNAL(clicked()), this, SLOT(slotAddMode()));
+    connect(ui.theEditMode, SIGNAL(clicked()), this, SLOT(slotEditMode()));
+    connect(ui.theRemoveMode, SIGNAL(clicked()), this, SLOT(slotRemoveMode()));*/
+    connect(ui.theAvailableProfiles, SIGNAL(clicked(QModelIndex)), this, SLOT(updateProfileDetails(QModelIndex)));
+    connect(ui.theRemotes, SIGNAL(clicked(QModelIndex)), this, SLOT(updateRemoteDetails(QModelIndex)));
 }
 
 
@@ -155,26 +159,26 @@ KCMLirc::~KCMLirc()
 
 void KCMLirc::updateModesStatus()
 {
-    if (! theKCMLircBase->theModes->selectedItems().isEmpty()) {
-        QTreeWidgetItem *item = theKCMLircBase->theModes->selectedItems().first();
+/*    if (! ui.tvRemotes->selectionModel()->hasSelection()) {
+//        QTreeWidgetItem *item = ui.tvRemotes->selectionModel()->se.first();
         bool remoteSelected = item->isSelected();
-        theKCMLircBase->theAddActions->setEnabled(remoteSelected && ProfileServer::allProfiles().count());
-        theKCMLircBase->theAddAction->setEnabled(remoteSelected);
-        theKCMLircBase->theAddMode->setEnabled(remoteSelected);
-        theKCMLircBase->theRemoveMode->setEnabled(item->parent() != 0);
-        theKCMLircBase->theEditMode->setEnabled(remoteSelected);
-    }
+        ui.theAddActions->setEnabled(remoteSelected && ProfileServer::allProfiles().count());
+        ui.theAddAction->setEnabled(remoteSelected);
+        ui.theAddMode->setEnabled(remoteSelected);
+        ui.theRemoveMode->setEnabled(item->parent() != 0);
+        ui.theEditMode->setEnabled(remoteSelected);
+    }*/
 }
 
 void KCMLirc::updateActionsStatus()
 {
-    theKCMLircBase->theRemoveAction->setEnabled(theKCMLircBase->theActions->currentIndex().isValid());
-    theKCMLircBase->theEditAction->setEnabled(theKCMLircBase->theActions->currentIndex().isValid());
+/*    ui.theRemoveAction->setEnabled(ui.theActions->currentIndex().isValid());
+    ui.theEditAction->setEnabled(ui.theActions->currentIndex().isValid());*/
 }
 
 void KCMLirc::slotEditAction()
 {
-//     QTreeWidgetItem *item = theKCMLircBase->theModes->selectedItems().first();
+//     QTreeWidgetItem *item = ui.theModes->selectedItems().first();
 //     if (item->parent())
 //         item = item->parent();
 //     QStringList modeList;
@@ -191,10 +195,10 @@ void KCMLirc::slotEditAction()
 
 void KCMLirc::slotAddActions()
 {
-//     if (theKCMLircBase->theModes->selectedItems().isEmpty()) {
+//     if (ui.theModes->selectedItems().isEmpty()) {
 //         return;
 //     }
-//     Mode mode = theKCMLircBase->theModes->currentItem()->data(0, Qt::UserRole).value<Mode>();
+//     Mode mode = ui.theModes->currentItem()->data(0, Qt::UserRole).value<Mode>();
 //      QPointer<SelectProfile> tDialog = new SelectProfile( mode.remote(),this);
 //     if (tDialog->exec() == QDialog::Accepted) {
 //       autoPopulate(tDialog->getSelectedProfile(),mode);
@@ -206,14 +210,14 @@ void KCMLirc::slotAddActions()
 void KCMLirc::slotAddAction()
 {
 //     kDebug();
-//     if (theKCMLircBase->theModes->selectedItems().isEmpty()){
+//     if (ui.theModes->selectedItems().isEmpty()){
 //         return;
 //     }
-//     Mode m = theKCMLircBase->theModes->currentItem()->data(0, Qt::UserRole).value<Mode>();
+//     Mode m = ui.theModes->currentItem()->data(0, Qt::UserRole).value<Mode>();
 //     QPointer<AddAction> theDialog = new AddAction(this, 0, m);
 //
 //     // populate the modes list box
-//     QTreeWidgetItem *item = theKCMLircBase->theModes->selectedItems().first();
+//     QTreeWidgetItem *item = ui.theModes->selectedItems().first();
 //     if (item->parent())
 //         item = item->parent();
 //     theDialog->theModes->setEnabled(item->child(0));
@@ -237,7 +241,7 @@ void KCMLirc::slotAddAction()
 void KCMLirc::slotRemoveAction()
 {
 //     m_actionList.erase(currentAction());
-    m_actionList.removeAll(currentAction());
+//     m_actionList.removeAll(currentAction());
     updateActions();
     emit changed(true);
 }
@@ -286,7 +290,7 @@ void KCMLirc::autoPopulate(const Profile &profile, const Remote &remote)
 
 void KCMLirc::slotAddMode()
 {
-//     if (theKCMLircBase->theModes->selectedItems().isEmpty()) {
+//     if (ui.theModes->selectedItems().isEmpty()) {
 //         return;
 //     }
 //     QPointer<NewModeDialog>  theDialog = new NewModeDialog(allModes, this,0);
@@ -303,10 +307,10 @@ void KCMLirc::slotAddMode()
 
 void KCMLirc::slotEditMode()
 {
-//     if (theKCMLircBase->theModes->selectedItems().isEmpty())
+//     if (ui.theModes->selectedItems().isEmpty())
 //         return;
 //
-//     Mode mode = theKCMLircBase->theModes->currentItem()->data(0, Qt::UserRole).value<Mode>();
+//     Mode mode = ui.theModes->currentItem()->data(0, Qt::UserRole).value<Mode>();
 //     QPointer<EditMode> theDialog = new EditMode(mode,allModes, this, 0);
 //
 //     if (theDialog->exec() == QDialog::Accepted) {
@@ -328,46 +332,46 @@ void KCMLirc::slotEditMode()
 void KCMLirc::slotRemoveMode()
 {
 
-    Mode *tMode = theKCMLircBase->theModes->currentItem()->data(0, Qt::UserRole).value<Mode*>();
-    Remote *remote =  theKCMLircBase->theModes->currentItem()->parent()->data(0, Qt::UserRole).value<Remote*>();
-    if (KMessageBox::warningContinueCancel(this, i18n(
-                                               "Are you sure you want to remove %1 and all its actions?",
-                                               tMode->name()), i18n(
-                                               "Erase Actions?")) == KMessageBox::Continue) {
-        theKCMLircBase->theModes->clear();
-
-	remote->removeMode(*tMode);
-        updateModes();
-        emit changed(true);
-    }
+//     Mode *tMode = ui.theModes->currentItem()->data(0, Qt::UserRole).value<Mode*>();
+//     Remote *remote =  ui.theModes->currentItem()->parent()->data(0, Qt::UserRole).value<Remote*>();
+//     if (KMessageBox::warningContinueCancel(this, i18n(
+//                                                "Are you sure you want to remove %1 and all its actions?",
+//                                                tMode->name()), i18n(
+//                                                "Erase Actions?")) == KMessageBox::Continue) {
+//         ui.theModes->clear();
+// 
+// 	remote->removeMode(*tMode);
+//         updateModes();
+//         emit changed(true);
+//     }
 
 }
 
 void KCMLirc::slotSetDefaultMode()
 {
-    if (!theKCMLircBase->theModes->currentItem()) {
+/*    if (!ui.theModes->currentItem()) {
         return;
     }
-    Remote *remote = theKCMLircBase->theModes->currentItem()->parent()->data(0, Qt::UserRole).value<Remote*>();
-    remote->setDefaultMode(*(theKCMLircBase->theModes->currentItem()->data(0, Qt::UserRole).value<Mode*>()));
+    Remote *remote = ui.theModes->currentItem()->parent()->data(0, Qt::UserRole).value<Remote*>();
+    remote->setDefaultMode(*(ui.theModes->currentItem()->data(0, Qt::UserRole).value<Mode*>()));
     updateModes();
-    emit changed(true);
+    emit changed(true);*/
 }
 
 void KCMLirc::updateActions()
 {
-    if (!theKCMLircBase->theModes->currentItem()) {
-        return;
-    }
+//     if (!ui.theModes->currentItem()) {
+//         return;
+//     }
 
 
 //     IRAction *oldCurrent = 0;
-//     if (theKCMLircBase->theActions->currentIndex().isValid()) {
+//     if (ui.theActions->currentIndex().isValid()) {
 //         oldCurrent = currentAction();
 //     }
-//     theKCMLircBase->theActions->clear();
-//     Mode m = theKCMLircBase->theModes->currentItem()->data(0, Qt::UserRole).value<Mode>();
-//     theKCMLircBase->theModeLabel->setText(m.remote() + ": "
+//     ui.theActions->clear();
+//     Mode m = ui.theModes->currentItem()->data(0, Qt::UserRole).value<Mode>();
+//     ui.theModeLabel->setText(m.remote() + ": "
 //                                           + (m.name().isEmpty() ? i18n("Actions <i>always</i> available") :
 //                                              i18n("Actions available only in mode <b>%1</b>", m.name())));
 //     IRActions allActionsList = m_actionList.findByMode(m);
@@ -378,7 +382,7 @@ void KCMLirc::updateActions()
 //         tActionRow << tAction->application() << tAction->function() << tAction->arguments().toString() << notes(tAction);
 //         QTreeWidgetItem *tActionItem = new  QTreeWidgetItem(tActionRow);
 //         tActionItem->setData(0, Qt::UserRole, qVariantFromValue(tAction));
-//         theKCMLircBase->theActions->addTopLevelItem(tActionItem);
+//         ui.theActions->addTopLevelItem(tActionItem);
 //     }
 //     updateActionsStatus();
 }
@@ -403,30 +407,28 @@ const QString KCMLirc::notes(Action* action) const
 
 void KCMLirc::updateModes()
 {
-    Mode *currentSelectedMode;
-    if (theKCMLircBase->theModes->currentItem()) {
-        currentSelectedMode = theKCMLircBase->theModes->currentItem()->data(0, Qt::UserRole).value<Mode*>();
+/*    Mode *currentSelectedMode;
+    if (ui.theModes->currentItem()) {
+        currentSelectedMode = ui.theModes->currentItem()->data(0, Qt::UserRole).value<Mode*>();
     }
 
-    theKCMLircBase->theModes->clear();
+    ui.theModes->clear();
 
     if (Remotes::remotes().size()==0) {
-        //theKCMLircBase->theMainLabel->setMaximumSize(32767, 32767);
-	theKCMLircBase->theMainLabel->setVisible(true);
-	theKCMLircBase->tabWidget->setEnabled(false);
+        //ui.theMainLabel->setMaximumSize(32767, 32767);
+	ui.tabWidget->setEnabled(false);
         return;
     }
     else {
-      theKCMLircBase->theMainLabel->setVisible(false);
-      theKCMLircBase->tabWidget->setEnabled(true);
-//         theKCMLircBase->theMainLabel->setMaximumSize(0, 0);
+      ui.tabWidget->setEnabled(true);
+//         ui.theMainLabel->setMaximumSize(0, 0);
     }
     foreach(Remote remote, Remotes::remotes()){
         QFont font = KApplication::font();
         font.setBold(true);
         QFontMetrics tFontMetric(font);
         QFont tFont = QFont();
-	QTreeWidgetItem *remoteTreeWidgetIcon = new QTreeWidgetItem(theKCMLircBase->theModes, QStringList() << remote.remoteName());
+	QTreeWidgetItem *remoteTreeWidgetIcon = new QTreeWidgetItem(ui.theModes, QStringList() << remote.remoteName());
 	tFont.setBold(true);
 	remoteTreeWidgetIcon->setFont(0, tFont);
         remoteTreeWidgetIcon->setExpanded(true);
@@ -441,7 +443,7 @@ void KCMLirc::updateModes()
             modeWidgetItem->setToolTip(1,mode.name());
             modeWidgetItem->setData(0, Qt::UserRole, qVariantFromValue(mode));
 	   if (mode.name() == currentSelectedMode->name()) {
-            theKCMLircBase->theModes->setCurrentItem(modeWidgetItem);
+            ui.theModes->setCurrentItem(modeWidgetItem);
            }
 
 	}
@@ -449,12 +451,12 @@ void KCMLirc::updateModes()
 // 	remoteTreeWidgetIcon->setData(0, Qt::UserRole, qVariantFromValue(remote));
     }
 
-    if (theKCMLircBase->theModes->currentItem() == 0) {
-        theKCMLircBase->theModes->setCurrentItem(theKCMLircBase->theModes->topLevelItem(0));
+    if (ui.theModes->currentItem() == 0) {
+        ui.theModes->setCurrentItem(ui.theModes->topLevelItem(0));
     }
-    theKCMLircBase->theModes->currentItem()->setSelected(true);
+    ui.theModes->currentItem()->setSelected(true);
     updateModesStatus();
-    updateActions();
+    updateActions();*/
 }
 
 
@@ -462,7 +464,7 @@ void KCMLirc::updateProfileInfo()
 {
     ProfileServer::allProfiles();
 
-    QStandardItemModel *tModel = new QStandardItemModel( theKCMLircBase->theAvailableProfiles);
+    QStandardItemModel *tModel = new QStandardItemModel( ui.theAvailableProfiles);
     foreach(Profile *profile , ProfileServer::allProfiles()) {
       QStandardItem *tItem = new QStandardItem();
       tItem->setData(profile->name(), Qt::DisplayRole);
@@ -471,35 +473,35 @@ void KCMLirc::updateProfileInfo()
       tModel->setHorizontalHeaderLabels(QStringList()<< i18n("Profiles"));
     }
     tModel->sort(0, Qt::AscendingOrder);
-    theKCMLircBase->theAvailableProfiles->setModel(tModel);
+    ui.theAvailableProfiles->setModel(tModel);
     //updateInformation();
 }
 
 void KCMLirc::updateProfileDetails(QModelIndex index)
 {
-    theKCMLircBase->theProfileInformation->clear();
-    theKCMLircBase->theProfileInformation->clear();
+    ui.theProfileInformation->clear();
+    ui.theProfileInformation->clear();
     if (!index.isValid()){
         return;
     }
-    Profile *tProfile = ProfileServer::profile(theKCMLircBase->theAvailableProfiles->model()->data(index,Qt::UserRole).toString());
+    Profile *tProfile = ProfileServer::profile(ui.theAvailableProfiles->model()->data(index,Qt::UserRole).toString());
     if(tProfile){
     QStringList infoList;
     infoList << i18n("Profile Name") << tProfile->name();
-    new QTreeWidgetItem(theKCMLircBase->theProfileInformation, infoList);
+    new QTreeWidgetItem(ui.theProfileInformation, infoList);
     infoList.clear();
     infoList << i18n("Profile Author") << tProfile->author();
-    new QTreeWidgetItem(theKCMLircBase->theProfileInformation, infoList);
+    new QTreeWidgetItem(ui.theProfileInformation, infoList);
     infoList.clear();
     infoList << i18n("Profile Identifier") << tProfile->profileId();
-    new QTreeWidgetItem(theKCMLircBase->theProfileInformation, infoList);
+    new QTreeWidgetItem(ui.theProfileInformation, infoList);
     infoList.clear();
     infoList << i18n("Profile Version") << tProfile->version();
-    new QTreeWidgetItem(theKCMLircBase->theProfileInformation, infoList);
+    new QTreeWidgetItem(ui.theProfileInformation, infoList);
     infoList.clear();
     infoList << i18n("Number of Actions") << QString().setNum(tProfile->actionTemplates().count());
-    new QTreeWidgetItem(theKCMLircBase->theProfileInformation, infoList);
-    theKCMLircBase->theProfileActions->setModel(new ProfileModel(tProfile, theKCMLircBase->theProfileActions));
+    new QTreeWidgetItem(ui.theProfileInformation, infoList);
+    ui.theProfileActions->setModel(new ProfileModel(tProfile, ui.theProfileActions));
     }
   }
 
@@ -507,14 +509,14 @@ void KCMLirc::updateProfileDetails(QModelIndex index)
 
 void KCMLirc::updateRemoteDetails(QModelIndex index)
 {
-//   QString tSelectedRemote = theKCMLircBase->theRemotes->model()->data(index).toString();
-//   theKCMLircBase->theRemoteButtons->setModel(new RemoteButtonModel(Solid::Control::RemoteControl(tSelectedRemote).buttons(), theKCMLircBase->theRemoteButtons));
+//   QString tSelectedRemote = ui.theRemotes->model()->data(index).toString();
+//   ui.theRemoteButtons->setModel(new RemoteButtonModel(Solid::Control::RemoteControl(tSelectedRemote).buttons(), ui.theRemoteButtons));
 }
 
 
 void KCMLirc::updateRemoteInfo()
 {
-//   theKCMLircBase->theRemotes->setModel(new  RemoteModel(Solid::Control::RemoteControl::allRemoteNames(), theKCMLircBase->theRemoteButtons));
+//   ui.theRemotes->setModel(new  RemoteModel(Solid::Control::RemoteControl::allRemoteNames(), ui.theRemoteButtons));
 }
 
 

@@ -27,8 +27,6 @@
 #ifndef IRKICK_H
 #define IRKICK_H
 
-#include "actionlist.h"
-#include "modelist.h"
 
 #include <kstatusnotifieritem.h>
 #include <kaboutdata.h>
@@ -47,11 +45,11 @@ class IRKick: public KStatusNotifierItem
 
 
     QString npApp, npModule, npMethod;
-    QMap<QString, Mode> currentModes;
-    QMap<QString, QActionGroup*> modeActions;
-    ActionList m_actionList;
+//     QMap<QString, Mode> currentModes;
+//     QMap<QString, QActionGroup*> modeActions;
+//     ActionList m_actionList;
     int theResetCount;
-    ModeList m_allModes;
+//     ModeList m_allModes;
     KMenu *m_menu;
     KAboutData *aboutData;
     QTimer *theFlashOff;
@@ -107,7 +105,7 @@ public Q_SLOTS: //dbus slot
         slotReloadConfiguration();
     }
     
-    void generateDemoActions();
+//     void generateDemoActions();
 
 private slots:
     void gotMessage(const Solid::Control::RemoteControlButton &button);

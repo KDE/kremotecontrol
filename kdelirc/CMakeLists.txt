@@ -8,12 +8,12 @@ include_directories(
 
 
 set(kdelirc_shared_LIB_SRCS
-   iraction.cpp 
-   iractions.cpp 
-   prototype.cpp 
-   modes.cpp 
-   arguments.cpp 
-   mode.cpp 
+   iraction.cpp
+   iractions.cpp
+   prototype.cpp
+   modes.cpp
+   arguments.cpp
+   mode.cpp
    profileserver.cpp
    dbusinterface.cpp
 )

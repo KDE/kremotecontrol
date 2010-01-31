@@ -1,5 +1,5 @@
 
-add_subdirectory( icons ) 
+add_subdirectory( icons )
 
 include_directories(
    ${CMAKE_SOURCE_DIR}/libkremotecontrol/
@@ -14,20 +14,20 @@ include_directories(
 
 
 set(libirkick_common_SRCS
-        main.cpp 
-        irkick.cpp 
-#        klircclient.cpp
+        main.cpp
+        irkick.cpp
+        klircclient.cpp
 )
 
 
 set(irkick_KDEINIT_SRCS ${libirkick_common_SRCS})
 
-qt4_add_dbus_adaptor(irkick_KDEINIT_SRCS org.kde.irkick.xml irkick.h IRKick) 
+qt4_add_dbus_adaptor(irkick_KDEINIT_SRCS org.kde.irkick.xml irkick.h IRKick)
 
 kde4_add_kdeinit_executable( irkick ${irkick_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_irkick  ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${KDE4_SOLID_LIBS} 
-                                      ${KDE4WORKSPACE_SOLIDCONTROL_LIBRARY} libkremotecontrol)
+target_link_libraries(kdeinit_irkick  ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${KDE4_SOLID_LIBS}
+                                      ${KDE4WORKSPACE_SOLIDCONTROL_LIBRARY} kdelirc_shared)
 install(TARGETS kdeinit_irkick ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 target_link_libraries(irkick kdeinit_irkick)

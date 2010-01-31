@@ -26,8 +26,7 @@
 	  const QString &actionName,
 	  const QString &serviceName,
 	  const QString &node,
-	  const QString &function,
-	  const QList<Argument> &arguments,
+	  const Prototype &function,
 	  const ProfileAction::ActionDestination destination,
 	  bool autostart,
 	  bool repeat,
@@ -41,7 +40,6 @@
   m_serviceName = m_serviceName;
   m_function = function;
   m_description = description;
-  m_defaultArguments = arguments;
   m_destination= destination;
   m_autostart = autostart;
   m_repeat = repeat;
@@ -75,7 +73,7 @@ QString ProfileActionTemplate::description() const {
 
 QList<Argument> ProfileActionTemplate::defaultArguments() const
 {
-  return m_defaultArguments;
+  return m_function.args();
 }
 
 DBusAction::ActionDestination ProfileActionTemplate::destination() const
@@ -103,12 +101,8 @@ ProfileAction *ProfileActionTemplate::createAction(const Solid::Control::RemoteC
   ProfileAction *action = new ProfileAction(button, mode, m_profileId, QString());
   action->setApplication(m_actionName);
   action->setNode(m_node);
-  action->setFunction(m_function);
   QList<Argument> newArgs;
-  foreach(const Argument &arg, m_defaultArguments){
-    newArgs.append(Argument(arg.defaultValue()));
-  }
-  action->setArguments(newArgs);
+  action->setFunction(m_function);
   action->setDestination(m_destination);
   action->setAutostart(m_autostart);
   action->setRepeat(m_repeat);

@@ -21,6 +21,7 @@
 #define ACTIONTEMPLATE_H
 
 #include "profileaction.h"
+#include "prototype.h"
 #include "kremotecontrol_export.h"
 
 #include <solid/control/remotecontrolbutton.h>
@@ -33,8 +34,7 @@ class KREMOTECONTROL_EXPORT ProfileActionTemplate
 			  const QString &actionName,
 			  const QString &serviceName,
 			  const QString &node,
-			  const QString &function,
-			  const QList<Argument> &arguments,
+			  const Prototype &function,
 			  const ProfileAction::ActionDestination,
 			  bool autostart,
 			  bool repeat,
@@ -62,9 +62,8 @@ class KREMOTECONTROL_EXPORT ProfileActionTemplate
     QString m_actionName; // e.g. Play
     QString m_serviceName; // e.g. org.kde.amarok
     QString m_node; // e.g. Player
-    QString m_function; // play
+    Prototype m_function; // play
     QString m_description; // e.g. Start playing
-    QList<Argument> m_defaultArguments;
     ProfileAction::ActionDestination m_destination;
     bool m_autostart;
     bool m_repeat;

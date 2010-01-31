@@ -399,7 +399,7 @@ void DBusInterface::executeAction(const DBusAction* action) {
       kDebug() << "runCommand" << runCommand;
       KToolInvocation::startServiceByDesktopName(runCommand);
     }
-    if (action->function().isEmpty()) // Just start
+    if (action->function().name().isEmpty()) // Just start
         return;
 
     if (!searchForProgram(action, programs)) {
@@ -411,12 +411,12 @@ void DBusInterface::executeAction(const DBusAction* action) {
         const QString &program = *i;
         kDebug() << "Searching DBus for program:" << program;
         if (dBusIface->isServiceRegistered(program)) {
-            kDebug() << "Sending data (" << program << ", " << '/' + action->node() << ", " << action->function();
+            kDebug() << "Sending data (" << program << ", " << '/' + action->node() << ", " << action->function().name();
 
             QDBusMessage m = QDBusMessage::createMethodCall(program, '/'
-                             + action->node(), "", action->function());
+                             + action->node(), "", action->function().name());
 
-            foreach(const Argument &arg, action->arguments()){
+            foreach(const Argument &arg, action->function().args()){
                 kDebug() << "Got argument:" << arg.value().type() << "value" << arg.value();
                 m << arg.value();
             }

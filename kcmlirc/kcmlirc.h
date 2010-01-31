@@ -49,16 +49,16 @@ class KCMLirc: public KCModule
     Q_CLASSINFO("KCMLirc", "org.kde.kcmlirc")
 
 private:
-    Ui::KCMLircBase *theKCMLircBase;
+    Ui::ConfigurationWidget ui;
     QList<Action*> m_actionList;
     QList<Mode*> m_modeList;
     void autoPopulate(const Profile& profile, const Remote& remote);
 
-    inline Action *currentAction() {
-        Action *tAction = theKCMLircBase->theActions->currentItem()->data(0, Qt::UserRole).value<Action*>();
+/*    inline Action *currentAction() {
+        Action *tAction = ui.theActions->currentItem()->data(0, Qt::UserRole).value<Action*>();
         return tAction;
 
-    }
+    }*/
     void connectSignalsAndSlots();
 
 public:

@@ -66,7 +66,6 @@ ProfileServerPrivate::ProfileServerPrivate()
 {
   ProfileServer::ProfileXmlContentHandler *handler = new ProfileServer::ProfileXmlContentHandler(QUrl::fromLocalFile(KGlobal::dirs()->findResource("data","profiles/profile.xsd")));
   foreach( Profile *profile, handler->loadProfilesFromFiles(KGlobal::dirs()->findAllResources("data", "profiles/*.profile.xml"))){
-   ProfileServer::addProfile(profile);
    addProfile(profile);
   }
 }
@@ -292,20 +291,6 @@ ProfileActionTemplate ProfileServer::ProfileXmlContentHandler::parseAction(QDomN
     QDomElement prototypeNode = actionNode.namedItem("prototype").toElement();
     QString serviceName = prototypeNode.namedItem("serviceName").toElement().text().trimmed();
     QString nodeName = prototypeNode.namedItem("node").toElement().text().trimmed();
-    QString functionName =  prototypeNode.namedItem("function").toElement().text().trimmed();
-
-
-    kDebug()<< ">>>>>> Action";
-    kDebug()<< "	" << "name" << actionName;
-    kDebug()<< "	" << "description" << description;
-    kDebug()<< "	" << "autostart" << autostart;
-    kDebug()<< "	" << "repeat" << repeat;
-    kDebug()<< "	" << "ifmulti" << actionType;
-    kDebug()<< "	" << "ifmulti" << serviceName;
-    kDebug()<< "	" << "ifmulti" << nodeName;
-    kDebug()<< "	" << "ifmulti" << functionName;
-
-
 
     QList<Argument> arguments;
     if( ! prototypeNode.namedItem("attributes").isNull()){
@@ -329,14 +314,27 @@ ProfileActionTemplate ProfileServer::ProfileXmlContentHandler::parseAction(QDomN
       }
 
     }
+
+    Prototype function(prototypeNode.namedItem("function").toElement().text().trimmed(), arguments);
+
+    kDebug()<< ">>>>>> Action";
+    kDebug()<< "	" << "name" << actionName;
+    kDebug()<< "	" << "description" << description;
+    kDebug()<< "	" << "autostart" << autostart;
+    kDebug()<< "	" << "repeat" << repeat;
+    kDebug()<< "	" << "ifmulti" << actionType;
+    kDebug()<< "	" << "ifmulti" << serviceName;
+    kDebug()<< "	" << "ifmulti" << nodeName;
+    kDebug()<< "	" << "ifmulti" << function.name();
+
+
     return ProfileActionTemplate(
       profileId,
       actionId,
       actionName,
       serviceName,
       nodeName,
-      functionName,
-      arguments,
+      function,
       actionType,
       autostart,
       repeat,
