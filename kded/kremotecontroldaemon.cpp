@@ -20,6 +20,7 @@
 
 #include "kremotecontroldaemon.h"
 
+#include "remotelist.h"
 
 #include <KCModuleInfo>
 #include <KDebug>
@@ -27,6 +28,7 @@
 #include <kdelirc/libkremotecontrol/mode.h>
 #include <kdelirc/libkremotecontrol/action.h>
 #include <kdelirc/libkremotecontrol/executionengine.h>
+
 
 #include<QHash>
 
@@ -43,18 +45,23 @@ class KRemoteControlDaemonPrivate
   KRemoteControlDaemonPrivate(){
     kDebug() << "hallIchBinDa";
   };
+
   private:
 
-  QHash<QString, Mode*> remoteModes;
+  QHash<QString, Mode*> m_remoteModes;
 
   public:
 
   Mode* getMode(const QString& remoteName) {
-    if(remoteModes.contains(remoteName)){
-      return remoteModes[remoteName];
+    if(m_remoteModes.contains(remoteName)){
+      return m_remoteModes[remoteName];
     }
     return 0;
   };
+
+  QHash<QString, Mode*> remoteModes(){
+	return m_remoteModes;
+   }
 
 
 };
@@ -83,4 +90,12 @@ void KRemoteControlDaemon::gotMessage(const Solid::Control::RemoteControlButton&
     }
   }
 
+}
+
+
+void KRemoteControlDaemon::currentModeChanged(const QString &remoteName,  Mode *mode)
+{
+  if(RemoteUtil::isAvailableInSolid(remoteName)){
+    d_ptr->remoteModes()[remoteName] = mode;
+  }
 }

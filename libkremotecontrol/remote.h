@@ -35,6 +35,7 @@ class KREMOTECONTROL_EXPORT Remote
   QString m_defaultModeName;
   QString m_remoteName;
   QSet<QString> m_buttonNameSet;
+  bool m_availableInSolid;
 
 
 
@@ -44,6 +45,7 @@ class KREMOTECONTROL_EXPORT Remote
 
     Remote(const Solid::Control::RemoteControl& remote, const QList<Mode>& modes = QList<Mode>() );
 
+    bool isAvailableInSolid();
     QList<Mode> allModes() const;
     Mode  defaultMode() ;
     void setDefaultMode(const Mode &mode );
@@ -54,6 +56,8 @@ class KREMOTECONTROL_EXPORT Remote
 
     void remote(const Solid::Control::RemoteControl& remote);
     void modeList(QList< Mode > modeList);
+
+    QStringList modesToStringList();
 
 };
 

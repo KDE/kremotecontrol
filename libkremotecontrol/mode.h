@@ -32,15 +32,15 @@ class KREMOTECONTROL_EXPORT Mode
   public:
     Mode();
     Mode(const QString &name, const QString &iconName = QString());
-    
+
     QString name() const;
     QString iconName() const;
-    
+
     void setName(const QString &name);
     void setIconName(const QString &iconName);
 
     bool operator==(const Mode &mode) const;
-    
+    QList<Action*> getActionsForButtonName(const QString& name);
   protected:
     QString m_name;
     QString m_iconName;

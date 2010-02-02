@@ -49,3 +49,8 @@ void Mode::setIconName(const QString& iconName)
 bool Mode::operator==(const Mode& mode) const {
   return m_name == mode.name() && m_iconName == mode.iconName();
 }
+
+QList<Action*> Mode::getActionsForButtonName(const QString &name){
+
+  return QList<Action*>();
+}

@@ -22,6 +22,8 @@
 #define KREMOTECONTROLDAEMON_H
 
 
+#include "mode.h"
+
 #include <solid/control/remotecontrolmanager.h>
 #include <solid/control/remotecontrol.h>
 
@@ -48,8 +50,10 @@ public:
     KRemoteControlDaemonPrivate * d_ptr;
 
 
-  private slots:
+  public slots:
     void gotMessage(const Solid::Control::RemoteControlButton &button);
+    void currentModeChanged(const QString& remoteName, Mode* mode);
+
 
 
 };

@@ -46,3 +46,20 @@ KREMOTECONTROL_EXPORT void Remotes::addRemote(const Remote& remote)
 {
   instance->m_remotes.append(remote);
 }
+
+
+KREMOTECONTROL_EXPORT bool RemoteUtil::isAvailableInSolid(const QString& name)
+{
+  foreach (const QString &  solidRemoteName, Solid::Control::RemoteControl::allRemoteNames()){
+    if(solidRemoteName == name){
+      return true;
+    }
+    return false;
+  }
+}
+
+
+KREMOTECONTROL_EXPORT bool RemoteUtil::isConfigured(const QString& name)
+{
+  return false;
+}

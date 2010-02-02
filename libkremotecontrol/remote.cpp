@@ -24,7 +24,7 @@
 
 Remote::Remote()
 {
-
+m_availableInSolid = false;
 }
 
 
@@ -41,6 +41,7 @@ Remote::Remote(const Solid::Control::RemoteControl &remote, const QList<Mode> &m
 void Remote::remote(const Solid::Control::RemoteControl& remote)
 {
   m_remoteName = remote.name();
+  m_availableInSolid = true;
 }
 
 
@@ -49,6 +50,7 @@ void Remote::remote(const Solid::Control::RemoteControl& remote)
 void Remote::modeList(QList< Mode > modeList)
 {
   m_modeList = modeList;
+  m_availableInSolid = true;
 }
 
 
@@ -99,6 +101,20 @@ void Remote::setDefaultMode(const Mode &mode )
  }
 }
 
+QStringList Remote::modesToStringList()
+{
+  QStringList list;
+
+foreach(const Mode &mode, m_modeList){
+    list <<  mode.name();
+  }
+}
+
+
+bool Remote::isAvailableInSolid()
+{
+  return m_availableInSolid;
+}
 
 
 // Solid::Control::RemoteControl Remote::remote()

@@ -31,4 +31,10 @@ namespace  Remotes {
       void addRemote(const Remote &remote);
 };
 
+namespace RemoteUtil{
+
+  bool isAvailableInSolid(const QString& name);
+  bool isConfigured(const QString & name);
+}
+
 #endif // REMOTELIST_H
