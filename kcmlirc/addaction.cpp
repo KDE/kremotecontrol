@@ -19,7 +19,7 @@
 
 #include "addaction.h"
 #include "dbusaction.h"
-#include "actioncontainer.h"
+#include "editactioncontainer.h"
 
 #include <kdebug.h>
 

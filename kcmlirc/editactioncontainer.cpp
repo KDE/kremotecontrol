@@ -18,7 +18,7 @@
 
 */
 
-#include "actioncontainer.h"
+#include "editactioncontainer.h"
 #include "editdbusaction.h"
 
 #include <kdebug.h>

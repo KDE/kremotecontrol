@@ -15,14 +15,14 @@ set(kcm_lirc_PART_SRCS
 #    selectprofile.cpp
    kcmlirc.cpp
    addaction.cpp
-   actioncontainer.cpp
+   editactioncontainer.cpp
    editdbusaction.cpp
    model.cpp
    )
 
 qt4_add_dbus_adaptor(kcm_lirc_PART_SRCS org.kde.kcmlirc.xml kcmlirc.h KCMLirc)
 
-kde4_add_ui_files(kcm_lirc_PART_SRCS addaction.ui actioncontainer.ui editdbusaction.ui configurationwidget.ui )
+kde4_add_ui_files(kcm_lirc_PART_SRCS addaction.ui editactioncontainer.ui editdbusaction.ui configurationwidget.ui )
 
 kde4_add_plugin(kcm_lirc ${kcm_lirc_PART_SRCS})
 

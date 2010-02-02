@@ -26,7 +26,9 @@
 
 #include "kcmlirc.h"
 #include "addaction.h"
-#include "actioncontainer.h"
+#include "editactioncontainer.h"
+#include "remote.h"
+#include "editactioncontainer.h"
 
 // #include "newmodedialog.h"
 #include "profileserver.h"
@@ -60,8 +62,6 @@
 #include <QDBusInterface>
 
 #define VERSION "version name goes here"
-#include <remote.h>
-#include "actioncontainer.h"
 
 
 
