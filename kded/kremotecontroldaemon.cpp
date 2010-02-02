@@ -85,9 +85,9 @@ void KRemoteControlDaemon::gotMessage(const Solid::Control::RemoteControlButton&
 {
   Mode *mode = d_ptr->getMode(button.name());
   if(mode){
-    foreach(Action *action, mode->getActionsForButtonName(button.name())){
+/*    foreach(Action *action, mode->getActionsForButtonName(button.name())){
 	ExecutionEngine::executeAction(action);
-    }
+    }*/
   }
 
 }

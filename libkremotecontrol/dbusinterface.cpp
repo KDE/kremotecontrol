@@ -131,7 +131,7 @@ KDE_EXPORT QStringList DBusInterface::getObjects(const QString &program) {
     return returnList;
 }
 
-KDE_EXPORT QStringList DBusInterface::getFunctions(const QString &program, const QString &object) {
+KDE_EXPORT QList<Prototype> DBusInterface::getFunctions(const QString &program, const QString &object) {
     QDBusInterface dBusIface(program, '/' + object, "org.freedesktop.DBus.Introspectable");
     QDBusReply<QString> response = dBusIface.call("Introspect");
 
@@ -150,8 +150,7 @@ KDE_EXPORT QStringList DBusInterface::getFunctions(const QString &program, const
     QDomElement node = domDoc.documentElement();
     QDomElement child = node.firstChildElement();
 
-    QStringList funcList;
-    QString function;
+    QList<Prototype> funcList;
 
     while (!child.isNull()) {
         if (child.tagName() == QLatin1String("interface")) {
@@ -163,60 +162,51 @@ KDE_EXPORT QStringList DBusInterface::getFunctions(const QString &program, const
             QDomElement subChild = child.firstChildElement();
             while (!subChild.isNull()) {
                 if (subChild.tagName() == QLatin1String("method")) {
-
-                    QString method = subChild.attribute(QLatin1String("name"));
-                    function = method;
-                    QDomElement arg = subChild.firstChildElement();
-                    QString argStr;
-                    QString retArg = "void";
-                    while (!arg.isNull()) {
-                        if (arg.tagName() == QLatin1String("arg")) {
-                            QString tmpArg = arg.attribute(QLatin1String("type"));
+                    QString functionName = subChild.attribute(QLatin1String("name"));
+                    QDomElement argDom = subChild.firstChildElement();
+                    QList<Argument> argList;
+                    while (!argDom.isNull()) {
+                        Argument argument;
+                        if (argDom.tagName() == QLatin1String("arg")) {
+                            QString tmpArg = argDom.attribute(QLatin1String("type"));
                             if (tmpArg == "i") {
-                                tmpArg = "int";
+                                argument.setValue(QVariant::Int);
                             } else if (tmpArg == "u") {
-                                tmpArg = "uint";
+                                argument.setValue(QVariant::UInt);
                             } else if (tmpArg == "x") {
-                                tmpArg = "qlonglong";
+                                argument.setValue(QVariant::LongLong);
                             } else if (tmpArg == "s") {
-                                tmpArg = "QString";
+                                argument.setValue(QVariant::String);
                             } else if (tmpArg == "b") {
-                                tmpArg = "bool";
+                                argument.setValue(QVariant::Bool);
                             } else if (tmpArg == "d") {
-                                tmpArg = "double";
+                                argument.setValue(QVariant::Double);
                             } else if (tmpArg == "as") {
-                                tmpArg = "QStringList";
+                                argument.setValue(QVariant::StringList);
                             } else if (tmpArg == "ay") {
-                                tmpArg = "QByteArray";
+                                argument.setValue(QVariant::ByteArray);
                             } else {
-                                arg = arg.nextSiblingElement();
+                                argDom = argDom.nextSiblingElement();
                                 continue;
                             }
 
-                            if (arg.attribute(QLatin1String("direction")) == "in") {
-                                if (!argStr.isEmpty()) {
-                                    argStr += ", ";
-                                }
-                                argStr += tmpArg;
-                                argStr.append(' ' );
-                                if (!arg.attribute(QLatin1String("name")).isEmpty()) {
-                                    argStr.append(arg.attribute(QLatin1String("name")));
+                            if (argDom.attribute(QLatin1String("direction")) == "in") {
+                                if (!argDom.attribute(QLatin1String("name")).isEmpty()) {
+                                    argument.setDescription(argDom.attribute(QLatin1String("name")));
                                 } else {
-                                    argStr.append( i18nc("The name of a parameter", "unknown"));
+                                    argument.setDescription(i18nc("The name of a parameter", "unknown"));
                                 }
-                            } else if (arg.attribute(QLatin1String("direction")) == "out") {
-                                retArg = tmpArg;
+                                argList.append(argument);
                             }
                         }
-                        arg = arg.nextSiblingElement();
+                        argDom = argDom.nextSiblingElement();
                     }
-                    function = retArg + ' ' + function;
-                    function += '(' + argStr + ')';
+                    Prototype function(functionName, argList);
+                    if(!funcList.contains(function)){
+                        funcList.append(function);
+                    }
                 }
                 subChild = subChild.nextSiblingElement();
-                if (!funcList.contains(function) && !function.isEmpty()) {
-                    funcList.append(function);
-                }
             }
         }
         child = child.nextSiblingElement();

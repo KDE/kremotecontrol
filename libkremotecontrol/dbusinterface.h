@@ -50,7 +50,7 @@ public:
 
   QStringList getRegisteredPrograms();
   QStringList getObjects(const QString &program);
-  QStringList getFunctions(const QString &program, const QString &object);
+  QList<Prototype> getFunctions(const QString &program, const QString &object);
 
   QStringList getRemotes();
   void requestNextKeyPress();

@@ -23,14 +23,32 @@
 
 #include "ui_editdbusaction.h"
 
+#include "dbusaction.h"
+#include "model.h"
+
+#include <QStandardItemModel>
+
 class EditDBusAction: public QWidget{
-  
+    Q_OBJECT
+    
     public:
     
-        EditDBusAction(QWidget* parent = 0, Qt::WFlags flags = 0);
+        EditDBusAction(DBusAction *action, QWidget* parent = 0, Qt::WFlags flags = 0);
+        ~EditDBusAction();
+        
+        void applyChanges();
 
     private:
         Ui::EditDBusAction ui;
+        
+        DBusAction *m_action;
+        DBusServiceModel *m_dbusServiceModel;
+        DBusFunctionModel *m_dbusFunctionModel;
+        ArgumentsModel *m_argumentsModel;
+        
+    private slots:
+        void refreshDBusFunctions(const QModelIndex &index);
+        void refreshArguments(const QModelIndex &index);
 };
 
 #endif // EDITDBUSACTION_H

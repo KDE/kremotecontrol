@@ -225,11 +225,15 @@ void KCMLirc::slotAddActions()
 
 void KCMLirc::addAction()
 {
+    // TODO: get currently selected remote!!!
+    QString remote = Solid::Control::RemoteControl::allRemotes().first()->name();
+
     AddAction addActionDialog;
-    if(addActionDialog.exec() == KDialog::Accepted){
-        ActionContainer actionContainer(addActionDialog.getType());
-        actionContainer.exec();
-    }    
+    Action *newAction = addActionDialog.createAction(remote);
+    if(newAction != 0){
+        // Yay... the new action is here
+        kDebug() << "created action:" << newAction->type() << newAction->name() << newAction->description();
+    }
 }
 
 void KCMLirc::slotRemoveAction()

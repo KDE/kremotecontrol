@@ -34,7 +34,8 @@ class KREMOTECONTROL_EXPORT DBusAction : public Action
   public:
     enum ActionDestination {Unique, Top, Bottom, None, All};
     
-    DBusAction(const Solid::Control::RemoteControlButton &button, const Mode &mode);
+    DBusAction(const QString &button, const Mode &mode);
+    DBusAction();
     
     QString application() const;
     void setApplication(const QString &application);

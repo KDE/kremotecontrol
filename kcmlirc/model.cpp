@@ -26,16 +26,52 @@
 
 #include "model.h"
 
-#include <QtAlgorithms>
+#include "dbusinterface.h"
+
 #include <kdebug.h>
-#include <QVariant>
 #include <KLocale>
-#include <QSpinBox>
 #include <KLineEdit>
-#include <QCheckBox>
-#include <QDoubleSpinBox>
 #include <KComboBox>
 
+#include <QVariant>
+#include <QtAlgorithms>
+#include <QSpinBox>
+#include <QCheckBox>
+#include <QDoubleSpinBox>
+
+
+/*
+***********************************
+DBusServiceModel
+***********************************
+*/
+
+DBusServiceModel::DBusServiceModel(QObject* parent): QStandardItemModel(parent) {
+    setHorizontalHeaderLabels(QStringList() << i18n("D-Bus applications"));
+    foreach(const QString &item, DBusInterface::getInstance()->getRegisteredPrograms()) {
+        DBusServiceItem *dbusServiceItem = new DBusServiceItem(item);
+        dbusServiceItem->setEditable(false);
+        appendRow(dbusServiceItem);
+        foreach(const QString &object, DBusInterface::getInstance()->getObjects(item)) {
+            dbusServiceItem->appendRow(new QStandardItem(object));
+        }
+    }
+    sort(0, Qt::AscendingOrder);
+}
+
+QString DBusServiceModel::application(const QModelIndex& index) const {
+    if(index.isValid() && index.parent().isValid()){
+        return data(index.parent(), Qt::UserRole).toString();
+    }
+    return QString();
+}
+
+QString DBusServiceModel::node(const QModelIndex& index) const {
+    if(index.isValid() && index.parent().isValid()){
+        return data(index, Qt::DisplayRole).toString();
+    }
+    return QString();
+}
 
 
 /*
@@ -92,18 +128,43 @@ DBusFunctionModel::DBusFunctionModel(QObject *parent):QStandardItemModel(parent)
     qRegisterMetaType<Prototype*>("Prototype*");
 }
 
-void DBusFunctionModel::appendRow (Prototype* prototype ) {
+void DBusFunctionModel::refresh(const QString &app, const QString &node) {
+    clear();
+
+    if(app.isEmpty()){
+        return;
+    }
+    
+    foreach(const Prototype &prototype, DBusInterface::getInstance()->getFunctions(app, node)){
+        appendRow(prototype);
+    }
+
+    sort(0, Qt::AscendingOrder);
+    
+}
+
+void DBusFunctionModel::appendRow(Prototype prototype) {
     QList<QStandardItem*> itemList;
-    QStandardItem *item = new QStandardItem(prototype->name());
+    QStandardItem *item = new QStandardItem(prototype.name());
     item->setData(qVariantFromValue(prototype), Qt::UserRole);
     itemList.append(item);
-//     itemList.append(new QStandardItem(prototype.argumentList()));
-//     itemList.append(new QStandardItem(prototype.prototype()));
+    QString argString;
+    foreach(const Argument &arg, prototype.args()){
+        if(!argString.isEmpty()){
+            argString += ", ";
+        }
+        argString += QString(QVariant::typeToName(arg.value().type()));
+        if(!arg.description().isEmpty()){
+            argString += " " + arg.description();
+        }
+    }
+    itemList.append(new QStandardItem(argString));
+//    itemList.append(new QStandardItem(prototype.name()));
     QStandardItemModel::appendRow(itemList);
 }
 
-Prototype* DBusFunctionModel::getPrototype(int index) const {
-    return QStandardItemModel::item(index)->data(Qt::UserRole).value<Prototype*>();
+Prototype DBusFunctionModel::getPrototype(int index) const {
+    return QStandardItemModel::item(index)->data(Qt::UserRole).value<Prototype>();
 }
 
 QVariant DBusFunctionModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -115,13 +176,57 @@ QVariant DBusFunctionModel::headerData(int section, Qt::Orientation orientation,
                 return i18n("Function");
             case 1:
                 return i18n("Parameter");
-            case 2:
-                return i18n("Prototype");
             }
         }
     }
     return QVariant();
 }
+
+/*
+***********************************
+ArgumentsModel
+***********************************
+*/
+
+
+ArgumentsModel::ArgumentsModel(QObject* parent): QStandardItemModel(parent) {
+}
+
+
+void ArgumentsModel::refresh(const Prototype& prototype) {
+    clear();
+    foreach(const Argument &arg, prototype.args()){
+        QList<QStandardItem*> itemList;
+        itemList.append(new QStandardItem(QString(QVariant::typeToName(arg.value().type())) + " " + arg.description()));
+        itemList.append(new ArgumentsModelItem(arg));
+        appendRow(itemList);
+    }
+    
+}
+
+QVariant ArgumentsModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if (orientation == Qt::Horizontal) {
+        if (role == Qt::DisplayRole) {
+            switch (section) {
+            case 0:
+                return i18n("Description");
+            case 1:
+                return i18n("Value");
+            }
+        }
+    }
+    return QVariant();
+}
+
+QList<Argument> ArgumentsModel::arguments() const {
+    QList<Argument> argList;
+    for(int i = 0; i < rowCount(); i++){
+        argList.append(item(i, 1)->data(Qt::UserRole));
+    }
+    return argList;
+}
+
 
 /*
 ***********************************
@@ -141,61 +246,62 @@ QWidget *ArgumentDelegate::createEditor(QWidget *parent,
 {
     QWidget *editor;
     unsigned int maxInt = -1;
-    kDebug() << "creaing edtor for:" << index.model()->data(index, Qt::EditRole) << "type:" << index.model()->data(index, Qt::EditRole).type();
-    switch (index.model()->data(index, Qt::EditRole).type()) {
-    case QVariant::Int:
-    case QVariant::LongLong: {
-        QSpinBox *spinBox = new QSpinBox(parent);
-        spinBox->setMaximum(maxInt/2);
-        spinBox->setMinimum(-maxInt/2);
-        spinBox->setValue(index.model()->data(index, Qt::EditRole).toInt());
-        editor = spinBox;
-        }
-        break;
-    case QVariant::UInt: {
-        QSpinBox *spinBox = new QSpinBox(parent);
-        spinBox->setMaximum(maxInt/2);
-        spinBox->setValue(index.model()->data(index, Qt::EditRole).toUInt());
-        editor = spinBox;
-        }
-        break;
-    case QVariant::Double: {
-        QDoubleSpinBox *dSpinBox = new QDoubleSpinBox(parent);
-        dSpinBox->setValue(index.model()->data(index, Qt::EditRole).toDouble(NULL));
-        editor = dSpinBox;
-        }
-        break;
-    case QVariant::Bool: {
-        KComboBox *comboBox = new KComboBox(parent);
-        comboBox->addItem(i18nc("True", "Value is true"));
-        comboBox->addItem(i18nc("False", "Value is false"));
-        comboBox->setCurrentIndex(index.model()->data(index, Qt::EditRole).toBool() ? 0 : 1);
-        editor = comboBox;
-        }
-        break;
-    case QVariant::StringList: {
-        KLineEdit *listLineEdit = new KLineEdit(parent);
-        listLineEdit->setToolTip(i18n("A comma-separated list of Strings"));
-        QString value;
-        value.clear();
-        foreach(const QString &tmp, index.model()->data(index, Qt::EditRole).toStringList()) {
-            if (!value.isEmpty()) {
-                value.append(',');
+    Argument arg = qVariantValue<Argument>(index.model()->data(index, Qt::EditRole));
+    kDebug() << "creaing edtor for:" << arg.description() << "value:" << arg.value();
+    switch (arg.value().type()) {
+        case QVariant::Int:
+        case QVariant::LongLong: {
+            QSpinBox *spinBox = new QSpinBox(parent);
+            spinBox->setMaximum(maxInt/2);
+            spinBox->setMinimum(-maxInt/2);
+            spinBox->setValue(arg.value().toInt());
+            editor = spinBox;
             }
-            value += tmp;
-        }
-        listLineEdit->setText(value);
+            break;
+        case QVariant::UInt: {
+            QSpinBox *spinBox = new QSpinBox(parent);
+            spinBox->setMaximum(maxInt/2);
+            spinBox->setValue(arg.value().toUInt());
+            editor = spinBox;
+            }
+            break;
+        case QVariant::Double: {
+            QDoubleSpinBox *dSpinBox = new QDoubleSpinBox(parent);
+            dSpinBox->setValue(arg.value().toDouble(NULL));
+            editor = dSpinBox;
+            }
+            break;
+        case QVariant::Bool: {
+            KComboBox *comboBox = new KComboBox(parent);
+            comboBox->addItem(i18nc("True", "Value is true"));
+            comboBox->addItem(i18nc("False", "Value is false"));
+            comboBox->setCurrentIndex(arg.value().toBool() ? 0 : 1);
+            editor = comboBox;
+            }
+            break;
+        case QVariant::StringList: {
+            KLineEdit *listLineEdit = new KLineEdit(parent);
+            listLineEdit->setToolTip(i18n("A comma-separated list of Strings"));
+            QString value;
+            value.clear();
+            foreach(const QString &tmp, arg.value().toStringList()) {
+                if (!value.isEmpty()) {
+                    value.append(',');
+                }
+                value += tmp;
+            }
+            listLineEdit->setText(value);
 
-        editor = listLineEdit;
-        }
-        break;
-    case QVariant::ByteArray:
-    case QVariant::String:
-    default: {
-        KLineEdit *lineEdit = new KLineEdit(parent);
-        lineEdit->setText(index.model()->data(index, Qt::EditRole).toString());
-        editor = lineEdit;
-        }
+            editor = listLineEdit;
+            }
+            break;
+        case QVariant::ByteArray:
+        case QVariant::String:
+        default: {
+            KLineEdit *lineEdit = new KLineEdit(parent);
+            lineEdit->setText(arg.value().toString());
+            editor = lineEdit;
+            }
     }
     return editor;
 }
@@ -205,28 +311,29 @@ void ArgumentDelegate::setEditorData(QWidget *editor,
                                      const QModelIndex &index) const
 {
 
-    switch (index.model()->data(index, Qt::EditRole).type()) {
+    Argument arg = qVariantValue<Argument>(index.model()->data(index, Qt::EditRole));
+    switch (arg.value().type()) {
     case QVariant::UInt:
     case QVariant::Int:
     case QVariant::LongLong: {
         QSpinBox *spinBox = static_cast<QSpinBox*>(editor);
-        spinBox->setValue(index.model()->data(index, Qt::EditRole).toInt());
+        spinBox->setValue(arg.value().toInt());
     }
     break;
     case QVariant::Double: {
         QDoubleSpinBox *doubleSpinBox = static_cast<QDoubleSpinBox*>(editor);
-        doubleSpinBox->setValue(index.model()->data(index, Qt::EditRole).toDouble(NULL));
+        doubleSpinBox->setValue(arg.value().toDouble(NULL));
     }
     case QVariant::Bool: {
         KComboBox *comboBox = static_cast<KComboBox*>(editor);
-        comboBox->setCurrentIndex(index.model()->data(index, Qt::EditRole).toBool() ? 0 : 1);
+        comboBox->setCurrentIndex(arg.value().toBool() ? 0 : 1);
     }
     break;
     case QVariant::StringList: {
         KLineEdit *listLineEdit = static_cast<KLineEdit*>(editor);
         QString value;
         value.clear();
-        foreach(const QString &tmp, index.model()->data(index, Qt::EditRole).toStringList()) {
+        foreach(const QString &tmp, arg.value().toStringList()) {
             if (!value.isEmpty()) {
                 value.append(',');
             }
@@ -239,7 +346,7 @@ void ArgumentDelegate::setEditorData(QWidget *editor,
     case QVariant::String:
     default: {
         KLineEdit *lineEdit = static_cast<KLineEdit*>(editor);
-        lineEdit->setText(index.model()->data(index, Qt::EditRole).toString());
+        lineEdit->setText(arg.value().toString());
     }
     }
 
@@ -250,7 +357,8 @@ void ArgumentDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
                                     const QModelIndex &index) const
 {
     QVariant value;
-    switch (index.model()->data(index, Qt::EditRole).type()) {
+    Argument arg = qVariantValue<Argument>(index.model()->data(index, Qt::EditRole));
+    switch (arg.value().type()) {
     case QVariant::Int:
     case QVariant::UInt:
     case QVariant::LongLong:
@@ -272,7 +380,8 @@ void ArgumentDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
     }
     }
     kDebug() << "setting value" << value;
-    model->setData(index, value, Qt::EditRole);
+    arg.setValue(value);
+    model->setData(index, qVariantFromValue(arg), Qt::EditRole);
 }
 
 void ArgumentDelegate::updateEditorGeometry(QWidget *editor,
@@ -294,10 +403,10 @@ ArgumentsModelItem::ArgumentsModelItem ( const QString & text ):QStandardItem(te
     setFlags(Qt::ItemIsEnabled);
 }
 
-ArgumentsModelItem::ArgumentsModelItem ( const QVariant &data ) {
-    setData(data, Qt::EditRole);
-    kDebug() << "creating model item:" << data << "type:" << data.type();
-    if (data.type() == QVariant::StringList) {
+ArgumentsModelItem::ArgumentsModelItem ( const Argument &arg ) {
+    setData(qVariantFromValue(arg), Qt::EditRole);
+    kDebug() << "creating model item:" << arg.value() << "type:" << arg.value().type();
+    if (arg.value().type() == QVariant::StringList) {
         setToolTip(i18n("A comma-separated list of Strings"));
     }
 
@@ -305,16 +414,22 @@ ArgumentsModelItem::ArgumentsModelItem ( const QVariant &data ) {
 
 QVariant ArgumentsModelItem::data ( int role ) const {
 
-    if (role == Qt::DisplayRole && (QStandardItem::data(role).type() == QVariant::StringList)) {
-        QString retList;
-        retList.clear();
-        foreach(const QString &tmp, QStandardItem::data(role).toStringList()) {
-            if (!retList.isEmpty()) {
-                retList.append(',');
+    if(role == Qt::DisplayRole) {
+        Argument arg = qVariantValue<Argument>(QStandardItem::data(Qt::EditRole));
+        kDebug() << "got arg:" << arg.description() << "with type" << arg.value();
+        if(arg.value().type() == QVariant::StringList) {
+            QString retList;
+            retList.clear();
+            foreach(const QString &tmp, QStandardItem::data(role).toStringList()) {
+                if (!retList.isEmpty()) {
+                    retList.append(',');
+                }
+                retList += tmp;
             }
-            retList += tmp;
+            return QVariant(retList);
+        } else {
+            return arg.value();
         }
-        return QVariant(retList);
     } else {
         return QStandardItem::data(role);
     }

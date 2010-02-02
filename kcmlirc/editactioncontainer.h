@@ -27,13 +27,18 @@
 #include <action.h>
 
 
-class ActionContainer : public KDialog {
+class EditActionContainer : public KDialog {
   
     public:
-        ActionContainer(Action::ActionType type, QWidget* parent = 0, Qt::WFlags flags = 0);
+        EditActionContainer(Action *action, const QString &remote, QWidget* parent = 0, Qt::WFlags flags = 0);
         
     private:
         Ui::ActionContainer ui;
+        Action *m_action;
+        QWidget *m_innerWidget;
+        
+    protected Q_SLOTS:
+         virtual void slotButtonClicked(int button);
 };
 
 #endif // ACTIONCONTAINER_H

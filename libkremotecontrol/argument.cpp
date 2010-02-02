@@ -29,9 +29,9 @@ Argument::Argument(const QVariant& value)
   m_value = value;
 }
 
-Argument::Argument(const QVariant& defaultValue, const QString& description)
+Argument::Argument(const QVariant& value, const QString& description)
 {
-  m_defaultValue = defaultValue;
+  m_value = value;
   m_description = description;
 }
 
@@ -40,9 +40,8 @@ QVariant Argument::value() const
   return m_value;
 }
 
-QVariant Argument::defaultValue() const
-{
-  return m_defaultValue;
+void Argument::setValue(const QVariant& value) {
+  m_value = value;
 }
 
 QString Argument::description() const
@@ -50,10 +49,13 @@ QString Argument::description() const
   return m_description;
 }
 
+void Argument::setDescription(const QString& description) {
+  m_description = description;
+}
+
 bool Argument::operator==(const Argument& other) const
 {
   return m_value == other.value() &&
-	  m_description == other.description() &&
-	  m_defaultValue == other.defaultValue();
+	  m_description == other.description();
 }
 

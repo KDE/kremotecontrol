@@ -28,7 +28,7 @@ class KREMOTECONTROL_EXPORT ModeSwitchAction : public Action
 {
   
   public:
-    ModeSwitchAction(const Solid::Control::RemoteControlButton &button, const Mode &mode);
+    ModeSwitchAction(const QString &button, const Mode &mode);
     
     Mode newMode() const;
     void setNewMode(const Mode &mode);

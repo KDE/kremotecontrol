@@ -18,14 +18,14 @@
 */
 
 #include "addaction.h"
-#include <action.h>
+#include "dbusaction.h"
+#include "actioncontainer.h"
+
 #include <kdebug.h>
 
 
 AddAction::AddAction() {
     QWidget *widget = new QWidget(this);
-    QHBoxLayout *layout = new QHBoxLayout(this);
-    layout->addWidget(widget);
     ui.setupUi(widget);
     setMainWidget(widget);
     
@@ -38,4 +38,23 @@ AddAction::AddAction() {
 Action::ActionType AddAction::getType() {
     kDebug() << "current index" << ui.cbActionType->currentIndex() << "type" << ui.cbActionType->itemData(ui.cbActionType->currentIndex()).toInt();
     return (Action::ActionType)ui.cbActionType->itemData(ui.cbActionType->currentIndex()).toInt();
+}
+
+Action *AddAction::createAction(const QString &remote) {
+    Action *action = 0;
+    if(exec() == KDialog::Accepted){
+        switch(getType()){
+            case Action::ProfileAction:
+                break;
+            case Action::DBusAction:
+                action = new DBusAction();
+                EditActionContainer actionContainer(action, remote);
+                if(actionContainer.exec() != KDialog::Accepted){
+                    delete action;
+                    action = 0;
+                }
+                break;
+        }
+    }
+    return action;
 }

@@ -46,6 +46,13 @@ Q_DECLARE_METATYPE(Prototype*)
 Q_DECLARE_METATYPE(ProfileActionTemplate*)
 Q_DECLARE_METATYPE(RemoteControlButton*)
 
+class DBusServiceModel: public QStandardItemModel
+{
+    public:
+        DBusServiceModel(QObject* parent = 0);
+        QString application(const QModelIndex &index) const;
+        QString node(const QModelIndex &index) const;
+};
 
 class DBusServiceItem : public QStandardItem
 {
@@ -64,20 +71,34 @@ class DBusFunctionModel: public QStandardItemModel
 {
 public:
     DBusFunctionModel(QObject *parent);
+    
+    void refresh(const QString &app, const QString &node);
 
-    void appendRow (Prototype *item );
-
-    Prototype* getPrototype( int index ) const;
+    Prototype getPrototype( int index ) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
+private:
+    void appendRow(Prototype item);
+
+};
+
+class ArgumentsModel: public QStandardItemModel
+{
+public:
+    ArgumentsModel(QObject *parent = 0);
+    
+    void refresh(const Prototype &prototype);
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+    
+    QList<Argument> arguments() const;
 };
 
 class ArgumentsModelItem: public QStandardItem
 {
 public:
-    ArgumentsModelItem ( const QString & text );
-    ArgumentsModelItem ( const QVariant &data);
-    virtual QVariant data ( int role = Qt::UserRole + 1 ) const;
+    ArgumentsModelItem(const QString &text);
+    ArgumentsModelItem(const Argument &arg);
+    virtual QVariant data(int role = Qt::UserRole + 1) const;
 
 private:
 

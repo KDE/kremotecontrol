@@ -36,6 +36,10 @@ QList<Argument> Prototype::args() const {
   return m_args;
 }
 
+void Prototype::setArgs(const QList<Argument> &argList){
+    m_args = argList;
+}
+
 bool Prototype::operator==(const Prototype &other) const {
   return m_name == other.name() && m_args == other.args();
 }

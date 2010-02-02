@@ -19,9 +19,12 @@
 
 #include "dbusaction.h"
 
-DBusAction::DBusAction(const Solid::Control::RemoteControlButton &button, const Mode &mode): Action(Action::DBusAction, button, mode)
+DBusAction::DBusAction(const QString &button, const Mode &mode): Action(Action::DBusAction, button, mode)
 {
 
+}
+
+DBusAction::DBusAction(): Action(Action::DBusAction){
 }
 
 QString DBusAction::application() const{
@@ -80,7 +83,6 @@ void DBusAction::setDestination(DBusAction::ActionDestination destination)
 
 void DBusAction::operator=(const DBusAction& action) {
   m_type = action.type();
-  m_remote = action.remote();
   m_mode = action.mode();
   m_button = action.button();
   m_application = action.application();
@@ -98,8 +100,7 @@ bool DBusAction::operator==(const DBusAction& action) const {
 	  m_destination == action.destination() &&
 	  m_function == action.function() &&
 	  m_node == action.node() &&
-	  m_button.id() == action.button().id() &&
-	  m_button.remoteName() == action.button().remoteName();
+	  m_button == action.button();
 }
 
 QString DBusAction::name() const {

@@ -19,7 +19,7 @@
 
 #include "profileaction.h"
 
-ProfileAction::ProfileAction(const Solid::Control::RemoteControlButton& button, const Mode &mode, const QString &profileName, const QString &actionTemplate): DBusAction(button, mode)
+ProfileAction::ProfileAction(const QString& button, const Mode &mode, const QString &profileName, const QString &actionTemplate): DBusAction(button, mode)
 {
   //change type from DBusAction (c'tor) to ProfileAction
   m_type = Action::ProfileAction;

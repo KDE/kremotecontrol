@@ -33,12 +33,16 @@ class KREMOTECONTROL_EXPORT Action: public QObject
   public:
     enum ActionType {ModeSwitchAction, DBusAction, ProfileAction};
   
-    Action(ActionType type, const Solid::Control::RemoteControlButton &button, const Mode &mode);
+    Action(ActionType type, const QString &button, const Mode &mode);
+    Action(ActionType type);
     Action(const Action &action);
+//    Action();
   
     ActionType type() const;
-    QString remote() const;
-    Solid::Control::RemoteControlButton button() const;
+
+    QString button() const;
+    void setButton(const QString &button);
+    
     Mode mode() const;
     
     virtual void operator=(const Action &action);
@@ -49,8 +53,7 @@ class KREMOTECONTROL_EXPORT Action: public QObject
     
   protected:
     ActionType m_type;
-    QString m_remote;
-    Solid::Control::RemoteControlButton m_button;
+    QString m_button;
     Mode m_mode;
     
 };

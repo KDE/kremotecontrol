@@ -19,8 +19,11 @@
 
 #ifndef PROTOTYPE_H
 #define PROTOTYPE_H
+
 #include "argument.h"
 #include "kremotecontrol_export.h"
+
+#include <qmetatype.h>
 
 class KREMOTECONTROL_EXPORT Prototype
 {
@@ -30,6 +33,7 @@ class KREMOTECONTROL_EXPORT Prototype
     
     QString name() const;
     QList<Argument> args() const;
+    void setArgs(const QList<Argument> &args);
     
     bool operator==(const Prototype &other) const;
     
@@ -37,5 +41,7 @@ class KREMOTECONTROL_EXPORT Prototype
     QString m_name;
     QList<Argument> m_args;
 };
+
+Q_DECLARE_METATYPE(Prototype)
 
 #endif // PROTOTYPE_H

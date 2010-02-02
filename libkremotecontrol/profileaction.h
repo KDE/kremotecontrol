@@ -26,7 +26,7 @@
 class KREMOTECONTROL_EXPORT ProfileAction : public DBusAction
 {
   public:
-    ProfileAction(const Solid::Control::RemoteControlButton& button, const Mode &mode, const QString &profile, const QString &actionTemplate);
+    ProfileAction(const QString& button, const Mode &mode, const QString &profile, const QString &actionTemplate);
 
     QString profileName() const;
     QString actionTemplateID() const;

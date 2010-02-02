@@ -19,24 +19,27 @@
 
 #include "action.h"
 
-Action::Action(ActionType type, const Solid::Control::RemoteControlButton &button, const Mode &mode): m_type(type), m_button(button), m_mode(mode){
+Action::Action(ActionType type, const QString &button, const Mode &mode): m_type(type), m_button(button), m_mode(mode){
 }
 
 Action::Action(const Action& action): m_button(action.button()){
   m_type = action.type();
 }
 
+Action::Action(ActionType type){
+  m_type = type;
+}
+
 Action::ActionType Action::type() const{
   return m_type;
 }
 
-QString Action::remote() const
-{
-  return m_remote;
+QString Action::button() const {
+  return m_button;
 }
 
-Solid::Control::RemoteControlButton Action::button() const {
-  return m_button;
+void Action::setButton(const QString& button) {
+  m_button = button;
 }
 
 Mode Action::mode() const {
@@ -45,16 +48,15 @@ Mode Action::mode() const {
 
 void Action::operator=(const Action& action) {
   m_type = action.type();
-  m_remote = action.remote();
+//   m_remote = action.remote();
   m_mode = action.mode();
   m_button = action.button();
 }
 
 bool Action::operator==(const Action& action) const {
   return m_type == action.type() &&
-	  m_remote == action.remote() &&
+// 	  m_remote == action.remote() &&
 	  m_mode == action.mode() &&
-	  m_button.id() == action.button().id() &&
-	  m_button.remoteName() == action.button().remoteName();
+	  m_button == action.button();
 }
 
