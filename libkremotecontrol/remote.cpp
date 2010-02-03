@@ -1,6 +1,5 @@
 /*
-    <one line to give the program's name and a brief idea of what it does.>
-    Copyright (C) <year>  <name of author>
+    Copyright (C) <2010>  Michael Zanetti <michael_zanetti@gmx.net>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,45 +23,20 @@
 
 Remote::Remote() {
     // Always create the Master Mode and set it default
-    Mode *masterMode = new Mode("Master");
+    Mode *masterMode = new Mode("");
     addMode(masterMode);
     setDefaultMode(masterMode);
 }
 
 Remote::Remote(const QString &remote, const QList<Mode*> &modes) {
     // Always create the Master Mode and set it default
-    Mode *masterMode = new Mode("Master");
+    Mode *masterMode = new Mode("");
     addMode(masterMode);
     setDefaultMode(masterMode);
     
     m_modeList = modes;
     m_remoteName = remote;
-    foreach(const Solid::Control::RemoteControlButton &button, Solid::Control::RemoteControl(remote).buttons()){
-        m_buttonNameSet.insert(button.name());
-    }
 }
-
-/*
-void Remote::remote(const Solid::Control::RemoteControl& remote) const {
-    m_remoteName = remote.name();
-    m_availableInSolid = true;
-}
-
-
-
-
-void Remote::modeList(QList< Mode > modeList)
-{
-  m_modeList = modeList;
-  m_availableInSolid = true;
-}
-
-
-
-QSet< QString > Remote::buttonNames() const
-{
-  return m_buttonNameSet;
-}*/
 
 QString Remote::name() const {
   return m_remoteName;
@@ -77,6 +51,20 @@ void Remote::addMode(Mode *mode) {
 }
 
 void Remote::removeMode(Mode *mode) {
+    if(mode->name().isEmpty()){
+        // Cannot delete the Master Mode...
+        return;
+    }
+    
+    if(m_defaultMode == mode){
+        // Deleting the Default Mode... Setting Master Mode to default
+        foreach(Mode *tmp, m_modeList){
+            if(tmp->name().isEmpty()){
+                m_defaultMode = tmp;
+                break;
+            }
+        }
+    }
     m_modeList.removeAll(mode);
 }
 
@@ -93,24 +81,6 @@ void Remote::setDefaultMode(Mode *mode) {
     m_defaultMode = mode;
 }
 
-// QStringList Remote::modesToStringList()
-// {
-//   QStringList list;
-// 
-// foreach(const Mode &mode, m_modeList){
-//     list <<  mode.name();
-//   }
-// }
-
-
-// bool Remote::isAvailableInSolid()
-// {
-//   return m_availableInSolid;
-// }
-// 
-
-// Solid::Control::RemoteControl Remote::remote()
-// {
-//   return m_remote;
-// }
-
+bool Remote::isAvailable() const {
+    return Solid::Control::RemoteControl::allRemoteNames().contains(m_remoteName);
+}

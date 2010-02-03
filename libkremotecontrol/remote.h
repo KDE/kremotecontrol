@@ -44,21 +44,12 @@ class KREMOTECONTROL_EXPORT Remote
         Mode* defaultMode() const;
         void setDefaultMode(Mode *mode );
 
-//        QSet<QString> buttonNames() const;
         QString name() const;
-
-//         void remote(const Solid::Control::RemoteControl& remote);
-//         void modeList(QList< Mode > modeList);
-
-//         QStringList modesToStringList();
 
     private:
         QList<Mode*> m_modeList;
         Mode *m_defaultMode;
         QString m_remoteName;
-        QSet<QString> m_buttonNameSet;
-        bool m_availableInSolid;
-
 };
 
 Q_DECLARE_METATYPE(Remote*)
