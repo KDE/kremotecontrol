@@ -494,42 +494,17 @@ void KCMLirc::load() {
         foreach(const QString &modeName, remoteGroup.groupList()){
             KConfigGroup modegroup(&remoteGroup, modeName);
             remote->addMode(new Mode(modeName, modegroup.readEntry("IconName")));
+            
+            // TODO: Read All Action for this Mode here!
+            
         }
-        
+        remote->setDefaultMode(remoteGroup.readEntry("DefaultMode"));
         m_remoteList.append(remote);
     }
 
+    // TODO: Check if there are Remotes available in Solid without a config entry. Add them here!
+
     updateModes();
-//     KConfigGroup modesGroup = theConfig.group("Modes");
-//     clear();
-//     QString helperString = modesGroup.readEntry("Modes", QString());
-//     int numModes = helperString.toInt();
-//     for (int i = 0; i < numModes; i++) {
-//         add(Mode().loadFromConfig(theConfig, i));
-//     }
-// 
-//     for (iterator i = begin(); i != end(); ++i)
-//         theDefaults[i.key()] = modesGroup.readEntry("Default" + i.key(), QString());
-
-  
-  
-  
-  
-  
-  
-  
-  
-/*    foreach(Solid::Control::RemoteControl *remote, Solid::Control::RemoteControl::allRemotes()){
-        
-        m_remoteList.append(remote->name());
-    }*/
-    
-/*/*    m_actionList.loadFromConfig(theConfig);
-    m_modeList.loadFromConfig(theConfig);*/
-    QStringList remotes = DBusInterface::getInstance()->getRemotes();
-
-//     m_modeList.generateNulls(remotes);
-
 }
 
 void KCMLirc::save() {
@@ -541,6 +516,8 @@ void KCMLirc::save() {
         foreach(const Mode *mode, remote->allModes()){
             KConfigGroup modeGroup(&remoteGroup, mode->name());
             modeGroup.writeEntry("IconName", mode->iconName());
+            
+            // TODO: Write all Actions for this mode into sub-groups here
                 
         }        
     }

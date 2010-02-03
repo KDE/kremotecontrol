@@ -36,12 +36,13 @@ class KREMOTECONTROL_EXPORT Remote
 
         bool isAvailable() const;
         
-        void addMode(Mode *mode) ;
+        void addMode(Mode *mode);
         void removeMode(Mode *mode);
         QList<Mode*> allModes() const;
         
         Mode* defaultMode() const;
-        void setDefaultMode(Mode *mode );
+        void setDefaultMode(Mode *mode);
+        void setDefaultMode(const QString &name);
 
         QString name() const;
 

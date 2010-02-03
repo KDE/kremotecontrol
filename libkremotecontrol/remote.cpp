@@ -81,6 +81,15 @@ void Remote::setDefaultMode(Mode *mode) {
     m_defaultMode = mode;
 }
 
+void Remote::setDefaultMode(const QString &modeName){
+    foreach(Mode *mode, m_modeList){
+        if(mode->name() == modeName){
+            setDefaultMode(mode);
+            return;
+        }
+    }
+}
+
 bool Remote::isAvailable() const {
     return Solid::Control::RemoteControl::allRemoteNames().contains(m_remoteName);
 }
