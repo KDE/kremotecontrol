@@ -30,35 +30,37 @@
 
 class KREMOTECONTROL_EXPORT Remote
 {
-  private:
-  QList<Mode> m_modeList;
-  QString m_defaultModeName;
-  QString m_remoteName;
-  QSet<QString> m_buttonNameSet;
-  bool m_availableInSolid;
+    public:
+        Remote();
 
+        Remote(const QString& remote, const QList<Mode>& modes = QList<Mode>() );
 
+        bool isAvailable() const;
+        
+        void addMode(const Mode &mode) ;
+        void removeMode(const Mode &mode);
+        QList<Mode> allModes() const;
+        
+        Mode defaultMode() const;
+        void setDefaultMode(const Mode &mode );
 
-  public:
+//        QSet<QString> buttonNames() const;
+        QString name() const;
 
-    Remote();
+//         void remote(const Solid::Control::RemoteControl& remote);
+//         void modeList(QList< Mode > modeList);
 
-    Remote(const Solid::Control::RemoteControl& remote, const QList<Mode>& modes = QList<Mode>() );
+//         QStringList modesToStringList();
 
-    bool isAvailableInSolid();
-    QList<Mode> allModes() const;
-    Mode  defaultMode() ;
-    void setDefaultMode(const Mode &mode );
-    void addMode(const Mode &mode) ;
-    void removeMode(const Mode &mode);
-    QSet<QString> buttonNames() const;
-    QString remoteName();
-
-    void remote(const Solid::Control::RemoteControl& remote);
-    void modeList(QList< Mode > modeList);
-
-    QStringList modesToStringList();
+    private:
+        QList<Mode> m_modeList;
+        QString m_defaultModeName;
+        QString m_remoteName;
+        QSet<QString> m_buttonNameSet;
+        bool m_availableInSolid;
 
 };
+
+Q_DECLARE_METATYPE(Remote*)
 
 #endif // REMOTE_H

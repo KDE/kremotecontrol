@@ -52,7 +52,7 @@ DBusServiceModel::DBusServiceModel(QObject* parent): QStandardItemModel(parent) 
         DBusServiceItem *dbusServiceItem = new DBusServiceItem(item);
         dbusServiceItem->setEditable(false);
         appendRow(dbusServiceItem);
-        foreach(const QString &object, DBusInterface::getInstance()->getObjects(item)) {
+        foreach(const QString &object, DBusInterface::getInstance()->getNodes(item)) {
             dbusServiceItem->appendRow(new QStandardItem(object));
         }
     }
@@ -588,19 +588,44 @@ QModelIndex RemoteButtonModel::indexOfButtonName(const QString &button)
 }
 
 
-RemoteModel::RemoteModel(QObject* parent): QStringListModel(parent)
-{
+RemoteModel::RemoteModel(QObject* parent): QStandardItemModel(parent) {
 }
 
-RemoteModel::RemoteModel(const QStringList &strings, QObject *parent) : QStringListModel(strings, parent)
-{
-    QStringListModel::sort(0, Qt::AscendingOrder);
+RemoteModel::RemoteModel(const RemoteList &remoteList, QObject *parent) : QStandardItemModel(parent) {
+    refresh(remoteList);
 }
 
-QVariant RemoteModel::headerData(int section, Qt::Orientation o, int role) const
-{
-    if (role == Qt::DisplayRole) {
-        return i18nc("Remote name", "Remote");
+void RemoteModel::refresh(const RemoteList &remoteList){
+    clear();
+    foreach(Remote *remote, remoteList){
+        QStandardItem *item = new RemoteItem(remote);
+        appendRow(item);
+    }    
+}
+
+// QVariant RemoteModel::headerData(int section, Qt::Orientation o, int role) const {
+//     if (role == Qt::DisplayRole) {
+//         return i18nc("Remote name", "Remote");
+//     }
+//     return QAbstractListModel::headerData(section,o,role);
+// }
+
+
+RemoteItem::RemoteItem(Remote *remote) {
+    qRegisterMetaType<Remote*>("Remote*");
+    setData(qVariantFromValue(remote), Qt::UserRole);
+    setFlags(Qt::ItemIsEnabled);
+    foreach(const Mode &mode, remote->allModes()) {
+        QStandardItem *item = new QStandardItem(mode.name());
+        item->setData(qVariantFromValue(mode));
+        appendRow(item);
     }
-    return QAbstractListModel::headerData(section,o,role);
+}
+
+QVariant RemoteItem::data(int role) const {
+    if(role == Qt::DisplayRole) {
+        Remote *remote = qVariantValue<Remote*>(QStandardItem::data(Qt::UserRole));
+        return remote->name();
+    }
+    return QStandardItem::data(role);
 }

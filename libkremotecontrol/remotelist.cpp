@@ -24,42 +24,16 @@
 #include <kglobal.h>
 #include <QList>
 
-class RemotesPrivate
-{
-  public:
-   RemotesPrivate(){
-   };
 
-   QList<Remote> m_remotes;
-
-};
-
-
-K_GLOBAL_STATIC(RemotesPrivate, instance)
-
-KREMOTECONTROL_EXPORT QList< Remote > Remotes::remotes()
-{
-  return instance->m_remotes;
+RemoteList::RemoteList() {
+    // Load all remotes from config ans solid here
 }
 
-KREMOTECONTROL_EXPORT void Remotes::addRemote(const Remote& remote)
-{
-  instance->m_remotes.append(remote);
-}
-
-
-KREMOTECONTROL_EXPORT bool RemoteUtil::isAvailableInSolid(const QString& name)
-{
-  foreach (const QString &  solidRemoteName, Solid::Control::RemoteControl::allRemoteNames()){
-    if(solidRemoteName == name){
-      return true;
-    }
-    return false;
-  }
-}
-
-
-KREMOTECONTROL_EXPORT bool RemoteUtil::isConfigured(const QString& name)
-{
-  return false;
-}
+// void RemoteList::addRemote(const Remote& remote) {
+//     m_remotes.append(remote);
+// }
+// 
+// QList<Remote> RemoteList::remotes() const {
+//     return m_remotes;
+// }
+// 

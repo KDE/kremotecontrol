@@ -172,8 +172,10 @@ KDE_EXPORT  ProfileServer::ProfileSupportedByRemote ProfileServer::isProfileAvai
     }
     int found=0;
     foreach(const QString & tProfilActionName, tProfilActionNames) {
-        if ( remote.buttonNames().contains(tProfilActionName)) {
-            found++;
+        foreach(const Solid::Control::RemoteControlButton &button, Solid::Control::RemoteControl(remote.name()).buttons()) {
+            if(button.name() == tProfilActionName){
+                found++;
+            }
         }
     }
     if (found == 0) {

@@ -139,34 +139,54 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
     QStringList headers = (QStringList() << i18nc("Column which shows the available remotes on system", "Remote"));
 //    ui.tvRemotes->setHeaderLabels(headers);
 
-    connectSignalsAndSlots();
+//    connectSignalsAndSlots();
     load();
+    
+  
+    m_remoteModel = new RemoteModel(m_remoteList, ui.tvRemotes);
+    ui.tvRemotes->setModel(m_remoteModel);
+    
+    
+    
+    // Test code...
+    Remote *remote = new Remote(Solid::Control::RemoteControl::allRemotes().first()->name());
+    m_remoteList.append(remote);
+    remote->addMode(Mode("testmode"));
+    
+    
+     updateProfileInfo();
+     updateModes();
+     updateActions();
+     updateRemoteInfo();
+
+    
+//    save();
 }
 
 
-void KCMLirc::connectSignalsAndSlots() {
-  
-  connect(ui.pbAddAction, SIGNAL(clicked(bool)), SLOT(addAction()));
-  
-    connect(ui.tvRemotes, SIGNAL(itemSelectionChanged()), this, SLOT(updateActions()));
-    connect(ui.tvRemotes, SIGNAL(itemSelectionChanged()), this, SLOT(updateModesStatus()));
-//     connect(ui.theActions, SIGNAL(itemSelectionChanged()), this, SLOT(updateActionsStatus()));
-//     connect(ui.theActions, SIGNAL(doubleClicked(QModelIndex)),this,SLOT(slotEditAction()));
-
-    connect(ui.theAvailableProfiles, SIGNAL(itemSelectionChanged()), this, SLOT(updateProfileDetails()));
-
-/*    connect(ui.theAddActions, SIGNAL(clicked()), this, SLOT(slotAddActions()));
-    connect(ui.theAddAction, SIGNAL(clicked()), this, SLOT(slotAddAction()));
-    connect(ui.theEditAction, SIGNAL(clicked()), this, SLOT(slotEditAction()));
-
-    connect(ui.theRemoveAction, SIGNAL(clicked()), this, SLOT(slotRemoveAction()));
-    connect(ui.theAddMode, SIGNAL(clicked()), this, SLOT(slotAddMode()));
-    connect(ui.theEditMode, SIGNAL(clicked()), this, SLOT(slotEditMode()));
-    connect(ui.theRemoveMode, SIGNAL(clicked()), this, SLOT(slotRemoveMode()));*/
-    connect(ui.theAvailableProfiles, SIGNAL(clicked(QModelIndex)), this, SLOT(updateProfileDetails(QModelIndex)));
-    connect(ui.theRemotes, SIGNAL(clicked(QModelIndex)), this, SLOT(updateRemoteDetails(QModelIndex)));
-}
-
+// void KCMLirc::connectSignalsAndSlots() {
+//   
+//   connect(ui.pbAddAction, SIGNAL(clicked(bool)), SLOT(addAction()));
+//   
+//     connect(ui.tvRemotes, SIGNAL(itemSelectionChanged()), this, SLOT(updateActions()));
+//     connect(ui.tvRemotes, SIGNAL(itemSelectionChanged()), this, SLOT(updateModesStatus()));
+// //     connect(ui.theActions, SIGNAL(itemSelectionChanged()), this, SLOT(updateActionsStatus()));
+// //     connect(ui.theActions, SIGNAL(doubleClicked(QModelIndex)),this,SLOT(slotEditAction()));
+// 
+//     connect(ui.theAvailableProfiles, SIGNAL(itemSelectionChanged()), this, SLOT(updateProfileDetails()));
+// 
+// /*    connect(ui.theAddActions, SIGNAL(clicked()), this, SLOT(slotAddActions()));
+//     connect(ui.theAddAction, SIGNAL(clicked()), this, SLOT(slotAddAction()));
+//     connect(ui.theEditAction, SIGNAL(clicked()), this, SLOT(slotEditAction()));
+// 
+//     connect(ui.theRemoveAction, SIGNAL(clicked()), this, SLOT(slotRemoveAction()));
+//     connect(ui.theAddMode, SIGNAL(clicked()), this, SLOT(slotAddMode()));
+//     connect(ui.theEditMode, SIGNAL(clicked()), this, SLOT(slotEditMode()));
+//     connect(ui.theRemoveMode, SIGNAL(clicked()), this, SLOT(slotRemoveMode()));*/
+//     connect(ui.theAvailableProfiles, SIGNAL(clicked(QModelIndex)), this, SLOT(updateProfileDetails(QModelIndex)));
+//     connect(ui.theRemotes, SIGNAL(clicked(QModelIndex)), this, SLOT(updateRemoteDetails(QModelIndex)));
+// }
+// 
 
 
 KCMLirc::~KCMLirc()
@@ -405,6 +425,8 @@ const QString KCMLirc::notes(Action* action) const
 
 void KCMLirc::updateModes()
 {
+    m_remoteModel->refresh(m_remoteList);
+  
 /*    Mode *currentSelectedMode;
     if (ui.theModes->currentItem()) {
         currentSelectedMode = ui.theModes->currentItem()->data(0, Qt::UserRole).value<Mode*>();
@@ -518,22 +540,46 @@ void KCMLirc::updateRemoteInfo()
 }
 
 
-void KCMLirc::load()
-{
-  foreach(Solid::Control::RemoteControl *remote, Solid::Control::RemoteControl::allRemotes()){
-    Remotes::addRemote(*remote);
-  }
-    KConfig theConfig("irkickrc");
+void KCMLirc::load() {
+  
+    KConfig config("kremotecontrolrc");
+        
+    foreach(const QString &remoteGroupName, config.groupList()){
+        KConfigGroup remoteGroup(&config, remoteGroupName);
+        
+
+    }
+
+//     KConfigGroup modesGroup = theConfig.group("Modes");
+//     clear();
+//     QString helperString = modesGroup.readEntry("Modes", QString());
+//     int numModes = helperString.toInt();
+//     for (int i = 0; i < numModes; i++) {
+//         add(Mode().loadFromConfig(theConfig, i));
+//     }
+// 
+//     for (iterator i = begin(); i != end(); ++i)
+//         theDefaults[i.key()] = modesGroup.readEntry("Default" + i.key(), QString());
+
+  
+  
+  
+  
+  
+  
+  
+  
+/*    foreach(Solid::Control::RemoteControl *remote, Solid::Control::RemoteControl::allRemotes()){
+        
+        m_remoteList.append(remote->name());
+    }*/
+    
 /*/*    m_actionList.loadFromConfig(theConfig);
     m_modeList.loadFromConfig(theConfig);*/
     QStringList remotes = DBusInterface::getInstance()->getRemotes();
 
 //     m_modeList.generateNulls(remotes);
 
-     updateProfileInfo();
-     updateModes();
-     updateActions();
-     updateRemoteInfo();
 }
 
 void KCMLirc::defaults()
@@ -543,13 +589,19 @@ void KCMLirc::defaults()
 
 void KCMLirc::save()
 {
-    KConfig theConfig("irkickrc");
+    KConfig config("kremotecontrolrc");
+    
+    foreach(const Remote *remote, m_remoteList){
+        KConfigGroup remoteGroup(&config, remote->name());
+        remoteGroup.writeEntry("DefaultMode", remote->defaultMode().name());
+        
+    }
 
     //Todo save to config interface
 //     m_actionList.saveToConfig(theConfig);
 //     m_modeList.saveToConfig(theConfig);
 
-    theConfig.sync();
+//    theConfig.sync();
 
     DBusInterface::getInstance()->reloadIRKick();
 

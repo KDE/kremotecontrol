@@ -84,7 +84,7 @@ KDE_EXPORT QStringList DBusInterface::getRegisteredPrograms()
         if (!r1.exactMatch(tmp)) {
             continue;
         }
-        if (getObjects(tmp).isEmpty()) {
+        if (getNodes(tmp).isEmpty()) {
             continue;
         }
         QRegExp r2("[a-zA-Z0-9_\\.-]+-[0-9]+");
@@ -100,7 +100,7 @@ KDE_EXPORT QStringList DBusInterface::getRegisteredPrograms()
     return returnList;
 }
 
-KDE_EXPORT QStringList DBusInterface::getObjects(const QString &program) {
+KDE_EXPORT QStringList DBusInterface::getNodes(const QString &program) {
     QDBusInterface dBusIface(program, "/", "org.freedesktop.DBus.Introspectable");
     QDBusReply<QString> response = dBusIface.call("Introspect");
 

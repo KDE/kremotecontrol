@@ -95,7 +95,7 @@ void KRemoteControlDaemon::gotMessage(const Solid::Control::RemoteControlButton&
 
 void KRemoteControlDaemon::currentModeChanged(const QString &remoteName,  Mode *mode)
 {
-  if(RemoteUtil::isAvailableInSolid(remoteName)){
+/*  if(RemoteUtil::isAvailableInSolid(remoteName)){
     d_ptr->remoteModes()[remoteName] = mode;
-  }
+  }*/
 }

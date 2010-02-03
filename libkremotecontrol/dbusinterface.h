@@ -49,7 +49,7 @@ public:
   bool isUnique(const QString &program);
 
   QStringList getRegisteredPrograms();
-  QStringList getObjects(const QString &program);
+  QStringList getNodes(const QString &program);
   QList<Prototype> getFunctions(const QString &program, const QString &object);
 
   QStringList getRemotes();

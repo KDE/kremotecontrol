@@ -1,6 +1,7 @@
 
 /*************************************************************************
- * Copyright            : (C) 2003 by Gav Wood <gav@kde.org>             *
+ * Copyright: (C) 2009 by Frank Scheffold <fscheffold@googlemail.com>    *
+ * Copyright: (C) 2009 by Michael Zanetti <michael_zanetti@gmx.net>      *
  *                                                                       *
  * This program is free software; you can redistribute it and/or         *
  * modify it under the terms of the GNU General Public License as        *
@@ -19,10 +20,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  *************************************************************************/
 
-/*
+/**
  *
  *  Created on: 01.02.2009
- *      @author Frank Scheffold
+ *      @author Frank Scheffold, Michael Zanetti
  */
 
 #ifndef MODEL_H
@@ -32,6 +33,7 @@
 #include "prototype.h"
 #include "profileaction.h"
 #include "profile.h"
+#include "remotelist.h"
 
 #include <QItemDelegate>
 #include <QStandardItem>
@@ -41,8 +43,6 @@
 using namespace Solid::Control;
 
 
-Q_DECLARE_METATYPE(Prototype*)
-// Q_DECLARE_METATYPE(IRAction*)
 Q_DECLARE_METATYPE(ProfileActionTemplate*)
 Q_DECLARE_METATYPE(RemoteControlButton*)
 
@@ -67,6 +67,7 @@ public:
     virtual QVariant data(int  role) const;
 };
 
+
 class DBusFunctionModel: public QStandardItemModel
 {
 public:
@@ -81,6 +82,7 @@ private:
     void appendRow(Prototype item);
 
 };
+
 
 class ArgumentsModel: public QStandardItemModel
 {
@@ -103,7 +105,6 @@ public:
 private:
 
 };
-
 
 class ArgumentDelegate : public QItemDelegate
 {
@@ -138,7 +139,6 @@ public:
 };
 
 
-
 class RemoteButtonModel: public QStandardItemModel
 {
 private:
@@ -154,12 +154,20 @@ public:
 };
 
 
-class RemoteModel : public QStringListModel
+class RemoteModel: public QStandardItemModel
 {
-public:
-    explicit RemoteModel(const QStringList &strings, QObject *parent = 0);
-    RemoteModel(QObject *parent=0);
-    QVariant headerData(int section, Qt::Orientation o, int role) const;
+    public:
+        explicit RemoteModel(const RemoteList &remoteList, QObject *parent = 0);
+        RemoteModel(QObject *parent=0);
+        void refresh(const RemoteList &remoteList);
 };
+
+class RemoteItem: public QStandardItem
+{
+    public:
+        RemoteItem(Remote *remote);
+        virtual QVariant data(int role) const;
+};
+
 #endif /* MODEL_H_ */
 

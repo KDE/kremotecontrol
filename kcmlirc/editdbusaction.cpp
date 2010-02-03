@@ -22,8 +22,6 @@
 #include "model.h"
 #include "dbusinterface.h"
 
-#include <QHBoxLayout>
-
 EditDBusAction::EditDBusAction(DBusAction *action, QWidget* parent, Qt::WFlags flags): QWidget(parent, flags) {
     m_action = action;
     ui.setupUi(this);
@@ -45,8 +43,9 @@ EditDBusAction::EditDBusAction(DBusAction *action, QWidget* parent, Qt::WFlags f
     ui.tvArguments->setItemDelegate(new ArgumentDelegate(ui.tvArguments));
     connect(ui.tvDBusFunctions->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(refreshArguments(const QModelIndex &)));
     
-    //    updateDBusFunctions(QModelIndex());
 
+    // Load our action here
+    
 }
 
 

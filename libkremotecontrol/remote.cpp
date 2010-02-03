@@ -22,26 +22,30 @@
 
 #include <KLocale>
 
-Remote::Remote()
-{
-m_availableInSolid = false;
+Remote::Remote() {
+    // Always create the Master Mode and set it default
+    Mode masterMode("Master");
+    addMode(masterMode);
+    setDefaultMode(masterMode);
 }
 
-
-Remote::Remote(const Solid::Control::RemoteControl &remote, const QList<Mode> &modes) //: m_remote(remote)
-{
-  m_modeList = modes;
-  m_remoteName = remote.name();
-  foreach(Solid::Control::RemoteControlButton button, remote.buttons()){
-    m_buttonNameSet.insert(button.name());
-  }
+Remote::Remote(const QString &remote, const QList<Mode> &modes) {
+    // Always create the Master Mode and set it default
+    Mode masterMode("Master");
+    addMode(masterMode);
+    setDefaultMode(masterMode);
+    
+    m_modeList = modes;
+    m_remoteName = remote;
+    foreach(const Solid::Control::RemoteControlButton &button, Solid::Control::RemoteControl(remote).buttons()){
+        m_buttonNameSet.insert(button.name());
+    }
 }
 
-
-void Remote::remote(const Solid::Control::RemoteControl& remote)
-{
-  m_remoteName = remote.name();
-  m_availableInSolid = true;
+/*
+void Remote::remote(const Solid::Control::RemoteControl& remote) const {
+    m_remoteName = remote.name();
+    m_availableInSolid = true;
 }
 
 
@@ -58,10 +62,9 @@ void Remote::modeList(QList< Mode > modeList)
 QSet< QString > Remote::buttonNames() const
 {
   return m_buttonNameSet;
-}
+}*/
 
-QString Remote::remoteName()
-{
+QString Remote::name() const {
   return m_remoteName;
 }
 
@@ -81,16 +84,15 @@ void Remote::removeMode(const Mode& mode)
 }
 
 
-Mode  Remote::defaultMode()
-{
- foreach( Mode  mode, m_modeList){
-  if (mode.name() == m_defaultModeName){
-    return mode;
-  }
-  Mode master(i18n("Default mode"), QString());
-  m_modeList.append(master);
-  m_defaultModeName = master.name();
- }
+Mode Remote::defaultMode() const{
+    foreach(const Mode &mode, m_modeList){
+        if (mode.name() == m_defaultModeName){
+            return mode;
+        }
+    }
+    
+    // Default Mode not found... returning Master Mode
+    return Mode(i18n("Master"));
 }
 
 
@@ -101,21 +103,21 @@ void Remote::setDefaultMode(const Mode &mode )
  }
 }
 
-QStringList Remote::modesToStringList()
-{
-  QStringList list;
+// QStringList Remote::modesToStringList()
+// {
+//   QStringList list;
+// 
+// foreach(const Mode &mode, m_modeList){
+//     list <<  mode.name();
+//   }
+// }
 
-foreach(const Mode &mode, m_modeList){
-    list <<  mode.name();
-  }
-}
 
-
-bool Remote::isAvailableInSolid()
-{
-  return m_availableInSolid;
-}
-
+// bool Remote::isAvailableInSolid()
+// {
+//   return m_availableInSolid;
+// }
+// 
 
 // Solid::Control::RemoteControl Remote::remote()
 // {

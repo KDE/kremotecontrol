@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright            : (C) 2003 by Gav Wood <gav@kde.org>             *
+ * Copyright : (C) 2010 by Michael Zanetti <michael_zanetti@gmx.net>     *
  *                                                                       *
  * This program is free software; you can redistribute it and/or         *
  * modify it under the terms of the GNU General Public License as        *
@@ -18,18 +18,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  *************************************************************************/
 
-
-/**
-  * @author Gav Wood
-  */
-
-
 #ifndef KCMLIRC_H
 #define KCMLIRC_H
 
 #include "ui_kcmlircbase.h"
 #include "model.h"
 #include "action.h"
+#include <remotelist.h>
+
 #include <QMap>
 #include<QVariant>
 #include <QStandardItemModel>
@@ -38,11 +34,6 @@
 class Profile;
 class Remote;
 
-
-Q_DECLARE_METATYPE(Remote*)
-Q_DECLARE_METATYPE(Mode*)
-
-
 class KCMLirc: public KCModule
 {
     Q_OBJECT
@@ -50,17 +41,11 @@ class KCMLirc: public KCModule
 
 private:
     Ui::ConfigurationWidget ui;
-    QList<Action*> m_actionList;
-    QList<Mode*> m_modeList;
     void autoPopulate(const Profile& profile, const Remote& remote);
-
-/*    inline Action *currentAction() {
-        Action *tAction = ui.theActions->currentItem()->data(0, Qt::UserRole).value<Action*>();
-        return tAction;
-
-    }*/
-    void connectSignalsAndSlots();
-
+    
+    RemoteList m_remoteList;
+    RemoteModel *m_remoteModel;
+    
 public:
     virtual void load();
     virtual void save();

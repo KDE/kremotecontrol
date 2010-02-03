@@ -25,16 +25,17 @@
 #include "kremotecontrol_export.h"
 
 
-namespace  Remotes {
-
-      QList<Remote> remotes();
-      void addRemote(const Remote &remote);
+class KREMOTECONTROL_EXPORT RemoteList: public QList<Remote*>
+{
+    public:
+        RemoteList();
+        
+/*        void addRemote(const Remote &remote);
+        QList<Remote> remotes() const;
+        
+    private:
+        QList<Remote> m_remotes;*/
+        
 };
-
-namespace RemoteUtil{
-
-  bool isAvailableInSolid(const QString& name);
-  bool isConfigured(const QString & name);
-}
 
 #endif // REMOTELIST_H
