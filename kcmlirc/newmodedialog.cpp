@@ -27,23 +27,23 @@
 #include "newmodedialog.h"
 #include "mode.h"
 
-NewModeDialog::NewModeDialog(const Modes &allModes, QWidget *parent, const bool &modal): KDialog(parent), allModes(allModes)
+NewModeDialog::NewModeDialog(Remote *remote, QWidget *parent): KDialog(parent), m_remote(remote)
 {
-    newModeBaseWidget = new NewModeBaseWidget();
-    setMainWidget(newModeBaseWidget);
+    QWidget *widget = new QWidget(this);
+    ui.setupUi(widget);
+    setMainWidget(widget);
     setButtons( Ok | Cancel);
     setDefaultButton(Ok);
-    setModal(modal);
 
-    QStringList remoteList = allModes.getRemotes();
+/*    QStringList remoteList = allModes.getRemotes();
     remoteList.sort();
     for (QStringList::const_iterator it = remoteList.constBegin(); it != remoteList.constEnd(); ++it) {
         new QTreeWidgetItem(newModeBaseWidget->theRemotes, (QStringList() << *it));
     }
-    newModeBaseWidget->theIcon->setIcon("irkick");
-    connect(newModeBaseWidget->theName, SIGNAL(textChanged(const QString&)), this, SLOT(checkForComplete()));
-    connect(newModeBaseWidget->theRemotes, SIGNAL(itemActivated(QTreeWidgetItem*,int)), this, SLOT(checkForComplete()));
-    connect(newModeBaseWidget->checkBox, SIGNAL(toggled(bool)),  newModeBaseWidget->theIcon, SLOT(setEnabled(bool)));
+    
+    
+    newModeBaseWidget->theIcon->setIcon("irkick");*/
+    connect(ui.leName, SIGNAL(textChanged(const QString&)), this, SLOT(checkForComplete()));
     enableButtonOk(false);
 }
 
@@ -53,33 +53,41 @@ NewModeDialog::~NewModeDialog()
 
 void NewModeDialog::checkForComplete()
 {
-    if(newModeBaseWidget->theRemotes->currentItem() && !newModeBaseWidget->theName->text().isEmpty()){
-	foreach(const Mode &mode, allModes.getModes(newModeBaseWidget->theRemotes->currentItem()->text(0))){
-	    if(mode.name() == newModeBaseWidget->theName->text()){
-		enableButtonOk(false);
-		return;
-	    }
-	}
-	enableButtonOk(true);
-	return;
+    if(ui.leName->text().isEmpty()){
+        enableButtonOk(false);
+        return;
     }
-    enableButtonOk(false);
+    foreach(const Mode *mode, m_remote->allModes()){
+        if(mode->name() == ui.leName->text()){
+            enableButtonOk(false);
+            return;
+        }
+    }
+    enableButtonOk(true);
 }
 
-Mode NewModeDialog::getMode()
-{
-
-    Mode mode = Mode();
-    mode.setRemote(newModeBaseWidget->theRemotes->currentItem()->text(0));
-    mode.setName(newModeBaseWidget->theName->text());
-    mode.setIconFile(newModeBaseWidget->checkBox->isChecked()  ?
-                     newModeBaseWidget->theIcon->icon() : QString());
-    return mode;
+void NewModeDialog::slotButtonClicked(int button) {
+    if(button == KDialog::Ok){
+        m_remote->addMode(new Mode(ui.leName->text(),ui.ibIcon->icon()));
+    }
+    KDialog::slotButtonClicked(button);
 }
 
-bool NewModeDialog::isDefaultMode() const
-{
-    return newModeBaseWidget->theDefault->isChecked();
-}
+
+// Mode NewModeDialog::getMode()
+// {
+// 
+//     Mode mode = Mode();
+//     mode.setRemote(newModeBaseWidget->theRemotes->currentItem()->text(0));
+//     mode.setName(newModeBaseWidget->theName->text());
+//     mode.setIconFile(newModeBaseWidget->checkBox->isChecked()  ?
+//                      newModeBaseWidget->theIcon->icon() : QString());
+//     return mode;
+// }
+
+// bool NewModeDialog::isDefaultMode() const
+// {
+//     return newModeBaseWidget->theDefault->isChecked();
+// }
 
 #include "newmodedialog.moc"

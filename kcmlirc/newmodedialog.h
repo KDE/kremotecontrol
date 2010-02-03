@@ -28,34 +28,24 @@
 #define NEWMODEDIALOG_H
 
 #include "ui_newmode.h"
-#include "mode.h"
-#include "modes.h"
+#include "remote.h"
 #include <QStringList>
-
-class NewModeBaseWidget : public QWidget, public Ui::NewMode
-{
-public:
-    NewModeBaseWidget(QWidget *parent = 0) : QWidget(parent)
-    {
-        setupUi(this);
-    }
-};
-
 
 class NewModeDialog : public KDialog
 {
     Q_OBJECT
 
 public:
-    explicit NewModeDialog(const Modes &allModes, QWidget *parent = 0, const bool &modal = false);
+    explicit NewModeDialog(Remote *remote, QWidget *parent = 0);
     ~NewModeDialog();
 
 private:
-    NewModeBaseWidget *newModeBaseWidget;
-    Modes allModes;
+    Ui::NewMode ui;
+    Remote *m_remote;
 
 private slots:
     void checkForComplete();
+    void slotButtonClicked(int button);
 
 public:
     Mode getMode();

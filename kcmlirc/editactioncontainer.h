@@ -21,7 +21,7 @@
 #ifndef ACTIONCONTAINER_H
 #define ACTIONCONTAINER_H
 
-#include "ui_actioncontainer.h"
+#include "ui_editactioncontainer.h"
 
 #include <kdialog.h>
 #include <action.h>

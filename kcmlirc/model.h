@@ -160,6 +160,9 @@ class RemoteModel: public QStandardItemModel
         explicit RemoteModel(const RemoteList &remoteList, QObject *parent = 0);
         RemoteModel(QObject *parent=0);
         void refresh(const RemoteList &remoteList);
+        
+        Remote *remote(const QModelIndex &index) const;
+        Mode *mode(const QModelIndex &index) const;
 };
 
 class RemoteItem: public QStandardItem

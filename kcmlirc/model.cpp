@@ -603,6 +603,23 @@ void RemoteModel::refresh(const RemoteList &remoteList){
     }    
 }
 
+Remote *RemoteModel::remote(const QModelIndex &index) const {
+    if(index.isValid() && index.parent().isValid()){
+        return qVariantValue<Remote*>(index.parent().data(Qt::UserRole));
+    }
+    if(index.isValid()){
+        return qVariantValue<Remote*>(index.data(Qt::UserRole));
+    }
+    return 0;
+}
+
+Mode *RemoteModel::mode(const QModelIndex &index) const {
+    if(index.isValid() && index.parent().isValid()){
+        return qVariantValue<Mode*>(index.data(Qt::UserRole));
+    }
+    return 0;
+}
+
 // QVariant RemoteModel::headerData(int section, Qt::Orientation o, int role) const {
 //     if (role == Qt::DisplayRole) {
 //         return i18nc("Remote name", "Remote");
@@ -613,11 +630,11 @@ void RemoteModel::refresh(const RemoteList &remoteList){
 
 RemoteItem::RemoteItem(Remote *remote) {
     qRegisterMetaType<Remote*>("Remote*");
+    qRegisterMetaType<Mode*>("Mode*");
     setData(qVariantFromValue(remote), Qt::UserRole);
-    setFlags(Qt::ItemIsEnabled);
-    foreach(const Mode &mode, remote->allModes()) {
-        QStandardItem *item = new QStandardItem(mode.name());
-        item->setData(qVariantFromValue(mode));
+    foreach(Mode *mode, remote->allModes()) {
+        QStandardItem *item = new QStandardItem(mode->name());
+        item->setData(qVariantFromValue(mode), Qt::UserRole);
         appendRow(item);
     }
 }

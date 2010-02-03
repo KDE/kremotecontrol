@@ -21,7 +21,7 @@
 #ifndef KCMLIRC_H
 #define KCMLIRC_H
 
-#include "ui_kcmlircbase.h"
+#include "ui_configurationwidget.h"
 #include "model.h"
 #include "action.h"
 #include <remotelist.h>
@@ -59,13 +59,10 @@ public slots:
     void updateActions();
     void updateModesStatus();
     void updateActionsStatus();
-    void updateModes();
     void updateProfileInfo();
     void updateProfileDetails(QModelIndex);
     void updateRemoteInfo();
     void updateRemoteDetails(QModelIndex);
-    void slotAddMode();
-    void slotRemoveMode();
     void slotSetDefaultMode();
     void slotAddActions();
     void slotEditAction();
@@ -73,7 +70,11 @@ public slots:
     void slotEditMode();
 
 private slots:
-  void addAction();  
+    void addAction();  
+    void addMode();
+    void removeMode();
+    void updateModes();
+    void updateModeButtons(const QModelIndex &index);
     
 signals:
     void haveButton(const QString &remote, const QString &button);

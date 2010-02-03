@@ -24,14 +24,14 @@
 
 Remote::Remote() {
     // Always create the Master Mode and set it default
-    Mode masterMode("Master");
+    Mode *masterMode = new Mode("Master");
     addMode(masterMode);
     setDefaultMode(masterMode);
 }
 
-Remote::Remote(const QString &remote, const QList<Mode> &modes) {
+Remote::Remote(const QString &remote, const QList<Mode*> &modes) {
     // Always create the Master Mode and set it default
-    Mode masterMode("Master");
+    Mode *masterMode = new Mode("Master");
     addMode(masterMode);
     setDefaultMode(masterMode);
     
@@ -68,39 +68,29 @@ QString Remote::name() const {
   return m_remoteName;
 }
 
-QList< Mode> Remote::allModes() const
-{
+QList<Mode*> Remote::allModes() const {
   return m_modeList;
 }
 
-void Remote::addMode(const Mode& mode)
-{
+void Remote::addMode(Mode *mode) {
   m_modeList.append(mode);
 }
 
-void Remote::removeMode(const Mode& mode)
-{
+void Remote::removeMode(Mode *mode) {
     m_modeList.removeAll(mode);
 }
 
 
-Mode Remote::defaultMode() const{
-    foreach(const Mode &mode, m_modeList){
-        if (mode.name() == m_defaultModeName){
-            return mode;
-        }
-    }
-    
-    // Default Mode not found... returning Master Mode
-    return Mode(i18n("Master"));
+Mode *Remote::defaultMode() const {
+    return m_defaultMode;
 }
 
 
-void Remote::setDefaultMode(const Mode &mode )
-{
- if(m_modeList.contains(mode)){
-    m_defaultModeName = mode.name();
- }
+void Remote::setDefaultMode(Mode *mode) {
+    if(!m_modeList.contains(mode)){
+        m_modeList.append(mode);
+    }
+    m_defaultMode = mode;
 }
 
 // QStringList Remote::modesToStringList()

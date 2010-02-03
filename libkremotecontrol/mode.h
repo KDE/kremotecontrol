@@ -47,6 +47,6 @@ class KREMOTECONTROL_EXPORT Mode
     QList<Action*> m_actionList;
 };
 
-Q_DECLARE_METATYPE(Mode)
+Q_DECLARE_METATYPE(Mode*)
 
 #endif

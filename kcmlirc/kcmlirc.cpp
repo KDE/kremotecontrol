@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright            : (C) 2003 by Gav Wood <gav@kde.org>             *
+ * Copyright: (C) 2010 by Michael Zanetti <michael_zanetti@gmx.net>      *
  *                                                                       *
  * This program is free software; you can redistribute it and/or         *
  * modify it under the terms of the GNU General Public License as        *
@@ -19,18 +19,13 @@
  *************************************************************************/
 
 
-/**
-  * @author Gav Wood
-  */
-
-
 #include "kcmlirc.h"
 #include "addaction.h"
 #include "editactioncontainer.h"
 #include "remote.h"
 #include "editactioncontainer.h"
 
-// #include "newmodedialog.h"
+#include "newmodedialog.h"
 #include "profileserver.h"
 // #include "selectprofile.h"
 // #include "editaction.h"
@@ -74,21 +69,17 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
 
     QDBusConnection::sessionBus().registerObject("/KCMLirc", this, QDBusConnection::ExportAllSlots);
 
-//     qRegisterMetaType<Action*>("Action*");
-//     qRegisterMetaType<Mode*>("Mode*");
-//     qRegisterMetaType<Remote*>("Remote*");
-
     KGlobal::locale()->insertCatalog("kcm_lirc");
     setAboutData(
         new KAboutData(
             "kcm_lirc",
             0,
             ki18n("KDE Lirc"),
-            VERSION, ki18n("The KDE IR Remote Control System"),
+            VERSION, ki18n("The KDE Remote Control System"),
             KAboutData::License_GPL_V2,
-            ki18n("Copyright (c)2003 Gav Wood"),
+            ki18n("Copyright (c)2003 Gav Wood, 2007 Michael Zanetti, 2009 Frank Scheffold"),
             ki18n(
-                "Use this to configure KDE's infrared remote control system in order to control any KDE application with your infrared remote control."),
+                "Use this to configure KDE's remote control system in order to control any KDE application with your remote control."),
             "http://utils.kde.org/projects/kdelirc"));
     setQuickHelp(
         i18n(
@@ -121,8 +112,14 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
     layout->addWidget(widget);
 
     ui.pbAddMode->setIcon(KIcon("list-add"));
+    connect(ui.pbAddMode, SIGNAL(clicked(bool)), SLOT(addMode()));
+
     ui.pbRemoveMode->setIcon(KIcon("list-remove"));
+    connect(ui.pbRemoveMode, SIGNAL(clicked(bool)), SLOT(removeMode()));
+
     ui.pbAddAction->setIcon(KIcon("list-add"));
+    connect(ui.pbAddAction, SIGNAL(clicked(bool)), SLOT(addAction()));
+
     ui.pbRemoveAction->setIcon(KIcon("list-remove"));
 
     ui.pbEditMode->setIcon(KIcon("configure"));
@@ -135,23 +132,14 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
 
     ui.pbCopyAction->setIcon(KIcon("edit-copy"));
 
-
-    QStringList headers = (QStringList() << i18nc("Column which shows the available remotes on system", "Remote"));
-//    ui.tvRemotes->setHeaderLabels(headers);
-
 //    connectSignalsAndSlots();
-    load();
+//    load();
     
   
     m_remoteModel = new RemoteModel(m_remoteList, ui.tvRemotes);
     ui.tvRemotes->setModel(m_remoteModel);
+    connect(ui.tvRemotes->selectionModel(), SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), SLOT(updateModeButtons(const QModelIndex &)));
     
-    
-    
-    // Test code...
-    Remote *remote = new Remote(Solid::Control::RemoteControl::allRemotes().first()->name());
-    m_remoteList.append(remote);
-    remote->addMode(Mode("testmode"));
     
     
      updateProfileInfo();
@@ -306,8 +294,20 @@ void KCMLirc::autoPopulate(const Profile &profile, const Remote &remote)
 //     }
 }
 
-void KCMLirc::slotAddMode()
+void KCMLirc::addMode()
 {
+    Remote *remote = m_remoteModel->remote(ui.tvRemotes->selectionModel()->currentIndex());
+    kDebug() << "current selected remote:" << remote;
+    NewModeDialog newModeDialog(remote);
+    if(newModeDialog.exec()){
+        m_remoteModel->refresh(m_remoteList);
+        foreach(const Mode *mode, remote->allModes()){
+            kDebug() << "Created Mode" << mode->name();
+        }
+        updateModes();
+        emit changed(true);
+    }
+  
 //     if (ui.theModes->selectedItems().isEmpty()) {
 //         return;
 //     }
@@ -347,9 +347,17 @@ void KCMLirc::slotEditMode()
 //     }
 }
 
-void KCMLirc::slotRemoveMode()
-{
+void KCMLirc::removeMode() {
 
+    QModelIndex currentIndex = ui.tvRemotes->selectionModel()->currentIndex();
+    Remote *remote = m_remoteModel->remote(currentIndex);
+    Mode *mode = m_remoteModel->mode(currentIndex);
+    if(remote && remote->allModes().contains(mode)){
+        remote->removeMode(mode);
+        updateModes();
+        emit changed(true);
+    }
+  
 //     Mode *tMode = ui.theModes->currentItem()->data(0, Qt::UserRole).value<Mode*>();
 //     Remote *remote =  ui.theModes->currentItem()->parent()->data(0, Qt::UserRole).value<Remote*>();
 //     if (KMessageBox::warningContinueCancel(this, i18n(
@@ -426,6 +434,8 @@ const QString KCMLirc::notes(Action* action) const
 void KCMLirc::updateModes()
 {
     m_remoteModel->refresh(m_remoteList);
+    ui.tvRemotes->expandAll();
+    updateModeButtons(ui.tvRemotes->selectionModel()->currentIndex());
   
 /*    Mode *currentSelectedMode;
     if (ui.theModes->currentItem()) {
@@ -479,6 +489,21 @@ void KCMLirc::updateModes()
     updateActions();*/
 }
 
+void KCMLirc::updateModeButtons(const QModelIndex &index){
+    if(index.isValid()){
+        ui.pbAddMode->setEnabled(true);
+    } else {
+        ui.pbAddMode->setEnabled(false);
+    }
+    
+    if(index.isValid() && index.parent().isValid()){
+        ui.pbRemoveMode->setEnabled(true);
+        ui.pbEditMode->setEnabled(true);
+    } else {
+        ui.pbRemoveMode->setEnabled(false);
+        ui.pbEditMode->setEnabled(false);
+    }
+}
 
 void KCMLirc::updateProfileInfo()
 {
@@ -542,14 +567,20 @@ void KCMLirc::updateRemoteInfo()
 
 void KCMLirc::load() {
   
-    KConfig config("kremotecontrolrc");
+    KConfig config("kremotecontrolrc", KConfig::NoGlobals);
         
     foreach(const QString &remoteGroupName, config.groupList()){
+        Remote *remote = new Remote(remoteGroupName);
         KConfigGroup remoteGroup(&config, remoteGroupName);
+        foreach(const QString &modeName, remoteGroup.groupList()){
+            KConfigGroup modegroup(&remoteGroup, modeName);
+            remote->addMode(new Mode(modeName, modegroup.readEntry("IconName")));
+        }
         
-
+        m_remoteList.append(remote);
     }
 
+    updateModes();
 //     KConfigGroup modesGroup = theConfig.group("Modes");
 //     clear();
 //     QString helperString = modesGroup.readEntry("Modes", QString());
@@ -587,14 +618,17 @@ void KCMLirc::defaults()
     emit changed(true);
 }
 
-void KCMLirc::save()
-{
-    KConfig config("kremotecontrolrc");
-    
+void KCMLirc::save() {
+    KConfig config("kremotecontrolrc");    
     foreach(const Remote *remote, m_remoteList){
+        config.deleteGroup(remote->name());
         KConfigGroup remoteGroup(&config, remote->name());
-        remoteGroup.writeEntry("DefaultMode", remote->defaultMode().name());
-        
+        remoteGroup.writeEntry("DefaultMode", remote->defaultMode()->name());
+        foreach(const Mode *mode, remote->allModes()){
+            KConfigGroup modeGroup(&remoteGroup, mode->name());
+            modeGroup.writeEntry("IconName", mode->iconName());
+                
+        }        
     }
 
     //Todo save to config interface
