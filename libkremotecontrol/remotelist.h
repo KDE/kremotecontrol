@@ -29,13 +29,8 @@ class KREMOTECONTROL_EXPORT RemoteList: public QList<Remote*>
 {
     public:
         RemoteList();
-        
-/*        void addRemote(const Remote &remote);
-        QList<Remote> remotes() const;
-        
-    private:
-        QList<Remote> m_remotes;*/
-        
+
+        bool contains(const QString &remoteName) const;        
 };
 
 #endif // REMOTELIST_H

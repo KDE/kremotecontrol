@@ -28,7 +28,7 @@ class KREMOTECONTROL_EXPORT ModeSwitchAction : public Action
 {
   
   public:
-    ModeSwitchAction(const QString &button, const Mode &mode);
+    ModeSwitchAction(const QString &button, const Mode &newMode);
     
     Mode newMode() const;
     void setNewMode(const Mode &mode);

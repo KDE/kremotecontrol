@@ -9,10 +9,11 @@ include_directories(
 
 set(libkremotecontrol_LIB_SRCS
    remote.cpp
+   remotelist.cpp
    mode.cpp
-   action.cpp
    prototype.cpp
    argument.cpp
+   action.cpp
    dbusaction.cpp
    modeswitchaction.cpp
    profileaction.cpp
@@ -23,8 +24,6 @@ set(libkremotecontrol_LIB_SRCS
    actionexecutor.cpp
    dbusactionexecutor.cpp
    dbusinterface.cpp
-   remote.cpp
-   remotelist.cpp
 )
 
 kde4_add_library(libkremotecontrol SHARED ${libkremotecontrol_LIB_SRCS})

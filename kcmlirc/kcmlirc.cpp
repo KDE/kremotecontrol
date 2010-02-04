@@ -140,8 +140,10 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
   
     m_remoteModel = new RemoteModel(m_remoteList, ui.tvRemotes);
     ui.tvRemotes->setModel(m_remoteModel);
-    connect(ui.tvRemotes->selectionModel(), SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), SLOT(updateModeButtons(const QModelIndex &)));
+    connect(ui.tvRemotes->selectionModel(), SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), SLOT(modeSelectionChanged(const QModelIndex &)));
     
+    m_actionModel = new ActionModel(ui.tvActions);
+    ui.tvActions->setModel(m_actionModel);
     
     
      updateProfileInfo();
@@ -235,14 +237,15 @@ void KCMLirc::slotAddActions()
 
 void KCMLirc::addAction()
 {
-    // TODO: get currently selected remote!!!
-    QString remote = Solid::Control::RemoteControl::allRemotes().first()->name();
+    Remote *remote = m_remoteModel->remote(ui.tvRemotes->currentIndex());
 
     AddAction addActionDialog;
-    Action *newAction = addActionDialog.createAction(remote);
+    Action *newAction = addActionDialog.createAction(remote->name());
     if(newAction != 0){
-        // Yay... the new action is here
-        kDebug() << "created action:" << newAction->type() << newAction->name() << newAction->description();
+        Mode *mode = m_remoteModel->mode(ui.tvRemotes->currentIndex());
+        mode->addAction(newAction);
+        m_actionModel->refresh(mode);
+        emit changed(true);
     }
 }
 
@@ -400,14 +403,16 @@ const QString KCMLirc::notes(Action* action) const
 void KCMLirc::updateModes() {
     m_remoteModel->refresh(m_remoteList);
     ui.tvRemotes->expandAll();
-    updateModeButtons(ui.tvRemotes->selectionModel()->currentIndex());
+    modeSelectionChanged(ui.tvRemotes->selectionModel()->currentIndex());
 }
 
-void KCMLirc::updateModeButtons(const QModelIndex &index) {
+void KCMLirc::modeSelectionChanged(const QModelIndex &index) {
     if(index.isValid()){
         ui.pbAddMode->setEnabled(true);
+        ui.pbAddAction->setEnabled(true);
     } else {
         ui.pbAddMode->setEnabled(false);
+        ui.pbAddAction->setEnabled(false);
     }
     
     if(index.isValid() && index.parent().isValid()){
@@ -417,6 +422,12 @@ void KCMLirc::updateModeButtons(const QModelIndex &index) {
         ui.pbRemoveMode->setEnabled(false);
         ui.pbEditMode->setEnabled(false);
     }
+    
+    Mode *mode = m_remoteModel->mode(index);
+    if(mode){
+        m_actionModel->refresh(mode);
+    }
+    
 }
 
 void KCMLirc::updateProfileInfo()
@@ -486,17 +497,51 @@ void KCMLirc::load() {
         Remote *remote = new Remote(remoteGroupName);
         KConfigGroup remoteGroup(&config, remoteGroupName);
         foreach(const QString &modeName, remoteGroup.groupList()){
-            KConfigGroup modegroup(&remoteGroup, modeName);
-            remote->addMode(new Mode(modeName, modegroup.readEntry("IconName")));
+            KConfigGroup modeGroup(&remoteGroup, modeName);
+            Mode *mode;
+            if(modeName == "Master") { // A Remote always has a Master Mode... Adding a second one will not work
+                mode = remote->masterMode();
+                mode->setIconName(modeGroup.readEntry("IconName"));
+            } else {
+                mode = new Mode(modeName, modeGroup.readEntry("IconName"));
+            }
+            foreach(const QString &actionId, modeGroup.groupList()){
+                KConfigGroup actionGroup(&modeGroup, actionId);
+                // Read Action properties here
+                Action *action = 0;
+                Action::ActionType actionType = (Action::ActionType) actionGroup.readEntry("Type", 0);
+                switch(actionType){
+                    case Action::DBusAction:
+                        action = new DBusAction();
+                        break;
+                    case Action::ProfileAction:
+                        action = new ProfileAction();
+                        break;
+                }
+                if(!action){
+                    continue;
+                }
+                action->loadFromConfig(actionGroup);
+                
+                mode->addAction(action);
+            }
+            // Read Mode properties here
+            mode->setIconName(modeGroup.readEntry("IconName"));
             
-            // TODO: Read All Action for this Mode here!
-            
+            remote->addMode(mode);
         }
+        // Read Remote properties here
         remote->setDefaultMode(remoteGroup.readEntry("DefaultMode"));
+        
         m_remoteList.append(remote);
     }
 
-    // TODO: Check if there are Remotes available in Solid without a config entry. Add them here!
+    foreach(const QString &remoteName, Solid::Control::RemoteControl::allRemoteNames()){
+        if(!m_remoteList.contains(remoteName)){
+            Remote *remote = new Remote(remoteName);
+            m_remoteList.append(remote);
+        }
+    }
 
     updateModes();
 }
@@ -504,15 +549,24 @@ void KCMLirc::load() {
 void KCMLirc::save() {
     KConfig config("kremotecontrolrc");    
     foreach(const Remote *remote, m_remoteList){
+        // Clear out old entries for this remote
         config.deleteGroup(remote->name());
         KConfigGroup remoteGroup(&config, remote->name());
+        // Save Remote properties here
         remoteGroup.writeEntry("DefaultMode", remote->defaultMode()->name());
+        
         foreach(const Mode *mode, remote->allModes()){
             KConfigGroup modeGroup(&remoteGroup, mode->name());
+            // Save Mode properties here
             modeGroup.writeEntry("IconName", mode->iconName());
             
-            // TODO: Write all Actions for this mode into sub-groups here
-                
+            int i = 0; // The ID for the ActionGroup in config file as actions may have no unique attribute
+            foreach(Action *action, mode->actions()){
+                KConfigGroup actionGroup(&modeGroup, QString::number(i));
+                // Save Action properties here
+                action->saveToConfig(actionGroup);
+                i++;
+            }
         }        
     }
     

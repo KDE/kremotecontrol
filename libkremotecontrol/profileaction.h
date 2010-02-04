@@ -17,8 +17,8 @@
 
 */
 
-#ifndef NEWPROFILEACTION_H
-#define NEWPROFILEACTION_H
+#ifndef PROFILEACTION_H
+#define PROFILEACTION_H
 
 #include "dbusaction.h"
 #include "kremotecontrol_export.h"
@@ -26,7 +26,8 @@
 class KREMOTECONTROL_EXPORT ProfileAction : public DBusAction
 {
   public:
-    ProfileAction(const QString& button, const Mode &mode, const QString &profile, const QString &actionTemplate);
+    ProfileAction();
+    ProfileAction(const QString& button, const QString &profile, const QString &actionTemplate);
 
     QString profileName() const;
     QString actionTemplateID() const;
@@ -36,6 +37,9 @@ class KREMOTECONTROL_EXPORT ProfileAction : public DBusAction
     
     virtual QString name() const;
     virtual QString description() const;
+    
+    virtual void saveToConfig(KConfigGroup &config);
+    virtual void loadFromConfig(const KConfigGroup &config);
     
   protected:
     QString m_profileName;

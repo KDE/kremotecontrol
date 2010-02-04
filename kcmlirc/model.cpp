@@ -1,5 +1,6 @@
 /*************************************************************************
-* Copyright            : (C) 2003 by Gav Wood <gav@kde.org>             *
+* Copyright: (C) 2009 by Frank Scheffold <fscheffold@googlemail.com>    *
+* Copyright: (C) 2009 by Michael Zanetti <michael_zanetti@gmx.net>      *
 *                                                                       *
 * This program is free software; you can redistribute it and/or         *
 * modify it under the terms of the GNU General Public License as        *
@@ -577,8 +578,7 @@ QVariant RemoteButtonModel::headerData(int section, Qt::Orientation orientation,
 }
 
 
-QModelIndex RemoteButtonModel::indexOfButtonName(const QString &button)
-{
+QModelIndex RemoteButtonModel::indexOfButtonName(const QString &button) {
   for(int row = 0; row < QStandardItemModel::rowCount(); ++row){
     if(button == getButton(row)->name()){
       return indexFromItem(item(row));
@@ -617,6 +617,9 @@ Mode *RemoteModel::mode(const QModelIndex &index) const {
     if(index.isValid() && index.parent().isValid()){
         return qVariantValue<Mode*>(index.data(Qt::UserRole));
     }
+    if(index.isValid()){
+        return qVariantValue<Remote*>(index.data(Qt::UserRole))->masterMode();
+    }
     return 0;
 }
 
@@ -633,9 +636,11 @@ RemoteItem::RemoteItem(Remote *remote) {
     qRegisterMetaType<Mode*>("Mode*");
     setData(qVariantFromValue(remote), Qt::UserRole);
     foreach(Mode *mode, remote->allModes()) {
-        QStandardItem *item = new QStandardItem(mode->name());
-        item->setData(qVariantFromValue(mode), Qt::UserRole);
-        appendRow(item);
+        if(mode->name() != "Master"){ // Dont show the Master Mode separately
+            QStandardItem *item = new QStandardItem(mode->name());
+            item->setData(qVariantFromValue(mode), Qt::UserRole);
+            appendRow(item);
+        }
     }
 }
 
@@ -646,3 +651,35 @@ QVariant RemoteItem::data(int role) const {
     }
     return QStandardItem::data(role);
 }
+
+
+ActionModel::ActionModel(QObject *parent): QStandardItemModel(parent) {
+}
+
+
+void ActionModel::refresh(Mode* mode) {
+    clear();
+    foreach(Action *action, mode->actions()){
+        QStandardItem *item = new QStandardItem();
+        item->setData(qVariantFromValue(action), Qt::UserRole);
+        appendRow(item);
+    }
+    setColumnCount(3);
+}
+
+
+QVariant ActionModel::data(const QModelIndex& index, int role) const {
+    if(role == Qt::DisplayRole){
+        Action *action = qVariantValue<Action*>(item(index.row())->data(Qt::UserRole));
+        switch(index.column()){
+            case 0:
+                return action->button();
+            case 1:
+                return action->name();
+            case 2:
+                return action->description();
+        }
+    }
+    return QStandardItemModel::data(index, role);
+}
+

@@ -18,6 +18,7 @@
 */
 
 #include "mode.h"
+#include "action.h"
 
 Mode::Mode() {
 
@@ -50,7 +51,20 @@ bool Mode::operator==(const Mode& mode) const {
   return m_name == mode.name() && m_iconName == mode.iconName();
 }
 
-QList<Action*> Mode::getActionsForButtonName(const QString &name){
+void Mode::addAction(Action* action) {
+    m_actionList.append(action);
+}
 
-  return QList<Action*>();
+QList< Action* > Mode::actions() const {
+    return m_actionList;
+}
+
+QList<Action*> Mode::actionsForButton(const QString &button) const{
+    QList<Action*> retList;
+    foreach(Action *action, m_actionList){
+        if(action->button() == button){
+            retList.append(action);
+        }
+    }
+    return retList;
 }

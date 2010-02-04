@@ -45,6 +45,7 @@ private:
     
     RemoteList m_remoteList;
     RemoteModel *m_remoteModel;
+    ActionModel *m_actionModel;
     
 public:
     virtual void load();
@@ -74,7 +75,7 @@ private slots:
     void removeMode();
     
     void updateModes();
-    void updateModeButtons(const QModelIndex &index);
+    void modeSelectionChanged(const QModelIndex &index);
     
 signals:
     void haveButton(const QString &remote, const QString &button);

@@ -19,7 +19,7 @@
 
 #include "action.h"
 
-Action::Action(ActionType type, const QString &button, const Mode &mode): m_type(type), m_button(button), m_mode(mode){
+Action::Action(ActionType type, const QString &button): m_type(type), m_button(button){
 }
 
 Action::Action(const Action& action): m_button(action.button()){
@@ -42,21 +42,22 @@ void Action::setButton(const QString& button) {
   m_button = button;
 }
 
-Mode Action::mode() const {
-  return m_mode;
-}
-
 void Action::operator=(const Action& action) {
   m_type = action.type();
-//   m_remote = action.remote();
-  m_mode = action.mode();
   m_button = action.button();
 }
 
 bool Action::operator==(const Action& action) const {
   return m_type == action.type() &&
-// 	  m_remote == action.remote() &&
-	  m_mode == action.mode() &&
 	  m_button == action.button();
 }
 
+void Action::saveToConfig(KConfigGroup& config) {
+    config.writeEntry("Type", (int)m_type);
+    config.writeEntry("Button", m_button);
+}
+
+void Action::loadFromConfig(const KConfigGroup &config) {
+    m_type = (ActionType)config.readEntry("Type").toInt();
+    m_button = config.readEntry("Button");
+}

@@ -26,14 +26,13 @@
 
 
 RemoteList::RemoteList() {
-    // Load all remotes from config ans solid here
 }
 
-// void RemoteList::addRemote(const Remote& remote) {
-//     m_remotes.append(remote);
-// }
-// 
-// QList<Remote> RemoteList::remotes() const {
-//     return m_remotes;
-// }
-// 
+bool RemoteList::contains(const QString& remoteName) const {
+    for(QList<Remote*>::const_iterator i = constBegin(); i != constEnd(); ++i){
+        if((*i)->name() == remoteName){
+            return true;
+        }
+    }
+    return false;
+}

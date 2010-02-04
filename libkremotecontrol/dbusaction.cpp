@@ -19,7 +19,7 @@
 
 #include "dbusaction.h"
 
-DBusAction::DBusAction(const QString &button, const Mode &mode): Action(Action::DBusAction, button, mode)
+DBusAction::DBusAction(const QString &button): Action(Action::DBusAction, button)
 {
 
 }
@@ -83,7 +83,6 @@ void DBusAction::setDestination(DBusAction::ActionDestination destination)
 
 void DBusAction::operator=(const DBusAction& action) {
   m_type = action.type();
-  m_mode = action.mode();
   m_button = action.button();
   m_application = action.application();
   m_function = action.function();
@@ -110,3 +109,75 @@ QString DBusAction::name() const {
 QString DBusAction::description() const {
   return m_function.name();
 }
+
+void DBusAction::saveToConfig(KConfigGroup& config) {
+    Action::saveToConfig(config);
+    config.writeEntry("Application", m_application);
+    config.writeEntry("Node", m_node);
+    config.writeEntry("Function", m_function.name());
+    int i = 0; // GroupID for arguments
+    foreach(const Argument &arg, m_function.args()){
+        KConfigGroup argumentGroup(&config, "Argument" + QString::number(i));
+        argumentGroup.writeEntry("Description", arg.description());
+        argumentGroup.writeEntry("Value", arg.value());
+        argumentGroup.writeEntry("Type", arg.value().typeName());
+    }
+    switch(m_destination){
+        case Unique:
+            config.writeEntry("Destination", "Unique");
+            break;
+        case Top:
+            config.writeEntry("Destination", "Top");
+            break;
+        case Bottom:
+            config.writeEntry("Destination", "Bottom");
+            break;
+        case None:
+            config.writeEntry("Destination", "None");
+            break;
+        case All:
+        default:
+            config.writeEntry("Destination", "All");
+            break;            
+    }
+    config.writeEntry("Autostart", m_autostart);
+    config.writeEntry("Repeat", m_repeat);
+
+}
+
+void DBusAction::loadFromConfig(const KConfigGroup& config) {
+    Action::loadFromConfig(config);
+    m_application = config.readEntry("Application");
+    m_node = config.readEntry("Node");
+    m_function = Prototype(config.readEntry("Function"));
+    QList<Argument> argList;
+    foreach(const QString &argID, config.groupList()){
+        KConfigGroup argumentGroup = KConfigGroup(&config, argID);
+        QVariant argValue = QVariant(QVariant::nameToType(argumentGroup.readEntry("Type").toLocal8Bit()));
+        argValue = argumentGroup.readEntry("Value", argValue);
+        QString description = argumentGroup.readEntry("Description");
+        Argument arg(argValue, description);
+        argList.append(arg);
+    }
+    m_function.setArgs(argList);
+    QString destination = config.readEntry("Destination");
+    if(destination == "Unique"){
+        m_destination = Unique;
+    }
+    if(destination == "Top"){
+        m_destination = Top;
+    }
+    if(destination == "Bottom"){
+        m_destination = Bottom;
+    }
+    if(destination == "None"){
+        m_destination = None;
+    }
+    if(destination == "All"){
+        m_destination = All;
+    }
+    m_autostart = config.readEntry("Autostart", QVariant(false)).toBool();
+    m_repeat = config.readEntry("Repeat", QVariant(false)).toBool();
+    
+}
+

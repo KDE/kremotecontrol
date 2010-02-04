@@ -34,7 +34,7 @@ class KREMOTECONTROL_EXPORT DBusAction : public Action
   public:
     enum ActionDestination {Unique, Top, Bottom, None, All};
     
-    DBusAction(const QString &button, const Mode &mode);
+    DBusAction(const QString &button);
     DBusAction();
     
     QString application() const;
@@ -60,6 +60,9 @@ class KREMOTECONTROL_EXPORT DBusAction : public Action
     
     virtual QString name() const;
     virtual QString description() const;
+    
+    virtual void saveToConfig(KConfigGroup &config);
+    virtual void loadFromConfig(const KConfigGroup &config);
     
   protected:
     QString m_application;

@@ -54,7 +54,7 @@ class KREMOTECONTROL_EXPORT ProfileActionTemplate
     bool repeat() const;
     QString buttonName() const;
 
-    ProfileAction *createAction(const Solid::Control::RemoteControlButton &button, const Mode &mode) const;
+    ProfileAction *createAction(const Solid::Control::RemoteControlButton &button) const;
 
   protected:
     QString m_profileId; // e.g. multimedia

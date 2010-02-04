@@ -20,22 +20,33 @@
 #include "remote.h"
 
 #include <KLocale>
+#include <kdebug.h>
 
 Remote::Remote() {
     // Always create the Master Mode and set it default
-    Mode *masterMode = new Mode("");
+    Mode *masterMode = new Mode("Master");
     addMode(masterMode);
     setDefaultMode(masterMode);
 }
 
 Remote::Remote(const QString &remote, const QList<Mode*> &modes) {
-    // Always create the Master Mode and set it default
-    Mode *masterMode = new Mode("");
-    addMode(masterMode);
-    setDefaultMode(masterMode);
-    
     m_modeList = modes;
     m_remoteName = remote;
+    
+    // Always create the Master Mode and set it default
+    bool hasMaster = false;
+    foreach(Mode *mode, m_modeList){
+        if(mode->name() == "Master"){
+            hasMaster = true;
+            break;
+        }
+    }
+    if(!hasMaster){
+        Mode *masterMode = new Mode("Master");
+        addMode(masterMode);
+        setDefaultMode(masterMode);
+    }
+
 }
 
 QString Remote::name() const {
@@ -51,15 +62,15 @@ void Remote::addMode(Mode *mode) {
 }
 
 void Remote::removeMode(Mode *mode) {
-    if(mode->name().isEmpty()){
-        // Cannot delete the Master Mode...
+    if(mode->name() == "Master"){
+        kDebug() << "cannot delete the Master mode";
         return;
     }
     
     if(m_defaultMode == mode){
         // Deleting the Default Mode... Setting Master Mode to default
         foreach(Mode *tmp, m_modeList){
-            if(tmp->name().isEmpty()){
+            if(tmp->name() == "Master"){
                 m_defaultMode = tmp;
                 break;
             }
@@ -68,11 +79,22 @@ void Remote::removeMode(Mode *mode) {
     m_modeList.removeAll(mode);
 }
 
+Mode* Remote::masterMode() const {
+    foreach(Mode *mode, m_modeList){
+        kDebug() << "checking Mode" << mode->name();
+        if(mode->name() == "Master"){
+            return mode;
+        }
+    }
+    kDebug() << "Master mode not found";
+    // Huh??? No Master Mode? Should never happen as removeMode() doesn't delete the Master mode
+    // and all ctors create a Master Mode...
+    return 0;
+}
 
 Mode *Remote::defaultMode() const {
     return m_defaultMode;
 }
-
 
 void Remote::setDefaultMode(Mode *mode) {
     if(!m_modeList.contains(mode)){

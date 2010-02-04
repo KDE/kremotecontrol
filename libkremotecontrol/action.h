@@ -25,6 +25,7 @@
 
 #include <solid/control/remotecontrolbutton.h>
 #include <solid/control/remotecontrol.h>
+#include <kconfiggroup.h>
 
 class KREMOTECONTROL_EXPORT Action: public QObject
 {
@@ -33,7 +34,7 @@ class KREMOTECONTROL_EXPORT Action: public QObject
   public:
     enum ActionType {ModeSwitchAction, DBusAction, ProfileAction};
   
-    Action(ActionType type, const QString &button, const Mode &mode);
+    Action(ActionType type, const QString &button);
     Action(ActionType type);
     Action(const Action &action);
 //    Action();
@@ -42,22 +43,22 @@ class KREMOTECONTROL_EXPORT Action: public QObject
 
     QString button() const;
     void setButton(const QString &button);
-    
-    Mode mode() const;
-    
+        
     virtual void operator=(const Action &action);
     virtual bool operator==(const Action &action) const;
     
     virtual QString name() const = 0;
     virtual QString description() const = 0;
     
+    virtual void saveToConfig(KConfigGroup &config);
+    virtual void loadFromConfig(const KConfigGroup &config) = 0;
+    
   protected:
     ActionType m_type;
-    QString m_button;
-    Mode m_mode;
-    
+    QString m_button;    
 };
 
 Q_DECLARE_METATYPE(Action*)
+Q_DECLARE_METATYPE(Action::ActionType)
 
 #endif // ACTION_H

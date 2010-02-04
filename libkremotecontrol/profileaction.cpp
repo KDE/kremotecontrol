@@ -19,8 +19,13 @@
 
 #include "profileaction.h"
 
-ProfileAction::ProfileAction(const QString& button, const Mode &mode, const QString &profileName, const QString &actionTemplate): DBusAction(button, mode)
-{
+ProfileAction::ProfileAction(): DBusAction() {
+  //change type from DBusAction (c'tor) to ProfileAction
+  m_type = Action::ProfileAction;
+  
+}
+
+ProfileAction::ProfileAction(const QString& button, const QString &profileName, const QString &actionTemplate): DBusAction(button) {
   //change type from DBusAction (c'tor) to ProfileAction
   m_type = Action::ProfileAction;
   m_profileName = profileName;
@@ -55,4 +60,16 @@ QString ProfileAction::name() const {
 
 QString ProfileAction::description() const {
   return m_function.name();
+}
+
+void ProfileAction::saveToConfig(KConfigGroup &config) {
+    DBusAction::saveToConfig(config);
+    config.writeEntry("ProfileName", m_profileName);
+    config.writeEntry("Template", m_template);
+}
+
+void ProfileAction::loadFromConfig(const KConfigGroup &config) {
+    DBusAction::loadFromConfig(config);
+    m_profileName = config.readEntry("ProfileName");
+    m_template = config.readEntry("Template");
 }

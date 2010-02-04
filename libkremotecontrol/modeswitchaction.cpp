@@ -20,17 +20,15 @@
 #include "modeswitchaction.h"
 
 
-ModeSwitchAction::ModeSwitchAction(const QString &button, const Mode &mode): Action(Action::ModeSwitchAction, button, mode)
-{
-
+ModeSwitchAction::ModeSwitchAction(const QString &button, const Mode &newMode): Action(Action::ModeSwitchAction, button) {
+    m_mode = newMode;
 }
 
-bool ModeSwitchAction::executeActionsAfterSwitch() const{
+bool ModeSwitchAction::executeActionsAfterSwitch() const {
   return m_executeActionsAfterSwitch;
 }
 
-void ModeSwitchAction::setExecuteActionsAfterSwitch(bool execute)
-{
+void ModeSwitchAction::setExecuteActionsAfterSwitch(bool execute) {
   m_executeActionsAfterSwitch = execute;
 }
 
@@ -38,8 +36,7 @@ Mode ModeSwitchAction::newMode() const {
   return m_mode;
 }
 
-void ModeSwitchAction::setNewMode(const Mode& mode)
-{
+void ModeSwitchAction::setNewMode(const Mode& mode) {
   m_mode = mode;
 }
 
@@ -51,6 +48,6 @@ void ModeSwitchAction::operator=(const ModeSwitchAction& action) {
 
 bool ModeSwitchAction::operator==(const ModeSwitchAction& other) const {
   return Action::operator==(other) &&
-	  m_mode == other.mode() &&
+	  m_mode == other.newMode() &&
 	  m_executeActionsAfterSwitch == other.executeActionsAfterSwitch();
 }

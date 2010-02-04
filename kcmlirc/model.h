@@ -172,5 +172,15 @@ class RemoteItem: public QStandardItem
         virtual QVariant data(int role) const;
 };
 
+class ActionModel: public QStandardItemModel
+{
+    public:
+        ActionModel(QObject *parent = 0);
+        void refresh(Mode *mode);
+        
+        QVariant data(const QModelIndex &index, int role) const;
+
+};
+
 #endif /* MODEL_H_ */
 
