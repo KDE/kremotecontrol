@@ -1,5 +1,6 @@
 /*************************************************************************
- * Copyright            : (C) 2003 by Gav Wood <gav@kde.org>             *
+ * Copyright: (C) 2003 by Gav Wood <gav@kde.org>                         *
+ * Copyright: (C) 2010 by Michael Zanetti <michael_zanetti@gmx.net>      *
  *                                                                       *
  * This program is free software; you can redistribute it and/or         *
  * modify it under the terms of the GNU General Public License as        *
@@ -20,44 +21,41 @@
 
 
 /**
-  * @author Gav Wood
+  * @author Gav Wood, Michael Zanetti
   */
 
 
-#include "newmodedialog.h"
+#include "modedialog.h"
 #include "mode.h"
 
-NewModeDialog::NewModeDialog(Remote *remote, QWidget *parent): KDialog(parent), m_remote(remote)
-{
+ModeDialog::ModeDialog(Remote *remote, Mode *mode, QWidget *parent): KDialog(parent), m_remote(remote), m_mode(mode) {
     QWidget *widget = new QWidget(this);
     ui.setupUi(widget);
     setMainWidget(widget);
     setButtons( Ok | Cancel);
     setDefaultButton(Ok);
 
-/*    QStringList remoteList = allModes.getRemotes();
-    remoteList.sort();
-    for (QStringList::const_iterator it = remoteList.constBegin(); it != remoteList.constEnd(); ++it) {
-        new QTreeWidgetItem(newModeBaseWidget->theRemotes, (QStringList() << *it));
+    if(m_mode){
+        ui.leName->setText(m_mode->name());
+        ui.ibIcon->setIcon(m_mode->iconName());
     }
     
-    
-    newModeBaseWidget->theIcon->setIcon("irkick");*/
     connect(ui.leName, SIGNAL(textChanged(const QString&)), this, SLOT(checkForComplete()));
-    enableButtonOk(false);
+    checkForComplete();
 }
 
-NewModeDialog::~NewModeDialog()
-{
+ModeDialog::~ModeDialog() {
 }
 
-void NewModeDialog::checkForComplete()
-{
+void ModeDialog::checkForComplete() {
     if(ui.leName->text().isEmpty()){
         enableButtonOk(false);
         return;
     }
     foreach(const Mode *mode, m_remote->allModes()){
+        if(m_mode == mode){
+            continue; // Don't check the current Mode during Edit
+        }
         if(mode->name() == ui.leName->text()){
             enableButtonOk(false);
             return;
@@ -66,28 +64,16 @@ void NewModeDialog::checkForComplete()
     enableButtonOk(true);
 }
 
-void NewModeDialog::slotButtonClicked(int button) {
+void ModeDialog::slotButtonClicked(int button) {
     if(button == KDialog::Ok){
-        m_remote->addMode(new Mode(ui.leName->text(),ui.ibIcon->icon()));
+        if(!m_mode){
+            m_mode = new Mode();
+            m_remote->addMode(m_mode);
+        }
+        m_mode->setName(ui.leName->text());
+        m_mode->setIconName(ui.ibIcon->icon());
     }
     KDialog::slotButtonClicked(button);
 }
 
-
-// Mode NewModeDialog::getMode()
-// {
-// 
-//     Mode mode = Mode();
-//     mode.setRemote(newModeBaseWidget->theRemotes->currentItem()->text(0));
-//     mode.setName(newModeBaseWidget->theName->text());
-//     mode.setIconFile(newModeBaseWidget->checkBox->isChecked()  ?
-//                      newModeBaseWidget->theIcon->icon() : QString());
-//     return mode;
-// }
-
-// bool NewModeDialog::isDefaultMode() const
-// {
-//     return newModeBaseWidget->theDefault->isChecked();
-// }
-
-#include "newmodedialog.moc"
+#include "modedialog.moc"

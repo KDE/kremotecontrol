@@ -25,7 +25,7 @@
 #include "remote.h"
 #include "editactioncontainer.h"
 
-#include "newmodedialog.h"
+#include "modedialog.h"
 #include "profileserver.h"
 // #include "selectprofile.h"
 // #include "editaction.h"
@@ -123,6 +123,8 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
     ui.pbRemoveAction->setIcon(KIcon("list-remove"));
 
     ui.pbEditMode->setIcon(KIcon("configure"));
+    connect(ui.pbEditMode, SIGNAL(clicked(bool)), SLOT(editMode()));
+
     ui.pbEditAction->setIcon(KIcon("configure"));
     
     ui.pbMoveModeUp->setIcon(KIcon("arrow-up"));
@@ -294,12 +296,12 @@ void KCMLirc::autoPopulate(const Profile &profile, const Remote &remote)
 //     }
 }
 
-void KCMLirc::addMode()
-{
+void KCMLirc::addMode() {
     Remote *remote = m_remoteModel->remote(ui.tvRemotes->selectionModel()->currentIndex());
     kDebug() << "current selected remote:" << remote;
-    NewModeDialog newModeDialog(remote);
-    if(newModeDialog.exec()){
+    
+    ModeDialog modeDialog(remote);
+    if(modeDialog.exec()){
         m_remoteModel->refresh(m_remoteList);
         foreach(const Mode *mode, remote->allModes()){
             kDebug() << "Created Mode" << mode->name();
@@ -309,28 +311,20 @@ void KCMLirc::addMode()
     }
 }
 
-void KCMLirc::slotEditMode()
-{
-//     if (ui.theModes->selectedItems().isEmpty())
-//         return;
-//
-//     Mode mode = ui.theModes->currentItem()->data(0, Qt::UserRole).value<Mode>();
-//     QPointer<EditMode> theDialog = new EditMode(mode,allModes, this, 0);
-//
-//     if (theDialog->exec() == QDialog::Accepted) {
-//         Mode newMode = theDialog->getMode();
-//         mode.setIconFile(newMode.iconFile());
-//         if (!mode.name().isEmpty()) {
-//             allActions.renameMode(mode, newMode.name());
-//             allModes.rename(mode, newMode.name());
-//         }
-//         if (theDialog->isDefaultMode()) {
-//             allModes.setDefault(mode);
-//         }
-//         allModes.updateMode(mode);
-//         emit changed(true);
-//         updateModes();
-//     }
+void KCMLirc::editMode() {
+    Remote *remote = m_remoteModel->remote(ui.tvRemotes->selectionModel()->currentIndex());
+    Mode *mode = m_remoteModel->mode(ui.tvRemotes->selectionModel()->currentIndex());
+    kDebug() << "current selected remote:" << remote << "and mode:" << mode;
+    
+    ModeDialog modeDialog(remote, mode);
+    if(modeDialog.exec()){
+        m_remoteModel->refresh(m_remoteList);
+        foreach(const Mode *mode, remote->allModes()){
+            kDebug() << "Created Mode" << mode->name();
+        }
+        updateModes();
+        emit changed(true);
+    }
 }
 
 void KCMLirc::removeMode() {

@@ -65,12 +65,14 @@ public slots:
     void slotAddActions();
     void slotEditAction();
     void slotRemoveAction();
-    void slotEditMode();
 
 private slots:
-    void addAction();  
+    void addAction();
+    
     void addMode();
+    void editMode();
     void removeMode();
+    
     void updateModes();
     void updateModeButtons(const QModelIndex &index);
     

@@ -1,5 +1,6 @@
 /*************************************************************************
- * Copyright            : (C) 2003 by Gav Wood <gav@kde.org>             *
+ * Copyright: (C) 2003 by Gav Wood <gav@kde.org>                         *
+ * Copyright: (C) 2010 by Michael Zanetti <michael_zanetti@gmx.net>      *
  *                                                                       *
  * This program is free software; you can redistribute it and/or         *
  * modify it under the terms of the GNU General Public License as        *
@@ -20,36 +21,38 @@
 
 
 /**
-  * @author Gav Wood
+  * @author Gav Wood, Michael Zanetti
   */
 
 
-#ifndef NEWMODEDIALOG_H
-#define NEWMODEDIALOG_H
+#ifndef MODEDIALOG_H
+#define MODEDIALOG_H
 
-#include "ui_newmode.h"
+#include "ui_modedialog.h"
 #include "remote.h"
-#include <QStringList>
 
-class NewModeDialog : public KDialog
+class ModeDialog : public KDialog
 {
     Q_OBJECT
 
 public:
-    explicit NewModeDialog(Remote *remote, QWidget *parent = 0);
-    ~NewModeDialog();
+  
+    /**
+      * @brief Creates a ModeDialog for the given Remote.
+      * @param Remote The Remote that owns to Mode to edit or create
+      * @param Mode The Mode to be edited. If 0 a new one will be created and inserted into the Remote
+      */
+    ModeDialog(Remote *remote, Mode *mode = 0, QWidget *parent = 0);
+    ~ModeDialog();
 
 private:
-    Ui::NewMode ui;
+    Ui::ModeDialog ui;
     Remote *m_remote;
+    Mode *m_mode;
 
 private slots:
     void checkForComplete();
     void slotButtonClicked(int button);
-
-public:
-    Mode getMode();
-    bool isDefaultMode() const;
 };
 
 #endif /* NEWMODEDIALOG_H */

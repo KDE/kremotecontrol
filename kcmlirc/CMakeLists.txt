@@ -18,12 +18,12 @@ set(kcm_lirc_PART_SRCS
    editactioncontainer.cpp
    editdbusaction.cpp
    model.cpp
-   newmodedialog.cpp
+   modedialog.cpp
    )
 
 qt4_add_dbus_adaptor(kcm_lirc_PART_SRCS org.kde.kcmlirc.xml kcmlirc.h KCMLirc)
 
-kde4_add_ui_files(kcm_lirc_PART_SRCS newmode.ui addaction.ui editactioncontainer.ui editdbusaction.ui configurationwidget.ui )
+kde4_add_ui_files(kcm_lirc_PART_SRCS modedialog.ui addaction.ui editactioncontainer.ui editdbusaction.ui configurationwidget.ui )
 
 kde4_add_plugin(kcm_lirc ${kcm_lirc_PART_SRCS})
 

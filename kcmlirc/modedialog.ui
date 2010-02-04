@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>NewMode</class>
- <widget class="QWidget" name="NewMode">
+ <class>ModeDialog</class>
+ <widget class="QWidget" name="ModeDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
