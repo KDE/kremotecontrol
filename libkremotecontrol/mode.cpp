@@ -68,3 +68,4 @@ QList<Action*> Mode::actionsForButton(const QString &button) const{
     }
     return retList;
 }
+

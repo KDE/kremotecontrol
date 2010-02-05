@@ -48,6 +48,7 @@
 #include <ktoolinvocation.h>
 #include <kaboutdata.h>
 #include <solid/control/remotecontrol.h>
+#include <kdeutils-version.h>
 
 #include <QStandardItemModel>
 #include <QListWidget>
@@ -55,9 +56,6 @@
 #include <QHBoxLayout>
 #include <QWidget>
 #include <QDBusInterface>
-
-#define VERSION "version name goes here"
-
 
 
 K_PLUGIN_FACTORY( KCMLircFactory, registerPlugin<KCMLirc>();)
@@ -75,7 +73,7 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
             "kcm_lirc",
             0,
             ki18n("KDE Lirc"),
-            VERSION, ki18n("The KDE Remote Control System"),
+            KDEUTILS_VERSION_STRING, ki18n("The KDE Remote Control System"),
             KAboutData::License_GPL_V2,
             ki18n("Copyright (c)2003 Gav Wood, 2007 Michael Zanetti, 2009 Frank Scheffold"),
             ki18n(
@@ -111,6 +109,7 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
     ui.setupUi(widget);
     layout->addWidget(widget);
 
+    // Set up GUI buttons
     ui.pbAddMode->setIcon(KIcon("list-add"));
     connect(ui.pbAddMode, SIGNAL(clicked(bool)), SLOT(addMode()));
 
@@ -134,14 +133,13 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
 
     ui.pbCopyAction->setIcon(KIcon("edit-copy"));
 
-//    connectSignalsAndSlots();
-//    load();
     
-  
+    // Create RemoteModel 
     m_remoteModel = new RemoteModel(m_remoteList, ui.tvRemotes);
     ui.tvRemotes->setModel(m_remoteModel);
     connect(ui.tvRemotes->selectionModel(), SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), SLOT(modeSelectionChanged(const QModelIndex &)));
     
+    // Create ActionModel
     m_actionModel = new ActionModel(ui.tvActions);
     ui.tvActions->setModel(m_actionModel);
     
@@ -490,52 +488,9 @@ void KCMLirc::updateRemoteInfo()
 
 
 void KCMLirc::load() {
-  
-    KConfig config("kremotecontrolrc", KConfig::NoGlobals);
-        
-    foreach(const QString &remoteGroupName, config.groupList()){
-        Remote *remote = new Remote(remoteGroupName);
-        KConfigGroup remoteGroup(&config, remoteGroupName);
-        foreach(const QString &modeName, remoteGroup.groupList()){
-            KConfigGroup modeGroup(&remoteGroup, modeName);
-            Mode *mode;
-            if(modeName == "Master") { // A Remote always has a Master Mode... Adding a second one will not work
-                mode = remote->masterMode();
-                mode->setIconName(modeGroup.readEntry("IconName"));
-            } else {
-                mode = new Mode(modeName, modeGroup.readEntry("IconName"));
-            }
-            foreach(const QString &actionId, modeGroup.groupList()){
-                KConfigGroup actionGroup(&modeGroup, actionId);
-                // Read Action properties here
-                Action *action = 0;
-                Action::ActionType actionType = (Action::ActionType) actionGroup.readEntry("Type", 0);
-                switch(actionType){
-                    case Action::DBusAction:
-                        action = new DBusAction();
-                        break;
-                    case Action::ProfileAction:
-                        action = new ProfileAction();
-                        break;
-                }
-                if(!action){
-                    continue;
-                }
-                action->loadFromConfig(actionGroup);
-                
-                mode->addAction(action);
-            }
-            // Read Mode properties here
-            mode->setIconName(modeGroup.readEntry("IconName"));
-            
-            remote->addMode(mode);
-        }
-        // Read Remote properties here
-        remote->setDefaultMode(remoteGroup.readEntry("DefaultMode"));
-        
-        m_remoteList.append(remote);
-    }
+    m_remoteList.loadFromConfig("kremotecontrolrc");
 
+    // Check if there are Remotes available in Solid but not yet in m_remoteList
     foreach(const QString &remoteName, Solid::Control::RemoteControl::allRemoteNames()){
         if(!m_remoteList.contains(remoteName)){
             Remote *remote = new Remote(remoteName);
@@ -547,29 +502,7 @@ void KCMLirc::load() {
 }
 
 void KCMLirc::save() {
-    KConfig config("kremotecontrolrc");    
-    foreach(const Remote *remote, m_remoteList){
-        // Clear out old entries for this remote
-        config.deleteGroup(remote->name());
-        KConfigGroup remoteGroup(&config, remote->name());
-        // Save Remote properties here
-        remoteGroup.writeEntry("DefaultMode", remote->defaultMode()->name());
-        
-        foreach(const Mode *mode, remote->allModes()){
-            KConfigGroup modeGroup(&remoteGroup, mode->name());
-            // Save Mode properties here
-            modeGroup.writeEntry("IconName", mode->iconName());
-            
-            int i = 0; // The ID for the ActionGroup in config file as actions may have no unique attribute
-            foreach(Action *action, mode->actions()){
-                KConfigGroup actionGroup(&modeGroup, QString::number(i));
-                // Save Action properties here
-                action->saveToConfig(actionGroup);
-                i++;
-            }
-        }        
-    }
-    
+    m_remoteList.saveToConfig("kremotecontrolrc");
     DBusInterface::getInstance()->reloadIRKick();
 }
 

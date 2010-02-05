@@ -31,6 +31,9 @@ class KREMOTECONTROL_EXPORT RemoteList: public QList<Remote*>
         RemoteList();
 
         bool contains(const QString &remoteName) const;        
+        
+        void saveToConfig(const QString &configName);
+        void loadFromConfig(const QString &configName);
 };
 
 #endif // REMOTELIST_H
