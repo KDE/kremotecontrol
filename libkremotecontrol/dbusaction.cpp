@@ -121,6 +121,7 @@ void DBusAction::saveToConfig(KConfigGroup& config) {
         argumentGroup.writeEntry("Description", arg.description());
         argumentGroup.writeEntry("Value", arg.value());
         argumentGroup.writeEntry("Type", arg.value().typeName());
+        i++;
     }
     switch(m_destination){
         case Unique:

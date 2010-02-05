@@ -1,6 +1,5 @@
 /*
-    <one line to give the program's name and a brief idea of what it does.>
-    Copyright (C) <year>  <name of author>
+    Copyright (C) 2010 Michael Zanetti <michael_zanetti@gmx.net>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -80,6 +79,7 @@ void EditActionContainer::slotButtonClicked(int button) {
             default:
               kDebug() << "Invalid action type. Not creating inner Widget";
         }
+        m_action->setButton(ui.cbButton->currentText());
     }
     KDialog::slotButtonClicked(button);
 }

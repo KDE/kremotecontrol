@@ -84,7 +84,14 @@
         </widget>
        </item>
        <item row="1" column="2" rowspan="7">
-        <widget class="QTreeView" name="tvActions"/>
+        <widget class="QTreeView" name="tvActions">
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+         <property name="rootIsDecorated">
+          <bool>false</bool>
+         </property>
+        </widget>
        </item>
        <item row="1" column="3">
         <widget class="KPushButton" name="pbAddAction">

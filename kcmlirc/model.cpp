@@ -223,7 +223,7 @@ QVariant ArgumentsModel::headerData(int section, Qt::Orientation orientation, in
 QList<Argument> ArgumentsModel::arguments() const {
     QList<Argument> argList;
     for(int i = 0; i < rowCount(); i++){
-        argList.append(item(i, 1)->data(Qt::UserRole));
+        argList.append(qVariantValue<Argument>(item(i, 1)->data(Qt::EditRole)));
     }
     return argList;
 }

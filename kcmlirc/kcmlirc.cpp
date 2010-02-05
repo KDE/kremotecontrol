@@ -142,6 +142,7 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
     // Create ActionModel
     m_actionModel = new ActionModel(ui.tvActions);
     ui.tvActions->setModel(m_actionModel);
+    connect(ui.tvActions->selectionModel(), SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), SLOT(actionSelectionChanged(const QModelIndex &)));
     
     
      updateProfileInfo();
@@ -426,6 +427,20 @@ void KCMLirc::modeSelectionChanged(const QModelIndex &index) {
         m_actionModel->refresh(mode);
     }
     
+    actionSelectionChanged(QModelIndex());
+    
+}
+
+void KCMLirc::actionSelectionChanged(const QModelIndex& index) {
+    if(index.isValid()){
+        ui.pbRemoveAction->setEnabled(true);
+        ui.pbEditAction->setEnabled(true);
+        ui.pbCopyAction->setEnabled(true);
+    } else {
+        ui.pbRemoveAction->setEnabled(false);
+        ui.pbEditAction->setEnabled(false);
+        ui.pbCopyAction->setEnabled(false);
+    }
 }
 
 void KCMLirc::updateProfileInfo()
