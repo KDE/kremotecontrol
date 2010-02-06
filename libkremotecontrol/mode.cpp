@@ -38,6 +38,10 @@ QString Mode::iconName() const {
   return m_iconName;
 }
 
+QString Mode::button() const {
+  return m_button;
+}
+
 void Mode::setName(const QString& name) {
   m_name = name;
 }
@@ -45,6 +49,10 @@ void Mode::setName(const QString& name) {
 void Mode::setIconName(const QString& iconName)
 {
   m_iconName = iconName;
+}
+
+void Mode::setButton(const QString& button) {
+  m_button = button;
 }
 
 bool Mode::operator==(const Mode& mode) const {

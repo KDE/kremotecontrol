@@ -24,37 +24,19 @@
 #include "editactioncontainer.h"
 #include "remote.h"
 #include "editactioncontainer.h"
-
 #include "modedialog.h"
 #include "profileserver.h"
 // #include "selectprofile.h"
-// #include "editaction.h"
-// #include "editmode.h"
 #include "dbusinterface.h"
 #include "model.h"
 #include "remotelist.h"
 
-#include <kapplication.h>
-#include <klocale.h>
-#include <kglobal.h>
-#include <kconfig.h>
-#include <kicondialog.h>
-#include <kiconloader.h>
-#include <kdebug.h>
-#include <kconfiggroup.h>
-#include <kgenericfactory.h>
-#include <kmessagebox.h>
-#include <kpushbutton.h>
-#include <ktoolinvocation.h>
-#include <kaboutdata.h>
-#include <solid/control/remotecontrol.h>
 #include <kdeutils-version.h>
+#include <kconfig.h>
+#include <kdebug.h>
+#include <kgenericfactory.h>
+#include <kaboutdata.h>
 
-#include <QStandardItemModel>
-#include <QListWidget>
-#include <QEvent>
-#include <QHBoxLayout>
-#include <QWidget>
 #include <QDBusInterface>
 
 
@@ -231,6 +213,7 @@ void KCMLirc::addAction()
         Mode *mode = m_remoteModel->mode(ui.tvRemotes->currentIndex());
         mode->addAction(newAction);
         m_actionModel->refresh(mode);
+        ui.tvActions->resizeColumnToContents(0);
         emit changed(true);
     }
 }
@@ -241,7 +224,7 @@ void KCMLirc::removeAction() {
     
     mode->removeAction(action);
     m_actionModel->refresh(mode);
-
+    ui.tvActions->resizeColumnToContents(0);
     emit changed(true);
 }
 
@@ -253,6 +236,7 @@ void KCMLirc::editAction() {
     EditActionContainer editActioncontainer(action, remote->name());
     if(editActioncontainer.exec()) {
         m_actionModel->refresh(mode);
+        ui.tvActions->resizeColumnToContents(0);
         emit changed(true);
     }    
 }
@@ -275,6 +259,8 @@ void KCMLirc::copyAction() {
     }
     mode->addAction(newAction);
     m_actionModel->refresh(mode);
+    ui.tvActions->resizeColumnToContents(0);
+    emit changed(true);
 }
 
 void KCMLirc::autoPopulate(const Profile &profile, const Remote &remote)
@@ -423,6 +409,7 @@ const QString KCMLirc::notes(Action* action) const
 void KCMLirc::updateModes() {
     m_remoteModel->refresh(m_remoteList);
     ui.tvRemotes->expandAll();
+    ui.tvRemotes->resizeColumnToContents(0);
     modeSelectionChanged(ui.tvRemotes->selectionModel()->currentIndex());
 }
 
@@ -446,6 +433,7 @@ void KCMLirc::modeSelectionChanged(const QModelIndex &index) {
     Mode *mode = m_remoteModel->mode(index);
     if(mode){
         m_actionModel->refresh(mode);
+        ui.tvActions->resizeColumnToContents(0);
     }
     
     actionSelectionChanged(QModelIndex());
@@ -466,8 +454,6 @@ void KCMLirc::actionSelectionChanged(const QModelIndex& index) {
 
 void KCMLirc::updateProfileInfo()
 {
-    ProfileServer::allProfiles();
-
     QStandardItemModel *tModel = new QStandardItemModel( ui.theAvailableProfiles);
     foreach(Profile *profile , ProfileServer::allProfiles()) {
       QStandardItem *tItem = new QStandardItem();

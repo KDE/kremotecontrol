@@ -52,6 +52,7 @@ void RemoteList::saveToConfig(const QString& configName) {
             KConfigGroup modeGroup(&remoteGroup, mode->name());
             // Save Mode properties here
             modeGroup.writeEntry("IconName", mode->iconName());
+            modeGroup.writeEntry("Button", mode->button());
             
             int i = 0; // The ID for the ActionGroup in config file as actions may have no unique attribute
             foreach(Action *action, mode->actions()){
@@ -100,7 +101,8 @@ void RemoteList::loadFromConfig(const QString& configName) {
                 mode->addAction(action);
             }
             // Read Mode properties here
-            mode->setIconName(modeGroup.readEntry("IconName"));
+            mode->setIconName(modeGroup.readEntry("IconName", "infrared-remote"));
+            mode->setButton(modeGroup.readEntry("Button"));
             
             remote->addMode(mode);
         }

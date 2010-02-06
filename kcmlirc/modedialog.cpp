@@ -35,9 +35,17 @@ ModeDialog::ModeDialog(Remote *remote, Mode *mode, QWidget *parent): KDialog(par
     setButtons( Ok | Cancel);
     setDefaultButton(Ok);
 
+    ui.cbButtons->addItem(i18n("No button"), "");
+    foreach(const Solid::Control::RemoteControlButton &button, Solid::Control::RemoteControl(remote->name()).buttons()){
+        ui.cbButtons->addItem(button.name(), button.name());
+    }
+    
     if(m_mode){
         ui.leName->setText(m_mode->name());
         ui.ibIcon->setIcon(m_mode->iconName());
+        ui.cbButtons->setCurrentIndex(ui.cbButtons->findData(m_mode->button()));
+    } else {
+        ui.ibIcon->setIcon("infrared-remote");
     }
     
     connect(ui.leName, SIGNAL(textChanged(const QString&)), this, SLOT(checkForComplete()));
@@ -72,6 +80,7 @@ void ModeDialog::slotButtonClicked(int button) {
         }
         m_mode->setName(ui.leName->text());
         m_mode->setIconName(ui.ibIcon->icon());
+        m_mode->setButton(ui.cbButtons->itemData(ui.cbButtons->currentIndex()).toString());
     }
     KDialog::slotButtonClicked(button);
 }

@@ -33,6 +33,7 @@
 #include <KLocale>
 #include <KLineEdit>
 #include <KComboBox>
+#include <kicon.h>
 
 #include <QVariant>
 #include <QtAlgorithms>
@@ -656,9 +657,15 @@ RemoteModel::RemoteModel(const RemoteList &remoteList, QObject *parent) : QStand
 
 void RemoteModel::refresh(const RemoteList &remoteList){
     clear();
+    setHorizontalHeaderLabels(QStringList() << i18n("Remotes and modes") << i18n("Button"));
     foreach(Remote *remote, remoteList){
+        QList<QStandardItem*> itemList;
         QStandardItem *item = new RemoteItem(remote);
-        appendRow(item);
+        itemList.append(item);
+        item = new QStandardItem();
+        item->setData(qVariantFromValue(remote), Qt::UserRole);
+        itemList.append(item);
+        appendRow(itemList);
     }    
 }
 
@@ -673,6 +680,7 @@ Remote *RemoteModel::remote(const QModelIndex &index) const {
 }
 
 Mode *RemoteModel::mode(const QModelIndex &index) const {
+    kDebug() << "getting mode for index:" << index;
     if(index.isValid() && index.parent().isValid()){
         return qVariantValue<Mode*>(index.data(Qt::UserRole));
     }
@@ -680,6 +688,21 @@ Mode *RemoteModel::mode(const QModelIndex &index) const {
         return qVariantValue<Remote*>(index.data(Qt::UserRole))->masterMode();
     }
     return 0;
+}
+
+QVariant RemoteModel::data(const QModelIndex& index, int role) const {
+    if(index.isValid() && index.parent().isValid()){
+        if(role == Qt::DisplayRole){
+            Mode *mode = qVariantValue<Mode*>(index.data(Qt::UserRole));
+            switch(index.column()){
+                case 0:
+                    return mode->name();
+                case 1:
+                    return mode->button();
+            }
+        }
+    }
+    return QStandardItemModel::data(index, role);
 }
 
 // QVariant RemoteModel::headerData(int section, Qt::Orientation o, int role) const {
@@ -696,34 +719,44 @@ RemoteItem::RemoteItem(Remote *remote) {
     setData(qVariantFromValue(remote), Qt::UserRole);
     foreach(Mode *mode, remote->allModes()) {
         if(mode->name() != "Master"){ // Dont show the Master Mode separately
+            QList<QStandardItem*> itemList;
             QStandardItem *item = new QStandardItem(mode->name());
             item->setData(qVariantFromValue(mode), Qt::UserRole);
-            appendRow(item);
+            item->setIcon(KIcon(mode->iconName()));
+            itemList.append(item);
+            item = new QStandardItem(mode->name());
+            item->setData(qVariantFromValue(mode), Qt::UserRole);
+            itemList.append(item);
+            appendRow(itemList);
         }
     }
 }
 
 QVariant RemoteItem::data(int role) const {
+    Remote *remote = qVariantValue<Remote*>(QStandardItem::data(Qt::UserRole));
     if(role == Qt::DisplayRole) {
-        Remote *remote = qVariantValue<Remote*>(QStandardItem::data(Qt::UserRole));
         return remote->name();
+    }
+    if(role == Qt::DecorationRole){
+        return KIcon(remote->masterMode()->iconName());
     }
     return QStandardItem::data(role);
 }
 
 
 ActionModel::ActionModel(QObject *parent): QStandardItemModel(parent) {
+    setHorizontalHeaderLabels(QStringList() << i18n("Button") << i18n("Application") << i18n("Function"));
 }
 
 
 void ActionModel::refresh(Mode* mode) {
     clear();
+    setHorizontalHeaderLabels(QStringList() << i18n("Button") << i18n("Application") << i18n("Function"));
     foreach(Action *action, mode->actions()){
         QStandardItem *item = new QStandardItem();
         item->setData(qVariantFromValue(action), Qt::UserRole);
         appendRow(item);
     }
-    setColumnCount(3);
 }
 
 

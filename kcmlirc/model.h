@@ -167,6 +167,8 @@ class RemoteModel: public QStandardItemModel
         
         Remote *remote(const QModelIndex &index) const;
         Mode *mode(const QModelIndex &index) const;
+        
+        virtual QVariant data(const QModelIndex &index, int role) const;
 };
 
 class RemoteItem: public QStandardItem

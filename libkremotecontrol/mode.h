@@ -35,9 +35,12 @@ class KREMOTECONTROL_EXPORT Mode
 
     QString name() const;
     QString iconName() const;
-
+    QString button() const;
+    
+    
     void setName(const QString &name);
     void setIconName(const QString &iconName);
+    void setButton(const QString &button);
 
     void addAction(Action *action);
     void removeAction(Action *action);
@@ -49,6 +52,7 @@ class KREMOTECONTROL_EXPORT Mode
   protected:
     QString m_name;
     QString m_iconName;
+    QString m_button;
     QList<Action*> m_actionList;
 };
 
