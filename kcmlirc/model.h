@@ -52,6 +52,8 @@ class DBusServiceModel: public QStandardItemModel
         DBusServiceModel(QObject* parent = 0);
         QString application(const QModelIndex &index) const;
         QString node(const QModelIndex &index) const;
+        
+        QModelIndex findOrInsert(const DBusAction *action, bool insert = false);
 };
 
 class DBusServiceItem : public QStandardItem
@@ -78,6 +80,8 @@ public:
     Prototype getPrototype( int index ) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
+    QModelIndex findOrInsert(const DBusAction *action, bool insert = false);
+    
 private:
     void appendRow(Prototype item);
 
@@ -179,6 +183,8 @@ class ActionModel: public QStandardItemModel
         void refresh(Mode *mode);
         
         QVariant data(const QModelIndex &index, int role) const;
+        
+        Action *action(const QModelIndex &index) const;
 
 };
 

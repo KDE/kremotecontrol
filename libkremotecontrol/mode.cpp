@@ -55,6 +55,10 @@ void Mode::addAction(Action* action) {
     m_actionList.append(action);
 }
 
+void Mode::removeAction(Action* action) {
+    m_actionList.removeAll(action);
+}
+
 QList< Action* > Mode::actions() const {
     return m_actionList;
 }

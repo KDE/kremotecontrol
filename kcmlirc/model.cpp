@@ -53,8 +53,8 @@ DBusServiceModel::DBusServiceModel(QObject* parent): QStandardItemModel(parent) 
         DBusServiceItem *dbusServiceItem = new DBusServiceItem(item);
         dbusServiceItem->setEditable(false);
         appendRow(dbusServiceItem);
-        foreach(const QString &object, DBusInterface::getInstance()->getNodes(item)) {
-            dbusServiceItem->appendRow(new QStandardItem(object));
+        foreach(const QString &node, DBusInterface::getInstance()->getNodes(item)) {
+            dbusServiceItem->appendRow(new QStandardItem(node));
         }
     }
     sort(0, Qt::AscendingOrder);
@@ -74,6 +74,36 @@ QString DBusServiceModel::node(const QModelIndex& index) const {
     return QString();
 }
 
+QModelIndex DBusServiceModel::findOrInsert(const DBusAction* action, bool insert) {
+  
+    for(int i = 0; i < rowCount(); i++){
+        QStandardItem *appItem = item(i);
+        if(!appItem->index().parent().isValid()){ // Only check Applications, no Nodes
+            if(appItem->data(Qt::UserRole).toString() == action->application()){
+                int j = 0;
+                QStandardItem *nodeItem;
+                while((nodeItem = appItem->child(j++)) != 0){
+                    if(nodeItem->data(Qt::DisplayRole) == action->node()){
+                        kDebug() << "Found item at index:" << nodeItem->index();
+                        return nodeItem->index();
+                    }
+                }
+            }
+        }
+    }
+    // Not found... Insert it
+    if(insert){
+        kDebug() << "inserting item because app seems not to be registered at DBus";
+        DBusServiceItem *dbusServiceItem = new DBusServiceItem(action->application());
+        dbusServiceItem->setEditable(false);
+        appendRow(dbusServiceItem);
+        QStandardItem *item = new QStandardItem(action->node());
+        dbusServiceItem->appendRow(item);
+        return item->index();
+    }
+    kDebug() << "Not found and not inserting... Returning invalid index";
+    return QModelIndex();
+}
 
 /*
 ***********************************
@@ -96,15 +126,11 @@ DBusServiceItem::DBusServiceItem(const QString &item,  const QStringList &object
 }
 
 
-QVariant DBusServiceItem::data(int role) const
-{
+QVariant DBusServiceItem::data(int role) const {
     if (role == Qt::DisplayRole || role == Qt::EditRole)  {
         return trimAppname(QStandardItem::data(Qt::UserRole).toString());
     }
-    else if (role == Qt::UserRole) {
-        return QStandardItem::data(role);
-    }
-    return QVariant();
+    return QStandardItem::data(role);
 }
 
 QString DBusServiceItem::trimAppname(const QString& appName) {
@@ -166,6 +192,39 @@ void DBusFunctionModel::appendRow(Prototype prototype) {
 
 Prototype DBusFunctionModel::getPrototype(int index) const {
     return QStandardItemModel::item(index)->data(Qt::UserRole).value<Prototype>();
+}
+
+QModelIndex DBusFunctionModel::findOrInsert(const DBusAction* action, bool insert) {
+  
+    for(int i = 0; i < rowCount(); i++){
+        QStandardItem *functionItem = item(i);
+        if(functionItem->data(Qt::UserRole).value<Prototype>() == action->function()){
+            return functionItem->index();
+        }
+    }
+    // Not found... Insert it
+    if(insert){
+        QList<QStandardItem*> itemList;
+        QStandardItem *item = new QStandardItem(action->function().name());
+        item->setData(qVariantFromValue(action->function()), Qt::UserRole);
+        itemList.append(item);
+        QString argString;
+        foreach(const Argument &arg, action->function().args()){
+            if(!argString.isEmpty()){
+                argString += ", ";
+            }
+            argString += QString(QVariant::typeToName(arg.value().type()));
+            if(!arg.description().isEmpty()){
+                argString += " " + arg.description();
+            }
+        }
+        itemList.append(new QStandardItem(argString));
+    //    itemList.append(new QStandardItem(prototype.name()));
+        QStandardItemModel::appendRow(itemList);
+        return item->index();
+    }
+    kDebug() << "Not found and not inserting... Returning invalid index";
+    return QModelIndex();
 }
 
 QVariant DBusFunctionModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -683,3 +742,6 @@ QVariant ActionModel::data(const QModelIndex& index, int role) const {
     return QStandardItemModel::data(index, role);
 }
 
+Action* ActionModel::action(const QModelIndex& index) const {
+    return qVariantValue<Action*>(item(index.row())->data(Qt::UserRole));
+}

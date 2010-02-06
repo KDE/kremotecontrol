@@ -45,7 +45,15 @@ EditDBusAction::EditDBusAction(DBusAction *action, QWidget* parent, Qt::WFlags f
     
 
     // Load our action here
-    
+    if(!m_action->application().isEmpty()){
+        QModelIndex index = m_dbusServiceModel->findOrInsert(m_action);
+        ui.tvDBusApps->selectionModel()->setCurrentIndex(index, QItemSelectionModel::SelectCurrent);
+        index = m_dbusFunctionModel->findOrInsert(m_action);
+        ui.tvDBusFunctions->selectionModel()->setCurrentIndex(index, QItemSelectionModel::SelectCurrent);
+    }
+    if(!m_action->function().args().isEmpty()){
+        m_argumentsModel->refresh(m_action->function());
+    }
 }
 
 

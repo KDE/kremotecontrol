@@ -120,11 +120,13 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
     connect(ui.pbAddAction, SIGNAL(clicked(bool)), SLOT(addAction()));
 
     ui.pbRemoveAction->setIcon(KIcon("list-remove"));
+    connect(ui.pbRemoveAction, SIGNAL(clicked(bool)), SLOT(removeAction()));
 
     ui.pbEditMode->setIcon(KIcon("configure"));
     connect(ui.pbEditMode, SIGNAL(clicked(bool)), SLOT(editMode()));
 
     ui.pbEditAction->setIcon(KIcon("configure"));
+    connect(ui.pbEditAction, SIGNAL(clicked(bool)), SLOT(editAction()));
     
     ui.pbMoveModeUp->setIcon(KIcon("arrow-up"));
     ui.pbMoveModeDown->setIcon(KIcon("arrow-down"));
@@ -203,22 +205,6 @@ void KCMLirc::updateActionsStatus()
     ui.theEditAction->setEnabled(ui.theActions->currentIndex().isValid());*/
 }
 
-void KCMLirc::slotEditAction()
-{
-//     QTreeWidgetItem *item = ui.theModes->selectedItems().first();
-//     if (item->parent())
-//         item = item->parent();
-//     QStringList modeList;
-//     for (int i = 0; i < item->childCount(); i++) {
-//         modeList << item->child(i)->text(0);
-//     }
-//     QPointer<EditAction > theDialog = new EditAction(currentAction(), modeList,this);
-//     if (theDialog->exec() == QDialog::Accepted) {
-//         allActions[allActions.indexOf(currentAction())] = theDialog->getAction();
-//         updateActions();
-// 	emit changed(true);
-//     }
-}
 
 void KCMLirc::slotAddActions()
 {
@@ -248,12 +234,26 @@ void KCMLirc::addAction()
     }
 }
 
-void KCMLirc::slotRemoveAction()
-{
-//     m_actionList.erase(currentAction());
-//     m_actionList.removeAll(currentAction());
-    updateActions();
+void KCMLirc::removeAction() {
+    Mode *mode = m_remoteModel->mode(ui.tvRemotes->selectionModel()->currentIndex());
+    Action *action = m_actionModel->action(ui.tvActions->selectionModel()->currentIndex());
+    
+    mode->removeAction(action);
+    m_actionModel->refresh(mode);
+
     emit changed(true);
+}
+
+void KCMLirc::editAction() {
+    Action *action = m_actionModel->action(ui.tvActions->selectionModel()->currentIndex());
+    Remote *remote = m_remoteModel->remote(ui.tvRemotes->selectionModel()->currentIndex());
+    Mode *mode = m_remoteModel->mode(ui.tvRemotes->selectionModel()->currentIndex());
+    
+    EditActionContainer editActioncontainer(action, remote->name());
+    if(editActioncontainer.exec()) {
+        m_actionModel->refresh(mode);
+        emit changed(true);
+    }    
 }
 
 void KCMLirc::autoPopulate(const Profile &profile, const Remote &remote)

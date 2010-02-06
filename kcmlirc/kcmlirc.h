@@ -64,11 +64,11 @@ public slots:
     void updateRemoteDetails(QModelIndex);
     void slotSetDefaultMode();
     void slotAddActions();
-    void slotEditAction();
-    void slotRemoveAction();
 
 private slots:
     void addAction();
+    void removeAction();
+    void editAction();
     
     void addMode();
     void editMode();
