@@ -134,6 +134,7 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
     ui.pbMoveActionDown->setIcon(KIcon("arrow-down"));
 
     ui.pbCopyAction->setIcon(KIcon("edit-copy"));
+    connect(ui.pbCopyAction, SIGNAL(clicked(bool)), SLOT(copyAction()));
 
     
     // Create RemoteModel 
@@ -254,6 +255,26 @@ void KCMLirc::editAction() {
         m_actionModel->refresh(mode);
         emit changed(true);
     }    
+}
+
+void KCMLirc::copyAction() {
+    Action *action = m_actionModel->action(ui.tvActions->selectionModel()->currentIndex());
+    Mode *mode = m_remoteModel->mode(ui.tvRemotes->selectionModel()->currentIndex());
+    Action *newAction;
+    switch(action->type()){
+        case Action::DBusAction: {
+            DBusAction *dBusAction = dynamic_cast<DBusAction*>(action);
+            newAction = new DBusAction(*dBusAction);
+            }
+            break;
+        case Action::ProfileAction:{
+            ProfileAction *profileAction = dynamic_cast<ProfileAction*>(action);
+            newAction = new ProfileAction(*profileAction);
+            }
+            break;
+    }
+    mode->addAction(newAction);
+    m_actionModel->refresh(mode);
 }
 
 void KCMLirc::autoPopulate(const Profile &profile, const Remote &remote)

@@ -69,6 +69,7 @@ private slots:
     void addAction();
     void removeAction();
     void editAction();
+    void copyAction();
     
     void addMode();
     void editMode();
