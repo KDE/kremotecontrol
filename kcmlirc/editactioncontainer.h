@@ -27,7 +27,7 @@
 
 
 class EditActionContainer : public KDialog {
-  
+    Q_OBJECT
     public:
         EditActionContainer(Action *action, const QString &remote, QWidget* parent = 0, Qt::WFlags flags = 0);
         
@@ -37,7 +37,8 @@ class EditActionContainer : public KDialog {
         QWidget *m_innerWidget;
         
     protected Q_SLOTS:
-         virtual void slotButtonClicked(int button);
+        void checkForComplete();
+        virtual void slotButtonClicked(int button);
 };
 
 #endif // ACTIONCONTAINER_H

@@ -34,7 +34,6 @@ EditProfileAction::EditProfileAction(ProfileAction *action, QWidget* parent, Qt:
     //Init Templates
     m_templateModel = new ActionTemplateModel(ui.tvDBusFunctions);
     ui.tvDBusFunctions->setModel(m_templateModel);
-    ui.tvDBusFunctions->setRootIsDecorated(false);
     connect(ui.tvDBusApps->selectionModel(), SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), SLOT(refreshTemplates(const QModelIndex &)));
     
 
@@ -48,10 +47,32 @@ EditProfileAction::EditProfileAction(ProfileAction *action, QWidget* parent, Qt:
     // Load our action here
     kDebug() << "searching for action:" << m_action->name() << m_action->description() << m_action->application();
     if(!m_action->application().isEmpty()){
+        // Find Profile and Template in Models and set current index
         QModelIndex index = m_profileModel->find(m_action);
         ui.tvDBusApps->selectionModel()->setCurrentIndex(index, QItemSelectionModel::SelectCurrent);
         index = m_templateModel->find(m_action);
         ui.tvDBusFunctions->selectionModel()->setCurrentIndex(index, QItemSelectionModel::SelectCurrent);
+
+        // Load Options tab
+        ui.cbAutostart->setChecked(m_action->autostart());
+        ui.cbRepeat->setChecked(m_action->repeat());
+        switch(m_action->destination()){
+            case DBusAction::Unique:
+                ui.gbUnique->setEnabled(false);
+                break;
+            case DBusAction::Top:
+                ui.rbTop->setChecked(true);
+                break;
+            case DBusAction::Bottom:
+                ui.rbBottom->setChecked(true);
+                break;
+            case DBusAction::All:
+                ui.rbAll->setChecked(true);
+                break;
+            case DBusAction::None:
+                ui.rbNone->setChecked(true);
+                break;
+        }
     }
     if(!m_action->function().args().isEmpty()){
         m_argumentsModel->refresh(m_action->function());
@@ -60,6 +81,13 @@ EditProfileAction::EditProfileAction(ProfileAction *action, QWidget* parent, Qt:
 
 
 EditProfileAction::~EditProfileAction() {
+}
+
+bool EditProfileAction::checkForComplete() const {
+    if(ui.tvDBusFunctions->selectionModel()->currentIndex().isValid()){
+        return true;
+    }
+    return false;
 }
 
 void EditProfileAction::applyChanges(){
@@ -72,6 +100,22 @@ void EditProfileAction::applyChanges(){
     m_action->setFunction(prototype);
     m_action->setActionTemplateId(actionTemplate.actionTemplateId());
     m_action->setProfileId(actionTemplate.profileId());
+
+    m_action->setAutostart(ui.cbAutostart->isChecked());
+    m_action->setRepeat(ui.cbRepeat->isChecked());
+    if(ui.gbUnique->isEnabled()){
+        if(ui.rbAll->isChecked()){
+            m_action->setDestination(DBusAction::All);
+        } else if(ui.rbNone->isChecked()){
+            m_action->setDestination(DBusAction::None);
+        } else if(ui.rbTop->isChecked()){
+            m_action->setDestination(DBusAction::Top);
+        } else if(ui.rbBottom->isChecked()){
+            m_action->setDestination(DBusAction::Bottom);
+        }
+    } else {
+        m_action->setDestination(DBusAction::Unique);
+    }
 }
 
 void EditProfileAction::refreshTemplates(const QModelIndex& index) {
@@ -86,5 +130,12 @@ void EditProfileAction::refreshArguments(const QModelIndex &index) {
     m_argumentsModel->refresh(actionTemplate.function());
     ui.tvArguments->resizeColumnsToContents();
     ui.tvArguments->horizontalHeader()->setStretchLastSection(true);
+
+    if(actionTemplate.destination() == DBusAction::Unique){
+        ui.gbUnique->setEnabled(false);
+    } else {
+        ui.gbUnique->setEnabled(true);
+    }
+    emit formComplete(index.isValid());
 }
 

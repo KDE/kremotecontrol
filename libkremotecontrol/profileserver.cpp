@@ -272,19 +272,19 @@ ProfileActionTemplate ProfileServer::ProfileXmlContentHandler::parseAction(QDomN
 
     DBusAction::ActionDestination actionType;
     if( ! actionNode.namedItem("ifmulti").isNull())  {
-	QString ifMultiTag = actionNode.namedItem("ifmulti").toElement().text().trimmed();
-	if(ifMultiTag == "sendtotop"){
-	  actionType = DBusAction::Top;
-	}
-	else if(ifMultiTag == "sendtobottom"){
-	  actionType = DBusAction::Bottom;
-	}
-	else if(ifMultiTag == "sendtoall"){
-	  actionType = DBusAction::All;
-	}
-	else {
-	  actionType = DBusAction::None;
-	}
+        QString ifMultiTag = actionNode.namedItem("ifmulti").toElement().text().trimmed();
+        if(ifMultiTag == "sendtotop"){
+          actionType = DBusAction::Top;
+        }
+        else if(ifMultiTag == "sendtobottom"){
+          actionType = DBusAction::Bottom;
+        }
+        else if(ifMultiTag == "sendtoall"){
+          actionType = DBusAction::All;
+        }
+        else {
+          actionType = DBusAction::None;
+        }
     }else{
       actionType = DBusAction::Unique;
     }

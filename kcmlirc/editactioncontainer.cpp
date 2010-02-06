@@ -34,6 +34,7 @@ EditActionContainer::EditActionContainer(Action *action, const QString &remote, 
     foreach(const Solid::Control::RemoteControlButton &button, Solid::Control::RemoteControl(remote).buttons()){
         ui.cbButton->addItem(button.name());
     }
+    connect(ui.cbButton, SIGNAL(currentIndexChanged(int)), SLOT(checkForComplete()));
     ui.cbButton->setCurrentIndex(ui.cbButton->findText(action->button()));
     
     
@@ -61,6 +62,34 @@ EditActionContainer::EditActionContainer(Action *action, const QString &remote, 
         QHBoxLayout *innerLayout = new QHBoxLayout();
         innerLayout->addWidget(m_innerWidget);
         ui.wActionWidget->setLayout(innerLayout);
+        connect(m_innerWidget, SIGNAL(formComplete(bool)), SLOT(checkForComplete()));
+    }
+    checkForComplete();
+}
+
+void EditActionContainer::checkForComplete() {
+    if(ui.cbButton->currentIndex() < 0){
+        enableButtonOk(false);
+        return;
+        
+    }
+    switch(m_action->type()){
+        case Action::DBusAction:{
+            EditDBusAction *dbusActionEditor = dynamic_cast<EditDBusAction*>(m_innerWidget);
+            if(dbusActionEditor){
+                enableButtonOk(dbusActionEditor->checkForComplete());
+                return;
+            }
+        }
+        case Action::ProfileAction:{
+            EditProfileAction *profileActionEditor = dynamic_cast<EditProfileAction*>(m_innerWidget);
+            if(profileActionEditor){
+                enableButtonOk(profileActionEditor->checkForComplete());
+                return;
+            }
+        }
+        default:
+          kDebug() << "Invalid action type! Nothing to check for completeness!";
     }
 }
 
@@ -82,7 +111,7 @@ void EditActionContainer::slotButtonClicked(int button) {
                 break;
             }
             default:
-              kDebug() << "Invalid action type. Not creating inner Widget";
+              kDebug() << "Invalid action type! No changes made to action!";
         }
         m_action->setButton(ui.cbButton->currentText());
     }

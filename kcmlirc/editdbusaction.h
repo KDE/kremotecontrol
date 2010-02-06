@@ -33,6 +33,7 @@ class EditDBusAction: public QWidget{
         EditDBusAction(DBusAction *action, QWidget* parent = 0, Qt::WFlags flags = 0);
         ~EditDBusAction();
         
+        bool checkForComplete() const;
         void applyChanges();
 
     private:
@@ -46,6 +47,9 @@ class EditDBusAction: public QWidget{
     private slots:
         void refreshDBusFunctions(const QModelIndex &index);
         void refreshArguments(const QModelIndex &index);
+        
+    signals:
+        void formComplete(bool complete);
 };
 
 #endif // EDITDBUSACTION_H

@@ -33,6 +33,7 @@ class EditProfileAction: public QWidget{
         EditProfileAction(ProfileAction *action, QWidget* parent = 0, Qt::WFlags flags = 0);
         ~EditProfileAction();
         
+        bool checkForComplete() const;
         void applyChanges();
 
     private:
@@ -46,6 +47,10 @@ class EditProfileAction: public QWidget{
     private slots:
         void refreshTemplates(const QModelIndex &index);
         void refreshArguments(const QModelIndex &index);
+        
+    signals:
+        void formComplete(bool complete);
+
 };
 
 #endif // EDITDBUSACTION_H

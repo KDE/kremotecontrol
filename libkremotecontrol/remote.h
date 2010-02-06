@@ -40,13 +40,14 @@ class KREMOTECONTROL_EXPORT Remote
         void removeMode(Mode *mode);
         QList<Mode*> allModes() const;
         
-        /**
-          * @brief convenience function to get the Master mode (the one with the empty name)
-          */
         Mode *masterMode() const;
+
         Mode *defaultMode() const;
         void setDefaultMode(Mode *mode);
         void setDefaultMode(const QString &name);
+        
+        Mode *currentMode() const;
+        void setCurrentMode(Mode *mode);
 
         QString name() const;
 
@@ -54,6 +55,7 @@ class KREMOTECONTROL_EXPORT Remote
         QList<Mode*> m_modeList;
         Mode *m_defaultMode;
         QString m_remoteName;
+        Mode *m_currentMode;
 };
 
 Q_DECLARE_METATYPE(Remote*)

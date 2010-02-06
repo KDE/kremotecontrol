@@ -50,7 +50,6 @@ private:
 public:
     virtual void load();
     virtual void save();
-    const QString notes(Action *action) const;
     explicit KCMLirc(QWidget *parent = 0, const QVariantList &args = QVariantList());
     ~KCMLirc();
 

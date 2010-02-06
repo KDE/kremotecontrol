@@ -128,7 +128,10 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
     m_actionModel = new ActionModel(ui.tvActions);
     ui.tvActions->setModel(m_actionModel);
     connect(ui.tvActions->selectionModel(), SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), SLOT(actionSelectionChanged(const QModelIndex &)));
-    
+
+    // Remotes Tab
+    ui.theRemotes->setModel(new RemoteModel(m_remoteList, ui.theRemoteButtons));
+
 }
 
 KCMLirc::~KCMLirc() {
@@ -279,23 +282,6 @@ void KCMLirc::removeMode() {
     }
 }
 
-const QString KCMLirc::notes(Action* action) const
-{
-
-//     if (action->isModeChange())
-//         return QString(action->doBefore() ? i18n("Do actions before. ") : "") +
-//                QString(action->doAfter() ? i18n("Do actions after. ") : "");
-//     else if (action->isJustStart())
-//         return "";
-//     else
-//         return QString(action->autoStart() ? i18n("Auto-start. ") : "")
-//                + QString(action->repeat() ? i18n("Repeatable. ") : "")
-//                + QString(!action->unique() ? (action->ifMulti() == IM_DONTSEND ? i18n("Do nothing if many instances. ")
-//                                        : action->ifMulti()== IM_SENDTOTOP ? i18n("Send to top instance. ")
-//                                        : action->ifMulti() == IM_SENDTOBOTTOM ? i18n("Send to bottom instance. ") : i18n("Send to all instances. "))
-//                                  : "");
-}
-
 void KCMLirc::updateModes() {
     m_remoteModel->refresh(m_remoteList);
     ui.tvRemotes->expandAll();
@@ -384,12 +370,11 @@ void KCMLirc::updateProfileDetails(QModelIndex index) {
 }
 
 void KCMLirc::updateRemoteDetails(QModelIndex index) {
-//   QString tSelectedRemote = ui.theRemotes->model()->data(index).toString();
-//   ui.theRemoteButtons->setModel(new RemoteButtonModel(Solid::Control::RemoteControl(tSelectedRemote).buttons(), ui.theRemoteButtons));
+   QString tSelectedRemote = ui.theRemotes->model()->data(index).toString();
+   ui.theRemoteButtons->setModel(new RemoteButtonModel(Solid::Control::RemoteControl(tSelectedRemote).buttons(), ui.theRemoteButtons));
 }
 
 void KCMLirc::updateRemoteInfo() {
-//   ui.theRemotes->setModel(new  RemoteModel(Solid::Control::RemoteControl::allRemoteNames(), ui.theRemoteButtons));
 }
 
 void KCMLirc::load() {
