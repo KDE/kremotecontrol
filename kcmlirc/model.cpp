@@ -28,6 +28,7 @@
 #include "model.h"
 
 #include "dbusinterface.h"
+#include "profileserver.h"
 
 #include <kdebug.h>
 #include <KLocale>
@@ -112,8 +113,6 @@ DBusServiceItem
 ***********************************
 */
 
-
-
 DBusServiceItem::DBusServiceItem(const QString &item) {
     setData(item, Qt::UserRole);
     setFlags(Qt::ItemIsEnabled);
@@ -125,7 +124,6 @@ DBusServiceItem::DBusServiceItem(const QString &item,  const QStringList &object
         this->appendRow(new QStandardItem(object));
     }
 }
-
 
 QVariant DBusServiceItem::data(int role) const {
     if (role == Qt::DisplayRole || role == Qt::EditRole)  {
@@ -228,8 +226,7 @@ QModelIndex DBusFunctionModel::findOrInsert(const DBusAction* action, bool inser
     return QModelIndex();
 }
 
-QVariant DBusFunctionModel::headerData(int section, Qt::Orientation orientation, int role) const
-{
+QVariant DBusFunctionModel::headerData(int section, Qt::Orientation orientation, int role) const {
     if (orientation == Qt::Horizontal) {
         if (role == Qt::DisplayRole) {
             switch (section) {
@@ -249,10 +246,8 @@ ArgumentsModel
 ***********************************
 */
 
-
 ArgumentsModel::ArgumentsModel(QObject* parent): QStandardItemModel(parent) {
 }
-
 
 void ArgumentsModel::refresh(const Prototype& prototype) {
     clear();
@@ -265,8 +260,7 @@ void ArgumentsModel::refresh(const Prototype& prototype) {
     
 }
 
-QVariant ArgumentsModel::headerData(int section, Qt::Orientation orientation, int role) const
-{
+QVariant ArgumentsModel::headerData(int section, Qt::Orientation orientation, int role) const {
     if (orientation == Qt::Horizontal) {
         if (role == Qt::DisplayRole) {
             switch (section) {
@@ -295,16 +289,10 @@ ArgumentDelegate
 ***********************************
 */
 
-
-ArgumentDelegate::ArgumentDelegate(QObject *parent)
-        : QItemDelegate(parent)
-{
+ArgumentDelegate::ArgumentDelegate(QObject *parent): QItemDelegate(parent) {
 }
 
-QWidget *ArgumentDelegate::createEditor(QWidget *parent,
-                                        const QStyleOptionViewItem &/* option */,
-                                        const QModelIndex &index) const
-{
+QWidget *ArgumentDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &/* option */, const QModelIndex &index) const {
     QWidget *editor;
     unsigned int maxInt = -1;
     Argument arg = qVariantValue<Argument>(index.model()->data(index, Qt::EditRole));
@@ -367,10 +355,7 @@ QWidget *ArgumentDelegate::createEditor(QWidget *parent,
     return editor;
 }
 
-
-void ArgumentDelegate::setEditorData(QWidget *editor,
-                                     const QModelIndex &index) const
-{
+void ArgumentDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const {
 
     Argument arg = qVariantValue<Argument>(index.model()->data(index, Qt::EditRole));
     switch (arg.value().type()) {
@@ -413,10 +398,7 @@ void ArgumentDelegate::setEditorData(QWidget *editor,
 
 }
 
-
-void ArgumentDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
-                                    const QModelIndex &index) const
-{
+void ArgumentDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const {
     QVariant value;
     Argument arg = qVariantValue<Argument>(index.model()->data(index, Qt::EditRole));
     switch (arg.value().type()) {
@@ -445,13 +427,9 @@ void ArgumentDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
     model->setData(index, qVariantFromValue(arg), Qt::EditRole);
 }
 
-void ArgumentDelegate::updateEditorGeometry(QWidget *editor,
-        const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
-{
+void ArgumentDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &/* index */) const {
     editor->setGeometry(option.rect);
 }
-
-
 
 
 /*
@@ -477,7 +455,7 @@ QVariant ArgumentsModelItem::data ( int role ) const {
 
     if(role == Qt::DisplayRole) {
         Argument arg = qVariantValue<Argument>(QStandardItem::data(Qt::EditRole));
-        kDebug() << "got arg:" << arg.description() << "with type" << arg.value();
+//        kDebug() << "got arg:" << arg.description() << "with type" << arg.value();
         if(arg.value().type() == QVariant::StringList) {
             QString retList;
             retList.clear();
@@ -496,30 +474,63 @@ QVariant ArgumentsModelItem::data ( int role ) const {
     }
 }
 
+
 /*
 ***********************************
 ProfileModel
 ***********************************
 */
 
-
-
-ProfileModel::ProfileModel(QObject* parent): QStandardItemModel(parent)
-{
-    qRegisterMetaType<ProfileActionTemplate*>("ProfileActionTemplate*");
+ProfileModel::ProfileModel(QObject *parent): QStandardItemModel(parent) {
+    foreach(Profile *profile, ProfileServer::allProfiles()){
+        QStandardItem *item = new QStandardItem(profile->name());
+        item->setData(qVariantFromValue(profile), Qt::UserRole);
+        appendRow(item);
+    }    
 }
 
-ProfileModel::ProfileModel(Profile* profile, QObject* parent): QStandardItemModel(parent)
-{
-    ProfileModel();
+Profile* ProfileModel::profile(const QModelIndex& index) const {
+    if(index.isValid()){
+        return qVariantValue<Profile*>(index.data(Qt::UserRole));
+    }
+    return 0;
+}
+
+QModelIndex ProfileModel::find(const ProfileAction* action) const {
+    for(int i = 0; i < rowCount(); i++){
+        kDebug() << "checking item" << item(i)->data(Qt::UserRole).value<Profile*>()->profileId() << "for" << action->profileId();
+        QStandardItem *profileItem = item(i);
+        if(profileItem->data(Qt::UserRole).value<Profile*>()->profileId() == action->profileId()){
+            return profileItem->index();
+        }
+    }
+    // Not found...
+    return QModelIndex();    
+}
+
+
+/*
+***********************************
+ActionTemplateModel
+***********************************
+*/
+
+ActionTemplateModel::ActionTemplateModel(QObject* parent): QStandardItemModel(parent) {
+}
+
+ActionTemplateModel::ActionTemplateModel(const Profile* profile, QObject* parent): QStandardItemModel(parent) {
+    refresh(profile);
+}
+
+void ActionTemplateModel::refresh(const Profile* profile) {
+    clear();
     foreach(ProfileActionTemplate profileActionTemplate, profile->actionTemplates()){
       appendRow(profileActionTemplate);
     }
     sort(0, Qt::DescendingOrder);
 }
 
-QVariant ProfileModel::headerData(int section, Qt::Orientation orientation, int role) const
-{
+QVariant ActionTemplateModel::headerData(int section, Qt::Orientation orientation, int role) const {
     if (orientation == Qt::Horizontal) {
         if (role == Qt::DisplayRole) {
             switch (section) {
@@ -537,17 +548,25 @@ QVariant ProfileModel::headerData(int section, Qt::Orientation orientation, int 
     return QVariant();
 }
 
-ProfileActionTemplate* ProfileModel::getProfileActionTemlate(int index) const
-{
-    return index == -1 ? 0 : QStandardItemModel::item(index)->data(Qt::UserRole).value<ProfileActionTemplate*>();
+ProfileActionTemplate ActionTemplateModel::actionTemplate(const QModelIndex &index) const {
+    return item(index.row())->data(Qt::UserRole).value<ProfileActionTemplate>();
 }
 
+QModelIndex ActionTemplateModel::find(const ProfileAction* action) const {
+    for(int i = 0; i < rowCount(); i++){
+        QStandardItem *templateItem = item(i);
+        if(templateItem->data(Qt::UserRole).value<ProfileActionTemplate>().actionTemplateId() == action->actionTemplateId()){
+            return templateItem->index();
+        }
+    }
+    // Not found...
+    return QModelIndex();
+}
 
-void ProfileModel::appendRow(ProfileActionTemplate actionTemplate)
-{
+void ActionTemplateModel::appendRow(ProfileActionTemplate actionTemplate) {
     QList<QStandardItem*> row;
     QStandardItem *item = new QStandardItem(actionTemplate.actionName());
-    item->setData(qVariantFromValue(&actionTemplate), Qt::UserRole);
+    item->setData(qVariantFromValue(actionTemplate), Qt::UserRole);
     row.append(item);
 
     if (!(actionTemplate.description().isEmpty())) {
@@ -557,7 +576,7 @@ void ProfileModel::appendRow(ProfileActionTemplate actionTemplate)
     } else {
         row.append(new QStandardItem("-"));
     }
-    row.append(new QStandardItem(QString::number(actionTemplate.defaultArguments().size())));
+    row.append(new QStandardItem(QString::number(actionTemplate.function().args().size())));
     if (!actionTemplate.buttonName().isEmpty()) {
         row.append(new QStandardItem(actionTemplate.buttonName()));
     } else {
@@ -566,8 +585,7 @@ void ProfileModel::appendRow(ProfileActionTemplate actionTemplate)
     QStandardItemModel::appendRow(row);
 }
 
-Qt::ItemFlags ProfileModel::flags(const QModelIndex& index) const
-{
+Qt::ItemFlags ActionTemplateModel::flags(const QModelIndex& index) const {
     return (QStandardItemModel::flags(index) & ~Qt::ItemIsEditable);
 }
 
@@ -578,15 +596,11 @@ RemoteButtonModel
 ***********************************
 */
 
-
-RemoteButtonModel::RemoteButtonModel(QObject* parent): QStandardItemModel(parent)
-{
+RemoteButtonModel::RemoteButtonModel(QObject* parent): QStandardItemModel(parent) {
     qRegisterMetaType<RemoteControlButton*>("RemoteControlButton*");
 }
 
-
-RemoteButtonModel::RemoteButtonModel( const QList<RemoteControlButton> &buttonList, QObject* parent): QStandardItemModel(parent)
-{
+RemoteButtonModel::RemoteButtonModel( const QList<RemoteControlButton> &buttonList, QObject* parent): QStandardItemModel(parent) {
     RemoteButtonModel();
     foreach(const RemoteControlButton &tButton, buttonList) {
         appendRow(tButton);
@@ -594,9 +608,7 @@ RemoteButtonModel::RemoteButtonModel( const QList<RemoteControlButton> &buttonLi
     sort(0, Qt::AscendingOrder);
 }
 
-
-void RemoteButtonModel::appendRow( const RemoteControlButton &button)
-{
+void RemoteButtonModel::appendRow( const RemoteControlButton &button) {
     QList<QStandardItem*> row;
     m_buttonList.append(button);
     QStandardItem *item = new QStandardItem(m_buttonList.last().description());
@@ -608,22 +620,15 @@ void RemoteButtonModel::appendRow( const RemoteControlButton &button)
     QStandardItemModel::appendRow(row);
 }
 
-
-
-Solid::Control::RemoteControlButton* RemoteButtonModel::getButton(int index) const
-{
+Solid::Control::RemoteControlButton* RemoteButtonModel::getButton(int index) const {
   return index == -1 ? 0 : QStandardItemModel::item(index)->data(Qt::UserRole).value<RemoteControlButton*>();
 }
 
-
-Qt::ItemFlags RemoteButtonModel::flags(const QModelIndex& index) const
-{
+Qt::ItemFlags RemoteButtonModel::flags(const QModelIndex& index) const {
     return (QStandardItemModel::flags(index) & ~Qt::ItemIsEditable);
 }
 
-
-QVariant RemoteButtonModel::headerData(int section, Qt::Orientation orientation, int role) const
-{
+QVariant RemoteButtonModel::headerData(int section, Qt::Orientation orientation, int role) const {
     if (orientation == Qt::Horizontal) {
         if (role == Qt::DisplayRole) {
             switch (section) {
@@ -637,7 +642,6 @@ QVariant RemoteButtonModel::headerData(int section, Qt::Orientation orientation,
     return QVariant();
 }
 
-
 QModelIndex RemoteButtonModel::indexOfButtonName(const QString &button) {
   for(int row = 0; row < QStandardItemModel::rowCount(); ++row){
     if(button == getButton(row)->name()){
@@ -647,7 +651,6 @@ QModelIndex RemoteButtonModel::indexOfButtonName(const QString &button) {
   return QModelIndex();
 }
 
-
 RemoteModel::RemoteModel(QObject* parent): QStandardItemModel(parent) {
 }
 
@@ -655,7 +658,7 @@ RemoteModel::RemoteModel(const RemoteList &remoteList, QObject *parent) : QStand
     refresh(remoteList);
 }
 
-void RemoteModel::refresh(const RemoteList &remoteList){
+void RemoteModel::refresh(const RemoteList &remoteList) {
     clear();
     setHorizontalHeaderLabels(QStringList() << i18n("Remotes and modes") << i18n("Button"));
     foreach(Remote *remote, remoteList){

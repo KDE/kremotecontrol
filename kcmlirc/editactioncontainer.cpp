@@ -19,6 +19,7 @@
 
 #include "editactioncontainer.h"
 #include "editdbusaction.h"
+#include "editprofileaction.h"
 
 #include <kdebug.h>
 
@@ -45,9 +46,13 @@ EditActionContainer::EditActionContainer(Action *action, const QString &remote, 
             }
             break;
             }
-        case Action::ProfileAction:
-  /*          m_innerWidget = new EditProfileAction();
-            break;*/
+        case Action::ProfileAction:{
+            ProfileAction *profileAction = dynamic_cast<ProfileAction*>(action);
+            if(profileAction){
+                m_innerWidget = new EditProfileAction(profileAction);
+            }
+            break;
+            }
         default:
           kDebug() << "Invalid action type. Not creating inner Widget";
     }
@@ -70,11 +75,11 @@ void EditActionContainer::slotButtonClicked(int button) {
                 break;
             }
             case Action::ProfileAction:{
-/*                EditProfileAction *profileActionEditor = dynamic_cast<EditProfileAction*>(m_innerWidget);
+                EditProfileAction *profileActionEditor = dynamic_cast<EditProfileAction*>(m_innerWidget);
                 if(profileActionEditor){
                     profileActionEditor->applyChanges();
                 }
-                break;*/
+                break;
             }
             default:
               kDebug() << "Invalid action type. Not creating inner Widget";

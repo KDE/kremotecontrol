@@ -46,9 +46,11 @@ class KREMOTECONTROL_EXPORT ProfileActionTemplate
     QString profileId() const;
     QString actionTemplateId() const;
     QString actionName() const;
-    QString serviceName() const;
+    QString service() const;
+    QString node() const;
+    Prototype function() const;
     QString description() const;
-    QList<Argument> defaultArguments() const;
+//    QList<Argument> defaultArguments() const;
     ProfileAction::ActionDestination destination() const;
     bool autostart() const;
     bool repeat() const;
@@ -70,5 +72,7 @@ class KREMOTECONTROL_EXPORT ProfileActionTemplate
     QString m_buttonName;
 
 };
+
+Q_DECLARE_METATYPE(ProfileActionTemplate)
 
 #endif // ACTIONTEMPLATE_H

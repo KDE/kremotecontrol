@@ -17,6 +17,7 @@ set(kcm_lirc_PART_SRCS
    addaction.cpp
    editactioncontainer.cpp
    editdbusaction.cpp
+   editprofileaction.cpp
    model.cpp
    modedialog.cpp
    )

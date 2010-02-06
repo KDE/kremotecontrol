@@ -379,7 +379,7 @@ void KCMLirc::updateProfileDetails(QModelIndex index) {
         infoList.clear();
         infoList << i18n("Number of Actions") << QString().setNum(tProfile->actionTemplates().count());
         new QTreeWidgetItem(ui.theProfileInformation, infoList);
-        ui.theProfileActions->setModel(new ProfileModel(tProfile, ui.theProfileActions));
+        ui.theProfileActions->setModel(new ActionTemplateModel(tProfile, ui.theProfileActions));
     }
 }
 

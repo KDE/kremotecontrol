@@ -69,7 +69,6 @@ public:
     virtual QVariant data(int  role) const;
 };
 
-
 class DBusFunctionModel: public QStandardItemModel
 {
 public:
@@ -86,7 +85,6 @@ private:
     void appendRow(Prototype item);
 
 };
-
 
 class ArgumentsModel: public QStandardItemModel
 {
@@ -129,19 +127,28 @@ public:
 
 };
 
-
 class ProfileModel: public QStandardItemModel
 {
-public:
-    ProfileModel(QObject *parent=0);
-    explicit ProfileModel(Profile *profile, QObject *parent=0);
+    public:
+        ProfileModel(QObject *parent = 0);
+        
+        Profile *profile(const QModelIndex &index) const;       
+        QModelIndex find(const ProfileAction *action) const;
+};
 
-    ProfileActionTemplate* getProfileActionTemlate(int index) const;
+class ActionTemplateModel: public QStandardItemModel
+{
+public:
+    ActionTemplateModel(QObject *parent=0);
+    explicit ActionTemplateModel(const Profile *profile, QObject *parent=0);
+    
+    void refresh(const Profile *profile);
+    ProfileActionTemplate actionTemplate(const QModelIndex &index) const;
+    QModelIndex find(const ProfileAction *action) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
     void appendRow(ProfileActionTemplate actionTemplate);
     Qt::ItemFlags flags(const QModelIndex& index) const;
 };
-
 
 class RemoteButtonModel: public QStandardItemModel
 {
@@ -156,7 +163,6 @@ public:
     Qt::ItemFlags flags(const QModelIndex& index) const;
     QModelIndex indexOfButtonName(const QString &button);
 };
-
 
 class RemoteModel: public QStandardItemModel
 {

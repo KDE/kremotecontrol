@@ -29,8 +29,11 @@ class KREMOTECONTROL_EXPORT ProfileAction : public DBusAction
     ProfileAction();
     ProfileAction(const QString& button, const QString &profile, const QString &actionTemplate);
 
-    QString profileName() const;
-    QString actionTemplateID() const;
+    QString profileId() const;
+    void setProfileId(const QString &profileId);
+    
+    QString actionTemplateId() const;
+    void setActionTemplateId(const QString &actionTemplateID);
     
     virtual void operator=(const ProfileAction &action);
     virtual bool operator==(const ProfileAction &other) const;
@@ -42,7 +45,7 @@ class KREMOTECONTROL_EXPORT ProfileAction : public DBusAction
     virtual void loadFromConfig(const KConfigGroup &config);
     
   protected:
-    QString m_profileName;
+    QString m_profileId;
     QString m_template;
 };
 

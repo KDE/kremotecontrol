@@ -225,10 +225,10 @@ Profile * ProfileServer::ProfileXmlContentHandler::parseFile(const QString& file
     QString author = rootElement.namedItem("author").toElement().text().trimmed();
     QString version = rootElement.namedItem("version").toElement().text().trimmed();
 
-    kDebug()<< "Profile";
-    kDebug()<< "***********************************************************************";
-    kDebug() << "id " << profileId <<"name " << name << "description " << description;
-    kDebug() << "id " << profileId <<"author" << author<< "version" << version;
+//     kDebug()<< "Profile";
+//     kDebug()<< "***********************************************************************";
+//     kDebug() << "id " << profileId <<"name " << name << "description " << description;
+//     kDebug() << "id " << profileId <<"author" << author<< "version" << version;
 
     Profile *profile =  new Profile(profileId, name ,version, author, description);
 
@@ -295,39 +295,39 @@ ProfileActionTemplate ProfileServer::ProfileXmlContentHandler::parseAction(QDomN
     QString nodeName = prototypeNode.namedItem("node").toElement().text().trimmed();
 
     QList<Argument> arguments;
-    if( ! prototypeNode.namedItem("attributes").isNull()){
-      QDomNodeList attributeNodes = prototypeNode.namedItem("attributes").toElement().elementsByTagName("attribute");
-      for(int attributeCount = 0; attributeCount < attributeNodes.size(); ++ attributeCount){
-	QDomNode attributeNode = attributeNodes.at(attributeCount);
-	QString typeString  = attributeNode.attributes().namedItem("type").nodeValue().trimmed();
-	QVariant variantType(QVariant::nameToType(typeString.toLocal8Bit()));
-	QString description;
-	if(attributeNode.toElement().namedItem("comment").isNull()){
-	  description = attributeNode.toElement().namedItem("comment").toElement().text();
-	}
-	QString defaultValue;
-	if(attributeNode.toElement().namedItem("default").isNull()){
-	  description = attributeNode.toElement().namedItem("default").toElement().text();
-	}
-	arguments.append(Argument(variantType, description));
-	kDebug()<< "		" << "type" << variantType;
-	kDebug()<< "		" << "description" << description;
-	kDebug()<< "		" << "default" << defaultValue;
-      }
-
+    if(!prototypeNode.namedItem("arguments").isNull()){
+        QDomNodeList attributeNodes = prototypeNode.namedItem("arguments").toElement().elementsByTagName("argument");
+        for(int attributeCount = 0; attributeCount < attributeNodes.size(); ++ attributeCount){
+          QDomNode attributeNode = attributeNodes.at(attributeCount);
+          QString typeString  = attributeNode.attributes().namedItem("type").nodeValue().trimmed();
+          QVariant variantType(QVariant::nameToType(typeString.toLocal8Bit()));
+          QString description;
+          if(attributeNode.toElement().namedItem("comment").isNull()){
+              description = attributeNode.toElement().namedItem("comment").toElement().text();
+          }
+          QString defaultValue;
+          if(attributeNode.toElement().namedItem("default").isNull()){
+              description = attributeNode.toElement().namedItem("default").toElement().text();
+          }
+          arguments.append(Argument(variantType, description));
+/*          kDebug()<< "		" << "type" << variantType;
+          kDebug()<< "		" << "description" << description;
+          kDebug()<< "		" << "default" << defaultValue;*/
+        }
     }
 
     Prototype function(prototypeNode.namedItem("function").toElement().text().trimmed(), arguments);
 
-    kDebug()<< ">>>>>> Action";
-    kDebug()<< "	" << "name" << actionName;
-    kDebug()<< "	" << "description" << description;
-    kDebug()<< "	" << "autostart" << autostart;
-    kDebug()<< "	" << "repeat" << repeat;
-    kDebug()<< "	" << "ifmulti" << actionType;
-    kDebug()<< "	" << "ifmulti" << serviceName;
-    kDebug()<< "	" << "ifmulti" << nodeName;
-    kDebug()<< "	" << "ifmulti" << function.name();
+//     kDebug()<< ">>>>>> Action";
+//     kDebug()<< "	" << "name" << actionName;
+//     kDebug()<< "	" << "description" << description;
+//     kDebug()<< "	" << "autostart" << autostart;
+//     kDebug()<< "	" << "repeat" << repeat;
+//     kDebug()<< "	" << "ifmulti" << actionType;
+     kDebug()<< "	" << "serviceName" << serviceName;
+//     kDebug()<< "	" << "ifmulti" << nodeName;
+//     kDebug()<< "	" << "ifmulti" << function.name();
+//     kDebug()<< "    " << "args" << function.args().count();
 
 
     return ProfileActionTemplate(

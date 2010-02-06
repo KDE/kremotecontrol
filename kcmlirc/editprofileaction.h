@@ -17,34 +17,34 @@
 
 */
 
-#ifndef EDITDBUSACTION_H
-#define EDITDBUSACTION_H
+#ifndef EDITPROFILEACTION_H
+#define EDITPROFILEACTION_H
 
 #include "ui_editdbusaction.h"
 
-#include "dbusaction.h"
+#include "profileaction.h"
 #include "model.h"
 
-class EditDBusAction: public QWidget{
+class EditProfileAction: public QWidget{
     Q_OBJECT
     
     public:
     
-        EditDBusAction(DBusAction *action, QWidget* parent = 0, Qt::WFlags flags = 0);
-        ~EditDBusAction();
+        EditProfileAction(ProfileAction *action, QWidget* parent = 0, Qt::WFlags flags = 0);
+        ~EditProfileAction();
         
         void applyChanges();
 
     private:
         Ui::EditDBusAction ui;
         
-        DBusAction *m_action;
-        DBusServiceModel *m_dbusServiceModel;
-        DBusFunctionModel *m_dbusFunctionModel;
+        ProfileAction *m_action;
+        ProfileModel *m_profileModel;
+        ActionTemplateModel *m_templateModel;
         ArgumentsModel *m_argumentsModel;
         
     private slots:
-        void refreshDBusFunctions(const QModelIndex &index);
+        void refreshTemplates(const QModelIndex &index);
         void refreshArguments(const QModelIndex &index);
 };
 

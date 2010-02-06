@@ -38,7 +38,6 @@ KDE_EXPORT ProfileServer::ProfileServer()
 {
 // theProfiles.setAutoDelete(true);
     loadProfiles();
-    kDebug() << "ProfileServer started up. Starting NewProfileServer";
 }
 
 KDE_EXPORT ProfileServer::~ProfileServer()

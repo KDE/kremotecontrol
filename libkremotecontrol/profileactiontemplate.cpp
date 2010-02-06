@@ -37,7 +37,7 @@
   m_actionTemplateId = actionTemplateId;
   m_actionName = actionName;
   m_node = node;
-  m_serviceName = m_serviceName;
+  m_serviceName = serviceName;
   m_function = function;
   m_description = description;
   m_destination= destination;
@@ -63,17 +63,21 @@ QString ProfileActionTemplate::actionName() const
   return m_actionName;
 }
 
-QString ProfileActionTemplate::serviceName() const {
+QString ProfileActionTemplate::service() const {
   return m_serviceName;
+}
+
+QString ProfileActionTemplate::node() const {
+  return m_node;
 }
 
 QString ProfileActionTemplate::description() const {
   return m_description;
 }
 
-QList<Argument> ProfileActionTemplate::defaultArguments() const
+Prototype ProfileActionTemplate::function() const
 {
-  return m_function.args();
+  return m_function;
 }
 
 DBusAction::ActionDestination ProfileActionTemplate::destination() const
@@ -98,9 +102,8 @@ QString ProfileActionTemplate::buttonName() const
 
 ProfileAction *ProfileActionTemplate::createAction(const Solid::Control::RemoteControlButton& button) const {
   ProfileAction *action = new ProfileAction(button.name(), m_profileId, QString());
-  action->setApplication(m_actionName);
+  action->setApplication(m_serviceName);
   action->setNode(m_node);
-  QList<Argument> newArgs;
   action->setFunction(m_function);
   action->setDestination(m_destination);
   action->setAutostart(m_autostart);

@@ -1,6 +1,5 @@
 /*
-    <one line to give the program's name and a brief idea of what it does.>
-    Copyright (C) <year>  <name of author>
+    Copyright (C) 2010 Michael Zanetti <michael_zanetti@gmx.net>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,8 +18,6 @@
 */
 
 #include "editdbusaction.h"
-#include "model.h"
-#include "dbusinterface.h"
 
 EditDBusAction::EditDBusAction(DBusAction *action, QWidget* parent, Qt::WFlags flags): QWidget(parent, flags) {
     m_action = action;

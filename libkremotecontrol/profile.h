@@ -79,4 +79,6 @@ class KREMOTECONTROL_EXPORT Profile
 
 };
 
+Q_DECLARE_METATYPE(Profile*)
+
 #endif // PROFILE_H

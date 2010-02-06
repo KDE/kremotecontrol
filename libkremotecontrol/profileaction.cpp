@@ -18,6 +18,7 @@
 */
 
 #include "profileaction.h"
+#include "profileserver.h"
 
 ProfileAction::ProfileAction(): DBusAction() {
   //change type from DBusAction (c'tor) to ProfileAction
@@ -28,48 +29,70 @@ ProfileAction::ProfileAction(): DBusAction() {
 ProfileAction::ProfileAction(const QString& button, const QString &profileName, const QString &actionTemplate): DBusAction(button) {
   //change type from DBusAction (c'tor) to ProfileAction
   m_type = Action::ProfileAction;
-  m_profileName = profileName;
+  m_profileId = profileName;
   m_template = actionTemplate;
 }
 
-QString ProfileAction::profileName() const
+QString ProfileAction::profileId() const
 {
-  return m_profileName;
+  return m_profileId;
 }
 
-QString ProfileAction::actionTemplateID() const
+void ProfileAction::setProfileId(const QString& profileId) {
+  m_profileId = profileId;
+}
+
+QString ProfileAction::actionTemplateId() const
 {
   return m_template;
+}
+
+void ProfileAction::setActionTemplateId(const QString& actionTemplateId) {
+  m_template = actionTemplateId;
 }
 
 void ProfileAction::operator=(const ProfileAction& action) {
   DBusAction::operator=(action);
-  m_profileName = action.profileName();
-  m_template = action.actionTemplateID();
+  m_profileId = action.profileId();
+  m_template = action.actionTemplateId();
 }
 
 bool ProfileAction::operator==(const ProfileAction& other) const {
   return DBusAction::operator==(other) &&
-	  m_profileName == other.profileName() &&
-	  m_template == other.actionTemplateID();
+	  m_profileId == other.profileId() &&
+	  m_template == other.actionTemplateId();
 }
 
 QString ProfileAction::name() const {
-  return m_template;
+    foreach(const Profile *profile, ProfileServer::allProfiles()){
+        if(profile->profileId() == m_profileId){
+            return profile->name();
+        }
+    }
+    return m_profileId;
 }
 
 QString ProfileAction::description() const {
+    foreach(const Profile *profile, ProfileServer::allProfiles()){
+        if(profile->profileId() == m_profileId){
+            foreach(const ProfileActionTemplate &actionTemplate, profile->actionTemplates()){
+                if(actionTemplate.actionTemplateId() == m_template && actionTemplate.profileId() == m_profileId){
+                    return actionTemplate.actionName();
+                }
+            }
+        }
+  }
   return m_function.name();
 }
 
 void ProfileAction::saveToConfig(KConfigGroup &config) {
     DBusAction::saveToConfig(config);
-    config.writeEntry("ProfileName", m_profileName);
+    config.writeEntry("ProfileId", m_profileId);
     config.writeEntry("Template", m_template);
 }
 
 void ProfileAction::loadFromConfig(const KConfigGroup &config) {
     DBusAction::loadFromConfig(config);
-    m_profileName = config.readEntry("ProfileName");
+    m_profileId = config.readEntry("ProfileId");
     m_template = config.readEntry("Template");
 }

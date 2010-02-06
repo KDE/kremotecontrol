@@ -19,6 +19,7 @@
 
 #include "addaction.h"
 #include "dbusaction.h"
+#include "profileaction.h"
 #include "editactioncontainer.h"
 
 #include <kdebug.h>
@@ -45,15 +46,18 @@ Action *AddAction::createAction(const QString &remote) {
     if(exec() == KDialog::Accepted){
         switch(getType()){
             case Action::ProfileAction:
+                action = new ProfileAction();
                 break;
             case Action::DBusAction:
                 action = new DBusAction();
-                EditActionContainer actionContainer(action, remote);
-                if(actionContainer.exec() != KDialog::Accepted){
-                    delete action;
-                    action = 0;
-                }
                 break;
+        }
+        if(action){
+            EditActionContainer actionContainer(action, remote);
+            if(actionContainer.exec() != KDialog::Accepted){
+                delete action;
+                action = 0;
+            }
         }
     }
     return action;
