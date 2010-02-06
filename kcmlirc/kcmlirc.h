@@ -54,17 +54,6 @@ public:
     explicit KCMLirc(QWidget *parent = 0, const QVariantList &args = QVariantList());
     ~KCMLirc();
 
-public slots:
-    void updateActions();
-    void updateModesStatus();
-    void updateActionsStatus();
-    void updateProfileInfo();
-    void updateProfileDetails(QModelIndex);
-    void updateRemoteInfo();
-    void updateRemoteDetails(QModelIndex);
-    void slotSetDefaultMode();
-    void slotAddActions();
-
 private slots:
     void addAction();
     void removeAction();
@@ -78,7 +67,12 @@ private slots:
     void updateModes();
     void modeSelectionChanged(const QModelIndex &index);
     void actionSelectionChanged(const QModelIndex &index);
-    
+
+    void updateProfileInfo();
+    void updateProfileDetails(QModelIndex);
+    void updateRemoteInfo();
+    void updateRemoteDetails(QModelIndex);
+
 signals:
     void haveButton(const QString &remote, const QString &button);
 
