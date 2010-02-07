@@ -42,17 +42,20 @@ class GroupModechangehandler : public ModeChangeHandler{
 
 
   void nextMode(Remote* remote, const QString& button) {
-    int found=remote->m_modeList.indexOf(remote->currentMode());
+    int index=remote->m_modeList.indexOf(remote->currentMode());
     Mode *mode =0;
-    for(int i = found +1; i < remote->m_modeList.size(); ++i){
-      if(remote->m_modeList.at(found)->button() == button){
-	mode = remote->m_modeList.at(found);
+    int size = remote->m_modeList.size();
+    if(index < size){
+      for(int i = index +1; i < size ; ++i){
+	if(remote->m_modeList.at(index)->button() == button){
+	  mode = remote->m_modeList.at(index);
+	}
       }
     }  
     if(mode== 0){
-      for(int i = 0; i < found; ++i){
-	if(remote->m_modeList.at(found)->button() == button){
-	  mode = remote->m_modeList.at(found);
+      for(int i = 0; i < index; ++i){
+	if(remote->m_modeList.at(index)->button() == button){
+	  mode = remote->m_modeList.at(index);
 	}
       }
     }
