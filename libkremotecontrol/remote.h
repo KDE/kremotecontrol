@@ -27,8 +27,13 @@
 
 #include <QSet>
 
+class ModeChangeHandler;
+
 class KREMOTECONTROL_EXPORT Remote
 {
+    
+    friend class GroupModechangehandler;
+    
     public:
         Remote();
 
@@ -59,7 +64,12 @@ class KREMOTECONTROL_EXPORT Remote
         Mode *m_defaultMode;
         QString m_remoteName;
         Mode *m_currentMode;
+	ModeChangeHandler *m_modechangeHandler;		
 };
+
+
+
+
 
 Q_DECLARE_METATYPE(Remote*)
 

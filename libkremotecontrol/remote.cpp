@@ -22,11 +22,53 @@
 #include <KLocale>
 #include <kdebug.h>
 
+class ModeChangeHandler{
+  public:
+      virtual  bool isButtonModechange(const Remote *remote, const QString &button ) =0;
+      virtual  void nextMode(Remote *remote, const QString &button)=0;
+};    
+
+
+class GroupModechangehandler : public ModeChangeHandler{
+
+  bool isButtonModechange(const Remote* remote, const QString& button) {
+    foreach(Mode *mode, remote->m_modeList){
+      if(mode->button() == button && ! (mode == remote->currentMode())){
+	return true;
+      }
+    }
+    return false;
+  }
+
+
+  void nextMode(Remote* remote, const QString& button) {
+    int found=remote->m_modeList.indexOf(remote->currentMode());
+    Mode *mode =0;
+    for(int i = found +1; i < remote->m_modeList.size(); ++i){
+      if(remote->m_modeList.at(found)->button() == button){
+	mode = remote->m_modeList.at(found);
+      }
+    }  
+    if(mode== 0){
+      for(int i = 0; i < found; ++i){
+	if(remote->m_modeList.at(found)->button() == button){
+	  mode = remote->m_modeList.at(found);
+	}
+      }
+    }
+    if(mode){
+      remote->setCurrentMode(mode);
+    }
+  }
+};
+
+
 Remote::Remote() {
     // Always create the Master Mode and set it default
     Mode *masterMode = new Mode("Master");
     addMode(masterMode);
     setDefaultMode(masterMode);
+    m_modechangeHandler = new GroupModechangehandler();
 }
 
 Remote::Remote(const QString &remote, const QList<Mode*> &modes) {
@@ -128,10 +170,13 @@ bool Remote::isAvailable() const {
 }
 
 bool Remote::isButtonModechange(const QString& button) {
-  return false;
+  return m_modechangeHandler->isButtonModechange(this,button);
 }
 
 void Remote::nextMode ( const QString& button ){
-  //return currentMode();
+  m_modechangeHandler->nextMode(this, button);
 }
+
+
+
 
