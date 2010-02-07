@@ -48,7 +48,7 @@ EditDBusAction::EditDBusAction(DBusAction *action, QWidget* parent, Qt::WFlags f
         QModelIndex index = m_dbusServiceModel->findOrInsert(m_action);
         ui.tvDBusApps->selectionModel()->setCurrentIndex(index, QItemSelectionModel::SelectCurrent);
         index = m_dbusFunctionModel->findOrInsert(m_action);
-        ui.tvDBusFunctions->selectionModel()->setCurrentIndex(index, QItemSelectionModel::SelectCurrent);
+        ui.tvDBusFunctions->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Rows | QItemSelectionModel::SelectCurrent);
         
         // Load Options tab
         ui.cbAutostart->setChecked(m_action->autostart());
@@ -125,6 +125,7 @@ void EditDBusAction::refreshDBusFunctions(const QModelIndex& index) {
     } else {
         ui.gbUnique->setEnabled(true);
     }
+    m_argumentsModel->clear();
     emit formComplete(index.parent().isValid());
 }
 

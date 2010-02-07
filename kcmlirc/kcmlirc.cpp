@@ -169,7 +169,10 @@ void KCMLirc::editAction() {
     
     EditActionContainer editActioncontainer(action, remote->name());
     if(editActioncontainer.exec()) {
+        QModelIndex index = ui.tvActions->selectionModel()->currentIndex();
         m_actionModel->refresh(mode);
+        ui.tvActions->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Rows | QItemSelectionModel::SelectCurrent);
+        actionSelectionChanged(index);
         ui.tvActions->resizeColumnToContents(0);
         emit changed(true);
     }    
@@ -262,9 +265,6 @@ void KCMLirc::editMode() {
     ModeDialog modeDialog(remote, mode);
     if(modeDialog.exec()){
         m_remoteModel->refresh(m_remoteList);
-        foreach(const Mode *mode, remote->allModes()){
-            kDebug() << "Created Mode" << mode->name();
-        }
         updateModes();
         emit changed(true);
     }

@@ -300,19 +300,18 @@ ProfileActionTemplate ProfileServer::ProfileXmlContentHandler::parseAction(QDomN
         for(int attributeCount = 0; attributeCount < attributeNodes.size(); ++ attributeCount){
           QDomNode attributeNode = attributeNodes.at(attributeCount);
           QString typeString  = attributeNode.attributes().namedItem("type").nodeValue().trimmed();
-          QVariant variantType(QVariant::nameToType(typeString.toLocal8Bit()));
+          QVariant argValue(QVariant::nameToType(typeString.toLocal8Bit()));
           QString description;
-          if(attributeNode.toElement().namedItem("comment").isNull()){
+          if(!attributeNode.toElement().namedItem("comment").isNull()){
               description = attributeNode.toElement().namedItem("comment").toElement().text();
           }
-          QString defaultValue;
-          if(attributeNode.toElement().namedItem("default").isNull()){
-              description = attributeNode.toElement().namedItem("default").toElement().text();
+          if(!attributeNode.toElement().namedItem("default").isNull()){
+              argValue = QVariant(attributeNode.toElement().namedItem("default").toElement().text());
+              argValue.convert(QVariant::nameToType(typeString.toLocal8Bit()));
           }
-          arguments.append(Argument(variantType, description));
-/*          kDebug()<< "		" << "type" << variantType;
+          arguments.append(Argument(argValue, description));
           kDebug()<< "		" << "description" << description;
-          kDebug()<< "		" << "default" << defaultValue;*/
+          kDebug()<< "		" << "value" << argValue;
         }
     }
 

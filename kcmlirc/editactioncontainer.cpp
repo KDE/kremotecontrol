@@ -59,6 +59,8 @@ EditActionContainer::EditActionContainer(Action *action, const QString &remote, 
       
     if(m_innerWidget){
         QHBoxLayout *innerLayout = new QHBoxLayout();
+        innerLayout->setMargin(0);
+
         innerLayout->addWidget(m_innerWidget);
         ui.wActionWidget->setLayout(innerLayout);
         connect(m_innerWidget, SIGNAL(formComplete(bool)), SLOT(checkForComplete()));

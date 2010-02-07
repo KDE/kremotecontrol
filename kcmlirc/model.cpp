@@ -51,7 +51,7 @@ DBusServiceModel
 #include <kapplication.h>
 
 DBusServiceModel::DBusServiceModel(QObject* parent): QStandardItemModel(parent) {
-    setHorizontalHeaderLabels(QStringList() << i18n("D-Bus applications"));
+    setHorizontalHeaderLabels(QStringList() << i18n("Application / Node"));
     foreach(const QString &item, DBusInterface::getInstance()->getRegisteredPrograms()) {
         DBusServiceItem *dbusServiceItem = new DBusServiceItem(item);
         dbusServiceItem->setEditable(false);
@@ -234,7 +234,7 @@ QVariant DBusFunctionModel::headerData(int section, Qt::Orientation orientation,
             case 0:
                 return i18n("Function");
             case 1:
-                return i18n("Parameter");
+                return i18n("Parameters");
             }
         }
     }
@@ -254,7 +254,7 @@ void ArgumentsModel::refresh(const Prototype& prototype) {
     clear();
     foreach(const Argument &arg, prototype.args()){
         QList<QStandardItem*> itemList;
-        itemList.append(new QStandardItem(QString(QVariant::typeToName(arg.value().type())) + " " + arg.description()));
+        itemList.append(new QStandardItem(QString(QVariant::typeToName(arg.value().type())) + ": " + arg.description()));
         itemList.append(new ArgumentsModelItem(arg));
         appendRow(itemList);
     }
@@ -483,6 +483,7 @@ ProfileModel
 */
 
 ProfileModel::ProfileModel(QObject *parent): QStandardItemModel(parent) {
+    setHorizontalHeaderLabels(QStringList() << i18n("Profile Name"));
     foreach(Profile *profile, ProfileServer::allProfiles()){
         QStandardItem *item = new QStandardItem(profile->name());
         item->setData(qVariantFromValue(profile), Qt::UserRole);

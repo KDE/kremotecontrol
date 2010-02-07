@@ -27,11 +27,13 @@ EditProfileAction::EditProfileAction(ProfileAction *action, QWidget* parent, Qt:
     ui.setupUi(this);
     
     // Init Profiles
+    ui.lDBusServices->setText(i18n("Profiles:"));
     m_profileModel = new ProfileModel(ui.tvDBusApps);
     ui.tvDBusApps->setModel(m_profileModel);
     ui.tvDBusApps->setRootIsDecorated(false);
     
     //Init Templates
+    ui.lFunctions->setText(i18n("Action templates:"));
     m_templateModel = new ActionTemplateModel(ui.tvDBusFunctions);
     ui.tvDBusFunctions->setModel(m_templateModel);
     connect(ui.tvDBusApps->selectionModel(), SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), SLOT(refreshTemplates(const QModelIndex &)));
@@ -51,7 +53,7 @@ EditProfileAction::EditProfileAction(ProfileAction *action, QWidget* parent, Qt:
         QModelIndex index = m_profileModel->find(m_action);
         ui.tvDBusApps->selectionModel()->setCurrentIndex(index, QItemSelectionModel::SelectCurrent);
         index = m_templateModel->find(m_action);
-        ui.tvDBusFunctions->selectionModel()->setCurrentIndex(index, QItemSelectionModel::SelectCurrent);
+        ui.tvDBusFunctions->selectionModel()->setCurrentIndex(index, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
 
         // Load Options tab
         ui.cbAutostart->setChecked(m_action->autostart());
@@ -91,7 +93,7 @@ bool EditProfileAction::checkForComplete() const {
 }
 
 void EditProfileAction::applyChanges(){
-    ProfileActionTemplate actionTemplate = m_templateModel->actionTemplate(ui.tvDBusApps->selectionModel()->currentIndex());
+    ProfileActionTemplate actionTemplate = m_templateModel->actionTemplate(ui.tvDBusFunctions->selectionModel()->currentIndex());
     kDebug() << "applyChanges to action:" << actionTemplate.profileId();
     m_action->setApplication(actionTemplate.service());
     m_action->setNode(actionTemplate.node());
@@ -122,6 +124,7 @@ void EditProfileAction::refreshTemplates(const QModelIndex& index) {
     m_templateModel->refresh(m_profileModel->profile(ui.tvDBusApps->selectionModel()->currentIndex()));
     m_templateModel->setColumnCount(2);
     ui.tvDBusFunctions->resizeColumnToContents(0);
+    m_argumentsModel->clear();
     emit formComplete(index.isValid());
 }
 
