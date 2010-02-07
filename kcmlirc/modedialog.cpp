@@ -44,6 +44,7 @@ ModeDialog::ModeDialog(Remote *remote, Mode *mode, QWidget *parent): KDialog(par
         ui.leName->setText(m_mode->name());
         ui.ibIcon->setIcon(m_mode->iconName());
         ui.cbButtons->setCurrentIndex(ui.cbButtons->findData(m_mode->button()));
+        ui.cbSetDefault->setChecked(remote->defaultMode() == mode);
     } else {
         ui.ibIcon->setIcon("infrared-remote");
     }
@@ -81,6 +82,11 @@ void ModeDialog::slotButtonClicked(int button) {
         m_mode->setName(ui.leName->text());
         m_mode->setIconName(ui.ibIcon->icon());
         m_mode->setButton(ui.cbButtons->itemData(ui.cbButtons->currentIndex()).toString());
+        if(ui.cbSetDefault->isChecked()){
+            m_remote->setDefaultMode(m_mode);
+        } else if(m_remote->defaultMode() == m_mode){
+            m_remote->setDefaultMode(m_remote->masterMode());            
+        }
     }
     KDialog::slotButtonClicked(button);
 }

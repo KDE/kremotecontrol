@@ -48,6 +48,7 @@
 DBusServiceModel
 ***********************************
 */
+#include <kapplication.h>
 
 DBusServiceModel::DBusServiceModel(QObject* parent): QStandardItemModel(parent) {
     setHorizontalHeaderLabels(QStringList() << i18n("D-Bus applications"));
@@ -696,12 +697,11 @@ Mode *RemoteModel::mode(const QModelIndex &index) const {
 QVariant RemoteModel::data(const QModelIndex& index, int role) const {
     if(index.isValid() && index.parent().isValid()){
         if(role == Qt::DisplayRole){
-            Mode *mode = qVariantValue<Mode*>(index.data(Qt::UserRole));
             switch(index.column()){
                 case 0:
-                    return mode->name();
+                    return mode(index)->name();
                 case 1:
-                    return mode->button();
+                    return mode(index)->button();
             }
         }
     }
@@ -725,6 +725,11 @@ RemoteItem::RemoteItem(Remote *remote) {
             QList<QStandardItem*> itemList;
             QStandardItem *item = new QStandardItem(mode->name());
             item->setData(qVariantFromValue(mode), Qt::UserRole);
+            if(remote->defaultMode() == mode){
+                QFont font = KApplication::font();
+                font.setBold(true);
+                item->setFont(font);
+            }
             item->setIcon(KIcon(mode->iconName()));
             itemList.append(item);
             item = new QStandardItem(mode->name());

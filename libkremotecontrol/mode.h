@@ -30,8 +30,7 @@ class Action;
 class KREMOTECONTROL_EXPORT Mode
 {
   public:
-    Mode();
-    Mode(const QString &name, const QString &iconName = QString());
+    Mode(const QString &name = QString(), const QString &iconName = "infrared-remote");
 
     QString name() const;
     QString iconName() const;
