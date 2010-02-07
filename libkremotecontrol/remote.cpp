@@ -32,7 +32,7 @@ Remote::Remote() {
 Remote::Remote(const QString &remote, const QList<Mode*> &modes) {
     m_modeList = modes;
     m_remoteName = remote;
-    
+
     // Always create the Master Mode and set it default
     bool hasMaster = false;
     foreach(Mode *mode, m_modeList){
@@ -66,7 +66,7 @@ void Remote::removeMode(Mode *mode) {
         kDebug() << "cannot delete the Master mode";
         return;
     }
-    
+
     if(m_defaultMode == mode){
         // Deleting the Default Mode... Setting Master Mode to default
         foreach(Mode *tmp, m_modeList){
@@ -126,3 +126,12 @@ void Remote::setCurrentMode(Mode* mode) {
 bool Remote::isAvailable() const {
     return Solid::Control::RemoteControl::allRemoteNames().contains(m_remoteName);
 }
+
+bool Remote::isButtonModechange(const QString& button) {
+  return false;
+}
+
+void Remote::nextMode ( const QString& button ){
+  //return currentMode();
+}
+

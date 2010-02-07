@@ -113,4 +113,12 @@ void RemoteList::loadFromConfig(const QString& configName) {
     }
 
 }
+Remote* RemoteList::getRemote ( const QString& remoteName ){
+   for(QList<Remote*>::const_iterator i = constBegin(); i != constEnd(); ++i){
+        if((*i)->name() == remoteName){
+            return *i;
+        }
+    }
+    return 0;
+}
 

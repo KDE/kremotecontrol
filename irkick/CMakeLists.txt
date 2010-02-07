@@ -22,7 +22,7 @@ set(libirkick_common_SRCS
 
 set(irkick_KDEINIT_SRCS ${libirkick_common_SRCS})
 
-qt4_add_dbus_adaptor(irkick_KDEINIT_SRCS org.kde.irkick.xml irkick.h IRKick)
+qt4_add_dbus_adaptor(irkick_KDEINIT_SRCS org.kde.irkick.xml irkick.h KRemoteControlDaemon)
 
 kde4_add_kdeinit_executable( irkick ${irkick_KDEINIT_SRCS})
 

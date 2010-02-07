@@ -41,18 +41,22 @@ Q_DECLARE_PRIVATE(KRemoteControlDaemon)
 public:
     KRemoteControlDaemon(QObject * parent, const QVariantList&);
     virtual ~KRemoteControlDaemon();
-
+  
     bool isConnected() {
         return Solid::Control::RemoteControlManager::connected();
     }
-
+  void reloadConfiguration();
+  
+  void ignoreButtonEvents(const QString &remote);
+  void considerButtonEvents(const QString &remote);
+  
   private:
     KRemoteControlDaemonPrivate * d_ptr;
 
 
   public slots:
     void gotMessage(const Solid::Control::RemoteControlButton &button);
-    void currentModeChanged(const QString& remoteName, Mode* mode);
+    void changeMode(const QString& remoteName, Mode* mode);
 
 
 

@@ -76,3 +76,7 @@ QList<Action*> Mode::actionsForButton(const QString &button) const{
     return retList;
 }
 
+bool Mode::doAfter(){
+  return m_doAfter;
+}
+

@@ -35,21 +35,24 @@ class KREMOTECONTROL_EXPORT Remote
         Remote(const QString& remote, const QList<Mode*>& modes = QList<Mode*>());
 
         bool isAvailable() const;
-        
+
         void addMode(Mode *mode);
         void removeMode(Mode *mode);
         QList<Mode*> allModes() const;
-        
+
         Mode *masterMode() const;
 
         Mode *defaultMode() const;
         void setDefaultMode(Mode *mode);
         void setDefaultMode(const QString &name);
-        
+
         Mode *currentMode() const;
         void setCurrentMode(Mode *mode);
 
         QString name() const;
+
+	bool isButtonModechange(const QString &button );
+	void  nextMode(const QString &button);
 
     private:
         QList<Mode*> m_modeList;

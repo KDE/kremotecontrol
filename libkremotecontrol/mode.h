@@ -48,11 +48,13 @@ class KREMOTECONTROL_EXPORT Mode
     QList<Action*> actionsForButton(const QString& button) const;
 
     bool operator==(const Mode &mode) const;
+    bool doAfter();
   protected:
     QString m_name;
     QString m_iconName;
     QString m_button;
     QList<Action*> m_actionList;
+    bool m_doAfter;
 };
 
 Q_DECLARE_METATYPE(Mode*)
