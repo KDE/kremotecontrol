@@ -34,9 +34,8 @@ EditActionContainer::EditActionContainer(Action *action, const QString &remote, 
     foreach(const Solid::Control::RemoteControlButton &button, Solid::Control::RemoteControl(remote).buttons()){
         ui.cbButton->addItem(button.name());
     }
-    connect(ui.cbButton, SIGNAL(currentIndexChanged(int)), SLOT(checkForComplete()));
     ui.cbButton->setCurrentIndex(ui.cbButton->findText(action->button()));
-    
+    connect(ui.cbButton, SIGNAL(currentIndexChanged(int)), SLOT(checkForComplete()));    
     
     m_innerWidget = 0;
     switch(action->type()){

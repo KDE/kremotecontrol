@@ -125,6 +125,7 @@ void EditDBusAction::refreshDBusFunctions(const QModelIndex& index) {
     } else {
         ui.gbUnique->setEnabled(true);
     }
+    emit formComplete(index.parent().isValid());
 }
 
 void EditDBusAction::refreshArguments(const QModelIndex &index) {

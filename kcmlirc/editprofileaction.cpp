@@ -122,6 +122,7 @@ void EditProfileAction::refreshTemplates(const QModelIndex& index) {
     m_templateModel->refresh(m_profileModel->profile(ui.tvDBusApps->selectionModel()->currentIndex()));
     m_templateModel->setColumnCount(2);
     ui.tvDBusFunctions->resizeColumnToContents(0);
+    emit formComplete(index.isValid());
 }
 
 void EditProfileAction::refreshArguments(const QModelIndex &index) {
