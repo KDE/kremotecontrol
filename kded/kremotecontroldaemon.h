@@ -36,7 +36,11 @@ class KRemoteControlDaemonPrivate;
 class KRemoteControlDaemon : public KDEDModule
 {
 Q_OBJECT
+Q_CLASSINFO("D-Bus Interface", "org.kde.krcd")
 Q_DECLARE_PRIVATE(KRemoteControlDaemon)
+
+private:
+    KRemoteControlDaemonPrivate * d_ptr;
 
 public:
     KRemoteControlDaemon(QObject * parent, const QVariantList&);
@@ -45,19 +49,17 @@ public:
     bool isConnected() {
         return Solid::Control::RemoteControlManager::connected();
     }
-  void reloadConfiguration();
+    void reloadConfiguration();
+    
+    void ignoreButtonEvents(const QString &remote);
+    void considerButtonEvents(const QString &remote);
   
-  void ignoreButtonEvents(const QString &remote);
-  void considerButtonEvents(const QString &remote);
   
-  private:
-    KRemoteControlDaemonPrivate * d_ptr;
 
-
-  public slots:
-    void gotMessage(const Solid::Control::RemoteControlButton &button);
+  public slots:   
+     void gotMessage(const Solid::Control::RemoteControlButton &button);
     void changeMode(const QString& remoteName, Mode* mode);
-
+    void slotStatusChanged(bool connected);
 
 
 };

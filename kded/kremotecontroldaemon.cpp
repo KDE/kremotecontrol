@@ -35,8 +35,9 @@
 #include <KDebug>
 #include<KNotification>
 #include <KAboutData>
+#include <KIconLoader>
 
-#include <QWeakPointer>
+#include<QPixmap>
 
 using namespace Solid::Control;
 
@@ -94,8 +95,7 @@ class KRemoteControlDaemonPrivate
 
 KRemoteControlDaemon::KRemoteControlDaemon(QObject* parent, const QVariantList& ): KDEDModule(parent), d_ptr(new KRemoteControlDaemonPrivate)
 {
-Q_D(KRemoteControlDaemon);
-
+  Q_D(KRemoteControlDaemon);  
   KGlobal::locale()->insertCatalog("krcd");
   KAboutData aboutData("krcd", "krcd", ki18n("K Remote Control Daemon"),
                          "0.1", ki18n("Remote Control Daemon for KDE4"),
@@ -107,18 +107,16 @@ Q_D(KRemoteControlDaemon);
 
   d->applicationData = KComponentData(aboutData);
 //   d->lookupTimer = new QTimer(this);
+ connect(RemoteControlManager::notifier(), SIGNAL(statusChanged(bool)), this, SLOT(slotStatusChanged(bool)));
   reloadConfiguration();
   foreach(const QString &remote, RemoteControl::allRemoteNames()){
         RemoteControl *rc = new RemoteControl(remote);
         kDebug() << "connecting to remote" << remote;
         connect(rc,
                 SIGNAL(buttonPressed(const Solid::Control::RemoteControlButton &)),
-                this,
-                SLOT(gotMessage(const Solid::Control::RemoteControlButton &))
-                );
-    }
+                this,  SLOT(gotMessage(const Solid::Control::RemoteControlButton &)));
+      }
 }
-
 
 KRemoteControlDaemon::~KRemoteControlDaemon()
 {
@@ -126,25 +124,57 @@ KRemoteControlDaemon::~KRemoteControlDaemon()
 }
 
 
-void KRemoteControlDaemon::gotMessage(const Solid::Control::RemoteControlButton& button)
-{
-    if(d_ptr->isButtonEventIgnored(button.name())){      
-      return;
+void KRemoteControlDaemon::slotStatusChanged(bool connected) {
+  if(connected){
+     KNotification::event("global_event", i18n("A connection to the remote control  subsystem has been made. Remote controls may now be available."),  SmallIcon("irkick"));
+    foreach(const QString &remote, RemoteControl::allRemoteNames()){
+        RemoteControl *rc = new RemoteControl(remote);
+        kDebug() << "connecting to remote" << remote;
+        connect(rc,
+		
+		
+                SIGNAL(buttonPressed(const Solid::Control::RemoteControlButton &)),
+                this,
+                SLOT(gotMessage(const Solid::Control::RemoteControlButton &)));
     }
-    Remote *remote=   d_ptr->getRemote(button.name());
-    if(! remote){
-      return;
-    }    
-    if(remote->currentMode()){
-      QList<Action*> actionList = remote->currentMode()->actionsForButton(button.name());      
-      if(remote->nextMode(button.name())){	
-	if(remote->currentMode()-> doAfter()){
-	  actionList.append(remote->currentMode()->actionsForButton(button.name()));
-	}
+    } else {
+      KNotification::event("global_event", i18n("The remote control subsystem  has severed its connection. Remote controls are no longer available."),
+			   SmallIcon("irkick"));
+    }
+}
+
+
+void KRemoteControlDaemon::gotMessage(const Solid::Control::RemoteControlButton& button) {
+  kDebug()<< "Got message";
+  Remote *remote=   d_ptr->getRemote(button.name());
+  if(! remote){
+    return;
+  }
+    if(d_ptr->isButtonEventIgnored(remote->name())){      
+    kDebug() << "Events for  "<< remote->name() <<    " are currently is ignored";
+    return;
+  }
+  //This is for debugging purposes, till we got our tray icon back
+  KNotification::event("mode_event",
+	"<b>" + remote->name() + ":</b><br>" + i18n("Button %1 pressed" , button.name()),
+	DesktopIcon("infrared-remote"));      
+  if(remote->currentMode()){
+    QList<Action*> actionList = remote->currentMode()->actionsForButton(button.name());      
+    if(remote->nextMode(button.name())){
+      Mode *mode = remote->currentMode();
+      
+      KNotification::event("mode_event", 
+	"<b>" + remote->name() + ":</b><br>" + i18n("Mode switched to %1" , mode->name()),
+	DesktopIcon(mode->iconName().isEmpty() ? "infrared-remote" : mode->iconName())
+      );
+      
+      if(remote->currentMode()-> doAfter()){
+	actionList.append(remote->currentMode()->actionsForButton(button.name()));
       }
-      foreach(Action *action, actionList){      
-	 ExecutionEngine::executeAction(action);
-      } 
+    }
+    foreach(Action *action, actionList){      
+      ExecutionEngine::executeAction(action);
+    } 
   }
 }
 

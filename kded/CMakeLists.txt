@@ -13,6 +13,7 @@ kde4_add_plugin(kded_kremotecontrol ${kded_kremotecontrol_SRCS})
 qt4_add_dbus_adaptor(kded_kremotecontrol_SRCS org.kde.krcd.xml kremotecontroldaemon.h KRemoteControlDaemon)
 target_link_libraries(kded_kremotecontrol
    ${KDE4_KDECORE_LIBS}
+   ${KDE4_KDEUI_LIBS}
    ${KDE4_SOLID_LIBS}
    ${KDE4WORKSPACE_SOLIDCONTROL_LIBRARY}
    libkremotecontrol
