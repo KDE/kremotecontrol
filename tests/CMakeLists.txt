@@ -13,13 +13,20 @@ include_directories(
 # set(kdelirctest_SRCS kdelirctest.cpp profiletest.cpp)
 
 # kde4_add_unit_test(kdelirctest TESTNAME kdelirctest ${kdelirctest_SRCS})
-set(profiletest_SRCS  profiletest.cpp)
+set(profileTest_SRCS  profiletest.cpp)
+set(remoteTest_SRCS  remotetest.cpp)
 
-kde4_add_unit_test(profiletest TESTNAME profileTest ${profiletest_SRCS})
+kde4_add_unit_test(profileTest TESTNAME profileTest ${profileTest_SRCS})
+kde4_add_unit_test(remoteTest TESTNAME remoteTest ${remoteTest_SRCS})
 
 target_link_libraries(
-  profiletest
+  profileTest
   libkremotecontrol    
   ${QT_QTTEST_LIBRARY}  
 )
 
+target_link_libraries(
+  remoteTest
+  libkremotecontrol    
+  ${QT_QTTEST_LIBRARY}  
+)

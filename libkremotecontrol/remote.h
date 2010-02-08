@@ -56,8 +56,7 @@ class KREMOTECONTROL_EXPORT Remote
 
         QString name() const;
 
-	bool isButtonModechange(const QString &button );
-	void  nextMode(const QString &button);
+	bool  nextMode(const QString &button);
 
     private:
         QList<Mode*> m_modeList;

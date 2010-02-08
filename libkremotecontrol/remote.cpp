@@ -24,40 +24,32 @@
 
 class ModeChangeHandler{
   public:
-      virtual  bool isButtonModechange(const Remote *remote, const QString &button ) =0;
-      virtual  void nextMode(Remote *remote, const QString &button)=0;
+      virtual  bool nextMode(Remote *remote, const QString &button)=0;
 };    
 
 
 class GroupModechangehandler : public ModeChangeHandler{
 
-  bool isButtonModechange(const Remote* remote, const QString& button) {
-    foreach(Mode *mode, remote->m_modeList){
-      if(mode->button() == button && ! (mode == remote->currentMode())){
-	return true;
-      }
-    }
-    return false;
-  }
-
-
- void nextMode(Remote* remote, const QString& button) {
-    int index=remote->m_modeList.indexOf(remote->currentMode());
+ bool nextMode(Remote* remote, const QString& button) {
+    int index= remote->currentMode()->button() == button ?  remote->m_modeList.indexOf(remote->currentMode()) : remote->m_modeList.size();
     int size = remote->m_modeList.size();
     if(index < size){
       for(int i = index +1; i < size ; ++i){
-	if(remote->m_modeList.at(index)->button() == button){
-	  remote->setCurrentMode(remote->m_modeList.at(index));
-	  return;
+	kDebug()<< "Size == "<< i;      
+	if(remote->m_modeList.at(i)->button() == button){
+	  remote->setCurrentMode(remote->m_modeList.at(i));
+	  return true;
 	}
       }
     }      
     for(int i = 0; i < index; ++i){
-	if(remote->m_modeList.at(index)->button() == button){
-	 remote->setCurrentMode(remote->m_modeList.at(index));
-	  return;
+      kDebug()<< " else 	Size == "<< i;          
+	if(remote->m_modeList.at(i)->button() == button){
+	 remote->setCurrentMode(remote->m_modeList.at(i));
+	  return true;
 	}
     }
+    return false;
  }
 };
 
@@ -67,26 +59,30 @@ Remote::Remote() {
     Mode *masterMode = new Mode("Master");
     addMode(masterMode);
     setDefaultMode(masterMode);
+    setCurrentMode(masterMode);
     m_modechangeHandler = new GroupModechangehandler();
 }
 
 Remote::Remote(const QString &remote, const QList<Mode*> &modes) {
     m_modeList = modes;
     m_remoteName = remote;
+    m_modechangeHandler = new GroupModechangehandler();
 
     // Always create the Master Mode and set it default
     bool hasMaster = false;
     foreach(Mode *mode, m_modeList){
         if(mode->name() == "Master"){
             hasMaster = true;
-            break;
+	    setCurrentMode(mode);            
         }
     }
     if(!hasMaster){
-        Mode *masterMode = new Mode("Master");
+        Mode *masterMode = new Mode("Master");	
         addMode(masterMode);
         setDefaultMode(masterMode);
+	setCurrentMode(masterMode);
     }
+    
 }
 
 QString Remote::name() const {
@@ -121,8 +117,8 @@ void Remote::removeMode(Mode *mode) {
 
 Mode* Remote::masterMode() const {
     foreach(Mode *mode, m_modeList){
-        kDebug() << "checking Mode" << mode->name();
-        if(mode->name() == "Master"){
+//         kDebug() << "checking Mode" << mode->name();
+        if(mode->name() == "Master"){	  
             return mode;
         }
     }
@@ -167,12 +163,12 @@ bool Remote::isAvailable() const {
     return Solid::Control::RemoteControl::allRemoteNames().contains(m_remoteName);
 }
 
-bool Remote::isButtonModechange(const QString& button) {
-  return m_modechangeHandler->isButtonModechange(this,button);
-}
+// bool Remote::isButtonModechange(const QString& button) {
+//   return m_modechangeHandler->isButtonModechange(this,button);
+// }
 
-void Remote::nextMode ( const QString& button ){
-  m_modechangeHandler->nextMode(this, button);
+bool Remote::nextMode ( const QString& button ){
+  return m_modechangeHandler->nextMode(this, button);
 }
 
 

@@ -33,8 +33,10 @@
 
 #include <KCModuleInfo>
 #include <KDebug>
+#include<KNotification>
+#include <KAboutData>
 
-#include<QHash>
+#include <QWeakPointer>
 
 using namespace Solid::Control;
 
@@ -46,20 +48,18 @@ K_EXPORT_PLUGIN(KRemoteControlDaemonFactory("kremotecontrol"))
 class KRemoteControlDaemonPrivate
 {
   private:
-   RemoteList m_remoteList;
-   
+   RemoteList m_remoteList;    
+     QStringList m_ignoreNextButtonList;
+
   public:
-  KRemoteControlDaemonPrivate(){
     
-  };
+    QWeakPointer<KNotification> notification;
+//     QTimer *lookupTimer;
+    KComponentData applicationData;
 
-  private:
 
-  QHash<QString, Mode*> m_remoteModes;
-  QStringList m_ignoreNextButtonList;
-  
-  public:
-  
+    KRemoteControlDaemonPrivate(){};
+ 
     RemoteList remoteList(){
       return m_remoteList;
     };
@@ -95,6 +95,18 @@ class KRemoteControlDaemonPrivate
 KRemoteControlDaemon::KRemoteControlDaemon(QObject* parent, const QVariantList& ): KDEDModule(parent), d_ptr(new KRemoteControlDaemonPrivate)
 {
 Q_D(KRemoteControlDaemon);
+
+  KGlobal::locale()->insertCatalog("krcd");
+  KAboutData aboutData("krcd", "krcd", ki18n("K Remote Control Daemon"),
+                         "0.1", ki18n("Remote Control Daemon for KDE4"),
+                         KAboutData::License_GPL, ki18n("(c) 2010 Frank Scheffold"),
+                         KLocalizedString(), "http://www.kde.org");
+
+  aboutData.addAuthor(ki18n("Frank Scheffold"), ki18n("Maintainer"), "fscheffold@googlemail.com");
+  aboutData.addAuthor(ki18n("Michael Zanetti"), ki18n("Maintainer"), "michal_zanetti@gmx.net");
+
+  d->applicationData = KComponentData(aboutData);
+//   d->lookupTimer = new QTimer(this);
   reloadConfiguration();
   foreach(const QString &remote, RemoteControl::allRemoteNames()){
         RemoteControl *rc = new RemoteControl(remote);
@@ -125,9 +137,8 @@ void KRemoteControlDaemon::gotMessage(const Solid::Control::RemoteControlButton&
     }    
     if(remote->currentMode()){
       QList<Action*> actionList = remote->currentMode()->actionsForButton(button.name());      
-      if(remote->isButtonModechange(button.name())){
-	remote->nextMode(button.name());
-	if(remote->currentMode() && remote->currentMode()-> doAfter()){
+      if(remote->nextMode(button.name())){	
+	if(remote->currentMode()-> doAfter()){
 	  actionList.append(remote->currentMode()->actionsForButton(button.name()));
 	}
       }
