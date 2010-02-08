@@ -41,28 +41,24 @@ class GroupModechangehandler : public ModeChangeHandler{
   }
 
 
-  void nextMode(Remote* remote, const QString& button) {
+ void nextMode(Remote* remote, const QString& button) {
     int index=remote->m_modeList.indexOf(remote->currentMode());
-    Mode *mode =0;
     int size = remote->m_modeList.size();
     if(index < size){
       for(int i = index +1; i < size ; ++i){
 	if(remote->m_modeList.at(index)->button() == button){
-	  mode = remote->m_modeList.at(index);
+	  remote->setCurrentMode(remote->m_modeList.at(index));
+	  return;
 	}
       }
-    }  
-    if(mode== 0){
-      for(int i = 0; i < index; ++i){
+    }      
+    for(int i = 0; i < index; ++i){
 	if(remote->m_modeList.at(index)->button() == button){
-	  mode = remote->m_modeList.at(index);
+	 remote->setCurrentMode(remote->m_modeList.at(index));
+	  return;
 	}
-      }
     }
-    if(mode){
-      remote->setCurrentMode(mode);
-    }
-  }
+ }
 };
 
 
@@ -91,7 +87,6 @@ Remote::Remote(const QString &remote, const QList<Mode*> &modes) {
         addMode(masterMode);
         setDefaultMode(masterMode);
     }
-
 }
 
 QString Remote::name() const {
