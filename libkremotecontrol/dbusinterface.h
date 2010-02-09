@@ -55,7 +55,7 @@ public:
   QStringList getRemotes();
   void requestNextKeyPress();
   void cancelKeyPressRequest();
-  void reloadIRKick();
+  void reloadRemoteControlDaemon();
 
   QStringList getButtons(const QString &remoteName);
   void executeAction(const DBusAction *action);

@@ -66,6 +66,7 @@ void RemoteList::saveToConfig(const QString& configName) {
 }
 
 void RemoteList::loadFromConfig(const QString& configName) {
+    clear(); //Drop old entries
     KConfig config(configName, KConfig::NoGlobals);
 
     foreach(const QString &remoteGroupName, config.groupList()){

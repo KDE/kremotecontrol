@@ -393,7 +393,7 @@ void KCMLirc::load() {
 
 void KCMLirc::save() {
     m_remoteList.saveToConfig("kremotecontrolrc");
-    DBusInterface::getInstance()->reloadIRKick();
+    DBusInterface::getInstance()->reloadRemoteControlDaemon();
 }
 
 void KCMLirc::gotButton(QString remote, QString button)

@@ -258,9 +258,9 @@ KDE_EXPORT QStringList DBusInterface::getButtons(const QString& remoteName) {
     return response.arguments().at(0).toStringList();
 }
 
-KDE_EXPORT void DBusInterface::reloadIRKick() {
-    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.irkick", "/IRKick",
-                     "", "reloadConfiguration");
+KDE_EXPORT void DBusInterface::reloadRemoteControlDaemon() {
+    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontrol",
+                     "org.kde.krcd", "reloadConfiguration");
     QDBusMessage response = QDBusConnection::sessionBus().call(m);
     if (response.type() == QDBusMessage::ErrorMessage) {
         kDebug() << response.errorMessage();
