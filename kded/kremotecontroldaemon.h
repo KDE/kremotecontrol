@@ -54,13 +54,17 @@ public:
     void ignoreButtonEvents(const QString &remote);
     void considerButtonEvents(const QString &remote);
   
-  
+    void changeMode(const QString& remoteName, Mode* mode);
+    
+    void changeMode(const QString& remoteName, QString modeName);   
 
   public slots:   
      void gotMessage(const Solid::Control::RemoteControlButton &button);
-    void changeMode(const QString& remoteName, Mode* mode);
+ 
     void slotStatusChanged(bool connected);
-
-
+    
+    void remoteControlAdded(const QString &name);                        
+    void remoteControlRemoved(const QString &name);
+    void lauchKcmShell();   
 };
 #endif // KREMOTECONTROLDAEMON_H

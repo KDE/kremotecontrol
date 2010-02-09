@@ -36,7 +36,7 @@
 #include<KNotification>
 #include <KAboutData>
 #include <KIconLoader>
-
+#include <KToolInvocation>
 
 
 #include<QPixmap>
@@ -114,6 +114,8 @@ KRemoteControlDaemon::KRemoteControlDaemon(QObject* parent, const QVariantList& 
   d->applicationData = KComponentData(aboutData);
 //   d->lookupTimer = new QTimer(this);
  connect(RemoteControlManager::notifier(), SIGNAL(statusChanged(bool)), this, SLOT(slotStatusChanged(bool)));
+ connect(RemoteControlManager::notifier(), SIGNAL(remoteControlAdded(const QString&)), this, SLOT(remoteControlAdded(const QString&)));
+ connect(RemoteControlManager::notifier(), SIGNAL(remoteControlRemoved(const QString&)), this, SLOT(remoteControlRemoved(const QString&)));
   reloadConfiguration();
   foreach(const QString &remote, RemoteControl::allRemoteNames()){
         RemoteControl *rc = new RemoteControl(remote);
@@ -121,7 +123,9 @@ KRemoteControlDaemon::KRemoteControlDaemon(QObject* parent, const QVariantList& 
         connect(rc,
                 SIGNAL(buttonPressed(const Solid::Control::RemoteControlButton &)),
                 this,  SLOT(gotMessage(const Solid::Control::RemoteControlButton &)));
+		remoteControlAdded(rc->name());
       }
+      
 }
 
 KRemoteControlDaemon::~KRemoteControlDaemon()
@@ -214,3 +218,37 @@ void KRemoteControlDaemon::considerButtonEvents(const QString& remote){
     }
   }
 }
+
+void KRemoteControlDaemon::remoteControlAdded(const QString& name)
+{
+  /*if(d_ptr->getRemote(name)){
+    kDebug() << "remote found";
+    KNotification::event("global_event", i18n("The remote %1 is now available.", name),
+			  DesktopIcon("infrared-remote"), 0, KNotification::CloseOnTimeout, d_ptr->applicationData);      
+  }else{*/
+  kDebug() << "remote not found";
+	d_ptr->notification = KNotification::event("global_event", i18n("A unconfigured remote %1 is now available.", name),
+ 			   DesktopIcon("infrared-remote"), 0, KNotification::Persistant, d_ptr->applicationData);      
+
+        d_ptr->notification.data()->setActions(QStringList() << i18nc("Configure the temote",
+                                                           "Configure remote"));
+	connect(d_ptr->notification.data(), SIGNAL(activated(unsigned int)), SLOT(lauchKcmShell()));
+//   }
+}
+
+
+void KRemoteControlDaemon::lauchKcmShell(){
+  kDebug() << "Going to launch kcmshell";
+   KToolInvocation::startServiceByDesktopName("kcm_lirc");
+    if (d_ptr->notification) {
+	d_ptr->notification.data()->disconnect();
+        d_ptr->notification.data()->deleteLater();
+   }
+}
+
+void KRemoteControlDaemon::remoteControlRemoved(const QString& name)
+{
+ KNotification::event("global_event", i18n("The remote %1 was removed from system.", name),
+			   DesktopIcon("infrared-remote"), 0, KNotification::CloseOnTimeout, d_ptr->applicationData);      
+}
+
