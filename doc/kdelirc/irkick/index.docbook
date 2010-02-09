@@ -11,30 +11,49 @@
 <book lang="&language;">
 <bookinfo>
 
-<title>&irkick;: The KDE LIRC Server Handbook</title>
+<title>&irkick;: The &kde; LIRC Server Handbook</title>
 
 <authorgroup>
+<author>
+<firstname>Frank</firstname>
+<surname>Scheffold</surname>
+<affiliation>
+        <address><email>fscheffold@googlemail.com</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Michael</firstname>
+<surname>Zanetti</surname>
+<affiliation>
+        <address><email>michael_zanetti@gmx.net</email></address>
+</affiliation>
+</author>
 <author>
 <firstname>Gav</firstname>
 <surname>Wood</surname>
 <affiliation>
-	<address><email>gav@kde.org</email></address>
+        <address><email>gav@kde.org</email></address>
 </affiliation>
 </author>
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
 
-<date>2004-01-02</date>
-<releaseinfo>1.0</releaseinfo>
+<date>2010-01-06</date>
+<releaseinfo>2.0</releaseinfo>
 
 <copyright>
 <year>2004</year>
 <holder>Gav Wood</holder>
 </copyright>
-
+<copyright>
+<year>2010</year>
+<holder>Frank Scheffold</holder>
+<holder>Michael Zanetti</holder>
+</copyright>
+<!--
 <legalnotice>&FDLNotice;</legalnotice>
-
-<abstract><para>&kdelirc; is the infrastructure for the KDE's
+-->
+<abstract><para>&kdelirc; is the infrastructure for the &kde;'s
 Infrared Remote Control functionality; &irkick; is the server
 component of that infrastructure.</para></abstract>
 
@@ -59,22 +78,26 @@ controlling applications with your infrared remote controls.
 
 <para>
 It has a configuration tool, which may be accessed either by the
-KDE Control Center or directly from the menu of &irkick;.
+&kde; &systemsettings; or directly from the menu of &irkick;.
 </para>
 
 <sect1 id="requirements">
 <title>Requirements</title>
 
-<para>
-For the KDELirc framework to be utilised you must have setup a LIRC
-on your computer. If it is properly set up, the &irkick; icon in
-the system tray will light up red. If not, it will be grey and crossed
-out.
-</para>
+    <para>
+      To use the &kdelirc; framework you must have set up LIRC on your computer. If it is properly set up, the &kdelirc; icon in the system tray will light up red
+      <inlinemediaobject><imageobject><imagedata fileref="irkick.png" format="PNG" /></imageobject></inlinemediaobject>. 
+      If not, it will be grey and crossed out
+      <inlinemediaobject><imageobject><imagedata fileref="irkickoff.png" format="PNG" /></imageobject></inlinemediaobject>.
+    </para>
 
-<para>
-For more information about LIRC, visit the project's website at <ulink url="http://www.lirc.org/">www.lirc.org</ulink>.
-</para>
+    <para>
+      For more information about LIRC and how to configure it, visit their website at <ulink url="http://www.lirc.org">http://www.lirc.org</ulink>.
+    </para>
+
+    <para>
+      <emphasis role="strong">Note:</emphasis> When configuring LIRC it is recommended to make use of button-namespaces.
+    </para>
 
 </sect1>
 </chapter>
@@ -84,38 +107,14 @@ For more information about LIRC, visit the project's website at <ulink url="http
 
 <para>
 &irkick; provides one main function: When a button on a remote control is
-pressed, it will temporarily become lit up. Aside from this &irkick; does
-little for the user directly aside from telling them of the activity of their
-remote controls.
+pressed, it will lookup your configuration and execute an action accordingly. The system tray icon also becomes lit for a short period of time to indicate the button press or show some notifications to tell you the current states of your remote controls.
 </para>
 
 <para>
-Using the right-mouse-button menu, you can configure the KDE infrared remote
-control framework.
+Using the system trays context menu, you can configure the &kde; infrared remote control framework and add actions to be executed on button presses. The context menu contains a submenu including all your remote controls and modes which may be used to switch a remote controls mode directly with your mouse.
 </para>
-
 </chapter>
 
-<chapter id="credits">
-<title>Credits and Licenses</title>
-
-<para>&kdelirc;: The KDE LIRC Framework Copyright (c) 2004 Gav Wood
-<email>gav@kde.org</email>.</para>
-
-<!-- TRANS:CREDIT_FOR_TRANSLATORS -->
-
-&underFDL;
-&underGPL;
-
-</chapter>
-
-<appendix id="installation">
-<title>Installation</title>
-
-&install.intro.documentation;
-&install.compile.documentation;
-
-</appendix>
 </book>
 
 <!--

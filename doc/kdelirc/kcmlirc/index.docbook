@@ -10,30 +10,51 @@
 <book lang="&language;">
 <bookinfo>
 
-<title>KDE Infrared Remote Control Configuration</title>
+<title>&kde; Infrared Remote Control Configuration</title>
 
 <authorgroup>
+<author>
+<firstname>Frank</firstname>
+<surname>Scheffold</surname>
+<affiliation>
+        <address><email>fscheffold@googlemail.com</email></address>
+</affiliation>
+</author>
+<author>
+<firstname>Michael</firstname>
+<surname>Zanetti</surname>
+<affiliation>
+        <address><email>michael_zanetti@gmx.net</email></address>
+</affiliation>
+</author>
 <author>
 <firstname>Gav</firstname>
 <surname>Wood</surname>
 <affiliation>
-	<address><email>gav@kde.org</email></address>
+        <address><email>gav@kde.org</email></address>
 </affiliation>
 </author>
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
 
-<date>2004-01-02</date>
-<releaseinfo>1.0</releaseinfo>
+<date>2010-01-06</date>
+<releaseinfo>2.0</releaseinfo>
 
 <copyright>
 <year>2004</year>
 <holder>Gav Wood</holder>
 </copyright>
-
+<copyright>
+<year>2010</year>
+<holder>Frank Scheffold</holder>
+<holder>Michael Zanetti</holder>
+</copyright>
+<!--
 <legalnotice>&FDLNotice;</legalnotice>
+-->
 
-<abstract><para>&kdelirc; configuration: The infrastructure for the KDE's
+
+<abstract><para>&kdelirc; configuration: The infrastructure for the &kde;'s
 Infrared Remote Control functionality.</para></abstract>
 
 <keywordset>
@@ -47,109 +68,249 @@ Infrared Remote Control functionality.</para></abstract>
 </bookinfo>
 
 <chapter id="introduction">
-<title>Introduction</title>
+  <title>Introduction</title>
+  <sect1 id="requirements">
+    <title>Requirements</title>
+    <para>
+      To use the &kdelirc; framework you must have set up LIRC on your computer. If it is properly set up, the &kdelirc; icon in the system tray will light up red
+      <inlinemediaobject><imageobject><imagedata fileref="irkick.png" format="PNG" /></imageobject></inlinemediaobject>. 
+      If not, it will be grey and crossed out 
+      <inlinemediaobject><imageobject><imagedata fileref="irkickoff.png" format="PNG"/></imageobject></inlinemediaobject>.
+    </para>
 
-<para>
-</para>
+    <para>
+      For more information about LIRC and how to configure it, visit their website at <ulink url="http://www.lirc.org">http://www.lirc.org</ulink>.
+    </para>
 
-<sect1 id="requirements">
-<title>Requirements</title>
+    <para>
+      <emphasis role="strong">Note:</emphasis> When configuring LIRC it is recommended to make use of button-namespaces.
+    </para>
+  </sect1>
 
-<para>
-For the KDELirc framework to be utilised you must have setup a LIRC
-on your computer. If it is properly set up, the &kdelirc; icon in
-the system tray (show icon here) will light up red. If not, it will
-be grey and crossed out.
-</para>
-
-<para>
-For more information about LIRC, visit their website at http://www.lirc.org.
-</para>
-
-</sect1>
 </chapter>
 
 <chapter id="usage">
-<title>Usage</title>
+  <title>Usage</title>
 
-<para>
-There are several sections of the configuration. The list on the left details the remote controls and modes. The selection of that dictates the contents of the right-most list, which shows button/action bindings. Flicking the main tab over to Loaded Extensions will show a list of applications and remote controls that are recognized for the advanced functionality; some data is also viewable by selecting one of the items.
-</para>
+  <para>
+    There are three tabs giving you several sections of configuration and additional information. The first tab, called <guibutton>Controller Functions</guibutton> is used to configure modes and actions for all available remotes. The tab named <guibutton>Profiles Overview</guibutton> contains details about the available profiles. The <guibutton>Available Remotes</guibutton> tab shows you additional information about your remote controls. Selecting a remote gives you an overview about their buttons.
+  </para>
+  <sect1 id="controllerFunctions">
+    <title>Controller Functions</title>
+    <sect2 id="modes">
+      <title>Remote Controls and Modes</title>
 
-<sect1 id="modes">
-<title>Remote Controls and Modes</title>
+      <para>
+        Each remote control can have a number of different modes. Having multiple modes allows buttons to execute different actions in different situations. Think of it as a TV/Video/Satellite/DVD multi-purpose remote control. Instead of using different remote controls for different applications, you can change the behaviour of one remote control to adapt to an application by creating different modes and switching them as needed.
+      </para>
 
-<para>
-Each remote control can have a number of modes. Having multiple modes allows the same button to conduct different actions in difference situations, and is how many remote controls handle many different appliances with a limited number of buttons. A good example are the TV/Video/Satellite/DVD multi-purpose remote controls - rather than having several sets of number buttons for each appliance they have only one set which works for the currently selected appliance only.
-</para>
+      <para>
+        Actions defined directly to the remote control are always available, no matter in what mode the remote currently is. Actions defined in a mode are only executed if the remote is currently set to that mode. Each remote control can be only in one mode at a time. It may also be in no mode at all meaning that only always available actions are executed on button presses. You can also define a default mode, which is the mode automatically assigned on startup.
+      </para>
 
-<para>
-Each remote control can be in at most one mode at once (it may also be in no mode at all). The remote control also has a "default mode", which is the mode that it starts in, and the mode that it gets reset to normally. This may be set by using the Edit button.
-</para>
+      <para>
+        The list on the left contains all remote controls detected on your system. Modes may be added and removed by selecting the desired remote control or mode and using the buttons directly below the list. The Edit button allows you to change existing modes.
+      </para>
 
-<para>
-The list contains any remote controls detected on your system. Modes may be added and removed by selecting the desired remote control and using the buttons directly below the list Add, Remove. Modes may be renamed "inline" in the standard KDE fashion by first selecting the mode in the list box, and then clicking it again after a short pause. The Edit button allows mode names to be edited, and also allows you to define an icon that will show up in the system tray when that mode is entered.
-</para>
+    </sect2>
 
-</sect1>
+    <sect2 id="addactions">
+      <title>Assigning actions to buttons</title>
+      <para>
+        &kdelirc; knows two different types of actions. Mode switches and actions to be executed. Mode switches allow to switch the current remote to a different mode, while regular actions allow executing commands over &DBus;. When defining a new executable action you have two options. One is to use a template while the other requires to manually specify all possible options. Templates for actions are called profiles. While using profiles to create actions is more easy and straight forward it is not possible to access all functions with profiles. More advanced actions may be configured by manually selecting functions and their parameters.
+      </para>
 
-<sect1 id="bindings">
-<title>Action-Button Bindings</title>
+      <para>
+        To add an action use the <guibutton>Add...</guibutton> button on the lower right side. A wizard will show up asking you what type of action should be created. The first option will create an action based on a profile. The second option lets you create the entire action manually. Remember that the application you would like to control must be running at the time you configure the action or it won't show up in the list of available applications. The third option allows to create a mode switch action.
+        Select the desired type of action and follow the steps through the wizard.
+      </para>
 
-<para>
-An action/button binding ("action") is a connection between a button press and an effect. The effect may be to switch modes, to start a program or to execute a function in a program (using D-Bus).
-</para>
+      <para>
+        Actions may also be automatically populated using the <guibutton>Autopopulate...</guibutton> button. This means that &kdelirc; can attempt to match buttons to functions for you. The autopopulate dialog shows all available profiles with a flag. Depending on the color of the flag your remote control is fully, partially or not supported by that profile. Green means full support, yellow partial and red none.
+      </para>
+      <para>
+        <emphasis role="strong">Note:</emphasis> If your remote control isn't compatible to any profile you might haven't configured lirc using namespaces.
+      </para>
 
-<para>
-Actions may be associated with a mode of the remote control; if it is, the action will only have effect when the remote control is in that mode. Actions may also be placed out of any mode. Such actions will always have their desired effect no matter what mode that remote control happens to be in.
-</para>
+    </sect2>
 
-<para>
-To add an action/button binding simply use the Add button. Removal may be performed by selecting the action(s) to be removed and clicking the Remove button. Actions may be Edited with the Edit button, and moved to different modes by dragging and dropping onto the desired mode in the remotes/modes list.
-</para>
+  </sect1>
 
-<para>
-Actions may also be "automatically" populated. This handles the instance when you have a supported remote control and you wish to map its buttons to a supported application's functions. &kdelirc; can attempt to match buttons to functions for you; this behaviour may have to be tweaked, however.
-</para>
+  <sect1 id="profiles">
+    <title>Profiles Overview</title>
 
-</sect1>
+    <para>
+      The <guibutton>Profiles Overview</guibutton> tab gives you information about the available profiles. By selecting a profile you can see detailed informations such as the author's details and a list of all defined actions. Each action entry contains information about additional settings, a comment and the identifier of the button to be used by the autopopulate function.
+    </para>
 
-<sect1 id="extensions">
-<title>Loaded Extensions</title>
+    <para>
+      If you would like to contribute application profiles see the <link linkend="advancedInformation">advanced information</link> chapter.
+    </para>
 
-<para>
-There is another tab available named "Loaded Extensions". This details the applications and remote controls that &kdelirc; recognises. &kdelirc; can also use unsupported remote controls and applications, but the Auto-Populate function will not work as well (if at all).
-</para>
+  </sect1>
 
-<para>
-By clicking on an entry you can see information on it such as the author's details.
-</para>
-
-</sect1>
-
-</chapter>
-
-<chapter id="credits">
-<title>Credits and Licenses</title>
-
-<para>&kdelirc; Framework Copyright (c) 2004 Gav Wood
-<email>gav@kde.org</email>.</para>
-
-<para>Documentation Copyright (c) 2004 by Gav Wood
-<email>gav@kde.org</email>.</para>
-
-&underFDL;
-&underGPL;
+  <sect1 id="availableRemotes">
+    <title>Available Remotes</title>
+    <para>
+      This tab gives you detailed information on your remote controls. You can check here if your remote controls were recognized correctly by the system.
+    </para>
+  </sect1>
 
 </chapter>
 
-<appendix id="installation">
-<title>Installation</title>
+<chapter id="advancedInformation">
+  <title>Advanced Information</title>
+  <para>
+    This chapter will discuss some information which might be interesting for more advanced users or developers. You will learn how to create your own profiles.
+  </para>
 
-&install.intro.documentation;
-&install.compile.documentation;
+  <sect1 id="profileCreation">
+    <title>Profile Creation</title>
 
-</appendix>
+    <sect2>
+      <title>Introduction</title>
+      <para>
+        All &DBus; capable applications can be used with &kdelirc; without any further actions. However, to provide user friendly configuration and let the application appear in the autpopulate dialog you might want to create a profile for it.
+      </para>
+      <para>
+        A profile tells &kdelirc; (and the user!) what the various &DBus; calls do. Essentially this is a kind of documentation for the &DBus; calls. You don't have to include all &DBus; calls - just the ones that you feel end-users would benefit the most (usually <quote>interface adjusting</quote> calls rather the <quote>information gathering</quote> calls).
+      </para>
+    </sect2>
+
+    <sect2>
+      <title>Creation</title>
+      <procedure>
+
+        <step>
+          <title>&DBus;</title>
+          <para>
+            Make sure the application you want to create the profile for, provides functions over &DBus;. Basically you can check this by trying to add actions for that application using the manual method in &kdelirc;. The <quote>qdbusviewer</quote> application, which is shipped with your Qt4 installation is also a very good tool to find out about &DBus; capabilities of applications.
+          </para>
+        </step>
+
+        <step>
+          <title>Create a profile</title>
+          <para>
+            Once you have found the appropriate &DBus; functions you need to describe them in a <filename>appname.profile.xml</filename> document. Here is a quick guide how to create such files:
+          </para>
+
+          <substeps>
+            <step>
+              <para>
+                First create a new file containing the following content. Replace <quote>myapp</quote> with the executable name of the application and <quote>My Application</quote> with a descriptive application name.
+              </para>
+              <programlisting>
+&lt;?xml version="1.0" ?&gt;
+&lt;!DOCTYPE profile SYSTEM "profile.dtd"&gt;
+
+  &lt;profile id="myapp" servicename="My Application"&gt;
+  &lt;/profile&gt;
+              </programlisting>
+            </step>
+
+            <step>
+              <para>
+                Inside the <quote>profile</quote> tag add name and author information. The <quote>instances</quote> tag tells &kdelirc; whether the application can be executed multiple times or not. Set <quote>unique</quote> to <quote>0</quote> if you can start the application multiple times (it defaults to <quote>1</quote>). The <quote>ifmulti</quote> property specifies what &kdelirc; should do if there are multiple instances running when a button is pressed. The options are <quote>dontsend</quote> (do nothing if &gt;1 instance), <quote>sendtoone</quote> (send call to one arbitrarily chosen instance) and <quote>sendtoall</quote> (send to all instances). The default is <quote>dontsend</quote>, however, <quote>sendtoone</quote> may be the most useful in many circumstances.
+              </para>
+
+              <programlisting>
+&lt;?xml version="1.0" ?&gt;
+&lt;!DOCTYPE profile SYSTEM "profile.dtd"&gt;
+
+  &lt;profile id="myapp" servicename="My Application"&gt;
+    &lt;name&gt;My Application&lt;/name&gt;
+    &lt;author&gt;Me&lt;/author&gt;
+    &lt;instances unique="0" ifmulti="sendtoone"/&gt;
+  &lt;/profile&gt;
+              </programlisting>
+            </step>
+
+            <step>
+              <para>
+                Populate the profile with action tags. Each action tag should contain the &DBus; object name and the function prototype.
+              </para>
+
+              <para>
+                &kdelirc; needs some additional attributes to know how to handle an action. The <quote>button</quote> tag is used for the autopopulate function. See <ulink url="http://api.kde.org/4.x-api/kdebase-workspace-apidocs/libs/solid/html/classSolid_1_1Control_1_1RemoteControlButton.html">the solid API docs</ulink> for a complete list of available button names. The <quote>repeat</quote> tag tells whether the action should be executed multiple times if the button on the remote is being held pressed (0 = No, 1 = Yes). The <quote>autostart</quote> tag defines whether the application should be started if not already running.
+              </para>
+              <programlisting>
+&lt;?xml version="1.0" ?&gt;
+&lt;!DOCTYPE profile SYSTEM "profile.dtd"&gt;
+
+  &lt;profile id="myapp" servicename="My Application"&gt;
+    &lt;name&gt;My Application&lt;/name&gt;
+    &lt;author&gt;Me&lt;/author&gt;
+    &lt;instances unique="0" ifmulti="sendtoone"/&gt;
+    &lt;action objid="MyApp" prototype="void showint(short int)"
+      button="Menu" repeat="0" autostart="0"&gt;
+    &lt;/action&gt;
+  &lt;/profile&gt;
+              </programlisting>
+            </step>
+
+            <step>
+              <para>
+                Add a name and a comment to the action. This is shown in the &kdelirc; user interface.
+              </para>
+
+              <programlisting>
+&lt;?xml version="1.0" ?&gt;
+&lt;!DOCTYPE profile SYSTEM "profile.dtd"&gt;
+
+  &lt;profile id="myapp" servicename="My Application"&gt;
+    &lt;name&gt;My Application&lt;/name&gt;
+    &lt;author&gt;Me&lt;/author&gt;
+    &lt;instances unique="0" ifmulti="sendtoone"/&gt;
+    &lt;action objid="MyApp" prototype="void showints(short int)"
+        button="Menu" repeat="0" autostart="0"&gt;
+      &lt;name&gt;Show Integers&lt;/name&gt;
+      &lt;comment&gt;Shows a configurable integer&lt;/comment&gt;
+    &lt;/action&gt;
+  &lt;/profile&gt;
+                </programlisting>
+            </step>
+
+	    <step>
+                <para>
+                Describe each argument with a comment and type attribute. A list of valid types can be found in the <ulink url="http://websvn.kde.org/trunk/KDE/kdeutils/kdelirc/profiles/profile.dtd?view=markup">profiles description file</ulink>. You should declare a default value for each argument between the <quote>default</quote> tags:
+                </para>
+    
+                <programlisting>
+&lt;?xml version="1.0" ?&gt;
+&lt;!DOCTYPE profile SYSTEM "profile.dtd"&gt;
+
+  &lt;profile id="myapp" servicename="My Application"&gt;
+    &lt;name&gt;My Application&lt;/name&gt;
+    &lt;author&gt;Me&lt;/author&gt;
+    &lt;instances unique="0" ifmulti="sendtoone"/&gt;
+    &lt;action objid="MyApp" prototype="void showints(short int)"
+        button="Menu" repeat="0" autostart="0"&gt;
+      &lt;name&gt;Show Integers&lt;/name&gt;
+      &lt;comment&gt;Shows a configurable integer&lt;/comment&gt;
+      &lt;argument type="int"&gt;
+        &lt;default&gt;5&lt;/default&gt;
+        &lt;comment&gt;The integer to be shown&lt;/comment&gt;
+      &lt;/argument&gt;
+    &lt;/action&gt;
+  &lt;/profile&gt;
+                </programlisting>
+            </step>
+            </substeps>
+        </step>
+      </procedure>
+    </sect2>
+    <sect2>
+      <title>Installation</title>
+        <para>
+            To test and use the profile you need to copy it into <filename>$(kde_datadir)/profiles</filename> and restart &kdelirc;.
+        </para>
+        <para>
+            If you would like to contribute the profile to the &kde; SC please send it to the kdeutils team at <email>kde-utils-devel@kde.org</email>.
+        </para>
+      </sect2>
+  </sect1>
+</chapter>
+
 </book>
 
 <!--
