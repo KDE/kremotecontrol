@@ -37,7 +37,11 @@
 #include <KAboutData>
 #include <KIconLoader>
 
+
+
 #include<QPixmap>
+// #include <QErrorMessage>
+
 
 using namespace Solid::Control;
 
@@ -96,7 +100,9 @@ class KRemoteControlDaemonPrivate
 KRemoteControlDaemon::KRemoteControlDaemon(QObject* parent, const QVariantList& ): KDEDModule(parent), d_ptr(new KRemoteControlDaemonPrivate)
 {
   Q_D(KRemoteControlDaemon);  
-  KGlobal::locale()->insertCatalog("krcd");
+//   QErrorMessage::qtHandler ()  ;
+  //qInstallMsgHandler();
+  
   KAboutData aboutData("krcd", "krcd", ki18n("K Remote Control Daemon"),
                          "0.1", ki18n("Remote Control Daemon for KDE4"),
                          KAboutData::License_GPL, ki18n("(c) 2010 Frank Scheffold"),
@@ -130,24 +136,23 @@ void KRemoteControlDaemon::slotStatusChanged(bool connected) {
     foreach(const QString &remote, RemoteControl::allRemoteNames()){
         RemoteControl *rc = new RemoteControl(remote);
         kDebug() << "connecting to remote" << remote;
-        connect(rc,
-		
-		
+        connect(rc,	
                 SIGNAL(buttonPressed(const Solid::Control::RemoteControlButton &)),
                 this,
                 SLOT(gotMessage(const Solid::Control::RemoteControlButton &)));
     }
     } else {
       KNotification::event("global_event", i18n("The remote control subsystem  has severed its connection. Remote controls are no longer available."),
-			   SmallIcon("irkick"));
+			   SmallIcon("irkick"), 0, KNotification::CloseOnTimeout, d_ptr->applicationData);      
     }
 }
 
 
 void KRemoteControlDaemon::gotMessage(const Solid::Control::RemoteControlButton& button) {
-  kDebug()<< "Got message";
-  Remote *remote=   d_ptr->getRemote(button.name());
+  kDebug()<< "Got message from remote " << button.remoteName() << " button " << button.name();
+  Remote *remote=   d_ptr->getRemote(button.remoteName());
   if(! remote){
+    kDebug()<< "No remote found for remote" << button.remoteName();;
     return;
   }
     if(d_ptr->isButtonEventIgnored(remote->name())){      
@@ -157,7 +162,7 @@ void KRemoteControlDaemon::gotMessage(const Solid::Control::RemoteControlButton&
   //This is for debugging purposes, till we got our tray icon back
   KNotification::event("mode_event",
 	"<b>" + remote->name() + ":</b><br>" + i18n("Button %1 pressed" , button.name()),
-	DesktopIcon("infrared-remote"));      
+	DesktopIcon("infrared-remote"), 0, KNotification::CloseOnTimeout, d_ptr->applicationData);      
   if(remote->currentMode()){
     QList<Action*> actionList = remote->currentMode()->actionsForButton(button.name());      
     if(remote->nextMode(button.name())){
@@ -165,8 +170,7 @@ void KRemoteControlDaemon::gotMessage(const Solid::Control::RemoteControlButton&
       
       KNotification::event("mode_event", 
 	"<b>" + remote->name() + ":</b><br>" + i18n("Mode switched to %1" , mode->name()),
-	DesktopIcon(mode->iconName().isEmpty() ? "infrared-remote" : mode->iconName())
-      );
+	DesktopIcon(mode->iconName().isEmpty() ? "infrared-remote" : mode->iconName()), 0, KNotification::CloseOnTimeout, d_ptr->applicationData);      
       
       if(remote->currentMode()-> doAfter()){
 	actionList.append(remote->currentMode()->actionsForButton(button.name()));

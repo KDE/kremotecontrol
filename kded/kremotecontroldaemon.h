@@ -28,7 +28,7 @@
 #include <solid/control/remotecontrol.h>
 
 #include <KDEDModule>
-
+#include <kstatusnotifieritem.h>
 #include <QVariant>
 
 class KRemoteControlDaemonPrivate;
