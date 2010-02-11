@@ -58,7 +58,7 @@ class KRemoteControlDaemonPrivate
     
       KComponentData applicationData;
 
-      KRemoteControlDaemonPrivate(){
+      KRemoteControlDaemonPrivate() {
           m_notifier.setIconByName("infrared-remote");
           m_notifier.setCategory(KStatusNotifierItem::Hardware);
       };
@@ -158,17 +158,17 @@ void KRemoteControlDaemon::gotMessage(const Solid::Control::RemoteControlButton&
     }
     //This is for debugging purposes, till we got our tray icon back
     KNotification::event("mode_event",
-                          "<b>" + remote->name() + ":</b><br>" + i18n("Button %1 pressed" , button.name()),
+	"<b>" + remote->name() + ":</b><br>" + i18n("Button %1 pressed" , button.name()),
                           DesktopIcon("infrared-remote"), 0, KNotification::CloseOnTimeout, d_ptr->applicationData);      
     if(remote->currentMode()){
         QList<Action*> actionList = remote->currentMode()->actionsForButton(button.name());      
         if(remote->nextMode(button.name())){
-            Mode *mode = remote->currentMode();
-        
-            KNotification::event("mode_event", 
-                          "<b>" + remote->name() + ":</b><br>" + i18n("Mode switched to %1" , mode->name()),
-                          DesktopIcon(mode->iconName().isEmpty() ? "infrared-remote" : mode->iconName()), 0, KNotification::CloseOnTimeout, d_ptr->applicationData);      
-        
+      Mode *mode = remote->currentMode();
+      
+      KNotification::event("mode_event", 
+	"<b>" + remote->name() + ":</b><br>" + i18n("Mode switched to %1" , mode->name()),
+	DesktopIcon(mode->iconName().isEmpty() ? "infrared-remote" : mode->iconName()), 0, KNotification::CloseOnTimeout, d_ptr->applicationData);      
+      
             if(remote->currentMode()-> doAfter()){
                 actionList.append(remote->currentMode()->actionsForButton(button.name()));
             }
@@ -180,9 +180,9 @@ void KRemoteControlDaemon::gotMessage(const Solid::Control::RemoteControlButton&
 }
 
 
-void KRemoteControlDaemon::reloadConfiguration() {
-    d_ptr->reload();
-    KNotification::event("global_event", i18n("New remote actions have been configured and are now available"),
+void KRemoteControlDaemon::reloadConfiguration() {  
+  d_ptr->reload();
+    KNotification::event("global_event", i18n("Configuration reloaded."),
                     DesktopIcon("infrared-remote"), 0, KNotification::CloseOnTimeout, d_ptr->applicationData);      
 }
 
@@ -193,18 +193,18 @@ void KRemoteControlDaemon::changeMode(const QString& remoteName, Mode* mode) {
     }      
 }
 
-void KRemoteControlDaemon::ignoreButtonEvents(const QString& remote = QString()){
-    if(remote.isEmpty()){
+void KRemoteControlDaemon::ignoreButtonEvents(const QString& remoteName) {
+  if(remoteName.isEmpty()){
         foreach(const Remote *remote, d_ptr->remoteList()){
             d_ptr->ignoreButtonEvents(remote->name());
         }
     }else{
-        d_ptr->ignoreButtonEvents(remote);
+    d_ptr->ignoreButtonEvents(remoteName);
     }  
 }
 
-void KRemoteControlDaemon::considerButtonEvents(const QString& remote){
-    if(remote.isEmpty()){
+void KRemoteControlDaemon::considerButtonEvents(const QString& remoteName) {
+  if(remoteName.isEmpty()){
         d_ptr->clearIgnore();
     }else{
         foreach(const Remote *remote, d_ptr->remoteList()){
@@ -227,13 +227,64 @@ void KRemoteControlDaemon::remoteControlAdded(const QString& name) {
     }
 }
 
-
-void KRemoteControlDaemon::lauchKcmShell(){
-    kDebug() << "Launch kcmshell";
-    KToolInvocation::startServiceByDesktopName("kcm_lirc");    
+void KRemoteControlDaemon::lauchKcmShell() {    
+  kDebug() << "Launch kcmshell";
+   KToolInvocation::startServiceByDesktopName("kcm_lirc");    
+}
+   
+void KRemoteControlDaemon::remoteControlRemoved(const QString& name)
+{
+ KNotification::event("global_event", i18n("The remote %1 was removed from system.", name),
+			   DesktopIcon("infrared-remote"), 0, KNotification::CloseOnTimeout, d_ptr->applicationData);      
 }
 
-void KRemoteControlDaemon::remoteControlRemoved(const QString& name) {
-    KNotification::event("global_event", i18n("The remote %1 was removed from system.", name),
-                DesktopIcon("infrared-remote"), 0, KNotification::CloseOnTimeout, d_ptr->applicationData);      
+bool KRemoteControlDaemon::changeMode(const QString& remoteName, const QString& modeName) {
+  Remote *remote = d_ptr->remoteList().getRemote(remoteName);
+    if(remote){
+      foreach(Mode *mode, remote-> allModes()){
+	if(mode->name() == modeName){
+	  remote->setCurrentMode(mode);
+	  notifyModeChanged(remote);
+	  return true;
+	}
+      }
+    }
+    return false;
+}
+
+
+QStringList KRemoteControlDaemon::getModesForRemote(const QString& remoteName) {
+  QStringList list;
+    Remote *remote = d_ptr->remoteList().getRemote(remoteName);
+    if(remote){
+      foreach(Mode *mode, remote-> allModes()){
+	list << mode->name();
+      }
+    }
+    return list;
+}
+
+QStringList KRemoteControlDaemon::getConfiguredRemotes() {
+  QStringList list;
+  foreach(Remote *remote, d_ptr->remoteList()){
+    list << remote->name();
+  }
+  return list;
+}
+
+
+ void KRemoteControlDaemon::notifyModeChanged(Remote* remote) {
+  KNotification::event("mode_event", 
+  "<b>" + remote->name() + ":</b><br>" + i18n("Mode switched to %1" , remote->currentMode()->name()),
+  DesktopIcon(remote->currentMode()->iconName().isEmpty() ? "infrared-remote" : remote->currentMode()->iconName()),
+  0, KNotification::CloseOnTimeout, d_ptr->applicationData);    
+}	
+
+
+QString KRemoteControlDaemon::getCurrentMode(const QString& remoteName) {
+    Remote *remote = d_ptr->remoteList().getRemote(remoteName);
+    if(remote){
+      return remote->currentMode()->name();
+    }
+    return "modeNotFound";
 }

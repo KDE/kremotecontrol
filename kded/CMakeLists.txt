@@ -11,7 +11,7 @@ set(kded_kremotecontrol_SRCS
 
 set(krcd_xml  org.kde.krcd.xml)
 
-#qt4_add_dbus_interface(kded_kremotecontrol_SRCS ${krcd_xml} krcd_interface )
+
 qt4_add_dbus_adaptor( kded_kremotecontrol_SRCS org.kde.krcd.xml  kremotecontroldaemon.h KRemoteControlDaemon)
 
 

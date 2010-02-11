@@ -23,6 +23,7 @@
 
 #include "mode.h"
 
+#include <kdelirc/libkremotecontrol/remote.h>
 #include <solid/control/remotecontrolmanager.h>
 #include <solid/control/remotecontrol.h>
 
@@ -40,7 +41,7 @@ Q_DECLARE_PRIVATE(KRemoteControlDaemon)
 
 private:
     KRemoteControlDaemonPrivate * d_ptr;
-
+    void notifyModeChanged(Remote* remote);
 public:
     KRemoteControlDaemon(QObject * parent, const QVariantList&);
     virtual ~KRemoteControlDaemon();
@@ -50,12 +51,15 @@ public:
     }
     void reloadConfiguration();
     
-    void ignoreButtonEvents(const QString &remote);
-    void considerButtonEvents(const QString &remote);
-  
-    void changeMode(const QString& remoteName, Mode* mode);
+    void ignoreButtonEvents(const QString &remoteName);
+    void considerButtonEvents(const QString& remoteName);
+    void changeMode(const QString& remoteName, Mode* mode);    
+    bool changeMode(const QString& remoteName, const QString &modeName);
+    QStringList getConfiguredRemotes();
+    QStringList getModesForRemote(const QString &remoteName);
+    QString getCurrentMode(const QString& remoteName);
+       
     
-    void changeMode(const QString& remoteName, QString modeName);
     
 private slots:
     void lauchKcmShell();   
@@ -65,5 +69,6 @@ private slots:
     void remoteControlAdded(const QString &name);                        
     void remoteControlRemoved(const QString &name);   
     void gotMessage(const Solid::Control::RemoteControlButton &button);
+
 };
 #endif // KREMOTECONTROLDAEMON_H
