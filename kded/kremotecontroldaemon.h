@@ -1,6 +1,5 @@
 /*
-    <one line to give the program's name and a brief idea of what it does.>
-    Copyright (C) <year>  <name of author>
+    Copyright (C) <2010>  <Frank Scheffold (fscheffold@googlemail.com)>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -56,8 +55,9 @@ public:
   
     void changeMode(const QString& remoteName, Mode* mode);
     
-    void changeMode(const QString& remoteName, QString modeName);   
-  private slots:
+    void changeMode(const QString& remoteName, QString modeName);
+    
+private slots:
     void lauchKcmShell();   
     
     void slotStatusChanged(bool connected);
