@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>378</width>
-    <height>233</height>
+    <width>380</width>
+    <height>257</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>New Mode</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0" colspan="2">
+   <item row="0" column="0">
     <widget class="KIconButton" name="ibIcon">
      <property name="minimumSize">
       <size>
@@ -22,29 +22,71 @@
        <height>76</height>
       </size>
      </property>
+     <property name="maximumSize">
+      <size>
+       <width>76</width>
+       <height>16777215</height>
+      </size>
+     </property>
     </widget>
    </item>
-   <item row="0" column="2">
-    <widget class="KLineEdit" name="leName"/>
+   <item row="0" column="1" colspan="2">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="KLineEdit" name="leName"/>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="cbSetDefault">
+       <property name="text">
+        <string>Set mode as default</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
-   <item row="2" column="0" colspan="3">
+   <item row="1" column="0" colspan="3">
     <widget class="KSeparator" name="kseparator"/>
    </item>
-   <item row="3" column="2">
-    <widget class="KComboBox" name="cbButtons"/>
-   </item>
-   <item row="3" column="0" colspan="2">
-    <widget class="QLabel" name="label">
+   <item row="2" column="0">
+    <widget class="QLabel" name="lButton">
      <property name="text">
       <string>Button:</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="2">
-    <widget class="QCheckBox" name="cbSetDefault">
-     <property name="text">
-      <string>Set mode as default</string>
+   <item row="2" column="1" colspan="2">
+    <widget class="KComboBox" name="cbButtons"/>
+   </item>
+   <item row="3" column="0" colspan="3">
+    <widget class="QGroupBox" name="gbModeCycle">
+     <property name="title">
+      <string>Enable mode cycling (disables mode grouping)</string>
      </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="1">
+       <widget class="KComboBox" name="cbButtonForward"/>
+      </item>
+      <item row="1" column="1">
+       <widget class="KComboBox" name="cbButtonBackward"/>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="lCycleForward">
+        <property name="text">
+         <string>Forward button</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="lCycleBackward">
+        <property name="text">
+         <string>Backward button</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
   </layout>

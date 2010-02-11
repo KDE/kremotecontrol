@@ -53,6 +53,8 @@ private:
 private slots:
     void checkForComplete();
     void slotButtonClicked(int button);
+    void forwardButtonChanged(int index);
+    void backwardButtonChanged(int index);
 };
 
 #endif /* NEWMODEDIALOG_H */

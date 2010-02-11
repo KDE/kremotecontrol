@@ -32,9 +32,11 @@ class ModeChangeHandler;
 class KREMOTECONTROL_EXPORT Remote
 {
     
-    friend class GroupModechangehandler;
+    friend class GroupModeChangeHandler;
     
     public:
+        enum ModeChangeMode { Group, Cycle };
+      
         Remote();
 
         Remote(const QString& remote, const QList<Mode*>& modes = QList<Mode*>());
@@ -56,14 +58,22 @@ class KREMOTECONTROL_EXPORT Remote
 
         QString name() const;
 
-	bool  nextMode(const QString &button);
+        bool nextMode(const QString &button);
+        
+        ModeChangeMode modeChangeMode() const;
+        QStringList availableModeSwitchButtons() const;
+        
+        QString nextModeButton() const;
+        QString previousModeButton() const;
 
     private:
         QList<Mode*> m_modeList;
         Mode *m_defaultMode;
         QString m_remoteName;
         Mode *m_currentMode;
-	ModeChangeHandler *m_modechangeHandler;		
+        ModeChangeHandler *m_modechangeHandler;
+        QString m_nextModeButton;
+        QString m_previousModeButton;
 };
 
 

@@ -23,34 +23,60 @@
 #include <kdebug.h>
 
 class ModeChangeHandler{
-  public:
-      virtual  bool nextMode(Remote *remote, const QString &button)=0;
+    public:
+        ModeChangeHandler(Remote *remote) {
+            m_remote = remote;
+        }
+        
+        virtual bool handleModeButton(const QString &button) = 0;
+        virtual Remote::ModeChangeMode type() const = 0;
+        virtual QStringList availableModeSwitchButtons() const = 0;
+      
+    protected:
+        Remote *m_remote;
 };    
 
 
-class GroupModechangehandler : public ModeChangeHandler{
+class GroupModeChangeHandler : public ModeChangeHandler
+{
 
- bool nextMode(Remote* remote, const QString& button) {
-    int index= remote->currentMode()->button() == button ?  remote->m_modeList.indexOf(remote->currentMode()) : remote->m_modeList.size();
-    int size = remote->m_modeList.size();
-    if(index < size){
-      for(int i = index +1; i < size ; ++i){
-	kDebug()<< "Size == "<< i;      
-	if(remote->m_modeList.at(i)->button() == button){
-	  remote->setCurrentMode(remote->m_modeList.at(i));
-	  return true;
-	}
-      }
-    }      
-    for(int i = 0; i < index; ++i){
-      kDebug()<< " else 	Size == "<< i;          
-	if(remote->m_modeList.at(i)->button() == button){
-	 remote->setCurrentMode(remote->m_modeList.at(i));
-	  return true;
-	}
-    }
-    return false;
- }
+    public:
+        GroupModeChangeHandler(Remote* remote): ModeChangeHandler(remote){}
+
+        bool handleModeButton(const QString& button) {
+            int index= m_remote->currentMode()->button() == button ?  m_remote->m_modeList.indexOf(m_remote->currentMode()) : m_remote->m_modeList.size();
+            int size = m_remote->m_modeList.size();
+            if(index < size){
+                for(int i = index +1; i < size ; ++i){
+                    kDebug()<< "Size == "<< i;      
+                    if(m_remote->m_modeList.at(i)->button() == button){
+                        m_remote->setCurrentMode(m_remote->m_modeList.at(i));
+                        return true;
+                    }
+                }
+            }      
+            for(int i = 0; i < index; ++i){
+                kDebug()<< " else 	Size == "<< i;          
+                if(m_remote->m_modeList.at(i)->button() == button){
+                    m_remote->setCurrentMode(m_remote->m_modeList.at(i));
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        Remote::ModeChangeMode type() const {
+            return Remote::Group;
+        }
+        
+        QStringList availableModeSwitchButtons() const {
+            // GroupModeHandler allows to re-use all buttons
+            QStringList retList;
+            foreach(const Solid::Control::RemoteControlButton &button, Solid::Control::RemoteControl(m_remote->name()).buttons()){
+                retList.append(button.name());
+            }
+            return retList;
+        }
 };
 
 
@@ -60,13 +86,13 @@ Remote::Remote() {
     addMode(masterMode);
     setDefaultMode(masterMode);
     setCurrentMode(masterMode);
-    m_modechangeHandler = new GroupModechangehandler();
+    m_modechangeHandler = new GroupModeChangeHandler(this);
 }
 
 Remote::Remote(const QString &remote, const QList<Mode*> &modes) {
     m_modeList = modes;
     m_remoteName = remote;
-    m_modechangeHandler = new GroupModechangehandler();
+    m_modechangeHandler = new GroupModeChangeHandler(this);
 
     // Always create the Master Mode and set it default
     bool hasMaster = false;
@@ -80,21 +106,21 @@ Remote::Remote(const QString &remote, const QList<Mode*> &modes) {
         Mode *masterMode = new Mode("Master");	
         addMode(masterMode);
         setDefaultMode(masterMode);
-	setCurrentMode(masterMode);
+        setCurrentMode(masterMode);
     }
     
 }
 
 QString Remote::name() const {
-  return m_remoteName;
+    return m_remoteName;
 }
 
 QList<Mode*> Remote::allModes() const {
-  return m_modeList;
+    return m_modeList;
 }
 
 void Remote::addMode(Mode *mode) {
-  m_modeList.append(mode);
+    m_modeList.append(mode);
 }
 
 void Remote::removeMode(Mode *mode) {
@@ -163,14 +189,22 @@ bool Remote::isAvailable() const {
     return Solid::Control::RemoteControl::allRemoteNames().contains(m_remoteName);
 }
 
-// bool Remote::isButtonModechange(const QString& button) {
-//   return m_modechangeHandler->isButtonModechange(this,button);
-// }
-
-bool Remote::nextMode ( const QString& button ){
-  return m_modechangeHandler->nextMode(this, button);
+bool Remote::nextMode(const QString& button) {
+    return m_modechangeHandler->handleModeButton(button);
 }
 
+Remote::ModeChangeMode Remote::modeChangeMode() const {
+    return m_modechangeHandler->type();
+}
 
+QStringList Remote::availableModeSwitchButtons() const {
+    return m_modechangeHandler->availableModeSwitchButtons();
+}
 
+QString Remote::nextModeButton() const {
+    return m_nextModeButton;
+}
 
+QString Remote::previousModeButton() const {
+    return m_previousModeButton;
+}

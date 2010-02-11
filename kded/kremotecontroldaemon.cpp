@@ -140,7 +140,7 @@ void KRemoteControlDaemon::slotStatusChanged(bool connected) {
         }
     } else {
         KNotification::event("global_event", i18n("The remote control subsystem  has severed its connection. Remote controls are no longer available."),
-			   SmallIcon("irkick"), 0, KNotification::CloseOnTimeout, d_ptr->applicationData);      
+               SmallIcon("irkick"), 0, KNotification::CloseOnTimeout, d_ptr->applicationData);      
     }
 }
 
@@ -195,7 +195,7 @@ void KRemoteControlDaemon::changeMode(const QString& remoteName, Mode* mode) {
 
 void KRemoteControlDaemon::ignoreButtonEvents(const QString& remote = QString()){
     if(remote.isEmpty()){
-        foreach(Remote *remote, d_ptr->remoteList()){
+        foreach(const Remote *remote, d_ptr->remoteList()){
             d_ptr->ignoreButtonEvents(remote->name());
         }
     }else{
@@ -207,7 +207,7 @@ void KRemoteControlDaemon::considerButtonEvents(const QString& remote){
     if(remote.isEmpty()){
         d_ptr->clearIgnore();
     }else{
-        foreach(Remote *remote, d_ptr->remoteList()){
+        foreach(const Remote *remote, d_ptr->remoteList()){
             d_ptr->considerButtonEvents(remote->name());
         }
     }

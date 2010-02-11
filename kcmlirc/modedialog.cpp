@@ -21,7 +21,7 @@
 
 
 /**
-  * @author Gav Wood, Michael Zanetti
+  * @author Michael Zanetti
   */
 
 
@@ -36,8 +36,8 @@ ModeDialog::ModeDialog(Remote *remote, Mode *mode, QWidget *parent): KDialog(par
     setDefaultButton(Ok);
 
     ui.cbButtons->addItem(i18n("No button"), "");
-    foreach(const Solid::Control::RemoteControlButton &button, Solid::Control::RemoteControl(remote->name()).buttons()){
-        ui.cbButtons->addItem(button.name(), button.name());
+    foreach(const QString &button, remote->availableModeSwitchButtons()){
+        ui.cbButtons->addItem(button, button);
     }
     
     if(m_mode){
@@ -45,11 +45,40 @@ ModeDialog::ModeDialog(Remote *remote, Mode *mode, QWidget *parent): KDialog(par
         ui.ibIcon->setIcon(m_mode->iconName());
         ui.cbButtons->setCurrentIndex(ui.cbButtons->findData(m_mode->button()));
         ui.cbSetDefault->setChecked(remote->defaultMode() == mode);
+        if(m_mode == remote->masterMode()){
+            // Hide Non-Master-Mode options
+            ui.cbButtons->setVisible(false);
+            ui.lButton->setVisible(false);
+            ui.leName->setEnabled(false);
+            
+            // Fill in Cycle mode buttons
+            ui.cbButtonForward->addItem(i18n("No Button"), "");
+            foreach(const QString &button, remote->availableModeSwitchButtons()){
+                ui.cbButtonForward->addItem(button, button);
+            }
+            ui.cbButtonForward->setCurrentIndex(ui.cbButtonForward->findData(remote->nextModeButton()));
+
+            ui.cbButtonBackward->addItem(i18n("No Button"), "");
+            foreach(const QString &button, remote->availableModeSwitchButtons()){
+                ui.cbButtonBackward->addItem(button, button);
+            }
+            ui.cbButtonBackward->setCurrentIndex(ui.cbButtonForward->findData(remote->previousModeButton()));
+
+            if(remote->modeChangeMode() == Remote::Cycle){
+                ui.gbModeCycle->setChecked(true);
+            } else {
+                ui.gbModeCycle->setChecked(false);
+            }
+        } else {
+            ui.gbModeCycle->setVisible(false);
+        }
     } else {
         ui.ibIcon->setIcon("infrared-remote");
     }
     
     connect(ui.leName, SIGNAL(textChanged(const QString&)), this, SLOT(checkForComplete()));
+    connect(ui.cbButtonForward, SIGNAL(currentIndexChanged(int)), this, SLOT(forwardButtonChanged(int)));
+    connect(ui.cbButtonBackward, SIGNAL(currentIndexChanged(int)), this, SLOT(backwardButtonChanged(int)));
     checkForComplete();
 }
 
@@ -89,6 +118,14 @@ void ModeDialog::slotButtonClicked(int button) {
         }
     }
     KDialog::slotButtonClicked(button);
+}
+
+void ModeDialog::forwardButtonChanged(int index) {
+    // TODO: Set forwardButton in Remote and refresh backwardButtons
+}
+
+void ModeDialog::backwardButtonChanged(int index) {
+    // TODO: Set backwardButton in Remote and refresh forButtons
 }
 
 #include "modedialog.moc"

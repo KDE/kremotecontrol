@@ -292,18 +292,18 @@ void KCMLirc::updateModes() {
 void KCMLirc::modeSelectionChanged(const QModelIndex &index) {
     if(index.isValid()){
         ui.pbAddMode->setEnabled(true);
+        ui.pbEditMode->setEnabled(true);
         ui.pbAddAction->setEnabled(true);
     } else {
         ui.pbAddMode->setEnabled(false);
+        ui.pbEditMode->setEnabled(true);
         ui.pbAddAction->setEnabled(false);
     }
     
     if(index.isValid() && index.parent().isValid()){
         ui.pbRemoveMode->setEnabled(true);
-        ui.pbEditMode->setEnabled(true);
     } else {
         ui.pbRemoveMode->setEnabled(false);
-        ui.pbEditMode->setEnabled(false);
     }
     
     Mode *mode = m_remoteModel->mode(index);
