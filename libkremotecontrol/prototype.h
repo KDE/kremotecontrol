@@ -27,19 +27,19 @@
 
 class KREMOTECONTROL_EXPORT Prototype
 {
-  public:
-    Prototype(const QString &name, QList<Argument> args = QList<Argument>());
-    Prototype();
+    public:
+        Prototype(const QString &name, QList<Argument> args = QList<Argument>());
+        Prototype();
+        
+        QString name() const;
+        QList<Argument> args() const;
+        void setArgs(const QList<Argument> &args);
+        
+        bool operator==(const Prototype &other) const;
     
-    QString name() const;
-    QList<Argument> args() const;
-    void setArgs(const QList<Argument> &args);
-    
-    bool operator==(const Prototype &other) const;
-    
-  private:
-    QString m_name;
-    QList<Argument> m_args;
+    private:
+      QString m_name;
+      QList<Argument> m_args;
 };
 
 Q_DECLARE_METATYPE(Prototype)

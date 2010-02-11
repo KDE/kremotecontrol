@@ -21,46 +21,43 @@
 #include "profileserver.h"
 
 ProfileAction::ProfileAction(): DBusAction() {
-  //change type from DBusAction (c'tor) to ProfileAction
-  m_type = Action::ProfileAction;
-  
+    //change type from DBusAction (c'tor) to ProfileAction
+    m_type = Action::ProfileAction;  
 }
 
 ProfileAction::ProfileAction(const QString& button, const QString &profileName, const QString &actionTemplate): DBusAction(button) {
-  //change type from DBusAction (c'tor) to ProfileAction
-  m_type = Action::ProfileAction;
-  m_profileId = profileName;
-  m_template = actionTemplate;
+    //change type from DBusAction (c'tor) to ProfileAction
+    m_type = Action::ProfileAction;
+    m_profileId = profileName;
+    m_template = actionTemplate;
 }
 
-QString ProfileAction::profileId() const
-{
-  return m_profileId;
+QString ProfileAction::profileId() const {
+    return m_profileId;
 }
 
 void ProfileAction::setProfileId(const QString& profileId) {
-  m_profileId = profileId;
+    m_profileId = profileId;
 }
 
-QString ProfileAction::actionTemplateId() const
-{
-  return m_template;
+QString ProfileAction::actionTemplateId() const {
+    return m_template;
 }
 
 void ProfileAction::setActionTemplateId(const QString& actionTemplateId) {
-  m_template = actionTemplateId;
+    m_template = actionTemplateId;
 }
 
 void ProfileAction::operator=(const ProfileAction& action) {
-  DBusAction::operator=(action);
-  m_profileId = action.profileId();
-  m_template = action.actionTemplateId();
+    DBusAction::operator=(action);
+    m_profileId = action.profileId();
+    m_template = action.actionTemplateId();
 }
 
 bool ProfileAction::operator==(const ProfileAction& other) const {
-  return DBusAction::operator==(other) &&
-	  m_profileId == other.profileId() &&
-	  m_template == other.actionTemplateId();
+    return DBusAction::operator==(other) &&
+            m_profileId == other.profileId() &&
+            m_template == other.actionTemplateId();
 }
 
 QString ProfileAction::name() const {
@@ -81,8 +78,8 @@ QString ProfileAction::description() const {
                 }
             }
         }
-  }
-  return m_function.name();
+    }
+    return m_function.name();
 }
 
 void ProfileAction::saveToConfig(KConfigGroup &config) {

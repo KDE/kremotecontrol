@@ -26,22 +26,22 @@
 
 class KDE_EXPORT Argument
 {
-  public:
-    Argument();
-    Argument(const QVariant &value);
-    Argument(const QVariant &value, const QString &description);
-    
-    QVariant value() const;
-    void setValue(const QVariant &value);
-    
-    QString description() const;
-    void setDescription(const QString &description);
-    
-    bool operator==(const Argument &other) const;
-    
-  protected:
-    QVariant m_value;
-    QString m_description;
+    public:
+        Argument();
+        Argument(const QVariant &value);
+        Argument(const QVariant &value, const QString &description);
+        
+        QVariant value() const;
+        void setValue(const QVariant &value);
+        
+        QString description() const;
+        void setDescription(const QString &description);
+        
+        bool operator==(const Argument &other) const;
+      
+    protected:
+        QVariant m_value;
+        QString m_description;
 };
 
 Q_DECLARE_METATYPE(Argument)

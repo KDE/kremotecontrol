@@ -28,55 +28,54 @@
 class KREMOTECONTROL_EXPORT Profile
 {
 
+    private:
+        class ProfileVersion {
 
-  private:
-    class ProfileVersion {
+            private:
+                int m_major;
+                int m_minor;
 
-      private:
-	int m_major;
-	int m_minor;
+            public:
+                ProfileVersion(){
+                    m_major = 0;
+                    m_minor = 0;
+        };
 
-      public:
-	ProfileVersion(){
-	  m_major=0;
-	  m_minor=0;
-	};
-	ProfileVersion(const QString &version);
-	const int operator==(const ProfileVersion &other) const;
-	QString toString() const;
+        ProfileVersion(const QString &version);
+        const int operator==(const ProfileVersion &other) const;
+        QString toString() const;
     };
 
-  public:
-    Profile();
+    public:
+        Profile();
 
-    Profile(const QString &profileId, const QString &name, const QString &version, const QString &author, const QString &description);
+        Profile(const QString &profileId, const QString &name, const QString &version, const QString &author, const QString &description);
 
-    QString name() const;
-    QString author() const;
-    QString version() const;
-    QString description() const;
-    QString profileId() const;
-    QList<ProfileActionTemplate> actionTemplates() const;
+        QString name() const;
+        QString author() const;
+        QString version() const;
+        QString description() const;
+        QString profileId() const;
+        QList<ProfileActionTemplate> actionTemplates() const;
 
 
-    void name(const QString &name);
-    void author(const QString &author);
-    void version(const QString &version);
-    void description(const QString & description);
-    void profileId(const QString & profileId);
-    void actionTemplates(const QList< ProfileActionTemplate >& actionTemplates);
-    ProfileActionTemplate getActionTemplate(const QString& actionTemplateId);
-    void addTemplate(const ProfileActionTemplate &actionTemplate);
-    int compareVersion(Profile* other) const;
+        void setName(const QString &name);
+        void setAuthor(const QString &author) ;
+        void setVersion(const QString &version);
+        void setDescription(const QString & description);
+        void setProfileId(const QString & profileId);
+        void setActionTemplates(const QList< ProfileActionTemplate >& actionTemplates);
+        ProfileActionTemplate actionTemplate(const QString& actionTemplateId);
+        void addTemplate(const ProfileActionTemplate &actionTemplate);
+        int compareVersion(Profile* other) const;
 
-  private:
-    QString m_profileId;
-    QString m_name;
-    ProfileVersion m_version;
-    QString m_author;
-    QString m_description;
-    QList<ProfileActionTemplate> m_actionTemplates;
-
+    private:
+        QString m_profileId;
+        QString m_name;
+        ProfileVersion m_version;
+        QString m_author;
+        QString m_description;
+        QList<ProfileActionTemplate> m_actionTemplates;
 };
 
 Q_DECLARE_METATYPE(Profile*)

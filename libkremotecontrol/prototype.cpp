@@ -1,6 +1,5 @@
 /*
-    <one line to give the program's name and a brief idea of what it does.>
-    Copyright (C) <year>  <name of author>
+    Copyright (C) 2010 Michael Zanetti <michael_zanetti@gmx.net>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,19 +20,19 @@
 #include "prototype.h"
 
 Prototype::Prototype(const QString& name, QList< Argument > args) {
-  m_name = name;
-  m_args = args;
+    m_name = name;
+    m_args = args;
 }
 
 Prototype::Prototype() {  
 }
 
 QString Prototype::name() const {
-  return m_name;
+    return m_name;
 }
 
 QList<Argument> Prototype::args() const {
-  return m_args;
+    return m_args;
 }
 
 void Prototype::setArgs(const QList<Argument> &argList){
@@ -41,5 +40,5 @@ void Prototype::setArgs(const QList<Argument> &argList){
 }
 
 bool Prototype::operator==(const Prototype &other) const {
-  return m_name == other.name() && m_args == other.args();
+    return m_name == other.name() && m_args == other.args();
 }

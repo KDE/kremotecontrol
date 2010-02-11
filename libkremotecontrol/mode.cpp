@@ -21,37 +21,36 @@
 #include "action.h"
 
 Mode::Mode(const QString &name, const QString &iconName) {
-  m_name = name;
-  m_iconName = iconName;
+    m_name = name;
+    m_iconName = iconName;
 }
 
 QString Mode::name() const {
-  return m_name;
+    return m_name;
 }
 
 QString Mode::iconName() const {
-  return m_iconName;
+    return m_iconName;
 }
 
 QString Mode::button() const {
-  return m_button;
+    return m_button;
 }
 
 void Mode::setName(const QString& name) {
-  m_name = name;
+    m_name = name;
 }
 
-void Mode::setIconName(const QString& iconName)
-{
-  m_iconName = iconName;
+void Mode::setIconName(const QString& iconName) {
+    m_iconName = iconName;
 }
 
 void Mode::setButton(const QString& button) {
-  m_button = button;
+    m_button = button;
 }
 
 bool Mode::operator==(const Mode& mode) const {
-  return m_name == mode.name() && m_iconName == mode.iconName() && m_button == mode.button();
+    return m_name == mode.name() && m_iconName == mode.iconName() && m_button == mode.button();
 }
 
 
@@ -67,7 +66,7 @@ QList< Action* > Mode::actions() const {
     return m_actionList;
 }
 
-QList<Action*> Mode::actionsForButton(const QString &button) const{
+QList<Action*> Mode::actionsForButton(const QString &button) const {
     QList<Action*> retList;
     foreach(Action *action, m_actionList){
         if(action->button() == button){
@@ -78,6 +77,5 @@ QList<Action*> Mode::actionsForButton(const QString &button) const{
 }
 
 bool Mode::doAfter(){
-  return m_doAfter;
+    return m_doAfter;
 }
-

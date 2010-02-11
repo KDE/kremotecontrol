@@ -1,5 +1,4 @@
 /*
-    <one line to give the program's name and a brief idea of what it does.>
     Copyright (C) <2009>  <Frank Scheffold (fscheffold@googlemail.com)>
 
     This program is free software: you can redistribute it and/or modify
@@ -24,11 +23,11 @@ class Action;
 
 class ActionExecutor
 {
-  public:
-    ActionExecutor(){};
-    virtual ~ActionExecutor(){};
-  
-    virtual void execute(Action *action)=0;
+    public:
+        ActionExecutor(){};
+        virtual ~ActionExecutor(){};
+      
+        virtual void execute(Action *action)=0;
   
 };
 

@@ -30,35 +30,34 @@
 #include "dbusaction.h"
 #include <QStringList>
 
-class KDE_EXPORT DBusInterface: public QObject
+class KREMOTECONTROL_EXPORT DBusInterface: public QObject
 {
     Q_OBJECT
 
-private:
-  DBusInterface();
-//   Modes allModes;
+    private:
+        DBusInterface();
 
-  QStringList getAllRegisteredPrograms();
-  bool searchForProgram(const DBusAction *action, QStringList &programs);
-public:
+        QStringList getAllRegisteredPrograms();
+        bool searchForProgram(const DBusAction *action, QStringList &programs);
+    public:
 
-  static DBusInterface *getInstance();
-  ~DBusInterface();
+        static DBusInterface *getInstance();
+        ~DBusInterface();
 
-  bool isProgramRunning(const QString &program);
-  bool isUnique(const QString &program);
+        bool isProgramRunning(const QString &program);
+        bool isUnique(const QString &program);
 
-  QStringList getRegisteredPrograms();
-  QStringList getNodes(const QString &program);
-  QList<Prototype> getFunctions(const QString &program, const QString &object);
+        QStringList getRegisteredPrograms();
+        QStringList getNodes(const QString &program);
+        QList<Prototype> getFunctions(const QString &program, const QString &object);
 
-  QStringList getRemotes();
-  void requestNextKeyPress();
-  void cancelKeyPressRequest();
-  void reloadRemoteControlDaemon();
+        QStringList getRemotes();
+        void requestNextKeyPress();
+        void cancelKeyPressRequest();
+        void reloadRemoteControlDaemon();
 
-  QStringList getButtons(const QString &remoteName);
-  void executeAction(const DBusAction *action);
+        QStringList getButtons(const QString &remoteName);
+        void executeAction(const DBusAction *action);
 
 };
 

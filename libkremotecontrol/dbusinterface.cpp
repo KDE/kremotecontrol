@@ -45,11 +45,10 @@
   static DBusInterface *theInstance = NULL;
 
 
-KDE_EXPORT DBusInterface::DBusInterface()
-{
+DBusInterface::DBusInterface() {
 }
 
-KDE_EXPORT DBusInterface *DBusInterface::getInstance() {
+DBusInterface *DBusInterface::getInstance() {
     if (!theInstance) {
         theInstance = new DBusInterface();
     }
@@ -57,20 +56,18 @@ KDE_EXPORT DBusInterface *DBusInterface::getInstance() {
 }
 
 
-DBusInterface::~DBusInterface()
-{
+DBusInterface::~DBusInterface() {
     //delete(DBusInterface::theInstance);
     //DBusInterface::theInstance = 0;
 }
 
-KDE_EXPORT QStringList DBusInterface::getAllRegisteredPrograms() {
+QStringList DBusInterface::getAllRegisteredPrograms() {
     QDBusConnectionInterface *dBusIface = QDBusConnection::sessionBus().interface();
     return dBusIface->registeredServiceNames();
 }
 
 
-KDE_EXPORT QStringList DBusInterface::getRegisteredPrograms()
-{
+QStringList DBusInterface::getRegisteredPrograms() {
     QStringList returnList;
 
     QStringList allServices = getAllRegisteredPrograms();
@@ -100,7 +97,7 @@ KDE_EXPORT QStringList DBusInterface::getRegisteredPrograms()
     return returnList;
 }
 
-KDE_EXPORT QStringList DBusInterface::getNodes(const QString &program) {
+QStringList DBusInterface::getNodes(const QString &program) {
     QDBusInterface dBusIface(program, "/", "org.freedesktop.DBus.Introspectable");
     QDBusReply<QString> response = dBusIface.call("Introspect");
 
@@ -131,7 +128,7 @@ KDE_EXPORT QStringList DBusInterface::getNodes(const QString &program) {
     return returnList;
 }
 
-KDE_EXPORT QList<Prototype> DBusInterface::getFunctions(const QString &program, const QString &object) {
+QList<Prototype> DBusInterface::getFunctions(const QString &program, const QString &object) {
     QDBusInterface dBusIface(program, '/' + object, "org.freedesktop.DBus.Introspectable");
     QDBusReply<QString> response = dBusIface.call("Introspect");
 
@@ -214,7 +211,7 @@ KDE_EXPORT QList<Prototype> DBusInterface::getFunctions(const QString &program, 
     return funcList;
 }
 
-KDE_EXPORT QStringList DBusInterface::getRemotes() {
+QStringList DBusInterface::getRemotes() {
     QStringList remotes;
     QDBusMessage m = QDBusMessage::createMethodCall("org.kde.irkick", "/IRKick",
                      "", "remotes");
@@ -227,8 +224,7 @@ KDE_EXPORT QStringList DBusInterface::getRemotes() {
     return remotes;
 }
 
-
-KDE_EXPORT void DBusInterface::requestNextKeyPress() {
+void DBusInterface::requestNextKeyPress() {
     QDBusMessage m = QDBusMessage::createMethodCall("org.kde.irkick", "/IRKick", "", "stealNextPress");
     m << "org.kde.kcmshell_kcm_lirc";
     m << "/KCMLirc";
@@ -239,7 +235,7 @@ KDE_EXPORT void DBusInterface::requestNextKeyPress() {
     }
 }
 
-KDE_EXPORT void DBusInterface::cancelKeyPressRequest() {
+void DBusInterface::cancelKeyPressRequest() {
     QDBusMessage m = QDBusMessage::createMethodCall("org.kde.irkick", "/IRKick", "", "dontStealNextPress");
     QDBusMessage response = QDBusConnection::sessionBus().call(m);
     if (response.type() == QDBusMessage::ErrorMessage) {
@@ -247,7 +243,7 @@ KDE_EXPORT void DBusInterface::cancelKeyPressRequest() {
     }
 }
 
-KDE_EXPORT QStringList DBusInterface::getButtons(const QString& remoteName) {
+QStringList DBusInterface::getButtons(const QString& remoteName) {
     QDBusMessage m = QDBusMessage::createMethodCall("org.kde.irkick", "/IRKick", "", "buttons");
     m << remoteName;
     QDBusMessage response = QDBusConnection::sessionBus().call(m);
@@ -258,7 +254,7 @@ KDE_EXPORT QStringList DBusInterface::getButtons(const QString& remoteName) {
     return response.arguments().at(0).toStringList();
 }
 
-KDE_EXPORT void DBusInterface::reloadRemoteControlDaemon() {
+void DBusInterface::reloadRemoteControlDaemon() {
     QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontrol",
                      "org.kde.krcd", "reloadConfiguration");
     QDBusMessage response = QDBusConnection::sessionBus().call(m);
@@ -268,8 +264,7 @@ KDE_EXPORT void DBusInterface::reloadRemoteControlDaemon() {
 
 }
 
-
-KDE_EXPORT bool DBusInterface::isProgramRunning(const QString &program) {
+bool DBusInterface::isProgramRunning(const QString &program) {
     QDBusConnectionInterface *dBusIface = QDBusConnection::sessionBus().interface();
     if (dBusIface->isServiceRegistered(program)) {
         return true;
@@ -277,7 +272,7 @@ KDE_EXPORT bool DBusInterface::isProgramRunning(const QString &program) {
     return false;
 }
 
-KDE_EXPORT bool DBusInterface::isUnique(const QString &program){
+bool DBusInterface::isUnique(const QString &program){
     QStringList instances = getAllRegisteredPrograms().filter(program);
     kDebug() << "instances of " + program << instances;
 
@@ -297,21 +292,20 @@ KDE_EXPORT bool DBusInterface::isUnique(const QString &program){
     return true;
 }
 
-bool DBusInterface::searchForProgram(const DBusAction *action, QStringList &programs)
-{
+bool DBusInterface::searchForProgram(const DBusAction *action, QStringList &programs) {
     QDBusConnectionInterface *dBusIface = QDBusConnection::sessionBus().interface();
     programs.clear();
 
     if (action->destination() == DBusAction::Unique) {
-      QString service = action->application();
-      
-      kDebug() << "searching for prog:" << service;
-      if (dBusIface->isServiceRegistered(service)) {
-	kDebug() << "adding Program: " << service;
-	programs += service;
-      } else {
-	kDebug() << "nope... " + service + " not here.";
-      }
+        QString service = action->application();
+        
+        kDebug() << "searching for prog:" << service;
+        if (dBusIface->isServiceRegistered(service)) {
+            kDebug() << "adding Program: " << service;
+            programs += service;
+        } else {
+            kDebug() << "nope... " + service + " not here.";
+        }
     } else {
 
         // find all instances...
@@ -349,7 +343,6 @@ bool DBusInterface::searchForProgram(const DBusAction *action, QStringList &prog
             }
             while (programs.size() > 1) programs.removeFirst();
         } else if (programs.size() > 1 && action->destination() == DBusAction::Bottom) {
-            ;
             QList<WId> s = KWindowSystem::stackingOrder();
             // go through all the (ordered) window pids
             for (int i = 0; i < s.size(); ++i) {
@@ -370,7 +363,7 @@ bool DBusInterface::searchForProgram(const DBusAction *action, QStringList &prog
 
 
 void DBusInterface::executeAction(const DBusAction* action) {
-  kDebug() << "executeAction called";
+    kDebug() << "executeAction called";
     QDBusConnectionInterface *dBusIface = QDBusConnection::sessionBus().interface();
 
     QStringList programs;
@@ -383,18 +376,18 @@ void DBusInterface::executeAction(const DBusAction* action) {
     kDebug() << "Autostart: " << action->autostart();
     kDebug() << "programs.size: " << programs.size();
     if (action->autostart() && !programs.size()) {
-      kDebug() << "Should start " << action->application();
-      QString runCommand = action->application();
-      runCommand.remove(QRegExp("org.[a-zA-Z0-9]*."));
-      kDebug() << "runCommand" << runCommand;
-      KToolInvocation::startServiceByDesktopName(runCommand);
+        kDebug() << "Should start " << action->application();
+        QString runCommand = action->application();
+        runCommand.remove(QRegExp("org.[a-zA-Z0-9]*."));
+        kDebug() << "runCommand" << runCommand;
+        KToolInvocation::startServiceByDesktopName(runCommand);
     }
     if (action->function().name().isEmpty()) // Just start
         return;
 
     if (!searchForProgram(action, programs)) {
-      kDebug() << "Failed to start the application" << action->application();
-      return;
+        kDebug() << "Failed to start the application" << action->application();
+        return;
     }
 
     for (QStringList::iterator i = programs.begin(); i != programs.end(); ++i) {

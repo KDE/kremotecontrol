@@ -15,7 +15,6 @@ set(libkremotecontrol_LIB_SRCS
    argument.cpp
    action.cpp
    dbusaction.cpp
-   modeswitchaction.cpp
    profileaction.cpp
    profileactiontemplate.cpp
    profile.cpp

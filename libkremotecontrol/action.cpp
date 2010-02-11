@@ -19,37 +19,37 @@
 
 #include "action.h"
 
-Action::Action(ActionType type, const QString &button): m_type(type), m_button(button){
+Action::Action(ActionType type, const QString &button): m_type(type), m_button(button) {
 }
 
-Action::Action(const Action& action): m_button(action.button()){
-  m_type = action.type();
+Action::Action(const Action& action): m_button(action.button()) {
+    m_type = action.type();
 }
 
-Action::Action(ActionType type){
-  m_type = type;
+Action::Action(ActionType type) {
+    m_type = type;
 }
 
-Action::ActionType Action::type() const{
-  return m_type;
+Action::ActionType Action::type() const {
+    return m_type;
 }
 
 QString Action::button() const {
-  return m_button;
+    return m_button;
 }
 
 void Action::setButton(const QString& button) {
-  m_button = button;
+    m_button = button;
 }
 
 void Action::operator=(const Action& action) {
-  m_type = action.type();
-  m_button = action.button();
+    m_type = action.type();
+    m_button = action.button();
 }
 
 bool Action::operator==(const Action& action) const {
-  return m_type == action.type() &&
-	  m_button == action.button();
+    return m_type == action.type() &&
+           m_button == action.button();
 }
 
 void Action::saveToConfig(KConfigGroup& config) {

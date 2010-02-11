@@ -32,30 +32,29 @@ class KREMOTECONTROL_EXPORT Action: public QObject
   Q_OBJECT
   
   public:
-    enum ActionType {ModeSwitchAction, DBusAction, ProfileAction};
-  
-    Action(ActionType type, const QString &button);
-    Action(ActionType type);
-    Action(const Action &action);
-//    Action();
-  
-    ActionType type() const;
+      enum ActionType {ModeSwitchAction, DBusAction, ProfileAction};
+    
+      Action(ActionType type, const QString &button);
+      Action(ActionType type);
+      Action(const Action &action);
+    
+      ActionType type() const;
 
-    QString button() const;
-    void setButton(const QString &button);
-        
-    virtual void operator=(const Action &action);
-    virtual bool operator==(const Action &action) const;
-    
-    virtual QString name() const = 0;
-    virtual QString description() const = 0;
-    
-    virtual void saveToConfig(KConfigGroup &config);
-    virtual void loadFromConfig(const KConfigGroup &config) = 0;
+      QString button() const;
+      void setButton(const QString &button);
+          
+      virtual void operator=(const Action &action);
+      virtual bool operator==(const Action &action) const;
+      
+      virtual QString name() const = 0;
+      virtual QString description() const = 0;
+      
+      virtual void saveToConfig(KConfigGroup &config);
+      virtual void loadFromConfig(const KConfigGroup &config) = 0;
     
   protected:
-    ActionType m_type;
-    QString m_button;    
+      ActionType m_type;
+      QString m_button;    
 };
 
 Q_DECLARE_METATYPE(Action*)

@@ -28,48 +28,47 @@
 
 class KREMOTECONTROL_EXPORT ProfileActionTemplate
 {
-  public:
-    ProfileActionTemplate(const QString &profile,
-			  const QString &actionTemplateID,
-			  const QString &actionName,
-			  const QString &serviceName,
-			  const QString &node,
-			  const Prototype &function,
-			  const ProfileAction::ActionDestination,
-			  bool autostart,
-			  bool repeat,
-			  const QString &description = QString(),
-			  const QString &buttonName = QString());
+    public:
+        ProfileActionTemplate(const QString &profile,
+                              const QString &actionTemplateID,
+                              const QString &actionName,
+                              const QString &serviceName,
+                              const QString &node,
+                              const Prototype &function,
+                              const ProfileAction::ActionDestination,
+                              bool autostart,
+                              bool repeat,
+                              const QString &description = QString(),
+                              const QString &buttonName = QString());
 
-    ProfileActionTemplate() {};
+        ProfileActionTemplate() {};
 
-    QString profileId() const;
-    QString actionTemplateId() const;
-    QString actionName() const;
-    QString service() const;
-    QString node() const;
-    Prototype function() const;
-    QString description() const;
-//    QList<Argument> defaultArguments() const;
-    ProfileAction::ActionDestination destination() const;
-    bool autostart() const;
-    bool repeat() const;
-    QString buttonName() const;
+        QString profileId() const;
+        QString actionTemplateId() const;
+        QString actionName() const;
+        QString service() const;
+        QString node() const;
+        Prototype function() const;
+        QString description() const;
+        ProfileAction::ActionDestination destination() const;
+        bool autostart() const;
+        bool repeat() const;
+        QString buttonName() const;
 
-    ProfileAction *createAction(const Solid::Control::RemoteControlButton &button) const;
+        ProfileAction *createAction(const Solid::Control::RemoteControlButton &button) const;
 
-  protected:
-    QString m_profileId; // e.g. multimedia
-    QString m_actionTemplateId; // e.g. amarokPlay
-    QString m_actionName; // e.g. Play
-    QString m_serviceName; // e.g. org.kde.amarok
-    QString m_node; // e.g. Player
-    Prototype m_function; // play
-    QString m_description; // e.g. Start playing
-    ProfileAction::ActionDestination m_destination;
-    bool m_autostart;
-    bool m_repeat;
-    QString m_buttonName;
+    protected:
+        QString m_profileId; // e.g. multimedia
+        QString m_actionTemplateId; // e.g. amarokPlay
+        QString m_actionName; // e.g. Play
+        QString m_serviceName; // e.g. org.kde.amarok
+        QString m_node; // e.g. Player
+        Prototype m_function; // play
+        QString m_description; // e.g. Start playing
+        ProfileAction::ActionDestination m_destination;
+        bool m_autostart;
+        bool m_repeat;
+        QString m_buttonName;
 
 };
 

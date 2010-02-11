@@ -32,14 +32,11 @@
 namespace ProfileServer
 {
 
-
-
     enum ProfileSupportedByRemote {
-
-	  FULL_SUPPORTED,
-	  PARTIAL_SUPPORTED,
-	  NOT_SUPPORTED,
-	  NO_ACTIONS_DEFINED
+        FULL_SUPPORTED,
+        PARTIAL_SUPPORTED,
+        NOT_SUPPORTED,
+        NO_ACTIONS_DEFINED
     };
 
     void addProfile(Profile* profile);
@@ -49,27 +46,23 @@ namespace ProfileServer
     QList<ProfileActionTemplate> actionTemplateList(const QString &remote, Profile *profile);
     ProfileServer::ProfileSupportedByRemote isProfileAvailableForRemote(Profile *profile, const Remote &remote);
 
+    class ProfileXmlContentHandler: public QAbstractMessageHandler
+    {
 
+        private:
+            ProfileActionTemplate parseAction(QDomNode actionNode, const QString& profileId);
+            QXmlSchema *m_schema;
 
-
-    class  ProfileXmlContentHandler    : public QAbstractMessageHandler {
-
-      private:
-        ProfileActionTemplate parseAction(QDomNode actionNode, const QString& profileId);
-	QXmlSchema *m_schema;
-
-	 Profile m_currentProfile;
-      public:
-	 ProfileXmlContentHandler(const QUrl& schema);
-	 ~ProfileXmlContentHandler();
-	 bool validateFile(const QString& fileName);
-	 Profile *  parseFile(const QString& fileName);
-	 QList<Profile*> loadProfilesFromFiles(const QStringList& files);
-
-
+            Profile m_currentProfile;
+        public:
+            ProfileXmlContentHandler(const QUrl& schema);
+            ~ProfileXmlContentHandler();
+            bool validateFile(const QString& fileName);
+            Profile *parseFile(const QString& fileName);
+            QList<Profile*> loadProfilesFromFiles(const QStringList& files);
 
       protected:
-      virtual void handleMessage(QtMsgType type, const QString &description, const QUrl &identifier, const QSourceLocation &sourceLocation);
+          virtual void handleMessage(QtMsgType type, const QString &description, const QUrl &identifier, const QSourceLocation &sourceLocation);
 
     };
 };

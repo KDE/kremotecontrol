@@ -19,7 +19,6 @@
 
 #include "profileserver.h"
 #include "profileactiontemplate.h"
-#include "modeswitchaction.h"
 #include "executionengine.h"
 #include "dbusaction.h"
 
@@ -37,130 +36,110 @@
 
 class ProfileServerPrivate
 {
-  private:
-   QList<Profile*> m_allProfiles;
+    private:
+        QList<Profile*> m_allProfiles;
 
-  public:
-    ProfileServerPrivate();
-    void addProfile(Profile* profile);
-    QList<Profile*> allProfiles();
+    public:
+        ProfileServerPrivate();
+        void addProfile(Profile* profile);
+        QList<Profile*> allProfiles();
 
-     ~ProfileServerPrivate() {
-      while (!m_allProfiles.isEmpty()){
-	delete m_allProfiles.takeFirst();
-      }
-    }
+        ~ProfileServerPrivate() {
+            while (!m_allProfiles.isEmpty()){
+                delete m_allProfiles.takeFirst();
+            }
+        }
 };
-
 
 K_GLOBAL_STATIC(ProfileServerPrivate, instance)
 
-
-QList<Profile*> ProfileServerPrivate::allProfiles()
-{
-  return m_allProfiles;
+QList<Profile*> ProfileServerPrivate::allProfiles() {
+    return m_allProfiles;
 }
 
-
-ProfileServerPrivate::ProfileServerPrivate()
-{
-  ProfileServer::ProfileXmlContentHandler *handler = new ProfileServer::ProfileXmlContentHandler(QUrl::fromLocalFile(KGlobal::dirs()->findResource("data","profiles/profile.xsd")));
-  foreach( Profile *profile, handler->loadProfilesFromFiles(KGlobal::dirs()->findAllResources("data", "profiles/*.profile.xml"))){
-   addProfile(profile);
-  }
-}
-
-void ProfileServerPrivate::addProfile( Profile* profile)
-{
-   for(int i =0; i< m_allProfiles.size(); i++){
-    Profile *tProfile = m_allProfiles.at(i);
-    if(profile->profileId() == tProfile->profileId()){
-      if( 1 ==  profile->compareVersion(tProfile)){
-	// new profileversion is greater as current -> replace
-	m_allProfiles.replace(i, profile);
-	return;
-      }else {
-	// in this case keep profile (first come first served...)
-	return;
-      }
+ProfileServerPrivate::ProfileServerPrivate() {
+    ProfileServer::ProfileXmlContentHandler *handler = new ProfileServer::ProfileXmlContentHandler(QUrl::fromLocalFile(KGlobal::dirs()->findResource("data","profiles/profile.xsd")));
+    foreach( Profile *profile, handler->loadProfilesFromFiles(KGlobal::dirs()->findAllResources("data", "profiles/*.profile.xml"))){
+        addProfile(profile);
     }
-  }
-  // Profile is no in list. Append
-  m_allProfiles.append(profile);
 }
 
-
-KDE_EXPORT void ProfileServer::addProfile(Profile* profile) {
-  instance->addProfile(profile);
-}
-
-KDE_EXPORT QList< Profile*> ProfileServer::allProfiles() {
-  return instance->allProfiles();
-}
-
-KDE_EXPORT  Profile* ProfileServer::profile(const QString& profileId) {
-  foreach(Profile *profile, instance->allProfiles()){
-    if(profile->profileId() == profileId){
-      return profile;
+void ProfileServerPrivate::addProfile( Profile* profile) {
+    for(int i =0; i< m_allProfiles.size(); i++){
+        Profile *tProfile = m_allProfiles.at(i);
+        if(profile->profileId() == tProfile->profileId()){
+            if( 1 ==  profile->compareVersion(tProfile)){
+                // new profileversion is greater as current -> replace
+                m_allProfiles.replace(i, profile);
+                return;
+            }else {
+                // in this case keep profile (first come first served...)
+                return;
+            }
+        }
     }
-  }
-  kDebug() << "Profile" << profileId<< "not found.";
-  return 0;
+    // Profile is no in list. Append
+    m_allProfiles.append(profile);
 }
 
- QList< ProfileActionTemplate > KREMOTECONTROL_EXPORT ProfileServer::actionTemplateList(const QString& remote, Profile* profile) {
-  QList<ProfileActionTemplate> retList;
-  foreach(const ProfileActionTemplate &actionTemplate, profile->actionTemplates()){
-    kDebug() << "got template" << actionTemplate.actionTemplateId() << "with button" << actionTemplate.buttonName();
-    foreach(const Solid::Control::RemoteControlButton &button, Solid::Control::RemoteControl(remote).buttons()){
-      kDebug() << "got button" << button.name();
-      if(button.name() == actionTemplate.buttonName()){
-	retList.append(actionTemplate);
-      }
+KREMOTECONTROL_EXPORT void ProfileServer::addProfile(Profile* profile) {
+    instance->addProfile(profile);
+}
+
+KREMOTECONTROL_EXPORT QList< Profile*> ProfileServer::allProfiles() {
+    return instance->allProfiles();
+}
+
+KREMOTECONTROL_EXPORT Profile* ProfileServer::profile(const QString& profileId) {
+    foreach(Profile *profile, instance->allProfiles()){
+        if(profile->profileId() == profileId){
+            return profile;
+        }
     }
-  }
-  return retList;
+    kDebug() << "Profile" << profileId<< "not found.";
+    return 0;
 }
 
-// KDE_EXPORT ProfileActionTemplate ProfileServer::actionTemplate(const ProfileAction action) {
-//   return profile(action.profileName()).getActionTemplate(action->actionTemplateID());
-// }
-
-
-
-ProfileServer::ProfileXmlContentHandler::ProfileXmlContentHandler(const QUrl &schemaFile)
-{
-  m_schema = new QXmlSchema();
-  m_schema->setMessageHandler(this);
-  m_schema->load(schemaFile);
+KREMOTECONTROL_EXPORT QList<ProfileActionTemplate> ProfileServer::actionTemplateList(const QString& remote, Profile* profile) {
+    QList<ProfileActionTemplate> retList;
+    foreach(const ProfileActionTemplate &actionTemplate, profile->actionTemplates()){
+        kDebug() << "got template" << actionTemplate.actionTemplateId() << "with button" << actionTemplate.buttonName();
+        foreach(const Solid::Control::RemoteControlButton &button, Solid::Control::RemoteControl(remote).buttons()){
+            kDebug() << "got button" << button.name();
+            if(button.name() == actionTemplate.buttonName()){
+                retList.append(actionTemplate);
+            }
+        }
+    }
+    return retList;
 }
 
-ProfileServer::ProfileXmlContentHandler::~ProfileXmlContentHandler()
-{
-  delete m_schema;
+ProfileServer::ProfileXmlContentHandler::ProfileXmlContentHandler(const QUrl &schemaFile) {
+    m_schema = new QXmlSchema();
+    m_schema->setMessageHandler(this);
+    m_schema->load(schemaFile);
 }
 
+ProfileServer::ProfileXmlContentHandler::~ProfileXmlContentHandler() {
+    delete m_schema;
+}
 
- bool ProfileServer::ProfileXmlContentHandler::validateFile(const QString& fileName)
-{
-  if ( m_schema->isValid() ) {
+bool ProfileServer::ProfileXmlContentHandler::validateFile(const QString& fileName) {
+    if ( m_schema->isValid() ) {
         QStringList theFiles = KGlobal::dirs()->findAllResources("data", "profiles/*.profile.xml");
-	QXmlSchemaValidator validator(*m_schema);
-	  return validator.validate( QUrl::fromLocalFile(fileName));
-  }
-  return false;
+        QXmlSchemaValidator validator(*m_schema);
+        return validator.validate( QUrl::fromLocalFile(fileName));
+    }
+    return false;
 }
 
-void ProfileServer::ProfileXmlContentHandler::handleMessage(QtMsgType type, const QString& description, const QUrl& identifier, const QSourceLocation& sourceLocation)
-{
-  QTextDocument document;
-  document.setHtml(description);
-  kDebug() << "Error validating xml file " << sourceLocation.uri().toString() << " Message " << document.toPlainText();
+void ProfileServer::ProfileXmlContentHandler::handleMessage(QtMsgType type, const QString& description, const QUrl& identifier, const QSourceLocation& sourceLocation) {
+    QTextDocument document;
+    document.setHtml(description);
+    kDebug() << "Error validating xml file " << sourceLocation.uri().toString() << " Message " << document.toPlainText();
 }
 
-
-KDE_EXPORT  ProfileServer::ProfileSupportedByRemote ProfileServer::isProfileAvailableForRemote(Profile* profile, const Remote& remote)
-{
+ProfileServer::ProfileSupportedByRemote KREMOTECONTROL_EXPORT ProfileServer::isProfileAvailableForRemote(Profile* profile, const Remote& remote) {
     QStringList tProfilActionNames;
     foreach(const ProfileActionTemplate profileAction, profile->actionTemplates()) {
         if (! profileAction.buttonName().isEmpty()) {
@@ -193,102 +172,93 @@ KDE_EXPORT  ProfileServer::ProfileSupportedByRemote ProfileServer::isProfileAvai
 ********************************************************************
 */
 
-QList<Profile*> ProfileServer::ProfileXmlContentHandler::loadProfilesFromFiles(const QStringList& files)
-{
-  QList<Profile*> profileList;
-  foreach (QString file, files) {
-    if (validateFile(file) ) {
-      Profile *profile = parseFile(file);
-      if(profile){
-	profileList.append(profile);
-	}
-      }
+QList<Profile*> ProfileServer::ProfileXmlContentHandler::loadProfilesFromFiles(const QStringList& files) {
+    QList<Profile*> profileList;
+    foreach(QString file, files) {
+        if(validateFile(file)) {
+            Profile *profile = parseFile(file);
+            if(profile){
+                profileList.append(profile);
+            }
+        }
     }
-  return profileList;
+    return profileList;
 }
 
-Profile * ProfileServer::ProfileXmlContentHandler::parseFile(const QString& fileName)
-{
-  //QString id = fileName.left(filename.indexOf(".profile.xml"));
-  QFile file( fileName );
+Profile * ProfileServer::ProfileXmlContentHandler::parseFile(const QString& fileName) {
+    //QString id = fileName.left(filename.indexOf(".profile.xml"));
+    QFile file( fileName );
 
-  QString profileId = QFileInfo(fileName).fileName();
-  profileId = profileId.left(profileId.indexOf(".profile.xml"));
-  QDomDocument doc;
-  QString errorMsg;
-  int errorLine, errorColumn;
-  if ( doc.setContent( &file, &errorMsg, &errorLine, &errorColumn ) ) {
+    QString profileId = QFileInfo(fileName).fileName();
+    profileId = profileId.left(profileId.indexOf(".profile.xml"));
+    QDomDocument doc;
+    QString errorMsg;
+    int errorLine, errorColumn;
+    if(doc.setContent( &file, &errorMsg, &errorLine, &errorColumn)) {
 
-    QDomElement rootElement = doc.namedItem("profile").toElement();
-    QString name = rootElement.namedItem("name").toElement().text();
-    QString description = rootElement.namedItem("description").toElement().isNull() ? QString() : rootElement.namedItem("description").toElement().text().trimmed();
-    QString author = rootElement.namedItem("author").toElement().text().trimmed();
-    QString version = rootElement.namedItem("version").toElement().text().trimmed();
+        QDomElement rootElement = doc.namedItem("profile").toElement();
+        QString name = rootElement.namedItem("name").toElement().text();
+        QString description = rootElement.namedItem("description").toElement().isNull() ? QString() : rootElement.namedItem("description").toElement().text().trimmed();
+        QString author = rootElement.namedItem("author").toElement().text().trimmed();
+        QString version = rootElement.namedItem("version").toElement().text().trimmed();
 
-//     kDebug()<< "Profile";
-//     kDebug()<< "***********************************************************************";
-//     kDebug() << "id " << profileId <<"name " << name << "description " << description;
-//     kDebug() << "id " << profileId <<"author" << author<< "version" << version;
+        //     kDebug()<< "Profile";
+        //     kDebug()<< "***********************************************************************";
+        //     kDebug() << "id " << profileId <<"name " << name << "description " << description;
+        //     kDebug() << "id " << profileId <<"author" << author<< "version" << version;
 
-    Profile *profile =  new Profile(profileId, name ,version, author, description);
+        Profile *profile =  new Profile(profileId, name ,version, author, description);
 
-    QDomNodeList actionNodeList = rootElement.elementsByTagName("action");
-    for(int count = 0; count < actionNodeList.size(); ++count){
-	profile->addTemplate(parseAction(actionNodeList.at(count), profileId));
+        QDomNodeList actionNodeList = rootElement.elementsByTagName("action");
+        for(int count = 0; count < actionNodeList.size(); ++count){
+            profile->addTemplate(parseAction(actionNodeList.at(count), profileId));
+        }
+        return profile;
+    } else {
+        kDebug() << "Could not parse xml file " << fileName;
+        kDebug() << " Error on line " << errorLine << "Column " << errorColumn << " Message"  << errorMsg;
+        return 0;
     }
-    return profile;
-  }else{
-    kDebug() << "Could not parse xml file " << fileName;
-    kDebug() << " Error on line " << errorLine << "Column " << errorColumn << " Message"  << errorMsg;
-    return 0;
-  }
 }
 
-
-ProfileActionTemplate ProfileServer::ProfileXmlContentHandler::parseAction(QDomNode actionNode, const QString& profileId)
-{
-
+ProfileActionTemplate ProfileServer::ProfileXmlContentHandler::parseAction(QDomNode actionNode, const QString& profileId) {
     QString buttonName;
     bool autostart = false;
     bool repeat;
     QString actionId = actionNode.attributes().namedItem("id").nodeValue().trimmed();
     if (actionNode.attributes().contains("button")){
-      buttonName = actionNode.attributes().namedItem("button").nodeValue().trimmed();
+        buttonName = actionNode.attributes().namedItem("button").nodeValue().trimmed();
     }
     if (actionNode.attributes().contains("autostart")){
-      QString value = actionNode.attributes().namedItem("autostart").nodeValue().trimmed();
-      autostart = value == "true"? true: false;
+        QString value = actionNode.attributes().namedItem("autostart").nodeValue().trimmed();
+        autostart = value == "true"? true: false;
     }
     if (actionNode.attributes().contains("repeat")){
-      repeat = QVariant(actionNode.attributes().namedItem("repeat").nodeValue().trimmed()).toBool();
+        repeat = QVariant(actionNode.attributes().namedItem("repeat").nodeValue().trimmed()).toBool();
     }
 
     QString actionName = actionNode.namedItem("name").toElement().text().trimmed();
 
     QString description;
     if( ! actionNode.namedItem("description").isNull()) {
-      description = actionNode.namedItem("description").toElement().text().trimmed();
+        description = actionNode.namedItem("description").toElement().text().trimmed();
     }
 
     DBusAction::ActionDestination actionType;
     if( ! actionNode.namedItem("ifmulti").isNull())  {
         QString ifMultiTag = actionNode.namedItem("ifmulti").toElement().text().trimmed();
         if(ifMultiTag == "sendtotop"){
-          actionType = DBusAction::Top;
+            actionType = DBusAction::Top;
+        } else if(ifMultiTag == "sendtobottom") {
+            actionType = DBusAction::Bottom;
+        } else if(ifMultiTag == "sendtoall") {
+            actionType = DBusAction::All;
+        } else {
+            actionType = DBusAction::None;
         }
-        else if(ifMultiTag == "sendtobottom"){
-          actionType = DBusAction::Bottom;
-        }
-        else if(ifMultiTag == "sendtoall"){
-          actionType = DBusAction::All;
-        }
-        else {
-          actionType = DBusAction::None;
-        }
-    }else{
-      actionType = DBusAction::Unique;
+    } else {
+        actionType = DBusAction::Unique;
     }
-
 
     QDomElement prototypeNode = actionNode.namedItem("prototype").toElement();
     QString serviceName = prototypeNode.namedItem("serviceName").toElement().text().trimmed();
@@ -298,20 +268,20 @@ ProfileActionTemplate ProfileServer::ProfileXmlContentHandler::parseAction(QDomN
     if(!prototypeNode.namedItem("arguments").isNull()){
         QDomNodeList attributeNodes = prototypeNode.namedItem("arguments").toElement().elementsByTagName("argument");
         for(int attributeCount = 0; attributeCount < attributeNodes.size(); ++ attributeCount){
-          QDomNode attributeNode = attributeNodes.at(attributeCount);
-          QString typeString  = attributeNode.attributes().namedItem("type").nodeValue().trimmed();
-          QVariant argValue(QVariant::nameToType(typeString.toLocal8Bit()));
-          QString description;
-          if(!attributeNode.toElement().namedItem("comment").isNull()){
-              description = attributeNode.toElement().namedItem("comment").toElement().text();
-          }
-          if(!attributeNode.toElement().namedItem("default").isNull()){
-              argValue = QVariant(attributeNode.toElement().namedItem("default").toElement().text());
-              argValue.convert(QVariant::nameToType(typeString.toLocal8Bit()));
-          }
-          arguments.append(Argument(argValue, description));
-          kDebug()<< "		" << "description" << description;
-          kDebug()<< "		" << "value" << argValue;
+            QDomNode attributeNode = attributeNodes.at(attributeCount);
+            QString typeString  = attributeNode.attributes().namedItem("type").nodeValue().trimmed();
+            QVariant argValue(QVariant::nameToType(typeString.toLocal8Bit()));
+            QString description;
+            if(!attributeNode.toElement().namedItem("comment").isNull()){
+                description = attributeNode.toElement().namedItem("comment").toElement().text();
+            }
+            if(!attributeNode.toElement().namedItem("default").isNull()){
+                argValue = QVariant(attributeNode.toElement().namedItem("default").toElement().text());
+                argValue.convert(QVariant::nameToType(typeString.toLocal8Bit()));
+            }
+            arguments.append(Argument(argValue, description));
+            kDebug()<< "		" << "description" << description;
+            kDebug()<< "		" << "value" << argValue;
         }
     }
 
@@ -329,17 +299,15 @@ ProfileActionTemplate ProfileServer::ProfileXmlContentHandler::parseAction(QDomN
 //     kDebug()<< "    " << "args" << function.args().count();
 
 
-    return ProfileActionTemplate(
-      profileId,
-      actionId,
-      actionName,
-      serviceName,
-      nodeName,
-      function,
-      actionType,
-      autostart,
-      repeat,
-      description,
-      buttonName
-    );
+    return ProfileActionTemplate(profileId,
+                                  actionId,
+                                  actionName,
+                                  serviceName,
+                                  nodeName,
+                                  function,
+                                  actionType,
+                                  autostart,
+                                  repeat,
+                                  description,
+                                  buttonName);
 }
