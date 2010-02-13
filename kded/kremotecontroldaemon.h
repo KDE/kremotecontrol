@@ -42,6 +42,8 @@ Q_DECLARE_PRIVATE(KRemoteControlDaemon)
 private:
     KRemoteControlDaemonPrivate * d_ptr;
     void notifyModeChanged(Remote* remote);
+    void notifyEvent(const QString& message, const QString& icon = QString ( "infrared-remote" ), const QString& event = QString ( "global_event" ));
+    
 public:
     KRemoteControlDaemon(QObject * parent, const QVariantList&);
     virtual ~KRemoteControlDaemon();
@@ -49,7 +51,7 @@ public:
     bool isConnected() {
         return Solid::Control::RemoteControlManager::connected();
     }
-    void reloadConfiguration();
+    void reloadConfiguration();	
     
     void ignoreButtonEvents(const QString &remoteName);
     void considerButtonEvents(const QString& remoteName);

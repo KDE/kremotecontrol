@@ -1,7 +1,7 @@
 <!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
 <node>
   <interface name="org.kde.krcd">
-  <arg name="isConnected" type="s" direction="in"/>	 
+  <method name="isConnected">	 
 	<arg type="b" direction="out"/>
     </method>
     <method name="ignoreButtonEvents">
@@ -17,10 +17,10 @@
       <arg name="remoteName" type="s" direction="in"/>
       <arg type="as" direction="out"/>
     </method>
-    <method name="changeMode">
-    <arg name="remoteName" type="s" direction="in"/>
-	 <arg name="modeName" type="s" direction="in"/>
-	<arg type="b" direction="out"/>
+    <method name="changeMode">    
+      <arg name="remoteName" type="s" direction="in"/>
+      <arg name="modeName" type="s" direction="in"/>
+      <arg type="b" direction="out"/>
     </method>
     <method name="getCurrentMode">
       <arg name="remoteName" type="s" direction="in"/>

@@ -3,7 +3,6 @@ add_subdirectory( icons )
 include_directories(
    ${CMAKE_CURRENT_SOURCE_DIR}/../libkremotecontrol
    )
-   ## next target: test service
 
 set(kded_kremotecontrol_SRCS
    kremotecontroldaemon.cpp
