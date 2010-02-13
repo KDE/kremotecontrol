@@ -50,15 +50,18 @@ class KREMOTECONTROL_EXPORT DBusInterface: public QObject
         QStringList getRegisteredPrograms();
         QStringList getNodes(const QString &program);
         QList<Prototype> getFunctions(const QString &program, const QString &object);
-
-        QStringList getRemotes();
-        void requestNextKeyPress();
-        void cancelKeyPressRequest();
+	
+        QStringList getConfiguredRemotes();
+        void ignoreButtonEvents(const QString &remoteName);
+        void considerButtonEvents(const QString &remoteName);	
         void reloadRemoteControlDaemon();
 
         QStringList getButtons(const QString &remoteName);
         void executeAction(const DBusAction *action);
-
+	QStringList getModesForRemote(const QString &remoteName);
+	void changeMode(const QString &remoteName, const QString &modeName);
+	QString getCurrentMode(const QString &remoteName);
+    
 };
 
 #endif
