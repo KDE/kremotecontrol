@@ -1,0 +1,18 @@
+[Desktop Entry]
+Name=Remote Control Data Engine
+Comment=Data engine for kremotecontrol
+Type=Service
+ServiceTypes=Plasma/DataEngine
+Icon=infrared-remote
+
+X-KDE-Library=plasma_engine_kremoteconrol
+X-Plasma-EngineName=kremotecontrol
+X-KDE-PluginInfo-Author=Frank Scheffold
+X-KDE-PluginInfo-Email=fscheffold@googlemail.com
+X-KDE-PluginInfo-Name=kremotecontrol
+X-KDE-PluginInfo-Version=0.1
+X-KDE-PluginInfo-Website=http://plasma.kde.org/
+X-KDE-PluginInfo-Category=
+X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-License=LGPL
+X-KDE-PluginInfo-EnabledByDefault=true

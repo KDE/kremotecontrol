@@ -10,6 +10,10 @@
     <method name="considerButtonEvents">
        <arg name="remoteName" type="s" direction="in"/>
     </method>
+    <method name="eventsIgnored">    
+      <arg name="remoteName" type="s" direction="in"/>
+      <arg type="b" direction="out"/>
+    </method>
     <method name="getConfiguredRemotes">       
     <arg type="as" direction="out"/>
     </method>
@@ -27,5 +31,11 @@
       <arg type="s" direction="out"/>
     </method>    
   <method name="reloadConfiguration"/>
+  <signal name="modeChanged">
+       <arg name="remotName" type="s" direction="out"/>
+       <arg name="modeName" type="s" direction="out"/>
+     </signal>
+  <signal name="buttonPressed"/>
   </interface>
 </node>
+

@@ -61,7 +61,7 @@ class KREMOTECONTROL_EXPORT DBusInterface: public QObject
 	QStringList getModesForRemote(const QString &remoteName);
 	void changeMode(const QString &remoteName, const QString &modeName);
 	QString getCurrentMode(const QString &remoteName);
-    
+	bool eventsIgnored(const QString &remoteName);
 };
 
 #endif

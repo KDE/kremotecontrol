@@ -44,7 +44,7 @@ private:
     void notifyModeChanged(Remote* remote);
     void notifyEvent(const QString& message, const QString& icon = QString ( "infrared-remote" ), const QString& event = QString ( "global_event" ));
     
-public:
+  public:
     KRemoteControlDaemon(QObject * parent, const QVariantList&);
     virtual ~KRemoteControlDaemon();
   
@@ -60,10 +60,12 @@ public:
     QStringList getConfiguredRemotes();
     QStringList getModesForRemote(const QString &remoteName);
     QString getCurrentMode(const QString& remoteName);
-       
+    bool eventsIgnored(const QString& remoteName);
     
-    
-private slots:
+   signals:
+      void modeChanged(const QString &remoteName, const QString &modeName);
+      void buttonPressed();
+  private slots:
     void lauchKcmShell();   
     
     void slotStatusChanged(bool connected);

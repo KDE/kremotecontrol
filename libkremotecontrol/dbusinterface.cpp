@@ -417,42 +417,54 @@ void DBusInterface::executeAction(const DBusAction* action) {
 void DBusInterface::changeMode(const QString& remoteName, const QString& modeName) {    
       QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontrol",
                      "org.kde.krcd", "getConfiguredRemotes");    		      
-    m.arguments().append(remoteName);
-    m.arguments().append(modeName);
+    m << remoteName;
+    m << modeName;
     QDBusMessage response = QDBusConnection::sessionBus().call(m);
-    if (response.type() == QDBusMessage::ErrorMessage) {
-        kDebug() << response.errorMessage();
-    }else{
-      bool sucess = response.arguments().at(0).toBool();;
-      if(!sucess){
+    QDBusReply<bool> reply = QDBusConnection::sessionBus().call(m);
+    if(reply.isValid()){      
+      if(!reply){
 	kDebug() << "Couldn't change to mode " << modeName << " on remote " << remoteName;
       }
+    }else{
+        kDebug() << response.errorMessage();
     }
 }
 
 QString DBusInterface::getCurrentMode(const QString& remoteName) {
-  QString currentMode;
   QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontrol",
                      "org.kde.krcd", "getCurrentMode");    
-    QDBusMessage response = QDBusConnection::sessionBus().call(m);
-    if (response.type() == QDBusMessage::ErrorMessage) {
-        kDebug() << response.errorMessage();
+     m << remoteName;
+    QDBusReply<QString> reply = QDBusConnection::sessionBus().call(m);
+    if (reply.isValid()) {
+      return reply;
     } else {
-        currentMode = response.arguments().at(0).toString();
+      kDebug() << reply.error().message();  
+      return QString();
     }
-    return currentMode;
 }
 
 QStringList DBusInterface::getModesForRemote(const QString& remoteName) {
-  QStringList modes;
-      QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontrol",
+    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontrol",
                      "org.kde.krcd", "getModesForRemote");    
-    QDBusMessage response = QDBusConnection::sessionBus().call(m);
-    if (response.type() == QDBusMessage::ErrorMessage) {
-        kDebug() << response.errorMessage();
+    m << remoteName;
+    QDBusReply<QStringList> reply = QDBusConnection::sessionBus().call(m);
+    if (reply.isValid()) {
+        return reply;
     } else {
-        modes = response.arguments().at(0).toStringList();
+          kDebug() << reply.error().message();
+	  return QStringList();
     }
-    return modes;
 }
 
+bool DBusInterface::eventsIgnored(const QString& remoteName) {
+   QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontrol",
+                     "org.kde.krcd", "eventsIgnored");    
+     m << remoteName;
+    QDBusReply<bool> reply = QDBusConnection::sessionBus().call(m);
+    if (reply.isValid()) {
+      return reply;
+    } else {
+      kDebug() << reply.error().message();  
+      return false;
+    }
+}
