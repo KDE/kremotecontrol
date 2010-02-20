@@ -62,6 +62,20 @@ void Mode::removeAction(Action* action) {
     m_actionList.removeAll(action);
 }
 
+void Mode::moveActionUp(Action* action) {
+    int oldIndex = m_actionList.indexOf(action);
+    if(oldIndex > 0) {
+        m_actionList.move(oldIndex, oldIndex - 1);
+    }
+}
+
+void Mode::moveActionDown(Action* action) {
+    int oldIndex = m_actionList.indexOf(action);
+    if(oldIndex < (m_actionList.count() - 1)) {
+        m_actionList.move(oldIndex, oldIndex + 1);
+    }
+}
+
 QList< Action* > Mode::actions() const {
     return m_actionList;
 }

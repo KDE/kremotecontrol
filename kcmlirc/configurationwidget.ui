@@ -25,7 +25,7 @@
        <string>Controller Functions</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0" colspan="2">
+       <item row="0" column="0">
         <widget class="QLabel" name="label_2">
          <property name="maximumSize">
           <size>
@@ -41,12 +41,26 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="2" colspan="2">
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>TextLabel</string>
+       <item row="0" column="2">
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <property name="spacing">
+          <number>0</number>
          </property>
-        </widget>
+         <item>
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>Configured actions for:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lActions">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
        <item row="1" column="0" rowspan="7">
         <widget class="QTreeView" name="tvRemotes">

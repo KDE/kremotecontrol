@@ -115,6 +115,20 @@ QString Remote::name() const {
     return m_remoteName;
 }
 
+void Remote::moveModeUp(Mode* mode) {
+    int oldPos = m_modeList.indexOf(mode);
+    if(oldPos > 1){
+        m_modeList.move(oldPos, oldPos - 1);
+    }
+}
+
+void Remote::moveModeDown(Mode* mode) {
+    int oldPos = m_modeList.indexOf(mode);
+    if(oldPos < (m_modeList.count() - 1)){
+        m_modeList.move(oldPos, oldPos + 1);
+    }
+}
+
 QList<Mode*> Remote::allModes() const {
     return m_modeList;
 }

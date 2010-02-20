@@ -31,14 +31,20 @@ AddAction::AddAction() {
     setMainWidget(widget);
     
     
-    ui.cbActionType->addItem(i18n("I whish to create an Action from a Template"), Action::ProfileAction);
-    ui.cbActionType->addItem(i18n("I whish to create an Action using D-Bus"), Action::DBusAction);
+/*    ui.cbActionType->addItem(i18n("I whish to create an Action from a Template"), Action::ProfileAction);
+    ui.cbActionType->addItem(i18n("I whish to create an Action using D-Bus"), Action::DBusAction);*/
 }
 
 
 Action::ActionType AddAction::getType() {
-    kDebug() << "current index" << ui.cbActionType->currentIndex() << "type" << ui.cbActionType->itemData(ui.cbActionType->currentIndex()).toInt();
-    return (Action::ActionType)ui.cbActionType->itemData(ui.cbActionType->currentIndex()).toInt();
+/*    kDebug() << "current index" << ui.cbActionType->currentIndex() << "type" << ui.cbActionType->itemData(ui.cbActionType->currentIndex()).toInt();
+    return (Action::ActionType)ui.cbActionType->itemData(ui.cbActionType->currentIndex()).toInt();*/
+
+    if(ui.rbTemplate->isChecked()){
+        return Action::ProfileAction;
+    } else {
+        return Action::DBusAction;
+    }
 }
 
 Action *AddAction::createAction(const QString &remote) {

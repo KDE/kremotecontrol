@@ -173,6 +173,7 @@ class RemoteModel: public QStandardItemModel
         
         Remote *remote(const QModelIndex &index) const;
         Mode *mode(const QModelIndex &index) const;
+        QModelIndex find(Mode *mode) const;
         
         virtual QVariant data(const QModelIndex &index, int role) const;
 };
@@ -193,7 +194,7 @@ class ActionModel: public QStandardItemModel
         QVariant data(const QModelIndex &index, int role) const;
         
         Action *action(const QModelIndex &index) const;
-
+        QModelIndex find(Action *action) const;
 };
 
 #endif /* MODEL_H_ */

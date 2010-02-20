@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>441</width>
-    <height>293</height>
+    <width>399</width>
+    <height>129</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,29 +17,29 @@
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>TextLabel</string>
+      <string>How do you whish to create the new action?</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="KComboBox" name="cbActionType"/>
+    <widget class="QRadioButton" name="rbTemplate">
+     <property name="text">
+      <string>Create a new action using a template</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item>
-    <widget class="QLabel" name="label_2">
+    <widget class="QRadioButton" name="rbDBus">
      <property name="text">
-      <string>TextLabel</string>
+      <string>Create a new action browsing the D-Bus session bus</string>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -58,6 +58,9 @@ class KREMOTECONTROL_EXPORT Remote
 
         QString name() const;
 
+        void moveModeUp(Mode *mode);
+        void moveModeDown(Mode *mode);
+
         bool nextMode(const QString &button);
         
         ModeChangeMode modeChangeMode() const;

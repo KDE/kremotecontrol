@@ -58,12 +58,17 @@ private slots:
     void removeAction();
     void editAction();
     void copyAction();
+    void moveActionUp();
+    void moveActionDown();
     
     void addMode();
     void editMode();
     void removeMode();
+    void moveModeUp();
+    void moveModeDown();
     
     void updateModes();
+    void updateActions(Mode *mode);
     void modeSelectionChanged(const QModelIndex &index);
     void actionSelectionChanged(const QModelIndex &index);
 

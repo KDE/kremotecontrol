@@ -43,6 +43,8 @@ class KREMOTECONTROL_EXPORT Mode
 
         void addAction(Action *action);
         void removeAction(Action *action);
+        void moveActionUp(Action *action);
+        void moveActionDown(Action *action);
         
         QList<Action*> actions() const;
         QList<Action*> actionsForButton(const QString& button) const;

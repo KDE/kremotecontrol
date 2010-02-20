@@ -685,7 +685,6 @@ Remote *RemoteModel::remote(const QModelIndex &index) const {
 }
 
 Mode *RemoteModel::mode(const QModelIndex &index) const {
-    kDebug() << "getting mode for index:" << index;
     if(index.isValid() && index.parent().isValid()){
         return qVariantValue<Mode*>(index.data(Qt::UserRole));
     }
@@ -693,6 +692,21 @@ Mode *RemoteModel::mode(const QModelIndex &index) const {
         return qVariantValue<Remote*>(index.data(Qt::UserRole))->masterMode();
     }
     return 0;
+}
+
+QModelIndex RemoteModel::find(Mode* mode) const {
+    kDebug() << "finding mode" << mode->name() << "rows" << rowCount();
+    for(int i = 0; i < rowCount(); i++){
+        QModelIndex remoteIndex = index(i, 0);
+        for(int j = 0; j < rowCount(remoteIndex); j++){
+            QStandardItem *modeItem = itemFromIndex(index(j, 0, remoteIndex));
+            if(modeItem->data(Qt::UserRole).value<Mode*>() == mode){
+                return modeItem->index();
+            }
+        }
+    }
+    // Not found...
+    return QModelIndex();
 }
 
 QVariant RemoteModel::data(const QModelIndex& index, int role) const {
@@ -785,5 +799,21 @@ QVariant ActionModel::data(const QModelIndex& index, int role) const {
 }
 
 Action* ActionModel::action(const QModelIndex& index) const {
-    return qVariantValue<Action*>(item(index.row())->data(Qt::UserRole));
+    if(index.isValid()){
+        return qVariantValue<Action*>(item(index.row())->data(Qt::UserRole));
+    }
+    return 0;
+}
+
+QModelIndex ActionModel::find(Action* action) const {
+    kDebug() << "finding action" << action->name() << "rows" << rowCount();
+    for(int i = 0; i < rowCount(); i++){
+        QModelIndex actionIndex = index(i, 0);
+        QStandardItem *actionItem = itemFromIndex(actionIndex);
+        if(actionItem->data(Qt::UserRole).value<Action*>() == action){
+            return actionItem->index();
+        }
+    }
+    // Not found...
+    return QModelIndex();
 }

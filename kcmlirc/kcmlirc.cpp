@@ -111,9 +111,16 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
     connect(ui.pbEditAction, SIGNAL(clicked(bool)), SLOT(editAction()));
     
     ui.pbMoveModeUp->setIcon(KIcon("arrow-up"));
+    connect(ui.pbMoveModeUp, SIGNAL(clicked(bool)), SLOT(moveModeUp()));
+
     ui.pbMoveModeDown->setIcon(KIcon("arrow-down"));
+    connect(ui.pbMoveModeDown, SIGNAL(clicked(bool)), SLOT(moveModeDown()));
+
     ui.pbMoveActionUp->setIcon(KIcon("arrow-up"));
+    connect(ui.pbMoveActionUp, SIGNAL(clicked(bool)), SLOT(moveActionUp()));
+
     ui.pbMoveActionDown->setIcon(KIcon("arrow-down"));
+    connect(ui.pbMoveActionDown, SIGNAL(clicked(bool)), SLOT(moveActionDown()));
 
     ui.pbCopyAction->setIcon(KIcon("edit-copy"));
     connect(ui.pbCopyAction, SIGNAL(clicked(bool)), SLOT(copyAction()));
@@ -170,10 +177,7 @@ void KCMLirc::editAction() {
     EditActionContainer editActioncontainer(action, remote->name());
     if(editActioncontainer.exec()) {
         QModelIndex index = ui.tvActions->selectionModel()->currentIndex();
-        m_actionModel->refresh(mode);
-        ui.tvActions->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Rows | QItemSelectionModel::SelectCurrent);
-        actionSelectionChanged(index);
-        ui.tvActions->resizeColumnToContents(0);
+        updateActions(mode);
         emit changed(true);
     }    
 }
@@ -195,8 +199,25 @@ void KCMLirc::copyAction() {
             break;
     }
     mode->addAction(newAction);
-    m_actionModel->refresh(mode);
-    ui.tvActions->resizeColumnToContents(0);
+    updateActions(mode);
+    ui.tvActions->selectionModel()->setCurrentIndex(m_actionModel->find(newAction), QItemSelectionModel::Rows | QItemSelectionModel::SelectCurrent);
+    editAction();
+    emit changed(true);
+}
+
+void KCMLirc::moveActionUp() {
+    Mode *mode = m_remoteModel->mode(ui.tvRemotes->selectionModel()->currentIndex());
+    Action *action = m_actionModel->action(ui.tvActions->selectionModel()->currentIndex());
+    mode->moveActionUp(action);
+    updateActions(mode);
+    emit changed(true);
+}
+
+void KCMLirc::moveActionDown() {
+    Mode *mode = m_remoteModel->mode(ui.tvRemotes->selectionModel()->currentIndex());
+    Action *action = m_actionModel->action(ui.tvActions->selectionModel()->currentIndex());
+    mode->moveActionDown(action);
+    updateActions(mode);
     emit changed(true);
 }
 
@@ -281,12 +302,43 @@ void KCMLirc::removeMode() {
         emit changed(true);
     }
 }
+void KCMLirc::moveModeUp() {
+    QModelIndex currentIndex = ui.tvRemotes->selectionModel()->currentIndex();
+    Remote *remote = m_remoteModel->remote(currentIndex);
+    Mode *mode = m_remoteModel->mode(currentIndex);    
+    remote->moveModeUp(mode);
+    updateModes();
+//    ui.tvRemotes->selectionModel()->setCurrentIndex(m_remoteModel->find(mode), QItemSelectionModel::Rows | QItemSelectionModel::SelectCurrent);
+    emit changed(true);
+}
+
+void KCMLirc::moveModeDown() {
+    QModelIndex currentIndex = ui.tvRemotes->selectionModel()->currentIndex();
+    Remote *remote = m_remoteModel->remote(currentIndex);
+    Mode *mode = m_remoteModel->mode(currentIndex);    
+    remote->moveModeDown(mode);
+    updateModes();
+    emit changed(true);
+}
 
 void KCMLirc::updateModes() {
+    Mode *mode = m_remoteModel->mode(ui.tvRemotes->selectionModel()->currentIndex());
     m_remoteModel->refresh(m_remoteList);
     ui.tvRemotes->expandAll();
     ui.tvRemotes->resizeColumnToContents(0);
+    if(mode){
+        ui.tvRemotes->selectionModel()->setCurrentIndex(m_remoteModel->find(mode), QItemSelectionModel::Rows | QItemSelectionModel::SelectCurrent);
+    }
     modeSelectionChanged(ui.tvRemotes->selectionModel()->currentIndex());
+}
+
+void KCMLirc::updateActions(Mode *mode) {
+    Action *oldAction = m_actionModel->action(ui.tvActions->selectionModel()->currentIndex());
+    m_actionModel->refresh(mode);
+    ui.tvActions->resizeColumnToContents(0);
+    if(oldAction){
+        ui.tvActions->selectionModel()->setCurrentIndex(m_actionModel->find(oldAction), QItemSelectionModel::Rows | QItemSelectionModel::SelectCurrent);
+    }
 }
 
 void KCMLirc::modeSelectionChanged(const QModelIndex &index) {
@@ -308,8 +360,23 @@ void KCMLirc::modeSelectionChanged(const QModelIndex &index) {
     
     Mode *mode = m_remoteModel->mode(index);
     if(mode){
-        m_actionModel->refresh(mode);
-        ui.tvActions->resizeColumnToContents(0);
+        updateActions(mode);
+        
+        Remote *remote = m_remoteModel->remote(index);
+        ui.lActions->setText(remote->name() + " (" + mode->name() + ")");
+        
+        if(remote->allModes().indexOf(mode) > 2){
+            ui.pbMoveModeUp->setEnabled(true);
+        } else {
+            ui.pbMoveModeUp->setEnabled(false);
+        }
+
+        if(remote->allModes().indexOf(mode) < (remote->allModes().count() - 1)){
+            ui.pbMoveModeDown->setEnabled(true);
+        } else {
+            ui.pbMoveModeDown->setEnabled(false);
+        }
+
     }
     
     actionSelectionChanged(QModelIndex());
@@ -321,10 +388,22 @@ void KCMLirc::actionSelectionChanged(const QModelIndex& index) {
         ui.pbRemoveAction->setEnabled(true);
         ui.pbEditAction->setEnabled(true);
         ui.pbCopyAction->setEnabled(true);
+        if(index.row() > 0){
+            ui.pbMoveActionUp->setEnabled(true);
+        } else {
+            ui.pbMoveActionUp->setEnabled(false);          
+        }
+        if(index.row() < (m_actionModel->rowCount() - 1)){
+            ui.pbMoveActionDown->setEnabled(true);
+        } else {
+            ui.pbMoveActionDown->setEnabled(false);          
+        }
     } else {
         ui.pbRemoveAction->setEnabled(false);
         ui.pbEditAction->setEnabled(false);
         ui.pbCopyAction->setEnabled(false);
+        ui.pbMoveActionUp->setEnabled(false);
+        ui.pbMoveActionDown->setEnabled(false);
     }
 }
 
