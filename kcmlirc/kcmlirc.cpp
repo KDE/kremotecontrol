@@ -26,7 +26,7 @@
 #include "editactioncontainer.h"
 #include "modedialog.h"
 #include "profileserver.h"
-// #include "selectprofile.h"
+#include "selectprofile.h"
 #include "dbusinterface.h"
 #include "model.h"
 #include "remotelist.h"
@@ -38,8 +38,6 @@
 #include <kaboutdata.h>
 
 #include <QDBusInterface>
-#include "selectprofile.h"
-
 
 K_PLUGIN_FACTORY( KCMLircFactory, registerPlugin<KCMLirc>();)
 K_EXPORT_PLUGIN( KCMLircFactory( "kcm_lirc" ) )
@@ -133,6 +131,8 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
     m_remoteModel = new RemoteModel(m_remoteList, ui.tvRemotes);
     ui.tvRemotes->setModel(m_remoteModel);
     connect(ui.tvRemotes->selectionModel(), SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), SLOT(modeSelectionChanged(const QModelIndex &)));
+    // QueuedConnection needed because the model itself may has some slots queded and refreshing the model before that breaks logic
+    connect(m_remoteModel, SIGNAL(modeChanged(Mode *)), SLOT(actionDropped(Mode*)), Qt::QueuedConnection);
     
     // Create ActionModel
     m_actionModel = new ActionModel(ui.tvActions);
@@ -402,9 +402,13 @@ void KCMLirc::save() {
     DBusInterface::getInstance()->reloadRemoteControlDaemon();
 }
 
-void KCMLirc::gotButton(QString remote, QString button)
-{
+void KCMLirc::gotButton(QString remote, QString button) {
     emit haveButton(remote, button);
+}
+
+void KCMLirc::actionDropped(Mode* mode) {
+    ui.tvRemotes->selectionModel()->setCurrentIndex(m_remoteModel->find(mode), QItemSelectionModel::Rows | QItemSelectionModel::SelectCurrent);
+    updateActions(mode);
 }
 
 #include "kcmlirc.moc"

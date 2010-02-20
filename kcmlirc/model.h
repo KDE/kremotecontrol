@@ -152,6 +152,7 @@ public:
 
 class RemoteModel: public QStandardItemModel
 {
+    Q_OBJECT
     public:
         explicit RemoteModel(const RemoteList &remoteList, QObject *parent = 0);
         RemoteModel(QObject *parent=0);
@@ -162,6 +163,13 @@ class RemoteModel: public QStandardItemModel
         QModelIndex find(Mode *mode) const;
         
         virtual QVariant data(const QModelIndex &index, int role) const;
+        Qt::ItemFlags flags(const QModelIndex &index) const;
+        bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
+        QStringList mimeTypes() const;
+        Qt::DropActions supportedDropActions() const;
+        
+    signals:
+        void modeChanged(Mode *mode);
 };
 
 class RemoteItem: public QStandardItem
@@ -181,6 +189,13 @@ class ActionModel: public QStandardItemModel
         
         Action *action(const QModelIndex &index) const;
         QModelIndex find(Action *action) const;
+        Qt::ItemFlags flags(const QModelIndex &index) const;
+        QMimeData *mimeData(const QModelIndexList &indexes) const;
+        Qt::DropActions supportedDragActions() const;
+        bool removeRows(int row, int col, const QModelIndex &parent = QModelIndex());
+        
+    private:
+      Mode *m_mode;
 };
 
 #endif /* MODEL_H_ */

@@ -72,6 +72,7 @@ private slots:
     void actionSelectionChanged(const QModelIndex &index);
 
     void autoPopulate();
+    void actionDropped(Mode *mode);
 
 signals:
     void haveButton(const QString &remote, const QString &button);

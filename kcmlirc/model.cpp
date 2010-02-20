@@ -49,6 +49,7 @@ DBusServiceModel
 ***********************************
 */
 #include <kapplication.h>
+#include <qmimedata.h>
 
 DBusServiceModel::DBusServiceModel(QObject* parent): QStandardItemModel(parent) {
     setHorizontalHeaderLabels(QStringList() << i18n("Application / Node"));
@@ -668,13 +669,47 @@ QVariant RemoteModel::data(const QModelIndex& index, int role) const {
     return QStandardItemModel::data(index, role);
 }
 
-// QVariant RemoteModel::headerData(int section, Qt::Orientation o, int role) const {
-//     if (role == Qt::DisplayRole) {
-//         return i18nc("Remote name", "Remote");
-//     }
-//     return QAbstractListModel::headerData(section,o,role);
-// }
+Qt::ItemFlags RemoteModel::flags(const QModelIndex& index) const {
+    if(index.isValid()) {
+        return (QStandardItemModel::flags(index) | Qt::ItemIsDropEnabled);
+    }
 
+    return QStandardItemModel::flags(index);
+}
+
+bool RemoteModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) {
+    if (!data->hasFormat("krcd/action"))
+        return false;
+
+    if (action == Qt::IgnoreAction)
+        return true;
+
+    if (column > 0)
+        return false;
+
+    QByteArray encodedData = data->data("krcd/action");
+    QDataStream stream(&encodedData, QIODevice::ReadOnly);
+
+    quint64 actionPointer;
+    stream >> actionPointer;
+    Action *droppedAction = reinterpret_cast<Action*>(actionPointer);
+    kDebug() << "action pointer is" << droppedAction << "name is" << droppedAction->name();
+    
+    mode(parent)->addAction(droppedAction);
+    emit modeChanged(mode(parent));
+    
+    return true;
+}
+
+QStringList RemoteModel::mimeTypes() const {
+    QStringList types;
+    types << "krcd/action";
+    return types;
+}
+
+Qt::DropActions RemoteModel::supportedDropActions() const {
+    return Qt::CopyAction | Qt::MoveAction;
+}
 
 RemoteItem::RemoteItem(Remote *remote) {
     qRegisterMetaType<Remote*>("Remote*");
@@ -718,6 +753,7 @@ ActionModel::ActionModel(QObject *parent): QStandardItemModel(parent) {
 
 
 void ActionModel::refresh(Mode* mode) {
+    m_mode = mode;
     clear();
     setHorizontalHeaderLabels(QStringList() << i18n("Button") << i18n("Application") << i18n("Function"));
     foreach(Action *action, mode->actions()){
@@ -762,3 +798,40 @@ QModelIndex ActionModel::find(Action* action) const {
     // Not found...
     return QModelIndex();
 }
+
+Qt::ItemFlags ActionModel::flags(const QModelIndex &index) const {
+    if (index.isValid()) {
+        return (QStandardItemModel::flags(index) | Qt::ItemIsDragEnabled);
+    }
+
+    return QStandardItemModel::flags(index);
+}
+
+QMimeData *ActionModel::mimeData(const QModelIndexList &indexes) const {
+    QMimeData *mimeData = new QMimeData();
+    QByteArray encodedData;
+
+    QDataStream stream(&encodedData, QIODevice::WriteOnly);
+
+    QModelIndex index = indexes.first(); // Only need column 0
+    if(index.isValid()) {
+        Action *dragAction = action(index);
+        kDebug() << "index:" << index << "dragging action pointer is" << dragAction << "name is" << dragAction->name();
+        quint64 actionPointer = reinterpret_cast<quint64>(dragAction);
+        stream << actionPointer;
+    }
+
+    mimeData->setData("krcd/action", encodedData);
+    return mimeData;
+}
+
+bool ActionModel::removeRows(int row, int col, const QModelIndex& parent) {
+    kDebug() << "rmove Rows called";
+    m_mode->removeAction(action(index(row, col, parent)));
+    return QStandardItemModel::removeRows(row, col, parent);
+}
+
+Qt::DropActions ActionModel::supportedDragActions() const {
+    return Qt::CopyAction | Qt::MoveAction;
+}
+

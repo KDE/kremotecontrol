@@ -19,7 +19,6 @@
 */
 
 #include "selectprofile.h"
-#include "dbusinterface.h"
 
 #include <klocale.h>
 #include <kdebug.h>
