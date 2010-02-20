@@ -173,7 +173,6 @@ void KCMLirc::editAction() {
     
     EditActionContainer editActioncontainer(action, remote->name());
     if(editActioncontainer.exec()) {
-        QModelIndex index = ui.tvActions->selectionModel()->currentIndex();
         updateActions(mode);
         emit changed(true);
     }    

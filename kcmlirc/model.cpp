@@ -643,9 +643,12 @@ Mode *RemoteModel::mode(const QModelIndex &index) const {
 QModelIndex RemoteModel::find(Mode* mode) const {
     kDebug() << "finding mode" << mode->name() << "rows" << rowCount();
     for(int i = 0; i < rowCount(); i++){
-        QModelIndex remoteIndex = index(i, 0);
-        for(int j = 0; j < rowCount(remoteIndex); j++){
-            QStandardItem *modeItem = itemFromIndex(index(j, 0, remoteIndex));
+        QStandardItem *remoteItem = itemFromIndex(index(i, 0));
+        if(remoteItem->data(Qt::UserRole).value<Remote*>()->masterMode() == mode){
+            return remoteItem->index();
+        }
+        for(int j = 0; j < rowCount(remoteItem->index()); j++){
+            QStandardItem *modeItem = itemFromIndex(index(j, 0, remoteItem->index()));
             if(modeItem->data(Qt::UserRole).value<Mode*>() == mode){
                 return modeItem->index();
             }
