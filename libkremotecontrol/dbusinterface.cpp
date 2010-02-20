@@ -98,19 +98,25 @@ QStringList DBusInterface::getRegisteredPrograms() {
 }
 
 QStringList DBusInterface::getNodes(const QString &program) {
+    kDebug() << "getting Nodes of" << program;
     QDBusInterface dBusIface(program, "/", "org.freedesktop.DBus.Introspectable");
-    QDBusReply<QString> response = dBusIface.call("Introspect");
+    QDBusMessage msg = QDBusMessage::createMethodCall(program, "/", "org.freedesktop.DBus.Introspectable", "Introspect");
+    QDBusReply<QString> response = dBusIface.connection().call(msg, QDBus::Block, 1);
 
     QDomDocument domDoc;
     domDoc.setContent(response);
     if (domDoc.toString().isEmpty()) { // No reply... perhaps a multi-instance...
+        kDebug() << "no reply from" << program;
         QStringList instances = getAllRegisteredPrograms().filter(program);
         if (!instances.isEmpty()) {
             QDBusInterface iFace(instances.first(), "/", "org.freedesktop.DBus.Introspectable");
-            response = iFace.call("Introspect");
+            QDBusMessage msg = QDBusMessage::createMethodCall(instances.first(), "/", "org.freedesktop.DBus.Introspectable", "Introspect");
+            QDBusReply<QString> response = iFace.connection().call(msg, QDBus::Block, 1);
+//            response = iFace.call("Introspect");
             domDoc.setContent(response);
         }
     }
+    kDebug() << "got Nodes of" << program;
 
     QDomElement node = domDoc.documentElement();
 
