@@ -22,6 +22,7 @@
 #include "editprofileaction.h"
 
 #include <kdebug.h>
+#include <executionengine.h>
 
 EditActionContainer::EditActionContainer(Action *action, const QString &remote, QWidget* parent, Qt::WFlags flags): KDialog(parent, flags) {
     m_action = action;
@@ -29,6 +30,8 @@ EditActionContainer::EditActionContainer(Action *action, const QString &remote, 
     QWidget *widget = new QWidget(this);
     ui.setupUi(widget);
     setMainWidget(widget);
+    
+    setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Try);
     
     // Init Buttons
     foreach(const Solid::Control::RemoteControlButton &button, Solid::Control::RemoteControl(remote).buttons()){
@@ -115,6 +118,26 @@ void EditActionContainer::slotButtonClicked(int button) {
               kDebug() << "Invalid action type! No changes made to action!";
         }
         m_action->setButton(ui.cbButton->currentText());
+    } else if(button == KDialog::Try){
+        switch(m_action->type()){
+            case Action::DBusAction:{
+                EditDBusAction *dbusActionEditor = dynamic_cast<EditDBusAction*>(m_innerWidget);
+                if(dbusActionEditor){
+                    ExecutionEngine::executeAction(&dbusActionEditor->action());
+                }
+                break;
+            }
+            case Action::ProfileAction:{
+                EditProfileAction *profileActionEditor = dynamic_cast<EditProfileAction*>(m_innerWidget);
+                if(profileActionEditor){
+                    ExecutionEngine::executeAction(&profileActionEditor->action());
+                }
+                break;
+            }
+            default:
+              kDebug() << "Invalid action type! Not executing!";
+        }
+      
     }
     KDialog::slotButtonClicked(button);
 }

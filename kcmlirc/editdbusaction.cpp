@@ -116,6 +116,32 @@ void EditDBusAction::applyChanges(){
     }
 }
 
+DBusAction EditDBusAction::action() const {
+    DBusAction action;
+    action.setApplication(m_dbusServiceModel->application(ui.tvDBusApps->selectionModel()->currentIndex()));
+    action.setNode(m_dbusServiceModel->node(ui.tvDBusApps->selectionModel()->currentIndex()));
+    Prototype prototype = m_dbusFunctionModel->getPrototype(ui.tvDBusFunctions->selectionModel()->currentIndex().row());
+    prototype.setArgs(m_argumentsModel->arguments());
+    action.setFunction(prototype);
+    
+    action.setAutostart(ui.cbAutostart->isChecked());
+    action.setRepeat(ui.cbRepeat->isChecked());
+    if(ui.gbUnique->isEnabled()){
+        if(ui.rbAll->isChecked()){
+            action.setDestination(DBusAction::All);
+        } else if(ui.rbNone->isChecked()){
+            action.setDestination(DBusAction::None);
+        } else if(ui.rbTop->isChecked()){
+            action.setDestination(DBusAction::Top);
+        } else if(ui.rbBottom->isChecked()){
+            action.setDestination(DBusAction::Bottom);
+        }
+    } else {
+        action.setDestination(DBusAction::Unique);
+    }
+    return action;
+}
+
 void EditDBusAction::refreshDBusFunctions(const QModelIndex& index) {
     m_dbusFunctionModel->refresh(m_dbusServiceModel->application(index), m_dbusServiceModel->node(index));
     ui.tvDBusFunctions->resizeColumnToContents(0);

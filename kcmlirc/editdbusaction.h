@@ -35,6 +35,7 @@ class EditDBusAction: public QWidget{
         
         bool checkForComplete() const;
         void applyChanges();
+        DBusAction action() const;
 
     private:
         Ui::EditDBusAction ui;

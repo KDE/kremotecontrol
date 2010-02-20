@@ -120,6 +120,35 @@ void EditProfileAction::applyChanges(){
     }
 }
 
+ProfileAction EditProfileAction::action() const {
+    ProfileAction action;
+    ProfileActionTemplate actionTemplate = m_templateModel->actionTemplate(ui.tvDBusFunctions->selectionModel()->currentIndex());
+    action.setApplication(actionTemplate.service());
+    action.setNode(actionTemplate.node());
+    Prototype prototype = actionTemplate.function();
+    prototype.setArgs(m_argumentsModel->arguments());
+    action.setFunction(prototype);
+    action.setActionTemplateId(actionTemplate.actionTemplateId());
+    action.setProfileId(actionTemplate.profileId());
+
+    action.setAutostart(ui.cbAutostart->isChecked());
+    action.setRepeat(ui.cbRepeat->isChecked());
+    if(ui.gbUnique->isEnabled()){
+        if(ui.rbAll->isChecked()){
+            action.setDestination(DBusAction::All);
+        } else if(ui.rbNone->isChecked()){
+            action.setDestination(DBusAction::None);
+        } else if(ui.rbTop->isChecked()){
+            action.setDestination(DBusAction::Top);
+        } else if(ui.rbBottom->isChecked()){
+            action.setDestination(DBusAction::Bottom);
+        }
+    } else {
+        action.setDestination(DBusAction::Unique);
+    }
+    return action;
+}
+
 void EditProfileAction::refreshTemplates(const QModelIndex& index) {
     m_templateModel->refresh(m_profileModel->profile(ui.tvDBusApps->selectionModel()->currentIndex()));
     m_templateModel->setColumnCount(2);

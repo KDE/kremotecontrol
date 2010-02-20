@@ -35,6 +35,7 @@ class EditProfileAction: public QWidget{
         
         bool checkForComplete() const;
         void applyChanges();
+        ProfileAction action() const;
 
     private:
         Ui::EditDBusAction ui;
