@@ -136,9 +136,6 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
     ui.tvActions->setModel(m_actionModel);
     connect(ui.tvActions->selectionModel(), SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), SLOT(actionSelectionChanged(const QModelIndex &)));
 
-    // Remotes Tab
-    ui.theRemotes->setModel(new RemoteModel(m_remoteList, ui.theRemoteButtons));
-
 }
 
 KCMLirc::~KCMLirc() {
@@ -153,8 +150,7 @@ void KCMLirc::addAction()
     if(newAction != 0){
         Mode *mode = m_remoteModel->mode(ui.tvRemotes->currentIndex());
         mode->addAction(newAction);
-        m_actionModel->refresh(mode);
-        ui.tvActions->resizeColumnToContents(0);
+        updateActions(mode);
         emit changed(true);
     }
 }
@@ -164,8 +160,7 @@ void KCMLirc::removeAction() {
     Action *action = m_actionModel->action(ui.tvActions->selectionModel()->currentIndex());
     
     mode->removeAction(action);
-    m_actionModel->refresh(mode);
-    ui.tvActions->resizeColumnToContents(0);
+    updateActions(mode);
     emit changed(true);
 }
 
@@ -339,6 +334,7 @@ void KCMLirc::updateActions(Mode *mode) {
     if(oldAction){
         ui.tvActions->selectionModel()->setCurrentIndex(m_actionModel->find(oldAction), QItemSelectionModel::Rows | QItemSelectionModel::SelectCurrent);
     }
+    actionSelectionChanged(ui.tvActions->selectionModel()->currentIndex());
 }
 
 void KCMLirc::modeSelectionChanged(const QModelIndex &index) {
@@ -407,54 +403,6 @@ void KCMLirc::actionSelectionChanged(const QModelIndex& index) {
     }
 }
 
-void KCMLirc::updateProfileInfo() {
-    QStandardItemModel *tModel = new QStandardItemModel( ui.theAvailableProfiles);
-    foreach(Profile *profile , ProfileServer::allProfiles()) {
-      QStandardItem *tItem = new QStandardItem();
-      tItem->setData(profile->name(), Qt::DisplayRole);
-      tItem->setData(profile->profileId(), Qt::UserRole);
-      tModel->appendRow(tItem);
-      tModel->setHorizontalHeaderLabels(QStringList()<< i18n("Profiles"));
-    }
-    tModel->sort(0, Qt::AscendingOrder);
-    ui.theAvailableProfiles->setModel(tModel);
-    //updateInformation();
-}
-
-void KCMLirc::updateProfileDetails(QModelIndex index) {
-    ui.theProfileInformation->clear();
-    ui.theProfileInformation->clear();
-    if(!index.isValid()) {
-        return;
-    }
-    Profile *tProfile = ProfileServer::profile(ui.theAvailableProfiles->model()->data(index,Qt::UserRole).toString());
-    if(tProfile) {
-        QStringList infoList;
-        infoList << i18n("Profile Name") << tProfile->name();
-        new QTreeWidgetItem(ui.theProfileInformation, infoList);
-        infoList.clear();
-        infoList << i18n("Profile Author") << tProfile->author();
-        new QTreeWidgetItem(ui.theProfileInformation, infoList);
-        infoList.clear();
-        infoList << i18n("Profile Identifier") << tProfile->profileId();
-        new QTreeWidgetItem(ui.theProfileInformation, infoList);
-        infoList.clear();
-        infoList << i18n("Profile Version") << tProfile->version();
-        new QTreeWidgetItem(ui.theProfileInformation, infoList);
-        infoList.clear();
-        infoList << i18n("Number of Actions") << QString().setNum(tProfile->actionTemplates().count());
-        new QTreeWidgetItem(ui.theProfileInformation, infoList);
-        ui.theProfileActions->setModel(new ActionTemplateModel(tProfile, ui.theProfileActions));
-    }
-}
-
-void KCMLirc::updateRemoteDetails(QModelIndex index) {
-   QString tSelectedRemote = ui.theRemotes->model()->data(index).toString();
-   ui.theRemoteButtons->setModel(new RemoteButtonModel(Solid::Control::RemoteControl(tSelectedRemote).buttons(), ui.theRemoteButtons));
-}
-
-void KCMLirc::updateRemoteInfo() {
-}
 
 void KCMLirc::load() {
     m_remoteList.loadFromConfig("kremotecontrolrc");

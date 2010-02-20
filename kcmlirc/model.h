@@ -150,20 +150,6 @@ public:
     Qt::ItemFlags flags(const QModelIndex& index) const;
 };
 
-class RemoteButtonModel: public QStandardItemModel
-{
-private:
-    QList<RemoteControlButton> m_buttonList;
-public:
-    RemoteButtonModel(QObject *parent=0);
-    explicit RemoteButtonModel(const QList<RemoteControlButton> &buttonList , QObject *parent=0);
-    RemoteControlButton* getButton( int index ) const;
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-    void appendRow( const RemoteControlButton &button);
-    Qt::ItemFlags flags(const QModelIndex& index) const;
-    QModelIndex indexOfButtonName(const QString &button);
-};
-
 class RemoteModel: public QStandardItemModel
 {
     public:

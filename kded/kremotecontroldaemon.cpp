@@ -157,17 +157,16 @@ void KRemoteControlDaemon::gotMessage(const Solid::Control::RemoteControlButton&
     }
     emit(buttonPressed());
     //This is for debugging purposes, till we got our tray icon back
-    notifyEvent("<b>" + remote->name() + ":</b><br>" + i18n("Button %1 pressed" , button.name()));
+//    notifyEvent("<b>" + remote->name() + ":</b><br>" + i18n("Button %1 pressed" , button.name()));
     if(remote->currentMode()){
         QList<Action*> actionList = remote->currentMode()->actionsForButton(button.name());      
         if(remote->nextMode(button.name())){
-	Mode *mode = remote->currentMode();
-	QString iconName = mode->iconName().isEmpty() ? "infrared-remote" : mode->iconName();
-	notifyEvent("<b>" + remote->name() + ":</b><br>" + i18n("Mode switched to %1" , iconName));            
-	      if(remote->currentMode()-> doAfter()){
-		  actionList.append(remote->currentMode()->actionsForButton(button.name()));
+            Mode *mode = remote->currentMode();
+            notifyEvent("<b>" + remote->name() + ":</b><br>" + i18n("Mode switched to %1" , mode->name()), mode->iconName());            
+            if(remote->currentMode()-> doAfter()){
+                actionList.append(remote->currentMode()->actionsForButton(button.name()));
             }
-         emit(modeChanged(remote->name(), mode->name()));   
+            emit(modeChanged(remote->name(), mode->name()));   
         }
         foreach(Action *action, actionList){      
             ExecutionEngine::executeAction(action);

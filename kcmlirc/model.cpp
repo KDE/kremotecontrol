@@ -594,64 +594,9 @@ Qt::ItemFlags ActionTemplateModel::flags(const QModelIndex& index) const {
 
 /*
 ***********************************
-RemoteButtonModel
+RemoteModel
 ***********************************
 */
-
-RemoteButtonModel::RemoteButtonModel(QObject* parent): QStandardItemModel(parent) {
-    qRegisterMetaType<RemoteControlButton*>("RemoteControlButton*");
-}
-
-RemoteButtonModel::RemoteButtonModel( const QList<RemoteControlButton> &buttonList, QObject* parent): QStandardItemModel(parent) {
-    RemoteButtonModel();
-    foreach(const RemoteControlButton &tButton, buttonList) {
-        appendRow(tButton);
-    }
-    sort(0, Qt::AscendingOrder);
-}
-
-void RemoteButtonModel::appendRow( const RemoteControlButton &button) {
-    QList<QStandardItem*> row;
-    m_buttonList.append(button);
-    QStandardItem *item = new QStandardItem(m_buttonList.last().description());
-    item->setData(qVariantFromValue(&m_buttonList.last()), Qt::UserRole);
-    row.append(item);
-    if (m_buttonList.last().id() != RemoteControlButton::Unknown) {
-        row.append(new QStandardItem(m_buttonList.last().name()));
-    }
-    QStandardItemModel::appendRow(row);
-}
-
-Solid::Control::RemoteControlButton* RemoteButtonModel::getButton(int index) const {
-  return index == -1 ? 0 : QStandardItemModel::item(index)->data(Qt::UserRole).value<RemoteControlButton*>();
-}
-
-Qt::ItemFlags RemoteButtonModel::flags(const QModelIndex& index) const {
-    return (QStandardItemModel::flags(index) & ~Qt::ItemIsEditable);
-}
-
-QVariant RemoteButtonModel::headerData(int section, Qt::Orientation orientation, int role) const {
-    if (orientation == Qt::Horizontal) {
-        if (role == Qt::DisplayRole) {
-            switch (section) {
-            case 0:
-                return i18n("Button");
-            case 1:
-                return i18n("Identifier");
-            }
-        }
-    }
-    return QVariant();
-}
-
-QModelIndex RemoteButtonModel::indexOfButtonName(const QString &button) {
-  for(int row = 0; row < QStandardItemModel::rowCount(); ++row){
-    if(button == getButton(row)->name()){
-      return indexFromItem(item(row));
-    }
-  }
-  return QModelIndex();
-}
 
 RemoteModel::RemoteModel(QObject* parent): QStandardItemModel(parent) {
 }
