@@ -38,6 +38,7 @@
 #include <kaboutdata.h>
 
 #include <QDBusInterface>
+#include "selectprofile.h"
 
 
 K_PLUGIN_FACTORY( KCMLircFactory, registerPlugin<KCMLirc>();)
@@ -124,7 +125,9 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
 
     ui.pbCopyAction->setIcon(KIcon("edit-copy"));
     connect(ui.pbCopyAction, SIGNAL(clicked(bool)), SLOT(copyAction()));
-
+    
+    ui.pbAutoPopulate->setIcon(KIcon("tools-wizard"));
+    connect(ui.pbAutoPopulate, SIGNAL(clicked(bool)), SLOT(autoPopulate()));
     
     // Create RemoteModel 
     m_remoteModel = new RemoteModel(m_remoteList, ui.tvRemotes);
@@ -135,7 +138,6 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
     m_actionModel = new ActionModel(ui.tvActions);
     ui.tvActions->setModel(m_actionModel);
     connect(ui.tvActions->selectionModel(), SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), SLOT(actionSelectionChanged(const QModelIndex &)));
-
 }
 
 KCMLirc::~KCMLirc() {
@@ -216,46 +218,22 @@ void KCMLirc::moveActionDown() {
     emit changed(true);
 }
 
-void KCMLirc::autoPopulate(const Profile &profile, const Remote &remote)
-{
- /*   QStringList buttonList = Remotes::remotes()
-
-    foreach (Solid::Control::RemoteControlButton button, remote.remote().buttons() ) {
-        const ProfileAction *pa = profile->getProfileActionByButton(button);
-
-        if (pa) {
-	  ProfileAction tAction();
-            Action *action = new Action(*pamode);
-	   action->
-            action->setMode(mode.name());
-            action->setRepeat(pa->repeat());
-            action->setAutoStart(pa->autoStart());
-            action->setProgram(pa->profile()->id());
-            action->setObject(pa->objId());
-            action->setMethod(pa->prototype());
-            action->setUnique(pa->profile()->unique());
-            action->setIfMulti(pa->profile()->ifMulti());
-            Arguments arguments;
-            kDebug() << "Argumentcount" << Prototype(pa->prototype()).argumentCount();
-
-            for (int j = 0; j < pa->arguments().size(); ++j) {
-                ProfileActionArgument tArgument= pa->arguments().at(j);
-                QVariant tVariant;
-                if (!tArgument.getDefault().toString().isEmpty()) {
-                    tVariant = tArgument.getDefault();
-                    tVariant.convert(QVariant::nameToType(tArgument.type().toLocal8Bit()));
-                } else {
-                    tVariant = QString().setNum(pa->multiplier());
-                    tVariant.convert(QVariant::nameToType(Prototype(pa->prototype()).type(0).toLocal8Bit()));
-                }
-                arguments.append(tVariant);
-                kDebug() << "added argument: " << tVariant;
+void KCMLirc::autoPopulate() {
+    Mode *mode = m_remoteModel->mode(ui.tvRemotes->selectionModel()->currentIndex());
+    Remote *remote = m_remoteModel->remote(ui.tvRemotes->selectionModel()->currentIndex());
+    SelectProfile *autoPopulateDialog = new SelectProfile(remote, this);
+    if(autoPopulateDialog->exec()){
+        Profile *profile = autoPopulateDialog->getSelectedProfile();
+        foreach(const Solid::Control::RemoteControlButton &button, Solid::Control::RemoteControl(remote->name()).buttons()){
+            ProfileActionTemplate actionTemplate = profile->actionTemplateByButton(button.name());
+            if(!actionTemplate.buttonName().isEmpty()){
+                mode->addAction(actionTemplate.createAction(button));
             }
-            action->setArguments(arguments);
-           */
-// 	   m_actionList.addAction(action);
-//         }
-//     }
+        }
+    }
+    updateActions(mode);
+    emit changed(true);
+
 }
 
 void KCMLirc::addMode() {
@@ -303,7 +281,6 @@ void KCMLirc::moveModeUp() {
     Mode *mode = m_remoteModel->mode(currentIndex);    
     remote->moveModeUp(mode);
     updateModes();
-//    ui.tvRemotes->selectionModel()->setCurrentIndex(m_remoteModel->find(mode), QItemSelectionModel::Rows | QItemSelectionModel::SelectCurrent);
     emit changed(true);
 }
 
@@ -342,10 +319,12 @@ void KCMLirc::modeSelectionChanged(const QModelIndex &index) {
         ui.pbAddMode->setEnabled(true);
         ui.pbEditMode->setEnabled(true);
         ui.pbAddAction->setEnabled(true);
+        ui.pbAutoPopulate->setEnabled(true);
     } else {
         ui.pbAddMode->setEnabled(false);
         ui.pbEditMode->setEnabled(true);
         ui.pbAddAction->setEnabled(false);
+        ui.pbAutoPopulate->setEnabled(false);
     }
     
     if(index.isValid() && index.parent().isValid()){

@@ -20,10 +20,11 @@
 
 #include "selectprofile.h"
 #include "dbusinterface.h"
-#include <QTreeWidgetItem>
+
 #include <klocale.h>
+#include <kdebug.h>
 
-
+#include <QTreeWidgetItem>
 
 SelectProfileWidget::SelectProfileWidget (QWidget *parent) : QWidget(parent) {
     selectionLabel = new QLabel();
@@ -38,7 +39,7 @@ SelectProfileWidget::SelectProfileWidget (QWidget *parent) : QWidget(parent) {
     
 }
 
-SelectProfile::SelectProfile(QString remoteName, QWidget *parent, const bool &modal): KDialog(parent)
+SelectProfile::SelectProfile(Remote *remote, QWidget *parent, const bool &modal): KDialog(parent)
 {
     selectProfileWidget = new SelectProfileWidget;
 
@@ -50,12 +51,11 @@ SelectProfile::SelectProfile(QString remoteName, QWidget *parent, const bool &mo
     setWindowTitle(i18n("Auto-Populate"));
 
     connect(selectProfileWidget->profilesWidget,SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(checkForUpdate(QTreeWidgetItem*,int)));
-    kDebug()<< "remote  " << remoteName;
-    QList<Profile*> profiles = ProfileServer::getInstance()->profiles();
-    QStringList solidButtons = DBusInterface::getInstance()->getButtons(remoteName);
+    kDebug()<< "remote  " << remote->name();
+    QList<Profile*> profiles = ProfileServer::allProfiles();
     foreach(Profile* profile, profiles) {
-        ProfileServer::ProfileSupportedByRemote tSupported = ProfileServer::getInstance()->isProfileAvailableForRemote(profile, solidButtons);
-	  kDebug()<< "support "<< tSupported;
+        ProfileServer::ProfileSupportedByRemote tSupported = ProfileServer::isProfileAvailableForRemote(profile, *remote);
+        kDebug()<< "support "<< tSupported;
         if ( tSupported != ProfileServer::NO_ACTIONS_DEFINED) {	
             ProfileWrapper wrapper = ProfileWrapper(profile, tSupported);
             QTreeWidgetItem* tTreewidget = new QTreeWidgetItem(selectProfileWidget->profilesWidget,QStringList()<< profile->name());

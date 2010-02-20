@@ -12,7 +12,6 @@ include_directories(
 ########### next target ###############
 
 set(kcm_lirc_PART_SRCS 
-#    selectprofile.cpp
    kcmlirc.cpp
    addaction.cpp
    editactioncontainer.cpp
@@ -20,6 +19,7 @@ set(kcm_lirc_PART_SRCS
    editprofileaction.cpp
    model.cpp
    modedialog.cpp
+   selectprofile.cpp
    )
 
 qt4_add_dbus_adaptor(kcm_lirc_PART_SRCS org.kde.kcmlirc.xml kcmlirc.h KCMLirc)

@@ -57,7 +57,7 @@ class KREMOTECONTROL_EXPORT Profile
         QString description() const;
         QString profileId() const;
         QList<ProfileActionTemplate> actionTemplates() const;
-
+        ProfileActionTemplate actionTemplateByButton(const QString &buttonName) const;
 
         void setName(const QString &name);
         void setAuthor(const QString &author) ;

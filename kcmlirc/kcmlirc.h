@@ -27,7 +27,7 @@
 #include <remotelist.h>
 
 #include <QMap>
-#include<QVariant>
+#include <QVariant>
 #include <QStandardItemModel>
 #include <kcmodule.h>
 
@@ -41,7 +41,6 @@ class KCMLirc: public KCModule
 
 private:
     Ui::ConfigurationWidget ui;
-    void autoPopulate(const Profile& profile, const Remote& remote);
     
     RemoteList m_remoteList;
     RemoteModel *m_remoteModel;
@@ -71,6 +70,8 @@ private slots:
     void updateActions(Mode *mode);
     void modeSelectionChanged(const QModelIndex &index);
     void actionSelectionChanged(const QModelIndex &index);
+
+    void autoPopulate();
 
 signals:
     void haveButton(const QString &remote, const QString &button);

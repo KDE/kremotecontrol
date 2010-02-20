@@ -82,6 +82,15 @@ QList< ProfileActionTemplate > Profile::actionTemplates() const {
     return m_actionTemplates;
 }
 
+ProfileActionTemplate Profile::actionTemplateByButton(const QString &buttonName) const {
+    foreach(const ProfileActionTemplate &actionTemplate, m_actionTemplates){
+        if(actionTemplate.buttonName() == buttonName){
+            return actionTemplate;
+        }
+    }
+    return ProfileActionTemplate();
+}
+
 ProfileActionTemplate Profile::actionTemplate(const QString& actionTemplateId) {
     foreach(const ProfileActionTemplate &actionTemplate, m_actionTemplates){
         if(actionTemplate.actionTemplateId() == actionTemplateId){

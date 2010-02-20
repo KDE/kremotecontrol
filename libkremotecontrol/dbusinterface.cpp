@@ -250,17 +250,6 @@ void DBusInterface::ignoreButtonEvents(const QString& remoteName) {
     }
 }
 
-QStringList DBusInterface::getButtons(const QString& remoteName) {
-    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.irkick", "/IRKick", "", "buttons");
-    m << remoteName;
-    QDBusMessage response = QDBusConnection::sessionBus().call(m);
-
-    if (response.type() == QDBusMessage::ErrorMessage) {
-        kDebug() << response.errorMessage();
-    }
-    return response.arguments().at(0).toStringList();
-}
-
 void DBusInterface::reloadRemoteControlDaemon() {
     QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontrol",
                      "org.kde.krcd", "reloadConfiguration");
