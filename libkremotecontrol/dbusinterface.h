@@ -61,6 +61,18 @@ class KREMOTECONTROL_EXPORT DBusInterface: public QObject
         void changeMode(const QString &remoteName, const QString &modeName);
         QString getCurrentMode(const QString &remoteName);
         bool eventsIgnored(const QString &remoteName);
+        
+        bool isKdedModuleRunning();
+        
+        /**
+          * Loads the kremotecontrol kded module and sets autoLoading to true
+          */
+        bool loadKdedModule();
+
+        /**
+          * Unloads the kremotecontrol kded module and sets autoLoading to false
+          */
+        bool unloadKdedModule();
 };
 
 #endif

@@ -45,7 +45,7 @@ private:
     RemoteList m_remoteList;
     RemoteModel *m_remoteModel;
     ActionModel *m_actionModel;
-    
+        
 public:
     virtual void load();
     virtual void save();

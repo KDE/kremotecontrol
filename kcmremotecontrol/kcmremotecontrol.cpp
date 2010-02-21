@@ -36,6 +36,7 @@
 #include <kdebug.h>
 #include <kgenericfactory.h>
 #include <kaboutdata.h>
+#include <kmessagebox.h>
 
 #include <QDBusInterface>
 
@@ -49,41 +50,12 @@ KCMRemoteControl::KCMRemoteControl(QWidget *parent, const QVariantList &args) :
     QDBusConnection::sessionBus().registerObject("/KCMRemoteControl", this, QDBusConnection::ExportAllSlots);
 
     KGlobal::locale()->insertCatalog("kcm_remotecontrol");
-    setAboutData(
-        new KAboutData(
-            "kcm_remotecontrol",
-            0,
-            ki18n("KRemoteControl"),
-            KDEUTILS_VERSION_STRING, ki18n("The KDE Remote Control System"),
-            KAboutData::License_GPL_V2,
-            ki18n("Copyright (c)2003 Gav Wood, 2007 Michael Zanetti, 2009 Frank Scheffold"),
-            ki18n(
-                "Use this to configure KDE's remote control system in order to control any KDE application with your remote control."),
-            "http://utils.kde.org/projects/kremotecontrol"));
-    setQuickHelp(
-        i18n(
-            "<h1>Remote Controls</h1><p>This module allows you to configure bindings between your remote controls and KDE applications. Simply select your remote control and click Add next to the Actions/Buttons list to create new action for button presses.</p>"));
-
-//     if (!DBusInterface::getInstance()->isProgramRunning("org.kde.irkick")) {
-//         if (KMessageBox::questionYesNo(
-//                     this,
-//                     i18n(
-//                         "The Infrared Remote Control software is not currently running. This configuration module will not work properly without it. Would you like to start it now?"),
-//                     i18n("Software Not Running"), KGuiItem(i18nc("Start irkick daemon","Start")), KGuiItem(
-//                         i18nc("Do not start irkick daemon", "Do Not Start"))) == KMessageBox::Yes) {
-//             kDebug() << "S" << KToolInvocation::startServiceByDesktopName("irkick");
-//             KConfig theConfig("irkickrc");
-//             KConfigGroup generalGroup = theConfig.group("General");
-//             if (generalGroup.readEntry("AutoStart", true) == false)
-//                 if (KMessageBox::questionYesNo(
-//                             this,
-//                             i18n(
-//                                 "Would you like the infrared remote control software to start automatically when you begin KDE?"),
-//                             i18n("Automatically Start?"), KGuiItem(i18n("Start Automatically")),
-//                             KGuiItem(i18n("Do Not Start"))) == KMessageBox::Yes)
-//                     generalGroup.writeEntry("AutoStart", true);
-//         }
-//     }
+    setAboutData(new KAboutData("kcm_remotecontrol", 0, ki18n("KRemoteControl"), KDEUTILS_VERSION_STRING,
+                                ki18n("The KDE Remote Control System"), KAboutData::License_GPL_V2,
+                                ki18n("Copyright (c)2003 Gav Wood, 2007 Michael Zanetti, 2009 Frank Scheffold"),
+                                ki18n("Use this to configure KDE's remote control system in order to control any KDE application with your remote control."),
+                                "http://utils.kde.org/projects/kremotecontrol"));
+    setQuickHelp(i18n("<h1>Remote Controls</h1><p>This module allows you to configure bindings between your remote controls and KDE applications. Simply select your remote control and click Add next to the Actions/Buttons list to create new action for button presses.</p>"));
 
     QHBoxLayout *layout = new QHBoxLayout(this);
     QWidget *widget = new QWidget(this);
@@ -138,6 +110,7 @@ KCMRemoteControl::KCMRemoteControl(QWidget *parent, const QVariantList &args) :
     m_actionModel = new ActionModel(ui.tvActions);
     ui.tvActions->setModel(m_actionModel);
     connect(ui.tvActions->selectionModel(), SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), SLOT(actionSelectionChanged(const QModelIndex &)));
+    
 }
 
 KCMRemoteControl::~KCMRemoteControl() {
@@ -383,11 +356,29 @@ void KCMRemoteControl::load() {
     }
 
     updateModes();
+
+    // Check if the daemon module is running
+    if(!m_remoteList.isEmpty()){ // No need to run the daemon if we have no remote controls
+        kDebug() << "remotes found... checking for kded module";
+        if(!DBusInterface::getInstance()->isKdedModuleRunning()) {
+            kDebug() << "kded module not running";
+            if(!DBusInterface::getInstance()->loadKdedModule()){
+                KMessageBox::error(this, i18n("The remote control daemon failed to load. Your remote controls will not work."), i18n("Failed to load daemon"));
+            }
+        }
+    }
 }
 
 void KCMRemoteControl::save() {
     m_remoteList.saveToConfig("kremotecontrolrc");
     DBusInterface::getInstance()->reloadRemoteControlDaemon();
+    
+    // If there are no remotes configured it makes no sense to have de daemon running. stop it
+    if(m_remoteList.isEmpty()){
+        if(DBusInterface::getInstance()->isKdedModuleRunning()){
+            DBusInterface::getInstance()->unloadKdedModule();
+        }
+    }
 }
 
 void KCMRemoteControl::gotButton(QString remote, QString button) {

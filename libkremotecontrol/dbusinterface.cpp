@@ -463,3 +463,42 @@ bool DBusInterface::eventsIgnored(const QString& remoteName) {
       return false;
     }
 }
+
+bool DBusInterface::isKdedModuleRunning() {
+    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/kded", "org.kde.kded", "loadedModules");
+    QDBusReply<QStringList> reply = QDBusConnection::sessionBus().call(m);
+    if(reply.isValid()){
+        return reply.value().contains("kremotecontrol");
+    }
+    kDebug() << reply.error().message();
+    return false;
+}
+
+bool DBusInterface::loadKdedModule() {
+    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/kded", "org.kde.kded", "loadModule");
+    m << "kremotecontrol";
+    QDBusReply<bool> reply = QDBusConnection::sessionBus().call(m);
+    if(!reply.isValid() || !reply.value()){
+        return false;
+    }
+
+    m = QDBusMessage::createMethodCall("org.kde.kded", "/kded", "org.kde.kded", "setModuleAutoloading");
+    m << "kremotecontrol" << true;
+    QDBusConnection::sessionBus().call(m);    
+    return true;
+}
+
+bool DBusInterface::unloadKdedModule() {
+    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/kded", "org.kde.kded", "unloadModule");
+    m << "kremotecontrol";
+    QDBusReply<bool> reply = QDBusConnection::sessionBus().call(m);
+    if(!reply.isValid() || !reply.value()){
+        return false;
+    }
+
+    m = QDBusMessage::createMethodCall("org.kde.kded", "/kded", "org.kde.kded", "setModuleAutoloading");
+    m << "kremotecontrol" << false;
+    QDBusConnection::sessionBus().call(m);
+    return true;
+}
+
