@@ -1,17 +1,17 @@
 [Desktop Entry]
 Icon=infrared-remote
-Exec=kcmshell4 kcm_lirc
+Exec=kcmshell4 kcm_remotecontrol
 
 Type=Service
 X-KDE-ServiceTypes=KCModule
-X-KDE-Library=kcm_lirc
-X-KDE-FactoryName=kcm_lirc
+X-KDE-Library=kcm_remotecontrol
+X-KDE-FactoryName=kcm_remotecontrol
 X-KDE-ParentApp=kcontrol
 X-KDE-System-Settings-Parent-Category=computer-administration
-X-DocPath=kcmlirc/index.html
+X-DocPath=kremotecontrol/index.html
 Categories=Qt;KDE;X-KDE-settings-system;
 
-X-KDE-Keywords=KCMLirc,kcmlirc
+X-KDE-Keywords=KCMRemoteControl,remote control
 X-KDE-Keywords[nl]=kcmlirc,linux infrarood,infrarood,afstandsbediening
 X-KDE-Keywords[pl]=KCMLirc,kcmlirc,piloty,podczerwień
 X-KDE-Keywords[ta]= KCMLirc,kcmlirc

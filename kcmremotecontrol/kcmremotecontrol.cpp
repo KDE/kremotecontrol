@@ -19,7 +19,7 @@
  *************************************************************************/
 
 
-#include "kcmlirc.h"
+#include "kcmremotecontrol.h"
 #include "addaction.h"
 #include "editactioncontainer.h"
 #include "remote.h"
@@ -39,30 +39,30 @@
 
 #include <QDBusInterface>
 
-K_PLUGIN_FACTORY( KCMLircFactory, registerPlugin<KCMLirc>();)
-K_EXPORT_PLUGIN( KCMLircFactory( "kcm_lirc" ) )
+K_PLUGIN_FACTORY( KCMLircFactory, registerPlugin<KCMRemoteControl>();)
+K_EXPORT_PLUGIN( KCMLircFactory( "kcm_remotecontrol" ) )
 
-KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
+KCMRemoteControl::KCMRemoteControl(QWidget *parent, const QVariantList &args) :
         KCModule(KCMLircFactory::componentData(), parent, args)
 {
 
-    QDBusConnection::sessionBus().registerObject("/KCMLirc", this, QDBusConnection::ExportAllSlots);
+    QDBusConnection::sessionBus().registerObject("/KCMRemoteControl", this, QDBusConnection::ExportAllSlots);
 
-    KGlobal::locale()->insertCatalog("kcm_lirc");
+    KGlobal::locale()->insertCatalog("kcm_remotecontrol");
     setAboutData(
         new KAboutData(
-            "kcm_lirc",
+            "kcm_remotecontrol",
             0,
-            ki18n("KDE Lirc"),
+            ki18n("KRemoteControl"),
             KDEUTILS_VERSION_STRING, ki18n("The KDE Remote Control System"),
             KAboutData::License_GPL_V2,
             ki18n("Copyright (c)2003 Gav Wood, 2007 Michael Zanetti, 2009 Frank Scheffold"),
             ki18n(
                 "Use this to configure KDE's remote control system in order to control any KDE application with your remote control."),
-            "http://utils.kde.org/projects/kdelirc"));
+            "http://utils.kde.org/projects/kremotecontrol"));
     setQuickHelp(
         i18n(
-            "<h1>Remote Controls</h1><p>This module allows you to configure bindings between your remote controls and KDE applications. Simply select your remote control and click Add under the Actions/Buttons list. If you want KDE to attempt to automatically assign buttons to a supported application's actions, try clicking the Auto-Populate button.</p><p>To view the recognized applications and remote controls, simply select the <em>Loaded Profiles</em> tab.</p>"));
+            "<h1>Remote Controls</h1><p>This module allows you to configure bindings between your remote controls and KDE applications. Simply select your remote control and click Add next to the Actions/Buttons list to create new action for button presses.</p>"));
 
 //     if (!DBusInterface::getInstance()->isProgramRunning("org.kde.irkick")) {
 //         if (KMessageBox::questionYesNo(
@@ -140,10 +140,10 @@ KCMLirc::KCMLirc(QWidget *parent, const QVariantList &args) :
     connect(ui.tvActions->selectionModel(), SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), SLOT(actionSelectionChanged(const QModelIndex &)));
 }
 
-KCMLirc::~KCMLirc() {
+KCMRemoteControl::~KCMRemoteControl() {
 }
 
-void KCMLirc::addAction()
+void KCMRemoteControl::addAction()
 {
     Remote *remote = m_remoteModel->remote(ui.tvRemotes->currentIndex());
 
@@ -157,7 +157,7 @@ void KCMLirc::addAction()
     }
 }
 
-void KCMLirc::removeAction() {
+void KCMRemoteControl::removeAction() {
     Mode *mode = m_remoteModel->mode(ui.tvRemotes->selectionModel()->currentIndex());
     Action *action = m_actionModel->action(ui.tvActions->selectionModel()->currentIndex());
     
@@ -166,7 +166,7 @@ void KCMLirc::removeAction() {
     emit changed(true);
 }
 
-void KCMLirc::editAction() {
+void KCMRemoteControl::editAction() {
     Action *action = m_actionModel->action(ui.tvActions->selectionModel()->currentIndex());
     Remote *remote = m_remoteModel->remote(ui.tvRemotes->selectionModel()->currentIndex());
     Mode *mode = m_remoteModel->mode(ui.tvRemotes->selectionModel()->currentIndex());
@@ -178,7 +178,7 @@ void KCMLirc::editAction() {
     }    
 }
 
-void KCMLirc::copyAction() {
+void KCMRemoteControl::copyAction() {
     Action *action = m_actionModel->action(ui.tvActions->selectionModel()->currentIndex());
     Mode *mode = m_remoteModel->mode(ui.tvRemotes->selectionModel()->currentIndex());
     Action *newAction = action->clone();
@@ -189,7 +189,7 @@ void KCMLirc::copyAction() {
     emit changed(true);
 }
 
-void KCMLirc::moveActionUp() {
+void KCMRemoteControl::moveActionUp() {
     Mode *mode = m_remoteModel->mode(ui.tvRemotes->selectionModel()->currentIndex());
     Action *action = m_actionModel->action(ui.tvActions->selectionModel()->currentIndex());
     mode->moveActionUp(action);
@@ -197,7 +197,7 @@ void KCMLirc::moveActionUp() {
     emit changed(true);
 }
 
-void KCMLirc::moveActionDown() {
+void KCMRemoteControl::moveActionDown() {
     Mode *mode = m_remoteModel->mode(ui.tvRemotes->selectionModel()->currentIndex());
     Action *action = m_actionModel->action(ui.tvActions->selectionModel()->currentIndex());
     mode->moveActionDown(action);
@@ -205,7 +205,7 @@ void KCMLirc::moveActionDown() {
     emit changed(true);
 }
 
-void KCMLirc::autoPopulate() {
+void KCMRemoteControl::autoPopulate() {
     Mode *mode = m_remoteModel->mode(ui.tvRemotes->selectionModel()->currentIndex());
     Remote *remote = m_remoteModel->remote(ui.tvRemotes->selectionModel()->currentIndex());
     SelectProfile *autoPopulateDialog = new SelectProfile(remote, this);
@@ -223,7 +223,7 @@ void KCMLirc::autoPopulate() {
 
 }
 
-void KCMLirc::addMode() {
+void KCMRemoteControl::addMode() {
     Remote *remote = m_remoteModel->remote(ui.tvRemotes->selectionModel()->currentIndex());
     kDebug() << "current selected remote:" << remote;
     
@@ -238,7 +238,7 @@ void KCMLirc::addMode() {
     }
 }
 
-void KCMLirc::editMode() {
+void KCMRemoteControl::editMode() {
     Remote *remote = m_remoteModel->remote(ui.tvRemotes->selectionModel()->currentIndex());
     Mode *mode = m_remoteModel->mode(ui.tvRemotes->selectionModel()->currentIndex());
     kDebug() << "current selected remote:" << remote << "and mode:" << mode;
@@ -251,7 +251,7 @@ void KCMLirc::editMode() {
     }
 }
 
-void KCMLirc::removeMode() {
+void KCMRemoteControl::removeMode() {
 
     QModelIndex currentIndex = ui.tvRemotes->selectionModel()->currentIndex();
     Remote *remote = m_remoteModel->remote(currentIndex);
@@ -263,7 +263,7 @@ void KCMLirc::removeMode() {
         emit changed(true);
     }
 }
-void KCMLirc::moveModeUp() {
+void KCMRemoteControl::moveModeUp() {
     QModelIndex currentIndex = ui.tvRemotes->selectionModel()->currentIndex();
     Remote *remote = m_remoteModel->remote(currentIndex);
     Mode *mode = m_remoteModel->mode(currentIndex);    
@@ -272,7 +272,7 @@ void KCMLirc::moveModeUp() {
     emit changed(true);
 }
 
-void KCMLirc::moveModeDown() {
+void KCMRemoteControl::moveModeDown() {
     QModelIndex currentIndex = ui.tvRemotes->selectionModel()->currentIndex();
     Remote *remote = m_remoteModel->remote(currentIndex);
     Mode *mode = m_remoteModel->mode(currentIndex);    
@@ -281,7 +281,7 @@ void KCMLirc::moveModeDown() {
     emit changed(true);
 }
 
-void KCMLirc::updateModes() {
+void KCMRemoteControl::updateModes() {
     Mode *mode = m_remoteModel->mode(ui.tvRemotes->selectionModel()->currentIndex());
     m_remoteModel->refresh(m_remoteList);
     ui.tvRemotes->expandAll();
@@ -292,7 +292,7 @@ void KCMLirc::updateModes() {
     modeSelectionChanged(ui.tvRemotes->selectionModel()->currentIndex());
 }
 
-void KCMLirc::updateActions(Mode *mode) {
+void KCMRemoteControl::updateActions(Mode *mode) {
     Action *oldAction = m_actionModel->action(ui.tvActions->selectionModel()->currentIndex());
     m_actionModel->refresh(mode);
     ui.tvActions->resizeColumnToContents(0);
@@ -302,7 +302,7 @@ void KCMLirc::updateActions(Mode *mode) {
     actionSelectionChanged(ui.tvActions->selectionModel()->currentIndex());
 }
 
-void KCMLirc::modeSelectionChanged(const QModelIndex &index) {
+void KCMRemoteControl::modeSelectionChanged(const QModelIndex &index) {
     if(index.isValid()){
         ui.pbAddMode->setEnabled(true);
         ui.pbEditMode->setEnabled(true);
@@ -346,7 +346,7 @@ void KCMLirc::modeSelectionChanged(const QModelIndex &index) {
     
 }
 
-void KCMLirc::actionSelectionChanged(const QModelIndex& index) {
+void KCMRemoteControl::actionSelectionChanged(const QModelIndex& index) {
     if(index.isValid()){
         ui.pbRemoveAction->setEnabled(true);
         ui.pbEditAction->setEnabled(true);
@@ -371,7 +371,7 @@ void KCMLirc::actionSelectionChanged(const QModelIndex& index) {
 }
 
 
-void KCMLirc::load() {
+void KCMRemoteControl::load() {
     m_remoteList.loadFromConfig("kremotecontrolrc");
 
     // Check if there are Remotes available in Solid but not yet in m_remoteList
@@ -385,18 +385,18 @@ void KCMLirc::load() {
     updateModes();
 }
 
-void KCMLirc::save() {
+void KCMRemoteControl::save() {
     m_remoteList.saveToConfig("kremotecontrolrc");
     DBusInterface::getInstance()->reloadRemoteControlDaemon();
 }
 
-void KCMLirc::gotButton(QString remote, QString button) {
+void KCMRemoteControl::gotButton(QString remote, QString button) {
     emit haveButton(remote, button);
 }
 
-void KCMLirc::actionDropped(Mode* mode) {
+void KCMRemoteControl::actionDropped(Mode* mode) {
     ui.tvRemotes->selectionModel()->setCurrentIndex(m_remoteModel->find(mode), QItemSelectionModel::Rows | QItemSelectionModel::SelectCurrent);
     updateActions(mode);
 }
 
-#include "kcmlirc.moc"
+#include "kcmremotecontrol.moc"

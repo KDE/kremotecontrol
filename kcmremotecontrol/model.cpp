@@ -680,7 +680,7 @@ Qt::ItemFlags RemoteModel::flags(const QModelIndex& index) const {
 }
 
 bool RemoteModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) {
-    if (!data->hasFormat("krcd/action"))
+    if (!data->hasFormat("kremotecontrol/action"))
         return false;
 
     if (action == Qt::IgnoreAction)
@@ -689,7 +689,7 @@ bool RemoteModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int
     if (column > 0)
         return false;
 
-    QByteArray encodedData = data->data("krcd/action");
+    QByteArray encodedData = data->data("kremotecontrol/action");
     QDataStream stream(&encodedData, QIODevice::ReadOnly);
 
     quint64 actionPointer;
@@ -705,7 +705,7 @@ bool RemoteModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int
 
 QStringList RemoteModel::mimeTypes() const {
     QStringList types;
-    types << "krcd/action";
+    types << "kremotecontrol/action";
     return types;
 }
 
@@ -822,7 +822,7 @@ QMimeData *ActionModel::mimeData(const QModelIndexList &indexes) const {
         stream << actionPointer;
     }
 
-    mimeData->setData("krcd/action", encodedData);
+    mimeData->setData("kremotecontrol/action", encodedData);
     return mimeData;
 }
 

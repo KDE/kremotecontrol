@@ -18,8 +18,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  *************************************************************************/
 
-#ifndef KCMLIRC_H
-#define KCMLIRC_H
+#ifndef KCMREMOTECONTROL_H
+#define KCMREMOTECONTROL_H
 
 #include "ui_configurationwidget.h"
 #include "model.h"
@@ -34,10 +34,10 @@
 class Profile;
 class Remote;
 
-class KCMLirc: public KCModule
+class KCMRemoteControl: public KCModule
 {
     Q_OBJECT
-    Q_CLASSINFO("KCMLirc", "org.kde.kcmlirc")
+    Q_CLASSINFO("KCMLirc", "org.kde.kcmremotecontrol")
 
 private:
     Ui::ConfigurationWidget ui;
@@ -49,8 +49,8 @@ private:
 public:
     virtual void load();
     virtual void save();
-    explicit KCMLirc(QWidget *parent = 0, const QVariantList &args = QVariantList());
-    ~KCMLirc();
+    explicit KCMRemoteControl(QWidget *parent = 0, const QVariantList &args = QVariantList());
+    ~KCMRemoteControl();
 
 private slots:
     void addAction();
