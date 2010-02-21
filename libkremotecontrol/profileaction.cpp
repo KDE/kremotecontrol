@@ -93,3 +93,17 @@ void ProfileAction::loadFromConfig(const KConfigGroup &config) {
     m_profileId = config.readEntry("ProfileId");
     m_template = config.readEntry("Template");
 }
+
+Action* ProfileAction::clone() const {
+    ProfileAction *action = new ProfileAction();
+    action->setActionTemplateId(m_template);
+    action->setProfileId(m_profileId);
+    action->setApplication(m_application);
+    action->setAutostart(m_autostart);
+    action->setDestination(m_destination);
+    action->setFunction(m_function);
+    action->setNode(m_node);
+    action->setRepeat(m_repeat);
+    action->setButton(m_button);
+    return action;
+}

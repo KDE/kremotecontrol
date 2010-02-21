@@ -64,6 +64,8 @@ class KREMOTECONTROL_EXPORT DBusAction : public Action
     virtual void saveToConfig(KConfigGroup &config);
     virtual void loadFromConfig(const KConfigGroup &config);
     
+    virtual Action* clone() const;
+    
   protected:
     QString m_application;
     QString m_node;

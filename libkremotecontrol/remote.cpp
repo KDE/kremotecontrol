@@ -111,6 +111,12 @@ Remote::Remote(const QString &remote, const QList<Mode*> &modes) {
     
 }
 
+Remote::~Remote() {
+    while(!m_modeList.isEmpty()){
+        delete m_modeList.takeFirst();
+    }
+}
+
 QString Remote::name() const {
     return m_remoteName;
 }
@@ -153,6 +159,7 @@ void Remote::removeMode(Mode *mode) {
         }
     }
     m_modeList.removeAll(mode);
+    delete mode;
 }
 
 Mode* Remote::masterMode() const {

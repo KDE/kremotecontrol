@@ -175,3 +175,16 @@ void DBusAction::loadFromConfig(const KConfigGroup& config) {
     
 }
 
+Action* DBusAction::clone() const {
+    DBusAction *action = new DBusAction();
+    action->setApplication(m_application);
+    action->setAutostart(m_autostart);
+    action->setDestination(m_destination);
+    action->setFunction(m_function);
+    action->setNode(m_node);
+    action->setRepeat(m_repeat);
+    action->setButton(m_button);
+    return action;
+}
+
+

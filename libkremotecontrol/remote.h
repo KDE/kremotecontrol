@@ -38,12 +38,25 @@ class KREMOTECONTROL_EXPORT Remote
         enum ModeChangeMode { Group, Cycle };
       
         Remote();
-
         Remote(const QString& remote, const QList<Mode*>& modes = QList<Mode*>());
+        
+        /**
+          * Destrys the Remote and all of its Modes
+          */
+        ~Remote();
 
         bool isAvailable() const;
 
+        /**
+          * Add the given Mode to this Remote. The Remote takes ownership of this Mode. Don't delete it!
+          */
         void addMode(Mode *mode);
+        
+        /**
+          * Remove the given Mode from this Remote and delete it. Don't try to access the Mode after this call!
+          * This function will not remove the Master mode! If the deleted Mode is the default mode, the Master will be set
+          * to as the new default Mode.
+          */
         void removeMode(Mode *mode);
         QList<Mode*> allModes() const;
 

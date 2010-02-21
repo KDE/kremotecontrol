@@ -25,6 +25,12 @@ Mode::Mode(const QString &name, const QString &iconName) {
     m_iconName = iconName;
 }
 
+Mode::~Mode() {
+    while(!m_actionList.isEmpty()){
+        delete m_actionList.takeFirst();
+    }
+}
+
 QString Mode::name() const {
     return m_name;
 }
@@ -60,6 +66,7 @@ void Mode::addAction(Action* action) {
 
 void Mode::removeAction(Action* action) {
     m_actionList.removeAll(action);
+    delete action;
 }
 
 void Mode::moveActionUp(Action* action) {

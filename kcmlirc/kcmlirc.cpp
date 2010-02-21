@@ -181,19 +181,7 @@ void KCMLirc::editAction() {
 void KCMLirc::copyAction() {
     Action *action = m_actionModel->action(ui.tvActions->selectionModel()->currentIndex());
     Mode *mode = m_remoteModel->mode(ui.tvRemotes->selectionModel()->currentIndex());
-    Action *newAction;
-    switch(action->type()){
-        case Action::DBusAction: {
-            DBusAction *dBusAction = dynamic_cast<DBusAction*>(action);
-            newAction = new DBusAction(*dBusAction);
-            }
-            break;
-        case Action::ProfileAction:{
-            ProfileAction *profileAction = dynamic_cast<ProfileAction*>(action);
-            newAction = new ProfileAction(*profileAction);
-            }
-            break;
-    }
+    Action *newAction = action->clone();
     mode->addAction(newAction);
     updateActions(mode);
     ui.tvActions->selectionModel()->setCurrentIndex(m_actionModel->find(newAction), QItemSelectionModel::Rows | QItemSelectionModel::SelectCurrent);
@@ -271,6 +259,7 @@ void KCMLirc::removeMode() {
     if(remote && remote->allModes().contains(mode)){
         remote->removeMode(mode);
         updateModes();
+        ui.tvRemotes->selectionModel()->setCurrentIndex(m_remoteModel->find(remote->masterMode()), QItemSelectionModel::Rows | QItemSelectionModel::SelectCurrent);
         emit changed(true);
     }
 }

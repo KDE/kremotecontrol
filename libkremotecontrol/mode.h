@@ -31,6 +31,7 @@ class KREMOTECONTROL_EXPORT Mode
 {
     public:
         Mode(const QString &name = QString(), const QString &iconName = "infrared-remote");
+        ~Mode();
 
         QString name() const;
         QString iconName() const;
@@ -41,7 +42,14 @@ class KREMOTECONTROL_EXPORT Mode
         void setIconName(const QString &iconName);
         void setButton(const QString &button);
 
+        /**
+          * Add the given Action to the Mode. The mode takes ownership of the action. Don't delete it!
+          */
         void addAction(Action *action);
+        
+        /**
+          * Remove the given action from this mode and delete it. Don't try to access the action after this call!
+          */
         void removeAction(Action *action);
         void moveActionUp(Action *action);
         void moveActionDown(Action *action);

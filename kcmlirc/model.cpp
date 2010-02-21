@@ -641,7 +641,6 @@ Mode *RemoteModel::mode(const QModelIndex &index) const {
 }
 
 QModelIndex RemoteModel::find(Mode* mode) const {
-    kDebug() << "finding mode" << mode->name() << "rows" << rowCount();
     for(int i = 0; i < rowCount(); i++){
         QStandardItem *remoteItem = itemFromIndex(index(i, 0));
         if(remoteItem->data(Qt::UserRole).value<Remote*>()->masterMode() == mode){
@@ -698,7 +697,7 @@ bool RemoteModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int
     Action *droppedAction = reinterpret_cast<Action*>(actionPointer);
     kDebug() << "action pointer is" << droppedAction << "name is" << droppedAction->name();
     
-    mode(parent)->addAction(droppedAction);
+    mode(parent)->addAction(droppedAction->clone());
     emit modeChanged(mode(parent));
     
     return true;
@@ -790,7 +789,6 @@ Action* ActionModel::action(const QModelIndex& index) const {
 }
 
 QModelIndex ActionModel::find(Action* action) const {
-    kDebug() << "finding action" << action->name() << "rows" << rowCount();
     for(int i = 0; i < rowCount(); i++){
         QModelIndex actionIndex = index(i, 0);
         QStandardItem *actionItem = itemFromIndex(actionIndex);

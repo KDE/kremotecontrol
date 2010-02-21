@@ -50,7 +50,9 @@ class KREMOTECONTROL_EXPORT Action: public QObject
       virtual QString description() const = 0;
       
       virtual void saveToConfig(KConfigGroup &config);
-      virtual void loadFromConfig(const KConfigGroup &config) = 0;
+      virtual void loadFromConfig(const KConfigGroup &config);
+      
+      virtual Action *clone() const = 0;
     
   protected:
       ActionType m_type;

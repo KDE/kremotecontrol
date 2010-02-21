@@ -44,6 +44,8 @@ class KREMOTECONTROL_EXPORT ProfileAction : public DBusAction
         virtual void saveToConfig(KConfigGroup &config);
         virtual void loadFromConfig(const KConfigGroup &config);
     
+        virtual Action* clone() const;
+        
     protected:
         QString m_profileId;
         QString m_template;
