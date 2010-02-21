@@ -91,7 +91,7 @@ QString ProfileActionTemplate::buttonName() const {
 }
 
 ProfileAction *ProfileActionTemplate::createAction(const Solid::Control::RemoteControlButton& button) const {
-    ProfileAction *action = new ProfileAction(button.name(), m_profileId, QString());
+    ProfileAction *action = new ProfileAction(button.name(), m_profileId, m_actionTemplateId);
     action->setApplication(m_serviceName);
     action->setNode(m_node);
     action->setFunction(m_function);
