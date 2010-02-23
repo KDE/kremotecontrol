@@ -11,7 +11,7 @@ include_directories(
 
 ########### next target ###############
 
-set(kcm_lirc_PART_SRCS 
+set(kcm_remotecontrol_PART_SRCS
    kcmremotecontrol.cpp
    addaction.cpp
    editactioncontainer.cpp
@@ -26,7 +26,7 @@ qt4_add_dbus_adaptor(kcm_remotecontrol_PART_SRCS org.kde.kcmremotecontrol.xml kc
 
 kde4_add_ui_files(kcm_remotecontrol_PART_SRCS modedialog.ui addaction.ui editactioncontainer.ui editdbusaction.ui configurationwidget.ui )
 
-kde4_add_plugin(kcm_remotecontrol ${kcm_lirc_PART_SRCS})
+kde4_add_plugin(kcm_remotecontrol ${kcm_remotecontrol_PART_SRCS})
 
 target_link_libraries(kcm_remotecontrol ${KDE4_KIO_LIBS} ${KDE4WORKSPACE_SOLIDCONTROL_LIBRARY} libkremotecontrol)
 
