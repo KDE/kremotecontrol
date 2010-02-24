@@ -43,27 +43,41 @@ class GroupModeChangeHandler : public ModeChangeHandler
     public:
         GroupModeChangeHandler(Remote* remote): ModeChangeHandler(remote){}
 
+
+	/**
+	Goes to the next mode which has assigned the button given as argument.
+	
+	When pressed button is the same as the assigned button in the current mode, start searching for the next mode at index +1
+	Otherwise the user want to switch from a other "button mode" into the current, so start the serach from the beginning
+	If a button was found the current mode is set to it. If not you have got 2 cases:
+	
+	1. The current mode button is the same as the pressed button. We are in the last element of the mode list which hast assigned 
+	this button to its mode. Switch to master.
+	
+	2. The pressed button has no assigned mode button. Stay in the current mode.
+	
+	@return true if the mode was changed.
+	*/
         bool handleModeButton(const QString& button) {
-            int index= m_remote->currentMode()->button() == button ?  m_remote->m_modeList.indexOf(m_remote->currentMode()) : m_remote->m_modeList.size();
+	    
             int size = m_remote->m_modeList.size();
-            if(index < size){
-                for(int i = index +1; i < size ; ++i){
-                    kDebug()<< "Size == "<< i;      
-                    if(m_remote->m_modeList.at(i)->button() == button){
-                        m_remote->setCurrentMode(m_remote->m_modeList.at(i));
-                        return true;
-                    }
-                }
-            }      
-            for(int i = 0; i < index; ++i){
-                kDebug()<< " else 	Size == "<< i;          
-                if(m_remote->m_modeList.at(i)->button() == button){
-                    m_remote->setCurrentMode(m_remote->m_modeList.at(i));
-                    return true;
-                }
-            }
-            return false;
+	    int currentModeHasAssignedPressedButton = m_remote->currentMode()->button() == button;	    
+	    int index= currentModeHasAssignedPressedButton ? m_remote->m_modeList.indexOf(m_remote->currentMode()) +1 : 0;	    
+	    for(index; index < size ; ++index){
+                    if(m_remote->m_modeList.at(index)->button() == button){
+                        m_remote->setCurrentMode(m_remote->m_modeList.at(index));
+			return true;
+                    }                    
+	    }
+	    if(currentModeHasAssignedPressedButton){
+	      m_remote->setCurrentMode(m_remote->masterMode());
+	      return true;
+	    }			    	    	    
+	    kDebug()<< "Mode with button " << button << " not available. Mode is not changed.";
+	    return false;
         }
+                
+                   
         
         Remote::ModeChangeMode type() const {
             return Remote::Group;

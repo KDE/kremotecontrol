@@ -162,7 +162,7 @@ void KRemoteControlDaemon::gotMessage(const Solid::Control::RemoteControlButton&
         QList<Action*> actionList = remote->currentMode()->actionsForButton(button.name());      
         if(remote->nextMode(button.name())){
             Mode *mode = remote->currentMode();
-            notifyEvent("<b>" + remote->name() + ":</b><br>" + i18n("Mode switched to %1" , mode->name()), mode->iconName());            
+	    notifyModeChanged(remote);
             if(remote->currentMode()-> doAfter()){
                 actionList.append(remote->currentMode()->actionsForButton(button.name()));
             }

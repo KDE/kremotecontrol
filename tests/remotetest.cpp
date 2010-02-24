@@ -44,13 +44,13 @@ void RemoteTest::testnextMode() {
   Mode *mode6 = new Mode("mode6");
   mode6->setButton("1");
   Mode *mode7 = new Mode("mode7");
-  mode6->setButton("1");
+  mode7->setButton("1");
   Mode *mode8 = new Mode("mode8");
-  mode6->setButton("2");
+  mode8->setButton("2");
   Mode *mode9 = new Mode("mode9");
-  mode6->setButton("2");
+  mode9->setButton("2");
   Mode *mode10 = new Mode("mode10");
-  mode6->setButton("2");
+  mode10->setButton("2");
   
   QList<Mode*> modeList;
   modeList.append(mode1);
@@ -73,15 +73,22 @@ void RemoteTest::testnextMode() {
   QCOMPARE( mode1,  remote->currentMode());
   QCOMPARE(true,remote->nextMode("1"));
   QCOMPARE(mode3,remote->currentMode());
+  QCOMPARE(true,remote->nextMode("1"));
+  QCOMPARE(mode6,remote->currentMode());
+  QCOMPARE(true,remote->nextMode("1"));
+  QCOMPARE(mode7,remote->currentMode());
+  QCOMPARE(true,remote->nextMode("1"));
+  QCOMPARE(remote->masterMode(), remote->currentMode());
+  
   
   QCOMPARE(true,remote->nextMode("3"));
   QCOMPARE(mode5,remote->currentMode());
-  QCOMPARE(false,remote->nextMode("3"));
-  QCOMPARE(mode5,remote->currentMode());
+  QCOMPARE(true,remote->nextMode("3"));
+  QCOMPARE(remote->masterMode(), remote->currentMode());
   
   remote->setCurrentMode(mode10);
   QCOMPARE(true,remote->nextMode("2"));
-  QCOMPARE(mode2,remote->currentMode());
+  QCOMPARE(remote->masterMode(), remote->currentMode());
   
   remote->setCurrentMode(mode10);
   QCOMPARE(true,remote->nextMode("1"));
