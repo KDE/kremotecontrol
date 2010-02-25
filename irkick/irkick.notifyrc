@@ -1,47 +1,6 @@
 [Global]
 IconName=irkick
 Comment=Remote Control Service
-Comment[ar]=Irkick
-Comment[ca]=Irkick
-Comment[ca@valencia]=Irkick
-Comment[cs]=Irkick
-Comment[da]=IRKick
-Comment[de]=Irkick
-Comment[en_GB]=Irkick
-Comment[eo]=Irkick
-Comment[es]=Irkick
-Comment[et]=Irkick
-Comment[eu]=Irkick
-Comment[fi]=Irkick
-Comment[fr]=IRKick
-Comment[gl]=Irkick
-Comment[hr]=Irkick
-Comment[hu]=Irkick
-Comment[it]=Irkick
-Comment[km]=Irkick
-Comment[lv]=Irkick
-Comment[nb]=Irkick
-Comment[nds]=IRKick
-Comment[nl]=Irkick
-Comment[nn]=Irkick
-Comment[pa]=Irkick
-Comment[pl]=Irkick
-Comment[pt]=Irkick
-Comment[pt_BR]=Irkick
-Comment[ro]=Irkick
-Comment[ru]=Irkick
-Comment[sk]=Irkick
-Comment[sl]=Irkick
-Comment[sr]=Иркик
-Comment[sr@ijekavian]=Иркик
-Comment[sr@ijekavianlatin]=Irkick
-Comment[sr@latin]=Irkick
-Comment[sv]=Irkick
-Comment[tr]=Irkick
-Comment[uk]=Irkick
-Comment[x-test]=xxIrkickxx
-Comment[zh_CN]=Irkick
-Comment[zh_TW]=Irkick
 
 
 [Event/global_event]
