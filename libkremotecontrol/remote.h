@@ -31,65 +31,69 @@ class ModeChangeHandler;
 
 class KREMOTECONTROL_EXPORT Remote
 {
-    
-    friend class GroupModeChangeHandler;
-    
-    public:
-        enum ModeChangeMode { Group, Cycle };
-      
-        Remote();
-        Remote(const QString& remote, const QList<Mode*>& modes = QList<Mode*>());
-        
-        /**
-          * Destrys the Remote and all of its Modes
-          */
-        ~Remote();
 
-        bool isAvailable() const;
+		friend class GroupModeChangeHandler;
+		friend class CycleModeChangeHandler;
 
-        /**
-          * Add the given Mode to this Remote. The Remote takes ownership of this Mode. Don't delete it!
-          */
-        void addMode(Mode *mode);
-        
-        /**
-          * Remove the given Mode from this Remote and delete it. Don't try to access the Mode after this call!
-          * This function will not remove the Master mode! If the deleted Mode is the default mode, the Master will be set
-          * to as the new default Mode.
-          */
-        void removeMode(Mode *mode);
-        QList<Mode*> allModes() const;
+	public:
+		enum ModeChangeMode { Group, Cycle };
 
-        Mode *masterMode() const;
+		Remote();
+		Remote(const QString& remote, Remote::ModeChangeMode changeMode = Remote::Group);
 
-        Mode *defaultMode() const;
-        void setDefaultMode(Mode *mode);
-        void setDefaultMode(const QString &name);
+		/**
+		  * Destrys the Remote and all of its Modes
+		  */
+		~Remote();
 
-        Mode *currentMode() const;
-        void setCurrentMode(Mode *mode);
+		bool isAvailable() const;
 
-        QString name() const;
+		/**
+		  * Add the given Mode to this Remote. The Remote takes ownership of this Mode. Don't delete it!
+		  */
+		void addMode(Mode *mode);
 
-        void moveModeUp(Mode *mode);
-        void moveModeDown(Mode *mode);
+		/**
+		  * Remove the given Mode from this Remote and delete it. Don't try to access the Mode after this call!
+		  * This function will not remove the Master mode! If the deleted Mode is the default mode, the Master will be set
+		  * to as the new default Mode.
+		  */
+		void removeMode(Mode *mode);
+		QList<Mode*> allModes() const;
 
-        bool nextMode(const QString &button);
-        
-        ModeChangeMode modeChangeMode() const;
-        QStringList availableModeSwitchButtons() const;
-        
-        QString nextModeButton() const;
-        QString previousModeButton() const;
+		Mode *masterMode() const;
 
-    private:
-        QList<Mode*> m_modeList;
-        Mode *m_defaultMode;
-        QString m_remoteName;
-        Mode *m_currentMode;
-        ModeChangeHandler *m_modechangeHandler;
-        QString m_nextModeButton;
-        QString m_previousModeButton;
+		Mode *defaultMode() const;
+		void setDefaultMode(Mode *mode);
+		void setDefaultMode(const QString &name);
+
+		Mode *currentMode() const;
+		void setCurrentMode(Mode *mode);
+
+		QString name() const;
+
+		void moveModeUp(Mode *mode);
+		void moveModeDown(Mode *mode);
+
+		bool nextMode(const QString &button);
+
+		ModeChangeMode modeChangeMode() const;
+		QStringList availableModeSwitchButtons() const;
+
+		QString nextModeButton() const;
+		void nextModeButton(const QString &button);
+		QString previousModeButton() const;
+		void previousModeButton(const QString &button);
+		void setModeChangeHandler(ModeChangeMode modeChangeMode);
+
+	private:
+		QList<Mode*> m_modeList;
+		Mode *m_defaultMode;
+		QString m_remoteName;
+		Mode *m_currentMode;
+		ModeChangeHandler *m_modechangeHandler;
+		QString m_nextModeButton;
+		QString m_previousModeButton;
 };
 
 

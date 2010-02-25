@@ -28,7 +28,8 @@ class RemoteTest  : public QObject
   private Q_SLOTS:
 
     void testGetter();
-    void testnextMode();
+    void testGroupChangeHandler();
+    void testCycleChangeHandler();
     void testOperatorEquals();
 };
 
