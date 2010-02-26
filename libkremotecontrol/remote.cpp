@@ -187,7 +187,7 @@ class GroupModeChangeHandler : public ModeChangeHandler
                     for(int index=0; index < size; ++index){
                         QString buttonToValidate = m_remote->m_modeList.at(index)->button();
                         if(! buttonToValidate.isEmpty()){
-                            for(int counter=index+1; counter< size; ++index){
+                            for(int counter=index+1; counter< size; ++counter){
                                 Mode *mode = m_remote->m_modeList.at(counter);
                                 if(!mode->button().isEmpty() && mode->button() == buttonToValidate){
                                     mode->setButton(QString());
@@ -267,7 +267,7 @@ QList<Mode*> Remote::allModes() const
 	return m_modeList;
 }
 
-void Remote::addMode(Mode *mode)
+void Remote::addMode(Mode* mode)
 {
         m_modechangeHandler->addMode(mode);
 }

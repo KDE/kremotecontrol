@@ -31,6 +31,7 @@ class RemoteTest  : public QObject
     void testGroupChangeHandler();
     void testCycleChangeHandler();
     void testOperatorEquals();
+    void toggleModeChangeHandler();
 };
 
 #endif // REMOTETEST_H

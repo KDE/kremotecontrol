@@ -130,6 +130,7 @@ void RemoteTest::testCycleChangeHandler()
   QCOMPARE(mode5, remote->currentMode());
   QCOMPARE(false, remote->nextMode("3"));
   QCOMPARE(mode5, remote->currentMode());
+
   
 }
 
@@ -223,6 +224,62 @@ void RemoteTest::testOperatorEquals() {
    QCOMPARE(*mode1, *mode2);
 }
 
+void RemoteTest::toggleModeChangeHandler()
+{
+ Mode *mode1 = new Mode("mode1");
+  mode1->setButton("1");
+  Mode *mode2 = new Mode("mode2");
+  mode2->setButton("2");
+  Mode *mode3 = new Mode("mode3");
+  mode3->setButton("1");
+  Mode *mode4 = new Mode("mode4");
+  mode4->setButton("2");
+  Mode *mode5 = new Mode("mode5");
+  mode5->setButton("3");
+  Mode *mode6 = new Mode("mode6");
+  mode6->setButton("1");
+  Mode *mode7 = new Mode("mode7");
+  mode7->setButton("1");
+  Mode *mode8 = new Mode("mode8");
+  mode8->setButton("2");
+  Mode *mode9 = new Mode("mode9");
+  mode9->setButton("2");
+  Mode *mode10 = new Mode("mode10");
+  mode10->setButton("2");
+
+
+
+  Remote *remote = new Remote("remote1");
+  QCOMPARE(1, remote->allModes().size());
+  remote->addMode(mode1);
+  remote->addMode(mode2);
+  remote->addMode(mode3);
+  remote->addMode(mode4);
+  remote->addMode(mode5);
+  remote->addMode(mode6);
+  remote->addMode(mode7);
+  remote->addMode(mode8);
+  remote->addMode(mode9);
+  remote->addMode(mode10);
+  QCOMPARE(11, remote->allModes().size());
+  remote->setModeChangeHandler(Remote::Cycle);
+  QCOMPARE(11, remote->allModes().size());
+  QCOMPARE(QString("1"),mode1->button());
+  QCOMPARE(QString("2"),mode2->button());
+  QCOMPARE(QString(),mode3->button());
+  QCOMPARE(QString(),mode4->button());
+  QCOMPARE(QString("3"),mode5->button());
+  QCOMPARE(QString(),mode6->button());
+  QCOMPARE(QString(),mode7->button());
+  QCOMPARE(QString(),mode8->button());
+  QCOMPARE(QString(),mode9->button());
+  QCOMPARE(QString(),mode10->button());
+
+  remote->nextModeButton("1");
+  QCOMPARE(QString(),mode1->button());
+  remote->previousModeButton("2");
+  QCOMPARE(QString(),mode2->button());
+}
 
 
 QTEST_MAIN( RemoteTest )

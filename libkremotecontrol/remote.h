@@ -51,7 +51,7 @@ class KREMOTECONTROL_EXPORT Remote
 		/**
 		  * Add the given Mode to this Remote. The Remote takes ownership of this Mode. Don't delete it!
 		  */
-		void addMode(Mode *mode);
+		void addMode(Mode* mode);
 
 		/**
 		  * Remove the given Mode from this Remote and delete it. Don't try to access the Mode after this call!
