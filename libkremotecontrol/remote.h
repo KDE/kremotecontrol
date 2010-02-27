@@ -78,13 +78,25 @@ class KREMOTECONTROL_EXPORT Remote
         bool nextMode(const QString &button);
 
         ModeChangeMode modeChangeMode() const;
-        QStringList availableModeSwitchButtons() const;
+        void setModeChangeMode(ModeChangeMode modeChangeMode);
+
+        /**
+          * Get buttons available for this mode (Free buttons + the current button for this mode)
+          */
+        QStringList availableModeSwitchButtons(const Mode *mode) const;
+        /**
+          * Get buttons available for switching to the next mode (Free buttons + the current button nextMode)
+          */
+        QStringList availableNextModeButtons() const;
+        /**
+          * Get buttons available for switching to the previous mode (Free buttons + the current button previousMode)
+          */
+        QStringList availablePreviousModeButtons() const;
 
         QString nextModeButton() const;
-        void nextModeButton(const QString &button);
+        void setNextModeButton(const QString &button);
         QString previousModeButton() const;
-        void previousModeButton(const QString &button);
-        void setModeChangeHandler(ModeChangeMode modeChangeMode);
+        void setPreviousModeButton(const QString &button);
 
     private:
         QList<Mode*> m_modeList;

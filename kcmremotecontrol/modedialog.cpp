@@ -1,5 +1,4 @@
 /*************************************************************************
- * Copyright: (C) 2003 by Gav Wood <gav@kde.org>                         *
  * Copyright: (C) 2010 by Michael Zanetti <michael_zanetti@gmx.net>      *
  *                                                                       *
  * This program is free software; you can redistribute it and/or         *
@@ -27,6 +26,7 @@
 
 #include "modedialog.h"
 #include "mode.h"
+#include <kmessagebox.h>
 
 ModeDialog::ModeDialog(Remote *remote, Mode *mode, QWidget *parent): KDialog(parent), m_remote(remote), m_mode(mode) {
     QWidget *widget = new QWidget(this);
@@ -36,7 +36,7 @@ ModeDialog::ModeDialog(Remote *remote, Mode *mode, QWidget *parent): KDialog(par
     setDefaultButton(Ok);
 
     ui.cbButtons->addItem(i18n("No button"), "");
-    foreach(const QString &button, remote->availableModeSwitchButtons()){
+    foreach(const QString &button, remote->availableModeSwitchButtons(mode)){
         ui.cbButtons->addItem(button, button);
     }
     
@@ -53,16 +53,17 @@ ModeDialog::ModeDialog(Remote *remote, Mode *mode, QWidget *parent): KDialog(par
             
             // Fill in Cycle mode buttons
             ui.cbButtonForward->addItem(i18n("No Button"), "");
-            foreach(const QString &button, remote->availableModeSwitchButtons()){
+                        
+            foreach(const QString &button, remote->availableNextModeButtons()){
                 ui.cbButtonForward->addItem(button, button);
             }
             ui.cbButtonForward->setCurrentIndex(ui.cbButtonForward->findData(remote->nextModeButton()));
 
             ui.cbButtonBackward->addItem(i18n("No Button"), "");
-            foreach(const QString &button, remote->availableModeSwitchButtons()){
+            foreach(const QString &button, remote->availablePreviousModeButtons()){
                 ui.cbButtonBackward->addItem(button, button);
             }
-            ui.cbButtonBackward->setCurrentIndex(ui.cbButtonForward->findData(remote->previousModeButton()));
+            ui.cbButtonBackward->setCurrentIndex(ui.cbButtonBackward->findData(remote->previousModeButton()));
 
             if(remote->modeChangeMode() == Remote::Cycle){
                 ui.gbModeCycle->setChecked(true);
@@ -115,6 +116,22 @@ void ModeDialog::slotButtonClicked(int button) {
             m_remote->setDefaultMode(m_mode);
         } else if(m_remote->defaultMode() == m_mode){
             m_remote->setDefaultMode(m_remote->masterMode());            
+        }
+        if(m_mode == m_remote->masterMode()){
+            Remote::ModeChangeMode modeChangeMode = ui.gbModeCycle->isChecked() ? Remote::Cycle : Remote::Group;
+            if(m_remote->modeChangeMode() != modeChangeMode){
+                if(modeChangeMode == Remote::Cycle){
+                    if(KMessageBox::questionYesNo(this, i18n("Using the cycle function will remove all duplicate button assignments from your modes. Are you sure that you would like to proceed?"), i18n("Change mode switch behaviour")) == KMessageBox::Yes){
+                        m_remote->setModeChangeMode(modeChangeMode);
+                    } else {
+                        return;
+                    }
+                } else {
+                    m_remote->setModeChangeMode(modeChangeMode);                  
+                }
+            }
+            m_remote->setNextModeButton(ui.cbButtonForward->itemData(ui.cbButtonForward->currentIndex()).toString());
+            m_remote->setPreviousModeButton(ui.cbButtonBackward->itemData(ui.cbButtonBackward->currentIndex()).toString());
         }
     }
     KDialog::slotButtonClicked(button);

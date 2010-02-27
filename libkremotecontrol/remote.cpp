@@ -141,7 +141,9 @@ class CycleModeChangeHandler : public ModeChangeHandler
             foreach(const Solid::Control::RemoteControlButton &button, Solid::Control::RemoteControl(m_remote->name()).buttons()) {
                 retList << button.name();
             }
-            foreach(Mode *mode, m_remote->m_modeList){
+            retList.removeAll(m_remote->nextModeButton());
+            retList.removeAll(m_remote->previousModeButton());
+            foreach(const Mode *mode, m_remote->m_modeList){
                 retList.removeAll(mode->button());
             }
             return retList;
@@ -215,7 +217,7 @@ Remote::Remote(const QString &remote, ModeChangeMode changeMode) {
 
     // Always create the Master Mode and set it default
     bool hasMaster = false;
-    setModeChangeHandler(changeMode);
+    setModeChangeMode(changeMode);
     foreach(Mode *mode, m_modeList) {
         if (mode->name() == "Master") {
             hasMaster = true;
@@ -343,29 +345,7 @@ Remote::ModeChangeMode Remote::modeChangeMode() const {
     return m_modechangeHandler->type();
 }
 
-QStringList Remote::availableModeSwitchButtons() const {
-    return m_modechangeHandler->availableModeSwitchButtons();
-}
-
-QString Remote::nextModeButton() const {
-    return m_nextModeButton;
-}
-
-void Remote::nextModeButton(const QString& button) {
-    m_nextModeButton = button;
-    m_modechangeHandler->handleModeButtonAssignment(button);
-}
-
-QString Remote::previousModeButton() const {
-    return m_previousModeButton;
-}
-
-void Remote::previousModeButton(const QString& button) {
-    m_previousModeButton = button;
-    m_modechangeHandler->handleModeButtonAssignment(button);
-}
-
-void Remote::setModeChangeHandler(Remote::ModeChangeMode modeChangeMode) {
+void Remote::setModeChangeMode(Remote::ModeChangeMode modeChangeMode) {
     if(m_modechangeHandler){
         delete m_modechangeHandler;
     }
@@ -376,3 +356,46 @@ void Remote::setModeChangeHandler(Remote::ModeChangeMode modeChangeMode) {
     }
     m_modechangeHandler->handleModeButtonAssignments();
 }
+
+QStringList Remote::availableModeSwitchButtons(const Mode *mode) const {
+    QStringList buttonList = m_modechangeHandler->availableModeSwitchButtons();
+    if(!mode->button().isEmpty() && !buttonList.contains(mode->button())){
+        buttonList.append(mode->button());
+    }
+    return buttonList;
+}
+
+QStringList Remote::availableNextModeButtons() const {
+    QStringList buttonList = m_modechangeHandler->availableModeSwitchButtons();
+    if(!nextModeButton().isEmpty() && !buttonList.contains(nextModeButton())){
+        buttonList.append(nextModeButton());
+    }
+    return buttonList;
+}
+
+QStringList Remote::availablePreviousModeButtons() const {
+    QStringList buttonList = m_modechangeHandler->availableModeSwitchButtons();
+    if(!previousModeButton().isEmpty() && !buttonList.contains(previousModeButton())){
+        buttonList.append(previousModeButton());
+    }
+    return buttonList;
+}
+
+QString Remote::nextModeButton() const {
+    return m_nextModeButton;
+}
+
+void Remote::setNextModeButton(const QString& button) {
+    m_nextModeButton = button;
+    m_modechangeHandler->handleModeButtonAssignment(button);
+}
+
+QString Remote::previousModeButton() const {
+    return m_previousModeButton;
+}
+
+void Remote::setPreviousModeButton(const QString& button) {
+    m_previousModeButton = button;
+    m_modechangeHandler->handleModeButtonAssignment(button);
+}
+

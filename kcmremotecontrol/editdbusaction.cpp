@@ -45,9 +45,9 @@ EditDBusAction::EditDBusAction(DBusAction *action, QWidget* parent, Qt::WFlags f
     // Load our action here
     if(!m_action->application().isEmpty()){
         // Find in or insert into Models and set current selection
-        QModelIndex index = m_dbusServiceModel->findOrInsert(m_action);
+        QModelIndex index = m_dbusServiceModel->findOrInsert(m_action, true);
         ui.tvDBusApps->selectionModel()->setCurrentIndex(index, QItemSelectionModel::SelectCurrent);
-        index = m_dbusFunctionModel->findOrInsert(m_action);
+        index = m_dbusFunctionModel->findOrInsert(m_action, true);
         ui.tvDBusFunctions->selectionModel()->setCurrentIndex(index, QItemSelectionModel::Rows | QItemSelectionModel::SelectCurrent);
         
         // Load Options tab

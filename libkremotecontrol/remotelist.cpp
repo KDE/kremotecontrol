@@ -46,6 +46,9 @@ void RemoteList::saveToConfig(const QString& configName) {
         KConfigGroup remoteGroup(&config, (*i)->name());
         // Save Remote properties here
         remoteGroup.writeEntry("DefaultMode", (*i)->defaultMode()->name());
+        remoteGroup.writeEntry("ModeChangeMode", (*i)->modeChangeMode() == Remote::Group ? "Group" : "Cycle");
+        remoteGroup.writeEntry("NextModeButton", (*i)->nextModeButton());
+        remoteGroup.writeEntry("PreviousModeButton", (*i)->previousModeButton());
         
         foreach(const Mode *mode, (*i)->allModes()){
             KConfigGroup modeGroup(&remoteGroup, mode->name());
@@ -108,6 +111,9 @@ void RemoteList::loadFromConfig(const QString& configName) {
         }
         // Read Remote properties here
         remote->setDefaultMode(remoteGroup.readEntry("DefaultMode"));
+        remote->setModeChangeMode(remoteGroup.readEntry("ModeChangeMode", "Group") == "Group" ? Remote::Group : Remote::Cycle);
+        remote->setNextModeButton(remoteGroup.readEntry("NextModeButton"));
+        remote->setPreviousModeButton(remoteGroup.readEntry("PreviousModeButton"));
         
         append(remote);
     }

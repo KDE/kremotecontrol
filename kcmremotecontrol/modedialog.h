@@ -1,5 +1,4 @@
 /*************************************************************************
- * Copyright: (C) 2003 by Gav Wood <gav@kde.org>                         *
  * Copyright: (C) 2010 by Michael Zanetti <michael_zanetti@gmx.net>      *
  *                                                                       *
  * This program is free software; you can redistribute it and/or         *
