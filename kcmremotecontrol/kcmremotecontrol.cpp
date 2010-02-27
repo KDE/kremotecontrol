@@ -103,6 +103,7 @@ KCMRemoteControl::KCMRemoteControl(QWidget *parent, const QVariantList &args) :
     m_remoteModel = new RemoteModel(m_remoteList, ui.tvRemotes);
     ui.tvRemotes->setModel(m_remoteModel);
     connect(ui.tvRemotes->selectionModel(), SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), SLOT(modeSelectionChanged(const QModelIndex &)));
+    connect(ui.tvRemotes, SIGNAL(doubleClicked(QModelIndex)), SLOT(editMode()));
     // QueuedConnection needed because the model itself may has some slots queded and refreshing the model before that breaks logic
     connect(m_remoteModel, SIGNAL(modeChanged(Mode *)), SLOT(actionDropped(Mode*)), Qt::QueuedConnection);
     
