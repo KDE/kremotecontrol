@@ -26,6 +26,8 @@
 
 #include "modedialog.h"
 #include "mode.h"
+
+#include <kdebug.h>
 #include <kmessagebox.h>
 
 ModeDialog::ModeDialog(Remote *remote, Mode *mode, QWidget *parent): KDialog(parent), m_remote(remote), m_mode(mode) {
@@ -52,8 +54,7 @@ ModeDialog::ModeDialog(Remote *remote, Mode *mode, QWidget *parent): KDialog(par
             ui.leName->setEnabled(false);
             
             // Fill in Cycle mode buttons
-            ui.cbButtonForward->addItem(i18n("No Button"), "");
-                        
+            ui.cbButtonForward->addItem(i18n("No Button"), "");                        
             foreach(const QString &button, remote->availableNextModeButtons()){
                 ui.cbButtonForward->addItem(button, button);
             }
@@ -138,11 +139,29 @@ void ModeDialog::slotButtonClicked(int button) {
 }
 
 void ModeDialog::forwardButtonChanged(int index) {
-    // TODO: Set forwardButton in Remote and refresh backwardButtons
+    disconnect(ui.cbButtonBackward, SIGNAL(currentIndexChanged(int)), this, SLOT(backwardButtonChanged(int)));
+    ui.cbButtonBackward->clear();
+    
+    ui.cbButtonBackward->addItem(i18n("No Button"), "");
+    foreach(const QString &button, m_remote->availablePreviousModeButtons()){
+        ui.cbButtonBackward->addItem(button, button);
+    }
+
+    ui.cbButtonBackward->setCurrentIndex(ui.cbButtonBackward->findData(m_remote->previousModeButton()));
+    connect(ui.cbButtonBackward, SIGNAL(currentIndexChanged(int)), this, SLOT(backwardButtonChanged(int)));
 }
 
 void ModeDialog::backwardButtonChanged(int index) {
-    // TODO: Set backwardButton in Remote and refresh forButtons
+    disconnect(ui.cbButtonForward, SIGNAL(currentIndexChanged(int)), this, SLOT(forwardButtonChanged(int)));
+    ui.cbButtonForward->clear();
+ 
+    ui.cbButtonForward->addItem(i18n("No Button"), "");                
+    foreach(const QString &button, m_remote->availableNextModeButtons()){
+        ui.cbButtonForward->addItem(button, button);
+    }
+
+    ui.cbButtonForward->setCurrentIndex(ui.cbButtonForward->findData(m_remote->nextModeButton()));
+    connect(ui.cbButtonForward, SIGNAL(currentIndexChanged(int)), this, SLOT(forwardButtonChanged(int)));
 }
 
 #include "modedialog.moc"
