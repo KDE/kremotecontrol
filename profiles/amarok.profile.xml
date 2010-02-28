@@ -19,7 +19,7 @@
     </action>
     
     <action id="stop" button="Stop">
-        <name>Start playing</name>
+        <name>Stop playing</name>
         <prototype>
             <serviceName>org.mpris.amarok</serviceName>
             <node>Player</node>
@@ -27,12 +27,22 @@
         </prototype>
     </action>
     
+    
     <action id="pause" button="Pause" repeat="true">
-        <name>Pause playing</name>
+    <name>Pause playing</name>
+    <prototype>
+        <serviceName>org.mpris.amarok</serviceName>
+        <node>Player</node>
+        <function>Pause</function>
+    </prototype>
+    </action>
+    
+    <action id="playpause" button="PlayPause" repeat="true">
+        <name>Play Pause</name>
         <prototype>
             <serviceName>org.mpris.amarok</serviceName>
-            <node>Pause</node>
-            <function>Pause</function>
+            <node>Player</node>
+            <function>PlayPause</function>
         </prototype>
     </action>
     
@@ -70,11 +80,11 @@
     </action>
     
     <action id="rewind" button="Rewind" repeat="true">
-        <name>Rewind</name>
+        <name>Backward</name>
         <prototype>
             <serviceName>org.mpris.amarok</serviceName>
             <node>Player</node>
-            <function>Rewind</function>
+            <function>Backward</function>
             <arguments>
                 <argument type="int">
                     <comment>Amount to rewind in ms</comment>
@@ -83,4 +93,15 @@
             </arguments>            
         </prototype>
     </action>
+    
+    <action id="fullscreen">
+        <name></name>
+        <prototype>
+            <serviceName>org.mpris.amarok</serviceName>            
+            <node>amarok/MainWindow</node>
+            <function>slotFullScreen</function>
+        </prototype>
+        <ifmulti>sendtotop</ifmulti>
+    </action>
+    
 </profile>

@@ -45,6 +45,12 @@
 				<argument type="QStringList">
 					<comment>Parameters for the program or script</comment>
 				</argument>
+				<argument type="QStringList">
+					<comment>Environment variables</comment>
+				</argument>
+				<argument type="QString">
+					<comment>Startup ID</comment>
+				</argument>
 			</arguments>
 		</prototype>
 	</action>

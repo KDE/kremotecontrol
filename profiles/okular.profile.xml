@@ -3,7 +3,6 @@
 <profile xmlns="urn:org-kde-kremotecontrol" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="urn:org-kde-kremotecontrol file:profile.xsd">
     
-<!--<profile id="okular" servicename="org.kde.okular">-->
     <name>Okular</name>
     <version>0.1</version>
     <author>Pino Toscano</author>

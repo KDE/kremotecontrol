@@ -6,7 +6,7 @@
     <name>VLC videolan player</name>
     <version>0.1</version>
     <author>Gioacchino Mazzurco [gmazzurco89@gmail.com]</author>
-    
+    <description>This profile works only if vlc is configured for single instance running</description>
     <!-- Playback actions -->
     <action id="play" button="Play">
         <name>Start playing</name>
@@ -14,8 +14,7 @@
             <serviceName>org.mpris.vlc</serviceName>
             <node>Player</node>
             <function>Play</function>
-        </prototype>
-        <ifmulti>sendtotop</ifmulti>
+        </prototype>        
     </action>
     
     <action id="stop" button="Stop">
@@ -24,8 +23,7 @@
             <serviceName>org.mpris.vlc</serviceName>
             <node>Player</node>
             <function>Stop</function>
-        </prototype>
-        <ifmulti>sendtotop</ifmulti>
+        </prototype>        
     </action>
     
     <action id="pause" button="Pause">
@@ -35,7 +33,6 @@
             <node>Player</node>
             <function>Pause</function>
         </prototype>
-        <ifmulti>sendtotop</ifmulti>
     </action>
     
     <action id="skipForward" button="SkipForward" repeat="true">
@@ -45,7 +42,6 @@
             <node>Player</node>
             <function>Next</function>
         </prototype>
-        <ifmulti>sendtotop</ifmulti>
     </action>
     
     <action id="skipBackward" button="SkipBackward" repeat="true">
@@ -55,6 +51,5 @@
             <node>Player</node>
             <function>Prev</function>
         </prototype>
-        <ifmulti>sendtotop</ifmulti>
     </action>            
 </profile>

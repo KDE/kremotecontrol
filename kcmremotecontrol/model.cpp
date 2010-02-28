@@ -487,6 +487,13 @@ ProfileModel::ProfileModel(QObject *parent): QStandardItemModel(parent) {
     setHorizontalHeaderLabels(QStringList() << i18n("Profile Name"));
     foreach(Profile *profile, ProfileServer::allProfiles()){
         QStandardItem *item = new QStandardItem(profile->name());
+        QString tooltip;
+        if(!profile->description().isEmpty()){
+          tooltip.append(profile->description()).append("\n");
+        }
+        tooltip.append(i18nc("Profile author", "Author")).append(": ");
+        tooltip.append(profile->author()).append(" (").append(i18nc( "Profile Version", "Version")).append(": ").append(profile->version()).append(")");                
+        item->setToolTip(tooltip);
         item->setData(qVariantFromValue(profile), Qt::UserRole);
         appendRow(item);
     }    

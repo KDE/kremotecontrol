@@ -28,7 +28,7 @@
         <ifmulti>sendtotop</ifmulti>
     </action>
     
-    <action id="pause" button="Pause">
+    <action id="pause" button="PlayPause">
         <name>Pause playing</name>
         <prototype>
             <serviceName>org.mpris.dragonplayer</serviceName>
@@ -38,7 +38,8 @@
         <ifmulti>sendtotop</ifmulti>
     </action>
     
-   
+   <!-- The actions currently have no effekt in dragon player 2.0        
+    
     <action id="skipForward" button="SkipForward" repeat="true">
         <name>Advance to next track</name>
         <prototype>
@@ -57,5 +58,6 @@
             <function>Prev</function>
         </prototype>
         <ifmulti>sendtotop</ifmulti>
-    </action>            
+    </action>       
+   -->
 </profile>
