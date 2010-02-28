@@ -384,6 +384,7 @@ void KCMRemoteControl::save() {
     KConfig config("kremotecontrolrc");
     KConfigGroup globalGroup = KConfigGroup(&config, "Global");
     globalGroup.writeEntry("ShowTrayIcon", ui.cbTrayIcon->isChecked());
+    globalGroup.sync();
 
     DBusInterface::getInstance()->reloadRemoteControlDaemon();
     

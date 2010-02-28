@@ -65,6 +65,8 @@ private:
    signals:
       void modeChanged(const QString &remoteName, const QString &modeName);
       void buttonPressed();
+      void unloadTray();
+      
   private slots:
     void lauchKcmShell();   
     

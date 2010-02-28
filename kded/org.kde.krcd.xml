@@ -36,6 +36,7 @@
        <arg name="modeName" type="s" direction="out"/>
      </signal>
   <signal name="buttonPressed"/>
+  <signal name="unloadTray"/>
   </interface>
 </node>
 

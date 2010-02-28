@@ -50,6 +50,7 @@ K_EXPORT_PLUGIN(KRemoteControlDaemonFactory("kremotecontroldaemon"))
 class KRemoteControlDaemonPrivate
 {
   private:
+      KRemoteControlDaemon *m_parent;
       RemoteList m_remoteList;    
       QStringList m_ignoreNextButtonList;
 
@@ -57,21 +58,26 @@ class KRemoteControlDaemonPrivate
     
       KComponentData applicationData;
 
-      KRemoteControlDaemonPrivate() {
+      KRemoteControlDaemonPrivate(KRemoteControlDaemon *parent) {
+          m_parent = parent;
       };
- 
+
+      ~KRemoteControlDaemonPrivate() {
+      };
+
       RemoteList remoteList(){
           return m_remoteList;
       };
     
       void reload(){
-          kDebug() << "******************************************************reloading";
           m_remoteList.loadFromConfig("kremotecontrolrc");
           KConfig config("kremotecontrolrc");
           KConfigGroup globalGroup(&config, "Global");
           if(globalGroup.readEntry("ShowTrayIcon", true)){
               kDebug() << "starting notifier item" <<
               KToolInvocation::kdeinitExec("krcdnotifieritem");
+          } else {
+              emit m_parent->unloadTray();
           }
       };
     
@@ -99,7 +105,7 @@ class KRemoteControlDaemonPrivate
 
 
 
-KRemoteControlDaemon::KRemoteControlDaemon(QObject* parent, const QVariantList& ): KDEDModule(parent), d_ptr(new KRemoteControlDaemonPrivate) {
+KRemoteControlDaemon::KRemoteControlDaemon(QObject* parent, const QVariantList& ): KDEDModule(parent), d_ptr(new KRemoteControlDaemonPrivate(this)) {
     Q_D(KRemoteControlDaemon);  
   //   QErrorMessage::qtHandler ()  ;
     //qInstallMsgHandler();
@@ -127,7 +133,7 @@ KRemoteControlDaemon::KRemoteControlDaemon(QObject* parent, const QVariantList& 
 }
 
 KRemoteControlDaemon::~KRemoteControlDaemon() {
-
+    emit unloadTray();
 }
 
 
@@ -180,7 +186,7 @@ void KRemoteControlDaemon::gotMessage(const Solid::Control::RemoteControlButton&
 
 
 void KRemoteControlDaemon::reloadConfiguration() {  
-  d_ptr->reload();
+    d_ptr->reload();
     notifyEvent(i18n("Configuration reloaded."));
 }
 
