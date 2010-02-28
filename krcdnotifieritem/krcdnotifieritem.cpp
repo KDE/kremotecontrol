@@ -39,6 +39,7 @@ KrcdNotifierItem::KrcdNotifierItem(){
     setStandardActionsEnabled(false); 
     updateContextMenu();
     QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontrol", "org.kde.krcd", "buttonPressed",  this, SLOT(flash()));
+    QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontrol", "org.kde.krcd", "modeChanged",  this, SLOT(updateContextMenu()));
 }
 
 void KrcdNotifierItem::updateTray() {
@@ -81,6 +82,13 @@ void KrcdNotifierItem::updateContextMenu(){
             }
             entry->setData(QStringList() << remote << mode);
         }
+        modeMenu->addSeparator();
+        QAction *entry = modeMenu->addAction(i18n("Pause remote"));
+        entry->setCheckable(true);
+        entry->setData(QStringList() << remote);
+        if(DBusInterface::getInstance()->eventsIgnored(remote)){
+            entry->setChecked(true);
+        }
         m_menu.addMenu(modeMenu);
         connect(modeMenu, SIGNAL(triggered(QAction*)), this, SLOT(slotModeSelected(QAction*)));
 
@@ -91,11 +99,19 @@ void KrcdNotifierItem::slotConfigure() {
     KToolInvocation::startServiceByDesktopName("kcm_remotecontrol");
 }
 
-void KrcdNotifierItem::slotModeSelected ( QAction* action ) {
-    QString remote = action->data().toStringList().first();
-    QString mode = action->data().toStringList().last();
-    DBusInterface::getInstance()->changeMode(remote, mode);
-    action->setChecked(true);
+void KrcdNotifierItem::slotModeSelected(QAction* action) {
+    if(action->data().toStringList().count() > 1){
+        QString remote = action->data().toStringList().first();
+        QString mode = action->data().toStringList().last();
+        DBusInterface::getInstance()->changeMode(remote, mode);
+        action->setChecked(true);
+    } else {
+        if(action->isChecked()){
+            DBusInterface::getInstance()->ignoreButtonEvents(action->data().toStringList().first());
+        } else {
+            DBusInterface::getInstance()->considerButtonEvents(action->data().toStringList().first());          
+        }
+    }
     updateTray();
 }
 

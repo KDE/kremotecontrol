@@ -34,13 +34,13 @@ class KrcdNotifierItem: public KStatusNotifierItem
         KMenu m_menu;
         
         void updateTray();
-        void updateContextMenu();
         
     private slots:
         void slotConfigure();
         void slotModeSelected(QAction *action);
         void flash();
         void flashOff();
+        void updateContextMenu();
 };
 
 #endif // KRCDNOTIFICATIONITEM_H

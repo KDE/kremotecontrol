@@ -8,7 +8,6 @@ TODOs before move to kdereview
 * test/fix behaviour on newly attached or removed remotes during runtime (mzanetti)
 * rework icons
 * button selection via buttonpress in kcm
-* mute kded by tray app
 * remove compiler warnings
 * check why profile stringlist default values are not reaaded from xml
 * knewstuff

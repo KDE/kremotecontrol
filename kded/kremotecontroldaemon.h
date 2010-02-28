@@ -61,6 +61,8 @@ private:
     QStringList getModesForRemote(const QString &remoteName);
     QString getCurrentMode(const QString& remoteName);
     bool eventsIgnored(const QString& remoteName);
+
+    
     
    signals:
       void modeChanged(const QString &remoteName, const QString &modeName);

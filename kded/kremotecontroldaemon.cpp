@@ -90,11 +90,13 @@ class KRemoteControlDaemonPrivate
       };
     
       void ignoreButtonEvents(const QString& remote){   
-          m_ignoreNextButtonList << remote;
+          kDebug() << "muting remote" << remote;
+          m_ignoreNextButtonList.append(remote);
           m_ignoreNextButtonList.removeDuplicates();
       }
     
       void considerButtonEvents(const QString& remote){
+          kDebug() << "unmuting remote" << remote;
           m_ignoreNextButtonList.removeAll(remote);
       }
     
