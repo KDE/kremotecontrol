@@ -1,0 +1,11 @@
+# KDE Config File
+[Desktop Entry]
+Name=KRemoteControl Notifier Item
+Exec=krcdnotifieritem
+Icon=krcd
+Type=Application
+Terminal=false
+
+X-DBUS-StartupType=Unique
+
+

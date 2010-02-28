@@ -359,7 +359,7 @@ void Remote::setModeChangeMode(Remote::ModeChangeMode modeChangeMode) {
 
 QStringList Remote::availableModeSwitchButtons(const Mode *mode) const {
     QStringList buttonList = m_modechangeHandler->availableModeSwitchButtons();
-    if(!mode->button().isEmpty() && !buttonList.contains(mode->button())){
+    if(mode && !mode->button().isEmpty() && !buttonList.contains(mode->button())){
         buttonList.append(mode->button());
     }
     return buttonList;

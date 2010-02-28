@@ -40,10 +40,11 @@ bool RemoteList::contains(const QString& remoteName) const {
 
 void RemoteList::saveToConfig(const QString& configName) {
     KConfig config(configName);
+    KConfigGroup remotesGroup(&config, "Remotes");
     for(QList<Remote*>::const_iterator i = constBegin(); i != constEnd(); ++i){
         // Clear out old entries for this remote
         config.deleteGroup((*i)->name());
-        KConfigGroup remoteGroup(&config, (*i)->name());
+        KConfigGroup remoteGroup(&remotesGroup, (*i)->name());
         // Save Remote properties here
         remoteGroup.writeEntry("DefaultMode", (*i)->defaultMode()->name());
         remoteGroup.writeEntry("ModeChangeMode", (*i)->modeChangeMode() == Remote::Group ? "Group" : "Cycle");
@@ -70,10 +71,11 @@ void RemoteList::saveToConfig(const QString& configName) {
 void RemoteList::loadFromConfig(const QString& configName) {
     clear(); //Drop old entries
     KConfig config(configName, KConfig::NoGlobals);
+    KConfigGroup remotesGroup(&config, "Remotes");
 
-    foreach(const QString &remoteGroupName, config.groupList()){
+    foreach(const QString &remoteGroupName, remotesGroup.groupList()){
         Remote *remote = new Remote(remoteGroupName);
-        KConfigGroup remoteGroup(&config, remoteGroupName);
+        KConfigGroup remoteGroup(&remotesGroup, remoteGroupName);
         foreach(const QString &modeName, remoteGroup.groupList()){
             KConfigGroup modeGroup(&remoteGroup, modeName);
             Mode *mode;

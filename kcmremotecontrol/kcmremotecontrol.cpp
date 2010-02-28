@@ -113,6 +113,8 @@ KCMRemoteControl::KCMRemoteControl(QWidget *parent, const QVariantList &args) :
     connect(ui.tvActions->selectionModel(), SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), SLOT(actionSelectionChanged(const QModelIndex &)));
     connect(ui.tvActions, SIGNAL(doubleClicked(QModelIndex)), SLOT(editAction()));
     
+    // connect ShowTrayIcon checkbox
+    connect(ui.cbTrayIcon, SIGNAL(clicked(bool)), SLOT(changed()));
 }
 
 KCMRemoteControl::~KCMRemoteControl() {
@@ -369,6 +371,11 @@ void KCMRemoteControl::load() {
             }
         }
     }
+
+    KConfig config("kremotecontrolrc");
+    KConfigGroup globalGroup = KConfigGroup(&config, "Global");
+    ui.cbTrayIcon->setChecked(globalGroup.readEntry("ShowTrayIcon", true));
+
 }
 
 void KCMRemoteControl::save() {
@@ -381,6 +388,10 @@ void KCMRemoteControl::save() {
             DBusInterface::getInstance()->unloadKdedModule();
         }
     }
+    
+    KConfig config("kremotecontrolrc");
+    KConfigGroup globalGroup = KConfigGroup(&config, "Global");
+    globalGroup.writeEntry("ShowTrayIcon", ui.cbTrayIcon->isChecked());
 }
 
 void KCMRemoteControl::gotButton(QString remote, QString button) {

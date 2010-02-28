@@ -411,7 +411,7 @@ void DBusInterface::executeAction(const DBusAction* action) {
 
 void DBusInterface::changeMode(const QString& remoteName, const QString& modeName) {    
       QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontrol",
-                     "org.kde.krcd", "getConfiguredRemotes");    		      
+                     "org.kde.krcd", "changeMode");    		      
     m << remoteName;
     m << modeName;
     QDBusMessage response = QDBusConnection::sessionBus().call(m);

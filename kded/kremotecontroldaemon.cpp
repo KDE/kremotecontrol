@@ -52,15 +52,12 @@ class KRemoteControlDaemonPrivate
   private:
       RemoteList m_remoteList;    
       QStringList m_ignoreNextButtonList;
-      KStatusNotifierItem m_notifier;
 
   public:
     
       KComponentData applicationData;
 
       KRemoteControlDaemonPrivate() {
-          m_notifier.setIconByName("infrared-remote");
-          m_notifier.setCategory(KStatusNotifierItem::Hardware);
       };
  
       RemoteList remoteList(){
@@ -68,7 +65,14 @@ class KRemoteControlDaemonPrivate
       };
     
       void reload(){
+          kDebug() << "******************************************************reloading";
           m_remoteList.loadFromConfig("kremotecontrolrc");
+          KConfig config("kremotecontrolrc");
+          KConfigGroup globalGroup(&config, "Global");
+          if(globalGroup.readEntry("ShowTrayIcon", true)){
+              kDebug() << "starting notifier item" <<
+              KToolInvocation::kdeinitExec("krcdnotifieritem");
+          }
       };
     
       Remote* getRemote(const QString& remoteName) {          
