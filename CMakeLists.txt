@@ -6,7 +6,6 @@ add_subdirectory(profiles)
 add_subdirectory(kded)
 add_subdirectory(krcdnotifieritem)
 add_subdirectory(dataengine)
-add_subdirectory(applet)
 
 if(KDE4_BUILD_TESTS)
   add_subdirectory(tests)
