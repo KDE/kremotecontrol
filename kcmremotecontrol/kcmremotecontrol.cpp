@@ -380,6 +380,11 @@ void KCMRemoteControl::load() {
 
 void KCMRemoteControl::save() {
     m_remoteList.saveToConfig("kremotecontrolrc");
+    
+    KConfig config("kremotecontrolrc");
+    KConfigGroup globalGroup = KConfigGroup(&config, "Global");
+    globalGroup.writeEntry("ShowTrayIcon", ui.cbTrayIcon->isChecked());
+
     DBusInterface::getInstance()->reloadRemoteControlDaemon();
     
     // If there are no remotes configured it makes no sense to have de daemon running. stop it
@@ -388,10 +393,6 @@ void KCMRemoteControl::save() {
             DBusInterface::getInstance()->unloadKdedModule();
         }
     }
-    
-    KConfig config("kremotecontrolrc");
-    KConfigGroup globalGroup = KConfigGroup(&config, "Global");
-    globalGroup.writeEntry("ShowTrayIcon", ui.cbTrayIcon->isChecked());
 }
 
 void KCMRemoteControl::gotButton(QString remote, QString button) {
