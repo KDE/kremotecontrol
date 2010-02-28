@@ -1,7 +1,20 @@
-Todos / Bugs
+TODOs before move to kdereview
+-------------------------------
+* update docs (mzanetti)
+* move plasma stuff to playground (frasche)
+* Tooltips for Profiles in KCM (frasche)
+* finish NotifierItem (mzanetti)
+* Check/update all profiles (frasche)
+* rework nofications from Kded (mzanetti + frasche)
+* test/fix behaviour on newly attached or removed remotes during runtime (mzanetti)
+
+TODOs after move back to kdeutils
+---------------------------------
+* update websites
+
+Long-term TODOs
 -------------------
-*Look for a way to do more complex action into profile not calling only one simple dbus method 
-  at moment we can't do something like increase volume on amarok because we need to do something like: VolumeSet(VolumeGet() + 10);
+* Implement executor and ActionType/configuration to do something like: VolumeSet(VolumeGet() + 10);
   It should be something like:
     <action objid="Player" class="volumeup">
         <name>Increase volume</name>
