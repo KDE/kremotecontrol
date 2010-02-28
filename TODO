@@ -6,6 +6,9 @@ TODOs before move to kdereview
 * Check/update all profiles (frasche)
 * rework nofications from Kded (mzanetti + frasche)
 * test/fix behaviour on newly attached or removed remotes during runtime (mzanetti)
+* rework icons
+* button selection via buttonpress in kcm
+* mute kded by tray app
 
 TODOs after move back to kdeutils
 ---------------------------------
