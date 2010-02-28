@@ -23,8 +23,7 @@
 #include <QTest>
 
 
-void ProfileTest::testGetter()
-{
+void ProfileTest::testGetter() {
   Profile profile("id1", "name", "1.1","some author", "dummy 1" );
   QCOMPARE(QString("id1"), profile.profileId());
   QCOMPARE(QString("name"), profile.name());
@@ -36,8 +35,7 @@ void ProfileTest::testGetter()
   QCOMPARE(QString("0.0"), profile.version());
 }
 
-void ProfileTest::testVersion()
-{
+void ProfileTest::testVersion() {
   Profile *profile_1 = new Profile("id1", "name", "1.1","some author", "dummy 1" );
   Profile *profile_2 = new Profile("id2", "name", "1.1","some author", "dummy 1" );
 

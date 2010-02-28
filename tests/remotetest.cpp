@@ -29,8 +29,7 @@ void RemoteTest::testGetter() {
 
 }
 
-void RemoteTest::testCycleChangeHandler()
-{
+void RemoteTest::testCycleChangeHandler() {
  Mode *mode1 = new Mode("mode1");
   mode1->setButton("1");
   Mode *mode2 = new Mode("mode2");
@@ -76,8 +75,8 @@ void RemoteTest::testCycleChangeHandler()
   QCOMPARE(7, remote->allModes().size());
   remote->addMode(mode10);
   QCOMPARE(8, remote->allModes().size());
-  remote->nextModeButton("n");
-  remote->previousModeButton("p");
+  remote->setNextModeButton("n");
+  remote->setPreviousModeButton("p");
   QCOMPARE(remote->masterMode(), remote->currentMode());
   QCOMPARE(false, remote->nextMode("foobar"));
   QCOMPARE(remote->masterMode(), remote->currentMode());
@@ -129,9 +128,7 @@ void RemoteTest::testCycleChangeHandler()
   QCOMPARE(true, remote->nextMode("3"));
   QCOMPARE(mode5, remote->currentMode());
   QCOMPARE(false, remote->nextMode("3"));
-  QCOMPARE(mode5, remote->currentMode());
-
-  
+  QCOMPARE(mode5, remote->currentMode());  
 }
 
 
@@ -224,8 +221,7 @@ void RemoteTest::testOperatorEquals() {
    QCOMPARE(*mode1, *mode2);
 }
 
-void RemoteTest::toggleModeChangeHandler()
-{
+void RemoteTest::toggleModeChangeHandler() {
  Mode *mode1 = new Mode("mode1");
   mode1->setButton("1");
   Mode *mode2 = new Mode("mode2");
@@ -262,7 +258,7 @@ void RemoteTest::toggleModeChangeHandler()
   remote->addMode(mode9);
   remote->addMode(mode10);
   QCOMPARE(11, remote->allModes().size());
-  remote->setModeChangeHandler(Remote::Cycle);
+  remote->setModeChangeMode(Remote::Cycle);  
   QCOMPARE(11, remote->allModes().size());
   QCOMPARE(QString("1"),mode1->button());
   QCOMPARE(QString("2"),mode2->button());
@@ -275,9 +271,9 @@ void RemoteTest::toggleModeChangeHandler()
   QCOMPARE(QString(),mode9->button());
   QCOMPARE(QString(),mode10->button());
 
-  remote->nextModeButton("1");
+  remote->setNextModeButton("1");
   QCOMPARE(QString(),mode1->button());
-  remote->previousModeButton("2");
+  remote->setPreviousModeButton("2");
   QCOMPARE(QString(),mode2->button());
 }
 
