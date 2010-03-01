@@ -287,7 +287,7 @@ void KCMRemoteControl::modeSelectionChanged(const QModelIndex &index) {
         ui.pbAutoPopulate->setEnabled(true);
     } else {
         ui.pbAddMode->setEnabled(false);
-        ui.pbEditMode->setEnabled(true);
+        ui.pbEditMode->setEnabled(false);
         ui.pbAddAction->setEnabled(false);
         ui.pbAutoPopulate->setEnabled(false);
     }
@@ -305,13 +305,13 @@ void KCMRemoteControl::modeSelectionChanged(const QModelIndex &index) {
         Remote *remote = m_remoteModel->remote(index);
         ui.lActions->setText(remote->name() + " (" + mode->name() + ")");
         
-        if(remote->allModes().indexOf(mode) > 2){
+        if(remote->allModes().indexOf(mode) > 1){
             ui.pbMoveModeUp->setEnabled(true);
         } else {
             ui.pbMoveModeUp->setEnabled(false);
         }
 
-        if(remote->allModes().indexOf(mode) < (remote->allModes().count() - 1)){
+        if((remote->allModes().indexOf(mode) < (remote->allModes().count() - 1)) && (mode != remote->masterMode())){
             ui.pbMoveModeDown->setEnabled(true);
         } else {
             ui.pbMoveModeDown->setEnabled(false);
