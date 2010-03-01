@@ -190,6 +190,9 @@ void KRemoteControlDaemon::gotMessage(const Solid::Control::RemoteControlButton&
 void KRemoteControlDaemon::reloadConfiguration() {  
     d_ptr->reload();
     notifyEvent(i18n("Configuration reloaded."));
+    foreach(const Remote *remote, d_ptr->remoteList()){
+        emit modeChanged(remote->name(), remote->masterMode()->name());
+    }
 }
 
 void KRemoteControlDaemon::changeMode(const QString& remoteName, Mode* mode) {
