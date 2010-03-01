@@ -77,6 +77,7 @@ ModeDialog::ModeDialog(Remote *remote, Mode *mode, QWidget *parent): KDialog(par
         }
     } else {
         ui.ibIcon->setIcon("infrared-remote");
+        ui.gbModeCycle->setVisible(false);
     }
     
     connect(ui.leName, SIGNAL(textChanged(const QString&)), this, SLOT(checkForComplete()));
