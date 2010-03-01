@@ -42,16 +42,6 @@ void Action::setButton(const QString& button) {
     m_button = button;
 }
 
-void Action::operator=(const Action& action) {
-    m_type = action.type();
-    m_button = action.button();
-}
-
-bool Action::operator==(const Action& action) const {
-    return m_type == action.type() &&
-           m_button == action.button();
-}
-
 void Action::saveToConfig(KConfigGroup& config) {
     config.writeEntry("Type", (int)m_type);
     config.writeEntry("Button", m_button);

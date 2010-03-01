@@ -54,10 +54,7 @@ class KREMOTECONTROL_EXPORT DBusAction : public Action
     
     ActionDestination destination() const;
     void setDestination(ActionDestination destination);
-    
-    virtual void operator=(const DBusAction &action);
-    virtual bool operator==(const DBusAction &action) const;
-    
+
     virtual QString name() const;
     virtual QString description() const;
     

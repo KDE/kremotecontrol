@@ -687,6 +687,7 @@ Qt::ItemFlags RemoteModel::flags(const QModelIndex& index) const {
 }
 
 bool RemoteModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) {
+    Q_UNUSED(row)
     if (!data->hasFormat("kremotecontrol/action"))
         return false;
 

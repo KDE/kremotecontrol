@@ -52,8 +52,8 @@ private:
 private slots:
     void checkForComplete();
     void slotButtonClicked(int button);
-    void forwardButtonChanged(int index);
-    void backwardButtonChanged(int index);
+    void forwardButtonChanged();
+    void backwardButtonChanged();
     void buttonPressed(const Solid::Control::RemoteControlButton &button);
 };
 

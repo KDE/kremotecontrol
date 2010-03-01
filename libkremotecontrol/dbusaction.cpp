@@ -74,27 +74,6 @@ void DBusAction::setDestination(DBusAction::ActionDestination destination) {
     m_destination = destination;
 }
 
-void DBusAction::operator=(const DBusAction& action) {
-    m_type = action.type();
-    m_button = action.button();
-    m_application = action.application();
-    m_function = action.function();
-    m_destination = action.destination();
-    m_autostart = action.autostart();
-    m_repeat = action.repeat();
-}
-
-bool DBusAction::operator==(const DBusAction& action) const {
-    return m_type == action.type() &&
-            m_application == action.application() &&
-            m_autostart == action.autostart() &&
-            m_repeat == action.repeat() &&
-            m_destination == action.destination() &&
-            m_function == action.function() &&
-            m_node == action.node() &&
-            m_button == action.button();
-}
-
 QString DBusAction::name() const {
     return m_application + ":" + m_node;
 }

@@ -130,14 +130,16 @@ void EditActionContainer::slotButtonClicked(int button) {
             case Action::DBusAction:{
                 EditDBusAction *dbusActionEditor = dynamic_cast<EditDBusAction*>(m_innerWidget);
                 if(dbusActionEditor){
-                    ExecutionEngine::executeAction(&dbusActionEditor->action());
+                    DBusAction action = dbusActionEditor->action();
+                    ExecutionEngine::executeAction(&action);
                 }
                 break;
             }
             case Action::ProfileAction:{
                 EditProfileAction *profileActionEditor = dynamic_cast<EditProfileAction*>(m_innerWidget);
                 if(profileActionEditor){
-                    ExecutionEngine::executeAction(&profileActionEditor->action());
+                    ProfileAction action = profileActionEditor->action();
+                    ExecutionEngine::executeAction(&action);
                 }
                 break;
             }

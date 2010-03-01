@@ -34,10 +34,7 @@ class KREMOTECONTROL_EXPORT ProfileAction : public DBusAction
         
         QString actionTemplateId() const;
         void setActionTemplateId(const QString &actionTemplateID);
-        
-        virtual void operator=(const ProfileAction &action);
-        virtual bool operator==(const ProfileAction &other) const;
-        
+
         virtual QString name() const;
         virtual QString description() const;
         

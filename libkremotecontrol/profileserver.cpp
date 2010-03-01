@@ -223,8 +223,8 @@ Profile * ProfileServer::ProfileXmlContentHandler::parseFile(const QString& file
 
 ProfileActionTemplate ProfileServer::ProfileXmlContentHandler::parseAction(QDomNode actionNode, const QString& profileId) {
     QString buttonName;
-    bool autostart = false;
-    bool repeat;
+    bool autostart = true;
+    bool repeat = false;
     QString actionId = actionNode.attributes().namedItem("id").nodeValue().trimmed();
     if (actionNode.attributes().contains("button")){
         buttonName = actionNode.attributes().namedItem("button").nodeValue().trimmed();

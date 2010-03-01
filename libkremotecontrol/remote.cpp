@@ -28,12 +28,15 @@ class ModeChangeHandler
         ModeChangeHandler(Remote *remote) {
             m_remote = remote;
         }
+        virtual ~ModeChangeHandler(){}
 
         virtual bool handleModeButton(const QString &button) = 0;
         virtual Remote::ModeChangeMode type() const = 0;
         virtual QStringList availableModeSwitchButtons() const = 0;
         virtual void addMode(Mode *mode) const = 0;
-        virtual void handleModeButtonAssignment(const QString &button){};
+        virtual void handleModeButtonAssignment(const QString &button){
+            Q_UNUSED(button);
+        };
         virtual void handleModeButtonAssignments(){};
                 
     protected:
@@ -70,7 +73,7 @@ class GroupModeChangeHandler : public ModeChangeHandler
 
             int index= currentModeHasButton ? m_remote->m_modeList.indexOf(m_remote->currentMode()) +1 : 0;
 
-            for (index; index < size ; ++index) {
+            for(; index < size ; ++index) {
                 if (m_remote->m_modeList.at(index)->button() == button) {
 
                     m_remote->setCurrentMode(m_remote->m_modeList.at(index));

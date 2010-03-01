@@ -81,8 +81,8 @@ ModeDialog::ModeDialog(Remote *remote, Mode *mode, QWidget *parent): KDialog(par
     }
     
     connect(ui.leName, SIGNAL(textChanged(const QString&)), this, SLOT(checkForComplete()));
-    connect(ui.cbButtonForward, SIGNAL(currentIndexChanged(int)), this, SLOT(forwardButtonChanged(int)));
-    connect(ui.cbButtonBackward, SIGNAL(currentIndexChanged(int)), this, SLOT(backwardButtonChanged(int)));
+    connect(ui.cbButtonForward, SIGNAL(currentIndexChanged(int)), this, SLOT(forwardButtonChanged()));
+    connect(ui.cbButtonBackward, SIGNAL(currentIndexChanged(int)), this, SLOT(backwardButtonChanged()));
     checkForComplete();
 
     // Pause remote to make use of button presses here
@@ -145,8 +145,8 @@ void ModeDialog::slotButtonClicked(int button) {
     KDialog::slotButtonClicked(button);
 }
 
-void ModeDialog::forwardButtonChanged(int index) {
-    disconnect(ui.cbButtonBackward, SIGNAL(currentIndexChanged(int)), this, SLOT(backwardButtonChanged(int)));
+void ModeDialog::forwardButtonChanged() {
+    disconnect(ui.cbButtonBackward, SIGNAL(currentIndexChanged(int)), this, SLOT(backwardButtonChanged()));
     ui.cbButtonBackward->clear();
     
     ui.cbButtonBackward->addItem(i18n("No Button"), "");
@@ -155,11 +155,11 @@ void ModeDialog::forwardButtonChanged(int index) {
     }
 
     ui.cbButtonBackward->setCurrentIndex(ui.cbButtonBackward->findData(m_remote->previousModeButton()));
-    connect(ui.cbButtonBackward, SIGNAL(currentIndexChanged(int)), this, SLOT(backwardButtonChanged(int)));
+    connect(ui.cbButtonBackward, SIGNAL(currentIndexChanged(int)), this, SLOT(backwardButtonChanged()));
 }
 
-void ModeDialog::backwardButtonChanged(int index) {
-    disconnect(ui.cbButtonForward, SIGNAL(currentIndexChanged(int)), this, SLOT(forwardButtonChanged(int)));
+void ModeDialog::backwardButtonChanged() {
+    disconnect(ui.cbButtonForward, SIGNAL(currentIndexChanged(int)), this, SLOT(forwardButtonChanged()));
     ui.cbButtonForward->clear();
  
     ui.cbButtonForward->addItem(i18n("No Button"), "");                
@@ -168,7 +168,7 @@ void ModeDialog::backwardButtonChanged(int index) {
     }
 
     ui.cbButtonForward->setCurrentIndex(ui.cbButtonForward->findData(m_remote->nextModeButton()));
-    connect(ui.cbButtonForward, SIGNAL(currentIndexChanged(int)), this, SLOT(forwardButtonChanged(int)));
+    connect(ui.cbButtonForward, SIGNAL(currentIndexChanged(int)), this, SLOT(forwardButtonChanged()));
 }
 
 void ModeDialog::buttonPressed(const Solid::Control::RemoteControlButton& button) {

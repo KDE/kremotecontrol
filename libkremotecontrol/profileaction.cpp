@@ -48,18 +48,6 @@ void ProfileAction::setActionTemplateId(const QString& actionTemplateId) {
     m_template = actionTemplateId;
 }
 
-void ProfileAction::operator=(const ProfileAction& action) {
-    DBusAction::operator=(action);
-    m_profileId = action.profileId();
-    m_template = action.actionTemplateId();
-}
-
-bool ProfileAction::operator==(const ProfileAction& other) const {
-    return DBusAction::operator==(other) &&
-            m_profileId == other.profileId() &&
-            m_template == other.actionTemplateId();
-}
-
 QString ProfileAction::name() const {
     foreach(const Profile *profile, ProfileServer::allProfiles()){
         if(profile->profileId() == m_profileId){

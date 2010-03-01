@@ -108,7 +108,7 @@ int Profile::compareVersion(Profile* other) const {
     return m_version == other->version();
 }
 
-const int Profile::ProfileVersion::operator==(const Profile::ProfileVersion& other) const {
+int Profile::ProfileVersion::operator==(const Profile::ProfileVersion& other) const {
     if(m_major == other.m_major){
         if(m_minor > other.m_minor){
             return 1;

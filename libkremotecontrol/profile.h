@@ -42,7 +42,7 @@ class KREMOTECONTROL_EXPORT Profile
         };
 
         ProfileVersion(const QString &version);
-        const int operator==(const ProfileVersion &other) const;
+        int operator==(const ProfileVersion &other) const;
         QString toString() const;
     };
 
