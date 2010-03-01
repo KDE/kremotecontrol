@@ -43,7 +43,7 @@ void RemoteList::saveToConfig(const QString& configName) {
     KConfigGroup remotesGroup(&config, "Remotes");
     for(QList<Remote*>::const_iterator i = constBegin(); i != constEnd(); ++i){
         // Clear out old entries for this remote
-        config.deleteGroup((*i)->name());
+        remotesGroup.deleteGroup((*i)->name());
         KConfigGroup remoteGroup(&remotesGroup, (*i)->name());
         // Save Remote properties here
         remoteGroup.writeEntry("DefaultMode", (*i)->defaultMode()->name());
