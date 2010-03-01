@@ -35,10 +35,12 @@ class EditActionContainer : public KDialog {
         Ui::ActionContainer ui;
         Action *m_action;
         QWidget *m_innerWidget;
+        QString m_remote;
         
     protected Q_SLOTS:
         void checkForComplete();
         virtual void slotButtonClicked(int button);
+        void buttonPressed(const Solid::Control::RemoteControlButton &button);
 };
 
 #endif // ACTIONCONTAINER_H

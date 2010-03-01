@@ -1,13 +1,10 @@
 TODOs before move to kdereview
 -------------------------------
 * update docs (mzanetti)
-* move plasma stuff to playground (frasche)
-* Tooltips for Profiles in KCM (frasche)
 * Check/update all profiles (frasche)
 * rework nofications from Kded (mzanetti + frasche)
 * test/fix behaviour on newly attached or removed remotes during runtime (mzanetti)
 * rework icons
-* button selection via buttonpress in kcm
 * remove compiler warnings
 * check why profile stringlist default values are not reaaded from xml
 * knewstuff

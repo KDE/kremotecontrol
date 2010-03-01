@@ -26,6 +26,7 @@
 
 #include "modedialog.h"
 #include "mode.h"
+#include "dbusinterface.h"
 
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -82,6 +83,10 @@ ModeDialog::ModeDialog(Remote *remote, Mode *mode, QWidget *parent): KDialog(par
     connect(ui.cbButtonForward, SIGNAL(currentIndexChanged(int)), this, SLOT(forwardButtonChanged(int)));
     connect(ui.cbButtonBackward, SIGNAL(currentIndexChanged(int)), this, SLOT(backwardButtonChanged(int)));
     checkForComplete();
+
+    // Pause remote to make use of button presses here
+    DBusInterface::getInstance()->ignoreButtonEvents(remote->name());
+    connect(new Solid::Control::RemoteControl(remote->name()), SIGNAL(buttonPressed(const Solid::Control::RemoteControlButton &)), SLOT(buttonPressed(const Solid::Control::RemoteControlButton &)));
 }
 
 ModeDialog::~ModeDialog() {
@@ -135,6 +140,7 @@ void ModeDialog::slotButtonClicked(int button) {
             m_remote->setPreviousModeButton(ui.cbButtonBackward->itemData(ui.cbButtonBackward->currentIndex()).toString());
         }
     }
+    DBusInterface::getInstance()->considerButtonEvents(m_remote->name());
     KDialog::slotButtonClicked(button);
 }
 
@@ -162,6 +168,15 @@ void ModeDialog::backwardButtonChanged(int index) {
 
     ui.cbButtonForward->setCurrentIndex(ui.cbButtonForward->findData(m_remote->nextModeButton()));
     connect(ui.cbButtonForward, SIGNAL(currentIndexChanged(int)), this, SLOT(forwardButtonChanged(int)));
+}
+
+void ModeDialog::buttonPressed(const Solid::Control::RemoteControlButton& button) {
+    kDebug() << "button event received";
+    if(button.remoteName() == m_remote->name()) {
+        if(m_mode != m_remote->masterMode()){
+            ui.cbButtons->setCurrentIndex(ui.cbButtons->findText(button.name()));            
+        }
+    }
 }
 
 #include "modedialog.moc"

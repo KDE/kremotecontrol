@@ -20,12 +20,14 @@
 #include "editactioncontainer.h"
 #include "editdbusaction.h"
 #include "editprofileaction.h"
+#include "dbusinterface.h"
+#include "executionengine.h"
 
 #include <kdebug.h>
-#include <executionengine.h>
 
 EditActionContainer::EditActionContainer(Action *action, const QString &remote, QWidget* parent, Qt::WFlags flags): KDialog(parent, flags) {
     m_action = action;
+    m_remote = remote;
     
     QWidget *widget = new QWidget(this);
     ui.setupUi(widget);
@@ -69,6 +71,11 @@ EditActionContainer::EditActionContainer(Action *action, const QString &remote, 
         connect(m_innerWidget, SIGNAL(formComplete(bool)), SLOT(checkForComplete()));
     }
     checkForComplete();
+    
+    // Pause remote to make use of button presses here
+    DBusInterface::getInstance()->ignoreButtonEvents(remote);
+    connect(new Solid::Control::RemoteControl(remote), SIGNAL(buttonPressed(const Solid::Control::RemoteControlButton &)), SLOT(buttonPressed(const Solid::Control::RemoteControlButton &)));
+    
 }
 
 void EditActionContainer::checkForComplete() {
@@ -137,7 +144,17 @@ void EditActionContainer::slotButtonClicked(int button) {
             default:
               kDebug() << "Invalid action type! Not executing!";
         }
-      
+        // return here because try button should not unpause remote
+        return;
     }
+    DBusInterface::getInstance()->considerButtonEvents(m_remote);
     KDialog::slotButtonClicked(button);
 }
+
+void EditActionContainer::buttonPressed(const Solid::Control::RemoteControlButton& button) {
+    kDebug() << "button event received";
+    if(button.remoteName() == m_remote) {
+        ui.cbButton->setCurrentIndex(ui.cbButton->findText(button.name()));
+    }
+}
+

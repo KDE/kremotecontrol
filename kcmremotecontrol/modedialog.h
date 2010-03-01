@@ -20,7 +20,7 @@
 
 
 /**
-  * @author Gav Wood, Michael Zanetti
+  * @author Michael Zanetti
   */
 
 
@@ -54,6 +54,7 @@ private slots:
     void slotButtonClicked(int button);
     void forwardButtonChanged(int index);
     void backwardButtonChanged(int index);
+    void buttonPressed(const Solid::Control::RemoteControlButton &button);
 };
 
 #endif /* NEWMODEDIALOG_H */

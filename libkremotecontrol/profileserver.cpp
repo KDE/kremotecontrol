@@ -280,8 +280,8 @@ ProfileActionTemplate ProfileServer::ProfileXmlContentHandler::parseAction(QDomN
                 argValue.convert(QVariant::nameToType(typeString.toLocal8Bit()));
             }
             arguments.append(Argument(argValue, description));
-            kDebug()<< "		" << "description" << description;
-            kDebug()<< "		" << "value" << argValue;
+/*            kDebug()<< "		" << "description" << description;
+            kDebug()<< "		" << "value" << argValue;*/
         }
     }
 
@@ -293,7 +293,7 @@ ProfileActionTemplate ProfileServer::ProfileXmlContentHandler::parseAction(QDomN
 //     kDebug()<< "	" << "autostart" << autostart;
 //     kDebug()<< "	" << "repeat" << repeat;
 //     kDebug()<< "	" << "ifmulti" << actionType;
-     kDebug()<< "	" << "serviceName" << serviceName;
+//     kDebug()<< "	" << "serviceName" << serviceName;
 //     kDebug()<< "	" << "ifmulti" << nodeName;
 //     kDebug()<< "	" << "ifmulti" << function.name();
 //     kDebug()<< "    " << "args" << function.args().count();
