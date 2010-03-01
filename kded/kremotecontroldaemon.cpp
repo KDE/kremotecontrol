@@ -257,12 +257,12 @@ bool KRemoteControlDaemon::changeMode(const QString& remoteName, const QString& 
 
 
 QStringList KRemoteControlDaemon::getModesForRemote(const QString& remoteName) {
-  QStringList list;
+    QStringList list;
     Remote *remote = d_ptr->remoteList().getRemote(remoteName);
     if(remote){
-      foreach(Mode *mode, remote-> allModes()){
-	list << mode->name();
-      }
+        foreach(const Mode *mode, remote->allModes()){
+            list << mode->name();
+        }
     }
     return list;
 }

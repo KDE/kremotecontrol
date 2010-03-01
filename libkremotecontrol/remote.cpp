@@ -264,7 +264,10 @@ QList<Mode*> Remote::allModes() const {
 }
 
 void Remote::addMode(Mode* mode) {
-    m_modechangeHandler->addMode(mode);
+    // Don't add a second master mode
+    if(mode != masterMode() && mode->name() != "Master"){
+        m_modechangeHandler->addMode(mode);
+    }
 }
 
 void Remote::removeMode(Mode *mode) {
