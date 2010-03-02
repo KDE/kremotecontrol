@@ -38,33 +38,35 @@ bool RemoteList::contains(const QString& remoteName) const {
     return false;
 }
 
+// Save everything to config File in the format [Remote][modeIndex][actionIndex]
 void RemoteList::saveToConfig(const QString& configName) {
     KConfig config(configName);
     KConfigGroup remotesGroup(&config, "Remotes");
-    for(QList<Remote*>::const_iterator i = constBegin(); i != constEnd(); ++i){
+    for(QList<Remote*>::const_iterator remoteIterator = constBegin(); remoteIterator != constEnd(); ++remoteIterator){
         // Clear out old entries for this remote
-        remotesGroup.deleteGroup((*i)->name());
-        KConfigGroup remoteGroup(&remotesGroup, (*i)->name());
+        remotesGroup.deleteGroup((*remoteIterator)->name());
+        KConfigGroup remoteGroup(&remotesGroup, (*remoteIterator)->name());
         // Save Remote properties here
-        remoteGroup.writeEntry("DefaultMode", (*i)->defaultMode()->name());
-        remoteGroup.writeEntry("ModeChangeMode", (*i)->modeChangeMode() == Remote::Group ? "Group" : "Cycle");
-        remoteGroup.writeEntry("NextModeButton", (*i)->nextModeButton());
-        remoteGroup.writeEntry("PreviousModeButton", (*i)->previousModeButton());
+        remoteGroup.writeEntry("DefaultMode", (*remoteIterator)->defaultMode()->name());
+        remoteGroup.writeEntry("ModeChangeMode", (*remoteIterator)->modeChangeMode() == Remote::Group ? "Group" : "Cycle");
+        remoteGroup.writeEntry("NextModeButton", (*remoteIterator)->nextModeButton());
+        remoteGroup.writeEntry("PreviousModeButton", (*remoteIterator)->previousModeButton());
         
-        foreach(const Mode *mode, (*i)->allModes()){
-            KConfigGroup modeGroup(&remoteGroup, mode->name());
+        int modeIndex = 0;
+        foreach(const Mode *mode, (*remoteIterator)->allModes()){
+            KConfigGroup modeGroup(&remoteGroup, QString::number(modeIndex++));
             // Save Mode properties here
+            modeGroup.writeEntry("Name", mode->name());
             modeGroup.writeEntry("IconName", mode->iconName());
             modeGroup.writeEntry("Button", mode->button());
             
-            int i = 0; // The ID for the ActionGroup in config file as actions may have no unique attribute
+            int actionIndex = 0;
             foreach(Action *action, mode->actions()){
-                KConfigGroup actionGroup(&modeGroup, QString::number(i));
-                // Save Action properties here
+                KConfigGroup actionGroup(&modeGroup, QString::number(actionIndex++));
+                // Actions need to save themselves...
                 action->saveToConfig(actionGroup);
-                i++;
             }
-        }        
+        }
     }
 }
 
@@ -76,16 +78,21 @@ void RemoteList::loadFromConfig(const QString& configName) {
     foreach(const QString &remoteGroupName, remotesGroup.groupList()){
         Remote *remote = new Remote(remoteGroupName);
         KConfigGroup remoteGroup(&remotesGroup, remoteGroupName);
-        foreach(const QString &modeName, remoteGroup.groupList()){
-            KConfigGroup modeGroup(&remoteGroup, modeName);
+        QStringList modeGroupList = remoteGroup.groupList();
+        modeGroupList.sort();
+        foreach(const QString &modeIndex, modeGroupList){
+            KConfigGroup modeGroup(&remoteGroup, modeIndex);
             Mode *mode;
+            QString modeName = modeGroup.readEntry("Name");
             if(modeName == "Master") { // A Remote always has a Master Mode... Adding a second one will not work
                 mode = remote->masterMode();
                 mode->setIconName(modeGroup.readEntry("IconName"));
             } else {
                 mode = new Mode(modeName, modeGroup.readEntry("IconName"));
             }
-            foreach(const QString &actionId, modeGroup.groupList()){
+            QStringList actionGroupList = modeGroup.groupList();
+            actionGroupList.sort();
+            foreach(const QString &actionId, actionGroupList){
                 KConfigGroup actionGroup(&modeGroup, actionId);
                 // Read Action properties here
                 Action *action = 0;

@@ -123,8 +123,10 @@ void DBusAction::loadFromConfig(const KConfigGroup& config) {
     m_application = config.readEntry("Application");
     m_node = config.readEntry("Node");
     m_function = Prototype(config.readEntry("Function"));
+    QStringList argGroupList = config.groupList();
+    argGroupList.sort();
     QList<Argument> argList;
-    foreach(const QString &argID, config.groupList()){
+    foreach(const QString &argID, argGroupList){
         KConfigGroup argumentGroup = KConfigGroup(&config, argID);
         QVariant argValue = QVariant(QVariant::nameToType(argumentGroup.readEntry("Type").toLocal8Bit()));
         argValue = argumentGroup.readEntry("Value", argValue);
