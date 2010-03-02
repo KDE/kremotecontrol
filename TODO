@@ -4,7 +4,6 @@ TODOs before move to kdereview
 * rework nofications from Kded (mzanetti + frasche)
 * test/fix behaviour on newly attached or removed remotes during runtime (mzanetti)
 * rework icons
-* check why profile stringlists are not displayed corret in the arguments model
 * knewstuff
 * more unit tests (can also be done after moving back to kdeutils)
 * krazy checks
