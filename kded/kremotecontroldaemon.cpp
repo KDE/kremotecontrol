@@ -123,8 +123,8 @@ KRemoteControlDaemon::KRemoteControlDaemon(QObject* parent, const QVariantList& 
 
     d->applicationData = KComponentData(aboutData);
     connect(RemoteControlManager::notifier(), SIGNAL(statusChanged(bool)), this, SLOT(slotStatusChanged(bool)));
-    connect(RemoteControlManager::notifier(), SIGNAL(remoteControlAdded(const QString&)), this, SLOT(remoteControlAdded(const QString&)));
-    connect(RemoteControlManager::notifier(), SIGNAL(remoteControlRemoved(const QString&)), this, SLOT(remoteControlRemoved(const QString&)));
+    connect(RemoteControlManager::notifier(), SIGNAL(remoteControlAdded(const QString&)), this, SLOT(slotRemoteControlAdded(const QString&)));
+    connect(RemoteControlManager::notifier(), SIGNAL(remoteControlRemoved(const QString&)), this, SLOT(slotRemoteControlRemoved(const QString&)));
     d_ptr->reload();
     foreach(const QString &remote, RemoteControl::allRemoteNames()){
         RemoteControl *rc = new RemoteControl(remote);
@@ -153,6 +153,7 @@ void KRemoteControlDaemon::slotStatusChanged(bool connected) {
     } else {
         notifyEvent(i18n("The remote control subsystem  has severed its connection. Remote controls are no longer available."));
     }
+    emit connectionChanged(connected);
 }
 
 
@@ -222,7 +223,7 @@ void KRemoteControlDaemon::considerButtonEvents(const QString& remoteName) {
     }
 }
 
-void KRemoteControlDaemon::remoteControlAdded(const QString& name) {
+void KRemoteControlDaemon::slotRemoteControlAdded(const QString& name) {
     if(d_ptr->getRemote(name)){
         kDebug() << "remote found";
         notifyEvent(i18n("The remote %1 is now available.", name));
@@ -233,6 +234,7 @@ void KRemoteControlDaemon::remoteControlAdded(const QString& name) {
         notification->setActions(QStringList() << i18nc("Configure the remote", "Configure remote"));
         connect(notification, SIGNAL(activated(unsigned int)), SLOT(lauchKcmShell()));
     }
+    emit remoteControlAdded(name);
 }
 
 void KRemoteControlDaemon::lauchKcmShell() {    
@@ -240,8 +242,9 @@ void KRemoteControlDaemon::lauchKcmShell() {
    KToolInvocation::startServiceByDesktopName("kcm_lirc");    
 }
    
-void KRemoteControlDaemon::remoteControlRemoved(const QString& name) {
- notifyEvent(i18n("The remote %1 was removed from system.", name));
+void KRemoteControlDaemon::slotRemoteControlRemoved(const QString& name) {
+    notifyEvent(i18n("The remote %1 was removed from system.", name));
+    emit remoteControlRemoved(name);
 }
 
 bool KRemoteControlDaemon::changeMode(const QString& remoteName, const QString& modeName) {

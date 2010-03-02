@@ -31,10 +31,9 @@ class KrcdNotifierItem: public KStatusNotifierItem
         
     private:
         KMenu m_menu;
-        
-        void updateTray();
-        
+                
     private slots:
+        void updateTray();
         void slotConfigure();
         void slotModeSelected(QAction *action);
         void flash();

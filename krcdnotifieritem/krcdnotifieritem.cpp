@@ -38,6 +38,11 @@ KrcdNotifierItem::KrcdNotifierItem(){
     // No need for close button...
     setStandardActionsEnabled(false); 
     updateContextMenu();
+    QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontrol", "org.kde.krcd", "connectionChanged",  this, SLOT(updateTray()));
+    QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontrol", "org.kde.krcd", "remoteControlAdded",  this, SLOT(updateTray()));
+    QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontrol", "org.kde.krcd", "remoteControlAdded",  this, SLOT(updateContextMenu()));
+    QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontrol", "org.kde.krcd", "remoteControlRemoved",  this, SLOT(updateTray()));
+    QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontrol", "org.kde.krcd", "remoteControlRemoved",  this, SLOT(updateContextMenu()));
     QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontrol", "org.kde.krcd", "buttonPressed",  this, SLOT(flash()));
     QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontrol", "org.kde.krcd", "modeChanged",  this, SLOT(updateContextMenu()));
 }
@@ -48,7 +53,7 @@ void KrcdNotifierItem::updateTray() {
     QString icon = "krcd";
     if (!Solid::Control::RemoteControlManager::connected()) {
         toolTipHeader += i18nc("The state of kremotecontrol", "Stopped");
-        toolTip += i18n("No Remote Control Backend is currently available.");
+        toolTip += i18n("No Remote Control is currently available.");
         icon = "krcd_off";
         setStatus(Passive);
     } else {

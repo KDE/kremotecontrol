@@ -66,17 +66,18 @@ private:
     
     
    signals:
+      void connectionChanged(bool connected);
+      void remoteControlAdded(const QString &remote);
+      void remoteControlRemoved(const QString &remote);
       void modeChanged(const QString &remoteName, const QString &modeName);
       void buttonPressed();
       void unloadTray();
       
   private slots:
-    void lauchKcmShell();   
-    
-    void slotStatusChanged(bool connected);
-    
-    void remoteControlAdded(const QString &name);                        
-    void remoteControlRemoved(const QString &name);   
+    void lauchKcmShell();       
+    void slotStatusChanged(bool connected);    
+    void slotRemoteControlAdded(const QString &name);                        
+    void slotRemoteControlRemoved(const QString &name);   
     void gotMessage(const Solid::Control::RemoteControlButton &button);
 
 };
