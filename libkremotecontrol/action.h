@@ -27,16 +27,15 @@
 #include <solid/control/remotecontrol.h>
 #include <kconfiggroup.h>
 
-class KREMOTECONTROL_EXPORT Action: public QObject
-{
-  Q_OBJECT
-  
+class KREMOTECONTROL_EXPORT Action
+{  
   public:
       enum ActionType {DBusAction, ProfileAction};
     
       Action(ActionType type, const QString &button);
       Action(ActionType type);
       Action(const Action &action);
+      virtual ~Action(){};
     
       ActionType type() const;
 
