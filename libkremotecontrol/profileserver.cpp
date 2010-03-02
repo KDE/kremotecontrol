@@ -134,6 +134,9 @@ bool ProfileServer::ProfileXmlContentHandler::validateFile(const QString& fileNa
 }
 
 void ProfileServer::ProfileXmlContentHandler::handleMessage(QtMsgType type, const QString& description, const QUrl& identifier, const QSourceLocation& sourceLocation) {
+    Q_UNUSED(type);
+    Q_UNUSED(identifier);
+    Q_UNUSED(sourceLocation);
     QTextDocument document;
     document.setHtml(description);
     kDebug() << "Error validating xml file " << sourceLocation.uri().toString() << " Message " << document.toPlainText();
@@ -201,11 +204,6 @@ Profile * ProfileServer::ProfileXmlContentHandler::parseFile(const QString& file
         QString description = rootElement.namedItem("description").toElement().isNull() ? QString() : rootElement.namedItem("description").toElement().text().trimmed();
         QString author = rootElement.namedItem("author").toElement().text().trimmed();
         QString version = rootElement.namedItem("version").toElement().text().trimmed();
-
-        //     kDebug()<< "Profile";
-        //     kDebug()<< "***********************************************************************";
-        //     kDebug() << "id " << profileId <<"name " << name << "description " << description;
-        //     kDebug() << "id " << profileId <<"author" << author<< "version" << version;
 
         Profile *profile =  new Profile(profileId, name ,version, author, description);
 
@@ -276,28 +274,24 @@ ProfileActionTemplate ProfileServer::ProfileXmlContentHandler::parseAction(QDomN
                 description = attributeNode.toElement().namedItem("comment").toElement().text();
             }
             if(!attributeNode.toElement().namedItem("default").isNull()){
-                argValue = QVariant(attributeNode.toElement().namedItem("default").toElement().text());
+                QVariant qVariant = QVariant::nameToType(typeString.toLocal8Bit());
+                QString value = attributeNode.toElement().namedItem("default").toElement().text().trimmed();
+                if(argValue.type() == QVariant::StringList){
+                  QStringList stringList;
+                  foreach(QString tListValue, value.split(",", QString::SkipEmptyParts)){
+                    stringList << tListValue.trimmed();
+                  }
+                  argValue = QVariant(stringList);
+                }else{
+                  argValue = QVariant(value);
+                }
                 argValue.convert(QVariant::nameToType(typeString.toLocal8Bit()));
             }
             arguments.append(Argument(argValue, description));
-/*            kDebug()<< "		" << "description" << description;
-            kDebug()<< "		" << "value" << argValue;*/
         }
     }
 
     Prototype function(prototypeNode.namedItem("function").toElement().text().trimmed(), arguments);
-
-//     kDebug()<< ">>>>>> Action";
-//     kDebug()<< "	" << "name" << actionName;
-//     kDebug()<< "	" << "description" << description;
-//     kDebug()<< "	" << "autostart" << autostart;
-//     kDebug()<< "	" << "repeat" << repeat;
-//     kDebug()<< "	" << "ifmulti" << actionType;
-//     kDebug()<< "	" << "serviceName" << serviceName;
-//     kDebug()<< "	" << "ifmulti" << nodeName;
-//     kDebug()<< "	" << "ifmulti" << function.name();
-//     kDebug()<< "    " << "args" << function.args().count();
-
 
     return ProfileActionTemplate(profileId,
                                   actionId,
