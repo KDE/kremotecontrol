@@ -121,10 +121,10 @@ class CycleModeChangeHandler : public ModeChangeHandler
             int index = -1;
             if(!m_remote->previousModeButton().isEmpty() && m_remote->previousModeButton() == button){
                 index = m_remote->m_modeList.indexOf(m_remote->currentMode());
-                index = index > 0 ?  --index  :  m_remote->m_modeList.size()-1;
+                index = index > 0 ?  index-1  :  m_remote->m_modeList.size()-1;
             }else if (! m_remote->nextModeButton().isEmpty() && m_remote->nextModeButton() == button){
                 index = m_remote->m_modeList.indexOf(m_remote->currentMode());
-                index = index < m_remote->m_modeList.size() -1 ?  ++index  : 0;
+                index = index < m_remote->m_modeList.size() -1 ?  index+1  : 0;
             }else if((m_remote->currentMode()->button().isEmpty() || m_remote->currentMode()->button() != button )){
                 index = indexOfModeButton(button);                            
             }
