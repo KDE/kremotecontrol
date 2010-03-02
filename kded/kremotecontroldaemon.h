@@ -60,6 +60,7 @@ private:
     QStringList getConfiguredRemotes();
     QStringList getModesForRemote(const QString &remoteName);
     QString getCurrentMode(const QString& remoteName);
+    QString getModeIcon(const QString &remoteName, const QString &modeName);
     bool eventsIgnored(const QString& remoteName);
 
     

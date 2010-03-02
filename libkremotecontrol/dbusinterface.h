@@ -60,6 +60,7 @@ class KREMOTECONTROL_EXPORT DBusInterface: public QObject
         QStringList getModesForRemote(const QString &remoteName);
         void changeMode(const QString &remoteName, const QString &modeName);
         QString getCurrentMode(const QString &remoteName);
+        QString getModeIcon(const QString &remoteName, const QString &modeName);
         bool eventsIgnored(const QString &remoteName);
         
         bool isKdedModuleRunning();

@@ -327,6 +327,15 @@ void Remote::setDefaultMode(const QString &modeName) {
     }
 }
 
+Mode* Remote::modeByName(const QString& modeName) const {
+    foreach(Mode *mode, m_modeList) {
+        if (mode->name() == modeName) {
+            return mode;
+        }
+    }
+    return 0;
+}
+
 Mode* Remote::currentMode() const {
     if (m_currentMode != 0) {
         return m_currentMode;

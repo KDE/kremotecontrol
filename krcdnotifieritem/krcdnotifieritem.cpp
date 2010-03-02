@@ -77,6 +77,7 @@ void KrcdNotifierItem::updateContextMenu(){
             QAction *entry = modeMenu->addAction(mode);
             entry->setActionGroup(actionGroup);
             entry->setCheckable(true);
+            entry->setIcon(KIcon(DBusInterface::getInstance()->getModeIcon(remote, mode)));
             if(DBusInterface::getInstance()->getCurrentMode(remote) == mode){
                 entry->setChecked(true);
             }

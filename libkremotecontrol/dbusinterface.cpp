@@ -445,9 +445,24 @@ QStringList DBusInterface::getModesForRemote(const QString& remoteName) {
     if (reply.isValid()) {
         return reply;
     } else {
-          kDebug() << reply.error().message();
-	  return QStringList();
+        kDebug() << reply.error().message();
+        return QStringList();
     }
+}
+
+QString DBusInterface::getModeIcon(const QString& remoteName, const QString& modeName) {
+    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontrol",
+                     "org.kde.krcd", "getModeIcon");    
+    m << remoteName;
+    m << modeName;
+    QDBusReply<QString> reply = QDBusConnection::sessionBus().call(m);
+    if (reply.isValid()) {
+        return reply;
+    } else {
+        kDebug() << reply.error().message();
+        return "";
+    }
+    
 }
 
 bool DBusInterface::eventsIgnored(const QString& remoteName) {

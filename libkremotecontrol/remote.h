@@ -66,6 +66,7 @@ class KREMOTECONTROL_EXPORT Remote
         Mode *defaultMode() const;
         void setDefaultMode(Mode *mode);
         void setDefaultMode(const QString &name);
+        Mode *modeByName(const QString &name) const;
 
         Mode *currentMode() const;
         void setCurrentMode(Mode *mode);

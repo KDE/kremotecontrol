@@ -295,6 +295,16 @@ QString KRemoteControlDaemon::getCurrentMode(const QString& remoteName) {
     return "modeNotFound";
 }
 
+QString KRemoteControlDaemon::getModeIcon(const QString &remoteName, const QString& modeName) {
+    Remote *remote = d_ptr->remoteList().getRemote(remoteName);
+    if(remote){
+        Mode *mode = remote->modeByName(modeName);
+        if(mode){
+            return mode->iconName();
+        }
+    }
+    return "";
+}
 
 void KRemoteControlDaemon::notifyEvent(const QString& message, const QString& iconName, const QString& event) {
     KNotification::event(event, message, DesktopIcon(iconName), 0, KNotification::CloseOnTimeout, d_ptr->applicationData);      
