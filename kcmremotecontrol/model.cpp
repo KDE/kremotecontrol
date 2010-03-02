@@ -457,11 +457,10 @@ QVariant ArgumentsModelItem::data ( int role ) const {
 
     if(role == Qt::DisplayRole) {
         Argument arg = qVariantValue<Argument>(QStandardItem::data(Qt::EditRole));
-//        kDebug() << "got arg:" << arg.description() << "with type" << arg.value();
         if(arg.value().type() == QVariant::StringList) {
             QString retList;
             retList.clear();
-            foreach(const QString &tmp, QStandardItem::data(role).toStringList()) {
+            foreach(const QString &tmp, arg.value().toStringList()) {
                 if (!retList.isEmpty()) {
                     retList.append(',');
                 }
