@@ -31,7 +31,7 @@
 #include <QDBusConnection>
 
 KrcdNotifierItem::KrcdNotifierItem(){
-    m_notifier.setCategory(KStatusNotifierItem::Hardware);
+    setCategory(KStatusNotifierItem::Hardware);
     updateTray();
     setContextMenu(&m_menu);
     

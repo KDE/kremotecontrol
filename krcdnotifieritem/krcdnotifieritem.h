@@ -30,7 +30,6 @@ class KrcdNotifierItem: public KStatusNotifierItem
         KrcdNotifierItem();
         
     private:
-        KStatusNotifierItem m_notifier;
         KMenu m_menu;
         
         void updateTray();
