@@ -673,7 +673,22 @@ QVariant RemoteModel::data(const QModelIndex& index, int role) const {
                     return mode(index)->button();
             }
         }
+    } else if(index.isValid()){
+        if(role == Qt::FontRole){
+            if(index.column() == 0 && !remote(index)->isAvailable()){
+                QFont font = KApplication::font();
+                font.setItalic(true);
+                return font;
+            }
+        }
     }
+
+    if(role == Qt::TextColorRole){
+        if(index.column() == 0 && !remote(index)->isAvailable()){
+            return KGlobalSettings::inactiveTextColor();
+        }
+    }
+    
     return QStandardItemModel::data(index, role);
 }
 

@@ -349,6 +349,7 @@ void Remote::setCurrentMode(Mode* mode) {
 }
 
 bool Remote::isAvailable() const {
+    kDebug() << "available remotes in solid:" << Solid::Control::RemoteControl::allRemoteNames();
     return Solid::Control::RemoteControl::allRemoteNames().contains(m_remoteName);
 }
 
