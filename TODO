@@ -1,12 +1,10 @@
 TODOs before move to kdereview
 -------------------------------
 * update docs (mzanetti)
-* Check/update all profiles (frasche)
 * rework nofications from Kded (mzanetti + frasche)
 * test/fix behaviour on newly attached or removed remotes during runtime (mzanetti)
 * rework icons
-* remove compiler warnings
-* check why profile stringlist default values are not reaaded from xml
+* check why profile stringlists are not displayed corret in the arguments model
 * knewstuff
 * more unit tests (can also be done after moving back to kdeutils)
 * krazy checks
@@ -29,4 +27,8 @@ Long-term TODOs
     </action>
 
   
-  
+DONE:
+-------------------  
+* Check/update all profiles (frasche)
+* remove compiler warnings
+* check why profile stringlist default values are not reaaded from xml
