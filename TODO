@@ -1,7 +1,6 @@
 TODOs before move to kdereview
 -------------------------------
 * update docs (mzanetti)
-* rework nofications from Kded (mzanetti + frasche)
 * rework icons
 * knewstuff
 * more unit tests (can also be done after moving back to kdeutils)

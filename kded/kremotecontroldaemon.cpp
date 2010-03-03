@@ -141,7 +141,6 @@ KRemoteControlDaemon::~KRemoteControlDaemon() {
 
 void KRemoteControlDaemon::slotStatusChanged(bool connected) {
     if(connected){
-        notifyEvent(i18n("A connection to the remote control  subsystem has been made. Remote controls may now be available."));	
         foreach(const QString &remote, RemoteControl::allRemoteNames()){
             RemoteControl *rc = new RemoteControl(remote);
             kDebug() << "connecting to remote" << remote;
@@ -150,8 +149,6 @@ void KRemoteControlDaemon::slotStatusChanged(bool connected) {
                     this,
                     SLOT(gotMessage(const Solid::Control::RemoteControlButton &)));
         }
-    } else {
-        notifyEvent(i18n("The remote control subsystem  has severed its connection. Remote controls are no longer available."));
     }
     emit connectionChanged(connected);
 }
@@ -226,10 +223,10 @@ void KRemoteControlDaemon::considerButtonEvents(const QString& remoteName) {
 void KRemoteControlDaemon::slotRemoteControlAdded(const QString& name) {
     if(d_ptr->getRemote(name)){
         kDebug() << "remote found";
-        notifyEvent(i18n("The remote %1 is now available.", name));
+        notifyEvent(i18n("The remote control %1 is now available.", name));
     }else{
         kDebug() << "remote not found";
-        KNotification *notification = KNotification::event("global_event", i18n("An unconfigured remote %1 is now available.", name),
+        KNotification *notification = KNotification::event("global_event", i18n("An unconfigured remote control %1 is now available.", name),
                   DesktopIcon("infrared-remote"), 0, KNotification::Persistant, d_ptr->applicationData);      
         notification->setActions(QStringList() << i18nc("Configure the remote", "Configure remote"));
         connect(notification, SIGNAL(activated(unsigned int)), SLOT(lauchKcmShell()));
