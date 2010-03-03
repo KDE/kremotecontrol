@@ -37,6 +37,7 @@
 #include <kgenericfactory.h>
 #include <kaboutdata.h>
 #include <kmessagebox.h>
+#include <solid/control/remotecontrolmanager.h>
 
 #include <QDBusInterface>
 
@@ -115,6 +116,9 @@ KCMRemoteControl::KCMRemoteControl(QWidget *parent, const QVariantList &args) :
     
     // connect ShowTrayIcon checkbox
     connect(ui.cbTrayIcon, SIGNAL(clicked(bool)), SLOT(changed()));
+    
+    connect(Solid::Control::RemoteControlManager::notifier(), SIGNAL(statusChanged(bool)), SLOT(addUnconfiguredRemotes()));
+    connect(Solid::Control::RemoteControlManager::notifier(), SIGNAL(remoteControlAdded(const QString &)), SLOT(addUnconfiguredRemotes()));
 }
 
 KCMRemoteControl::~KCMRemoteControl() {
@@ -234,9 +238,25 @@ void KCMRemoteControl::removeMode() {
     Remote *remote = m_remoteModel->remote(currentIndex);
     Mode *mode = m_remoteModel->mode(currentIndex);
     if(remote && remote->allModes().contains(mode)){
-        remote->removeMode(mode);
-        updateModes();
-        ui.tvRemotes->selectionModel()->setCurrentIndex(m_remoteModel->find(remote->masterMode()), QItemSelectionModel::Rows | QItemSelectionModel::SelectCurrent);
+        // If the master mode is selected the we should remove the whole remote
+        if(mode == remote->masterMode()){
+            if(KMessageBox::questionYesNo(this, i18n("Are you sure you want to remove this remote and all of its modes and actions?"), i18n("Remove remote")) == KMessageBox::Yes) {
+                m_remoteList.removeAll(remote);
+                m_remoteModel->clear(); // Clear the model before deleting the remote!!!
+                delete remote;
+                addUnconfiguredRemotes(); // Just in case we removed a physically available remote (shouldn't happen). This also refreshes the modeModel
+            } else {
+                return; // User cancelled
+            }
+        } else {
+            if((mode->actions().count() > 0) &&
+                (KMessageBox::questionYesNo(this, i18n("Are you sure you want to remove this mode and all contained actions?"), i18n("Remove mode")) != KMessageBox::Yes)) {
+                return; // User cancelled
+            }
+            remote->removeMode(mode);
+            updateModes();
+            ui.tvRemotes->selectionModel()->setCurrentIndex(m_remoteModel->find(remote->masterMode()), QItemSelectionModel::Rows | QItemSelectionModel::SelectCurrent);
+        }
         emit changed(true);
     }
 }
@@ -285,17 +305,26 @@ void KCMRemoteControl::modeSelectionChanged(const QModelIndex &index) {
         ui.pbEditMode->setEnabled(true);
         ui.pbAddAction->setEnabled(true);
         ui.pbAutoPopulate->setEnabled(true);
+        
+        // Only enable the remove mode button if a non-Master mode is selected,
+        // or if the Remote is not available in Solid
+        if((m_remoteModel->mode(index) != m_remoteModel->remote(index)->masterMode())
+            || (!m_remoteModel->remote(index)->isAvailable()) ){
+            ui.pbRemoveMode->setEnabled(true);                
+        } else {
+            ui.pbRemoveMode->setEnabled(false);
+        }
+        
     } else {
         ui.pbAddMode->setEnabled(false);
         ui.pbEditMode->setEnabled(false);
         ui.pbAddAction->setEnabled(false);
         ui.pbAutoPopulate->setEnabled(false);
+        ui.pbRemoveMode->setEnabled(false);
     }
     
     if(index.isValid() && index.parent().isValid()){
-        ui.pbRemoveMode->setEnabled(true);
     } else {
-        ui.pbRemoveMode->setEnabled(false);
     }
     
     Mode *mode = m_remoteModel->mode(index);
@@ -347,10 +376,7 @@ void KCMRemoteControl::actionSelectionChanged(const QModelIndex& index) {
     }
 }
 
-
-void KCMRemoteControl::load() {
-    m_remoteList.loadFromConfig("kremotecontrolrc");
-
+void KCMRemoteControl::addUnconfiguredRemotes() {
     // Check if there are Remotes available in Solid but not yet in m_remoteList
     foreach(const QString &remoteName, Solid::Control::RemoteControl::allRemoteNames()){
         if(!m_remoteList.contains(remoteName)){
@@ -358,8 +384,14 @@ void KCMRemoteControl::load() {
             m_remoteList.append(remote);
         }
     }
-
     updateModes();
+}
+
+
+void KCMRemoteControl::load() {
+    m_remoteList.loadFromConfig("kremotecontrolrc");
+
+    addUnconfiguredRemotes();
 
     // Check if the daemon module is running
     if(!m_remoteList.isEmpty()){ // No need to run the daemon if we have no remote controls
@@ -384,11 +416,11 @@ void KCMRemoteControl::save() {
     KConfig config("kremotecontrolrc");
     KConfigGroup globalGroup = KConfigGroup(&config, "Global");
     globalGroup.writeEntry("ShowTrayIcon", ui.cbTrayIcon->isChecked());
-    globalGroup.sync();
+    globalGroup.sync(); // Sync the config before requesting the daemon to update.
 
     DBusInterface::getInstance()->reloadRemoteControlDaemon();
     
-    // If there are no remotes configured it makes no sense to have de daemon running. stop it
+    // If there are no remotes configured it makes no sense to have the daemon running. stop it
     if(m_remoteList.isEmpty()){
         if(DBusInterface::getInstance()->isKdedModuleRunning()){
             DBusInterface::getInstance()->unloadKdedModule();

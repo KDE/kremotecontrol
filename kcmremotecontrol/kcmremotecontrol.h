@@ -70,6 +70,7 @@ private slots:
     void updateActions(Mode *mode);
     void modeSelectionChanged(const QModelIndex &index);
     void actionSelectionChanged(const QModelIndex &index);
+    void addUnconfiguredRemotes();
 
     void autoPopulate();
     void actionDropped(Mode *mode);

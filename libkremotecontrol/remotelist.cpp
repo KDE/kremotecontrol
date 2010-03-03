@@ -41,10 +41,10 @@ bool RemoteList::contains(const QString& remoteName) const {
 // Save everything to config File in the format [Remote][modeIndex][actionIndex]
 void RemoteList::saveToConfig(const QString& configName) {
     KConfig config(configName);
+    // Clear out all old remotes settings. We will sync the whole tree to disk now
+    config.deleteGroup("Remotes");
     KConfigGroup remotesGroup(&config, "Remotes");
     for(QList<Remote*>::const_iterator remoteIterator = constBegin(); remoteIterator != constEnd(); ++remoteIterator){
-        // Clear out old entries for this remote
-        remotesGroup.deleteGroup((*remoteIterator)->name());
         KConfigGroup remoteGroup(&remotesGroup, (*remoteIterator)->name());
         // Save Remote properties here
         remoteGroup.writeEntry("DefaultMode", (*remoteIterator)->defaultMode()->name());
