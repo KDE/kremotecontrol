@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright: (C) 2010 by Michael Zanetti <michael_zanetti@gmx.net>      *
+ * Copyright (C) 2010 by Michael Zanetti <michael_zanetti@gmx.net>       *
  *                                                                       *
  * This program is free software; you can redistribute it and/or         *
  * modify it under the terms of the GNU General Public License as        *
