@@ -335,7 +335,11 @@ void KCMRemoteControl::modeSelectionChanged(const QModelIndex &index) {
         updateActions(mode);
         
         Remote *remote = m_remoteModel->remote(index);
-        ui.lActions->setText(remote->name() + " (" + mode->name() + ')');
+        if(mode == remote->masterMode()){
+            ui.lActions->setText(remote->name());
+        } else {
+            ui.lActions->setText(remote->name() + " in mode \"" + mode->name() + "\"");          
+        }
         
         if(remote->allModes().indexOf(mode) > 1){
             ui.pbMoveModeUp->setEnabled(true);

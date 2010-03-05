@@ -39,12 +39,18 @@
      <item>
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>Configured actions for:</string>
+        <string>Configured actions for </string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QLabel" name="lActions">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string/>
        </property>
