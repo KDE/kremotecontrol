@@ -237,7 +237,7 @@ void KRemoteControlDaemon::slotRemoteControlAdded(const QString& name) {
 
 void KRemoteControlDaemon::lauchKcmShell() {    
   kDebug() << "Launch kcmshell";
-   KToolInvocation::startServiceByDesktopName("kcm_lirc");    
+   KToolInvocation::startServiceByDesktopName("kcm_remotecontrol");
 }
    
 void KRemoteControlDaemon::slotRemoteControlRemoved(const QString& name) {
