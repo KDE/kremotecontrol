@@ -165,11 +165,12 @@ void KRemoteControlDaemon::gotMessage(const Solid::Control::RemoteControlButton&
         kDebug() << "Events for  "<< remote->name() <<    " are currently ignored";
         return;
     }
+
     emit(buttonPressed());
-    //This is for debugging purposes, till we got our tray icon back
-//    notifyEvent("<b>" + remote->name() + ":</b><br>" + i18n("Button %1 pressed" , button.name()));
+
     if(remote->currentMode()){
-        QList<Action*> actionList = remote->currentMode()->actionsForButton(button.name());      
+        QList<Action*> actionList = remote->masterMode()->actionsForButton(button.name());
+        actionList.append(remote->currentMode()->actionsForButton(button.name()));
         if(remote->nextMode(button.name())){
             Mode *mode = remote->currentMode();
 	    notifyModeChanged(remote);
