@@ -1,9 +1,0 @@
-<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
-<node>
-  <interface name="org.kde.kcmlirc">
-    <method name="gotButton">
-      <arg name="remote" type="s" direction="in"/>
-      <arg name="button" type="s" direction="in"/>
-    </method>
-  </interface>
-</node>

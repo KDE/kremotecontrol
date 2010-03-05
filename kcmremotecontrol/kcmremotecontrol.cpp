@@ -47,8 +47,6 @@ KCMRemoteControl::KCMRemoteControl(QWidget *parent, const QVariantList &args) :
         KCModule(KCMLircFactory::componentData(), parent, args)
 {
 
-    QDBusConnection::sessionBus().registerObject("/KCMRemoteControl", this, QDBusConnection::ExportAllSlots);
-
     KGlobal::locale()->insertCatalog("kcm_remotecontrol");
     setAboutData(new KAboutData("kcm_remotecontrol", 0, ki18n("KRemoteControl"), KDEUTILS_VERSION_STRING,
                                 ki18n("The KDE Remote Control System"), KAboutData::License_GPL_V2,
@@ -325,11 +323,7 @@ void KCMRemoteControl::modeSelectionChanged(const QModelIndex &index) {
         ui.pbAutoPopulate->setEnabled(false);
         ui.pbRemoveMode->setEnabled(false);
     }
-    
-    if(index.isValid() && index.parent().isValid()){
-    } else {
-    }
-    
+        
     Mode *mode = m_remoteModel->mode(index);
     if(mode){
         updateActions(mode);
@@ -400,6 +394,11 @@ void KCMRemoteControl::load() {
 
     addUnconfiguredRemotes();
 
+/*    if(!m_remoteList.isEmpty()){
+        QModelIndex firstItem = m_remoteModel->find(m_remoteList.first()->masterMode());
+        ui.tvRemotes->selectionModel()->setCurrentIndex(firstItem, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
+    }*/
+        
     // Check if the daemon module is running
     if(!m_remoteList.isEmpty()){ // No need to run the daemon if we have no remote controls
         kDebug() << "remotes found... checking for kded module";
@@ -433,10 +432,6 @@ void KCMRemoteControl::save() {
             DBusInterface::getInstance()->unloadKdedModule();
         }
     }
-}
-
-void KCMRemoteControl::gotButton(QString remote, QString button) {
-    emit haveButton(remote, button);
 }
 
 void KCMRemoteControl::actionDropped(Mode* mode) {

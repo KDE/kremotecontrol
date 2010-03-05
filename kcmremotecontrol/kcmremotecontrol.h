@@ -37,7 +37,6 @@ class Remote;
 class KCMRemoteControl: public KCModule
 {
     Q_OBJECT
-    Q_CLASSINFO("KCMLirc", "org.kde.kcmremotecontrol")
 
 private:
     Ui::ConfigurationWidget ui;
@@ -75,11 +74,6 @@ private slots:
     void autoPopulate();
     void actionDropped(Mode *mode);
 
-signals:
-    void haveButton(const QString &remote, const QString &button);
-
-public Q_SLOTS:
-    void gotButton(QString remote, QString button);
 };
 
 #endif

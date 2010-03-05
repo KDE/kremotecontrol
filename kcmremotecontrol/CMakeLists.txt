@@ -22,8 +22,6 @@ set(kcm_remotecontrol_PART_SRCS
    selectprofile.cpp
    )
 
-qt4_add_dbus_adaptor(kcm_remotecontrol_PART_SRCS org.kde.kcmremotecontrol.xml kcmremotecontrol.h KCMRemoteControl)
-
 kde4_add_ui_files(kcm_remotecontrol_PART_SRCS modedialog.ui addaction.ui editactioncontainer.ui editdbusaction.ui configurationwidget.ui )
 
 kde4_add_plugin(kcm_remotecontrol ${kcm_remotecontrol_PART_SRCS})
