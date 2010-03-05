@@ -442,6 +442,7 @@ void KCMRemoteControl::gotButton(QString remote, QString button) {
 void KCMRemoteControl::actionDropped(Mode* mode) {
     ui.tvRemotes->selectionModel()->setCurrentIndex(m_remoteModel->find(mode), QItemSelectionModel::Rows | QItemSelectionModel::SelectCurrent);
     updateActions(mode);
+    emit changed(true);
 }
 
 #include "kcmremotecontrol.moc"
