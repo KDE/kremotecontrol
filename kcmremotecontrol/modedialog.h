@@ -41,7 +41,7 @@ public:
       * @param Remote The Remote that owns to Mode to edit or create
       * @param Mode The Mode to be edited. If 0 a new one will be created and inserted into the Remote
       */
-    ModeDialog(Remote *remote, Mode *mode = 0, QWidget *parent = 0);
+    explicit ModeDialog(Remote *remote, Mode *mode = 0, QWidget *parent = 0);
     ~ModeDialog();
 
 private:

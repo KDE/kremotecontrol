@@ -28,7 +28,7 @@
 class KREMOTECONTROL_EXPORT Prototype
 {
     public:
-        Prototype(const QString &name, QList<Argument> args = QList<Argument>());
+        explicit Prototype(const QString &name, QList<Argument> args = QList<Argument>());
         Prototype();
         
         QString name() const;

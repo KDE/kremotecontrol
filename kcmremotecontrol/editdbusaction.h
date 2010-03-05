@@ -30,7 +30,7 @@ class EditDBusAction: public QWidget{
     
     public:
     
-        EditDBusAction(DBusAction *action, QWidget* parent = 0, Qt::WFlags flags = 0);
+        explicit EditDBusAction(DBusAction *action, QWidget* parent = 0, Qt::WFlags flags = 0);
         ~EditDBusAction();
         
         bool checkForComplete() const;

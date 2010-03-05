@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=K Remote Control Deamon
+Name=K Remote Control Daemon
 Type=Service
 X-KDE-ServiceTypes=KDEDModule
 X-KDE-ModuleType=Library

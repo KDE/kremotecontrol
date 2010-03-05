@@ -21,7 +21,6 @@
 
 #include "kcmremotecontrol.h"
 #include "addaction.h"
-#include "editactioncontainer.h"
 #include "remote.h"
 #include "editactioncontainer.h"
 #include "modedialog.h"
@@ -152,11 +151,12 @@ void KCMRemoteControl::editAction() {
     Remote *remote = m_remoteModel->remote(ui.tvRemotes->selectionModel()->currentIndex());
     Mode *mode = m_remoteModel->mode(ui.tvRemotes->selectionModel()->currentIndex());
     
-    EditActionContainer editActioncontainer(action, remote->name());
-    if(editActioncontainer.exec()) {
+    QPointer<EditActionContainer> editActioncontainer = new EditActionContainer(action, remote->name());
+    if(editActioncontainer->exec()) {
         updateActions(mode);
         emit changed(true);
-    }    
+    }
+    delete editActioncontainer;
 }
 
 void KCMRemoteControl::copyAction() {
@@ -189,7 +189,7 @@ void KCMRemoteControl::moveActionDown() {
 void KCMRemoteControl::autoPopulate() {
     Mode *mode = m_remoteModel->mode(ui.tvRemotes->selectionModel()->currentIndex());
     Remote *remote = m_remoteModel->remote(ui.tvRemotes->selectionModel()->currentIndex());
-    SelectProfile *autoPopulateDialog = new SelectProfile(remote, this);
+    QPointer<SelectProfile> autoPopulateDialog = new SelectProfile(remote, this);
     if(autoPopulateDialog->exec()){
         Profile *profile = autoPopulateDialog->getSelectedProfile();
         foreach(const Solid::Control::RemoteControlButton &button, Solid::Control::RemoteControl(remote->name()).buttons()){
@@ -199,6 +199,7 @@ void KCMRemoteControl::autoPopulate() {
             }
         }
     }
+    delete autoPopulateDialog;
     updateActions(mode);
     emit changed(true);
 
@@ -208,8 +209,8 @@ void KCMRemoteControl::addMode() {
     Remote *remote = m_remoteModel->remote(ui.tvRemotes->selectionModel()->currentIndex());
     kDebug() << "current selected remote:" << remote;
     
-    ModeDialog modeDialog(remote);
-    if(modeDialog.exec()){
+    QPointer<ModeDialog> modeDialog = new ModeDialog(remote);
+    if(modeDialog->exec()){
         m_remoteModel->refresh(m_remoteList);
         foreach(const Mode *mode, remote->allModes()){
             kDebug() << "Created Mode" << mode->name();
@@ -217,6 +218,7 @@ void KCMRemoteControl::addMode() {
         updateModes();
         emit changed(true);
     }
+    delete modeDialog;
 }
 
 void KCMRemoteControl::editMode() {
@@ -224,12 +226,13 @@ void KCMRemoteControl::editMode() {
     Mode *mode = m_remoteModel->mode(ui.tvRemotes->selectionModel()->currentIndex());
     kDebug() << "current selected remote:" << remote << "and mode:" << mode;
     
-    ModeDialog modeDialog(remote, mode);
-    if(modeDialog.exec()){
+    QPointer<ModeDialog> modeDialog = new ModeDialog(remote, mode);
+    if(modeDialog->exec()){
         m_remoteModel->refresh(m_remoteList);
         updateModes();
         emit changed(true);
     }
+    delete modeDialog;
 }
 
 void KCMRemoteControl::removeMode() {
@@ -332,7 +335,7 @@ void KCMRemoteControl::modeSelectionChanged(const QModelIndex &index) {
         updateActions(mode);
         
         Remote *remote = m_remoteModel->remote(index);
-        ui.lActions->setText(remote->name() + " (" + mode->name() + ")");
+        ui.lActions->setText(remote->name() + " (" + mode->name() + ')');
         
         if(remote->allModes().indexOf(mode) > 1){
             ui.pbMoveModeUp->setEnabled(true);

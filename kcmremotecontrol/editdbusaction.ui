@@ -21,7 +21,7 @@
     <number>0</number>
    </property>
    <item row="0" column="0" rowspan="2">
-    <widget class="QTabWidget" name="tabWidget">
+    <widget class="KTabWidget" name="tabWidget">
      <property name="currentIndex">
       <number>0</number>
      </property>

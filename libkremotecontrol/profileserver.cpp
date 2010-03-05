@@ -58,7 +58,7 @@ QList<Profile*> ProfileServerPrivate::allProfiles() {
 }
 
 ProfileServerPrivate::ProfileServerPrivate() {
-    ProfileServer::ProfileXmlContentHandler *handler = new ProfileServer::ProfileXmlContentHandler(QUrl::fromLocalFile(KGlobal::dirs()->findResource("data","profiles/profile.xsd")));
+    ProfileServer::ProfileXmlContentHandler *handler = new ProfileServer::ProfileXmlContentHandler(KUrl::fromLocalFile(KGlobal::dirs()->findResource("data","profiles/profile.xsd")));
     foreach( Profile *profile, handler->loadProfilesFromFiles(KGlobal::dirs()->findAllResources("data", "profiles/*.profile.xml"))){
         addProfile(profile);
     }
@@ -177,7 +177,7 @@ ProfileServer::ProfileSupportedByRemote KREMOTECONTROL_EXPORT ProfileServer::isP
 
 QList<Profile*> ProfileServer::ProfileXmlContentHandler::loadProfilesFromFiles(const QStringList& files) {
     QList<Profile*> profileList;
-    foreach(QString file, files) {
+    foreach(const QString &file, files) {
         if(validateFile(file)) {
             Profile *profile = parseFile(file);
             if(profile){
@@ -278,7 +278,7 @@ ProfileActionTemplate ProfileServer::ProfileXmlContentHandler::parseAction(QDomN
                 QString value = attributeNode.toElement().namedItem("default").toElement().text().trimmed();
                 if(argValue.type() == QVariant::StringList){
                   QStringList stringList;
-                  foreach(QString tListValue, value.split(",", QString::SkipEmptyParts)){
+                  foreach(const QString &tListValue, value.split(',', QString::SkipEmptyParts)){
                     stringList << tListValue.trimmed();
                   }
                   argValue = QVariant(stringList);

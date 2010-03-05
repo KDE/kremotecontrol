@@ -39,7 +39,7 @@ class KREMOTECONTROL_EXPORT Remote
         enum ModeChangeMode { Group, Cycle };
 
         Remote();
-        Remote(const QString& remote, Remote::ModeChangeMode changeMode = Remote::Group);
+        explicit Remote(const QString& remote, Remote::ModeChangeMode changeMode = Remote::Group);
 
         /**
           * Destrys the Remote and all of its Modes

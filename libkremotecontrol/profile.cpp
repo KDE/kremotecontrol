@@ -126,11 +126,11 @@ int Profile::ProfileVersion::operator==(const Profile::ProfileVersion& other) co
 }
 
 Profile::ProfileVersion::ProfileVersion(const QString& version) {
-    QStringList split=  version.split(".");
+    QStringList split=  version.split('.');
     m_major = split.at(0).toInt();
     m_minor = split.at(1).toInt();
 }
 
 QString Profile::ProfileVersion::toString() const {
-    return QString().setNum(m_major) + "." + QString().setNum(m_minor);
+    return QString().setNum(m_major) + '.' + QString().setNum(m_minor);
 }

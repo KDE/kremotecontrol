@@ -75,7 +75,7 @@ void DBusAction::setDestination(DBusAction::ActionDestination destination) {
 }
 
 QString DBusAction::name() const {
-    return m_application + ":" + m_node;
+    return m_application + ':' + m_node;
 }
 
 QString DBusAction::description() const {

@@ -49,7 +49,7 @@ void Argument::setDescription(const QString& description) {
 }
 
 bool Argument::operator==(const Argument& other) const {
-    /* Dont check for value because it breaks comaprison of a configured
+    /* Don't check for value because it breaks comaprison of a configured
        dbusfunction (with values) and one browsed from dbus (only type and description) */
     return m_value.type() == other.value().type() && 
            m_description == other.description();

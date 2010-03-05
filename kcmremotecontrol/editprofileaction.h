@@ -30,7 +30,7 @@ class EditProfileAction: public QWidget{
     
     public:
     
-        EditProfileAction(ProfileAction *action, QWidget* parent = 0, Qt::WFlags flags = 0);
+        explicit EditProfileAction(ProfileAction *action, QWidget* parent = 0, Qt::WFlags flags = 0);
         ~EditProfileAction();
         
         bool checkForComplete() const;

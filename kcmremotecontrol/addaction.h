@@ -17,6 +17,9 @@
 
 */
 
+#ifndef ADDACTION_H
+#define ADDACTION_H
+
 #include "ui_addaction.h"
 
 #include <action.h>
@@ -34,3 +37,5 @@ class AddAction: public KDialog
     Ui::AddAction ui;
     
 };
+
+#endif

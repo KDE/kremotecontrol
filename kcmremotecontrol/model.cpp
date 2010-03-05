@@ -183,7 +183,7 @@ void DBusFunctionModel::appendRow(Prototype prototype) {
         }
         argString += QString(QVariant::typeToName(arg.value().type()));
         if(!arg.description().isEmpty()){
-            argString += " " + arg.description();
+            argString += ' ' + arg.description();
         }
     }
     itemList.append(new QStandardItem(argString));
@@ -216,7 +216,7 @@ QModelIndex DBusFunctionModel::findOrInsert(const DBusAction* action, bool inser
             }
             argString += QString(QVariant::typeToName(arg.value().type()));
             if(!arg.description().isEmpty()){
-                argString += " " + arg.description();
+                argString += ' ' + arg.description();
             }
         }
         itemList.append(new QStandardItem(argString));
@@ -533,7 +533,7 @@ ActionTemplateModel::ActionTemplateModel(const Profile* profile, QObject* parent
 
 void ActionTemplateModel::refresh(const Profile* profile) {
     clear();
-    foreach(ProfileActionTemplate profileActionTemplate, profile->actionTemplates()){
+    foreach(const ProfileActionTemplate &profileActionTemplate, profile->actionTemplates()){
       appendRow(profileActionTemplate);
     }
     sort(0, Qt::DescendingOrder);
@@ -740,7 +740,7 @@ RemoteItem::RemoteItem(Remote *remote) {
     qRegisterMetaType<Mode*>("Mode*");
     setData(qVariantFromValue(remote), Qt::UserRole);
     foreach(Mode *mode, remote->allModes()) {
-        if(mode->name() != "Master"){ // Dont show the Master Mode separately
+        if(mode->name() != "Master"){ // Don't show the Master Mode separately
             QList<QStandardItem*> itemList;
             QStandardItem *item = new QStandardItem(mode->name());
             item->setData(qVariantFromValue(mode), Qt::UserRole);

@@ -30,9 +30,6 @@ AddAction::AddAction() {
     ui.setupUi(widget);
     setMainWidget(widget);
     
-    
-/*    ui.cbActionType->addItem(i18n("I whish to create an Action from a Template"), Action::ProfileAction);
-    ui.cbActionType->addItem(i18n("I whish to create an Action using D-Bus"), Action::DBusAction);*/
 }
 
 
