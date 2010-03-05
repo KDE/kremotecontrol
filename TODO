@@ -4,7 +4,6 @@ TODOs before move to kdereview
 * rework icons
 * knewstuff
 * more unit tests (can also be done after moving back to kdeutils)
-* krazy checks
 
 TODOs after move back to kdeutils
 ---------------------------------
