@@ -39,6 +39,11 @@ ModeDialog::ModeDialog(Remote *remote, Mode *mode, QWidget *parent): KDialog(par
     setButtons( Ok | Cancel);
     setDefaultButton(Ok);
 
+    connect(ui.leName, SIGNAL(textChanged(const QString&)), this, SLOT(checkForComplete()));
+    connect(ui.cbButtonForward, SIGNAL(currentIndexChanged(int)), this, SLOT(forwardButtonChanged()));
+    connect(ui.cbButtonBackward, SIGNAL(currentIndexChanged(int)), this, SLOT(backwardButtonChanged()));
+    connect(ui.gbModeCycle, SIGNAL(clicked(bool)), this, SLOT(modeHandlerChanged()));
+
     ui.cbButtons->addItem(i18n("No button"), "");
     foreach(const QString &button, remote->availableModeSwitchButtons(mode)){
         ui.cbButtons->addItem(button, button);
@@ -57,10 +62,10 @@ ModeDialog::ModeDialog(Remote *remote, Mode *mode, QWidget *parent): KDialog(par
             
             // Fill in Cycle mode buttons
             ui.cbButtonBackward->addButtons(remote->availableModeCycleButtons());
-            kDebug() << "findprevData " << remote->previousModeButton() << ":" << ui.cbButtonBackward->findData(remote->previousModeButton());
-            ui.cbButtonBackward->setCurrentIndex(ui.cbButtonBackward->findData(remote->previousModeButton()));
             ui.cbButtonForward->addButtons(remote->availableModeCycleButtons());
-            kDebug() << "findNextData " << remote->nextModeButton() << ":" << ui.cbButtonBackward->findData(remote->nextModeButton());
+
+            // Load currently configured buttons
+            ui.cbButtonBackward->setCurrentIndex(ui.cbButtonBackward->findData(remote->previousModeButton()));
             ui.cbButtonForward->setCurrentIndex(ui.cbButtonForward->findData(remote->nextModeButton()));
 
             if(remote->modeChangeMode() == Remote::Cycle){
@@ -76,10 +81,6 @@ ModeDialog::ModeDialog(Remote *remote, Mode *mode, QWidget *parent): KDialog(par
         ui.gbModeCycle->setVisible(false);
     }
     
-    connect(ui.leName, SIGNAL(textChanged(const QString&)), this, SLOT(checkForComplete()));
-    connect(ui.cbButtonForward, SIGNAL(currentIndexChanged(int)), this, SLOT(forwardButtonChanged()));
-    connect(ui.cbButtonBackward, SIGNAL(currentIndexChanged(int)), this, SLOT(backwardButtonChanged()));
-    connect(ui.gbModeCycle, SIGNAL(clicked(bool)), this, SLOT(modeHandlerChanged()));
     checkForComplete();
 
     // Pause remote to make use of button presses here
