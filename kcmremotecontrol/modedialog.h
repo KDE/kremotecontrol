@@ -27,8 +27,27 @@
 #ifndef MODEDIALOG_H
 #define MODEDIALOG_H
 
+#include "QComboBox"
+
+class ButtonComboBox: public QComboBox
+{
+    Q_OBJECT
+public:
+    ButtonComboBox(QWidget* parent = 0);
+    void addButtons(const QStringList &buttonList);
+
+public slots:
+    void hideButton(const QString &button);
+
+private:
+    int m_hiddenIndex;
+    QString m_hiddedButton;
+};
+
 #include "ui_modedialog.h"
 #include "remote.h"
+
+#include "kcombobox.h"
 
 class ModeDialog : public KDialog
 {
@@ -55,6 +74,9 @@ private slots:
     void forwardButtonChanged();
     void backwardButtonChanged();
     void buttonPressed(const Solid::Control::RemoteControlButton &button);
+    void modeHandlerChanged();
 };
+
+
 
 #endif /* NEWMODEDIALOG_H */

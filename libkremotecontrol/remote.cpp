@@ -349,7 +349,6 @@ void Remote::setCurrentMode(Mode* mode) {
 }
 
 bool Remote::isAvailable() const {
-    kDebug() << "available remotes in solid:" << Solid::Control::RemoteControl::allRemoteNames();
     return Solid::Control::RemoteControl::allRemoteNames().contains(m_remoteName);
 }
 
@@ -378,19 +377,17 @@ QStringList Remote::availableModeSwitchButtons(const Mode *mode) const {
     if(mode && !mode->button().isEmpty() && !buttonList.contains(mode->button())){
         buttonList.append(mode->button());
     }
-    return buttonList;
-}
-
-QStringList Remote::availableNextModeButtons() const {
-    QStringList buttonList = m_modechangeHandler->availableModeSwitchButtons();
-    if(!nextModeButton().isEmpty() && !buttonList.contains(nextModeButton())){
-        buttonList.append(nextModeButton());
+    if(mode && mode == masterMode()){
+        
     }
     return buttonList;
 }
 
-QStringList Remote::availablePreviousModeButtons() const {
+QStringList Remote::availableModeCycleButtons() const {
     QStringList buttonList = m_modechangeHandler->availableModeSwitchButtons();
+    if(!nextModeButton().isEmpty() && !buttonList.contains(nextModeButton())){
+        buttonList.append(nextModeButton());
+    }
     if(!previousModeButton().isEmpty() && !buttonList.contains(previousModeButton())){
         buttonList.append(previousModeButton());
     }

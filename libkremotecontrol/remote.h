@@ -86,13 +86,9 @@ class KREMOTECONTROL_EXPORT Remote
           */
         QStringList availableModeSwitchButtons(const Mode *mode = 0) const;
         /**
-          * Get buttons available for switching to the next mode (Free buttons + the current button nextMode)
+          * Get buttons available for switching to the next or previous mode (Free buttons + the current nextMode and previousMode)
           */
-        QStringList availableNextModeButtons() const;
-        /**
-          * Get buttons available for switching to the previous mode (Free buttons + the current button previousMode)
-          */
-        QStringList availablePreviousModeButtons() const;
+        QStringList availableModeCycleButtons() const;
 
         QString nextModeButton() const;
         void setNextModeButton(const QString &button);
