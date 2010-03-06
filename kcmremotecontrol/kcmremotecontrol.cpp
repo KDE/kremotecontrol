@@ -50,7 +50,7 @@ KCMRemoteControl::KCMRemoteControl(QWidget *parent, const QVariantList &args) :
     KGlobal::locale()->insertCatalog("kcm_remotecontrol");
     setAboutData(new KAboutData("kcm_remotecontrol", 0, ki18n("KRemoteControl"), KDEUTILS_VERSION_STRING,
                                 ki18n("The KDE Remote Control System"), KAboutData::License_GPL_V2,
-                                ki18n("Copyright (c)2003 Gav Wood, 2007 Michael Zanetti, 2009 Frank Scheffold"),
+                                ki18n("2010 Michael Zanetti, 2010 Frank Scheffold"),
                                 ki18n("Use this to configure KDE's remote control system in order to control any KDE application with your remote control."),
                                 "http://utils.kde.org/projects/kremotecontrol"));
     setQuickHelp(i18n("<h1>Remote Controls</h1><p>This module allows you to configure bindings between your remote controls and KDE applications. Simply select your remote control and click Add next to the Actions/Buttons list to create new action for button presses.</p>"));
@@ -243,7 +243,8 @@ void KCMRemoteControl::removeMode() {
         if(mode == remote->masterMode()){
             if(KMessageBox::questionYesNo(this, i18n("Are you sure you want to remove this remote and all of its modes and actions?"), i18n("Remove remote")) == KMessageBox::Yes) {
                 m_remoteList.removeAll(remote);
-                m_remoteModel->clear(); // Clear the model before deleting the remote!!!
+                m_remoteModel->clear(); // Clear the models before deleting the remote!!!
+                m_actionModel->clear();
                 delete remote;
                 addUnconfiguredRemotes(); // Just in case we removed a physically available remote (shouldn't happen). This also refreshes the modeModel
             } else {
