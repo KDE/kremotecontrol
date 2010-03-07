@@ -1,7 +1,8 @@
-<?xml version="1.0" ?>
-<profile xmlns="urn:org-kde-kremotecontrol" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="urn:org-kde-kremotecontrol file:profile.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
 
+<profile xmlns="urn:org-kde-kremotecontrol" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="urn:org-kde-kremotecontrol file:profile.xsd">
+    
 	<name>KsCD</name>
 	<version>0.1</version>
 	<author>Aaron J. Seigo</author>

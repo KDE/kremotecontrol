@@ -169,7 +169,7 @@ void ModeDialog::modeHandlerChanged() {
     }    
 }
 
-ButtonComboBox::ButtonComboBox(QWidget* parent): QComboBox(parent) {
+ButtonComboBox::ButtonComboBox(QWidget* parent): KComboBox(parent) {
     addItem(i18n("No Button"), "");
 }
 

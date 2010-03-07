@@ -27,9 +27,9 @@
 #ifndef MODEDIALOG_H
 #define MODEDIALOG_H
 
-#include "QComboBox"
+#include "KComboBox"
 
-class ButtonComboBox: public QComboBox
+class ButtonComboBox: public KComboBox
 {
     Q_OBJECT
 public:

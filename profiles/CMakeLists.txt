@@ -10,6 +10,7 @@ install( FILES
     klauncher.profile.xml
     konqueror.profile.xml    
     powermanagement.profile.xml
+    kscd.profile.xml
     DESTINATION ${DATA_INSTALL_DIR}/profiles)
 
 
