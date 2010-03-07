@@ -31,8 +31,10 @@ SelectProfileWidget::SelectProfileWidget (QWidget *parent) : QWidget(parent) {
 
     profilesWidget = new QTreeWidget();
     layout = new QVBoxLayout(this);
-    layout->addWidget(new QLabel(i18n("Select profile")));
-    profilesWidget->setHeaderLabel(i18n("Available profiles with button actions"));
+    QLabel *headerLabel = new QLabel(i18n("Select a profile to automatically generate actions for your remote control:"));
+    headerLabel->setWordWrap(true);
+    layout->addWidget(headerLabel);
+    profilesWidget->setHeaderLabel(i18n("Available profiles"));
     layout->addWidget(profilesWidget);
     layout->addWidget(selectionLabel);
     

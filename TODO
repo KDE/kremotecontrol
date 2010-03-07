@@ -1,17 +1,17 @@
 TODOs before move to kdereview
 -------------------------------
-* update docs (mzanetti)
+* update docs
 * rework icons
-* knewstuff
-* more unit tests (can also be done after moving back to kdeutils)
 
 TODOs after move back to kdeutils
 ---------------------------------
 * update websites
+* more unit tests (can also be done after moving back to kdeutils)
 
 
 Long-term TODOs
 -------------------
+* knewstuff
 * Implement executor and ActionType/configuration to do something like: VolumeSet(VolumeGet() + 10);
   It should be something like:
     <action objid="Player" class="volumeup">
@@ -22,9 +22,3 @@ Long-term TODOs
 	</someNewTagName>
     </action>
 
-  
-DONE:
--------------------  
-* Check/update all profiles (frasche)
-* remove compiler warnings
-* check why profile stringlist default values are not reaaded from xml
