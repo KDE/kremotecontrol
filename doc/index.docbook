@@ -1,0 +1,462 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
+  <!ENTITY kremotecontrol "<application>KRemoteControl</application>">
+  
+  <!ENTITY % English "INCLUDE" > <!-- change language only here -->
+  <!ENTITY % addindex "IGNORE">
+]>
+
+<book lang="&language;">
+  <bookinfo>
+    <title>KDE Remote Control Configuration</title>
+
+    <authorgroup>
+      <author>
+        <firstname>Michael</firstname>
+        <surname>Zanetti</surname>
+        <affiliation>
+	      <address><email>michael_zanetti@gmx.net</email></address>
+        </affiliation>
+      </author>
+    <!-- TRANS:ROLES_OF_TRANSLATORS -->
+    </authorgroup>
+
+    <date>2010-03-05</date>
+    <releaseinfo>1.0</releaseinfo>
+
+    <copyright>
+      <year>2010</year>
+      <holder>Michael Zanetti</holder>
+    </copyright>
+
+    <abstract>
+      <para>
+        &kremotecontrol; configuration: The infrastructure for the &kde;'s
+        Remote Control functionality.
+      </para>
+    </abstract>
+    
+    <keywordset>
+      <keyword>KRemoteControl</keyword>
+      <keyword>kcm_remotecontrol</keyword>
+      <keyword>Remote Control</keyword>
+    </keywordset>
+
+  </bookinfo>
+
+  <chapter id="introduction">
+    <title>Introduction</title>
+
+    <para>
+      This module allows you to configure your remote controls. 
+      You can assign actions that are executed on button presses. Actions can start applications,
+      control them or execute system commands, such as powering off your computer.
+    </para>
+
+    <sect1 id="requirements">
+      <title>Requirements</title>
+
+      <para>
+        To use &kremotecontrol; you must have set up a compatible backend for remote controls on 
+        your computer. Currently there is only a backend for LIRC available. If LIRC is properly set 
+        up, the &kremotecontrol; icon in the system tray will light up red
+        <inlinemediaobject>
+          <imageobject>
+            <imagedata fileref="irkick.png" format="PNG" />
+          </imageobject>
+        </inlinemediaobject>.
+        If not, it will be grey and crossed out 
+        <inlinemediaobject>
+          <imageobject>
+            <imagedata fileref="irkickoff.png" format="PNG"/>
+          </imageobject>
+        </inlinemediaobject>.
+      </para>
+
+      <para>
+        For more information about LIRC, visit their website at http://www.lirc.org.
+      </para>
+
+    </sect1>
+  </chapter>
+
+  <chapter id="usage">
+    <title>Usage</title>
+
+    <para>
+      The configuration module consists of two lists.
+      The list on the left shows the available remote controls and their modes. 
+      The list on the right displays all configured actions for the current selected remote and mode.
+      <screenshot>
+      <screeninfo>KRemoteControl configuration</screeninfo>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="kcmremotecontrol.png" format="PNG"/>
+          </imageobject>
+          <textobject>
+            <phrase>Lists of remotes and configured modes and actions</phrase>
+          </textobject>
+        </mediaobject>
+      </screenshot>
+    </para>
+
+    <sect1 id="modes">
+      <title>Remote Controls and Modes</title>
+
+      <para>
+        Each remote control can have a number of different modes. Having multiple modes allows 
+        buttons to execute different actions in different situations. Think of it as a 
+        TV/Video/Satellite/DVD multi-purpose remote control. Instead of using different remote 
+        controls for different applications, you can change the behaviour of one remote control 
+        to adapt to an application by creating different modes and switching them as needed. 
+        Actions defined directly to the remote control are always available, no matter in what 
+        mode the remote currently is. Actions defined in a mode are only executed if the remote 
+        is currently set to that mode. Each remote control can be only in one mode at a time. 
+        It may also be in no mode at all meaning that only always available actions are executed 
+        on button presses. You can also define a default mode, which is the mode automatically 
+        assigned on startup.
+      </para>
+      <para>
+        You can add modes to a remote control by selecting the remote and using the 
+        <guibutton>+</guibutton> button besides to the list. When creating a mode you need to 
+        supply a name for it. Optionally you can assign a button that is used to activate the 
+        mode and an icon that is used for notifications for this mode. You can delete modes by 
+        selecting them and using the <guibutton>-</guibutton> button.
+        <screenshot>
+        <screeninfo>Add mode</screeninfo>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="AddMode.png" format="PNG"/>
+            </imageobject>
+            <textobject>
+              <phrase>Adding a new mode</phrase>
+            </textobject>
+          </mediaobject>
+        </screenshot>
+      </para>
+      <para>
+        By default, if there are multiple modes with the same assigned button, the 
+        button is used to cycle through those modes. This way you can group your modes. For 
+        example you could assign a button named <quote>Music</quote> to cycle through modes 
+        for &amarok; and &juk; while a button named <quote>Video</quote> could cycle through 
+        modes for Dragonplayer or KMplayer If you rather would like to have a button for 
+        cycling though all modes and a second one to reverse-cycling through the modes, you 
+        can set this behaviour in a remotes preferences by selecting a remote and pressing 
+        the edit button.
+        <screenshot>
+        <screeninfo>EditRemote</screeninfo>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="EditMasterMode.png" format="PNG"/>
+            </imageobject>
+            <textobject>
+              <phrase>Editing a remote</phrase>
+            </textobject>
+          </mediaobject>
+        </screenshot>
+      </para>
+
+    </sect1>
+
+    <sect1 id="actions">
+      <title>Actions</title>
+
+      <para>
+        After selecting a remote or a mode, you can add actions to it using the 
+        <guibutton>+</guibutton> button on the right. There are two different ways how actions 
+        can be created. By using a template or by browsing the D-Bus session bus manally.
+        <screenshot>
+        <screeninfo>AddAction</screeninfo>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="AddAction.png" format="PNG"/>
+            </imageobject>
+            <textobject>
+              <phrase>Adding an action</phrase>
+            </textobject>
+          </mediaobject>
+        </screenshot>
+      </para>
+      <para>
+        Creating actions using templates is easier but limited. You can find 
+        templates for the most common applications such as &amarok; or the KDE program launcher 
+        and system commands for shutting down your computer. Those templates are collected in 
+        profiles that group them into similar task. For example there is a Profile called 
+        <quote>Power management</quote> that containes templates for shutting down or 
+        suspending your computer.
+        <screenshot>
+        <screeninfo>AddProfileAction</screeninfo>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="AddProfileAction.png" format="PNG"/>
+            </imageobject>
+            <textobject>
+              <phrase>Adding an using a template</phrase>
+            </textobject>
+          </mediaobject>
+        </screenshot>
+      </para>
+      <para>
+        Creating actions by browsing the D-Bus lists all currently running applications. You can 
+        browse though them and their functions. This requires a basic understanding of how D-Bus 
+        works, but you can use more applications and functions than those in the template list.
+        <screenshot>
+        <screeninfo>AddDBusAction</screeninfo>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="AddDBusAction.png" format="PNG"/>
+            </imageobject>
+            <textobject>
+              <phrase>Adding an action using D-Bus</phrase>
+            </textobject>
+          </mediaobject>
+        </screenshot>
+      </para>
+      <para>
+        When adding an action you can tweak a few more options. The first one of them defines if 
+        the actions is executed repeatedly when the button on the remote control is beeing held 
+        down. This is a useful behavour for actions like increasing or decreasing volume but may 
+        be undesired for actions like toggling play/pause on a media player. The second one 
+        defines if the target application should be started if it is not running yet when the 
+        button is pressed. For example it wouldn't make sense for actions that should close an 
+        application to launch it. The third and last option for actions is to define which 
+        instance of an application should receive the action if there are more then on instances 
+        running. If you have selected an application that cannot be run multiple times this 
+        option is disabled.
+      </para>
+      <para>
+        <screenshot>
+        <screeninfo>AddActionOptions</screeninfo>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="AddActionOptions.png" format="PNG"/>
+            </imageobject>
+            <textobject>
+              <phrase>Options for actions</phrase>
+            </textobject>
+          </mediaobject>
+        </screenshot>
+      </para>
+      <para>
+        Actions may also be automatically populated using the wizard button. This means that 
+        &kremotecontrol; can attempt to match buttons to functions for you. The autopopulate dialog 
+        shows all available templates collections with a flag. Depending on the color of the flag 
+        your remote control is fully, partially or not supported by that profile. 
+        Green means all contained templates can be machted to your remote control, yellow means 
+        some of the contained actions match and red means none of the templates can be mached 
+        to buttons of your remote control. This doesn't mean that you cannot use those templates. 
+        You just have to configure them one by one, setting the desired button by yourself.
+        <screenshot>
+        <screeninfo>AutoPopulate</screeninfo>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="AutoPopulate.png" format="PNG"/>
+            </imageobject>
+            <textobject>
+              <phrase>Automatically generate actions using templates</phrase>
+            </textobject>
+          </mediaobject>
+        </screenshot>
+      </para>
+      <para>
+        <emphasis role="strong">Note:</emphasis> If your remote control isn't compatible to any 
+        profile you might haven't configured LIRC using namespaces.
+      </para>
+    </sect1>
+  </chapter>
+  <chapter id="advancedInformation">
+    <title>Advanced Information</title>
+    <para>
+      This chapter will discuss some information which might be interesting for more advanced 
+      users or developers. You will learn how to create your own profiles.
+    </para>
+
+    <sect1 id="profileCreation">
+      <title>Creating a Profile</title>
+
+      <sect2>
+        <title>Introduction</title>
+        <para>
+          Nearly all &DBus; capable applications can be used with &kremotecontrol; without any 
+          further actions. However, to provide user friendly configuration and let the application 
+          appear in the autopopulate dialog you might want to create a profile for it.
+        </para>
+        <para>
+          A profile tells &kremotecontrol; (and the user!) what the various &DBus; calls do. 
+          Essentially this is a kind of documentation for &DBus; calls. You don't have to include 
+          all &DBus; calls - just the ones that you feel end-users would benefit the most 
+          (usually <quote>interface adjusting</quote> calls rather the <quote>information 
+          gathering</quote> calls).
+        </para>
+      </sect2>
+
+      <sect2>
+        <title>Profile HowTo</title>
+        <procedure>
+
+          <step>
+            <title>&DBus;</title>
+            <para>
+              Make sure the application you want to create the profile for, provides functions 
+              on the &DBus; session bus. You can check this by trying to add actions for that 
+              application using the manual method in &kremotecontrol;. <quote>qdbusviewer</quote>, 
+              an application which is shipped with your Qt4 installation is also a very good tool 
+              to find out about &DBus; capabilities of applications.
+            </para>
+          </step>
+
+          <step>
+            <title>Step by step</title>
+            <para>
+              Once you have found the appropriate &DBus; functions you need to describe them in 
+              a <filename>appname.profile.xml</filename> document. Here is a quick guide how to 
+              create such files:
+            </para>
+
+            <substeps>
+              <step>
+                <para>
+                  First create a new file containing the following content. Replace 
+                  <quote>myapp</quote> with the executable name of the application and 
+                  <quote>My Application</quote> with a descriptive application name.
+                </para>
+                <programlisting>
+&lt;?xml version="1.0" ?&gt;
+&lt;!DOCTYPE profile SYSTEM "profile.dtd"&gt;
+
+  &lt;profile id="myapp" servicename="My Application"&gt;
+  &lt;/profile&gt;
+                </programlisting>
+              </step>
+
+              <step>
+                <para>
+                  Inside the <quote>profile</quote> tag add name and author information. 
+                  The <quote>instances</quote> tag tells &kremotecontrol; whether the 
+                  application can be executed multiple times or not. Set 
+                  <quote>unique</quote> to <quote>0</quote> if you can start the 
+                  application multiple times (it defaults to <quote>1</quote>). The 
+                  <quote>ifmulti</quote> property specifies what &kremotecontrol; should 
+                  do if there are multiple instances running when a button is pressed. 
+                  The options are <quote>dontsend</quote> (do nothing if &gt;1 instance), 
+                  <quote>sendtoone</quote> (send call to one arbitrarily chosen instance) 
+                  and <quote>sendtoall</quote> (send to all instances). The default is 
+                  <quote>dontsend</quote>, however, <quote>sendtoone</quote> may be the 
+                  most useful in many circumstances.
+                </para>
+
+                <programlisting>
+&lt;?xml version="1.0" ?&gt;
+&lt;!DOCTYPE profile SYSTEM "profile.dtd"&gt;
+
+  &lt;profile id="myapp" servicename="My Application"&gt;
+    &lt;name&gt;My Application&lt;/name&gt;
+    &lt;author&gt;Me&lt;/author&gt;
+    &lt;instances unique="0" ifmulti="sendtoone"/&gt;
+  &lt;/profile&gt;
+                </programlisting>
+              </step>
+
+              <step>
+                <para>
+                  Populate the profile with action tags. Each action tag should contain 
+                  the &DBus; object name and the function prototype.
+                </para>
+
+                <para>
+                  &kremotecontrol; needs some additional attributes to know how to handle 
+                  an action. The <quote>button</quote> tag is used for the autopopulate 
+                  function. See
+                  <ulink url="http://api.kde.org/4.x-api/kdebase-workspace-apidocs/libs/solid/html/classSolid_1_1Control_1_1RemoteControlButton.html">
+                  the solid API docs</ulink> for a complete list of available button names. 
+                  The <quote>repeat</quote> tag tells whether the action should be executed 
+                  multiple times if the button on the remote is being held pressed (0 = No, 
+                  1 = Yes). The <quote>autostart</quote> tag defines whether the application 
+                  should be started if not already running.
+                </para>
+                <programlisting>
+&lt;?xml version="1.0" ?&gt;
+&lt;!DOCTYPE profile SYSTEM "profile.dtd"&gt;
+
+  &lt;profile id="myapp" servicename="My Application"&gt;
+    &lt;name&gt;My Application&lt;/name&gt;
+    &lt;author&gt;Me&lt;/author&gt;
+    &lt;instances unique="0" ifmulti="sendtoone"/&gt;
+    &lt;action objid="MyApp" prototype="void showint(short int)"
+      button="Menu" repeat="0" autostart="0"&gt;
+    &lt;/action&gt;
+  &lt;/profile&gt;
+                </programlisting>
+              </step>
+
+              <step>
+                <para>
+                  Add a name and a comment to the action. This is shown in the &kremotecontrol;
+                  user interface.
+                </para>
+
+                <programlisting>
+&lt;?xml version="1.0" ?&gt;
+&lt;!DOCTYPE profile SYSTEM "profile.dtd"&gt;
+
+  &lt;profile id="myapp" servicename="My Application"&gt;
+    &lt;name&gt;My Application&lt;/name&gt;
+    &lt;author&gt;Me&lt;/author&gt;
+    &lt;instances unique="0" ifmulti="sendtoone"/&gt;
+    &lt;action objid="MyApp" prototype="void showints(short int)"
+        button="Menu" repeat="0" autostart="0"&gt;
+      &lt;name&gt;Show Integers&lt;/name&gt;
+      &lt;comment&gt;Shows a configurable integer&lt;/comment&gt;
+    &lt;/action&gt;
+  &lt;/profile&gt;
+                  </programlisting>
+              </step>
+
+          <step>
+                  <para>
+                  Describe each argument with a comment and type attribute. A list of valid types 
+                  can be found in the 
+                  <ulink url="http://websvn.kde.org/trunk/KDE/kdeutils/kdelirc/profiles/profile.dtd?view=markup">
+                  profiles description file</ulink>. You should declare a default value for each 
+                  argument between the <quote>default</quote> tags:
+                  </para>
+      
+                  <programlisting>
+&lt;?xml version="1.0" ?&gt;
+&lt;!DOCTYPE profile SYSTEM "profile.dtd"&gt;
+
+  &lt;profile id="myapp" servicename="My Application"&gt;
+    &lt;name&gt;My Application&lt;/name&gt;
+    &lt;author&gt;Me&lt;/author&gt;
+    &lt;instances unique="0" ifmulti="sendtoone"/&gt;
+    &lt;action objid="MyApp" prototype="void showints(short int)"
+        button="Menu" repeat="0" autostart="0"&gt;
+      &lt;name&gt;Show Integers&lt;/name&gt;
+      &lt;comment&gt;Shows a configurable integer&lt;/comment&gt;
+      &lt;argument type="int"&gt;
+        &lt;default&gt;5&lt;/default&gt;
+        &lt;comment&gt;The integer to be shown&lt;/comment&gt;
+      &lt;/argument&gt;
+    &lt;/action&gt;
+  &lt;/profile&gt;
+                  </programlisting>
+              </step>
+              </substeps>
+          </step>
+        </procedure>
+      </sect2>
+      <sect2>
+        <title>Installation</title>
+          <para>
+              To test and use the profile you need to copy it into 
+              <filename>$(kde_datadir)/profiles</filename> and restart &kremotecontrol;.
+          </para>
+          <para>
+              If you would like to contribute the profile to the &kde; SC please send it 
+              to the kdeutils team at <email>kde-utils-devel@kde.org</email>.
+          </para>
+        </sect2>
+    </sect1>
+  </chapter>
+</book>
+
