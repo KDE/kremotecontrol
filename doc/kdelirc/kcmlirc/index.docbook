@@ -140,7 +140,7 @@ Infrared Remote Control functionality.</para></abstract>
     <title>Profiles Overview</title>
 
     <para>
-      The <guibutton>Profiles Overview</guibutton> tab gives you information about the available profiles. By selecting a profile you can see detailed informations such as the author's details and a list of all defined actions. Each action entry contains information about additional settings, a comment and the identifier of the button to be used by the autopopulate function.
+      The <guibutton>Profiles Overview</guibutton> tab gives you information about the available profiles. By selecting a profile you can see detailed information such as the author's details and a list of all defined actions. Each action entry contains information about additional settings, a comment and the identifier of the button to be used by the autopopulate function.
     </para>
 
     <para>
