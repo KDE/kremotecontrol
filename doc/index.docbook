@@ -198,7 +198,7 @@
       </para>
       <para>
         Creating actions by browsing the D-Bus lists all currently running applications. You can 
-        browse though them and their functions. This requires a basic understanding of how D-Bus 
+        browse through them and their functions. This requires a basic understanding of how D-Bus 
         works, but you can use more applications and functions than those in the template list.
         <screenshot>
         <screeninfo>AddDBusAction</screeninfo>
@@ -316,129 +316,160 @@
             <substeps>
               <step>
                 <para>
-                  First create a new file containing the following content. Replace 
-                  <quote>myapp</quote> with the executable name of the application and 
-                  <quote>My Application</quote> with a descriptive application name.
+                  First create a new file containing the following content below. In the tag <quote>name</quote> add a short descriptive name about the profile.
+                  Define a optional description about what the profile does in the <quote>description</quote> tag.
+                  Also add your name as author and a version number.
+                  The version number is important when more instances of the same profile are found by &kremotecontrol;.
+                  The profile with the higher version number will be assumed, all others are ignored.
                 </para>
                 <programlisting>
-&lt;?xml version="1.0" ?&gt;
-&lt;!DOCTYPE profile SYSTEM "profile.dtd"&gt;
+&lt;xml version="1.0" encoding="UTF-8"?>
+&lt;profile xmlns="urn:org-kde-kremotecontrol"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="urn:org-kde-kremotecontrol file:profile.xsd"&gt;
 
-  &lt;profile id="myapp" servicename="My Application"&gt;
-  &lt;/profile&gt;
+    &lt;name&gt;My Profile&lt;/name&gt;
+    &lt;version&gt;0.1&lt;/version&gt;
+    &lt;author&gt;Me&lt;/author&gt;
+    &lt;description&gt;Some descriptive information about what the profile does&lt;/description&gt;
+    &lt;action&gt;
+        &lt;--  This tag will be explained in the next step--&gt;
+    &lt;action&gt;
+
+&lt;/profile&gt;
                 </programlisting>
               </step>
 
               <step>
                 <para>
-                  Inside the <quote>profile</quote> tag add name and author information. 
-                  The <quote>instances</quote> tag tells &kremotecontrol; whether the 
-                  application can be executed multiple times or not. Set 
-                  <quote>unique</quote> to <quote>0</quote> if you can start the 
-                  application multiple times (it defaults to <quote>1</quote>). The 
-                  <quote>ifmulti</quote> property specifies what &kremotecontrol; should 
-                  do if there are multiple instances running when a button is pressed. 
-                  The options are <quote>dontsend</quote> (do nothing if &gt;1 instance), 
-                  <quote>sendtoone</quote> (send call to one arbitrarily chosen instance) 
-                  and <quote>sendtoall</quote> (send to all instances). The default is 
-                  <quote>dontsend</quote>, however, <quote>sendtoone</quote> may be the 
-                  most useful in many circumstances.
+                  After you created the profile skeleton it's time to append one ore more &DBus; actions. You define each of them as follow:
                 </para>
 
                 <programlisting>
-&lt;?xml version="1.0" ?&gt;
-&lt;!DOCTYPE profile SYSTEM "profile.dtd"&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?>
+&lt;profile xmlns="urn:org-kde-kremotecontrol"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="urn:org-kde-kremotecontrol file:profile.xsd"&gt;
 
-  &lt;profile id="myapp" servicename="My Application"&gt;
-    &lt;name&gt;My Application&lt;/name&gt;
+    &lt;name&gt;My Profile&lt;/name&gt;
+    &lt;version&gt;0.1&lt;/version&gt;
     &lt;author&gt;Me&lt;/author&gt;
-    &lt;instances unique="0" ifmulti="sendtoone"/&gt;
-  &lt;/profile&gt;
-                </programlisting>
-              </step>
+    &lt;description&gt;Some descriptive information about what the profile does&lt;/description&gt;
 
-              <step>
-                <para>
-                  Populate the profile with action tags. Each action tag should contain 
-                  the &DBus; object name and the function prototype.
-                </para>
-
-                <para>
-                  &kremotecontrol; needs some additional attributes to know how to handle 
-                  an action. The <quote>button</quote> tag is used for the autopopulate 
-                  function. See
-                  <ulink url="http://api.kde.org/4.x-api/kdebase-workspace-apidocs/libs/solid/html/classSolid_1_1Control_1_1RemoteControlButton.html">
-                  the solid API docs</ulink> for a complete list of available button names. 
-                  The <quote>repeat</quote> tag tells whether the action should be executed 
-                  multiple times if the button on the remote is being held pressed (0 = No, 
-                  1 = Yes). The <quote>autostart</quote> tag defines whether the application 
-                  should be started if not already running.
-                </para>
-                <programlisting>
-&lt;?xml version="1.0" ?&gt;
-&lt;!DOCTYPE profile SYSTEM "profile.dtd"&gt;
-
-  &lt;profile id="myapp" servicename="My Application"&gt;
-    &lt;name&gt;My Application&lt;/name&gt;
-    &lt;author&gt;Me&lt;/author&gt;
-    &lt;instances unique="0" ifmulti="sendtoone"/&gt;
-    &lt;action objid="MyApp" prototype="void showint(short int)"
-      button="Menu" repeat="0" autostart="0"&gt;
+    &lt;action id="someUniquId"  repeat="true|false" button="someButton"&gt;
+      &lt;name&gt;My Action&lt;/name&gt;
+      &lt;description&gt;What this action does&lt;/description&gt;
+      &lt;prototype&gt;
+        &lt;--  This tag will be explained in the next step--&gt;
+      &lt;prototype&gt;
+      &lt;ifmulti&gt;ifMultiOption&lt;/ifmulti&gt;
     &lt;/action&gt;
-  &lt;/profile&gt;
+    
+&lt;/profile&gt;
                 </programlisting>
+               <para>
+                 First define a unique identifier.  This will be used by &kremotecontrol; to identify the action.
+                 So this id can only be allocated once in the profile. The <quote>button</quote> attribute is used for the autopopulate function.
+                 Look at the <quote>profile.xsd</quote> schema file for a complete list of the available button names.
+                 The <quote>repeat</quote> attribute tells whether the action should be executed multiple times if the
+                 button on the remote is being held pressed. If the application is not running and you want to launch it when the action is triggered set
+                 <quote>autostart</quote> to true.
+                Please note that the attributes <quote>button</quote>, <quote>repeat</quote> and <quote>autostart</quote> are optional.
+                If <quote>repat</quote> and <quote>autostart</quote> are not defined, they will be handled by &kremotecontrol; as false value.
+                </para>
+                 
+               <para>
+               Now you can add a short name to the <quote>name</quote> tag and add, if you want, a description
+               to the optional tag <quote>description</quote>. The <quote>ifmulti</quote> property specifies what
+               &kremotecontrol; should do if there are multiple instances running when a button is pressed and
+                if the application allows multiple instances. If the tag is not defined &kremotecontrol;
+                handles it as an single application. If defined you have got following options as tag value:
+                <quote>dontsend</quote> (do nothing if &gt;1 instance),
+                <quote>sendtoone</quote> (send call to one arbitrarily chosen instance)
+                and <quote>sendtoall</quote> (send to all instances). The default is
+                <quote>dontsend</quote>, however, <quote>sendtoone</quote> may be the
+                most useful in many circumstances.
+               </para>
               </step>
 
               <step>
                 <para>
-                  Add a name and a comment to the action. This is shown in the &kremotecontrol;
-                  user interface.
+                  Now describe in the <quote>prototype</quote> tag the &DBus; function which should be executed:
                 </para>
-
                 <programlisting>
-&lt;?xml version="1.0" ?&gt;
-&lt;!DOCTYPE profile SYSTEM "profile.dtd"&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?>
+&lt;profile xmlns="urn:org-kde-kremotecontrol"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="urn:org-kde-kremotecontrol file:profile.xsd"&gt;
 
-  &lt;profile id="myapp" servicename="My Application"&gt;
-    &lt;name&gt;My Application&lt;/name&gt;
+    &lt;name&gt;My Profile&lt;/name&gt;
+    &lt;version&gt;0.1&lt;/version&gt;
     &lt;author&gt;Me&lt;/author&gt;
-    &lt;instances unique="0" ifmulti="sendtoone"/&gt;
-    &lt;action objid="MyApp" prototype="void showints(short int)"
-        button="Menu" repeat="0" autostart="0"&gt;
-      &lt;name&gt;Show Integers&lt;/name&gt;
-      &lt;comment&gt;Shows a configurable integer&lt;/comment&gt;
+    &lt;description&gt;Some descriptive information about what the profile does&lt;/description&gt;
+
+    &lt;action id="someUniquId"  repeat="true|false" button="someButton"&gt;
+      &lt;name&gt;My Action&lt;/name&gt;
+      &lt;description&gt;What this action does&lt;/description&gt;
+
+      &lt;prototype&gt;
+        &lt;serviceName&gt;org.example.application&lt;/serviceName&gt;
+        &lt;node&gt;Some/Node&lt;/node&gt;
+        &lt;function&gt;function&lt;/function&gt;
+      &lt;/prototype&gt;
+
+      &lt;ifmulti&gt;ifMultiOption&lt;/ifmulti&gt;
     &lt;/action&gt;
-  &lt;/profile&gt;
-                  </programlisting>
+
+&lt;/profile&gt;
+                </programlisting>
+                <para>
+                In the <quote>servicename</quote> you populate the service bus address in <quote>node</quote> the path to the method.
+                In the tag <quote>function</quote> add the method name without prototype and function parameters. If your method has arguments
+                go on to the next step.
+                </para>
               </step>
 
           <step>
                   <para>
-                  Describe each argument with a comment and type attribute. A list of valid types 
-                  can be found in the 
-                  <ulink url="http://websvn.kde.org/trunk/KDE/kdeutils/kdelirc/profiles/profile.dtd?view=markup">
-                  profiles description file</ulink>. You should declare a default value for each 
-                  argument between the <quote>default</quote> tags:
+                  You have to describe each argument of your declared function with a argument type. A list of valid types
+                  is defined in the <quote>profile.xsd</quote> schema file. If the type is not defined, the  &DBus; function is not supported.
+                  The <quote>comment</quote> tag is optional and will be displayed in the gui.
+                  You should also declare a default value for each argument between the <quote>default</quote> tags:
                   </para>
       
                   <programlisting>
-&lt;?xml version="1.0" ?&gt;
-&lt;!DOCTYPE profile SYSTEM "profile.dtd"&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?>
+&lt;profile xmlns="urn:org-kde-kremotecontrol"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="urn:org-kde-kremotecontrol file:profile.xsd"&gt;
 
-  &lt;profile id="myapp" servicename="My Application"&gt;
-    &lt;name&gt;My Application&lt;/name&gt;
+   &lt;name&gt;My Profile&lt;/name&gt;
+    &lt;version&gt;0.1&lt;/version&gt;
     &lt;author&gt;Me&lt;/author&gt;
-    &lt;instances unique="0" ifmulti="sendtoone"/&gt;
-    &lt;action objid="MyApp" prototype="void showints(short int)"
-        button="Menu" repeat="0" autostart="0"&gt;
-      &lt;name&gt;Show Integers&lt;/name&gt;
-      &lt;comment&gt;Shows a configurable integer&lt;/comment&gt;
-      &lt;argument type="int"&gt;
-        &lt;default&gt;5&lt;/default&gt;
-        &lt;comment&gt;The integer to be shown&lt;/comment&gt;
-      &lt;/argument&gt;
+    &lt;description&gt;Some descriptive information about what the profile does&lt;/description&gt;
+
+    &lt;action id="someUniquId"  repeat="true|false" button="someButton"&gt;
+      &lt;name&gt;My Action&lt;/name&gt;
+      &lt;description&gt;What this action does&lt;/description&gt;
+
+      &lt;prototype&gt;
+        &lt;serviceName&gt;org.example.application&lt;/serviceName&gt;
+        &lt;node&gt;SomeNode&lt;/node&gt;
+        &lt;function&gt;function&lt;/function&gt;
+
+        &lt;arguments&gt;
+          &lt;argument type="QString"&gt;
+            &lt;comment&gt;Additional comment&lt;/comment&gt;
+            &lt;default&gt;someValuet&lt;/default&gt;
+          &lt;/argument&gt;
+        &lt;/arguments&gt;
+
+      &lt;/prototype&gt;
+
+      &lt;ifmulti&gt;ifMultiOption&lt;/ifmulti&gt;
     &lt;/action&gt;
-  &lt;/profile&gt;
+
+&lt;/profile&gt;
                   </programlisting>
               </step>
               </substeps>
@@ -459,4 +490,3 @@
     </sect1>
   </chapter>
 </book>
-
