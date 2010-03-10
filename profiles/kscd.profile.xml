@@ -122,7 +122,7 @@
 	</action>
 	
 	<action id="toggleShuffle">
-		<name>Shffule</name>
+		<name>Shuffle</name>
 		<description>Toggles track shuffling on and off</description>
 		<prototype>
 			<serviceName>KsCD</serviceName>

@@ -259,7 +259,7 @@ void ArgumentsModel::refresh(const Prototype& prototype) {
         itemList.append(new ArgumentsModelItem(arg));
         appendRow(itemList);
     }
-    
+    sort(0);
 }
 
 QVariant ArgumentsModel::headerData(int section, Qt::Orientation orientation, int role) const {
@@ -496,7 +496,8 @@ ProfileModel::ProfileModel(QObject *parent): QStandardItemModel(parent) {
         item->setData(qVariantFromValue(profile), Qt::UserRole);
         item->setEditable(false);
         appendRow(item);
-    }    
+    }
+    sort(0);
 }
 
 Profile* ProfileModel::profile(const QModelIndex& index) const {
@@ -537,7 +538,7 @@ void ActionTemplateModel::refresh(const Profile* profile) {
     foreach(const ProfileActionTemplate &profileActionTemplate, profile->actionTemplates()){
       appendRow(profileActionTemplate);
     }
-    sort(0, Qt::DescendingOrder);
+    sort(0);
 }
 
 QVariant ActionTemplateModel::headerData(int section, Qt::Orientation orientation, int role) const {
@@ -592,7 +593,7 @@ void ActionTemplateModel::appendRow(ProfileActionTemplate actionTemplate) {
     } else {
         row.append(new QStandardItem("-"));
     }
-    QStandardItemModel::appendRow(row);
+    QStandardItemModel::appendRow(row);    
 }
 
 Qt::ItemFlags ActionTemplateModel::flags(const QModelIndex& index) const {
