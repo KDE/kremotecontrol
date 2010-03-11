@@ -259,7 +259,6 @@ void ArgumentsModel::refresh(const Prototype& prototype) {
         itemList.append(new ArgumentsModelItem(arg));
         appendRow(itemList);
     }
-    sort(0);
 }
 
 QVariant ArgumentsModel::headerData(int section, Qt::Orientation orientation, int role) const {
