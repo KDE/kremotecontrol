@@ -256,6 +256,7 @@ void ArgumentsModel::refresh(const Prototype& prototype) {
     foreach(const Argument &arg, prototype.args()){
         QList<QStandardItem*> itemList;
         itemList.append(new QStandardItem(QString(QVariant::typeToName(arg.value().type())) + ": " + arg.description()));
+        itemList.last()->setEditable(false);
         itemList.append(new ArgumentsModelItem(arg));
         appendRow(itemList);
     }
