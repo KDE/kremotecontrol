@@ -17,7 +17,7 @@
             <function>increaseVolume</function>
             <arguments>
                 <argument type="QString">
-                    <comment>The name of the slider you want to move and its index separated by a colon (eg. Master:0)</comment>
+                    <comment>Name of the slider to move and its index separated by a colon (eg. Master:0)</comment>
                     <default>Master:0</default>
                 </argument>
             </arguments>
@@ -33,7 +33,7 @@
             <function>decreaseVolume</function>
             <arguments>
                 <argument type="QString">
-                    <comment>The name of the slider you want to move and its index separated by a colon (eg. Master:0)</comment>
+                    <comment>Name of the slider to move and its index separated by a colon (eg. Master:0)</comment>
                     <default>Master:0</default>
                 </argument>
             </arguments>
@@ -49,7 +49,7 @@
             <function>toggleMute</function>
             <arguments>
                 <argument type="QString">
-                    <comment>The name of the slider you want to mute and its index separated by a colon (eg. Master:0)</comment>
+                    <comment>Name of the slider to mute and its index separated by a colon (eg. Master:0)</comment>
                     <default>Master:0</default>
                 </argument>
             </arguments>
