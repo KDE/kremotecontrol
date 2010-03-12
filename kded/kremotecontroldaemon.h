@@ -23,7 +23,7 @@
 
 #include "mode.h"
 
-#include <kdelirc/libkremotecontrol/remote.h>
+#include <remote.h>
 #include <solid/control/remotecontrolmanager.h>
 #include <solid/control/remotecontrol.h>
 

@@ -24,11 +24,11 @@
 #include "kremotecontroldaemon.h"
 #include "krcdadaptor.h"
 
-#include <kdelirc/libkremotecontrol/dbusinterface.h>
-#include <kdelirc/libkremotecontrol/mode.h>
-#include <kdelirc/libkremotecontrol/action.h>
-#include <kdelirc/libkremotecontrol/executionengine.h>
-#include <kdelirc/libkremotecontrol/remotelist.h>
+#include <dbusinterface.h>
+#include <mode.h>
+#include <action.h>
+#include <executionengine.h>
+#include <remotelist.h>
 
 #include <KCModuleInfo>
 #include <KDebug>

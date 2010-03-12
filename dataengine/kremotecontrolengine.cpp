@@ -26,7 +26,7 @@
 #include <KDateTime>
 
 #include <Plasma/DataContainer>
-#include <kdelirc//libkremotecontrol/dbusinterface.h>
+#include <dbusinterface.h>
 
 KRemoteControlEngine::KRemoteControlEngine(QObject* parent, const QVariantList& args) : Plasma::DataEngine(parent, args) {
     // We ignore any arguments - data engines do not have much use for them
