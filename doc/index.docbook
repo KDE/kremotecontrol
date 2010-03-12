@@ -316,11 +316,13 @@
             <substeps>
               <step>
                 <para>
-                  First create a new file containing the following content below. In the tag <quote>name</quote> add a short descriptive name about the profile.
-                  Define a optional description about what the profile does in the <quote>description</quote> tag.
-                  Also add your name as author and a version number.
-                  The version number is important when more instances of the same profile are found by &kremotecontrol;.
-                  The profile with the higher version number will be assumed, all others are ignored.
+                  First create a new file containing the content below. The tag 
+                  <quote>name</quote> defines a short descriptive name of the profile. Add a
+                  description of the profile in the <quote>description</quote> tag. Also add 
+                  your name int the <quote>author</quote> tag and a version number in the 
+                  <quote>version</quote> tag. The version number is important for upgrading 
+                  your profile. &kremotecontrol; will use the one with the highest number if 
+                  multiple versons of your profile are found on the system.
                 </para>
                 <programlisting>
 &lt;xml version="1.0" encoding="UTF-8"?>
@@ -342,7 +344,8 @@
 
               <step>
                 <para>
-                  After you created the profile skeleton it's time to append one ore more &DBus; actions. You define each of them as follow:
+                  After you have created the profile skeleton it's time to add some action 
+                  templates. 
                 </para>
 
                 <programlisting>
@@ -368,33 +371,38 @@
 &lt;/profile&gt;
                 </programlisting>
                <para>
-                 First define a unique identifier.  This will be used by &kremotecontrol; to identify the action.
-                 So this id can only be allocated once in the profile. The <quote>button</quote> attribute is used for the autopopulate function.
-                 Look at the <quote>profile.xsd</quote> schema file for a complete list of the available button names.
-                 The <quote>repeat</quote> attribute tells whether the action should be executed multiple times if the
-                 button on the remote is being held pressed. If the application is not running and you want to launch it when the action is triggered set
-                 <quote>autostart</quote> to true.
-                Please note that the attributes <quote>button</quote>, <quote>repeat</quote> and <quote>autostart</quote> are optional.
-                If <quote>repat</quote> and <quote>autostart</quote> are not defined, they will be handled by &kremotecontrol; as false value.
-                </para>
+                 First define a unique identifier. This will be used by &kremotecontrol; to 
+                 match existing actions to the template, for example for reading the description.
+                 This id must be unique through the whole profile. The <quote>button</quote> 
+                 attribute is used for the autopopulate function. Look at the <quote>profile.xsd</quote>
+                 schema file for a complete list of available button names. The <quote>repeat</quote> 
+                 attribute tells whether the action should be executed multiple times if the
+                 button on the remote is being held pressed. If the application should be started 
+                 if not running on incoming button presses set <quote>autostart</quote> to true.
+                 The attributes <quote>button</quote>, <quote>repeat</quote> and 
+                 <quote>autostart</quote> are optional. If <quote>repat</quote> and 
+                 <quote>autostart</quote> are not defined, they will default to <quote>false</quote>.
+               </para>
                  
                <para>
-               Now you can add a short name to the <quote>name</quote> tag and add, if you want, a description
-               to the optional tag <quote>description</quote>. The <quote>ifmulti</quote> property specifies what
-               &kremotecontrol; should do if there are multiple instances running when a button is pressed and
-                if the application allows multiple instances. If the tag is not defined &kremotecontrol;
-                handles it as an single application. If defined you have got following options as tag value:
-                <quote>dontsend</quote> (do nothing if &gt;1 instance),
-                <quote>sendtoone</quote> (send call to one arbitrarily chosen instance)
-                and <quote>sendtoall</quote> (send to all instances). The default is
-                <quote>dontsend</quote>, however, <quote>sendtoone</quote> may be the
-                most useful in many circumstances.
+                 Add a short name to the <quote>name</quote> tag and a description using the 
+                 <quote>description</quote> tag. The <quote>ifmulti</quote> property specifies what
+                 &kremotecontrol; should do if there are multiple instances running when a button is 
+                 pressed. You can use the following values for this property:
+                 <quote>sendtotop</quote> (send call to the instance on top of the window stack),
+                 <quote>sendtobottom</quote> (send call to the instance on bottom of the window stack),
+                 <quote>sendtoall</quote> (send to all instances),
+                 <quote>dontsend</quote> (don't send the action to any instance) and
+                 <quote>unique</quote> (This application does not allow multiple instances). 
+                 If this tag is not defined &kremotecontrol; assumes that the applications 
+                 cannot be run multiple times, defaulting this tag to <quote>unique</quote>.
                </para>
               </step>
 
               <step>
                 <para>
-                  Now describe in the <quote>prototype</quote> tag the &DBus; function which should be executed:
+                  Next define the &DBus; function which should be executed in the 
+                  <quote>prototype</quote> tag:
                 </para>
                 <programlisting>
 &lt;?xml version="1.0" encoding="UTF-8"?>
@@ -423,19 +431,25 @@
 &lt;/profile&gt;
                 </programlisting>
                 <para>
-                In the <quote>servicename</quote> you populate the service bus address in <quote>node</quote> the path to the method.
-                In the tag <quote>function</quote> add the method name without prototype and function parameters. If your method has arguments
-                go on to the next step.
+                <quote>servicename</quote> holds the &DBus; service name for the application, e.g.
+                <quote>org.kde.plasma-desktop</quote>. <quote>node</quote> holds the respective 
+                &DBus; node such as <quote>App</quote>. Add the function name without return value 
+                and arguments using the <quote>function</quote> tag. For example 
+                <quote>toggleDashboard</quote>.
                 </para>
               </step>
 
-          <step>
-                  <para>
-                  You have to describe each argument of your declared function with a argument type. A list of valid types
-                  is defined in the <quote>profile.xsd</quote> schema file. If the type is not defined, the  &DBus; function is not supported.
-                  The <quote>comment</quote> tag is optional and will be displayed in the gui.
-                  You should also declare a default value for each argument between the <quote>default</quote> tags:
-                  </para>
+              <step>
+                <para>
+                  If the function has arguments you need to describe each one of those, providing a 
+                  description for the user, a type and optionally a default value. A list of 
+                  supported types is can be found in the <quote>profile.xsd</quote> schema file. 
+                  The <quote>comment</quote> tag should contain a nice user friendly description of 
+                  what the argument is used for. You should also declare a default value for each 
+                  argument between the <quote>default</quote> tags. Note that templates containing 
+                  a button need to supply a default value for all arguments or the autopopulate 
+                  function will produce broken functions.
+                </para>
       
                   <programlisting>
 &lt;?xml version="1.0" encoding="UTF-8"?>
@@ -472,7 +486,7 @@
 &lt;/profile&gt;
                   </programlisting>
               </step>
-              </substeps>
+            </substeps>
           </step>
         </procedure>
       </sect2>

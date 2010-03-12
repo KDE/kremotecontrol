@@ -65,7 +65,7 @@
       <xs:element name="name" type="xs:string"/>
       <xs:element name="description" type="xs:string" minOccurs="0"/>
       <xs:element name="prototype" type="ps:prototype"/>
-      <xs:element name="ifmulti" type="ps:ifmulti" default="dontsend" minOccurs="0">
+      <xs:element name="ifmulti" type="ps:ifmulti" default="unique" minOccurs="0">
         <xs:annotation>
           <xs:documentation> TODO: Document me! </xs:documentation>
         </xs:annotation>
@@ -118,6 +118,7 @@
 
   <xs:simpleType name="ifmulti">
     <xs:restriction base="xs:string">
+      <xs:enumeration value="unique"/>
       <xs:enumeration value="sendtotop"/>
       <xs:enumeration value="sendtobottom"/>
       <xs:enumeration value="sendtoall"/>
