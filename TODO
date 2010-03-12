@@ -1,7 +1,6 @@
 TODOs before move to kdereview
 -------------------------------
-* update docs
-* rework icons
+
 
 TODOs after move back to kdeutils
 ---------------------------------
@@ -12,6 +11,7 @@ TODOs after move back to kdeutils
 Long-term TODOs
 -------------------
 * knewstuff
+* rework icons
 * Implement executor and ActionType/configuration to do something like: VolumeSet(VolumeGet() + 10);
   It should be something like:
     <action objid="Player" class="volumeup">
