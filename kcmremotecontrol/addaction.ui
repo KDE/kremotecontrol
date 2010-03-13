@@ -78,7 +78,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>This is the reccomended way if you would like to control the most common applications. It is the easiest way for adding actions, but also limited to the available templates.</string>
+         <string>This is the recommended way if you would like to control the most common applications. It is the easiest way for adding actions, but also limited to the available templates.</string>
         </property>
         <property name="wordWrap">
          <bool>true</bool>

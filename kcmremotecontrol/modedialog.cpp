@@ -158,7 +158,7 @@ void ModeDialog::modeHandlerChanged() {
     Remote::ModeChangeMode modeChangeMode = ui.gbModeCycle->isChecked() ? Remote::Cycle : Remote::Group;
     if(m_remote->modeChangeMode() != modeChangeMode){
         if(modeChangeMode == Remote::Cycle){
-            if(KMessageBox::questionYesNo(this, i18n("Using the cycle function will remove all duplicate button assignments from your modes. Are you sure that you would like to proceed?"), i18n("Change mode switch behaviour")) == KMessageBox::Yes){
+            if(KMessageBox::questionYesNo(this, i18n("Using the cycle function will remove all duplicate button assignments from your modes. Are you sure that you would like to proceed?"), i18n("Change mode switch behavior")) == KMessageBox::Yes){
                 m_remote->setModeChangeMode(modeChangeMode);
             } else {
                 ui.gbModeCycle->setChecked(false);

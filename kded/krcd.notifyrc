@@ -1,6 +1,6 @@
 [Global]
 IconName=krcd
-Comment=K Remotce Control Daemon
+Comment=K Remote Control Daemon
 
 [Event/global_event]
 Name=Irkick notification
