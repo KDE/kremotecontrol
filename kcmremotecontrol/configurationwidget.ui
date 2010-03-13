@@ -24,7 +24,7 @@
       </size>
      </property>
      <property name="text">
-      <string>Available Remotes:</string>
+      <string>Available remotes:</string>
      </property>
      <property name="wordWrap">
       <bool>false</bool>
@@ -120,7 +120,7 @@
       </size>
      </property>
      <property name="toolTip">
-      <string>Add Mode</string>
+      <string>Add mode</string>
      </property>
     </widget>
    </item>
@@ -142,7 +142,7 @@
       </size>
      </property>
      <property name="toolTip">
-      <string>Remove Mode</string>
+      <string>Remove mode</string>
      </property>
     </widget>
    </item>
@@ -164,7 +164,7 @@
       </size>
      </property>
      <property name="toolTip">
-      <string>Edit Mode</string>
+      <string>Edit mode</string>
      </property>
     </widget>
    </item>
@@ -186,7 +186,7 @@
       </size>
      </property>
      <property name="toolTip">
-      <string>Move Mode up</string>
+      <string>Move mode up</string>
      </property>
     </widget>
    </item>
@@ -221,7 +221,7 @@
       </size>
      </property>
      <property name="toolTip">
-      <string>Add Action</string>
+      <string>Add action</string>
      </property>
     </widget>
    </item>
@@ -243,7 +243,7 @@
       </size>
      </property>
      <property name="toolTip">
-      <string>Remove Action</string>
+      <string>Remove action</string>
      </property>
     </widget>
    </item>
@@ -265,7 +265,7 @@
       </size>
      </property>
      <property name="toolTip">
-      <string>Edit Action</string>
+      <string>Edit action</string>
      </property>
     </widget>
    </item>
@@ -287,7 +287,7 @@
       </size>
      </property>
      <property name="toolTip">
-      <string>Duplicate Action</string>
+      <string>Duplicate action</string>
      </property>
     </widget>
    </item>
@@ -309,7 +309,7 @@
       </size>
      </property>
      <property name="toolTip">
-      <string>Move Action up</string>
+      <string>Move action up</string>
      </property>
     </widget>
    </item>
@@ -331,7 +331,7 @@
       </size>
      </property>
      <property name="toolTip">
-      <string>Move Action down</string>
+      <string>Move action down</string>
      </property>
     </widget>
    </item>
@@ -385,7 +385,7 @@
       </size>
      </property>
      <property name="toolTip">
-      <string>Move Mode down</string>
+      <string>Move mode down</string>
      </property>
     </widget>
    </item>
@@ -402,7 +402,7 @@
    <item row="0" column="0" colspan="4">
     <widget class="QLabel" name="lNoRemotesWarning">
      <property name="text">
-      <string>There are no remote controls available. Please make sure lirc is configured correctly.</string>
+      <string>There are no remote controls available. Please make sure lircd is configured correctly.</string>
      </property>
     </widget>
    </item>
