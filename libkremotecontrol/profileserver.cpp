@@ -58,8 +58,8 @@ QList<Profile*> ProfileServerPrivate::allProfiles() {
 }
 
 ProfileServerPrivate::ProfileServerPrivate() {
-    ProfileServer::ProfileXmlContentHandler *handler = new ProfileServer::ProfileXmlContentHandler(KUrl::fromLocalFile(KGlobal::dirs()->findResource("data","profiles/profile.xsd")));
-    foreach( Profile *profile, handler->loadProfilesFromFiles(KGlobal::dirs()->findAllResources("data", "profiles/*.profile.xml"))){
+    ProfileServer::ProfileXmlContentHandler *handler = new ProfileServer::ProfileXmlContentHandler(KUrl::fromLocalFile(KGlobal::dirs()->findResource("data","kremotecontrol/profiles/profile.xsd")));
+    foreach( Profile *profile, handler->loadProfilesFromFiles(KGlobal::dirs()->findAllResources("data", "kremotecontrol/profiles/*.profile.xml"))){
         addProfile(profile);
     }
 }
@@ -126,7 +126,7 @@ ProfileServer::ProfileXmlContentHandler::~ProfileXmlContentHandler() {
 
 bool ProfileServer::ProfileXmlContentHandler::validateFile(const QString& fileName) {
     if ( m_schema->isValid() ) {
-        QStringList theFiles = KGlobal::dirs()->findAllResources("data", "profiles/*.profile.xml");
+        QStringList theFiles = KGlobal::dirs()->findAllResources("data", "kremotecontrol/profiles/*.profile.xml");
         QXmlSchemaValidator validator(*m_schema);
         return validator.validate( QUrl::fromLocalFile(fileName));
     }

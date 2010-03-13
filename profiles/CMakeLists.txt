@@ -11,7 +11,7 @@ install( FILES
     konqueror.profile.xml    
     powermanagement.profile.xml
     kscd.profile.xml
-    DESTINATION ${DATA_INSTALL_DIR}/profiles)
+    DESTINATION ${DATA_INSTALL_DIR}/kremotecontrol/profiles)
 
 
 
