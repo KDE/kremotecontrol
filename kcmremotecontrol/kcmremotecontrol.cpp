@@ -289,6 +289,20 @@ void KCMRemoteControl::updateModes() {
         ui.tvRemotes->selectionModel()->setCurrentIndex(m_remoteModel->find(mode), QItemSelectionModel::Rows | QItemSelectionModel::SelectCurrent);
     }
     modeSelectionChanged(ui.tvRemotes->selectionModel()->currentIndex());
+    
+    if(!m_remoteList.isEmpty()){
+        ui.lNoRemotesWarning->setMaximumSize(0,0);
+        ui.tvRemotes->setEnabled(true);
+        ui.tvActions->setEnabled(true);
+        ui.lRemotes->setEnabled(true);
+        ui.lActionText->setEnabled(true);
+    } else {
+        ui.lNoRemotesWarning->setMaximumSize(32767, 32767);
+        ui.tvRemotes->setEnabled(false);
+        ui.tvActions->setEnabled(false);
+        ui.lRemotes->setEnabled(false);
+        ui.lActionText->setEnabled(false);
+    }    
 }
 
 void KCMRemoteControl::updateActions(Mode *mode) {
@@ -394,7 +408,7 @@ void KCMRemoteControl::load() {
     m_remoteList.loadFromConfig("kremotecontrolrc");
 
     addUnconfiguredRemotes();
-
+    
 /*    if(!m_remoteList.isEmpty()){
         QModelIndex firstItem = m_remoteModel->find(m_remoteList.first()->masterMode());
         ui.tvRemotes->selectionModel()->setCurrentIndex(firstItem, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
