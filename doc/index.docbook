@@ -65,7 +65,7 @@
             <imagedata fileref="irkick.png" format="PNG" />
           </imageobject>
         </inlinemediaobject>.
-        If not, it will be grey and crossed out 
+        If not, it will be gray and crossed out 
         <inlinemediaobject>
           <imageobject>
             <imagedata fileref="irkickoff.png" format="PNG"/>
@@ -107,7 +107,7 @@
         Each remote control can have a number of different modes. Having multiple modes allows 
         buttons to execute different actions in different situations. Think of it as a 
         TV/Video/Satellite/DVD multi-purpose remote control. Instead of using different remote 
-        controls for different applications, you can change the behaviour of one remote control 
+        controls for different applications, you can change the behavior of one remote control 
         to adapt to an application by creating different modes and switching them as needed. 
         Actions defined directly to the remote control are always available, no matter in what 
         mode the remote currently is. Actions defined in a mode are only executed if the remote 
@@ -141,7 +141,7 @@
         for &amarok; and &juk; while a button named <quote>Video</quote> could cycle through 
         modes for Dragonplayer or KMplayer If you rather would like to have a button for 
         cycling though all modes and a second one to reverse-cycling through the modes, you 
-        can set this behaviour in a remotes preferences by selecting a remote and pressing 
+        can set this behavior in a remotes preferences by selecting a remote and pressing 
         the edit button.
         <screenshot>
         <screeninfo>EditRemote</screeninfo>
@@ -164,7 +164,7 @@
       <para>
         After selecting a remote or a mode, you can add actions to it using the 
         <guibutton>+</guibutton> button on the right. There are two different ways how actions 
-        can be created. By using a template or by browsing the D-Bus session bus manally.
+        can be created. By using a template or by browsing the D-Bus session bus manually.
         <screenshot>
         <screeninfo>AddAction</screeninfo>
           <mediaobject>
@@ -182,7 +182,7 @@
         templates for the most common applications such as &amarok; or the KDE program launcher 
         and system commands for shutting down your computer. Those templates are collected in 
         profiles that group them into similar task. For example there is a Profile called 
-        <quote>Power management</quote> that containes templates for shutting down or 
+        <quote>Power management</quote> that contains templates for shutting down or 
         suspending your computer.
         <screenshot>
         <screeninfo>AddProfileAction</screeninfo>
@@ -214,8 +214,8 @@
       </para>
       <para>
         When adding an action you can tweak a few more options. The first one of them defines if 
-        the actions is executed repeatedly when the button on the remote control is beeing held 
-        down. This is a useful behavour for actions like increasing or decreasing volume but may 
+        the actions is executed repeatedly when the button on the remote control is being held 
+        down. This is a useful behavior for actions like increasing or decreasing volume but may 
         be undesired for actions like toggling play/pause on a media player. The second one 
         defines if the target application should be started if it is not running yet when the 
         button is pressed. For example it wouldn't make sense for actions that should close an 
@@ -242,8 +242,8 @@
         &kremotecontrol; can attempt to match buttons to functions for you. The autopopulate dialog 
         shows all available templates collections with a flag. Depending on the color of the flag 
         your remote control is fully, partially or not supported by that profile. 
-        Green means all contained templates can be machted to your remote control, yellow means 
-        some of the contained actions match and red means none of the templates can be mached 
+        Green means all contained templates can be matched to your remote control, yellow means 
+        some of the contained actions match and red means none of the templates can be matched 
         to buttons of your remote control. This doesn't mean that you cannot use those templates. 
         You just have to configure them one by one, setting the desired button by yourself.
         <screenshot>
@@ -322,7 +322,7 @@
                   your name int the <quote>author</quote> tag and a version number in the 
                   <quote>version</quote> tag. The version number is important for upgrading 
                   your profile. &kremotecontrol; will use the one with the highest number if 
-                  multiple versons of your profile are found on the system.
+                  multiple versi1;3Hons of your profile are found on the system.
                 </para>
                 <programlisting>
 &lt;xml version="1.0" encoding="UTF-8"?>
@@ -380,7 +380,7 @@
                  button on the remote is being held pressed. If the application should be started 
                  if not running on incoming button presses set <quote>autostart</quote> to true.
                  The attributes <quote>button</quote>, <quote>repeat</quote> and 
-                 <quote>autostart</quote> are optional. If <quote>repat</quote> and 
+                 <quote>autostart</quote> are optional. If <quote>repeat</quote> and 
                  <quote>autostart</quote> are not defined, they will default to <quote>false</quote>.
                </para>
                  
