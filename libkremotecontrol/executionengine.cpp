@@ -29,9 +29,9 @@
 class ExecutionEnginePrivate
 {
     public:
-        ExecutionEnginePrivate();  
+        ExecutionEnginePrivate();
         
-        QMap<Action::ActionType, ActionExecutor*> executors;    
+        QMap<Action::ActionType, ActionExecutor*> executors;
   
 };
 

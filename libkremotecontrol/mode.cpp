@@ -59,7 +59,6 @@ bool Mode::operator==(const Mode& mode) const {
     return m_name == mode.name() && m_iconName == mode.iconName() && m_button == mode.button();
 }
 
-
 void Mode::addAction(Action* action) {
     m_actionList.append(action);
 }

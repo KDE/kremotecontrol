@@ -38,8 +38,8 @@ class KREMOTECONTROL_EXPORT Prototype
         bool operator==(const Prototype &other) const;
     
     private:
-      QString m_name;
-      QList<Argument> m_args;
+        QString m_name;
+        QList<Argument> m_args;
 };
 
 Q_DECLARE_METATYPE(Prototype)

@@ -31,44 +31,44 @@
 
 class KREMOTECONTROL_EXPORT DBusAction : public Action
 {
-  public:
-    enum ActionDestination {Unique, Top, Bottom, None, All};
-    
-    DBusAction(const QString &button);
-    DBusAction();
-    
-    QString application() const;
-    void setApplication(const QString &application);
-    
-    QString node() const;
-    void setNode(const QString &node);
-    
-    Prototype function() const;
-    void setFunction(const Prototype &function);
-    
-    bool repeat() const;
-    void setRepeat(bool repeat);
-    
-    bool autostart() const;
-    void setAutostart(bool autostart);
-    
-    ActionDestination destination() const;
-    void setDestination(ActionDestination destination);
+    public:
+        enum ActionDestination {Unique, Top, Bottom, None, All};
+        
+        DBusAction(const QString &button);
+        DBusAction();
+        
+        QString application() const;
+        void setApplication(const QString &application);
+        
+        QString node() const;
+        void setNode(const QString &node);
+        
+        Prototype function() const;
+        void setFunction(const Prototype &function);
+        
+        bool repeat() const;
+        void setRepeat(bool repeat);
+        
+        bool autostart() const;
+        void setAutostart(bool autostart);
+        
+        ActionDestination destination() const;
+        void setDestination(ActionDestination destination);
 
-    virtual QString name() const;
-    virtual QString description() const;
+        virtual QString name() const;
+        virtual QString description() const;
+        
+        virtual void saveToConfig(KConfigGroup &config);
+        virtual void loadFromConfig(const KConfigGroup &config);
+        
+        virtual Action* clone() const;
     
-    virtual void saveToConfig(KConfigGroup &config);
-    virtual void loadFromConfig(const KConfigGroup &config);
-    
-    virtual Action* clone() const;
-    
-  protected:
-    QString m_application;
-    QString m_node;
-    Prototype m_function;
-    bool m_repeat, m_autostart;
-    ActionDestination m_destination;
+    protected:
+        QString m_application;
+        QString m_node;
+        Prototype m_function;
+        bool m_repeat, m_autostart;
+        ActionDestination m_destination;
 };
 
 #endif // DBUSACTION_H

@@ -49,7 +49,6 @@ QString ProfileActionTemplate::profileId() const {
     return m_profileId;
 }
 
-
 QString ProfileActionTemplate::actionTemplateId() const {
     return m_actionTemplateId;
 }

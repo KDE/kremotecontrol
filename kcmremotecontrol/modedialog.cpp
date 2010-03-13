@@ -120,7 +120,7 @@ void ModeDialog::slotButtonClicked(int button) {
         if(ui.cbSetDefault->isChecked()){
             m_remote->setDefaultMode(m_mode);
         } else if(m_remote->defaultMode() == m_mode){
-            m_remote->setDefaultMode(m_remote->masterMode());            
+            m_remote->setDefaultMode(m_remote->masterMode());
         }
         if(m_mode == m_remote->masterMode()){
             m_remote->setNextModeButton(ui.cbButtonForward->itemData(ui.cbButtonForward->currentIndex()).toString());
@@ -149,7 +149,7 @@ void ModeDialog::buttonPressed(const Solid::Control::RemoteControlButton& button
     kDebug() << "button event received";
     if(button.remoteName() == m_remote->name()) {
         if(m_mode != m_remote->masterMode()){
-            ui.cbButtons->setCurrentIndex(ui.cbButtons->findText(button.name()));            
+            ui.cbButtons->setCurrentIndex(ui.cbButtons->findText(button.name()));
         }
     }
 }
@@ -164,9 +164,9 @@ void ModeDialog::modeHandlerChanged() {
                 ui.gbModeCycle->setChecked(false);
             }
         } else {
-            m_remote->setModeChangeMode(modeChangeMode);                  
+            m_remote->setModeChangeMode(modeChangeMode);
         }
-    }    
+    }
 }
 
 ButtonComboBox::ButtonComboBox(QWidget* parent): KComboBox(parent) {

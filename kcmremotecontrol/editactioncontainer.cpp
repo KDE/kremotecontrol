@@ -40,7 +40,7 @@ EditActionContainer::EditActionContainer(Action *action, const QString &remote, 
         ui.cbButton->addItem(button.name());
     }
     ui.cbButton->setCurrentIndex(ui.cbButton->findText(action->button()));
-    connect(ui.cbButton, SIGNAL(currentIndexChanged(int)), SLOT(checkForComplete()));    
+    connect(ui.cbButton, SIGNAL(currentIndexChanged(int)), SLOT(checkForComplete()));
     
     m_innerWidget = 0;
     switch(action->type()){
@@ -61,7 +61,7 @@ EditActionContainer::EditActionContainer(Action *action, const QString &remote, 
         default:
           kDebug() << "Invalid action type. Not creating inner Widget";
     }
-      
+    
     if(m_innerWidget){
         QHBoxLayout *innerLayout = new QHBoxLayout();
         innerLayout->setMargin(0);
@@ -81,8 +81,7 @@ EditActionContainer::EditActionContainer(Action *action, const QString &remote, 
 void EditActionContainer::checkForComplete() {
     if(ui.cbButton->currentIndex() < 0){
         enableButtonOk(false);
-        return;
-        
+        return;   
     }
     switch(m_action->type()){
         case Action::DBusAction:{
@@ -159,4 +158,3 @@ void EditActionContainer::buttonPressed(const Solid::Control::RemoteControlButto
         ui.cbButton->setCurrentIndex(ui.cbButton->findText(button.name()));
     }
 }
-

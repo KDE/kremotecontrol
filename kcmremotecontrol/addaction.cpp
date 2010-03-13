@@ -29,9 +29,7 @@ AddAction::AddAction() {
     QWidget *widget = new QWidget(this);
     ui.setupUi(widget);
     setMainWidget(widget);
-    
 }
-
 
 Action::ActionType AddAction::getType() {
 /*    kDebug() << "current index" << ui.cbActionType->currentIndex() << "type" << ui.cbActionType->itemData(ui.cbActionType->currentIndex()).toInt();

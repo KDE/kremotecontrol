@@ -121,8 +121,7 @@ KCMRemoteControl::KCMRemoteControl(QWidget *parent, const QVariantList &args) :
 KCMRemoteControl::~KCMRemoteControl() {
 }
 
-void KCMRemoteControl::addAction()
-{
+void KCMRemoteControl::addAction() {
     Remote *remote = m_remoteModel->remote(ui.tvRemotes->currentIndex());
 
     AddAction addActionDialog;
@@ -234,7 +233,6 @@ void KCMRemoteControl::editMode() {
 }
 
 void KCMRemoteControl::removeMode() {
-
     QModelIndex currentIndex = ui.tvRemotes->selectionModel()->currentIndex();
     Remote *remote = m_remoteModel->remote(currentIndex);
     Mode *mode = m_remoteModel->mode(currentIndex);
@@ -274,7 +272,7 @@ void KCMRemoteControl::moveModeUp() {
 void KCMRemoteControl::moveModeDown() {
     QModelIndex currentIndex = ui.tvRemotes->selectionModel()->currentIndex();
     Remote *remote = m_remoteModel->remote(currentIndex);
-    Mode *mode = m_remoteModel->mode(currentIndex);    
+    Mode *mode = m_remoteModel->mode(currentIndex);
     remote->moveModeDown(mode);
     updateModes();
     emit changed(true);
@@ -302,7 +300,7 @@ void KCMRemoteControl::updateModes() {
         ui.tvActions->setEnabled(false);
         ui.lRemotes->setEnabled(false);
         ui.lActionText->setEnabled(false);
-    }    
+    }
 }
 
 void KCMRemoteControl::updateActions(Mode *mode) {
@@ -325,8 +323,8 @@ void KCMRemoteControl::modeSelectionChanged(const QModelIndex &index) {
         // Only enable the remove mode button if a non-Master mode is selected,
         // or if the Remote is not available in Solid
         if((m_remoteModel->mode(index) != m_remoteModel->remote(index)->masterMode())
-            || (!m_remoteModel->remote(index)->isAvailable()) ){
-            ui.pbRemoveMode->setEnabled(true);                
+            || (!m_remoteModel->remote(index)->isAvailable())){
+            ui.pbRemoveMode->setEnabled(true);
         } else {
             ui.pbRemoveMode->setEnabled(false);
         }
@@ -338,7 +336,7 @@ void KCMRemoteControl::modeSelectionChanged(const QModelIndex &index) {
         ui.pbAutoPopulate->setEnabled(false);
         ui.pbRemoveMode->setEnabled(false);
     }
-        
+    
     Mode *mode = m_remoteModel->mode(index);
     if(mode){
         updateActions(mode);
@@ -347,7 +345,7 @@ void KCMRemoteControl::modeSelectionChanged(const QModelIndex &index) {
         if(mode == remote->masterMode()){
             ui.lActions->setText(remote->name());
         } else {
-            ui.lActions->setText(remote->name() + " in mode \"" + mode->name() + "\"");          
+            ui.lActions->setText(remote->name() + " in mode \"" + mode->name() + "\"");
         }
         
         if(remote->allModes().indexOf(mode) > 1){
@@ -376,12 +374,12 @@ void KCMRemoteControl::actionSelectionChanged(const QModelIndex& index) {
         if(index.row() > 0){
             ui.pbMoveActionUp->setEnabled(true);
         } else {
-            ui.pbMoveActionUp->setEnabled(false);          
+            ui.pbMoveActionUp->setEnabled(false);
         }
         if(index.row() < (m_actionModel->rowCount() - 1)){
             ui.pbMoveActionDown->setEnabled(true);
         } else {
-            ui.pbMoveActionDown->setEnabled(false);          
+            ui.pbMoveActionDown->setEnabled(false);
         }
     } else {
         ui.pbRemoveAction->setEnabled(false);
@@ -402,7 +400,6 @@ void KCMRemoteControl::addUnconfiguredRemotes() {
     }
     updateModes();
 }
-
 
 void KCMRemoteControl::load() {
     m_remoteList.loadFromConfig("kremotecontrolrc");

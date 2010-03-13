@@ -28,8 +28,8 @@
 
 class KRemoteControlEngine : public Plasma::DataEngine
 {
-        // required since Plasma::DataEngine inherits QObject
-        Q_OBJECT
+    // required since Plasma::DataEngine inherits QObject
+    Q_OBJECT
 
     public:
         // every engine needs a constructor with these arguments

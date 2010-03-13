@@ -35,35 +35,33 @@ class KRemoteControlDaemonPrivate;
 
 class KRemoteControlDaemon : public KDEDModule
 {
-Q_OBJECT
-Q_CLASSINFO("D-Bus Interface", "org.kde.krcd")
-Q_DECLARE_PRIVATE(KRemoteControlDaemon)
+    Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface", "org.kde.krcd")
+    Q_DECLARE_PRIVATE(KRemoteControlDaemon)
 
     private:
         KRemoteControlDaemonPrivate * d_ptr;
         void notifyModeChanged(Remote* remote);
         void notifyEvent(const QString& message, const QString& icon = QString ( "infrared-remote" ), const QString& event = QString ( "global_event" ));
-    
+
     public:
         KRemoteControlDaemon(QObject * parent, const QVariantList&);
         virtual ~KRemoteControlDaemon();
-      
+
         bool isConnected() {
             return Solid::Control::RemoteControlManager::connected();
         }
-        void reloadConfiguration();	
-        
+        void reloadConfiguration();
+
         void ignoreButtonEvents(const QString &remoteName);
         void considerButtonEvents(const QString& remoteName);
-        void changeMode(const QString& remoteName, Mode* mode);    
+        void changeMode(const QString& remoteName, Mode* mode);
         bool changeMode(const QString& remoteName, const QString &modeName);
         QStringList getConfiguredRemotes();
         QStringList getModesForRemote(const QString &remoteName);
         QString getCurrentMode(const QString& remoteName);
         QString getModeIcon(const QString &remoteName, const QString &modeName);
         bool eventsIgnored(const QString& remoteName);
-
-    
     
     signals:
         void connectionChanged(bool connected);
@@ -72,12 +70,12 @@ Q_DECLARE_PRIVATE(KRemoteControlDaemon)
         void modeChanged(const QString &remoteName, const QString &modeName);
         void buttonPressed();
         void unloadTray();
-      
+
     private slots:
-        void lauchKcmShell();       
-        void slotStatusChanged(bool connected);    
-        void slotRemoteControlAdded(const QString &name);                        
-        void slotRemoteControlRemoved(const QString &name);   
+        void lauchKcmShell();
+        void slotStatusChanged(bool connected);
+        void slotRemoteControlAdded(const QString &name);
+        void slotRemoteControlRemoved(const QString &name);
         void gotMessage(const Solid::Control::RemoteControlButton &button);
 
 };

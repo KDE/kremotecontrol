@@ -36,7 +36,7 @@ KrcdNotifierItem::KrcdNotifierItem(){
     setContextMenu(&m_menu);
     
     // No need for close button...
-    setStandardActionsEnabled(false); 
+    setStandardActionsEnabled(false);
     updateContextMenu();
     QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontrol", "org.kde.krcd", "connectionChanged",  this, SLOT(updateTray()));
     QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontrol", "org.kde.krcd", "remoteControlAdded",  this, SLOT(updateTray()));
@@ -115,7 +115,7 @@ void KrcdNotifierItem::slotModeSelected(QAction* action) {
         if(action->isChecked()){
             DBusInterface::getInstance()->ignoreButtonEvents(action->data().toStringList().first());
         } else {
-            DBusInterface::getInstance()->considerButtonEvents(action->data().toStringList().first());          
+            DBusInterface::getInstance()->considerButtonEvents(action->data().toStringList().first());
         }
     }
     updateTray();

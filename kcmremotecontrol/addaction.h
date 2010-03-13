@@ -28,14 +28,14 @@
 
 class AddAction: public KDialog
 {
-  public:
-    AddAction();
-    Action *createAction(const QString &remote);
-    Action::ActionType getType();
-    
-  private:
-    Ui::AddAction ui;
-    
+    public:
+        AddAction();
+        Action *createAction(const QString &remote);
+        Action::ActionType getType();
+
+    private:
+        Ui::AddAction ui;
+
 };
 
 #endif

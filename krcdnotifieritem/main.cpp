@@ -34,22 +34,20 @@
 class KrcdNotifierApp : public KUniqueApplication
 {
     public:
-      KrcdNotifierApp() : m_item( 0 ) {
-          // ensure the Quit dialog's Cancel reponse does not close the app
-          setQuitOnLastWindowClosed( false );
-          QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontrol", "org.kde.krcd", "unloadTray",  this, SLOT(quit()));
-      }
+        KrcdNotifierApp() : m_item( 0 ) {
+            // ensure the Quit dialog's Cancel reponse does not close the app
+            setQuitOnLastWindowClosed( false );
+            QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontrol", "org.kde.krcd", "unloadTray",  this, SLOT(quit()));
+        }
 
-      int newInstance() {
-          // Check if we already have a running alarm daemon widget
-          if(m_item) {
-              return 0;
-          }
-
-          m_item = new KrcdNotifierItem();
-
-          return 0;
-      }
+        int newInstance() {
+            // Check if we already have a running alarm daemon widget
+            if(m_item) {
+                return 0;
+            }
+            m_item = new KrcdNotifierItem();
+            return 0;
+        }
 
     private:
         KrcdNotifierItem *m_item;
@@ -66,15 +64,15 @@ class KrcdNotifierApp : public KUniqueApplication
 
 int main( int argc, char **argv ) {
 
-    KAboutData aboutData("irkick", 0, ki18n("Remote Control"), "kdeutils version goes here" /*KDEUTILS_VERSION_STRING*/, ki18n("The KDE Infrared Remote Control Server"), KAboutData::License_GPL, ki18n("(c) 2003, Gav Wood"), ki18n("Control your desktop with your remote."), "http://utils.kde.org/projects/kdelirc");
+    KAboutData aboutData("irkick", 0, ki18n("Remote Control"), "kdeutils version goes here" /*KDEUTILS_VERSION_STRING*/, ki18n("The KDE Infrared Remote Control Server"), KAboutData::License_GPL, ki18n("(c) 2010 Michael Zanetti, (c) 2010 Frank Scheffold"), ki18n("Control your desktop with your remote."), "http://utils.kde.org/projects/kdelirc");
     aboutData.addAuthor(ki18n("Michael Zanetti"), ki18n("Maintainer"), "michael_zanetti@gmx.net");
     aboutData.addAuthor(ki18n("Frank Scheffold"), ki18n("KDeveloper"), "fscheffold@googlemail.com");
     aboutData.addCredit(ki18n("Gav Wood"), ki18n("Original KDELirc Author"), "gav@kde.org");
 
-    KCmdLineArgs::init( argc, argv, &aboutData );
+    KCmdLineArgs::init(argc, argv, &aboutData);
 
     KCmdLineOptions options;
-    KCmdLineArgs::addCmdLineOptions( options );
+    KCmdLineArgs::addCmdLineOptions(options);
     KUniqueApplication::addCmdLineOptions();
 
     if(!KrcdNotifierApp::start()) {

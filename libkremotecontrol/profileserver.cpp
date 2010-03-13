@@ -71,7 +71,7 @@ void ProfileServerPrivate::addProfile( Profile* profile) {
                 // new profileversion is greater as current -> replace
                 m_allProfiles.replace(i, profile);
                 return;
-            }else {
+            } else {
                 // in this case keep profile (first come first served...)
                 return;
             }
@@ -274,13 +274,13 @@ ProfileActionTemplate ProfileServer::ProfileXmlContentHandler::parseAction(QDomN
                 QVariant qVariant = QVariant::nameToType(typeString.toLocal8Bit());
                 QString value = attributeNode.toElement().namedItem("default").toElement().text().trimmed();
                 if(argValue.type() == QVariant::StringList){
-                  QStringList stringList;
-                  foreach(const QString &tListValue, value.split(',', QString::SkipEmptyParts)){
-                    stringList << tListValue.trimmed();
-                  }
-                  argValue = QVariant(stringList);
-                }else{
-                  argValue = QVariant(value);
+                    QStringList stringList;
+                    foreach(const QString &tListValue, value.split(',', QString::SkipEmptyParts)){
+                        stringList << tListValue.trimmed();
+                    }
+                    argValue = QVariant(stringList);
+                } else {
+                    argValue = QVariant(value);
                 }
                 argValue.convert(QVariant::nameToType(typeString.toLocal8Bit()));
             }

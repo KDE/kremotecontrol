@@ -23,8 +23,6 @@
 #include "profileactiontemplate.h"
 #include "kremotecontrol_export.h"
 
-
-
 class KREMOTECONTROL_EXPORT Profile
 {
 
@@ -60,7 +58,7 @@ class KREMOTECONTROL_EXPORT Profile
         ProfileActionTemplate actionTemplateByButton(const QString &buttonName) const;
 
         void setName(const QString &name);
-        void setAuthor(const QString &author) ;
+        void setAuthor(const QString &author);
         void setVersion(const QString &version);
         void setDescription(const QString & description);
         void setProfileId(const QString & profileId);

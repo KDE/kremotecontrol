@@ -38,8 +38,7 @@ SelectProfileWidget::SelectProfileWidget (QWidget *parent) : QWidget(parent) {
     
 }
 
-SelectProfile::SelectProfile(Remote *remote, QWidget *parent, const bool &modal): KDialog(parent)
-{
+SelectProfile::SelectProfile(Remote *remote, QWidget *parent, const bool &modal): KDialog(parent) {
     selectProfileWidget = new SelectProfileWidget;
 
     setMainWidget(selectProfileWidget);
@@ -55,16 +54,16 @@ SelectProfile::SelectProfile(Remote *remote, QWidget *parent, const bool &modal)
     foreach(Profile* profile, profiles) {
         ProfileServer::ProfileSupportedByRemote tSupported = ProfileServer::isProfileAvailableForRemote(profile, *remote);
         kDebug()<< "support "<< tSupported;
-        if ( tSupported != ProfileServer::NO_ACTIONS_DEFINED) {	
+        if ( tSupported != ProfileServer::NO_ACTIONS_DEFINED) {
             ProfileWrapper wrapper = ProfileWrapper(profile, tSupported);
             QTreeWidgetItem* tTreewidget = new QTreeWidgetItem(selectProfileWidget->profilesWidget,QStringList()<< profile->name());
             tTreewidget->setData(0,Qt::UserRole,qVariantFromValue<ProfileWrapper>(wrapper));
             KIcon tIcon;
             switch (tSupported) {
-            case ProfileServer::FULL_SUPPORTED :
+            case ProfileServer::FULL_SUPPORTED:
                 tIcon = KIcon("flag-green");
                 break;
-            case ProfileServer::PARTIAL_SUPPORTED :
+            case ProfileServer::PARTIAL_SUPPORTED:
                 tIcon = KIcon("flag-yellow");
                 break;
             default:
@@ -73,13 +72,10 @@ SelectProfile::SelectProfile(Remote *remote, QWidget *parent, const bool &modal)
             tTreewidget->setIcon(0, tIcon);
         }
     }
-     enableButtonOk(false);
+    enableButtonOk(false);
 }
 
-
-
-void SelectProfile::checkForUpdate(QTreeWidgetItem* widgetItem, int col)
-{
+void SelectProfile::checkForUpdate(QTreeWidgetItem* widgetItem, int col) {
     if (col == -1) {
         selectProfileWidget->selectionLabel->setText(QString());
         enableButtonOk(false);
@@ -88,15 +84,15 @@ void SelectProfile::checkForUpdate(QTreeWidgetItem* widgetItem, int col)
     ProfileServer::ProfileSupportedByRemote tSupported =  widgetItem->data(0, Qt::UserRole).value<ProfileWrapper>().getSupported();
 
     switch (tSupported) {
-    case ProfileServer::FULL_SUPPORTED :
+    case ProfileServer::FULL_SUPPORTED:
         selectProfileWidget->selectionLabel->setText(i18n("Remote supports all defined buttons in selected profile"));
         enableButtonOk(true);
         break;
-    case ProfileServer::PARTIAL_SUPPORTED :
+    case ProfileServer::PARTIAL_SUPPORTED:
         selectProfileWidget->selectionLabel->setText(i18n("Remote does not support all defined buttons in selected profile"));
         enableButtonOk(true);
         break;
-    case ProfileServer::NOT_SUPPORTED :
+    case ProfileServer::NOT_SUPPORTED:
         selectProfileWidget->selectionLabel->setText(i18n("Remote supports none of the defined buttons in selected profile"));
         enableButtonOk(false);
         break;
@@ -106,9 +102,7 @@ void SelectProfile::checkForUpdate(QTreeWidgetItem* widgetItem, int col)
     }
 }
 
-
-Profile* SelectProfile::getSelectedProfile()
-{
+Profile* SelectProfile::getSelectedProfile() {
     return selectProfileWidget->profilesWidget->currentItem()->data(0, Qt::UserRole).value<ProfileWrapper>().getProfile();
 }
 

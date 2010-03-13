@@ -111,7 +111,7 @@ void DBusAction::saveToConfig(KConfigGroup& config) {
         case All:
         default:
             config.writeEntry("Destination", "All");
-            break;            
+            break;
     }
     config.writeEntry("Autostart", m_autostart);
     config.writeEntry("Repeat", m_repeat);
@@ -167,5 +167,3 @@ Action* DBusAction::clone() const {
     action->setButton(m_button);
     return action;
 }
-
-

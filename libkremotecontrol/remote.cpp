@@ -122,11 +122,11 @@ class CycleModeChangeHandler : public ModeChangeHandler
             if(!m_remote->previousModeButton().isEmpty() && m_remote->previousModeButton() == button){
                 index = m_remote->m_modeList.indexOf(m_remote->currentMode());
                 index = index > 0 ?  index-1  :  m_remote->m_modeList.size()-1;
-            }else if (! m_remote->nextModeButton().isEmpty() && m_remote->nextModeButton() == button){
+            } else if (! m_remote->nextModeButton().isEmpty() && m_remote->nextModeButton() == button){
                 index = m_remote->m_modeList.indexOf(m_remote->currentMode());
                 index = index < m_remote->m_modeList.size() -1 ?  index+1  : 0;
-            }else if((m_remote->currentMode()->button().isEmpty() || m_remote->currentMode()->button() != button )){
-                index = indexOfModeButton(button);                            
+            } else if((m_remote->currentMode()->button().isEmpty() || m_remote->currentMode()->button() != button )){
+                index = indexOfModeButton(button);
             }
             if(index > -1){
                 m_remote->setCurrentMode(m_remote->allModes().at(index));
@@ -151,7 +151,7 @@ class CycleModeChangeHandler : public ModeChangeHandler
             }
             return retList;
         }
-                
+        
         void addMode(Mode* mode) const {
             foreach(Mode *m, m_remote->m_modeList){
                 if(! mode->button().isEmpty() &&  m->button() == mode->button()){
@@ -185,7 +185,7 @@ class CycleModeChangeHandler : public ModeChangeHandler
             }
             return -1;
         }
-                
+        
         virtual void handleModeButtonAssignments(){
             handleModeButtonAssignment(m_remote->nextModeButton());
             handleModeButtonAssignment(m_remote->previousModeButton());
@@ -307,7 +307,7 @@ Mode* Remote::masterMode() const {
 }
 
 Mode *Remote::defaultMode() const {
-    return m_defaultMode;   
+    return m_defaultMode;
 }
 
 void Remote::setDefaultMode(Mode *mode) {
@@ -366,7 +366,7 @@ void Remote::setModeChangeMode(Remote::ModeChangeMode modeChangeMode) {
     }
     if(modeChangeMode == Remote::Group){
         m_modechangeHandler = new GroupModeChangeHandler(this);
-    }else{
+    } else {
         m_modechangeHandler = new CycleModeChangeHandler(this);
     }
     m_modechangeHandler->handleModeButtonAssignments();
@@ -376,9 +376,6 @@ QStringList Remote::availableModeSwitchButtons(const Mode *mode) const {
     QStringList buttonList = m_modechangeHandler->availableModeSwitchButtons();
     if(mode && !mode->button().isEmpty() && !buttonList.contains(mode->button())){
         buttonList.append(mode->button());
-    }
-    if(mode && mode == masterMode()){
-        
     }
     return buttonList;
 }

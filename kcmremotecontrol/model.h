@@ -60,71 +60,65 @@ class DBusServiceModel: public QStandardItemModel
 class DBusServiceItem : public QStandardItem
 {
 
-private:
-    static QString trimAppname(const QString &appName);
+    private:
+        static QString trimAppname(const QString &appName);
 
-public:
-    DBusServiceItem(const QString &item);
-    DBusServiceItem(const QString &item, const QStringList &objects);
+    public:
+        DBusServiceItem(const QString &item);
+        DBusServiceItem(const QString &item, const QStringList &objects);
 
-    virtual QVariant data(int  role) const;
+        virtual QVariant data(int  role) const;
 };
 
 class DBusFunctionModel: public QStandardItemModel
 {
-public:
-    DBusFunctionModel(QObject *parent);
-    
-    void refresh(const QString &app, const QString &node);
+    public:
+        DBusFunctionModel(QObject *parent);
+        
+        void refresh(const QString &app, const QString &node);
 
-    Prototype getPrototype( int index ) const;
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+        Prototype getPrototype( int index ) const;
+        QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
-    QModelIndex findOrInsert(const DBusAction *action, bool insert = false);
-    
-private:
-    void appendRow(Prototype item);
+        QModelIndex findOrInsert(const DBusAction *action, bool insert = false);
+        
+    private:
+        void appendRow(Prototype item);
 
 };
 
 class ArgumentsModel: public QStandardItemModel
 {
-public:
-    ArgumentsModel(QObject *parent = 0);
-    
-    void refresh(const Prototype &prototype);
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-    
-    QList<Argument> arguments() const;
+    public:
+        ArgumentsModel(QObject *parent = 0);
+        
+        void refresh(const Prototype &prototype);
+        QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+        
+        QList<Argument> arguments() const;
 };
 
 class ArgumentsModelItem: public QStandardItem
 {
-public:
-    ArgumentsModelItem(const QString &text);
-    ArgumentsModelItem(const Argument &arg);
-    virtual QVariant data(int role = Qt::UserRole + 1) const;
-
-private:
-
+    public:
+        ArgumentsModelItem(const QString &text);
+        ArgumentsModelItem(const Argument &arg);
+        virtual QVariant data(int role = Qt::UserRole + 1) const;
 };
 
 class ArgumentDelegate : public QItemDelegate
 {
     Q_OBJECT
 
-public:
-    ArgumentDelegate(QObject *parent = 0);
+    public:
+        ArgumentDelegate(QObject *parent = 0);
 
-    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
-                          const QModelIndex &index) const;
+        QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
-    void setEditorData(QWidget *editor, const QModelIndex &index) const;
-    void setModelData(QWidget *editor, QAbstractItemModel *model,
-                      const QModelIndex &index) const;
+        void setEditorData(QWidget *editor, const QModelIndex &index) const;
+        void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
 
-    void updateEditorGeometry(QWidget *editor,
-                              const QStyleOptionViewItem &option, const QModelIndex &index) const;
+        void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
 };
 
@@ -133,22 +127,22 @@ class ProfileModel: public QStandardItemModel
     public:
         ProfileModel(QObject *parent = 0);
         
-        Profile *profile(const QModelIndex &index) const;       
+        Profile *profile(const QModelIndex &index) const;
         QModelIndex find(const ProfileAction *action) const;
 };
 
 class ActionTemplateModel: public QStandardItemModel
 {
-public:
-    ActionTemplateModel(QObject *parent=0);
-    explicit ActionTemplateModel(const Profile *profile, QObject *parent=0);
-    
-    void refresh(const Profile *profile);
-    ProfileActionTemplate actionTemplate(const QModelIndex &index) const;
-    QModelIndex find(const ProfileAction *action) const;
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-    void appendRow(ProfileActionTemplate actionTemplate);
-    Qt::ItemFlags flags(const QModelIndex& index) const;
+    public:
+        ActionTemplateModel(QObject *parent=0);
+        explicit ActionTemplateModel(const Profile *profile, QObject *parent=0);
+        
+        void refresh(const Profile *profile);
+        ProfileActionTemplate actionTemplate(const QModelIndex &index) const;
+        QModelIndex find(const ProfileAction *action) const;
+        QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+        void appendRow(ProfileActionTemplate actionTemplate);
+        Qt::ItemFlags flags(const QModelIndex& index) const;
 };
 
 class RemoteModel: public QStandardItemModel

@@ -361,68 +361,68 @@ void ArgumentDelegate::setEditorData(QWidget *editor, const QModelIndex &index) 
 
     Argument arg = qVariantValue<Argument>(index.model()->data(index, Qt::EditRole));
     switch (arg.value().type()) {
-    case QVariant::UInt:
-    case QVariant::Int:
-    case QVariant::LongLong: {
-        QSpinBox *spinBox = static_cast<QSpinBox*>(editor);
-        spinBox->setValue(arg.value().toInt());
-    }
-    break;
-    case QVariant::Double: {
-        QDoubleSpinBox *doubleSpinBox = static_cast<QDoubleSpinBox*>(editor);
-        doubleSpinBox->setValue(arg.value().toDouble(NULL));
-    }
-    case QVariant::Bool: {
-        KComboBox *comboBox = static_cast<KComboBox*>(editor);
-        comboBox->setCurrentIndex(arg.value().toBool() ? 0 : 1);
-    }
-    break;
-    case QVariant::StringList: {
-        KLineEdit *listLineEdit = static_cast<KLineEdit*>(editor);
-        QString value;
-        value.clear();
-        foreach(const QString &tmp, arg.value().toStringList()) {
-            if (!value.isEmpty()) {
-                value.append(',');
-            }
-            value += tmp;
+        case QVariant::UInt:
+        case QVariant::Int:
+        case QVariant::LongLong: {
+            QSpinBox *spinBox = static_cast<QSpinBox*>(editor);
+            spinBox->setValue(arg.value().toInt());
+            break;
         }
-        listLineEdit->setText(value);
+        case QVariant::Double: {
+            QDoubleSpinBox *doubleSpinBox = static_cast<QDoubleSpinBox*>(editor);
+            doubleSpinBox->setValue(arg.value().toDouble(NULL));
+            break;
+        }
+        case QVariant::Bool: {
+            KComboBox *comboBox = static_cast<KComboBox*>(editor);
+            comboBox->setCurrentIndex(arg.value().toBool() ? 0 : 1);
+            break;
+        }
+        case QVariant::StringList: {
+            KLineEdit *listLineEdit = static_cast<KLineEdit*>(editor);
+            QString value;
+            value.clear();
+            foreach(const QString &tmp, arg.value().toStringList()) {
+                if (!value.isEmpty()) {
+                    value.append(',');
+                }
+                value += tmp;
+            }
+            listLineEdit->setText(value);
+            break;
+        }
+        case QVariant::ByteArray:
+        case QVariant::String:
+        default: {
+            KLineEdit *lineEdit = static_cast<KLineEdit*>(editor);
+            lineEdit->setText(arg.value().toString());
+        }
     }
-    break;
-    case QVariant::ByteArray:
-    case QVariant::String:
-    default: {
-        KLineEdit *lineEdit = static_cast<KLineEdit*>(editor);
-        lineEdit->setText(arg.value().toString());
-    }
-    }
-
 }
 
 void ArgumentDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const {
     QVariant value;
     Argument arg = qVariantValue<Argument>(index.model()->data(index, Qt::EditRole));
     switch (arg.value().type()) {
-    case QVariant::Int:
-    case QVariant::UInt:
-    case QVariant::LongLong:
-        value = QVariant(static_cast<QSpinBox*>(editor)->value());
-        break;
-    case QVariant::Double:
-        value = QVariant(static_cast<QDoubleSpinBox*>(editor)->value());
-        break;
-    case QVariant::Bool:
-        value = QVariant(static_cast<KComboBox*>(editor)->currentIndex() == 0 ? true : false);
-        break;
-    case QVariant::StringList:
-        value = QVariant(static_cast<KLineEdit*>(editor)->text().split(','));
-        break;
-    case QVariant::ByteArray:
-    case QVariant::String:
-    default: {
-        value = QVariant(static_cast<KLineEdit*>(editor)->text());
-    }
+        case QVariant::Int:
+        case QVariant::UInt:
+        case QVariant::LongLong:
+            value = QVariant(static_cast<QSpinBox*>(editor)->value());
+            break;
+        case QVariant::Double:
+            value = QVariant(static_cast<QDoubleSpinBox*>(editor)->value());
+            break;
+        case QVariant::Bool:
+            value = QVariant(static_cast<KComboBox*>(editor)->currentIndex() == 0 ? true : false);
+            break;
+        case QVariant::StringList:
+            value = QVariant(static_cast<KLineEdit*>(editor)->text().split(','));
+            break;
+        case QVariant::ByteArray:
+        case QVariant::String:
+        default: {
+            value = QVariant(static_cast<KLineEdit*>(editor)->text());
+        }
     }
     kDebug() << "setting value" << value;
     arg.setValue(value);
@@ -450,7 +450,6 @@ ArgumentsModelItem::ArgumentsModelItem ( const Argument &arg ) {
     if (arg.value().type() == QVariant::StringList) {
         setToolTip(i18n("A comma-separated list of Strings"));
     }
-
 }
 
 QVariant ArgumentsModelItem::data ( int role ) const {
@@ -482,16 +481,16 @@ ProfileModel
 ***********************************
 */
 
-ProfileModel::ProfileModel(QObject *parent): QStandardItemModel(parent) {  
+ProfileModel::ProfileModel(QObject *parent): QStandardItemModel(parent) {
     setHorizontalHeaderLabels(QStringList() << i18n("Profile Name"));
     foreach(Profile *profile, ProfileServer::allProfiles()){
         QStandardItem *item = new QStandardItem(profile->name());
         QString tooltip;
         if(!profile->description().isEmpty()){
-          tooltip.append(profile->description()).append("\n");
+            tooltip.append(profile->description()).append("\n");
         }
         tooltip.append(i18nc("Profile author", "Author")).append(": ");
-        tooltip.append(profile->author()).append(" (").append(i18nc( "Profile Version", "Version")).append(": ").append(profile->version()).append(")");                
+        tooltip.append(profile->author()).append(" (").append(i18nc( "Profile Version", "Version")).append(": ").append(profile->version()).append(")");
         item->setToolTip(tooltip);
         item->setData(qVariantFromValue(profile), Qt::UserRole);
         item->setEditable(false);
@@ -516,7 +515,7 @@ QModelIndex ProfileModel::find(const ProfileAction* action) const {
         }
     }
     // Not found...
-    return QModelIndex();    
+    return QModelIndex();
 }
 
 
@@ -536,7 +535,7 @@ ActionTemplateModel::ActionTemplateModel(const Profile* profile, QObject* parent
 void ActionTemplateModel::refresh(const Profile* profile) {
     clear();
     foreach(const ProfileActionTemplate &profileActionTemplate, profile->actionTemplates()){
-      appendRow(profileActionTemplate);
+        appendRow(profileActionTemplate);
     }
     sort(0);
 }
@@ -545,14 +544,14 @@ QVariant ActionTemplateModel::headerData(int section, Qt::Orientation orientatio
     if (orientation == Qt::Horizontal) {
         if (role == Qt::DisplayRole) {
             switch (section) {
-            case 0:
-                return i18nc("Profile name", "Name");
-            case 1:
-                return i18n("Description");
-            case 2:
-                return i18n("Default argument count");
-            case 3:
-                return i18n("Mapped remote button");
+                case 0:
+                    return i18nc("Profile name", "Name");
+                case 1:
+                    return i18n("Description");
+                case 2:
+                    return i18n("Default argument count");
+                case 3:
+                    return i18n("Mapped remote button");
             }
         }
     }
@@ -593,7 +592,7 @@ void ActionTemplateModel::appendRow(ProfileActionTemplate actionTemplate) {
     } else {
         row.append(new QStandardItem("-"));
     }
-    QStandardItemModel::appendRow(row);    
+    QStandardItemModel::appendRow(row);
 }
 
 Qt::ItemFlags ActionTemplateModel::flags(const QModelIndex& index) const {
@@ -625,7 +624,7 @@ void RemoteModel::refresh(const RemoteList &remoteList) {
         item->setData(qVariantFromValue(remote), Qt::UserRole);
         itemList.append(item);
         appendRow(itemList);
-    }    
+    }
 }
 
 Remote *RemoteModel::remote(const QModelIndex &index) const {
@@ -772,11 +771,9 @@ QVariant RemoteItem::data(int role) const {
     return QStandardItem::data(role);
 }
 
-
 ActionModel::ActionModel(QObject *parent): QStandardItemModel(parent) {
     setHorizontalHeaderLabels(QStringList() << i18n("Button") << i18n("Application") << i18n("Function"));
 }
-
 
 void ActionModel::refresh(Mode* mode) {
     m_mode = mode;
@@ -788,7 +785,6 @@ void ActionModel::refresh(Mode* mode) {
         appendRow(item);
     }
 }
-
 
 QVariant ActionModel::data(const QModelIndex& index, int role) const {
     if(role == Qt::DisplayRole){

@@ -24,7 +24,7 @@ Prototype::Prototype(const QString& name, QList< Argument > args) {
     m_args = args;
 }
 
-Prototype::Prototype() {  
+Prototype::Prototype() {
 }
 
 QString Prototype::name() const {

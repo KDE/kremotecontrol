@@ -81,13 +81,12 @@ EditDBusAction::EditDBusAction(DBusAction *action, QWidget* parent, Qt::WFlags f
     }
 }
 
-
 EditDBusAction::~EditDBusAction() {
 }
 
 bool EditDBusAction::checkForComplete() const {
     if(ui.tvDBusFunctions->selectionModel()->currentIndex().isValid()){
-       return true; 
+       return true;
     }
     return false;
 }

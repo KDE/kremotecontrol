@@ -54,7 +54,7 @@ class KREMOTECONTROL_EXPORT DBusInterface: public QObject
 	
         QStringList getConfiguredRemotes();
         void ignoreButtonEvents(const QString &remoteName);
-        void considerButtonEvents(const QString &remoteName);	
+        void considerButtonEvents(const QString &remoteName);
         void reloadRemoteControlDaemon();
 
         void executeAction(const DBusAction *action);

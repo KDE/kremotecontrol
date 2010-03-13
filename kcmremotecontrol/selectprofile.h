@@ -33,14 +33,12 @@
 
 class SelectProfileWidget : public QWidget
 {
-private:
-  
-public:
-    QTreeWidget *profilesWidget;
-    QLabel *selectionLabel;
-    QVBoxLayout *layout;
-    
-    SelectProfileWidget (QWidget *parent = 0);
+    public:
+        QTreeWidget *profilesWidget;
+        QLabel *selectionLabel;
+        QVBoxLayout *layout;
+        
+        SelectProfileWidget (QWidget *parent = 0);
     
 };
 
@@ -49,43 +47,43 @@ class SelectProfile : public KDialog
 {
     Q_OBJECT
 
-  private:
-    SelectProfileWidget *selectProfileWidget;
-    
-    
-  public:	
-    explicit SelectProfile(Remote *remote, QWidget *parent = 0, const bool &modal = false);
-    Profile *getSelectedProfile();
-    
-  public slots:
-    void checkForUpdate(QTreeWidgetItem*, int);
+    private:
+        SelectProfileWidget *selectProfileWidget;
+      
+      
+    public:
+        explicit SelectProfile(Remote *remote, QWidget *parent = 0, const bool &modal = false);
+        Profile *getSelectedProfile();
+      
+    public slots:
+        void checkForUpdate(QTreeWidgetItem*, int);
 };
 
 class ProfileWrapper 
 {
-  private:
-    Profile *profile;
-    ProfileServer::ProfileSupportedByRemote supported;
-  
-  public:
-  ProfileWrapper(){
-  qRegisterMetaType<ProfileWrapper>("ProfileWrapper");
-  };
-    
-    ProfileWrapper( Profile * pProfile, ProfileServer::ProfileSupportedByRemote pSupported){
-      ProfileWrapper();
+    private:
+        Profile *profile;
+        ProfileServer::ProfileSupportedByRemote supported;
       
-      profile = pProfile;
-      supported = pSupported;
-    };
-    
-    Profile *getProfile() {
-      return profile;
-    };
-    
-     ProfileServer::ProfileSupportedByRemote getSupported() {
-      return supported;
-    };
+    public:
+        ProfileWrapper(){
+            qRegisterMetaType<ProfileWrapper>("ProfileWrapper");
+        }
+        
+        ProfileWrapper( Profile * pProfile, ProfileServer::ProfileSupportedByRemote pSupported){
+            ProfileWrapper();
+        
+            profile = pProfile;
+            supported = pSupported;
+        }
+        
+        Profile *getProfile() {
+            return profile;
+        }
+        
+        ProfileServer::ProfileSupportedByRemote getSupported() {
+            return supported;
+        }
 };
 
 Q_DECLARE_METATYPE(ProfileWrapper)
