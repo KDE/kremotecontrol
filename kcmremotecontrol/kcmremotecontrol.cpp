@@ -47,13 +47,13 @@ KCMRemoteControl::KCMRemoteControl(QWidget *parent, const QVariantList &args) :
         KCModule(KCMLircFactory::componentData(), parent, args)
 {
 
-    KGlobal::locale()->insertCatalog("kcm_remotecontrol");
     setAboutData(new KAboutData("kcm_remotecontrol", 0, ki18n("KRemoteControl"), "kdeutils version comes here", //KDEUTILS_VERSION_STRING,
                                 ki18n("The KDE Remote Control System"), KAboutData::License_GPL_V2,
                                 ki18n("2010 Michael Zanetti, 2010 Frank Scheffold"),
                                 ki18n("Use this to configure KDE's remote control system in order to control any KDE application with your remote control."),
                                 "http://utils.kde.org/projects/kremotecontrol"));
     setQuickHelp(i18n("<h1>Remote Controls</h1><p>This module allows you to configure bindings between your remote controls and KDE applications. Simply select your remote control and click Add next to the Actions/Buttons list to create new action for button presses.</p>"));
+    KGlobal::locale()->insertCatalog("libkremotecontrol");
 
     QHBoxLayout *layout = new QHBoxLayout(this);
     QWidget *widget = new QWidget(this);

@@ -110,14 +110,14 @@ KRemoteControlDaemon::KRemoteControlDaemon(QObject* parent, const QVariantList& 
   //   QErrorMessage::qtHandler ()  ;
     //qInstallMsgHandler();
     new KrcdAdaptor(this);
-    KAboutData aboutData("krcd", "krcd", ki18n("K Remote Control Daemon"),
+    KAboutData aboutData("kremotecontroldaemon", "kremotecontroldaemon", ki18n("K Remote Control Daemon"),
                           "0.1", ki18n("Remote Control Daemon for KDE4"),
                           KAboutData::License_GPL, ki18n("(c) 2010 Frank Scheffold"),
                           KLocalizedString(), "http://www.kde.org");
 
     aboutData.addAuthor(ki18n("Michael Zanetti"), ki18n("Maintainer"), "michal_zanetti@gmx.net");
     aboutData.addAuthor(ki18n("Frank Scheffold"), ki18n("Developer"), "fscheffold@googlemail.com");
-    aboutData.addAuthor(ki18n("Gav Wood"), ki18n("Original KDELirc Developer"), "gav.wood@kde.org");
+    aboutData.addCredit(ki18n("Gav Wood"), ki18n("Original KDELirc Developer"), "gav.wood@kde.org");
 
     d->applicationData = KComponentData(aboutData);
     connect(RemoteControlManager::notifier(), SIGNAL(statusChanged(bool)), this, SLOT(slotStatusChanged(bool)));
