@@ -21,7 +21,7 @@
 #ifndef PROFILETEST_H
 #define PROFILETEST_H
   
-#include <QObject>
+#include <QtCore/QObject>
 
 class ProfileTest : public QObject
 {

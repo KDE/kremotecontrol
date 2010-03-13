@@ -21,18 +21,17 @@
 #include "profileactiontemplate.h"
 #include "executionengine.h"
 #include "dbusaction.h"
+#include "remote.h"
 
 #include <kdebug.h>
 #include <kglobal.h>
-
-
-#include <QXmlSchemaValidator>
-#include <QXmlSchema>
 #include <kstandarddirs.h>
-#include <QTextDocument>
-#include <QXmlSimpleReader>
-#include <QFileInfo>
-#include "remote.h"
+
+#include <QtCore/QFileInfo>
+#include <QtGui/QTextDocument>
+#include <QtXml/QXmlSimpleReader>
+#include <QtXmlPatterns/QXmlSchemaValidator>
+#include <QtXmlPatterns/QXmlSchema>
 
 class ProfileServerPrivate
 {

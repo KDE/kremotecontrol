@@ -24,7 +24,7 @@
 #include <kglobal.h>
 #include <kdebug.h>
 
-#include <QMap>
+#include <QtCore/QMap>
 
 class ExecutionEnginePrivate
 {

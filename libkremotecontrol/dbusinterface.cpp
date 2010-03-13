@@ -28,13 +28,6 @@
 
 #include "dbusinterface.h"
 
-#include <QStringList>
-#include <QDBusConnectionInterface>
-#include <QDBusInterface>
-#include <QDomDocument>
-
-#include <QtDBus/qdbusconnection.h>
-
 #include <kdebug.h>
 #include <kwindowsystem.h>
 #include <knotification.h>
@@ -42,8 +35,13 @@
 #include <kiconloader.h>
 #include <ktoolinvocation.h>
 
-  static DBusInterface *theInstance = NULL;
+#include <QtCore/QStringList>
+#include <QtDBus/QDBusConnectionInterface>
+#include <QtDBus/QDBusInterface>
+#include <QtDBus/qdbusconnection.h>
+#include <QtXml/QDomDocument>
 
+static DBusInterface *theInstance = NULL;
 
 DBusInterface::DBusInterface() {
 }

@@ -24,12 +24,13 @@
 #include "ui_configurationwidget.h"
 #include "model.h"
 #include "action.h"
-#include <remotelist.h>
+#include "remotelist.h"
 
-#include <QMap>
-#include <QVariant>
-#include <QStandardItemModel>
 #include <kcmodule.h>
+
+#include <QtCore/QMap>
+#include <QtCore/QVariant>
+#include <QtGui/QStandardItemModel>
 
 class Profile;
 class Remote;

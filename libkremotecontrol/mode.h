@@ -22,8 +22,8 @@
 
 #include "kremotecontrol_export.h"
 
-#include <QString>
-#include <qmetatype.h>
+#include <QtCore/QString>
+#include <QtCore/QMetaType>
 
 class Action;
 

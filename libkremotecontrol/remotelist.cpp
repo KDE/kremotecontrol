@@ -23,7 +23,7 @@
 #include <kglobal.h>
 #include <kconfig.h>
 
-#include <QList>
+#include <QtCore/QList>
 
 
 RemoteList::RemoteList() {

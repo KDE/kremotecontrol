@@ -24,12 +24,12 @@
 #include "profileserver.h"
 
 #include <QtGui/QWidget>
-#include <QTreeWidget>
-#include <QLabel>
-#include <QVBoxLayout>
-#include <KTextEdit>
+#include <QtGui/QTreeWidget>
+#include <QtGui/QLabel>
+#include <QtGui/QVBoxLayout>
 
-#include <kdialog.h>
+#include <KTextEdit>
+#include <KDialog>
 
 class SelectProfileWidget : public QWidget
 {

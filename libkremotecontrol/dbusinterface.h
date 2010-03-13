@@ -28,7 +28,8 @@
 #define DBUSINTERFACE_H
 
 #include "dbusaction.h"
-#include <QStringList>
+
+#include <QtCore/QStringList>
 
 class KREMOTECONTROL_EXPORT DBusInterface: public QObject
 {

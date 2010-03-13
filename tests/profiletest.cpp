@@ -19,11 +19,11 @@
  *************************************************************************/
 
 #include "profiletest.h"
-
-#include <kdelirc/libkremotecontrol/profile.h>
+#include "profile.h"
 
 #include <KDebug>
-#include <QTest>
+
+#include <QtTest/QTest>
 
 
 void ProfileTest::testGetter() {

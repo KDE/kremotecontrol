@@ -38,7 +38,7 @@
 #include <kmessagebox.h>
 #include <solid/control/remotecontrolmanager.h>
 
-#include <QDBusInterface>
+#include <QtDBus/QDBusInterface>
 
 K_PLUGIN_FACTORY( KCMLircFactory, registerPlugin<KCMRemoteControl>();)
 K_EXPORT_PLUGIN( KCMLircFactory( "kcm_remotecontrol" ) )

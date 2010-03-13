@@ -19,8 +19,8 @@
 
 #include "kremotecontrolengine.h"
 
-#include <QDate>
-#include <QTime>
+#include <QtCore/QDate>
+#include <QtCore/QTime>
 
 #include <KSystemTimeZones>
 #include <KDateTime>

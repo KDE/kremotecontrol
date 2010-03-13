@@ -24,8 +24,7 @@
 
 #include <solid/control/remotecontrol.h>
 
-
-#include <QSet>
+#include <QtCore/QSet>
 
 class ModeChangeHandler;
 

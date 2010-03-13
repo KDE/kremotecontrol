@@ -27,9 +27,9 @@
 #include <KCmdLineArgs>
 #include <KUniqueApplication>
 #include <kdebug.h>
-
-#include <QDBusConnection>
 #include <kconfiggroup.h>
+
+#include <QtDBus/QDBusConnection>
 
 class KrcdNotifierApp : public KUniqueApplication
 {

@@ -34,13 +34,15 @@
 #include <KLocale>
 #include <KLineEdit>
 #include <KComboBox>
-#include <kicon.h>
+#include <KIcon>
+#include <KApplication>
 
-#include <QVariant>
-#include <QtAlgorithms>
-#include <QSpinBox>
-#include <QCheckBox>
-#include <QDoubleSpinBox>
+#include <QtCore/QVariant>
+#include <QtCore/QtAlgorithms>
+#include <QtGui/QSpinBox>
+#include <QtGui/QCheckBox>
+#include <QtGui/QDoubleSpinBox>
+#include <QtCore/QMimeData>
 
 
 /*
@@ -48,8 +50,6 @@
 DBusServiceModel
 ***********************************
 */
-#include <kapplication.h>
-#include <qmimedata.h>
 
 DBusServiceModel::DBusServiceModel(QObject* parent): QStandardItemModel(parent) {
     setHorizontalHeaderLabels(QStringList() << i18n("Application / Node"));

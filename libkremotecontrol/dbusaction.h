@@ -27,7 +27,7 @@
 
 #include <solid/control/remotecontrolbutton.h>
 
-#include <QString>
+#include <QtCore/QString>
 
 class KREMOTECONTROL_EXPORT DBusAction : public Action
 {

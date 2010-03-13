@@ -38,8 +38,7 @@
 #include <KToolInvocation>
 
 
-#include<QPixmap>
-// #include <QErrorMessage>
+#include <QtGui/QPixmap>
 
 
 using namespace Solid::Control;

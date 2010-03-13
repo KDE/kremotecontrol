@@ -23,8 +23,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <QTreeWidgetItem>
-
 SelectProfileWidget::SelectProfileWidget (QWidget *parent) : QWidget(parent) {
     selectionLabel = new QLabel();
     selectionLabel->setWordWrap(true);

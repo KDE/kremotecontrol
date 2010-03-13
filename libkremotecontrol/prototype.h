@@ -23,7 +23,7 @@
 #include "argument.h"
 #include "kremotecontrol_export.h"
 
-#include <qmetatype.h>
+#include <QtCore/QMetaType>
 
 class KREMOTECONTROL_EXPORT Prototype
 {

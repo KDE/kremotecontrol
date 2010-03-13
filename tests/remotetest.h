@@ -21,7 +21,7 @@
 #ifndef REMOTETEST_H
 #define REMOTETEST_H
 
-#include <QObject>
+#include <QtCore/QObject>
 
 class RemoteTest  : public QObject
 {

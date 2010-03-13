@@ -19,9 +19,9 @@
 
 #include "dbusactionexecutor.h"
 #include "dbusaction.h"
+#include "dbusinterface.h"
 
 #include <kdebug.h>
-#include "dbusinterface.h"
 
 void DBusActionExecutor::execute(Action* action) {
     DBusAction *dbusAction = dynamic_cast<DBusAction*>(action);

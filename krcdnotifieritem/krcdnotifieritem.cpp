@@ -27,8 +27,8 @@
 #include <ktoolinvocation.h>
 #include <kdebug.h>
 
-#include <QTimer>
-#include <QDBusConnection>
+#include <QtCore/QTimer>
+#include <QtDBus/QDBusConnection>
 
 KrcdNotifierItem::KrcdNotifierItem(){
     setCategory(KStatusNotifierItem::Hardware);

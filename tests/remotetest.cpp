@@ -19,13 +19,11 @@
  *************************************************************************/
 
 #include "remotetest.h"
-
-#include <kdelirc/libkremotecontrol/remote.h>
-
+#include "remote.h"
 
 #include <KDebug>
 
-#include <QTest>
+#include <QtTest/QTest>
 
 
 void RemoteTest::testGetter() {

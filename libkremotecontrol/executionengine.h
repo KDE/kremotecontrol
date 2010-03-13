@@ -19,10 +19,12 @@
 
 #ifndef EXECUTIONENGINE_H
 #define EXECUTIONENGINE_H
-#include <qmap.h>
-#include <QPair>
+
 #include "action.h"
 #include "actionexecutor.h"
+
+#include <QtCore/QMap>
+#include <QtCore/QPair>
 
 namespace ExecutionEngine
 {

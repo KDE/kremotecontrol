@@ -22,14 +22,14 @@
 
 
 #include "mode.h"
+#include "remote.h"
 
-#include <remote.h>
 #include <solid/control/remotecontrolmanager.h>
 #include <solid/control/remotecontrol.h>
 
 #include <KDEDModule>
-#include <kstatusnotifieritem.h>
-#include <QVariant>
+
+#include <QtCore/QVariant>
 
 class KRemoteControlDaemonPrivate;
 

@@ -35,10 +35,11 @@
 #include "profile.h"
 #include "remotelist.h"
 
-#include <QItemDelegate>
-#include <QStandardItem>
 #include <solid/control/remotecontrol.h>
-#include <QStringListModel>
+
+#include <QtGui/QItemDelegate>
+#include <QtGui/QStandardItem>
+#include <QtGui/QStringListModel>
 
 using namespace Solid::Control;
 

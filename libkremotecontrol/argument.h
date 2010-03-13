@@ -22,7 +22,7 @@
 
 #include <kdemacros.h>
 
-#include <QVariant>
+#include <QtCore/QVariant>
 
 class KDE_EXPORT Argument
 {

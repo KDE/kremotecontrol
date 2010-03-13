@@ -24,10 +24,10 @@
 #include "remote.h"
 #include "kremotecontrol_export.h"
 
-#include <QAbstractMessageHandler>
-#include <QXmlDefaultHandler>
-#include <QDomDocument>
-#include <QXmlSchema>
+#include <QtXml/QXmlDefaultHandler>
+#include <QtXml/QDomDocument>
+#include <QtXmlPatterns/QAbstractMessageHandler>
+#include <QtXmlPatterns/QXmlSchema>
 
 namespace ProfileServer
 {
