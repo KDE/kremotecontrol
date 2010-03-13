@@ -139,7 +139,7 @@
         button is used to cycle through those modes. This way you can group your modes. For 
         example you could assign a button named <quote>Music</quote> to cycle through modes 
         for &amarok; and &juk; while a button named <quote>Video</quote> could cycle through 
-        modes for Dragonplayer or KMplayer If you rather would like to have a button for 
+        modes for &dragon; or KMplayer. If you rather would like to have a button for 
         cycling though all modes and a second one to reverse-cycling through the modes, you 
         can set this behavior in a remotes preferences by selecting a remote and pressing 
         the edit button.
@@ -179,7 +179,7 @@
       </para>
       <para>
         Creating actions using templates is easier but limited. You can find 
-        templates for the most common applications such as &amarok; or the KDE program launcher 
+        templates for the most common applications such as &amarok; or the &kde; program launcher 
         and system commands for shutting down your computer. Those templates are collected in 
         profiles that group them into similar task. For example there is a Profile called 
         <quote>Power management</quote> that contains templates for shutting down or 
@@ -218,7 +218,7 @@
         down. This is a useful behavior for actions like increasing or decreasing volume but may 
         be undesired for actions like toggling play/pause on a media player. The second one 
         defines if the target application should be started if it is not running yet when the 
-        button is pressed. For example it wouldn't make sense for actions that should close an 
+        button is pressed. For example it would not make sense for actions that should close an 
         application to launch it. The third and last option for actions is to define which 
         instance of an application should receive the action if there are more then on instances 
         running. If you have selected an application that cannot be run multiple times this 
@@ -319,7 +319,7 @@
                   First create a new file containing the content below. The tag 
                   <quote>name</quote> defines a short descriptive name of the profile. Add a
                   description of the profile in the <quote>description</quote> tag. Also add 
-                  your name int the <quote>author</quote> tag and a version number in the 
+                  your name into the <quote>author</quote> tag and a version number in the 
                   <quote>version</quote> tag. The version number is important for upgrading 
                   your profile. &kremotecontrol; will use the one with the highest number if 
                   multiple versi1;3Hons of your profile are found on the system.
@@ -378,7 +378,7 @@
                  schema file for a complete list of available button names. The <quote>repeat</quote> 
                  attribute tells whether the action should be executed multiple times if the
                  button on the remote is being held pressed. If the application should be started 
-                 if not running on incoming button presses set <quote>autostart</quote> to true.
+                 if not running on incoming button presses set <quote>autostart</quote> to <quote>true</quote>.
                  The attributes <quote>button</quote>, <quote>repeat</quote> and 
                  <quote>autostart</quote> are optional. If <quote>repeat</quote> and 
                  <quote>autostart</quote> are not defined, they will default to <quote>false</quote>.
@@ -431,7 +431,7 @@
 &lt;/profile&gt;
                 </programlisting>
                 <para>
-                <quote>servicename</quote> holds the &DBus; service name for the application, e.g.
+                <quote>servicename</quote> holds the &DBus; service name for the application, &eg;
                 <quote>org.kde.plasma-desktop</quote>. <quote>node</quote> holds the respective 
                 &DBus; node such as <quote>App</quote>. Add the function name without return value 
                 and arguments using the <quote>function</quote> tag. For example 
@@ -474,7 +474,7 @@
         &lt;arguments&gt;
           &lt;argument type="QString"&gt;
             &lt;comment&gt;Additional comment&lt;/comment&gt;
-            &lt;default&gt;someValuet&lt;/default&gt;
+            &lt;default&gt;someValue&lt;/default&gt;
           &lt;/argument&gt;
         &lt;/arguments&gt;
 
