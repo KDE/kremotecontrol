@@ -322,7 +322,7 @@
                   your name into the <quote>author</quote> tag and a version number in the 
                   <quote>version</quote> tag. The version number is important for upgrading 
                   your profile. &kremotecontrol; will use the one with the highest number if 
-                  multiple versi1;3Hons of your profile are found on the system.
+                  multiple versions of your profile are found on the system.
                 </para>
                 <programlisting>
 &lt;xml version="1.0" encoding="UTF-8"?>
