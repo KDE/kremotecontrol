@@ -1,6 +1,12 @@
 [Desktop Entry]
 Name=Remote Control Data Engine
+Name[sv]=Datagränssnitt för fjärrkontroll
+Name[uk]=Рушій даних дистанційного керування
+Name[x-test]=xxRemote Control Data Enginexx
 Comment=Data engine for kremotecontrol
+Comment[sv]=Datagränssnitt för Kremotecontrol
+Comment[uk]=Рушій даних для kremotecontrol
+Comment[x-test]=xxData engine for kremotecontrolxx
 Type=Service
 ServiceTypes=Plasma/DataEngine
 Icon=infrared-remote

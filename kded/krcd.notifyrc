@@ -5,13 +5,17 @@ Comment=K Remote Control Daemon
 [Event/global_event]
 Name=Irkick notification
 Name[en_GB]=Irkick notification
+Name[sv]=Underrättelse från Irkick
 Name[tr]=Irkick bildirimi
 Name[uk]=Сповіщення Irkick
+Name[x-test]=xxIrkick notificationxx
 Name[zh_TW]=Irkick 通知
 Comment=Irkick global notification event
 Comment[en_GB]=Irkick global notification event
+Comment[sv]=Irkick global underrättelsehändelse
 Comment[tr]=Irkick genel bildirim olayı
 Comment[uk]=Подія загального сповіщення Irkick
+Comment[x-test]=xxIrkick global notification eventxx
 Comment[zh_TW]=Irkick 全域通知事件
 Action=Popup
 
@@ -19,22 +23,31 @@ Action=Popup
 [Event/mode_event]
 Name=Mode event
 Name[en_GB]=Mode event
+Name[sv]=Lägeshändelse
 Name[tr]=Kip olayı
 Name[uk]=Подія режиму
+Name[x-test]=xxMode eventxx
 Name[zh_TW]=模式事件
 Comment=Mode has changed
 Comment[en_GB]=Mode has changed
+Comment[sv]=Läge har ändrats
 Comment[tr]=Kip değiştirildi
 Comment[uk]=Відбулася зміна режиму
+Comment[x-test]=xxMode has changedxx
 Comment[zh_TW]=模式已變更
 Action=Popup
 
 [Event/app_event]
 Name=Application event
+Name[sv]=Programhändelse
 Name[tr]=Uygulama olayı
+Name[uk]=Подія програми
+Name[x-test]=xxApplication eventxx
 Comment=Irkick has triggered an application
 Comment[en_GB]=Irkick has triggered an application
+Comment[sv]=Irkick har utlöst ett program
 Comment[tr]=Irkick bir uygulamayı tetikledi
 Comment[uk]=Irkick увімкнула програму
+Comment[x-test]=xxIrkick has triggered an applicationxx
 Comment[zh_TW]=Irkick 已觸發一應用程式
 Action=Popup
