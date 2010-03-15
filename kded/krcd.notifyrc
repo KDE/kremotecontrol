@@ -1,10 +1,16 @@
 [Global]
 IconName=krcd
 Comment=K Remote Control Daemon
+Comment[pt]=Servidor de Comandos à Distância do KDE
+Comment[sv]=K-fjärrkontrolldemon
+Comment[uk]=Фонова служба дистанційного керування
+Comment[x-test]=xxK Remote Control Daemonxx
 
 [Event/global_event]
 Name=Irkick notification
 Name[en_GB]=Irkick notification
+Name[pt]=Notificação do Irkick
+Name[pt_BR]=Notificação do Irkick
 Name[sv]=Underrättelse från Irkick
 Name[tr]=Irkick bildirimi
 Name[uk]=Сповіщення Irkick
@@ -12,6 +18,8 @@ Name[x-test]=xxIrkick notificationxx
 Name[zh_TW]=Irkick 通知
 Comment=Irkick global notification event
 Comment[en_GB]=Irkick global notification event
+Comment[pt]=Evento de notificação global do Irkick
+Comment[pt_BR]=Evento de notificação global do Irkick
 Comment[sv]=Irkick global underrättelsehändelse
 Comment[tr]=Irkick genel bildirim olayı
 Comment[uk]=Подія загального сповіщення Irkick
@@ -23,6 +31,8 @@ Action=Popup
 [Event/mode_event]
 Name=Mode event
 Name[en_GB]=Mode event
+Name[pt]=Evento do modo
+Name[pt_BR]=Evento do modo
 Name[sv]=Lägeshändelse
 Name[tr]=Kip olayı
 Name[uk]=Подія режиму
@@ -30,6 +40,8 @@ Name[x-test]=xxMode eventxx
 Name[zh_TW]=模式事件
 Comment=Mode has changed
 Comment[en_GB]=Mode has changed
+Comment[pt]=O modo foi alterado
+Comment[pt_BR]=O modo foi alterado
 Comment[sv]=Läge har ändrats
 Comment[tr]=Kip değiştirildi
 Comment[uk]=Відбулася зміна режиму
@@ -39,12 +51,16 @@ Action=Popup
 
 [Event/app_event]
 Name=Application event
+Name[pt]=Evento da aplicação
+Name[pt_BR]=Evento do aplicativo
 Name[sv]=Programhändelse
 Name[tr]=Uygulama olayı
 Name[uk]=Подія програми
 Name[x-test]=xxApplication eventxx
 Comment=Irkick has triggered an application
 Comment[en_GB]=Irkick has triggered an application
+Comment[pt]=O Irkick despoletou uma aplicação
+Comment[pt_BR]=O Irkick disparou um aplicativo
 Comment[sv]=Irkick har utlöst ett program
 Comment[tr]=Irkick bir uygulamayı tetikledi
 Comment[uk]=Irkick увімкнула програму
