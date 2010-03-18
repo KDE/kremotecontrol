@@ -1,11 +1,13 @@
 [Desktop Entry]
 Name=Remote Control Data Engine
 Name[pt]=Motor de Dados dos Comandos à Distância
+Name[pt_BR]=Mecanismo de dados de controle remoto
 Name[sv]=Datagränssnitt för fjärrkontroll
 Name[uk]=Рушій даних дистанційного керування
 Name[x-test]=xxRemote Control Data Enginexx
 Comment=Data engine for kremotecontrol
 Comment[pt]=Motor de dados do kremotecontrol
+Comment[pt_BR]=Mecanismo de dados para o kremotecontrol
 Comment[sv]=Datagränssnitt för Kremotecontrol
 Comment[uk]=Рушій даних для kremotecontrol
 Comment[x-test]=xxData engine for kremotecontrolxx

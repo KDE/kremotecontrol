@@ -2,6 +2,7 @@
 IconName=krcd
 Comment=K Remote Control Daemon
 Comment[pt]=Servidor de Comandos à Distância do KDE
+Comment[pt_BR]=Daemon de Controles Remotos do KDE
 Comment[sv]=K-fjärrkontrolldemon
 Comment[uk]=Фонова служба дистанційного керування
 Comment[x-test]=xxK Remote Control Daemonxx
