@@ -139,7 +139,7 @@
           <item>
            <widget class="QRadioButton" name="rbNone">
             <property name="text">
-             <string>don't send the action</string>
+             <string>do not send the action</string>
             </property>
            </widget>
           </item>
