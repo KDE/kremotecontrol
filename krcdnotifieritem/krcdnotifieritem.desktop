@@ -1,6 +1,7 @@
 # KDE Config File
 [Desktop Entry]
 Name=KRemoteControl Notifier Item
+Name[en_GB]=KRemoteControl Notifier Item
 Name[pt]=Item de Notificação do KRemoteControl
 Name[pt_BR]=Item de notificação do KRemoteControl
 Name[sv]=Underrättelseobjekt för Kremotecontrol

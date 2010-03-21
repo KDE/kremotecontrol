@@ -1,6 +1,7 @@
 [Global]
 IconName=krcd
 Comment=K Remote Control Daemon
+Comment[en_GB]=K Remote Control Dæmon
 Comment[pt]=Servidor de Comandos à Distância do KDE
 Comment[pt_BR]=Daemon de Controles Remotos do KDE
 Comment[sv]=K-fjärrkontrolldemon
@@ -60,6 +61,7 @@ Action=Popup
 
 [Event/app_event]
 Name=Application event
+Name[en_GB]=Application event
 Name[nb]=Programhendelse
 Name[nn]=Programhending
 Name[pt]=Evento da aplicação
