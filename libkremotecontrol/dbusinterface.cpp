@@ -214,7 +214,7 @@ QList<Prototype> DBusInterface::getFunctions(const QString &program, const QStri
 
 QStringList DBusInterface::getConfiguredRemotes() {
     QStringList remotes;
-    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontrol",
+    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontroldaemon",
                      "org.kde.krcd", "getConfiguredRemotes");
     QDBusMessage response = QDBusConnection::sessionBus().call(m);
     if (response.type() == QDBusMessage::ErrorMessage) {
@@ -226,7 +226,7 @@ QStringList DBusInterface::getConfiguredRemotes() {
 }
 
 void DBusInterface::considerButtonEvents(const QString& remoteName) {
-   QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontrol",
+   QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontroldaemon",
                      "org.kde.krcd", "considerButtonEvents");
     m << remoteName;
     QDBusMessage response = QDBusConnection::sessionBus().call(m);
@@ -236,7 +236,7 @@ void DBusInterface::considerButtonEvents(const QString& remoteName) {
 }
 
 void DBusInterface::ignoreButtonEvents(const QString& remoteName) {
-   QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontrol",
+   QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontroldaemon",
                      "org.kde.krcd", "ignoreButtonEvents");
     m << remoteName;
     QDBusMessage response = QDBusConnection::sessionBus().call(m);
@@ -246,7 +246,7 @@ void DBusInterface::ignoreButtonEvents(const QString& remoteName) {
 }
 
 void DBusInterface::reloadRemoteControlDaemon() {
-    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontrol",
+    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontroldaemon",
                      "org.kde.krcd", "reloadConfiguration");
     QDBusMessage response = QDBusConnection::sessionBus().call(m);
     if (response.type() == QDBusMessage::ErrorMessage) {
@@ -401,7 +401,7 @@ void DBusInterface::executeAction(const DBusAction* action) {
 }
 
 void DBusInterface::changeMode(const QString& remoteName, const QString& modeName) {
-    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontrol",
+    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontroldaemon",
                      "org.kde.krcd", "changeMode");
     m << remoteName;
     m << modeName;
@@ -417,7 +417,7 @@ void DBusInterface::changeMode(const QString& remoteName, const QString& modeNam
 }
 
 QString DBusInterface::getCurrentMode(const QString& remoteName) {
-  QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontrol",
+  QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontroldaemon",
                      "org.kde.krcd", "getCurrentMode");
      m << remoteName;
     QDBusReply<QString> reply = QDBusConnection::sessionBus().call(m);
@@ -430,7 +430,7 @@ QString DBusInterface::getCurrentMode(const QString& remoteName) {
 }
 
 QStringList DBusInterface::getModesForRemote(const QString& remoteName) {
-    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontrol",
+    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontroldaemon",
                      "org.kde.krcd", "getModesForRemote");
     m << remoteName;
     QDBusReply<QStringList> reply = QDBusConnection::sessionBus().call(m);
@@ -443,7 +443,7 @@ QStringList DBusInterface::getModesForRemote(const QString& remoteName) {
 }
 
 QString DBusInterface::getModeIcon(const QString& remoteName, const QString& modeName) {
-    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontrol",
+    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontroldaemon",
                      "org.kde.krcd", "getModeIcon");
     m << remoteName;
     m << modeName;
@@ -458,7 +458,7 @@ QString DBusInterface::getModeIcon(const QString& remoteName, const QString& mod
 }
 
 bool DBusInterface::eventsIgnored(const QString& remoteName) {
-   QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontrol",
+   QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontroldaemon",
                      "org.kde.krcd", "eventsIgnored");
      m << remoteName;
     QDBusReply<bool> reply = QDBusConnection::sessionBus().call(m);
@@ -474,7 +474,7 @@ bool DBusInterface::isKdedModuleRunning() {
     QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/kded", "org.kde.kded", "loadedModules");
     QDBusReply<QStringList> reply = QDBusConnection::sessionBus().call(m);
     if(reply.isValid()){
-        return reply.value().contains("kremotecontrol");
+        return reply.value().contains("kremotecontroldaemon");
     }
     kDebug() << reply.error().message();
     return false;
@@ -482,28 +482,28 @@ bool DBusInterface::isKdedModuleRunning() {
 
 bool DBusInterface::loadKdedModule() {
     QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/kded", "org.kde.kded", "loadModule");
-    m << "kremotecontrol";
+    m << "kremotecontroldaemon";
     QDBusReply<bool> reply = QDBusConnection::sessionBus().call(m);
     if(!reply.isValid() || !reply.value()){
         return false;
     }
 
     m = QDBusMessage::createMethodCall("org.kde.kded", "/kded", "org.kde.kded", "setModuleAutoloading");
-    m << "kremotecontrol" << true;
+    m << "kremotecontroldaemon" << true;
     QDBusConnection::sessionBus().call(m);
     return true;
 }
 
 bool DBusInterface::unloadKdedModule() {
     QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/kded", "org.kde.kded", "unloadModule");
-    m << "kremotecontrol";
+    m << "kremotecontroldaemon";
     QDBusReply<bool> reply = QDBusConnection::sessionBus().call(m);
     if(!reply.isValid() || !reply.value()){
         return false;
     }
 
     m = QDBusMessage::createMethodCall("org.kde.kded", "/kded", "org.kde.kded", "setModuleAutoloading");
-    m << "kremotecontrol" << false;
+    m << "kremotecontroldaemon" << false;
     QDBusConnection::sessionBus().call(m);
     return true;
 }

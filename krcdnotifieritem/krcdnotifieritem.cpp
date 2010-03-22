@@ -38,13 +38,13 @@ KrcdNotifierItem::KrcdNotifierItem(){
     // No need for close button...
     setStandardActionsEnabled(false);
     updateContextMenu();
-    QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontrol", "org.kde.krcd", "connectionChanged",  this, SLOT(updateTray()));
-    QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontrol", "org.kde.krcd", "remoteControlAdded",  this, SLOT(updateTray()));
-    QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontrol", "org.kde.krcd", "remoteControlAdded",  this, SLOT(updateContextMenu()));
-    QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontrol", "org.kde.krcd", "remoteControlRemoved",  this, SLOT(updateTray()));
-    QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontrol", "org.kde.krcd", "remoteControlRemoved",  this, SLOT(updateContextMenu()));
-    QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontrol", "org.kde.krcd", "buttonPressed",  this, SLOT(flash()));
-    QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontrol", "org.kde.krcd", "modeChanged",  this, SLOT(updateContextMenu()));
+    QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontroldaemon", "org.kde.krcd", "connectionChanged",  this, SLOT(updateTray()));
+    QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontroldaemon", "org.kde.krcd", "remoteControlAdded",  this, SLOT(updateTray()));
+    QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontroldaemon", "org.kde.krcd", "remoteControlAdded",  this, SLOT(updateContextMenu()));
+    QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontroldaemon", "org.kde.krcd", "remoteControlRemoved",  this, SLOT(updateTray()));
+    QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontroldaemon", "org.kde.krcd", "remoteControlRemoved",  this, SLOT(updateContextMenu()));
+    QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontroldaemon", "org.kde.krcd", "buttonPressed",  this, SLOT(flash()));
+    QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontroldaemon", "org.kde.krcd", "modeChanged",  this, SLOT(updateContextMenu()));
 }
 
 void KrcdNotifierItem::updateTray() {

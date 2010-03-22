@@ -3,18 +3,18 @@ include_directories(
    ${CMAKE_CURRENT_SOURCE_DIR}/../libkremotecontrol
    )
 
-set(kded_kremotecontrol_SRCS
+set(kded_kremotecontroldaemon_SRCS
    kremotecontroldaemon.cpp
    )
 
 set(krcd_xml org.kde.krcd.xml)
 
 
-qt4_add_dbus_adaptor( kded_kremotecontrol_SRCS org.kde.krcd.xml  kremotecontroldaemon.h KRemoteControlDaemon)
+qt4_add_dbus_adaptor( kded_kremotecontroldaemon_SRCS org.kde.krcd.xml kremotecontroldaemon.h KRemoteControlDaemon)
 
 
-kde4_add_plugin(kded_kremotecontrol ${kded_kremotecontrol_SRCS})
-target_link_libraries(kded_kremotecontrol
+kde4_add_plugin(kded_kremotecontroldaemon ${kded_kremotecontroldaemon_SRCS})
+target_link_libraries(kded_kremotecontroldaemon
    ${KDE4_KDECORE_LIBS}
    ${KDE4_KDEUI_LIBS}
    ${KDE4_SOLID_LIBS}
@@ -22,6 +22,6 @@ target_link_libraries(kded_kremotecontrol
    libkremotecontrol
 )
 
-install(TARGETS kded_kremotecontrol DESTINATION ${PLUGIN_INSTALL_DIR})
-install( FILES kremotecontrol.desktop DESTINATION ${SERVICES_INSTALL_DIR}/kded)
-install( FILES krcd.notifyrc  DESTINATION  ${DATA_INSTALL_DIR}/krcd )
+install(TARGETS kded_kremotecontroldaemon DESTINATION ${PLUGIN_INSTALL_DIR})
+install(FILES kremotecontroldaemon.desktop DESTINATION ${SERVICES_INSTALL_DIR}/kded)
+install(FILES kremotecontroldaemon.notifyrc DESTINATION ${DATA_INSTALL_DIR}/kremotecontroldaemon )
