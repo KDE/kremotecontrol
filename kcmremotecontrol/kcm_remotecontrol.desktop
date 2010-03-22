@@ -22,6 +22,7 @@ X-KDE-Keywords[x-test]=xxKCMLirc,kcmlircxx
 Name=Remote Controls
 Name[de]=Fernbedienungen
 Name[en_GB]=Remote Controls
+Name[es]=Mandos a distancia
 Name[nb]=Fjernkontroll
 Name[nn]=Fjernkontrollar
 Name[pt]=Comandos à Distância
@@ -34,6 +35,7 @@ Name[zh_TW]=遙控鍵
 
 Comment=Configure your remote controls for use with applications
 Comment[en_GB]=Configure your remote controls for use with applications
+Comment[es]=Configure sus mandos a distancia para usarlos con aplicaciones
 Comment[nb]=Sett opp fjernkontrollene for bruk med programmer
 Comment[nn]=Set opp bruken av fjernkontroll i ulike program
 Comment[pt]=Configure os seus comandos à distância para os usar nas aplicações
