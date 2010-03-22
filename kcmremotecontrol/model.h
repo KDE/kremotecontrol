@@ -163,7 +163,7 @@ class RemoteModel: public QStandardItemModel
         QStringList mimeTypes() const;
         Qt::DropActions supportedDropActions() const;
         
-    signals:
+    Q_SIGNALS:
         void modeChanged(Mode *mode);
 };
 

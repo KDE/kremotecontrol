@@ -36,7 +36,7 @@ public:
     ButtonComboBox(QWidget* parent = 0);
     void addButtons(const QStringList &buttonList);
 
-public slots:
+public Q_SLOTS:
     void hideButton(const QString &button);
 
 private:
@@ -68,7 +68,7 @@ private:
     Remote *m_remote;
     Mode *m_mode;
 
-private slots:
+private Q_SLOTS:
     void checkForComplete();
     void slotButtonClicked(int button);
     void forwardButtonChanged();

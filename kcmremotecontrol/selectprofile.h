@@ -55,7 +55,7 @@ class SelectProfile : public KDialog
         explicit SelectProfile(Remote *remote, QWidget *parent = 0, const bool &modal = false);
         Profile *getSelectedProfile();
       
-    public slots:
+    public Q_SLOTS:
         void checkForUpdate(QTreeWidgetItem*, int);
 };
 

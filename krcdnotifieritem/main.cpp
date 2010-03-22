@@ -52,7 +52,7 @@ class KrcdNotifierApp : public KUniqueApplication
     private:
         KrcdNotifierItem *m_item;
         
-    private slots:
+    private Q_SLOTS:
         void configChanged() {
             KConfig config("kremotecontrolrc");
             KConfigGroup globalGroup(&config, "Global");

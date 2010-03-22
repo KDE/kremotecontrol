@@ -52,7 +52,7 @@ public:
     explicit KCMRemoteControl(QWidget *parent = 0, const QVariantList &args = QVariantList());
     ~KCMRemoteControl();
 
-private slots:
+private Q_SLOTS:
     void addAction();
     void removeAction();
     void editAction();

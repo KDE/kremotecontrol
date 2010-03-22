@@ -45,11 +45,11 @@ class EditProfileAction: public QWidget{
         ActionTemplateModel *m_templateModel;
         ArgumentsModel *m_argumentsModel;
         
-    private slots:
+    private Q_SLOTS:
         void refreshTemplates(const QModelIndex &index);
         void refreshArguments(const QModelIndex &index);
         
-    signals:
+    Q_SIGNALS:
         void formComplete(bool complete);
 
 };

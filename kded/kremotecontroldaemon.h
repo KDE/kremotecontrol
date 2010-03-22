@@ -63,7 +63,7 @@ class KRemoteControlDaemon : public KDEDModule
         QString getModeIcon(const QString &remoteName, const QString &modeName);
         bool eventsIgnored(const QString& remoteName);
     
-    signals:
+    Q_SIGNALS:
         void connectionChanged(bool connected);
         void remoteControlAdded(const QString &remote);
         void remoteControlRemoved(const QString &remote);
@@ -71,7 +71,7 @@ class KRemoteControlDaemon : public KDEDModule
         void buttonPressed();
         void unloadTray();
 
-    private slots:
+    private Q_SLOTS:
         void lauchKcmShell();
         void slotStatusChanged(bool connected);
         void slotRemoteControlAdded(const QString &name);

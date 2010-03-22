@@ -45,11 +45,11 @@ class EditDBusAction: public QWidget{
         DBusFunctionModel *m_dbusFunctionModel;
         ArgumentsModel *m_argumentsModel;
         
-    private slots:
+    private Q_SLOTS:
         void refreshDBusFunctions(const QModelIndex &index);
         void refreshArguments(const QModelIndex &index);
         
-    signals:
+    Q_SIGNALS:
         void formComplete(bool complete);
 };
 
