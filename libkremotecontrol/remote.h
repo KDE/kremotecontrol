@@ -25,6 +25,7 @@
 #include <solid/control/remotecontrol.h>
 
 #include <QtCore/QSet>
+#include <QtCore/QVector>
 
 class ModeChangeHandler;
 
@@ -58,7 +59,7 @@ class KREMOTECONTROL_EXPORT Remote
           * to as the new default Mode.
           */
         void removeMode(Mode *mode);
-        QList<Mode*> allModes() const;
+        QVector<Mode*> allModes() const;
 
         Mode *masterMode() const;
 
@@ -95,7 +96,7 @@ class KREMOTECONTROL_EXPORT Remote
         void setPreviousModeButton(const QString &button);
 
     private:
-        QList<Mode*> m_modeList;
+        QVector<Mode*> m_modeList;
         Mode *m_defaultMode;
         QString m_remoteName;
         Mode *m_currentMode;

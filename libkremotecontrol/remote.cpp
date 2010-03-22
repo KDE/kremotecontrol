@@ -238,7 +238,9 @@ Remote::Remote(const QString &remote, ModeChangeMode changeMode) {
 
 Remote::~Remote() {
     while (!m_modeList.isEmpty()) {
-        delete m_modeList.takeFirst();
+        Mode *mode = m_modeList.first();
+        m_modeList.remove(0);
+        delete mode;
     }
 }
 
@@ -250,7 +252,8 @@ void Remote::moveModeUp(Mode* mode) {
     int oldPos = m_modeList.indexOf(mode);
 
     if (oldPos > 1) {
-        m_modeList.move(oldPos, oldPos - 1);
+        m_modeList.remove(oldPos);
+        m_modeList.insert(oldPos - 1, mode);
     }
 }
 
@@ -258,11 +261,12 @@ void Remote::moveModeDown(Mode* mode) {
     int oldPos = m_modeList.indexOf(mode);
 
     if (oldPos < (m_modeList.count() - 1)) {
-        m_modeList.move(oldPos, oldPos + 1);
+        m_modeList.remove(oldPos);
+        m_modeList.insert(oldPos + 1, mode);
     }
 }
 
-QList<Mode*> Remote::allModes() const {
+QVector<Mode*> Remote::allModes() const {
     return m_modeList;
 }
 
@@ -289,7 +293,7 @@ void Remote::removeMode(Mode *mode) {
         }
     }
 
-    m_modeList.removeAll(mode);
+    m_modeList.remove(m_modeList.indexOf(mode));
     delete mode;
 }
 

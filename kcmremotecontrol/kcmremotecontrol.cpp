@@ -240,7 +240,7 @@ void KCMRemoteControl::removeMode() {
         // If the master mode is selected the we should remove the whole remote
         if(mode == remote->masterMode()){
             if(KMessageBox::questionYesNo(this, i18n("Are you sure you want to remove this remote and all of its modes and actions?"), i18n("Remove remote")) == KMessageBox::Yes) {
-                m_remoteList.removeAll(remote);
+                m_remoteList.remove(m_remoteList.indexOf(remote));
                 m_remoteModel->clear(); // Clear the models before deleting the remote!!!
                 m_actionModel->clear();
                 delete remote;

@@ -27,7 +27,9 @@ Mode::Mode(const QString &name, const QString &iconName) {
 
 Mode::~Mode() {
     while(!m_actionList.isEmpty()){
-        delete m_actionList.takeFirst();
+        Action *action = m_actionList.first();
+        m_actionList.remove(0);
+        delete action;
     }
 }
 
@@ -64,30 +66,32 @@ void Mode::addAction(Action* action) {
 }
 
 void Mode::removeAction(Action* action) {
-    m_actionList.removeAll(action);
+    m_actionList.remove(m_actionList.indexOf(action));
     delete action;
 }
 
 void Mode::moveActionUp(Action* action) {
     int oldIndex = m_actionList.indexOf(action);
     if(oldIndex > 0) {
-        m_actionList.move(oldIndex, oldIndex - 1);
+        m_actionList.remove(oldIndex);
+        m_actionList.insert(oldIndex - 1, action);
     }
 }
 
 void Mode::moveActionDown(Action* action) {
     int oldIndex = m_actionList.indexOf(action);
     if(oldIndex < (m_actionList.count() - 1)) {
-        m_actionList.move(oldIndex, oldIndex + 1);
+        m_actionList.remove(oldIndex);
+        m_actionList.insert(oldIndex + 1, action);
     }
 }
 
-QList< Action* > Mode::actions() const {
+QVector<Action* > Mode::actions() const {
     return m_actionList;
 }
 
-QList<Action*> Mode::actionsForButton(const QString &button) const {
-    QList<Action*> retList;
+QVector<Action*> Mode::actionsForButton(const QString &button) const {
+    QVector<Action*> retList;
     foreach(Action *action, m_actionList){
         if(action->button() == button){
             retList.append(action);

@@ -30,7 +30,7 @@ RemoteList::RemoteList() {
 }
 
 bool RemoteList::contains(const QString& remoteName) const {
-    for(QList<Remote*>::const_iterator i = constBegin(); i != constEnd(); ++i){
+    for(QVector<Remote*>::const_iterator i = constBegin(); i != constEnd(); ++i){
         if((*i)->name() == remoteName){
             return true;
         }
@@ -44,7 +44,7 @@ void RemoteList::saveToConfig(const QString& configName) {
     // Clear out all old remotes settings. We will sync the whole tree to disk now
     config.deleteGroup("Remotes");
     KConfigGroup remotesGroup(&config, "Remotes");
-    for(QList<Remote*>::const_iterator remoteIterator = constBegin(); remoteIterator != constEnd(); ++remoteIterator){
+    for(QVector<Remote*>::const_iterator remoteIterator = constBegin(); remoteIterator != constEnd(); ++remoteIterator){
         KConfigGroup remoteGroup(&remotesGroup, (*remoteIterator)->name());
         // Save Remote properties here
         remoteGroup.writeEntry("DefaultMode", (*remoteIterator)->defaultMode()->name());
@@ -129,7 +129,7 @@ void RemoteList::loadFromConfig(const QString& configName) {
 
 }
 Remote* RemoteList::remote ( const QString& remoteName ){
-   for(QList<Remote*>::const_iterator i = constBegin(); i != constEnd(); ++i){
+   for(QVector<Remote*>::const_iterator i = constBegin(); i != constEnd(); ++i){
         if((*i)->name() == remoteName){
             return *i;
         }

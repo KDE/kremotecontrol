@@ -23,8 +23,9 @@
 #include "remote.h"
 #include "kremotecontrol_export.h"
 
+#include <QtCore/QVector>
 
-class KREMOTECONTROL_EXPORT RemoteList: public QList<Remote*>
+class KREMOTECONTROL_EXPORT RemoteList: public QVector<Remote*>
 {
     public:
         RemoteList();

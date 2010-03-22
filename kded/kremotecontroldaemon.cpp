@@ -114,13 +114,13 @@ void KRemoteControlDaemon::gotMessage(const Solid::Control::RemoteControlButton&
     emit(buttonPressed());
 
     if(remote->currentMode()){
-        QList<Action*> actionList = remote->masterMode()->actionsForButton(button.name());
-        actionList.append(remote->currentMode()->actionsForButton(button.name()));
+        QVector<Action*> actionList = remote->masterMode()->actionsForButton(button.name());
+        actionList += remote->currentMode()->actionsForButton(button.name());
         if(remote->nextMode(button.name())){
             Mode *mode = remote->currentMode();
             notifyModeChanged(remote);
             if(remote->currentMode()-> doAfter()){
-                actionList.append(remote->currentMode()->actionsForButton(button.name()));
+                actionList += remote->currentMode()->actionsForButton(button.name());
             }
             emit(modeChanged(remote->name(), mode->name()));
         }
@@ -260,7 +260,7 @@ QString KRemoteControlDaemon::modeIcon(const QString &remoteName, const QString&
             return mode->iconName();
         }
     }
-    return "";
+    return QString();
 }
 
 void KRemoteControlDaemon::notifyEvent(const QString& message, const QString& iconName, const QString& event) {
