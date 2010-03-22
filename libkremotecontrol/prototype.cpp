@@ -19,9 +19,7 @@
 
 #include "prototype.h"
 
-Prototype::Prototype(const QString& name, QList< Argument > args) {
-    m_name = name;
-    m_args = args;
+Prototype::Prototype(const QString& name, QList< Argument > args): m_name(name), m_args(args) {
 }
 
 Prototype::Prototype() {

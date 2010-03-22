@@ -25,12 +25,8 @@ Profile::Profile() {
 
 }
 
-Profile::Profile(const QString &profileId, const QString &name, const QString &version, const QString &author, const QString &description) {
-    m_profileId = profileId;
-    m_name = name;
-    m_version = ProfileVersion(version);
-    m_author = author;
-    m_description = description;
+Profile::Profile(const QString &profileId, const QString &name, const QString &version, const QString &author, const QString &description)
+    :m_profileId(profileId), m_name(name), m_version(ProfileVersion(version)), m_author(author), m_description(description){
 }
 
 void Profile::setProfileId(const QString& profileId) {

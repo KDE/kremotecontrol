@@ -23,13 +23,10 @@ Argument::Argument() {
 
 }
 
-Argument::Argument(const QVariant& value) {
-    m_value = value;
+Argument::Argument(const QVariant& value): m_value(value) {
 }
 
-Argument::Argument(const QVariant& value, const QString& description) {
-    m_value = value;
-    m_description = description;
+Argument::Argument(const QVariant& value, const QString& description): m_value(value), m_description(description) {
 }
 
 QVariant Argument::value() const {

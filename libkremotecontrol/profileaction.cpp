@@ -25,11 +25,10 @@ ProfileAction::ProfileAction(): DBusAction() {
     m_type = Action::ProfileAction;
 }
 
-ProfileAction::ProfileAction(const QString& button, const QString &profileName, const QString &actionTemplate): DBusAction(button) {
+ProfileAction::ProfileAction(const QString& button, const QString &profileName, const QString &actionTemplate)
+    : DBusAction(button), m_profileId(profileName), m_template(actionTemplate) {
     //change type from DBusAction (c'tor) to ProfileAction
     m_type = Action::ProfileAction;
-    m_profileId = profileName;
-    m_template = actionTemplate;
 }
 
 QString ProfileAction::profileId() const {

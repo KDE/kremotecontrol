@@ -38,8 +38,10 @@ class ExecutionEnginePrivate
 K_GLOBAL_STATIC(ExecutionEnginePrivate, executionEnginePrivate)
 
 ExecutionEnginePrivate::ExecutionEnginePrivate() {
-    executors.insert(Action::DBusAction, new DBusActionExecutor());
-    executors.insert(Action::ProfileAction, executors.value(Action::DBusAction)); // copy registration for DBusAction
+    DBusActionExecutor *dbusExecutor = new DBusActionExecutor();
+    executors.insert(Action::DBusAction, dbusExecutor);
+    // ProfileActions are DBusActions with additional Information. They can be handled by the DBusExecutor
+    executors.insert(Action::ProfileAction, dbusExecutor);
 }
 
 void KREMOTECONTROL_EXPORT ExecutionEngine::executeAction(Action* action) {

@@ -52,7 +52,7 @@ DBusServiceModel
 */
 
 DBusServiceModel::DBusServiceModel(QObject* parent): QStandardItemModel(parent) {
-    setHorizontalHeaderLabels(QStringList() << i18n("Application / Node"));
+    setHorizontalHeaderLabels(QStringList() << i18nc("Header in a table holding DBus functions", "Application / Node"));
     foreach(const QString &item, DBusInterface::getInstance()->registeredPrograms()) {
         DBusServiceItem *dbusServiceItem = new DBusServiceItem(item);
         dbusServiceItem->setEditable(false);
@@ -324,8 +324,8 @@ QWidget *ArgumentDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
             break;
         case QVariant::Bool: {
             KComboBox *comboBox = new KComboBox(parent);
-            comboBox->addItem(i18nc("True", "Value is true"));
-            comboBox->addItem(i18nc("False", "Value is false"));
+            comboBox->addItem(i18nc("Value is true", "True"));
+            comboBox->addItem(i18nc("Value is false", "False"));
             comboBox->setCurrentIndex(arg.value().toBool() ? 0 : 1);
             editor = comboBox;
             }

@@ -20,9 +20,7 @@
 #include "mode.h"
 #include "action.h"
 
-Mode::Mode(const QString &name, const QString &iconName) {
-    m_name = name;
-    m_iconName = iconName;
+Mode::Mode(const QString &name, const QString &iconName): m_name(name), m_iconName(iconName) {
 }
 
 Mode::~Mode() {
