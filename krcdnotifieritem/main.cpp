@@ -37,7 +37,7 @@ class KrcdNotifierApp : public KUniqueApplication
         KrcdNotifierApp() : m_item( 0 ) {
             // ensure the Quit dialog's Cancel reponse does not close the app
             setQuitOnLastWindowClosed( false );
-            QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontrol", "org.kde.krcd", "unloadTray",  this, SLOT(quit()));
+            QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontroldaemon", "org.kde.krcd", "unloadTray",  this, SLOT(quit()));
         }
 
         int newInstance() {

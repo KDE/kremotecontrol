@@ -23,11 +23,13 @@
 
 #include "mode.h"
 #include "remote.h"
+#include "remotelist.h"
 
 #include <solid/control/remotecontrolmanager.h>
 #include <solid/control/remotecontrol.h>
 
 #include <KDEDModule>
+#include <KComponentData>
 
 #include <QtCore/QVariant>
 
@@ -37,13 +39,16 @@ class KRemoteControlDaemon : public KDEDModule
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.krcd")
-    Q_DECLARE_PRIVATE(KRemoteControlDaemon)
 
     private:
-        KRemoteControlDaemonPrivate * d_ptr;
         void notifyModeChanged(Remote* remote);
         void notifyEvent(const QString& message, const QString& icon = QString ( "infrared-remote" ), const QString& event = QString ( "global_event" ));
 
+        RemoteList m_remoteList;
+        QStringList m_ignoreNextButtonList;
+        KComponentData m_applicationData;
+
+        
     public:
         KRemoteControlDaemon(QObject * parent, const QVariantList&);
         virtual ~KRemoteControlDaemon();

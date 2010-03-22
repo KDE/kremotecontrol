@@ -405,14 +405,9 @@ void DBusInterface::changeMode(const QString& remoteName, const QString& modeNam
                      "org.kde.krcd", "changeMode");
     m << remoteName;
     m << modeName;
-    QDBusMessage response = QDBusConnection::sessionBus().call(m);
     QDBusReply<bool> reply = QDBusConnection::sessionBus().call(m);
-    if(reply.isValid()){
-        if(!reply){
-            kDebug() << "Couldn't change to mode " << modeName << " on remote " << remoteName;
-        }
-    } else {
-        kDebug() << response.errorMessage();
+    if(!reply.isValid()){
+        kDebug() << "Couldn't change to mode " << modeName << " on remote " << remoteName;
     }
 }
 

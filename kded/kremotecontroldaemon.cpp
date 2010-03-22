@@ -28,7 +28,6 @@
 #include <mode.h>
 #include <action.h>
 #include <executionengine.h>
-#include <remotelist.h>
 
 #include <KCModuleInfo>
 #include <KDebug>
@@ -45,70 +44,8 @@ using namespace Solid::Control;
 K_PLUGIN_FACTORY(KRemoteControlDaemonFactory, registerPlugin<KRemoteControlDaemon>();)
 K_EXPORT_PLUGIN(KRemoteControlDaemonFactory("kremotecontroldaemon"))
 
-class KRemoteControlDaemonPrivate
-{
-  private:
-      KRemoteControlDaemon *m_parent;
-      RemoteList m_remoteList;
-      QStringList m_ignoreNextButtonList;
+KRemoteControlDaemon::KRemoteControlDaemon(QObject* parent, const QVariantList& ): KDEDModule(parent) {
 
-  public:
-
-      KComponentData applicationData;
-
-      KRemoteControlDaemonPrivate(KRemoteControlDaemon *parent) {
-          m_parent = parent;
-      };
-
-      ~KRemoteControlDaemonPrivate() {
-      };
-
-      RemoteList remoteList(){
-          return m_remoteList;
-      };
-
-      void reload(){
-          m_remoteList.loadFromConfig("kremotecontrolrc");
-          KConfig config("kremotecontrolrc");
-          KConfigGroup globalGroup(&config, "Global");
-          if(globalGroup.readEntry("ShowTrayIcon", true)){
-              kDebug() << "starting notifier item" <<
-              KToolInvocation::kdeinitExec("krcdnotifieritem");
-          } else {
-              emit m_parent->unloadTray();
-          }
-      };
-
-      Remote* remote(const QString& remoteName) {
-          return m_remoteList.remote(remoteName);
-      };
-
-      bool isButtonEventIgnored(const QString &remote){
-          return m_ignoreNextButtonList.contains(remote);
-      };
-
-      void ignoreButtonEvents(const QString& remote){
-          kDebug() << "muting remote" << remote;
-          m_ignoreNextButtonList.append(remote);
-          m_ignoreNextButtonList.removeDuplicates();
-      }
-
-      void considerButtonEvents(const QString& remote){
-          kDebug() << "unmuting remote" << remote;
-          m_ignoreNextButtonList.removeAll(remote);
-      }
-
-      void clearIgnore(){
-          m_remoteList.clear();
-      }
-};
-
-
-
-KRemoteControlDaemon::KRemoteControlDaemon(QObject* parent, const QVariantList& ): KDEDModule(parent), d_ptr(new KRemoteControlDaemonPrivate(this)) {
-    Q_D(KRemoteControlDaemon);  
-  //   QErrorMessage::qtHandler ()  ;
-    //qInstallMsgHandler();
     new KrcdAdaptor(this);
     KAboutData aboutData("kremotecontroldaemon", "kremotecontroldaemon", ki18n("K Remote Control Daemon"),
                           "0.1", ki18n("Remote Control Daemon for KDE4"),
@@ -119,11 +56,22 @@ KRemoteControlDaemon::KRemoteControlDaemon(QObject* parent, const QVariantList& 
     aboutData.addAuthor(ki18n("Frank Scheffold"), ki18n("Developer"), "fscheffold@googlemail.com");
     aboutData.addCredit(ki18n("Gav Wood"), ki18n("Original KDELirc Developer"), "gav.wood@kde.org");
 
-    d->applicationData = KComponentData(aboutData);
+    m_applicationData = KComponentData(aboutData);
+    
     connect(RemoteControlManager::notifier(), SIGNAL(statusChanged(bool)), this, SLOT(slotStatusChanged(bool)));
     connect(RemoteControlManager::notifier(), SIGNAL(remoteControlAdded(const QString&)), this, SLOT(slotRemoteControlAdded(const QString&)));
     connect(RemoteControlManager::notifier(), SIGNAL(remoteControlRemoved(const QString&)), this, SLOT(slotRemoteControlRemoved(const QString&)));
-    d_ptr->reload();
+        
+    m_remoteList.loadFromConfig("kremotecontrolrc");
+    KConfig config("kremotecontrolrc");
+    KConfigGroup globalGroup(&config, "Global");
+    if(globalGroup.readEntry("ShowTrayIcon", true)){
+        kDebug() << "starting notifier item" <<
+        KToolInvocation::kdeinitExec("krcdnotifieritem");
+    } else {
+        emit unloadTray();
+    }
+    
     foreach(const QString &remote, RemoteControl::allRemoteNames()){
         RemoteControl *rc = new RemoteControl(remote);
         kDebug() << "connecting to remote" << remote;
@@ -152,12 +100,13 @@ void KRemoteControlDaemon::slotStatusChanged(bool connected) {
 
 void KRemoteControlDaemon::gotMessage(const Solid::Control::RemoteControlButton& button) {
     kDebug()<< "Got message from remote " << button.remoteName() << " button " << button.name();
-    Remote *remote=   d_ptr->remote(button.remoteName());
+    Remote *remote = m_remoteList.remote(button.remoteName());
     if(!remote){
         kDebug()<< "No remote found for remote" << button.remoteName();
         return;
     }
-    if(d_ptr->isButtonEventIgnored(remote->name())){
+    
+    if(eventsIgnored(remote->name())){
         kDebug() << "Events for  "<< remote->name() <<    " are currently ignored";
         return;
     }
@@ -182,48 +131,63 @@ void KRemoteControlDaemon::gotMessage(const Solid::Control::RemoteControlButton&
 }
 
 void KRemoteControlDaemon::reloadConfiguration() {
-    d_ptr->reload();
+    m_remoteList.loadFromConfig("kremotecontrolrc");
+    KConfig config("kremotecontrolrc");
+    KConfigGroup globalGroup(&config, "Global");
+    
+    if(globalGroup.readEntry("ShowTrayIcon", true)){
+        kDebug() << "starting notifier item" <<
+        KToolInvocation::kdeinitExec("krcdnotifieritem");
+    } else {
+        emit unloadTray();
+    }
+    
     notifyEvent(i18n("Configuration reloaded."));
-    foreach(const Remote *remote, d_ptr->remoteList()){
+    foreach(const Remote *remote, m_remoteList){
         emit modeChanged(remote->name(), remote->masterMode()->name());
     }
 }
 
 void KRemoteControlDaemon::changeMode(const QString& remoteName, Mode* mode) {
-    Remote *remote=   d_ptr->remote(remoteName);
+    Remote *remote = m_remoteList.remote(remoteName);
     if(remote && remote->allModes().contains(mode)){
         remote->setCurrentMode(mode);
     }
 }
 
 void KRemoteControlDaemon::ignoreButtonEvents(const QString& remoteName) {
-  if(remoteName.isEmpty()){
-        foreach(const Remote *remote, d_ptr->remoteList()){
-            d_ptr->ignoreButtonEvents(remote->name());
+    if(remoteName.isEmpty()){
+        foreach(const Remote *remote, m_remoteList){
+            kDebug() << "muting remote" << remoteName;
+            m_ignoreNextButtonList.append(remoteName);
+            m_ignoreNextButtonList.removeDuplicates();
         }
-    }else{
-        d_ptr->ignoreButtonEvents(remoteName);
+    } else {
+        kDebug() << "muting remote" << remoteName;
+        m_ignoreNextButtonList.append(remoteName);
+        m_ignoreNextButtonList.removeDuplicates();
     }
 }
 
 void KRemoteControlDaemon::considerButtonEvents(const QString& remoteName) {
-  if(remoteName.isEmpty()){
-        d_ptr->clearIgnore();
-    }else{
-        foreach(const Remote *remote, d_ptr->remoteList()){
-            d_ptr->considerButtonEvents(remote->name());
+    if(remoteName.isEmpty()){
+        m_remoteList.clear();
+    } else {
+        foreach(const Remote *remote, m_remoteList){
+            kDebug() << "unmuting remote" << remote->name();
+            m_ignoreNextButtonList.removeAll(remote->name());
         }
     }
 }
 
 void KRemoteControlDaemon::slotRemoteControlAdded(const QString& name) {
-    if(d_ptr->remote(name)){
+    if(m_remoteList.remote(name)){
         kDebug() << "remote found";
         notifyEvent(i18n("The remote control %1 is now available.", name));
     }else{
         kDebug() << "remote not found";
         KNotification *notification = KNotification::event("global_event", i18n("An unconfigured remote control %1 is now available.", name),
-                  DesktopIcon("infrared-remote"), 0, KNotification::Persistant, d_ptr->applicationData);
+                  DesktopIcon("infrared-remote"), 0, KNotification::Persistant, m_applicationData);
         notification->setActions(QStringList() << i18nc("Configure the remote", "Configure remote"));
         connect(notification, SIGNAL(activated(unsigned int)), SLOT(lauchKcmShell()));
     }
@@ -241,7 +205,7 @@ void KRemoteControlDaemon::slotRemoteControlRemoved(const QString& name) {
 }
 
 bool KRemoteControlDaemon::changeMode(const QString& remoteName, const QString& modeName) {
-    Remote *remote = d_ptr->remoteList().remote(remoteName);
+    Remote *remote = m_remoteList.remote(remoteName);
     if(remote){
         foreach(Mode *mode, remote-> allModes()){
             if(mode->name() == modeName){
@@ -256,7 +220,7 @@ bool KRemoteControlDaemon::changeMode(const QString& remoteName, const QString& 
 
 QStringList KRemoteControlDaemon::modesForRemote(const QString& remoteName) {
     QStringList list;
-    Remote *remote = d_ptr->remoteList().remote(remoteName);
+    Remote *remote = m_remoteList.remote(remoteName);
     if(remote){
         foreach(const Mode *mode, remote->allModes()){
             list << mode->name();
@@ -267,7 +231,7 @@ QStringList KRemoteControlDaemon::modesForRemote(const QString& remoteName) {
 
 QStringList KRemoteControlDaemon::configuredRemotes() {
     QStringList list;
-    foreach(Remote *remote, d_ptr->remoteList()){
+    foreach(Remote *remote, m_remoteList){
         list << remote->name();
     }
     return list;
@@ -276,12 +240,12 @@ QStringList KRemoteControlDaemon::configuredRemotes() {
 void KRemoteControlDaemon::notifyModeChanged(Remote* remote) {
     KNotification::event("mode_event", 
     "<b>" + remote->name() + ":</b><br>" + i18n("Mode switched to %1" , remote->currentMode()->name()),
-    DesktopIcon(remote->currentMode()->iconName().isEmpty() ? "infrared-remote" : remote->currentMode()->iconName()),
-    0, KNotification::CloseOnTimeout, d_ptr->applicationData);
+    DesktopIcon(remote->currentMode()->iconName().isEmpty() ? "infrared-remote" : remote->currentMode()->iconName())
+    , 0, KNotification::CloseOnTimeout, m_applicationData);
 }
 
 QString KRemoteControlDaemon::currentMode(const QString& remoteName) {
-    Remote *remote = d_ptr->remoteList().remote(remoteName);
+    Remote *remote = m_remoteList.remote(remoteName);
     if(remote){
         return remote->currentMode()->name();
     }
@@ -289,7 +253,7 @@ QString KRemoteControlDaemon::currentMode(const QString& remoteName) {
 }
 
 QString KRemoteControlDaemon::modeIcon(const QString &remoteName, const QString& modeName) {
-    Remote *remote = d_ptr->remoteList().remote(remoteName);
+    Remote *remote = m_remoteList.remote(remoteName);
     if(remote){
         Mode *mode = remote->modeByName(modeName);
         if(mode){
@@ -300,9 +264,9 @@ QString KRemoteControlDaemon::modeIcon(const QString &remoteName, const QString&
 }
 
 void KRemoteControlDaemon::notifyEvent(const QString& message, const QString& iconName, const QString& event) {
-    KNotification::event(event, message, DesktopIcon(iconName), 0, KNotification::CloseOnTimeout, d_ptr->applicationData);
+    KNotification::event(event, message, DesktopIcon(iconName), 0, KNotification::CloseOnTimeout, m_applicationData);
 }
 
 bool KRemoteControlDaemon::eventsIgnored(const QString& remoteName) {
-    return d_ptr->isButtonEventIgnored(remoteName);
+    return m_ignoreNextButtonList.contains(remoteName);
 }
