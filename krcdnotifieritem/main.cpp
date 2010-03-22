@@ -68,6 +68,7 @@ int main( int argc, char **argv ) {
     aboutData.addAuthor(ki18n("Michael Zanetti"), ki18n("Maintainer"), "michael_zanetti@gmx.net");
     aboutData.addAuthor(ki18n("Frank Scheffold"), ki18n("KDeveloper"), "fscheffold@googlemail.com");
     aboutData.addCredit(ki18n("Gav Wood"), ki18n("Original KDELirc Author"), "gav@kde.org");
+    aboutData.setProgramIconName("krcd");
 
     KCmdLineArgs::init(argc, argv, &aboutData);
 
