@@ -48,12 +48,12 @@ bool KRemoteControlEngine::sourceRequestEvent(const QString &name) {
 
 bool KRemoteControlEngine::updateSourceEvent(const QString &name) {
     Q_UNUSED(name)
-    QStringList remotes = DBusInterface::getInstance()->getConfiguredRemotes();
+    QStringList remotes = DBusInterface::getInstance()->configuredRemotes();
     setData("remotes", remotes);
     kDebug() << "remotes" << remotes;
     foreach(const QString &remote, remotes) {
-        setData(remote, "modes", DBusInterface::getInstance()->getModesForRemote(remote));
-        setData(remote, "currentMode", DBusInterface::getInstance()->getCurrentMode(remote));
+        setData(remote, "modes", DBusInterface::getInstance()->modesForRemote(remote));
+        setData(remote, "currentMode", DBusInterface::getInstance()->currentMode(remote));
         setData(remote, "eventsIgnored", DBusInterface::getInstance()->eventsIgnored(remote));
     }
 

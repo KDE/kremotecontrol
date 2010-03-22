@@ -38,7 +38,7 @@ class KREMOTECONTROL_EXPORT DBusInterface: public QObject
     private:
         DBusInterface();
 
-        QStringList getAllRegisteredPrograms();
+        QStringList allRegisteredPrograms();
         bool searchForProgram(const DBusAction *action, QStringList &programs);
     public:
 
@@ -48,20 +48,20 @@ class KREMOTECONTROL_EXPORT DBusInterface: public QObject
         bool isProgramRunning(const QString &program);
         bool isUnique(const QString &program);
 
-        QStringList getRegisteredPrograms();
-        QStringList getNodes(const QString &program);
-        QList<Prototype> getFunctions(const QString &program, const QString &object);
+        QStringList registeredPrograms();
+        QStringList nodes(const QString &program);
+        QList<Prototype> functions(const QString &program, const QString &object);
 	
-        QStringList getConfiguredRemotes();
+        QStringList configuredRemotes();
         void ignoreButtonEvents(const QString &remoteName);
         void considerButtonEvents(const QString &remoteName);
         void reloadRemoteControlDaemon();
 
         void executeAction(const DBusAction *action);
-        QStringList getModesForRemote(const QString &remoteName);
+        QStringList modesForRemote(const QString &remoteName);
         void changeMode(const QString &remoteName, const QString &modeName);
-        QString getCurrentMode(const QString &remoteName);
-        QString getModeIcon(const QString &remoteName, const QString &modeName);
+        QString currentMode(const QString &remoteName);
+        QString modeIcon(const QString &remoteName, const QString &modeName);
         bool eventsIgnored(const QString &remoteName);
         
         bool isKdedModuleRunning();

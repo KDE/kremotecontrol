@@ -14,10 +14,10 @@
       <arg name="remoteName" type="s" direction="in"/>
       <arg type="b" direction="out"/>
     </method>
-    <method name="getConfiguredRemotes">       
+    <method name="configuredRemotes">       
     <arg type="as" direction="out"/>
     </method>
-    <method name="getModesForRemote">
+    <method name="modesForRemote">
       <arg name="remoteName" type="s" direction="in"/>
       <arg type="as" direction="out"/>
     </method>
@@ -26,11 +26,11 @@
       <arg name="modeName" type="s" direction="in"/>
       <arg type="b" direction="out"/>
     </method>
-    <method name="getCurrentMode">
+    <method name="currentMode">
       <arg name="remoteName" type="s" direction="in"/>
       <arg type="s" direction="out"/>
     </method>
-    <method name="getModeIcon">
+    <method name="modeIcon">
       <arg name="remoteName" type="s" direction="in"/>
       <arg name="modeName" type="s" direction="in"/>
       <arg type="s" direction="out" />

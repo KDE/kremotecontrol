@@ -30,7 +30,7 @@ class KREMOTECONTROL_EXPORT RemoteList: public QList<Remote*>
         RemoteList();
 
         bool contains(const QString &remoteName) const;
-        Remote* getRemote(const QString &remoteName);
+        Remote* remote(const QString &remoteName);
         void saveToConfig(const QString &configName);
         void loadFromConfig(const QString &configName);
 };

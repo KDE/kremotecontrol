@@ -79,8 +79,8 @@ class KRemoteControlDaemonPrivate
           }
       };
 
-      Remote* getRemote(const QString& remoteName) {
-          return m_remoteList.getRemote(remoteName);
+      Remote* remote(const QString& remoteName) {
+          return m_remoteList.remote(remoteName);
       };
 
       bool isButtonEventIgnored(const QString &remote){
@@ -152,7 +152,7 @@ void KRemoteControlDaemon::slotStatusChanged(bool connected) {
 
 void KRemoteControlDaemon::gotMessage(const Solid::Control::RemoteControlButton& button) {
     kDebug()<< "Got message from remote " << button.remoteName() << " button " << button.name();
-    Remote *remote=   d_ptr->getRemote(button.remoteName());
+    Remote *remote=   d_ptr->remote(button.remoteName());
     if(!remote){
         kDebug()<< "No remote found for remote" << button.remoteName();
         return;
@@ -190,7 +190,7 @@ void KRemoteControlDaemon::reloadConfiguration() {
 }
 
 void KRemoteControlDaemon::changeMode(const QString& remoteName, Mode* mode) {
-    Remote *remote=   d_ptr->getRemote(remoteName);
+    Remote *remote=   d_ptr->remote(remoteName);
     if(remote && remote->allModes().contains(mode)){
         remote->setCurrentMode(mode);
     }
@@ -217,7 +217,7 @@ void KRemoteControlDaemon::considerButtonEvents(const QString& remoteName) {
 }
 
 void KRemoteControlDaemon::slotRemoteControlAdded(const QString& name) {
-    if(d_ptr->getRemote(name)){
+    if(d_ptr->remote(name)){
         kDebug() << "remote found";
         notifyEvent(i18n("The remote control %1 is now available.", name));
     }else{
@@ -241,7 +241,7 @@ void KRemoteControlDaemon::slotRemoteControlRemoved(const QString& name) {
 }
 
 bool KRemoteControlDaemon::changeMode(const QString& remoteName, const QString& modeName) {
-    Remote *remote = d_ptr->remoteList().getRemote(remoteName);
+    Remote *remote = d_ptr->remoteList().remote(remoteName);
     if(remote){
         foreach(Mode *mode, remote-> allModes()){
             if(mode->name() == modeName){
@@ -254,9 +254,9 @@ bool KRemoteControlDaemon::changeMode(const QString& remoteName, const QString& 
     return false;
 }
 
-QStringList KRemoteControlDaemon::getModesForRemote(const QString& remoteName) {
+QStringList KRemoteControlDaemon::modesForRemote(const QString& remoteName) {
     QStringList list;
-    Remote *remote = d_ptr->remoteList().getRemote(remoteName);
+    Remote *remote = d_ptr->remoteList().remote(remoteName);
     if(remote){
         foreach(const Mode *mode, remote->allModes()){
             list << mode->name();
@@ -265,7 +265,7 @@ QStringList KRemoteControlDaemon::getModesForRemote(const QString& remoteName) {
     return list;
 }
 
-QStringList KRemoteControlDaemon::getConfiguredRemotes() {
+QStringList KRemoteControlDaemon::configuredRemotes() {
     QStringList list;
     foreach(Remote *remote, d_ptr->remoteList()){
         list << remote->name();
@@ -280,16 +280,16 @@ void KRemoteControlDaemon::notifyModeChanged(Remote* remote) {
     0, KNotification::CloseOnTimeout, d_ptr->applicationData);
 }
 
-QString KRemoteControlDaemon::getCurrentMode(const QString& remoteName) {
-    Remote *remote = d_ptr->remoteList().getRemote(remoteName);
+QString KRemoteControlDaemon::currentMode(const QString& remoteName) {
+    Remote *remote = d_ptr->remoteList().remote(remoteName);
     if(remote){
         return remote->currentMode()->name();
     }
     return "modeNotFound";
 }
 
-QString KRemoteControlDaemon::getModeIcon(const QString &remoteName, const QString& modeName) {
-    Remote *remote = d_ptr->remoteList().getRemote(remoteName);
+QString KRemoteControlDaemon::modeIcon(const QString &remoteName, const QString& modeName) {
+    Remote *remote = d_ptr->remoteList().remote(remoteName);
     if(remote){
         Mode *mode = remote->modeByName(modeName);
         if(mode){

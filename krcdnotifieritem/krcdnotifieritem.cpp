@@ -58,8 +58,8 @@ void KrcdNotifierItem::updateTray() {
         setStatus(Passive);
     } else {
         toolTipHeader += i18nc("The state of kremotecontrol", "Ready");
-        foreach(const QString &remote, DBusInterface::getInstance()->getConfiguredRemotes()) {
-            QString mode = DBusInterface::getInstance()->getCurrentMode(remote);
+        foreach(const QString &remote, DBusInterface::getInstance()->configuredRemotes()) {
+            QString mode = DBusInterface::getInstance()->currentMode(remote);
             toolTip += remote + " <i>(" + mode + ")</i><br>";
         }
         setStatus(Active);
@@ -78,12 +78,12 @@ void KrcdNotifierItem::updateContextMenu(){
         QActionGroup *actionGroup = new QActionGroup(modeMenu);
         actionGroup->setExclusive(true);
         modeMenu->addTitle(KIcon("infrared-remote"), i18n("Switch mode to"));
-        foreach(const QString &mode, DBusInterface::getInstance()->getModesForRemote(remote)){
+        foreach(const QString &mode, DBusInterface::getInstance()->modesForRemote(remote)){
             QAction *entry = modeMenu->addAction(mode);
             entry->setActionGroup(actionGroup);
             entry->setCheckable(true);
-            entry->setIcon(KIcon(DBusInterface::getInstance()->getModeIcon(remote, mode)));
-            if(DBusInterface::getInstance()->getCurrentMode(remote) == mode){
+            entry->setIcon(KIcon(DBusInterface::getInstance()->modeIcon(remote, mode)));
+            if(DBusInterface::getInstance()->currentMode(remote) == mode){
                 entry->setChecked(true);
             }
             entry->setData(QStringList() << remote << mode);

@@ -58,15 +58,15 @@ DBusInterface::~DBusInterface() {
     //DBusInterface::theInstance = 0;
 }
 
-QStringList DBusInterface::getAllRegisteredPrograms() {
+QStringList DBusInterface::allRegisteredPrograms() {
     QDBusConnectionInterface *dBusIface = QDBusConnection::sessionBus().interface();
     return dBusIface->registeredServiceNames();
 }
 
-QStringList DBusInterface::getRegisteredPrograms() {
+QStringList DBusInterface::registeredPrograms() {
     QStringList returnList;
 
-    QStringList allServices = getAllRegisteredPrograms();
+    QStringList allServices = allRegisteredPrograms();
 
     //Throw out invalid entries
     for (int i = 0; i < allServices.size(); ++i) {
@@ -76,7 +76,7 @@ QStringList DBusInterface::getRegisteredPrograms() {
         if (!r1.exactMatch(tmp)) {
             continue;
         }
-        if (getNodes(tmp).isEmpty()) {
+        if (nodes(tmp).isEmpty()) {
             continue;
         }
         QRegExp r2("[a-zA-Z0-9_\\.-]+-[0-9]+");
@@ -92,7 +92,7 @@ QStringList DBusInterface::getRegisteredPrograms() {
     return returnList;
 }
 
-QStringList DBusInterface::getNodes(const QString &program) {
+QStringList DBusInterface::nodes(const QString &program) {
     kDebug() << "getting Nodes of" << program;
     QDBusInterface dBusIface(program, "/", "org.freedesktop.DBus.Introspectable");
     QDBusMessage msg = QDBusMessage::createMethodCall(program, "/", "org.freedesktop.DBus.Introspectable", "Introspect");
@@ -102,7 +102,7 @@ QStringList DBusInterface::getNodes(const QString &program) {
     domDoc.setContent(response);
     if (domDoc.toString().isEmpty()) { // No reply... perhaps a multi-instance...
         kDebug() << "no reply from" << program;
-        QStringList instances = getAllRegisteredPrograms().filter(program);
+        QStringList instances = allRegisteredPrograms().filter(program);
         if (!instances.isEmpty()) {
             QDBusInterface iFace(instances.first(), "/", "org.freedesktop.DBus.Introspectable");
             QDBusMessage msg = QDBusMessage::createMethodCall(instances.first(), "/", "org.freedesktop.DBus.Introspectable", "Introspect");
@@ -120,7 +120,7 @@ QStringList DBusInterface::getNodes(const QString &program) {
     while (!child.isNull()) {
         if (child.tagName() == QLatin1String("node")) {
             QString name = child.attribute(QLatin1String("name"));
-            if (name != "org" && name != "modules" && !getFunctions(program, name).isEmpty()) {
+            if (name != "org" && name != "modules" && !functions(program, name).isEmpty()) {
                 returnList << name;
             }
         }
@@ -129,7 +129,7 @@ QStringList DBusInterface::getNodes(const QString &program) {
     return returnList;
 }
 
-QList<Prototype> DBusInterface::getFunctions(const QString &program, const QString &object) {
+QList<Prototype> DBusInterface::functions(const QString &program, const QString &object) {
     QDBusInterface dBusIface(program, '/' + object, "org.freedesktop.DBus.Introspectable");
     QDBusReply<QString> response = dBusIface.call("Introspect");
 
@@ -137,7 +137,7 @@ QList<Prototype> DBusInterface::getFunctions(const QString &program, const QStri
     domDoc.setContent(response);
 
     if (domDoc.toString().isEmpty()) { // No reply... perhaps a multi-instance...
-        QStringList instances = getAllRegisteredPrograms().filter(program);
+        QStringList instances = allRegisteredPrograms().filter(program);
         if (!instances.isEmpty()) {
             QDBusInterface iFace(instances.first(), '/' + object, "org.freedesktop.DBus.Introspectable");
             response = iFace.call("Introspect");
@@ -212,10 +212,10 @@ QList<Prototype> DBusInterface::getFunctions(const QString &program, const QStri
     return funcList;
 }
 
-QStringList DBusInterface::getConfiguredRemotes() {
+QStringList DBusInterface::configuredRemotes() {
     QStringList remotes;
     QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontroldaemon",
-                     "org.kde.krcd", "getConfiguredRemotes");
+                     "org.kde.krcd", "configuredRemotes");
     QDBusMessage response = QDBusConnection::sessionBus().call(m);
     if (response.type() == QDBusMessage::ErrorMessage) {
         kDebug() << response.errorMessage();
@@ -264,7 +264,7 @@ bool DBusInterface::isProgramRunning(const QString &program) {
 }
 
 bool DBusInterface::isUnique(const QString &program){
-    QStringList instances = getAllRegisteredPrograms().filter(program);
+    QStringList instances = allRegisteredPrograms().filter(program);
     kDebug() << "instances of " + program << instances;
 
     // If there are more than 1 it is oviously not unique
@@ -416,9 +416,9 @@ void DBusInterface::changeMode(const QString& remoteName, const QString& modeNam
     }
 }
 
-QString DBusInterface::getCurrentMode(const QString& remoteName) {
+QString DBusInterface::currentMode(const QString& remoteName) {
   QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontroldaemon",
-                     "org.kde.krcd", "getCurrentMode");
+                     "org.kde.krcd", "currentMode");
      m << remoteName;
     QDBusReply<QString> reply = QDBusConnection::sessionBus().call(m);
     if (reply.isValid()) {
@@ -429,9 +429,9 @@ QString DBusInterface::getCurrentMode(const QString& remoteName) {
     }
 }
 
-QStringList DBusInterface::getModesForRemote(const QString& remoteName) {
+QStringList DBusInterface::modesForRemote(const QString& remoteName) {
     QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontroldaemon",
-                     "org.kde.krcd", "getModesForRemote");
+                     "org.kde.krcd", "modesForRemote");
     m << remoteName;
     QDBusReply<QStringList> reply = QDBusConnection::sessionBus().call(m);
     if (reply.isValid()) {
@@ -442,9 +442,9 @@ QStringList DBusInterface::getModesForRemote(const QString& remoteName) {
     }
 }
 
-QString DBusInterface::getModeIcon(const QString& remoteName, const QString& modeName) {
+QString DBusInterface::modeIcon(const QString& remoteName, const QString& modeName) {
     QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontroldaemon",
-                     "org.kde.krcd", "getModeIcon");
+                     "org.kde.krcd", "modeIcon");
     m << remoteName;
     m << modeName;
     QDBusReply<QString> reply = QDBusConnection::sessionBus().call(m);

@@ -53,11 +53,11 @@ DBusServiceModel
 
 DBusServiceModel::DBusServiceModel(QObject* parent): QStandardItemModel(parent) {
     setHorizontalHeaderLabels(QStringList() << i18n("Application / Node"));
-    foreach(const QString &item, DBusInterface::getInstance()->getRegisteredPrograms()) {
+    foreach(const QString &item, DBusInterface::getInstance()->registeredPrograms()) {
         DBusServiceItem *dbusServiceItem = new DBusServiceItem(item);
         dbusServiceItem->setEditable(false);
         appendRow(dbusServiceItem);
-        foreach(const QString &node, DBusInterface::getInstance()->getNodes(item)) {
+        foreach(const QString &node, DBusInterface::getInstance()->nodes(item)) {
             dbusServiceItem->appendRow(new QStandardItem(node));
         }
     }
@@ -163,7 +163,7 @@ void DBusFunctionModel::refresh(const QString &app, const QString &node) {
         return;
     }
     
-    foreach(const Prototype &prototype, DBusInterface::getInstance()->getFunctions(app, node)){
+    foreach(const Prototype &prototype, DBusInterface::getInstance()->functions(app, node)){
         appendRow(prototype);
     }
 

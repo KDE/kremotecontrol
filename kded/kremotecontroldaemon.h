@@ -57,10 +57,10 @@ class KRemoteControlDaemon : public KDEDModule
         void considerButtonEvents(const QString& remoteName);
         void changeMode(const QString& remoteName, Mode* mode);
         bool changeMode(const QString& remoteName, const QString &modeName);
-        QStringList getConfiguredRemotes();
-        QStringList getModesForRemote(const QString &remoteName);
-        QString getCurrentMode(const QString& remoteName);
-        QString getModeIcon(const QString &remoteName, const QString &modeName);
+        QStringList configuredRemotes();
+        QStringList modesForRemote(const QString &remoteName);
+        QString currentMode(const QString& remoteName);
+        QString modeIcon(const QString &remoteName, const QString &modeName);
         bool eventsIgnored(const QString& remoteName);
     
     Q_SIGNALS:
