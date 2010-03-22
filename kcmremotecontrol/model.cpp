@@ -489,8 +489,7 @@ ProfileModel::ProfileModel(QObject *parent): QStandardItemModel(parent) {
         if(!profile->description().isEmpty()){
             tooltip.append(profile->description()).append("\n");
         }
-        tooltip.append(i18nc("Profile author", "Author")).append(": ");
-        tooltip.append(profile->author()).append(" (").append(i18nc( "Profile Version", "Version")).append(": ").append(profile->version()).append(")");
+        tooltip.append(i18n("Author: %1 (Version: %2)", profile->author(), profile->version()));
         item->setToolTip(tooltip);
         item->setData(qVariantFromValue(profile), Qt::UserRole);
         item->setEditable(false);
@@ -548,10 +547,6 @@ QVariant ActionTemplateModel::headerData(int section, Qt::Orientation orientatio
                     return i18nc("Profile name", "Name");
                 case 1:
                     return i18n("Description");
-                case 2:
-                    return i18n("Default argument count");
-                case 3:
-                    return i18n("Mapped remote button");
             }
         }
     }

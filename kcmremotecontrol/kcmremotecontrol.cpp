@@ -293,13 +293,11 @@ void KCMRemoteControl::updateModes() {
         ui.tvRemotes->setEnabled(true);
         ui.tvActions->setEnabled(true);
         ui.lRemotes->setEnabled(true);
-        ui.lActionText->setEnabled(true);
     } else {
         ui.lNoRemotesWarning->setMaximumSize(32767, 32767);
         ui.tvRemotes->setEnabled(false);
         ui.tvActions->setEnabled(false);
         ui.lRemotes->setEnabled(false);
-        ui.lActionText->setEnabled(false);
     }
 }
 
@@ -343,9 +341,9 @@ void KCMRemoteControl::modeSelectionChanged(const QModelIndex &index) {
         
         Remote *remote = m_remoteModel->remote(index);
         if(mode == remote->masterMode()){
-            ui.lActions->setText(remote->name());
+            ui.lActions->setText(i18n("Configured actions for %1:", remote->name()));
         } else {
-            ui.lActions->setText(remote->name() + " in mode \"" + mode->name() + "\"");
+            ui.lActions->setText(i18n("Configured actions for %1 in mode %2:", remote->name(), mode->name()));
         }
         
         if(remote->allModes().indexOf(mode) > 1){
