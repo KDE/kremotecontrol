@@ -1,40 +1,42 @@
 [Global]
 IconName=krcd
 Comment=K Remotce Control Daemon
+Comment[sv]=Styrdemon för Kremotec
+Comment[uk]=Фонова служба дистанційного керування
 
 [Event/global_event]
 Name=KRemoteControl notification
-Name[en_GB]=Irkick notification
-Name[tr]=Irkick bildirimi
-Name[uk]=Сповіщення Irkick
-Name[zh_TW]=Irkick 通知
 Comment=KRemoteControl global notification event
-Comment[en_GB]=Irkick global notification event
-Comment[tr]=Irkick genel bildirim olayı
-Comment[uk]=Подія загального сповіщення Irkick
-Comment[zh_TW]=Irkick 全域通知事件
 Action=Popup
 
 
 [Event/mode_event]
 Name=Mode switch event
-Name[en_GB]=Mode event
-Name[tr]=Kip olayı
-Name[uk]=Подія режиму
-Name[zh_TW]=模式事件
 Comment=Mode has changed
 Comment[en_GB]=Mode has changed
+Comment[es]=El modo ha cambiado
+Comment[nb]=Modus er endret
+Comment[nn]=Modusen er endra
+Comment[pt]=O modo foi alterado
+Comment[pt_BR]=O modo foi alterado
+Comment[sv]=Läge har ändrats
 Comment[tr]=Kip değiştirildi
 Comment[uk]=Відбулася зміна режиму
+Comment[x-test]=xxMode has changedxx
 Comment[zh_TW]=模式已變更
 Action=Popup
 
 [Event/app_event]
 Name=Application event
+Name[en_GB]=Application event
+Name[es]=Evento de aplicación
+Name[nb]=Programhendelse
+Name[nn]=Programhending
+Name[pt]=Evento da aplicação
+Name[pt_BR]=Evento do aplicativo
+Name[sv]=Programhändelse
 Name[tr]=Uygulama olayı
+Name[uk]=Подія програми
+Name[x-test]=xxApplication eventxx
 Comment=KRemoteControl has started an application
-Comment[en_GB]=Irkick has triggered an application
-Comment[tr]=Irkick bir uygulamayı tetikledi
-Comment[uk]=Irkick увімкнула програму
-Comment[zh_TW]=Irkick 已觸發一應用程式
 Action=Popup
