@@ -44,7 +44,7 @@ ModeDialog::ModeDialog(Remote *remote, Mode *mode, QWidget *parent): KDialog(par
     connect(ui.cbButtonBackward, SIGNAL(currentIndexChanged(int)), this, SLOT(backwardButtonChanged()));
     connect(ui.gbModeCycle, SIGNAL(clicked(bool)), this, SLOT(modeHandlerChanged()));
 
-    ui.cbButtons->addItem(i18n("No button"), "");
+    ui.cbButtons->addItem(i18n("No button"), QString());
     foreach(const QString &button, remote->availableModeSwitchButtons(mode)){
         ui.cbButtons->addItem(button, button);
     }
@@ -170,7 +170,7 @@ void ModeDialog::modeHandlerChanged() {
 }
 
 ButtonComboBox::ButtonComboBox(QWidget* parent): KComboBox(parent) {
-    addItem(i18n("No Button"), "");
+    addItem(i18n("No Button"), QString());
 }
 
 void ButtonComboBox::addButtons(const QStringList &buttonList){
@@ -183,13 +183,13 @@ void ButtonComboBox::addButtons(const QStringList &buttonList){
 
 void ButtonComboBox::hideButton(const QString& button) {
     kDebug() << "hiding button" << button;
-    if(!m_hiddedButton.isEmpty()){
-        kDebug() << "inserting old hidden button" << m_hiddedButton;
-        insertItem(m_hiddenIndex, m_hiddedButton);
+    if(!m_hiddenButton.isEmpty()){
+        kDebug() << "inserting old hidden button" << m_hiddenButton;
+        insertItem(m_hiddenIndex, m_hiddenButton);
     }
     if(!button.isEmpty()){
         m_hiddenIndex = findData(button);
-        m_hiddedButton = itemData(m_hiddenIndex).toString();
+        m_hiddenButton = itemData(m_hiddenIndex).toString();
         removeItem(m_hiddenIndex);
     }
 }

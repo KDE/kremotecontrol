@@ -131,6 +131,10 @@ void KRemoteControlDaemon::gotMessage(const Solid::Control::RemoteControlButton&
 }
 
 void KRemoteControlDaemon::reloadConfiguration() {
+    foreach(Remote *remote, m_remoteList){
+        delete remote;
+    }
+    m_remoteList.clear();
     m_remoteList.loadFromConfig("kremotecontrolrc");
     KConfig config("kremotecontrolrc");
     KConfigGroup globalGroup(&config, "Global");

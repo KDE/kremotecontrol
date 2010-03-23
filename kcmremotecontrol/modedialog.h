@@ -41,7 +41,7 @@ public Q_SLOTS:
 
 private:
     int m_hiddenIndex;
-    QString m_hiddedButton;
+    QString m_hiddenButton;
 };
 
 #include "ui_modedialog.h"

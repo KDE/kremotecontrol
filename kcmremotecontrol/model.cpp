@@ -602,9 +602,13 @@ RemoteModel
 */
 
 RemoteModel::RemoteModel(QObject* parent): QStandardItemModel(parent) {
+    qRegisterMetaType<Remote*>("Remote*");
+    qRegisterMetaType<Mode*>("Mode*");
 }
 
 RemoteModel::RemoteModel(const RemoteList &remoteList, QObject *parent) : QStandardItemModel(parent) {
+    qRegisterMetaType<Remote*>("Remote*");
+    qRegisterMetaType<Mode*>("Mode*");
     refresh(remoteList);
 }
 
@@ -732,8 +736,6 @@ Qt::DropActions RemoteModel::supportedDropActions() const {
 }
 
 RemoteItem::RemoteItem(Remote *remote) {
-    qRegisterMetaType<Remote*>("Remote*");
-    qRegisterMetaType<Mode*>("Mode*");
     setData(qVariantFromValue(remote), Qt::UserRole);
     foreach(Mode *mode, remote->allModes()) {
         if(mode->name() != "Master"){ // Don't show the Master Mode separately

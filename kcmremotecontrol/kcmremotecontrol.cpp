@@ -119,6 +119,9 @@ KCMRemoteControl::KCMRemoteControl(QWidget *parent, const QVariantList &args) :
 }
 
 KCMRemoteControl::~KCMRemoteControl() {
+    foreach(Remote *remote, m_remoteList){
+        delete remote;
+    }
 }
 
 void KCMRemoteControl::addAction() {
