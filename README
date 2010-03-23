@@ -1,55 +1,53 @@
-kdelirc
--------
+KRemoteControl
+===================
+part of the KDE project.
 
-KDELIRC is a KDE frontend for the Linux Infrared Remote Control system. It has
-two aims:
+Copyright: 2009 - 2010 Michael Zanetti <michael_zanetti@gmx.net>
+           2009 - 2010 Frank Scheffold <fscheffold@googlemail.com>
 
-1. Provide a control center module for configuration of:
-	a) Application bindings to remote control buttons.
-	b) Actual remote controls installed (i.e. lirc configuration).
+Author/Maintainer: Michael Zanetti <michael_zanetti@gmx.net>
+Author:            Frank Scheffold <fscheffold@googlemail.com>
 
-2. Provide a system-tray applet to act as a proxy between the LIRC system and
-	KDE (applications), in order to launch D-Bus requests (and potentially
-	other IPC signals) to applications (and potentially collect/display
-	results).
+Overview:
+--------
+KRemoteControl is a KDE frontend for your remote controls. It allows to configure
+actions for button presses on remotes. All types of remotes supported by 
+Solid are also supported by KRemoteControl. For usage instructions see 
+the KRemoteControl handbook provided with the kdeutils module.
 
-INSTALLATION
 
-Nothing but the normal ./configure && make && su -c "make install".
+KRemoteControl consists of the following modules:
+* libkremotecontrol:
+  This lib holds all the basic data structures for handling remotes,
+  modes and actions. Additionally it holds a D-Bus browser interface
+  and executors for actions.
 
-SETUP
+* kcmremotecontrol:
+  This is the configuration module for systemsettings. It allows to
+  create and assign actions to remote controls.
 
-For the KDELirc system to work properly, you *must* have lircd configured and
-running. If you have already had a Lirc program running, then you most likely
-have Lirc set up properly. If not, be sure that you have a correct kernel module
-loaded for your IR receiver (1) and that the lircd program is running (2).
+* kded:
+  A kded module responsible for actually executing the actions on incoming
+  button presses.
 
-You must also have some remote controls configured in "/etc/lircd.conf". Go to
-the lircd website (www.lirc.org) for more information on this.
+* krcdnotifieritem:
+  A notifier item sitting in the notification area (aka system tray).
+  Its job is to notify the user of incoming button presses by blinking
+  and provides a context menu for manually switching a remotes mode.
 
-(1) /sbin/lsmod | grep lirc
-If you see some output, you have a lirc kernel module loaded (that's not to say
-it's the right module for your hardware).
+* dataengine:
+  This is a plasma dataengine. It allows to interact with the kded module
+  within a plasmoid. There is no plasmoid provided with KRemoteControl yet.
 
-(2) ps aux | grep -v grep | grep lircd
-If you see some output, you have the lircd program running. This is good.
 
-DESIGN
+Development:
+--------------
+* To create new action templates you need to create a profile. See the
+  KRemoteControl handbook for a step by step guide.
 
-The design of the system is really quite simple---a control center module
-modifies a centralised configuration file to determine what action(s) should
-be taken on a remote control's button press.
+* To add new types of supported remotes you need to create a new Solid 
+  remote control backend.
 
-The same(?) module also provides a front-end for the input of /etc/lircd.conf,
-necessary to specify remote controls to the LIRC system. An extra (standard
-format XML-based) may be provided with the remote control description to give
-less sucky (lower case, no spaces/symbols) names.
-
-The /etc/lircd.conf frontend has not yet been implemented, though all other
-features are.
-
-The system tray applet interfaces with LIRC in order to catch key presses on
-remote controls. It is then able to communicate with and potentially start
-applications through D-Bus.
-
-Gav Wood, 2003 (gav at kde dot org).
+* To add new types of actions you need to provide an Action class derived 
+  from action, an executor able to execute your action and a configuration
+  UI for this action.
