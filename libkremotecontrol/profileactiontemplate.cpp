@@ -32,70 +32,71 @@ ProfileActionTemplate::ProfileActionTemplate( const QString &profileId,
                                               const QString &description,
                                               const QString &buttonName)
 {
-    m_profileId = profileId;
-    m_actionTemplateId = actionTemplateId;
-    m_actionName = actionName;
-    m_node = node;
-    m_serviceName = serviceName;
-    m_function = function;
-    m_description = description;
-    m_destination= destination;
-    m_autostart = autostart;
-    m_repeat = repeat;
-    m_buttonName = buttonName;
+    d = new ProfileActionTemplatePrivate;
+    d->m_profileId = profileId;
+    d->m_actionTemplateId = actionTemplateId;
+    d->m_actionName = actionName;
+    d->m_node = node;
+    d->m_serviceName = serviceName;
+    d->m_function = function;
+    d->m_description = description;
+    d->m_destination= destination;
+    d->m_autostart = autostart;
+    d->m_repeat = repeat;
+    d->m_buttonName = buttonName;
 }
 
 QString ProfileActionTemplate::profileId() const {
-    return m_profileId;
+    return d->m_profileId;
 }
 
 QString ProfileActionTemplate::actionTemplateId() const {
-    return m_actionTemplateId;
+    return d->m_actionTemplateId;
 }
 
 QString ProfileActionTemplate::actionName() const {
-    return m_actionName;
+    return d->m_actionName;
 }
 
 QString ProfileActionTemplate::service() const {
-    return m_serviceName;
+    return d->m_serviceName;
 }
 
 QString ProfileActionTemplate::node() const {
-    return m_node;
+    return d->m_node;
 }
 
 QString ProfileActionTemplate::description() const {
-    return m_description;
+    return d->m_description;
 }
 
 Prototype ProfileActionTemplate::function() const {
-    return m_function;
+    return d->m_function;
 }
 
 DBusAction::ActionDestination ProfileActionTemplate::destination() const {
-    return m_destination;
+    return d->m_destination;
 }
 
 bool ProfileActionTemplate::autostart() const {
-    return m_autostart;
+    return d->m_autostart;
 }
 
 bool ProfileActionTemplate::repeat() const {
-    return m_repeat;
+    return d->m_repeat;
 }
 
 QString ProfileActionTemplate::buttonName() const {
-    return m_buttonName;
+    return d->m_buttonName;
 }
 
 ProfileAction *ProfileActionTemplate::createAction(const Solid::Control::RemoteControlButton& button) const {
-    ProfileAction *action = new ProfileAction(button.name(), m_profileId, m_actionTemplateId);
-    action->setApplication(m_serviceName);
-    action->setNode(m_node);
-    action->setFunction(m_function);
-    action->setDestination(m_destination);
-    action->setAutostart(m_autostart);
-    action->setRepeat(m_repeat);
+    ProfileAction *action = new ProfileAction(button.name(), d->m_profileId, d->m_actionTemplateId);
+    action->setApplication(d->m_serviceName);
+    action->setNode(d->m_node);
+    action->setFunction(d->m_function);
+    action->setDestination(d->m_destination);
+    action->setAutostart(d->m_autostart);
+    action->setRepeat(d->m_repeat);
     return action;
 }

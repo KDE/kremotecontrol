@@ -26,6 +26,8 @@
 
 #include <solid/control/remotecontrolbutton.h>
 
+class ProfileActionTemplatePrivate;
+
 class KREMOTECONTROL_EXPORT ProfileActionTemplate
 {
     public:
@@ -56,8 +58,30 @@ class KREMOTECONTROL_EXPORT ProfileActionTemplate
         QString buttonName() const;
 
         ProfileAction *createAction(const Solid::Control::RemoteControlButton &button) const;
+        
+    private:
+        QSharedDataPointer<ProfileActionTemplatePrivate> d;
 
-    protected:
+};
+
+class ProfileActionTemplatePrivate: public QSharedData
+{
+    public:
+        ProfileActionTemplatePrivate(){};
+        
+        ProfileActionTemplatePrivate(const ProfileActionTemplatePrivate &other): QSharedData(other),
+                                      m_profileId(other.m_profileId),
+                                      m_actionTemplateId(other.m_actionTemplateId),
+                                      m_actionName(other.m_actionName),
+                                      m_serviceName(other.m_serviceName),
+                                      m_node(other.m_node),
+                                      m_function(other.m_function),
+                                      m_description(other.m_description),
+                                      m_destination(other.m_destination),
+                                      m_autostart(other.m_autostart),
+                                      m_repeat(other.m_repeat),
+                                      m_buttonName(other.m_buttonName){};
+                              
         QString m_profileId; // e.g. multimedia
         QString m_actionTemplateId; // e.g. amarokPlay
         QString m_actionName; // e.g. Play
@@ -69,7 +93,6 @@ class KREMOTECONTROL_EXPORT ProfileActionTemplate
         bool m_autostart;
         bool m_repeat;
         QString m_buttonName;
-
 };
 
 Q_DECLARE_METATYPE(ProfileActionTemplate)
