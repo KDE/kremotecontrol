@@ -1,6 +1,6 @@
 [Global]
 IconName=krcd
-Comment=K Remotce Control Daemon
+Comment=KRemoteControl Daemon
 Comment[sv]=Styrdemon för Kremotec
 Comment[uk]=Фонова служба дистанційного керування
 
