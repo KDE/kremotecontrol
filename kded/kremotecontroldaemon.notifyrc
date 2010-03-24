@@ -1,17 +1,27 @@
 [Global]
 IconName=krcd
 Comment=KRemoteControl Daemon
-Comment[sv]=Styrdemon för Kremotec
-Comment[uk]=Фонова служба дистанційного керування
 
 [Event/global_event]
 Name=KRemoteControl notification
+Name[en_GB]=KRemoteControl notification
+Name[pt]=Notificação do KRemoteControl
+Name[sv]=Underrättelser för Kremotecontrol
+Name[uk]=Сповіщення KRemoteControl
 Comment=KRemoteControl global notification event
+Comment[en_GB]=KRemoteControl global notification event
+Comment[pt]=Evento de notificação global do KRemoteControl
+Comment[sv]=Kremotecontrol global underrättelsehändelse
+Comment[uk]=Подія загального сповіщення KRemoteControl
 Action=Popup
 
 
 [Event/mode_event]
 Name=Mode switch event
+Name[en_GB]=Mode switch event
+Name[pt]=Evento de mudança de modo
+Name[sv]=Lägesbyteshändelse
+Name[uk]=Подія перемикання режиму
 Comment=Mode has changed
 Comment[en_GB]=Mode has changed
 Comment[es]=El modo ha cambiado
@@ -39,4 +49,8 @@ Name[tr]=Uygulama olayı
 Name[uk]=Подія програми
 Name[x-test]=xxApplication eventxx
 Comment=KRemoteControl has started an application
+Comment[en_GB]=KRemoteControl has started an application
+Comment[pt]=O KRemoteControl iniciou uma aplicação
+Comment[sv]=Kremotecontrol har startat ett program
+Comment[uk]=KRemoteControl було запущено програму
 Action=Popup
