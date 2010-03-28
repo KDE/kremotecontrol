@@ -1,10 +1,12 @@
 [Global]
 IconName=krcd
 Comment=KRemoteControl Daemon
+Comment[en_GB]=KRemoteControl Dæmon
 Comment[pt]=Servidor do KRemoteControl
 Comment[pt_BR]=Daemon do KRemoteControl
 Comment[sv]=K-fjärrkontrolldemon
 Comment[uk]=Фонова служба дистанційного керування
+Comment[x-test]=xxKRemoteControl Daemonxx
 
 [Event/global_event]
 Name=KRemoteControl notification
@@ -13,12 +15,14 @@ Name[pt]=Notificação do KRemoteControl
 Name[pt_BR]=Notificação do KRemoteControl
 Name[sv]=Underrättelser för Kremotecontrol
 Name[uk]=Сповіщення KRemoteControl
+Name[x-test]=xxKRemoteControl notificationxx
 Comment=KRemoteControl global notification event
 Comment[en_GB]=KRemoteControl global notification event
 Comment[pt]=Evento de notificação global do KRemoteControl
 Comment[pt_BR]=Evento de notificação global do KRemoteControl
 Comment[sv]=Kremotecontrol global underrättelsehändelse
 Comment[uk]=Подія загального сповіщення KRemoteControl
+Comment[x-test]=xxKRemoteControl global notification eventxx
 Action=Popup
 
 
@@ -28,6 +32,7 @@ Name[en_GB]=Mode switch event
 Name[pt]=Evento de mudança de modo
 Name[sv]=Lägesbyteshändelse
 Name[uk]=Подія перемикання режиму
+Name[x-test]=xxMode switch eventxx
 Comment=Mode has changed
 Comment[en_GB]=Mode has changed
 Comment[es]=El modo ha cambiado
@@ -60,4 +65,5 @@ Comment[pt]=O KRemoteControl iniciou uma aplicação
 Comment[pt_BR]=O KRemoteControl iniciou um aplicativo
 Comment[sv]=Kremotecontrol har startat ett program
 Comment[uk]=KRemoteControl було запущено програму
+Comment[x-test]=xxKRemoteControl has started an applicationxx
 Action=Popup
