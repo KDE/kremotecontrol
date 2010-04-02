@@ -1,6 +1,16 @@
 [Desktop Entry]
 Name=Remote Control Data Engine
+Name[en_GB]=Remote Control Data Engine
+Name[es]=Motor de datos de mandos a distancia
+Name[pt]=Motor de Dados dos Comandos à Distância
+Name[sv]=Datagränssnitt för fjärrkontroll
+Name[uk]=Рушій даних дистанційного керування
 Comment=Data engine for kremotecontrol
+Comment[en_GB]=Data engine for kremotecontrol
+Comment[es]=Motor de datos para kremotecontrol
+Comment[pt]=Motor de dados do kremotecontrol
+Comment[sv]=Datagränssnitt för Kremotecontrol
+Comment[uk]=Рушій даних для kremotecontrol
 Type=Service
 ServiceTypes=Plasma/DataEngine
 Icon=infrared-remote
