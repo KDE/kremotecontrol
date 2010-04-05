@@ -162,10 +162,10 @@ void KRemoteControlDaemon::changeMode(const QString& remoteName, Mode* mode) {
 void KRemoteControlDaemon::ignoreButtonEvents(const QString& remoteName) {
     if(remoteName.isEmpty()){
         foreach(const Remote *remote, m_remoteList){
-            kDebug() << "muting remote" << remoteName;
-            m_ignoreNextButtonList.append(remoteName);
-            m_ignoreNextButtonList.removeDuplicates();
+            kDebug() << "muting remote" << remote->name();
+            m_ignoreNextButtonList.append(remote->name());           
         }
+        m_ignoreNextButtonList.removeDuplicates();
     } else {
         kDebug() << "muting remote" << remoteName;
         m_ignoreNextButtonList.append(remoteName);
