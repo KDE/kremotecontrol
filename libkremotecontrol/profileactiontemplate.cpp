@@ -20,6 +20,11 @@
 #include "profileactiontemplate.h"
 
 
+ProfileActionTemplate::ProfileActionTemplate() {
+  d = new ProfileActionTemplatePrivate;
+}
+
+
 ProfileActionTemplate::ProfileActionTemplate( const QString &profileId,
                                               const QString &actionTemplateId,
                                               const QString &actionName,
