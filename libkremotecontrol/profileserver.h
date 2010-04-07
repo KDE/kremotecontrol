@@ -65,6 +65,6 @@ namespace ProfileServer
           virtual void handleMessage(QtMsgType type, const QString &description, const QUrl &identifier, const QSourceLocation &sourceLocation);
 
     };
-};
+}
 
 #endif // PROFILESERVER_H

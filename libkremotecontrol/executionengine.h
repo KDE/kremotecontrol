@@ -29,6 +29,6 @@
 namespace ExecutionEngine
 {
     void executeAction(Action *action);
-};
+}
 
 #endif // ACTIONDELEGATOR_H
