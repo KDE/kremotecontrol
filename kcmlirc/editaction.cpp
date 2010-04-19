@@ -424,8 +424,8 @@ void EditAction::addItem(QString item)
 
 Arguments EditAction::getCurrentArgs() {
     Arguments retList;
-    foreach(QStandardItem *item, argumentsModel->takeColumn(1)) {
-        retList.append(item->data(Qt::EditRole));
+    for(int i = 0; i < argumentsModel->rowCount(); i++){
+        retList.append(argumentsModel->item(i, 1)->data(Qt::EditRole));
     }
     return retList;
 }
