@@ -140,7 +140,7 @@ void KRemoteControlDaemon::reloadConfiguration() {
     KConfigGroup globalGroup(&config, "Global");
     
     if(globalGroup.readEntry("ShowTrayIcon", true)){
-        kDebug() << "starting notifier item" <<
+        kDebug() << "starting notifier item";
         KToolInvocation::kdeinitExec("krcdnotifieritem");
     } else {
         emit unloadTray();
