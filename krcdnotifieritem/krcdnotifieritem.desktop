@@ -10,6 +10,7 @@ Name[pt_BR]=Item de notificação do KRemoteControl
 Name[sv]=Underrättelseobjekt för Kremotecontrol
 Name[uk]=Пункт сповіщення KRemoteControl
 Name[x-test]=xxKRemoteControl Notifier Itemxx
+Name[zh_TW]=KRemoteControl 通知項目
 Exec=krcdnotifieritem
 Icon=krcd
 Type=Application

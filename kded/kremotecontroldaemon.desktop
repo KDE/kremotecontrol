@@ -10,6 +10,7 @@ Name[pt_BR]=Daemon de Controles Remotos do KDE
 Name[sv]=Demon för Kremotecontrol
 Name[uk]=Фонова служба дистанційного керування
 Name[x-test]=xxK Remote Control Daemonxx
+Name[zh_TW]=KDE 遠端遙控守護程式
 Type=Service
 X-KDE-ServiceTypes=KDEDModule
 X-KDE-ModuleType=Library
