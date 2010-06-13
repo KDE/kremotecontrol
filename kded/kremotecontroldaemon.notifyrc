@@ -1,6 +1,7 @@
 [Global]
 IconName=krcd
 Comment=KRemoteControl Daemon
+Comment[ca]=Dimoni KRemoteControl
 Comment[da]=KRemoteControl-dæmonen
 Comment[de]=Fernsteuerungsdienst für KDE
 Comment[en_GB]=KRemoteControl Dæmon
@@ -22,6 +23,7 @@ Comment[zh_TW]=KRemoteCOntrol 守護程式
 
 [Event/global_event]
 Name=KRemoteControl notification
+Name[ca]=Notificació del KRemoteControl
 Name[da]=KRemoteControl-bekendtgørelse
 Name[de]=KRemoteControl-Benachrichtigungen
 Name[en_GB]=KRemoteControl notification
@@ -41,6 +43,7 @@ Name[x-test]=xxKRemoteControl notificationxx
 Name[zh_CN]=KRemoteControl 通知
 Name[zh_TW]=KRemoteControl 通知
 Comment=KRemoteControl global notification event
+Comment[ca]=Esdeveniment de notificació global del KRemoteControl
 Comment[da]=KRemoteControl global bekendtgørelseshændelse
 Comment[de]=Globale Benachrichtigung in KRemoteControl
 Comment[en_GB]=KRemoteControl global notification event
@@ -64,6 +67,7 @@ Action=Popup
 
 [Event/mode_event]
 Name=Mode switch event
+Name[ca]=Esdeveniment de canvi de mode
 Name[da]=Tilstandsskift-hændelse
 Name[en_GB]=Mode switch event
 Name[es]=Evento de cambio de modo
@@ -169,6 +173,7 @@ Name[x-test]=xxApplication eventxx
 Name[zh_CN]=应用程序事件
 Name[zh_TW]=應用程式事件
 Comment=KRemoteControl has started an application
+Comment[ca]=El KRemoteControl ha iniciat una aplicació
 Comment[da]=KRemoteControl har startet et program
 Comment[de]=KRemoteControl hat eine Anwendung gestartet
 Comment[en_GB]=KRemoteControl has started an application

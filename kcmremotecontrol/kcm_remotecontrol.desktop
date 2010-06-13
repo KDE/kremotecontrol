@@ -21,7 +21,7 @@ X-KDE-Keywords[x-test]=xxKCMLirc,kcmlircxx
 
 Name=Remote Controls
 Name[ar]=التحكّم عن بعد
-Name[ca]=Controls remots
+Name[ca]=Comandaments a distància
 Name[ca@valencia]=Controls remots
 Name[cs]=Dálková ovládání
 Name[cy]=Rheolyddion Pell
@@ -78,7 +78,7 @@ Name[zh_TW]=遙控鍵
 
 Comment=Configure your remote controls for use with applications
 Comment[ar]=إعداد التحكّم عن بعد لاستخدامه في التطبيقات
-Comment[ca]=Configureu el control remot per usar-lo amb aplicacions
+Comment[ca]=Configureu el comandament a distància per usar-lo amb aplicacions
 Comment[ca@valencia]=Configureu el control remot per usar-lo amb aplicacions
 Comment[cs]=Nastavení dálkových ovladačů
 Comment[cy]=Ffurfweddu eich rheolyddion pell ar gyfer ddefnydd efo cymhwysiadau
