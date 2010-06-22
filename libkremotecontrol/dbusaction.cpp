@@ -50,30 +50,6 @@ void DBusAction::setFunction(const Prototype& function) {
     m_function = function;
 }
 
-bool DBusAction::repeat() const {
-    return m_repeat;
-}
-
-void DBusAction::setRepeat(bool repeat) {
-    m_repeat = repeat;
-}
-
-bool DBusAction::autostart() const {
-    return m_autostart;
-}
-
-void DBusAction::setAutostart(bool autostart) {
-    m_autostart = autostart;
-}
-
-DBusAction::ActionDestination DBusAction::destination() const {
-    return m_destination;
-}
-
-void DBusAction::setDestination(DBusAction::ActionDestination destination) {
-    m_destination = destination;
-}
-
 QString DBusAction::name() const {
     return m_application + ':' + m_node;
 }

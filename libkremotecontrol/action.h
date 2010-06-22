@@ -31,6 +31,7 @@ class KREMOTECONTROL_EXPORT Action
 {  
     public:
         enum ActionType {DBusAction, ProfileAction};
+        enum ActionDestination {Unique, Top, Bottom, None, All};
       
         Action(ActionType type, const QString &button);
         Action(ActionType type);
@@ -42,6 +43,15 @@ class KREMOTECONTROL_EXPORT Action
         QString button() const;
         void setButton(const QString &button);
 
+        bool repeat() const;
+        void setRepeat(bool repeat);
+        
+        bool autostart() const;
+        void setAutostart(bool autostart);
+        
+        ActionDestination destination() const;
+        void setDestination(ActionDestination destination);
+	
         virtual QString name() const = 0;
         virtual QString description() const = 0;
 
@@ -53,6 +63,8 @@ class KREMOTECONTROL_EXPORT Action
     protected:
         ActionType m_type;
         QString m_button;
+        bool m_repeat, m_autostart;
+        ActionDestination m_destination;
 };
 
 Q_DECLARE_METATYPE(Action*)

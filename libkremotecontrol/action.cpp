@@ -42,6 +42,30 @@ void Action::setButton(const QString& button) {
     m_button = button;
 }
 
+bool Action::repeat() const {
+    return m_repeat;
+}
+
+void Action::setRepeat(bool repeat) {
+    m_repeat = repeat;
+}
+
+bool Action::autostart() const {
+    return m_autostart;
+}
+
+void Action::setAutostart(bool autostart) {
+    m_autostart = autostart;
+}
+
+Action::ActionDestination Action::destination() const {
+    return m_destination;
+}
+
+void Action::setDestination(Action::ActionDestination destination) {
+    m_destination = destination;
+}
+
 void Action::saveToConfig(KConfigGroup& config) {
     config.writeEntry("Type", (int)m_type);
     config.writeEntry("Button", m_button);

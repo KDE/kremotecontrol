@@ -37,6 +37,7 @@
 #include <KToolInvocation>
 
 #include <QtGui/QPixmap>
+#include <kremotecontrol/libkremotecontrol/action.h>
 
 
 using namespace Solid::Control;
@@ -114,7 +115,10 @@ void KRemoteControlDaemon::gotMessage(const Solid::Control::RemoteControlButton&
     emit(buttonPressed());
 
     if(remote->currentMode()){
-        QVector<Action*> actionList = remote->masterMode()->actionsForButton(button.name());
+        QVector<Action*> actionList;
+        if(remote->currentMode() != remote->masterMode()){
+            actionList += remote->masterMode()->actionsForButton(button.name());
+        }
         actionList += remote->currentMode()->actionsForButton(button.name());
         if(remote->nextMode(button.name())){
             Mode *mode = remote->currentMode();
@@ -125,7 +129,10 @@ void KRemoteControlDaemon::gotMessage(const Solid::Control::RemoteControlButton&
             emit(modeChanged(remote->name(), mode->name()));
         }
         foreach(Action *action, actionList){
-            ExecutionEngine::executeAction(action);
+            if(action->repeat() || (button.repeatCounter() == 0)) {
+                kDebug() << "executing " << action->name() << action->description();
+                ExecutionEngine::executeAction(action);
+            }
         }
     }
 }
