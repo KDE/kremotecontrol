@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Remote Control Data Engine
 Name[ca]=Motor de dades de comandament a distància
+Name[ca@valencia]=Motor de dades de comandament a distància
 Name[da]=Datamotor til fjernbetjeninger
 Name[de]=Fernsteuerungs-Datenmodul
 Name[en_GB]=Remote Control Data Engine
@@ -22,6 +23,7 @@ Name[zh_CN]=远程控制数据引擎
 Name[zh_TW]=遠端遙控資料引擎
 Comment=Data engine for kremotecontrol
 Comment[ca]=Motor de dades pel kremotecontrol
+Comment[ca@valencia]=Motor de dades pel kremotecontrol
 Comment[da]=Datamotor til kremotecontrol
 Comment[de]=Datenmodul für KRemoteControl
 Comment[en_GB]=Data engine for kremotecontrol
