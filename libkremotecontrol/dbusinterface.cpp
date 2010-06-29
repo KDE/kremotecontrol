@@ -331,7 +331,7 @@ bool DBusInterface::searchForProgram(const DBusAction *action, QStringList &prog
                     break;
                 }
             }
-            while (programs.size() > 1) programs.removeFirst();
+            while (programs.size() > 1) programs.removeLast();
         } else if (programs.size() > 1 && action->destination() == DBusAction::Bottom) {
             QList<WId> s = KWindowSystem::stackingOrder();
             // go through all the (ordered) window pids
