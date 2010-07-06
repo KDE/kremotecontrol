@@ -66,8 +66,8 @@ KRemoteControlDaemon::KRemoteControlDaemon(QObject* parent, const QVariantList& 
     m_remoteList.loadFromConfig("kremotecontrolrc");
     KConfig config("kremotecontrolrc");
     KConfigGroup globalGroup(&config, "Global");
-    if(globalGroup.readEntry("ShowTrayIcon", true)){
-        kDebug() << "starting notifier item" <<
+    if(globalGroup.readEntry("ShowTrayIcon", false)){
+        kDebug() << "starting notifier item";
         KToolInvocation::kdeinitExec("krcdnotifieritem");
     } else {
         emit unloadTray();
@@ -146,7 +146,7 @@ void KRemoteControlDaemon::reloadConfiguration() {
     KConfig config("kremotecontrolrc");
     KConfigGroup globalGroup(&config, "Global");
     
-    if(globalGroup.readEntry("ShowTrayIcon", true)){
+    if(globalGroup.readEntry("ShowTrayIcon", false)){
         kDebug() << "starting notifier item";
         KToolInvocation::kdeinitExec("krcdnotifieritem");
     } else {
