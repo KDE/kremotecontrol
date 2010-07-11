@@ -33,6 +33,7 @@ Exec=krcdnotifieritem
 Icon=krcd
 Type=Application
 Terminal=false
+NoDisplay=true
 
 X-DBUS-StartupType=Unique
 
