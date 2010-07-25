@@ -1,6 +1,7 @@
 [Global]
 IconName=krcd
 Comment=KRemoteControl Daemon
+Comment[ar]=مراقب KRemoteControl
 Comment[ca]=Dimoni KRemoteControl
 Comment[ca@valencia]=Dimoni KRemoteControl
 Comment[da]=KRemoteControl-dæmonen
@@ -37,6 +38,7 @@ Comment[zh_TW]=KRemoteCOntrol 守護程式
 
 [Event/global_event]
 Name=KRemoteControl notification
+Name[ar]=اشعار KRemoteControl
 Name[ca]=Notificació del KRemoteControl
 Name[ca@valencia]=Notificació del KRemoteControl
 Name[da]=KRemoteControl-bekendtgørelse
@@ -69,6 +71,7 @@ Name[x-test]=xxKRemoteControl notificationxx
 Name[zh_CN]=KRemoteControl 通知
 Name[zh_TW]=KRemoteControl 通知
 Comment=KRemoteControl global notification event
+Comment[ar]=حدث اشعار عام لـKRemoteControl
 Comment[ca]=Esdeveniment de notificació global del KRemoteControl
 Comment[ca@valencia]=Esdeveniment de notificació global del KRemoteControl
 Comment[da]=KRemoteControl global bekendtgørelseshændelse
@@ -106,6 +109,7 @@ Action=Popup
 
 [Event/mode_event]
 Name=Mode switch event
+Name[ar]=حدث تبديل النمط
 Name[ca]=Esdeveniment de canvi de mode
 Name[ca@valencia]=Esdeveniment de canvi de mode
 Name[da]=Tilstandsskift-hændelse
@@ -233,6 +237,7 @@ Name[x-test]=xxApplication eventxx
 Name[zh_CN]=应用程序事件
 Name[zh_TW]=應用程式事件
 Comment=KRemoteControl has started an application
+Comment[ar]=شغل KRemoteControl  تطبيقا
 Comment[ca]=El KRemoteControl ha iniciat una aplicació
 Comment[ca@valencia]=El KRemoteControl ha iniciat una aplicació
 Comment[da]=KRemoteControl har startet et program

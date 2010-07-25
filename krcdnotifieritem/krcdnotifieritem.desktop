@@ -1,6 +1,7 @@
 # KDE Config File
 [Desktop Entry]
 Name=KRemoteControl Notifier Item
+Name[ar]=عنصر منبه KRemoteControl
 Name[ca]=Element notificador del KRemoteControl
 Name[ca@valencia]=Element notificador del KRemoteControl
 Name[da]=KRemoteControl bekendtgørelseselement
