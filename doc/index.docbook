@@ -191,7 +191,7 @@
               <imagedata fileref="AddProfileAction.png" format="PNG"/>
             </imageobject>
             <textobject>
-              <phrase>Adding an using a template</phrase>
+              <phrase>Adding an action using a template</phrase>
             </textobject>
           </mediaobject>
         </screenshot>
