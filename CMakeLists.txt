@@ -1,4 +1,4 @@
-project(kdelirc)
+project(kremotecontrol)
 
 add_subdirectory(libkremotecontrol)
 add_subdirectory(kcmremotecontrol)

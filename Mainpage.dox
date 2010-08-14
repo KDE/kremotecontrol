@@ -1,8 +1,8 @@
-/** @mainpage kdelirc
+/** @mainpage kremotecontrol
 
-The kdelirc application
+The kremotecontrol application
 
 */
 
 // DOXYGEN_REFERENCES = kdecore
-// DOXYGEN_SET_PROJECT_NAME = kdelirc
+// DOXYGEN_SET_PROJECT_NAME = kremotecontrol
