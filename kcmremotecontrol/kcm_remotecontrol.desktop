@@ -8,7 +8,7 @@ X-KDE-Library=kcm_remotecontrol
 X-KDE-FactoryName=kcm_remotecontrol
 X-KDE-ParentApp=kcontrol
 X-KDE-System-Settings-Parent-Category=input-devices
-X-DocPath=kremotecontrol/index.html
+X-DocPath=kcontrol/kremotecontrol/index.html
 Categories=Qt;KDE;X-KDE-settings-system;
 
 X-KDE-Keywords=KCMRemoteControl,remote control
