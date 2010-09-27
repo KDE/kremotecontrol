@@ -70,14 +70,14 @@ void KrcdNotifierItem::updateTray() {
 
 void KrcdNotifierItem::updateContextMenu(){
     m_menu.clear();
-    m_menu.addTitle(KIcon("infrared-remote"), "Remote Controls");
+    m_menu.addTitle(KIcon( QLatin1String( "infrared-remote")), "Remote Controls" );
     m_menu.addAction(SmallIcon("configure"), i18n("&Configure..."), this, SLOT(slotConfigure()));
 
     foreach(const QString &remote, Solid::Control::RemoteControl::allRemoteNames()){
         KMenu *modeMenu = new KMenu(remote, &m_menu);
         QActionGroup *actionGroup = new QActionGroup(modeMenu);
         actionGroup->setExclusive(true);
-        modeMenu->addTitle(KIcon("infrared-remote"), i18n("Switch mode to"));
+        modeMenu->addTitle(KIcon( QLatin1String( "infrared-remote")), i18n("Switch mode to" ));
         foreach(const QString &mode, DBusInterface::getInstance()->modesForRemote(remote)){
             QAction *entry = modeMenu->addAction(mode);
             entry->setActionGroup(actionGroup);

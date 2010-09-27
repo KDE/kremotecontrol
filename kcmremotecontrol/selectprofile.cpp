@@ -61,13 +61,13 @@ SelectProfile::SelectProfile(Remote *remote, QWidget *parent, const bool &modal)
             KIcon tIcon;
             switch (tSupported) {
             case ProfileServer::FULL_SUPPORTED:
-                tIcon = KIcon("flag-green");
+                tIcon = KIcon( QLatin1String( "flag-green" ));
                 break;
             case ProfileServer::PARTIAL_SUPPORTED:
-                tIcon = KIcon("flag-yellow");
+                tIcon = KIcon( QLatin1String( "flag-yellow" ));
                 break;
             default:
-                tIcon = KIcon("flag-red");
+                tIcon = KIcon( QLatin1String( "flag-red" ));
             }
             tTreewidget->setIcon(0, tIcon);
         }

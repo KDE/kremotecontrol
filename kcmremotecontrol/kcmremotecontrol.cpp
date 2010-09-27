@@ -53,7 +53,7 @@ KCMRemoteControl::KCMRemoteControl(QWidget *parent, const QVariantList &args) :
                                 ki18n("Use this to configure KDE's remote control system in order to control any KDE application with your remote control."),
                                 "http://utils.kde.org/projects/kremotecontrol"));
     setQuickHelp(i18n("<h1>Remote Controls</h1><p>This module allows you to configure bindings between your remote controls and KDE applications. Simply select your remote control and click Add next to the Actions/Buttons list to create new action for button presses.</p>"));
-    KGlobal::locale()->insertCatalog("libkremotecontrol");
+    KGlobal::locale()->insertCatalog( QLatin1String( "libkremotecontrol" ));
 
     QHBoxLayout *layout = new QHBoxLayout(this);
     QWidget *widget = new QWidget(this);
@@ -61,40 +61,40 @@ KCMRemoteControl::KCMRemoteControl(QWidget *parent, const QVariantList &args) :
     layout->addWidget(widget);
 
     // Set up GUI buttons
-    ui.pbAddMode->setIcon(KIcon("list-add"));
+    ui.pbAddMode->setIcon(KIcon( QLatin1String( "list-add" )));
     connect(ui.pbAddMode, SIGNAL(clicked(bool)), SLOT(addMode()));
 
-    ui.pbRemoveMode->setIcon(KIcon("list-remove"));
+    ui.pbRemoveMode->setIcon(KIcon( QLatin1String( "list-remove" )));
     connect(ui.pbRemoveMode, SIGNAL(clicked(bool)), SLOT(removeMode()));
 
-    ui.pbAddAction->setIcon(KIcon("list-add"));
+    ui.pbAddAction->setIcon(KIcon( QLatin1String( "list-add" )));
     connect(ui.pbAddAction, SIGNAL(clicked(bool)), SLOT(addAction()));
 
-    ui.pbRemoveAction->setIcon(KIcon("list-remove"));
+    ui.pbRemoveAction->setIcon(KIcon( QLatin1String( "list-remove" )));
     connect(ui.pbRemoveAction, SIGNAL(clicked(bool)), SLOT(removeAction()));
 
-    ui.pbEditMode->setIcon(KIcon("configure"));
+    ui.pbEditMode->setIcon(KIcon( QLatin1String( "configure" )));
     connect(ui.pbEditMode, SIGNAL(clicked(bool)), SLOT(editMode()));
 
-    ui.pbEditAction->setIcon(KIcon("configure"));
+    ui.pbEditAction->setIcon(KIcon( QLatin1String( "configure" )));
     connect(ui.pbEditAction, SIGNAL(clicked(bool)), SLOT(editAction()));
     
-    ui.pbMoveModeUp->setIcon(KIcon("arrow-up"));
+    ui.pbMoveModeUp->setIcon(KIcon( QLatin1String( "arrow-up" )));
     connect(ui.pbMoveModeUp, SIGNAL(clicked(bool)), SLOT(moveModeUp()));
 
-    ui.pbMoveModeDown->setIcon(KIcon("arrow-down"));
+    ui.pbMoveModeDown->setIcon(KIcon( QLatin1String( "arrow-down" )));
     connect(ui.pbMoveModeDown, SIGNAL(clicked(bool)), SLOT(moveModeDown()));
 
-    ui.pbMoveActionUp->setIcon(KIcon("arrow-up"));
+    ui.pbMoveActionUp->setIcon(KIcon( QLatin1String( "arrow-up" )));
     connect(ui.pbMoveActionUp, SIGNAL(clicked(bool)), SLOT(moveActionUp()));
 
-    ui.pbMoveActionDown->setIcon(KIcon("arrow-down"));
+    ui.pbMoveActionDown->setIcon(KIcon( QLatin1String( "arrow-down" )));
     connect(ui.pbMoveActionDown, SIGNAL(clicked(bool)), SLOT(moveActionDown()));
 
-    ui.pbCopyAction->setIcon(KIcon("edit-copy"));
+    ui.pbCopyAction->setIcon(KIcon( QLatin1String( "edit-copy" )));
     connect(ui.pbCopyAction, SIGNAL(clicked(bool)), SLOT(copyAction()));
     
-    ui.pbAutoPopulate->setIcon(KIcon("tools-wizard"));
+    ui.pbAutoPopulate->setIcon(KIcon( QLatin1String( "tools-wizard" )));
     connect(ui.pbAutoPopulate, SIGNAL(clicked(bool)), SLOT(autoPopulate()));
     
     // Create RemoteModel 
