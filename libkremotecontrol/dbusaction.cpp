@@ -51,7 +51,7 @@ void DBusAction::setFunction(const Prototype& function) {
 }
 
 QString DBusAction::name() const {
-    return m_application + ':' + m_node;
+    return m_application + QLatin1Char( ':' ) + m_node;
 }
 
 QString DBusAction::description() const {
@@ -65,7 +65,7 @@ void DBusAction::saveToConfig(KConfigGroup& config) {
     config.writeEntry("Function", m_function.name());
     int i = 0; // GroupID for arguments
     foreach(const Argument &arg, m_function.args()){
-        KConfigGroup argumentGroup(&config, "Argument" + QString::number(i));
+        KConfigGroup argumentGroup(&config, QLatin1String( "Argument" ) + QString::number(i));
         argumentGroup.writeEntry("Description", arg.description());
         argumentGroup.writeEntry("Value", arg.value());
         argumentGroup.writeEntry("Type", arg.value().typeName());
@@ -112,24 +112,24 @@ void DBusAction::loadFromConfig(const KConfigGroup& config) {
     }
     m_function.setArgs(argList);
     QString destination = config.readEntry("Destination");
-    if(destination == "Unique"){
+    if(destination == QLatin1String( "Unique" )){
         m_destination = Unique;
     }
-    if(destination == "Top"){
+    else if(destination == QLatin1String( "Top" )){
         m_destination = Top;
     }
-    if(destination == "Bottom"){
+    else if(destination == QLatin1String( "Bottom" )){
         m_destination = Bottom;
     }
-    if(destination == "None"){
+    else if(destination == QLatin1String( "None" )){
         m_destination = None;
     }
-    if(destination == "All"){
+    else if(destination == QLatin1String( "All" )){
         m_destination = All;
     }
     m_autostart = config.readEntry("Autostart", QVariant(false)).toBool();
     m_repeat = config.readEntry("Repeat", QVariant(false)).toBool();
-    
+
 }
 
 Action* DBusAction::clone() const {

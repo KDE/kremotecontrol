@@ -51,7 +51,7 @@ void RemoteList::saveToConfig(const QString& configName) {
         remoteGroup.writeEntry("ModeChangeMode", (*remoteIterator)->modeChangeMode() == Remote::Group ? "Group" : "Cycle");
         remoteGroup.writeEntry("NextModeButton", (*remoteIterator)->nextModeButton());
         remoteGroup.writeEntry("PreviousModeButton", (*remoteIterator)->previousModeButton());
-        
+
         int modeIndex = 0;
         foreach(const Mode *mode, (*remoteIterator)->allModes()){
             KConfigGroup modeGroup(&remoteGroup, QString::number(modeIndex++));
@@ -59,7 +59,7 @@ void RemoteList::saveToConfig(const QString& configName) {
             modeGroup.writeEntry("Name", mode->name());
             modeGroup.writeEntry("IconName", mode->iconName());
             modeGroup.writeEntry("Button", mode->button());
-            
+
             int actionIndex = 0;
             foreach(Action *action, mode->actions()){
                 KConfigGroup actionGroup(&modeGroup, QString::number(actionIndex++));
@@ -84,7 +84,7 @@ void RemoteList::loadFromConfig(const QString& configName) {
             KConfigGroup modeGroup(&remoteGroup, modeIndex);
             Mode *mode;
             QString modeName = modeGroup.readEntry("Name");
-            if(modeName == "Master") { // A Remote always has a Master Mode... Adding a second one will not work
+            if(modeName == QLatin1String( "Master" )) { // A Remote always has a Master Mode... Adding a second one will not work
                 mode = remote->masterMode();
                 mode->setIconName(modeGroup.readEntry("IconName"));
             } else {
@@ -109,21 +109,21 @@ void RemoteList::loadFromConfig(const QString& configName) {
                     continue;
                 }
                 action->loadFromConfig(actionGroup);
-                
+
                 mode->addAction(action);
             }
             // Read Mode properties here
             mode->setIconName(modeGroup.readEntry("IconName", "infrared-remote"));
             mode->setButton(modeGroup.readEntry("Button"));
-            
+
             remote->addMode(mode);
         }
         // Read Remote properties here
         remote->setDefaultMode(remoteGroup.readEntry("DefaultMode"));
-        remote->setModeChangeMode(remoteGroup.readEntry("ModeChangeMode", "Group") == "Group" ? Remote::Group : Remote::Cycle);
+        remote->setModeChangeMode(remoteGroup.readEntry("ModeChangeMode", "Group") == QLatin1String( "Group" ) ? Remote::Group : Remote::Cycle);
         remote->setNextModeButton(remoteGroup.readEntry("NextModeButton"));
         remote->setPreviousModeButton(remoteGroup.readEntry("PreviousModeButton"));
-        
+
         append(remote);
     }
 

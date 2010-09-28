@@ -38,7 +38,7 @@ class ModeChangeHandler
             Q_UNUSED(button);
         };
         virtual void handleModeButtonAssignments(){};
-                
+
     protected:
         Remote *m_remote;
 };
@@ -151,7 +151,7 @@ class CycleModeChangeHandler : public ModeChangeHandler
             }
             return retList;
         }
-        
+
         void addMode(Mode* mode) const {
             foreach(Mode *m, m_remote->m_modeList){
                 if(! mode->button().isEmpty() &&  m->button() == mode->button()){
@@ -185,7 +185,7 @@ class CycleModeChangeHandler : public ModeChangeHandler
             }
             return -1;
         }
-        
+
         virtual void handleModeButtonAssignments(){
             handleModeButtonAssignment(m_remote->nextModeButton());
             handleModeButtonAssignment(m_remote->previousModeButton());
@@ -207,7 +207,7 @@ class CycleModeChangeHandler : public ModeChangeHandler
 
 Remote::Remote() {
     // Always create the Master Mode and set it default
-    Mode *masterMode = new Mode("Master");
+    Mode *masterMode = new Mode(QLatin1String( "Master" ));
     addMode(masterMode);
     setDefaultMode(masterMode);
     setCurrentMode(masterMode);
@@ -222,14 +222,14 @@ Remote::Remote(const QString &remote, ModeChangeMode changeMode) {
     bool hasMaster = false;
     setModeChangeMode(changeMode);
     foreach(Mode *mode, m_modeList) {
-        if (mode->name() == "Master") {
+        if (mode->name() == QLatin1String( "Master" )) {
             hasMaster = true;
             setCurrentMode(mode);
         }
     }
 
     if (!hasMaster) {
-        Mode *masterMode = new Mode("Master");
+        Mode *masterMode = new Mode(QLatin1String( "Master" ));
         addMode(masterMode);
         setDefaultMode(masterMode);
         setCurrentMode(masterMode);
@@ -272,13 +272,13 @@ QVector<Mode*> Remote::allModes() const {
 
 void Remote::addMode(Mode* mode) {
     // Don't add a second master mode
-    if(mode != masterMode() && mode->name() != "Master"){
+    if(mode != masterMode() && mode->name() != QLatin1String( "Master" )){
         m_modechangeHandler->addMode(mode);
     }
 }
 
 void Remote::removeMode(Mode *mode) {
-    if (mode->name() == "Master") {
+    if (mode->name() == QLatin1String( "Master" )) {
         kDebug() << "cannot delete the Master mode";
         return;
     }
@@ -286,7 +286,7 @@ void Remote::removeMode(Mode *mode) {
     if (m_defaultMode == mode) {
         // Deleting the Default Mode... Setting Master Mode to default
         foreach(Mode *tmp, m_modeList) {
-            if (tmp->name() == "Master") {
+            if (tmp->name() == QLatin1String( "Master" )) {
                 m_defaultMode = tmp;
                 break;
             }
@@ -300,7 +300,7 @@ void Remote::removeMode(Mode *mode) {
 Mode* Remote::masterMode() const {
     foreach(Mode *mode, m_modeList) {
 //         kDebug() << "checking Mode" << mode->name();
-        if (mode->name() == "Master") {
+        if (mode->name() == QLatin1String( "Master" )) {
             return mode;
         }
     }
