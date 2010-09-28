@@ -31,14 +31,14 @@ class Action;
 class KREMOTECONTROL_EXPORT Mode
 {
     public:
-        explicit Mode(const QString &name = QString(), const QString &iconName = "infrared-remote");
+        explicit Mode(const QString &name = QString(), const QString &iconName = QLatin1String( "infrared-remote" ));
         ~Mode();
 
         QString name() const;
         QString iconName() const;
         QString button() const;
-        
-        
+
+
         void setName(const QString &name);
         void setIconName(const QString &iconName);
         void setButton(const QString &button);
@@ -47,14 +47,14 @@ class KREMOTECONTROL_EXPORT Mode
           * Add the given Action to the Mode. The mode takes ownership of the action. Don't delete it!
           */
         void addAction(Action *action);
-        
+
         /**
           * Remove the given action from this mode and delete it. Don't try to access the action after this call!
           */
         void removeAction(Action *action);
         void moveActionUp(Action *action);
         void moveActionDown(Action *action);
-        
+
         QVector<Action*> actions() const;
         QVector<Action*> actionsForButton(const QString& button) const;
 

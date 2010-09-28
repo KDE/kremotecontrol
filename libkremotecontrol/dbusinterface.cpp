@@ -72,16 +72,16 @@ QStringList DBusInterface::registeredPrograms() {
     for (int i = 0; i < allServices.size(); ++i) {
         QString tmp = allServices.at(i);
 
-        QRegExp r1("[a-zA-Z]{1,3}\\.[a-zA-Z0-9-]+\\.[a-zA-Z0-9_-]+");
+        QRegExp r1( QLatin1String( "[a-zA-Z]{1,3}\\.[a-zA-Z0-9-]+\\.[a-zA-Z0-9_-]+" ));
         if (!r1.exactMatch(tmp)) {
             continue;
         }
         if (nodes(tmp).isEmpty()) {
             continue;
         }
-        QRegExp r2("[a-zA-Z0-9_\\.-]+-[0-9]+");
+        QRegExp r2( QLatin1String( "[a-zA-Z0-9_\\.-]+-[0-9]+" ));
         if (r2.exactMatch(tmp)) {
-            tmp.truncate(tmp.lastIndexOf('-'));
+            tmp.truncate(tmp.lastIndexOf( QLatin1Char( '-' )));
         }
         if (!returnList.contains(tmp)) {
             returnList << tmp;
@@ -94,8 +94,8 @@ QStringList DBusInterface::registeredPrograms() {
 
 QStringList DBusInterface::nodes(const QString &program) {
     kDebug() << "getting Nodes of" << program;
-    QDBusInterface dBusIface(program, "/", "org.freedesktop.DBus.Introspectable");
-    QDBusMessage msg = QDBusMessage::createMethodCall(program, "/", "org.freedesktop.DBus.Introspectable", "Introspect");
+    QDBusInterface dBusIface(program, QLatin1String( "/" ), QLatin1String( "org.freedesktop.DBus.Introspectable" ));
+    QDBusMessage msg = QDBusMessage::createMethodCall(program, QLatin1String( "/" ), QLatin1String( "org.freedesktop.DBus.Introspectable" ), QLatin1String( "Introspect" ));
     QDBusReply<QString> response = dBusIface.connection().call(msg, QDBus::Block, 1);
 
     QDomDocument domDoc;
@@ -104,8 +104,8 @@ QStringList DBusInterface::nodes(const QString &program) {
         kDebug() << "no reply from" << program;
         QStringList instances = allRegisteredPrograms().filter(program);
         if (!instances.isEmpty()) {
-            QDBusInterface iFace(instances.first(), "/", "org.freedesktop.DBus.Introspectable");
-            QDBusMessage msg = QDBusMessage::createMethodCall(instances.first(), "/", "org.freedesktop.DBus.Introspectable", "Introspect");
+            QDBusInterface iFace(instances.first(), QLatin1String( "/" ), QLatin1String( "org.freedesktop.DBus.Introspectable" ));
+            QDBusMessage msg = QDBusMessage::createMethodCall(instances.first(), QLatin1String( "/" ), QLatin1String( "org.freedesktop.DBus.Introspectable" ), QLatin1String( "Introspect" ));
             QDBusReply<QString> response = iFace.connection().call(msg, QDBus::Block, 1);
 //            response = iFace.call("Introspect");
             domDoc.setContent(response);
@@ -120,7 +120,7 @@ QStringList DBusInterface::nodes(const QString &program) {
     while (!child.isNull()) {
         if (child.tagName() == QLatin1String("node")) {
             QString name = child.attribute(QLatin1String("name"));
-            if (name != "org" && name != "modules" && !functions(program, name).isEmpty()) {
+            if (name != QLatin1String( "org" ) && name != QLatin1String( "modules" ) && !functions(program, name).isEmpty()) {
                 returnList << name;
             }
         }
@@ -130,8 +130,8 @@ QStringList DBusInterface::nodes(const QString &program) {
 }
 
 QList<Prototype> DBusInterface::functions(const QString &program, const QString &object) {
-    QDBusInterface dBusIface(program, '/' + object, "org.freedesktop.DBus.Introspectable");
-    QDBusReply<QString> response = dBusIface.call("Introspect");
+    QDBusInterface dBusIface(program, QLatin1Char( '/' ) + object, QLatin1String( "org.freedesktop.DBus.Introspectable" ));
+    QDBusReply<QString> response = dBusIface.call(QLatin1String( "Introspect" ));
 
     QDomDocument domDoc;
     domDoc.setContent(response);
@@ -139,8 +139,8 @@ QList<Prototype> DBusInterface::functions(const QString &program, const QString 
     if (domDoc.toString().isEmpty()) { // No reply... perhaps a multi-instance...
         QStringList instances = allRegisteredPrograms().filter(program);
         if (!instances.isEmpty()) {
-            QDBusInterface iFace(instances.first(), '/' + object, "org.freedesktop.DBus.Introspectable");
-            response = iFace.call("Introspect");
+            QDBusInterface iFace(instances.first(), QLatin1Char( '/' ) + object, QLatin1String( "org.freedesktop.DBus.Introspectable" ));
+            response = iFace.call(QLatin1String( "Introspect" ));
             domDoc.setContent(response);
         }
     }
@@ -152,8 +152,8 @@ QList<Prototype> DBusInterface::functions(const QString &program, const QString 
 
     while (!child.isNull()) {
         if (child.tagName() == QLatin1String("interface")) {
-            if (child.attribute("name") == "org.freedesktop.DBus.Properties" ||
-                    child.attribute("name") == "org.freedesktop.DBus.Introspectable") {
+            if (child.attribute(QLatin1String( "name" )) == QLatin1String( "org.freedesktop.DBus.Properties" ) ||
+                    child.attribute(QLatin1String( "name" )) == QLatin1String( "org.freedesktop.DBus.Introspectable" )) {
                 child = child.nextSiblingElement();
                 continue;
             }
@@ -167,28 +167,28 @@ QList<Prototype> DBusInterface::functions(const QString &program, const QString 
                         Argument argument;
                         if (argDom.tagName() == QLatin1String("arg")) {
                             QString tmpArg = argDom.attribute(QLatin1String("type"));
-                            if (tmpArg == "i") {
+                            if (tmpArg == QLatin1String( "i" )) {
                                 argument.setValue(QVariant::Int);
-                            } else if (tmpArg == "u") {
+                            } else if (tmpArg == QLatin1String( "u" )) {
                                 argument.setValue(QVariant::UInt);
-                            } else if (tmpArg == "x") {
+                            } else if (tmpArg == QLatin1String( "x" )) {
                                 argument.setValue(QVariant::LongLong);
-                            } else if (tmpArg == "s") {
+                            } else if (tmpArg == QLatin1String( "s" )) {
                                 argument.setValue(QVariant::String);
-                            } else if (tmpArg == "b") {
+                            } else if (tmpArg == QLatin1String( "b" )) {
                                 argument.setValue(QVariant::Bool);
-                            } else if (tmpArg == "d") {
+                            } else if (tmpArg == QLatin1String( "d" )) {
                                 argument.setValue(QVariant::Double);
-                            } else if (tmpArg == "as") {
+                            } else if (tmpArg == QLatin1String( "as" )) {
                                 argument.setValue(QVariant::StringList);
-                            } else if (tmpArg == "ay") {
+                            } else if (tmpArg == QLatin1String( "ay" )) {
                                 argument.setValue(QVariant::ByteArray);
                             } else {
                                 argDom = argDom.nextSiblingElement();
                                 continue;
                             }
 
-                            if (argDom.attribute(QLatin1String("direction")) == "in") {
+                            if (argDom.attribute(QLatin1String("direction")) == QLatin1String( "in" )) {
                                 if (!argDom.attribute(QLatin1String("name")).isEmpty()) {
                                     argument.setDescription(argDom.attribute(QLatin1String("name")));
                                 } else {
@@ -214,8 +214,8 @@ QList<Prototype> DBusInterface::functions(const QString &program, const QString 
 
 QStringList DBusInterface::configuredRemotes() {
     QStringList remotes;
-    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontroldaemon",
-                     "org.kde.krcd", "configuredRemotes");
+    QDBusMessage m = QDBusMessage::createMethodCall(QLatin1String( "org.kde.kded" ), QLatin1String( "/modules/kremotecontroldaemon" ),
+                     QLatin1String( "org.kde.krcd" ), QLatin1String( "configuredRemotes" ));
     QDBusMessage response = QDBusConnection::sessionBus().call(m);
     if (response.type() == QDBusMessage::ErrorMessage) {
         kDebug() << response.errorMessage();
@@ -226,8 +226,8 @@ QStringList DBusInterface::configuredRemotes() {
 }
 
 void DBusInterface::considerButtonEvents(const QString& remoteName) {
-   QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontroldaemon",
-                     "org.kde.krcd", "considerButtonEvents");
+   QDBusMessage m = QDBusMessage::createMethodCall(QLatin1String( "org.kde.kded" ), QLatin1String( "/modules/kremotecontroldaemon" ),
+                     QLatin1String( "org.kde.krcd" ), QLatin1String( "considerButtonEvents" ));
     m << remoteName;
     QDBusMessage response = QDBusConnection::sessionBus().call(m);
     if (response.type() == QDBusMessage::ErrorMessage) {
@@ -236,8 +236,8 @@ void DBusInterface::considerButtonEvents(const QString& remoteName) {
 }
 
 void DBusInterface::ignoreButtonEvents(const QString& remoteName) {
-   QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontroldaemon",
-                     "org.kde.krcd", "ignoreButtonEvents");
+   QDBusMessage m = QDBusMessage::createMethodCall(QLatin1String( "org.kde.kded" ), QLatin1String( "/modules/kremotecontroldaemon" ),
+                     QLatin1String( "org.kde.krcd" ), QLatin1String( "ignoreButtonEvents" ));
     m << remoteName;
     QDBusMessage response = QDBusConnection::sessionBus().call(m);
     if (response.type() == QDBusMessage::ErrorMessage) {
@@ -246,8 +246,8 @@ void DBusInterface::ignoreButtonEvents(const QString& remoteName) {
 }
 
 void DBusInterface::reloadRemoteControlDaemon() {
-    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontroldaemon",
-                     "org.kde.krcd", "reloadConfiguration");
+    QDBusMessage m = QDBusMessage::createMethodCall(QLatin1String( "org.kde.kded" ), QLatin1String( "/modules/kremotecontroldaemon" ),
+                     QLatin1String( "org.kde.krcd" ), QLatin1String( "reloadConfiguration" ));
     QDBusMessage response = QDBusConnection::sessionBus().call(m);
     if (response.type() == QDBusMessage::ErrorMessage) {
         kDebug() << response.errorMessage();
@@ -265,7 +265,7 @@ bool DBusInterface::isProgramRunning(const QString &program) {
 
 bool DBusInterface::isUnique(const QString &program){
     QStringList instances = allRegisteredPrograms().filter(program);
-    kDebug() << "instances of " + program << instances;
+    kDebug() << "instances of " << program << instances;
 
     // If there are more than 1 it is oviously not unique
     // If there are 0 we cannot know... Return false so the user can at least try to specify what he likes.
@@ -275,7 +275,7 @@ bool DBusInterface::isUnique(const QString &program){
 
     // So... we have exactly one instance...
     // check if there are any trailing numbers. If yes, it is a multi-instance-app
-    QRegExp r2("[a-zA-Z0-9_\\.-]+-[0-9]+");
+    QRegExp r2( QLatin1String( "[a-zA-Z0-9_\\.-]+-[0-9]+" ));
     if(r2.exactMatch(instances.first())){
 	return false;
     }
@@ -289,13 +289,13 @@ bool DBusInterface::searchForProgram(const DBusAction *action, QStringList &prog
 
     if (action->destination() == DBusAction::Unique) {
         QString service = action->application();
-        
+
         kDebug() << "searching for prog:" << service;
         if (dBusIface->isServiceRegistered(service)) {
             kDebug() << "adding Program: " << service;
             programs += service;
         } else {
-            kDebug() << "nope... " + service + " not here.";
+            kDebug() << "nope... " << service << " not here.";
         }
     } else {
 
@@ -324,7 +324,7 @@ bool DBusInterface::searchForProgram(const DBusAction *action, QStringList &prog
             // go through all the (ordered) window pids
             for (int i = 0; i < s.size(); i++) {
                 int p = KWindowSystem::windowInfo(s.at(i), NET::WMPid).win();
-                QString id = action->application() + '-' + QString().setNum(p);
+                QString id = action->application() + QLatin1Char( '-' ) + QString().setNum(p);
                 if (programs.contains(id)) {
                     programs.clear();
                     programs += id;
@@ -337,7 +337,7 @@ bool DBusInterface::searchForProgram(const DBusAction *action, QStringList &prog
             // go through all the (ordered) window pids
             for (int i = 0; i < s.size(); ++i) {
                 int p = KWindowSystem::windowInfo(s.at(i), NET::WMPid).win();
-                QString id = action->application() + '-' + QString().setNum(p);
+                QString id = action->application() + QLatin1Char( '-' ) + QString().setNum(p);
                 if (programs.contains(id)) {
                     programs.clear();
                     programs += id;
@@ -367,7 +367,7 @@ void DBusInterface::executeAction(const DBusAction* action) {
     if (action->autostart() && !programs.size()) {
         kDebug() << "Should start " << action->application();
         QString runCommand = action->application();
-        runCommand.remove(QRegExp("org.[a-zA-Z0-9]*."));
+        runCommand.remove(QRegExp( QLatin1String( "org.[a-zA-Z0-9]*." )));
         kDebug() << "runCommand" << runCommand;
         KToolInvocation::startServiceByDesktopName(runCommand);
     }
@@ -383,10 +383,10 @@ void DBusInterface::executeAction(const DBusAction* action) {
         const QString &program = *i;
         kDebug() << "Searching DBus for program:" << program;
         if (dBusIface->isServiceRegistered(program)) {
-            kDebug() << "Sending data (" << program << ", " << '/' + action->node() << ", " << action->function().name();
+            kDebug() << "Sending data (" << program << ", " << QLatin1Char( '/' ) + action->node() << ", " << action->function().name();
 
-            QDBusMessage m = QDBusMessage::createMethodCall(program, '/'
-                             + action->node(), "", action->function().name());
+            QDBusMessage m = QDBusMessage::createMethodCall(program, QLatin1Char( '/' )
+                             + action->node(), QLatin1String( "" ), action->function().name());
 
             foreach(const Argument &arg, action->function().args()){
                 kDebug() << "Got argument:" << arg.value().type() << "value" << arg.value();
@@ -401,8 +401,8 @@ void DBusInterface::executeAction(const DBusAction* action) {
 }
 
 void DBusInterface::changeMode(const QString& remoteName, const QString& modeName) {
-    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontroldaemon",
-                     "org.kde.krcd", "changeMode");
+    QDBusMessage m = QDBusMessage::createMethodCall(QLatin1String( "org.kde.kded" ), QLatin1String( "/modules/kremotecontroldaemon" ),
+                     QLatin1String( "org.kde.krcd" ), QLatin1String( "changeMode" ));
     m << remoteName;
     m << modeName;
     QDBusReply<bool> reply = QDBusConnection::sessionBus().call(m);
@@ -412,8 +412,8 @@ void DBusInterface::changeMode(const QString& remoteName, const QString& modeNam
 }
 
 QString DBusInterface::currentMode(const QString& remoteName) {
-  QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontroldaemon",
-                     "org.kde.krcd", "currentMode");
+  QDBusMessage m = QDBusMessage::createMethodCall(QLatin1String( "org.kde.kded" ), QLatin1String( "/modules/kremotecontroldaemon" ),
+                     QLatin1String( "org.kde.krcd" ), QLatin1String( "currentMode" ));
      m << remoteName;
     QDBusReply<QString> reply = QDBusConnection::sessionBus().call(m);
     if (reply.isValid()) {
@@ -425,8 +425,8 @@ QString DBusInterface::currentMode(const QString& remoteName) {
 }
 
 QStringList DBusInterface::modesForRemote(const QString& remoteName) {
-    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontroldaemon",
-                     "org.kde.krcd", "modesForRemote");
+    QDBusMessage m = QDBusMessage::createMethodCall(QLatin1String( "org.kde.kded" ), QLatin1String( "/modules/kremotecontroldaemon" ),
+                     QLatin1String( "org.kde.krcd" ), QLatin1String( "modesForRemote" ));
     m << remoteName;
     QDBusReply<QStringList> reply = QDBusConnection::sessionBus().call(m);
     if (reply.isValid()) {
@@ -438,8 +438,8 @@ QStringList DBusInterface::modesForRemote(const QString& remoteName) {
 }
 
 QString DBusInterface::modeIcon(const QString& remoteName, const QString& modeName) {
-    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontroldaemon",
-                     "org.kde.krcd", "modeIcon");
+    QDBusMessage m = QDBusMessage::createMethodCall(QLatin1String( "org.kde.kded" ), QLatin1String( "/modules/kremotecontroldaemon" ),
+                     QLatin1String( "org.kde.krcd" ), QLatin1String( "modeIcon" ));
     m << remoteName;
     m << modeName;
     QDBusReply<QString> reply = QDBusConnection::sessionBus().call(m);
@@ -447,14 +447,14 @@ QString DBusInterface::modeIcon(const QString& remoteName, const QString& modeNa
         return reply;
     } else {
         kDebug() << reply.error().message();
-        return "";
+        return QLatin1String( "" );
     }
-    
+
 }
 
 bool DBusInterface::eventsIgnored(const QString& remoteName) {
-   QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/modules/kremotecontroldaemon",
-                     "org.kde.krcd", "eventsIgnored");
+   QDBusMessage m = QDBusMessage::createMethodCall(QLatin1String( "org.kde.kded" ), QLatin1String( "/modules/kremotecontroldaemon" ),
+                     QLatin1String( "org.kde.krcd" ), QLatin1String( "eventsIgnored" ));
      m << remoteName;
     QDBusReply<bool> reply = QDBusConnection::sessionBus().call(m);
     if (reply.isValid()) {
@@ -466,39 +466,39 @@ bool DBusInterface::eventsIgnored(const QString& remoteName) {
 }
 
 bool DBusInterface::isKdedModuleRunning() {
-    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/kded", "org.kde.kded", "loadedModules");
+    QDBusMessage m = QDBusMessage::createMethodCall(QLatin1String( "org.kde.kded" ), QLatin1String( "/kded" ), QLatin1String( "org.kde.kded" ), QLatin1String( "loadedModules" ));
     QDBusReply<QStringList> reply = QDBusConnection::sessionBus().call(m);
     if(reply.isValid()){
-        return reply.value().contains("kremotecontroldaemon");
+        return reply.value().contains(QLatin1String( "kremotecontroldaemon" ));
     }
     kDebug() << reply.error().message();
     return false;
 }
 
 bool DBusInterface::loadKdedModule() {
-    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/kded", "org.kde.kded", "loadModule");
-    m << "kremotecontroldaemon";
+    QDBusMessage m = QDBusMessage::createMethodCall(QLatin1String( "org.kde.kded" ), QLatin1String( "/kded" ), QLatin1String( "org.kde.kded" ), QLatin1String( "loadModule" ));
+    m << QLatin1String( "kremotecontroldaemon" );
     QDBusReply<bool> reply = QDBusConnection::sessionBus().call(m);
     if(!reply.isValid() || !reply.value()){
         return false;
     }
 
-    m = QDBusMessage::createMethodCall("org.kde.kded", "/kded", "org.kde.kded", "setModuleAutoloading");
-    m << "kremotecontroldaemon" << true;
+    m = QDBusMessage::createMethodCall(QLatin1String( "org.kde.kded" ), QLatin1String( "/kded" ), QLatin1String( "org.kde.kded" ), QLatin1String( "setModuleAutoloading" ));
+    m << QLatin1String( "kremotecontroldaemon" ) << true;
     QDBusConnection::sessionBus().call(m);
     return true;
 }
 
 bool DBusInterface::unloadKdedModule() {
-    QDBusMessage m = QDBusMessage::createMethodCall("org.kde.kded", "/kded", "org.kde.kded", "unloadModule");
-    m << "kremotecontroldaemon";
+    QDBusMessage m = QDBusMessage::createMethodCall(QLatin1String( "org.kde.kded" ), QLatin1String( "/kded" ), QLatin1String( "org.kde.kded" ), QLatin1String( "unloadModule" ));
+    m << QLatin1String( "kremotecontroldaemon" );
     QDBusReply<bool> reply = QDBusConnection::sessionBus().call(m);
     if(!reply.isValid() || !reply.value()){
         return false;
     }
 
-    m = QDBusMessage::createMethodCall("org.kde.kded", "/kded", "org.kde.kded", "setModuleAutoloading");
-    m << "kremotecontroldaemon" << false;
+    m = QDBusMessage::createMethodCall(QLatin1String( "org.kde.kded" ), QLatin1String( "/kded" ), QLatin1String( "org.kde.kded" ), QLatin1String( "setModuleAutoloading" ));
+    m << QLatin1String( "kremotecontroldaemon" ) << false;
     QDBusConnection::sessionBus().call(m);
     return true;
 }
