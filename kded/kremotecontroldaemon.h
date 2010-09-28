@@ -42,13 +42,13 @@ class KRemoteControlDaemon : public KDEDModule
 
     private:
         void notifyModeChanged(Remote* remote);
-        void notifyEvent(const QString& message, const QString& icon = QString ( "infrared-remote" ), const QString& event = QString ( "global_event" ));
+        void notifyEvent(const QString& message, const QString& icon = QLatin1String( "infrared-remote" ), const QString& event = QLatin1String ( "global_event" ));
 
         RemoteList m_remoteList;
         QStringList m_ignoreNextButtonList;
         KComponentData m_applicationData;
 
-        
+
     public:
         KRemoteControlDaemon(QObject * parent, const QVariantList&);
         virtual ~KRemoteControlDaemon();
@@ -67,7 +67,7 @@ class KRemoteControlDaemon : public KDEDModule
         QString currentMode(const QString& remoteName);
         QString modeIcon(const QString &remoteName, const QString &modeName);
         bool eventsIgnored(const QString& remoteName);
-    
+
     Q_SIGNALS:
         void connectionChanged(bool connected);
         void remoteControlAdded(const QString &remote);

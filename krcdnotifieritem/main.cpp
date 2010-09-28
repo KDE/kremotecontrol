@@ -37,7 +37,7 @@ class KrcdNotifierApp : public KUniqueApplication
         KrcdNotifierApp() : m_item( 0 ) {
             // ensure the Quit dialog's Cancel reponse does not close the app
             setQuitOnLastWindowClosed( false );
-            QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontroldaemon", "org.kde.krcd", "unloadTray",  this, SLOT(quit()));
+            QDBusConnection::sessionBus().connect(QLatin1String( "org.kde.kded" ), QLatin1String( "/modules/kremotecontroldaemon" ), QLatin1String( "org.kde.krcd" ), QLatin1String( "unloadTray" ),  this, SLOT(quit()));
         }
 
         int newInstance() {
@@ -51,10 +51,10 @@ class KrcdNotifierApp : public KUniqueApplication
 
     private:
         KrcdNotifierItem *m_item;
-        
+
     private Q_SLOTS:
         void configChanged() {
-            KConfig config("kremotecontrolrc");
+            KConfig config(QLatin1String( "kremotecontrolrc" ));
             KConfigGroup globalGroup(&config, "Global");
             if(!globalGroup.readEntry("ShowTrayIcon", true)){
                 quit();
@@ -68,7 +68,7 @@ int main( int argc, char **argv ) {
     aboutData.addAuthor(ki18n("Michael Zanetti"), ki18n("Maintainer"), "michael_zanetti@gmx.net");
     aboutData.addAuthor(ki18n("Frank Scheffold"), ki18n("KDeveloper"), "fscheffold@googlemail.com");
     aboutData.addCredit(ki18n("Gav Wood"), ki18n("Original KDELirc Author"), "gav@kde.org");
-    aboutData.setProgramIconName("krcd");
+    aboutData.setProgramIconName( QLatin1String( "krcd" ));
 
     KCmdLineArgs::init(argc, argv, &aboutData);
 

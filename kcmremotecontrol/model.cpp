@@ -79,7 +79,7 @@ QString DBusServiceModel::node(const QModelIndex& index) const {
 }
 
 QModelIndex DBusServiceModel::findOrInsert(const DBusAction* action, bool insert) {
-  
+
     for(int i = 0; i < rowCount(); i++){
         QStandardItem *appItem = item(i);
         if(!appItem->index().parent().isValid()){ // Only check Applications, no Nodes
@@ -135,13 +135,13 @@ QVariant DBusServiceItem::data(int role) const {
 }
 
 QString DBusServiceItem::trimAppname(const QString& appName) {
-    int lastIndex = appName .lastIndexOf(".") + 1;
+    int lastIndex = appName .lastIndexOf(QLatin1String( "." )) + 1;
     if (lastIndex < appName.size()) {
         QString s = appName;
         QString domainName = appName;
         s.remove(0, lastIndex);
         domainName.remove(lastIndex -1, domainName.length());
-        return  s.append(" (").append( domainName).append(')');;
+        return  s.append(QLatin1String( " (" )).append( domainName).append(QLatin1Char( ')' ));
     }
     return appName;
 }
@@ -162,13 +162,13 @@ void DBusFunctionModel::refresh(const QString &app, const QString &node) {
     if(app.isEmpty()){
         return;
     }
-    
+
     foreach(const Prototype &prototype, DBusInterface::getInstance()->functions(app, node)){
         appendRow(prototype);
     }
 
     sort(0, Qt::AscendingOrder);
-    
+
 }
 
 void DBusFunctionModel::appendRow(Prototype prototype) {
@@ -179,11 +179,11 @@ void DBusFunctionModel::appendRow(Prototype prototype) {
     QString argString;
     foreach(const Argument &arg, prototype.args()){
         if(!argString.isEmpty()){
-            argString += ", ";
+            argString += QLatin1String( ", " );
         }
-        argString += QString(QVariant::typeToName(arg.value().type()));
+        argString += QLatin1String(QVariant::typeToName(arg.value().type()));
         if(!arg.description().isEmpty()){
-            argString += ' ' + arg.description();
+            argString += QLatin1Char( ' ' ) + arg.description();
         }
     }
     itemList.append(new QStandardItem(argString));
@@ -196,7 +196,7 @@ Prototype DBusFunctionModel::getPrototype(int index) const {
 }
 
 QModelIndex DBusFunctionModel::findOrInsert(const DBusAction* action, bool insert) {
-  
+
     for(int i = 0; i < rowCount(); i++){
         QStandardItem *functionItem = item(i);
         if(functionItem->data(Qt::UserRole).value<Prototype>() == action->function()){
@@ -212,11 +212,11 @@ QModelIndex DBusFunctionModel::findOrInsert(const DBusAction* action, bool inser
         QString argString;
         foreach(const Argument &arg, action->function().args()){
             if(!argString.isEmpty()){
-                argString += ", ";
+                argString += QLatin1String( ", " );
             }
-            argString += QString(QVariant::typeToName(arg.value().type()));
+            argString += QLatin1String(QVariant::typeToName(arg.value().type()));
             if(!arg.description().isEmpty()){
-                argString += ' ' + arg.description();
+                argString += QLatin1Char( ' ' ) + arg.description();
             }
         }
         itemList.append(new QStandardItem(argString));
@@ -255,7 +255,7 @@ void ArgumentsModel::refresh(const Prototype& prototype) {
     clear();
     foreach(const Argument &arg, prototype.args()){
         QList<QStandardItem*> itemList;
-        itemList.append(new QStandardItem(QString(QVariant::typeToName(arg.value().type())) + ": " + arg.description()));
+        itemList.append(new QStandardItem(QLatin1String(QVariant::typeToName(arg.value().type())) + QLatin1String( ": " ) + arg.description()));
         itemList.last()->setEditable(false);
         itemList.append(new ArgumentsModelItem(arg));
         appendRow(itemList);
@@ -337,7 +337,7 @@ QWidget *ArgumentDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
             value.clear();
             foreach(const QString &tmp, arg.value().toStringList()) {
                 if (!value.isEmpty()) {
-                    value.append(',');
+                    value.append(QLatin1Char( ',' ));
                 }
                 value += tmp;
             }
@@ -384,7 +384,7 @@ void ArgumentDelegate::setEditorData(QWidget *editor, const QModelIndex &index) 
             value.clear();
             foreach(const QString &tmp, arg.value().toStringList()) {
                 if (!value.isEmpty()) {
-                    value.append(',');
+                    value.append(QLatin1Char( ',' ));
                 }
                 value += tmp;
             }
@@ -416,7 +416,7 @@ void ArgumentDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, 
             value = QVariant(static_cast<KComboBox*>(editor)->currentIndex() == 0 ? true : false);
             break;
         case QVariant::StringList:
-            value = QVariant(static_cast<KLineEdit*>(editor)->text().split(','));
+            value = QVariant(static_cast<KLineEdit*>(editor)->text().split(QLatin1Char( ',' )));
             break;
         case QVariant::ByteArray:
         case QVariant::String:
@@ -461,7 +461,7 @@ QVariant ArgumentsModelItem::data ( int role ) const {
             retList.clear();
             foreach(const QString &tmp, arg.value().toStringList()) {
                 if (!retList.isEmpty()) {
-                    retList.append(',');
+                    retList.append(QLatin1Char( ',' ));
                 }
                 retList += tmp;
             }
@@ -487,7 +487,7 @@ ProfileModel::ProfileModel(QObject *parent): QStandardItemModel(parent) {
         QStandardItem *item = new QStandardItem(profile->name());
         QString tooltip;
         if(!profile->description().isEmpty()){
-            tooltip.append(profile->description()).append("\n");
+            tooltip.append(profile->description()).append(QLatin1String( "\n" ));
         }
         tooltip.append(i18n("Author: %1 (Version: %2)", profile->author(), profile->version()));
         item->setToolTip(tooltip);
@@ -579,13 +579,13 @@ void ActionTemplateModel::appendRow(ProfileActionTemplate actionTemplate) {
         tItem->setToolTip(actionTemplate.description());
         row.append(tItem);
     } else {
-        row.append(new QStandardItem("-"));
+        row.append(new QStandardItem(QLatin1String( "-" )));
     }
     row.append(new QStandardItem(QString::number(actionTemplate.function().args().size())));
     if (!actionTemplate.buttonName().isEmpty()) {
         row.append(new QStandardItem(actionTemplate.buttonName()));
     } else {
-        row.append(new QStandardItem("-"));
+        row.append(new QStandardItem(QLatin1String( "-" )));
     }
     QStandardItemModel::appendRow(row);
 }
@@ -688,7 +688,7 @@ QVariant RemoteModel::data(const QModelIndex& index, int role) const {
             return KGlobalSettings::inactiveTextColor();
         }
     }
-    
+
     return QStandardItemModel::data(index, role);
 }
 
@@ -702,7 +702,7 @@ Qt::ItemFlags RemoteModel::flags(const QModelIndex& index) const {
 
 bool RemoteModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) {
     Q_UNUSED(row)
-    if (!data->hasFormat("kremotecontrol/action"))
+    if (!data->hasFormat(QLatin1String( "kremotecontrol/action" )))
         return false;
 
     if (action == Qt::IgnoreAction)
@@ -711,23 +711,23 @@ bool RemoteModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int
     if (column > 0)
         return false;
 
-    QByteArray encodedData = data->data("kremotecontrol/action");
+    QByteArray encodedData = data->data(QLatin1String( "kremotecontrol/action" ));
     QDataStream stream(&encodedData, QIODevice::ReadOnly);
 
     quint64 actionPointer;
     stream >> actionPointer;
     Action *droppedAction = reinterpret_cast<Action*>(actionPointer);
     kDebug() << "action pointer is" << droppedAction << "name is" << droppedAction->name();
-    
+
     mode(parent)->addAction(droppedAction->clone());
     emit modeChanged(mode(parent));
-    
+
     return true;
 }
 
 QStringList RemoteModel::mimeTypes() const {
     QStringList types;
-    types << "kremotecontrol/action";
+    types << QLatin1String( "kremotecontrol/action" );
     return types;
 }
 
@@ -738,7 +738,7 @@ Qt::DropActions RemoteModel::supportedDropActions() const {
 RemoteItem::RemoteItem(Remote *remote) {
     setData(qVariantFromValue(remote), Qt::UserRole);
     foreach(Mode *mode, remote->allModes()) {
-        if(mode->name() != "Master"){ // Don't show the Master Mode separately
+        if(mode->name() != QLatin1String( "Master" )){ // Don't show the Master Mode separately
             QList<QStandardItem*> itemList;
             QStandardItem *item = new QStandardItem(mode->name());
             item->setData(qVariantFromValue(mode), Qt::UserRole);
@@ -839,7 +839,7 @@ QMimeData *ActionModel::mimeData(const QModelIndexList &indexes) const {
         stream << actionPointer;
     }
 
-    mimeData->setData("kremotecontrol/action", encodedData);
+    mimeData->setData(QLatin1String( "kremotecontrol/action" ), encodedData);
     return mimeData;
 }
 

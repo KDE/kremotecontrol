@@ -78,7 +78,7 @@ KCMRemoteControl::KCMRemoteControl(QWidget *parent, const QVariantList &args) :
 
     ui.pbEditAction->setIcon(KIcon( QLatin1String( "configure" )));
     connect(ui.pbEditAction, SIGNAL(clicked(bool)), SLOT(editAction()));
-    
+
     ui.pbMoveModeUp->setIcon(KIcon( QLatin1String( "arrow-up" )));
     connect(ui.pbMoveModeUp, SIGNAL(clicked(bool)), SLOT(moveModeUp()));
 
@@ -93,27 +93,27 @@ KCMRemoteControl::KCMRemoteControl(QWidget *parent, const QVariantList &args) :
 
     ui.pbCopyAction->setIcon(KIcon( QLatin1String( "edit-copy" )));
     connect(ui.pbCopyAction, SIGNAL(clicked(bool)), SLOT(copyAction()));
-    
+
     ui.pbAutoPopulate->setIcon(KIcon( QLatin1String( "tools-wizard" )));
     connect(ui.pbAutoPopulate, SIGNAL(clicked(bool)), SLOT(autoPopulate()));
-    
-    // Create RemoteModel 
+
+    // Create RemoteModel
     m_remoteModel = new RemoteModel(m_remoteList, ui.tvRemotes);
     ui.tvRemotes->setModel(m_remoteModel);
     connect(ui.tvRemotes->selectionModel(), SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), SLOT(modeSelectionChanged(const QModelIndex &)));
     connect(ui.tvRemotes, SIGNAL(doubleClicked(QModelIndex)), SLOT(editMode()));
     // QueuedConnection needed because the model itself may has some slots queded and refreshing the model before that breaks logic
     connect(m_remoteModel, SIGNAL(modeChanged(Mode *)), SLOT(actionDropped(Mode*)), Qt::QueuedConnection);
-    
+
     // Create ActionModel
     m_actionModel = new ActionModel(ui.tvActions);
     ui.tvActions->setModel(m_actionModel);
     connect(ui.tvActions->selectionModel(), SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), SLOT(actionSelectionChanged(const QModelIndex &)));
     connect(ui.tvActions, SIGNAL(doubleClicked(QModelIndex)), SLOT(editAction()));
-    
+
     // connect ShowTrayIcon checkbox
     connect(ui.cbTrayIcon, SIGNAL(clicked(bool)), SLOT(changed()));
-    
+
     connect(Solid::Control::RemoteControlManager::notifier(), SIGNAL(statusChanged(bool)), SLOT(addUnconfiguredRemotes()));
     connect(Solid::Control::RemoteControlManager::notifier(), SIGNAL(remoteControlAdded(const QString &)), SLOT(addUnconfiguredRemotes()));
 }
@@ -140,7 +140,7 @@ void KCMRemoteControl::addAction() {
 void KCMRemoteControl::removeAction() {
     Mode *mode = m_remoteModel->mode(ui.tvRemotes->selectionModel()->currentIndex());
     Action *action = m_actionModel->action(ui.tvActions->selectionModel()->currentIndex());
-    
+
     mode->removeAction(action);
     updateActions(mode);
     emit changed(true);
@@ -150,7 +150,7 @@ void KCMRemoteControl::editAction() {
     Action *action = m_actionModel->action(ui.tvActions->selectionModel()->currentIndex());
     Remote *remote = m_remoteModel->remote(ui.tvRemotes->selectionModel()->currentIndex());
     Mode *mode = m_remoteModel->mode(ui.tvRemotes->selectionModel()->currentIndex());
-    
+
     QPointer<EditActionContainer> editActioncontainer = new EditActionContainer(action, remote->name());
     if(editActioncontainer->exec()) {
         updateActions(mode);
@@ -208,7 +208,7 @@ void KCMRemoteControl::autoPopulate() {
 void KCMRemoteControl::addMode() {
     Remote *remote = m_remoteModel->remote(ui.tvRemotes->selectionModel()->currentIndex());
     kDebug() << "current selected remote:" << remote;
-    
+
     QPointer<ModeDialog> modeDialog = new ModeDialog(remote);
     if(modeDialog->exec()){
         m_remoteModel->refresh(m_remoteList);
@@ -225,7 +225,7 @@ void KCMRemoteControl::editMode() {
     Remote *remote = m_remoteModel->remote(ui.tvRemotes->selectionModel()->currentIndex());
     Mode *mode = m_remoteModel->mode(ui.tvRemotes->selectionModel()->currentIndex());
     kDebug() << "current selected remote:" << remote << "and mode:" << mode;
-    
+
     QPointer<ModeDialog> modeDialog = new ModeDialog(remote, mode);
     if(modeDialog->exec()){
         m_remoteModel->refresh(m_remoteList);
@@ -266,7 +266,7 @@ void KCMRemoteControl::removeMode() {
 void KCMRemoteControl::moveModeUp() {
     QModelIndex currentIndex = ui.tvRemotes->selectionModel()->currentIndex();
     Remote *remote = m_remoteModel->remote(currentIndex);
-    Mode *mode = m_remoteModel->mode(currentIndex);    
+    Mode *mode = m_remoteModel->mode(currentIndex);
     remote->moveModeUp(mode);
     updateModes();
     emit changed(true);
@@ -290,7 +290,7 @@ void KCMRemoteControl::updateModes() {
         ui.tvRemotes->selectionModel()->setCurrentIndex(m_remoteModel->find(mode), QItemSelectionModel::Rows | QItemSelectionModel::SelectCurrent);
     }
     modeSelectionChanged(ui.tvRemotes->selectionModel()->currentIndex());
-    
+
     if(!m_remoteList.isEmpty()){
         ui.lNoRemotesWarning->setMaximumSize(0,0);
         ui.tvRemotes->setEnabled(true);
@@ -320,7 +320,7 @@ void KCMRemoteControl::modeSelectionChanged(const QModelIndex &index) {
         ui.pbEditMode->setEnabled(true);
         ui.pbAddAction->setEnabled(true);
         ui.pbAutoPopulate->setEnabled(true);
-        
+
         // Only enable the remove mode button if a non-Master mode is selected,
         // or if the Remote is not available in Solid
         if((m_remoteModel->mode(index) != m_remoteModel->remote(index)->masterMode())
@@ -329,7 +329,7 @@ void KCMRemoteControl::modeSelectionChanged(const QModelIndex &index) {
         } else {
             ui.pbRemoveMode->setEnabled(false);
         }
-        
+
     } else {
         ui.pbAddMode->setEnabled(false);
         ui.pbEditMode->setEnabled(false);
@@ -337,18 +337,18 @@ void KCMRemoteControl::modeSelectionChanged(const QModelIndex &index) {
         ui.pbAutoPopulate->setEnabled(false);
         ui.pbRemoveMode->setEnabled(false);
     }
-    
+
     Mode *mode = m_remoteModel->mode(index);
     if(mode){
         updateActions(mode);
-        
+
         Remote *remote = m_remoteModel->remote(index);
         if(mode == remote->masterMode()){
             ui.lActions->setText(i18n("Configured actions for %1:", remote->name()));
         } else {
             ui.lActions->setText(i18n("Configured actions for %1 in mode %2:", remote->name(), mode->name()));
         }
-        
+
         if(remote->allModes().indexOf(mode) > 1){
             ui.pbMoveModeUp->setEnabled(true);
         } else {
@@ -362,9 +362,9 @@ void KCMRemoteControl::modeSelectionChanged(const QModelIndex &index) {
         }
 
     }
-    
+
     actionSelectionChanged(QModelIndex());
-    
+
 }
 
 void KCMRemoteControl::actionSelectionChanged(const QModelIndex& index) {
@@ -403,15 +403,15 @@ void KCMRemoteControl::addUnconfiguredRemotes() {
 }
 
 void KCMRemoteControl::load() {
-    m_remoteList.loadFromConfig("kremotecontrolrc");
+    m_remoteList.loadFromConfig(QLatin1String( "kremotecontrolrc" ));
 
     addUnconfiguredRemotes();
-    
+
 /*    if(!m_remoteList.isEmpty()){
         QModelIndex firstItem = m_remoteModel->find(m_remoteList.first()->masterMode());
         ui.tvRemotes->selectionModel()->setCurrentIndex(firstItem, QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
     }*/
-        
+
     // Check if the daemon module is running
     if(!m_remoteList.isEmpty()){ // No need to run the daemon if we have no remote controls
         kDebug() << "remotes found... checking for kded module";
@@ -423,22 +423,22 @@ void KCMRemoteControl::load() {
         }
     }
 
-    KConfig config("kremotecontrolrc");
+    KConfig config(QLatin1String( "kremotecontrolrc" ));
     KConfigGroup globalGroup = KConfigGroup(&config, "Global");
     ui.cbTrayIcon->setChecked(globalGroup.readEntry("ShowTrayIcon", true));
 
 }
 
 void KCMRemoteControl::save() {
-    m_remoteList.saveToConfig("kremotecontrolrc");
-    
-    KConfig config("kremotecontrolrc");
+    m_remoteList.saveToConfig(QLatin1String( "kremotecontrolrc" ));
+
+    KConfig config(QLatin1String( "kremotecontrolrc" ));
     KConfigGroup globalGroup = KConfigGroup(&config, "Global");
     globalGroup.writeEntry("ShowTrayIcon", ui.cbTrayIcon->isChecked());
     globalGroup.sync(); // Sync the config before requesting the daemon to update.
 
     DBusInterface::getInstance()->reloadRemoteControlDaemon();
-    
+
     // If there are no remotes configured it makes no sense to have the daemon running. stop it
     if(m_remoteList.isEmpty()){
         if(DBusInterface::getInstance()->isKdedModuleRunning()){

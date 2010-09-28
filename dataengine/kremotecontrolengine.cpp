@@ -50,12 +50,12 @@ bool KRemoteControlEngine::updateSourceEvent(const QString &name) {
     Q_UNUSED(name)
     DBusInterface *dBusInterface = DBusInterface::getInstance();
     QStringList remotes = dBusInterface->configuredRemotes();
-    setData("remotes", remotes);
+    setData(QLatin1String( "remotes" ), remotes);
     kDebug() << "remotes" << remotes;
     foreach(const QString &remote, remotes) {
-        setData(remote, "modes", dBusInterface->modesForRemote(remote));
-        setData(remote, "currentMode", dBusInterface->currentMode(remote));
-        setData(remote, "eventsIgnored", dBusInterface->eventsIgnored(remote));
+        setData(remote, QLatin1String( "modes" ), dBusInterface->modesForRemote(remote));
+        setData(remote, QLatin1String( "currentMode" ), dBusInterface->currentMode(remote));
+        setData(remote, QLatin1String( "eventsIgnored" ), dBusInterface->eventsIgnored(remote));
     }
 
     return true;

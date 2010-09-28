@@ -48,7 +48,7 @@ ModeDialog::ModeDialog(Remote *remote, Mode *mode, QWidget *parent): KDialog(par
     foreach(const QString &button, remote->availableModeSwitchButtons(mode)){
         ui.cbButtons->addItem(button, button);
     }
-    
+
     if(m_mode){
         ui.leName->setText(m_mode->name());
         ui.ibIcon->setIcon(m_mode->iconName());
@@ -59,7 +59,7 @@ ModeDialog::ModeDialog(Remote *remote, Mode *mode, QWidget *parent): KDialog(par
             ui.cbButtons->setVisible(false);
             ui.lButton->setVisible(false);
             ui.leName->setEnabled(false);
-            
+
             // Fill in Cycle mode buttons
             ui.cbButtonBackward->addButtons(remote->availableModeCycleButtons());
             ui.cbButtonForward->addButtons(remote->availableModeCycleButtons());
@@ -77,10 +77,10 @@ ModeDialog::ModeDialog(Remote *remote, Mode *mode, QWidget *parent): KDialog(par
             ui.gbModeCycle->setVisible(false);
         }
     } else {
-        ui.ibIcon->setIcon("infrared-remote");
+        ui.ibIcon->setIcon(QLatin1String( "infrared-remote" ));
         ui.gbModeCycle->setVisible(false);
     }
-    
+
     checkForComplete();
 
     // Pause remote to make use of button presses here

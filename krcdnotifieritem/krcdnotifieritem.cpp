@@ -34,44 +34,44 @@ KrcdNotifierItem::KrcdNotifierItem(){
     setCategory(KStatusNotifierItem::Hardware);
     updateTray();
     setContextMenu(&m_menu);
-    
+
     // No need for close button...
     setStandardActionsEnabled(false);
     updateContextMenu();
-    QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontroldaemon", "org.kde.krcd", "connectionChanged",  this, SLOT(updateTray()));
-    QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontroldaemon", "org.kde.krcd", "remoteControlAdded",  this, SLOT(updateTray()));
-    QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontroldaemon", "org.kde.krcd", "remoteControlAdded",  this, SLOT(updateContextMenu()));
-    QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontroldaemon", "org.kde.krcd", "remoteControlRemoved",  this, SLOT(updateTray()));
-    QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontroldaemon", "org.kde.krcd", "remoteControlRemoved",  this, SLOT(updateContextMenu()));
-    QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontroldaemon", "org.kde.krcd", "buttonPressed",  this, SLOT(flash()));
-    QDBusConnection::sessionBus().connect("org.kde.kded", "/modules/kremotecontroldaemon", "org.kde.krcd", "modeChanged",  this, SLOT(updateContextMenu()));
+    QDBusConnection::sessionBus().connect(QLatin1String( "org.kde.kded" ), QLatin1String( "/modules/kremotecontroldaemon" ), QLatin1String( "org.kde.krcd" ), QLatin1String( "connectionChanged" ),  this, SLOT(updateTray()));
+    QDBusConnection::sessionBus().connect(QLatin1String( "org.kde.kded" ), QLatin1String( "/modules/kremotecontroldaemon" ), QLatin1String( "org.kde.krcd" ), QLatin1String( "remoteControlAdded" ),  this, SLOT(updateTray()));
+    QDBusConnection::sessionBus().connect(QLatin1String( "org.kde.kded" ), QLatin1String( "/modules/kremotecontroldaemon" ), QLatin1String( "org.kde.krcd" ), QLatin1String( "remoteControlAdded" ),  this, SLOT(updateContextMenu()));
+    QDBusConnection::sessionBus().connect(QLatin1String( "org.kde.kded" ), QLatin1String( "/modules/kremotecontroldaemon" ), QLatin1String( "org.kde.krcd" ), QLatin1String( "remoteControlRemoved" ),  this, SLOT(updateTray()));
+    QDBusConnection::sessionBus().connect(QLatin1String( "org.kde.kded" ), QLatin1String( "/modules/kremotecontroldaemon" ), QLatin1String( "org.kde.krcd" ), QLatin1String( "remoteControlRemoved" ),  this, SLOT(updateContextMenu()));
+    QDBusConnection::sessionBus().connect(QLatin1String( "org.kde.kded" ), QLatin1String( "/modules/kremotecontroldaemon" ), QLatin1String( "org.kde.krcd" ), QLatin1String( "buttonPressed" ),  this, SLOT(flash()));
+    QDBusConnection::sessionBus().connect(QLatin1String( "org.kde.kded" ), QLatin1String( "/modules/kremotecontroldaemon" ), QLatin1String( "org.kde.krcd" ), QLatin1String( "modeChanged" ),  this, SLOT(updateContextMenu()));
 }
 
 void KrcdNotifierItem::updateTray() {
     QString toolTipHeader = i18n("Remote Controls\n");
     QString toolTip;
-    QString icon = "krcd";
+    QString icon = QLatin1String( "krcd" );
     if (!Solid::Control::RemoteControlManager::connected()) {
         toolTipHeader += i18nc("The state of kremotecontrol", "Stopped");
         toolTip += i18n("No Remote Control is currently available.");
-        icon = "krcd_off";
+        icon = QLatin1String( "krcd_off" );
         setStatus(Passive);
     } else {
         toolTipHeader += i18nc("The state of kremotecontrol", "Ready");
         foreach(const QString &remote, DBusInterface::getInstance()->configuredRemotes()) {
             QString mode = DBusInterface::getInstance()->currentMode(remote);
-            toolTip += remote + " <i>(" + mode + ")</i><br>";
+            toolTip += remote + QLatin1String( " <i>(" ) + mode + QLatin1String( ")</i><br>" );
         }
         setStatus(Active);
     }
-    setToolTip("infrared-remote", toolTipHeader, toolTip);
+    setToolTip(QLatin1String( "infrared-remote" ), toolTipHeader, toolTip);
     setIconByName(icon);
 }
 
 void KrcdNotifierItem::updateContextMenu(){
     m_menu.clear();
-    m_menu.addTitle(KIcon( QLatin1String( "infrared-remote")), "Remote Controls" );
-    m_menu.addAction(SmallIcon("configure"), i18n("&Configure..."), this, SLOT(slotConfigure()));
+    m_menu.addTitle(KIcon( QLatin1String( "infrared-remote")), i18n( "Remote Controls" ) );
+    m_menu.addAction(SmallIcon(QLatin1String( "configure" )), i18n("&Configure..."), this, SLOT(slotConfigure()));
 
     foreach(const QString &remote, Solid::Control::RemoteControl::allRemoteNames()){
         KMenu *modeMenu = new KMenu(remote, &m_menu);
@@ -102,7 +102,7 @@ void KrcdNotifierItem::updateContextMenu(){
 }
 
 void KrcdNotifierItem::slotConfigure() {
-    KToolInvocation::startServiceByDesktopName("kcm_remotecontrol");
+    KToolInvocation::startServiceByDesktopName(QLatin1String( "kcm_remotecontrol" ));
 }
 
 void KrcdNotifierItem::slotModeSelected(QAction* action) {
@@ -122,10 +122,10 @@ void KrcdNotifierItem::slotModeSelected(QAction* action) {
 }
 
 void KrcdNotifierItem::flash() {
-    setIconByName("krcd_flash");
+    setIconByName(QLatin1String( "krcd_flash" ));
     QTimer::singleShot(200, this, SLOT(flashOff()));
 }
 
 void KrcdNotifierItem::flashOff() {
-    setIconByName("krcd");
+    setIconByName(QLatin1String( "krcd" ));
 }
