@@ -81,20 +81,25 @@ EditActionContainer::EditActionContainer(Action *action, const QString &remote, 
 void EditActionContainer::checkForComplete() {
     if(ui.cbButton->currentIndex() < 0){
         enableButtonOk(false);
+        enableButton(Try, false);
         return;   
     }
     switch(m_action->type()){
         case Action::DBusAction:{
             EditDBusAction *dbusActionEditor = dynamic_cast<EditDBusAction*>(m_innerWidget);
             if(dbusActionEditor){
-                enableButtonOk(dbusActionEditor->checkForComplete());
+                bool complete = dbusActionEditor->checkForComplete();
+                enableButtonOk(complete);
+                enableButton(Try, complete);
                 return;
             }
         }
         case Action::ProfileAction:{
             EditProfileAction *profileActionEditor = dynamic_cast<EditProfileAction*>(m_innerWidget);
             if(profileActionEditor){
-                enableButtonOk(profileActionEditor->checkForComplete());
+                bool complete = profileActionEditor->checkForComplete();
+                enableButtonOk(complete);
+                enableButton(Try, complete);
                 return;
             }
         }
