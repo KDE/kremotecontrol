@@ -21,7 +21,8 @@ kde4_add_unit_test(remoteTest TESTNAME remoteTest ${remoteTest_SRCS})
 
 target_link_libraries(
   profileTest
-  libkremotecontrol    
+  libkremotecontrol   
+  ${QT_QTCORE_LIBRARY} 
   ${QT_QTTEST_LIBRARY}  
 )
 
