@@ -27,30 +27,31 @@
 
 
 void ProfileTest::testGetter() {
-  Profile profile("id1", "name", "1.1","some author", "dummy 1" );
-  QCOMPARE(QString("id1"), profile.profileId());
-  QCOMPARE(QString("name"), profile.name());
-  QCOMPARE(QString("1.1"), profile.version());
-  QCOMPARE(QString("some author"), profile.author());
-  QCOMPARE(QString("dummy 1"), profile.description());
+  Profile profile(QLatin1String( "id1" ), QLatin1String( "name" ), QLatin1String( "1.1" ),QLatin1String( "some author" ), QLatin1String( "dummy 1" ) );
+  QCOMPARE(QLatin1String( "id1"), profile.profileId());
+  QCOMPARE(QLatin1String( "name"), profile.name());
+  QCOMPARE(QLatin1String( "1.1"), profile.version());
+  QCOMPARE(QLatin1String( "some author"), profile.author());
+  QCOMPARE(QLatin1String( "dummy 1"), profile.description());
 
   profile = Profile();
-  QCOMPARE(QString("0.0"), profile.version());
+  QCOMPARE(QLatin1String( "0.0"), profile.version());
 }
 
 void ProfileTest::testVersion() {
-  Profile *profile_1 = new Profile("id1", "name", "1.1","some author", "dummy 1" );
-  Profile *profile_2 = new Profile("id2", "name", "1.1","some author", "dummy 1" );
+  Profile *profile_1 = new Profile(QLatin1String( "id1" ), QLatin1String( "name" ), QLatin1String( "1.1" ),QLatin1String( "some author" ), QLatin1String( "dummy 1" ) );
+  Profile *profile_2 = new Profile(QLatin1String( "id2" ), QLatin1String( "name" ), QLatin1String( "1.1" ),QLatin1String( "some author" ), QLatin1String( "dummy 1" ) );
 
   QCOMPARE(0, profile_1->compareVersion(profile_2) );
 
-  profile_2=new Profile("id2", "name", "1.0","some author", "dummy 1" );
+  profile_2=new Profile(QLatin1String( "id2" ), QLatin1String( "name" ), QLatin1String( "1.0" ),QLatin1String( "some author" ), QLatin1String( "dummy 1" ) );
   QCOMPARE(1, profile_1->compareVersion(profile_2) );
 
-  profile_2 = new Profile("id2", "name", "1.2","some author", "dummy 1" );
+  profile_2 = new Profile(QLatin1String( "id2" ), QLatin1String( "name" ), QLatin1String( "1.2" ),QLatin1String( "some author" ), QLatin1String( "dummy 1" ) );
   QCOMPARE(-1, profile_1->compareVersion(profile_2) );
+  delete profile_2;
 
-  profile_2 =new Profile("id2", "name", "2.0","some author", "dummy 1" );
+  profile_2 =new Profile(QLatin1String( "id2" ), QLatin1String( "name" ), QLatin1String( "2.0" ),QLatin1String( "some author" ), QLatin1String( "dummy 1" ) );
   QCOMPARE(-1, profile_1->compareVersion(profile_2) );
 
   delete profile_1;
