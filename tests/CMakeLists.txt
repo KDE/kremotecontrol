@@ -28,6 +28,7 @@ target_link_libraries(
 
 target_link_libraries(
   remoteTest
-  libkremotecontrol    
+  libkremotecontrol   
+  ${QT_QTCORE_LIBRARY} 
   ${QT_QTTEST_LIBRARY}  
 )
