@@ -31,30 +31,30 @@ void RemoteTest::testGetter() {
 }
 
 void RemoteTest::testCycleChangeHandler() {
- Mode *mode1 = new Mode("mode1");
-  mode1->setButton("1");
-  Mode *mode2 = new Mode("mode2");
-  mode2->setButton("2");
-  Mode *mode3 = new Mode("mode3");
-  mode3->setButton("1");
-  Mode *mode4 = new Mode("mode4");
-  mode4->setButton("2");
-  Mode *mode5 = new Mode("mode5");
-  mode5->setButton("3");
-  Mode *mode6 = new Mode("mode6");
-  mode6->setButton("1");
-  Mode *mode7 = new Mode("mode7");
-  mode7->setButton("4");
-  Mode *mode8 = new Mode("mode8");
-  mode8->setButton("5");
-  Mode *mode9 = new Mode("mode9");
-  mode9->setButton("6");
-  Mode *mode10 = new Mode("mode10");
-  mode10->setButton("7");
+ Mode *mode1 = new Mode(QLatin1String("mode1"));
+  mode1->setButton(QLatin1String( "1" ));
+  Mode *mode2 = new Mode(QLatin1String( "mode2" ));
+  mode2->setButton(QLatin1String( "2" ));
+  Mode *mode3 = new Mode(QLatin1String( "mode3" ));
+  mode3->setButton(QLatin1String( "1" ));
+  Mode *mode4 = new Mode(QLatin1String( "mode4" ));
+  mode4->setButton(QLatin1String( "2" ));
+  Mode *mode5 = new Mode(QLatin1String( "mode5" ));
+  mode5->setButton(QLatin1String( "3" ));
+  Mode *mode6 = new Mode(QLatin1String( "mode6" ));
+  mode6->setButton(QLatin1String( "1" ));
+  Mode *mode7 = new Mode(QLatin1String( "mode7" ));
+  mode7->setButton(QLatin1String( "4" ));
+  Mode *mode8 = new Mode(QLatin1String( "mode8" ));
+  mode8->setButton(QLatin1String( "5" ));
+  Mode *mode9 = new Mode(QLatin1String( "mode9" ));
+  mode9->setButton(QLatin1String( "6" ));
+  Mode *mode10 = new Mode(QLatin1String( "mode10" ));
+  mode10->setButton(QLatin1String( "7" ));
 
 
 
-  Remote *remote = new Remote("remote1", Remote::Cycle);
+  Remote *remote = new Remote(QLatin1String( "remote1" ), Remote::Cycle);
   QCOMPARE(1, remote->allModes().size());
   remote->addMode(mode1);
   QCOMPARE(2, remote->allModes().size());
@@ -76,88 +76,88 @@ void RemoteTest::testCycleChangeHandler() {
   QCOMPARE(7, remote->allModes().size());
   remote->addMode(mode10);
   QCOMPARE(8, remote->allModes().size());
-  remote->setNextModeButton("n");
-  remote->setPreviousModeButton("p");
+  remote->setNextModeButton(QLatin1String( "n" ));
+  remote->setPreviousModeButton(QLatin1String( "p" ));
   QCOMPARE(remote->masterMode(), remote->currentMode());
-  QCOMPARE(false, remote->nextMode("foobar"));
+  QCOMPARE(false, remote->nextMode(QLatin1String( "foobar" )));
   QCOMPARE(remote->masterMode(), remote->currentMode());
 
-  QCOMPARE(true, remote->nextMode("n"));
+  QCOMPARE(true, remote->nextMode(QLatin1String( "n" )));
   QCOMPARE(mode1, remote->currentMode());
-  QCOMPARE(true, remote->nextMode("n"));
+  QCOMPARE(true, remote->nextMode(QLatin1String( "n" )));
   QCOMPARE(mode2, remote->currentMode());
-  QCOMPARE(true, remote->nextMode("n"));
+  QCOMPARE(true, remote->nextMode(QLatin1String( "n" )));
   QCOMPARE(mode5, remote->currentMode());
-  QCOMPARE(true, remote->nextMode("n"));
+  QCOMPARE(true, remote->nextMode(QLatin1String( "n" )));
   QCOMPARE(mode7, remote->currentMode());
-  QCOMPARE(true, remote->nextMode("n"));
+  QCOMPARE(true, remote->nextMode(QLatin1String( "n" )));
   QCOMPARE(mode8, remote->currentMode());
-  QCOMPARE(true, remote->nextMode("n"));
+  QCOMPARE(true, remote->nextMode(QLatin1String( "n" )));
   QCOMPARE(mode9, remote->currentMode());
-  QCOMPARE(true, remote->nextMode("n"));
+  QCOMPARE(true, remote->nextMode(QLatin1String( "n" )));
   QCOMPARE(mode10, remote->currentMode());
-  QCOMPARE(true, remote->nextMode("n"));
+  QCOMPARE(true, remote->nextMode(QLatin1String( "n" )));
   QCOMPARE(remote->masterMode(), remote->currentMode());
 
-  QCOMPARE(true, remote->nextMode("p"));
+  QCOMPARE(true, remote->nextMode(QLatin1String( "p" )));
   QCOMPARE(mode10, remote->currentMode());
-  QCOMPARE(true, remote->nextMode("p"));
+  QCOMPARE(true, remote->nextMode(QLatin1String( "p" )));
   QCOMPARE(mode9, remote->currentMode());
-  QCOMPARE(true, remote->nextMode("p"));
+  QCOMPARE(true, remote->nextMode(QLatin1String( "p" )));
   QCOMPARE(mode8, remote->currentMode());
-  QCOMPARE(true, remote->nextMode("p"));
+  QCOMPARE(true, remote->nextMode(QLatin1String( "p" )));
   QCOMPARE(mode7, remote->currentMode());
-  QCOMPARE(true, remote->nextMode("p"));
+  QCOMPARE(true, remote->nextMode(QLatin1String( "p" )));
   QCOMPARE(mode5, remote->currentMode());
-  QCOMPARE(true, remote->nextMode("p"));
+  QCOMPARE(true, remote->nextMode(QLatin1String( "p" )));
   QCOMPARE(mode2, remote->currentMode());
-  QCOMPARE(true, remote->nextMode("p"));
+  QCOMPARE(true, remote->nextMode(QLatin1String( "p" )));
   QCOMPARE(mode1, remote->currentMode());
-  QCOMPARE(true, remote->nextMode("p"));
+  QCOMPARE(true, remote->nextMode(QLatin1String( "p" )));
   QCOMPARE(remote->masterMode(), remote->currentMode());
 
-  QCOMPARE(true, remote->nextMode("1"));
+  QCOMPARE(true, remote->nextMode(QLatin1String( "1" )));
   QCOMPARE(mode1, remote->currentMode());
-  QCOMPARE(false, remote->nextMode("1"));
+  QCOMPARE(false, remote->nextMode(QLatin1String( "1" )));
   QCOMPARE(mode1, remote->currentMode());
 
-  QCOMPARE(true, remote->nextMode("2"));
+  QCOMPARE(true, remote->nextMode(QLatin1String( "2" )));
   QCOMPARE(mode2, remote->currentMode());
-  QCOMPARE(false, remote->nextMode("2"));
+  QCOMPARE(false, remote->nextMode(QLatin1String( "2" )));
   QCOMPARE(mode2, remote->currentMode());
 
-  QCOMPARE(true, remote->nextMode("3"));
+  QCOMPARE(true, remote->nextMode(QLatin1String( "3" )));
   QCOMPARE(mode5, remote->currentMode());
-  QCOMPARE(false, remote->nextMode("3"));
-  QCOMPARE(mode5, remote->currentMode());  
+  QCOMPARE(false, remote->nextMode(QLatin1String( "3" )));
+  QCOMPARE(mode5, remote->currentMode());
 }
 
 
 void RemoteTest::testGroupChangeHandler() {
-  Mode *mode1 = new Mode("mode1");
-  mode1->setButton("1");
-  Mode *mode2 = new Mode("mode2");
-  mode2->setButton("2");
-  Mode *mode3 = new Mode("mode3");
-  mode3->setButton("1");
-  Mode *mode4 = new Mode("mode4");
-  mode4->setButton("2");
-  Mode *mode5 = new Mode("mode5");
-  mode5->setButton("3");
-  Mode *mode6 = new Mode("mode6");
-  mode6->setButton("1");
-  Mode *mode7 = new Mode("mode7");
-  mode7->setButton("1");
-  Mode *mode8 = new Mode("mode8");
-  mode8->setButton("2");
-  Mode *mode9 = new Mode("mode9");
-  mode9->setButton("2");
-  Mode *mode10 = new Mode("mode10");
-  mode10->setButton("2");
-  
- 
+  Mode *mode1 = new Mode(QLatin1String( "mode1" ));
+  mode1->setButton(QLatin1String( "1" ));
+  Mode *mode2 = new Mode(QLatin1String( "mode2" ));
+  mode2->setButton(QLatin1String( "2" ));
+  Mode *mode3 = new Mode(QLatin1String( "mode3" ));
+  mode3->setButton(QLatin1String( "1" ));
+  Mode *mode4 = new Mode(QLatin1String( "mode4" ));
+  mode4->setButton(QLatin1String( "2" ));
+  Mode *mode5 = new Mode(QLatin1String( "mode5" ));
+  mode5->setButton(QLatin1String( "3" ));
+  Mode *mode6 = new Mode(QLatin1String( "mode6" ));
+  mode6->setButton(QLatin1String( "1" ));
+  Mode *mode7 = new Mode(QLatin1String( "mode7" ));
+  mode7->setButton(QLatin1String( "1" ));
+  Mode *mode8 = new Mode(QLatin1String( "mode8" ));
+  mode8->setButton(QLatin1String( "2" ));
+  Mode *mode9 = new Mode(QLatin1String( "mode9" ));
+  mode9->setButton(QLatin1String( "2" ));
+  Mode *mode10 = new Mode(QLatin1String( "mode10" ));
+  mode10->setButton(QLatin1String( "2" ));
 
-  Remote *remote = new Remote("remote1");
+
+
+  Remote *remote = new Remote(QLatin1String( "remote1" ));
   QCOMPARE(1, remote->allModes().size());
   remote->addMode(mode1);
   remote->addMode(mode2);
@@ -171,82 +171,82 @@ void RemoteTest::testGroupChangeHandler() {
   remote->addMode(mode10);
   QCOMPARE(11, remote->allModes().size());
   QCOMPARE(remote->masterMode(), remote->currentMode());
-  QCOMPARE(false, remote->nextMode("foobar"));
+  QCOMPARE(false, remote->nextMode(QLatin1String( "foobar" )));
   QCOMPARE(remote->masterMode(), remote->currentMode());
-  QCOMPARE(true,remote->nextMode("1"));
+  QCOMPARE(true,remote->nextMode(QLatin1String( "1" )));
   QCOMPARE( mode1,  remote->currentMode());
-  QCOMPARE(true,remote->nextMode("1"));
+  QCOMPARE(true,remote->nextMode(QLatin1String( "1" )));
   QCOMPARE(mode3,remote->currentMode());
-  QCOMPARE(true,remote->nextMode("1"));
+  QCOMPARE(true,remote->nextMode(QLatin1String( "1" )));
   QCOMPARE(mode6,remote->currentMode());
-  QCOMPARE(true,remote->nextMode("1"));
+  QCOMPARE(true,remote->nextMode(QLatin1String( "1" )));
   QCOMPARE(mode7,remote->currentMode());
-  QCOMPARE(true,remote->nextMode("1"));
+  QCOMPARE(true,remote->nextMode(QLatin1String( "1" )));
   QCOMPARE(remote->masterMode(), remote->currentMode());
-  
-  
-  QCOMPARE(true,remote->nextMode("3"));
+
+
+  QCOMPARE(true,remote->nextMode(QLatin1String( "3" )));
   QCOMPARE(mode5,remote->currentMode());
-  QCOMPARE(true,remote->nextMode("3"));
+  QCOMPARE(true,remote->nextMode(QLatin1String( "3" )));
   QCOMPARE(remote->masterMode(), remote->currentMode());
-  
+
   remote->setCurrentMode(mode10);
-  QCOMPARE(true,remote->nextMode("2"));
+  QCOMPARE(true,remote->nextMode(QLatin1String( "2" )));
   QCOMPARE(remote->masterMode(), remote->currentMode());
-  
+
   remote->setCurrentMode(mode10);
-  QCOMPARE(true,remote->nextMode("1"));
+  QCOMPARE(true,remote->nextMode(QLatin1String( "1" )));
   QCOMPARE(mode1,remote->currentMode());
 }
 
 
 void RemoteTest::testOperatorEquals() {
-   Mode *mode1 = new Mode("mode1");
-   Mode *mode2 = new Mode("mode1");
+   Mode *mode1 = new Mode(QLatin1String( "mode1" ));
+   Mode *mode2 = new Mode(QLatin1String( "mode1" ));
    QCOMPARE(*mode1, *mode2);
-   mode1->setButton("1");
+   mode1->setButton(QLatin1String( "1" ));
    QCOMPARE(false, *mode1==  *mode2);
-   mode2->setButton("1");
+   mode2->setButton(QLatin1String( "1" ));
    QCOMPARE(*mode1, *mode2);
-   
-   mode2->setName("blubber");
+
+   mode2->setName(QLatin1String( "blubber" ));
    QCOMPARE(false, *mode1==  *mode2);
-   
-   mode2->setName("mode1");
-   mode2->setButton("1");
-   mode2->setIconName("icon");
-   
+
+   mode2->setName(QLatin1String( "mode1" ));
+   mode2->setButton(QLatin1String( "1" ));
+   mode2->setIconName(QLatin1String( "icon" ));
+
    QCOMPARE(false, *mode1 ==  *mode2);
-   
-   mode1->setIconName("icon");
+
+   mode1->setIconName(QLatin1String( "icon" ));
    QCOMPARE(*mode1, *mode2);
 }
 
 void RemoteTest::toggleModeChangeHandler() {
- Mode *mode1 = new Mode("mode1");
-  mode1->setButton("1");
-  Mode *mode2 = new Mode("mode2");
-  mode2->setButton("2");
-  Mode *mode3 = new Mode("mode3");
-  mode3->setButton("1");
-  Mode *mode4 = new Mode("mode4");
-  mode4->setButton("2");
-  Mode *mode5 = new Mode("mode5");
-  mode5->setButton("3");
-  Mode *mode6 = new Mode("mode6");
-  mode6->setButton("1");
-  Mode *mode7 = new Mode("mode7");
-  mode7->setButton("1");
-  Mode *mode8 = new Mode("mode8");
-  mode8->setButton("2");
-  Mode *mode9 = new Mode("mode9");
-  mode9->setButton("2");
-  Mode *mode10 = new Mode("mode10");
-  mode10->setButton("2");
+ Mode *mode1 = new Mode(QLatin1String( "mode1" ));
+  mode1->setButton(QLatin1String( "1" ));
+  Mode *mode2 = new Mode(QLatin1String( "mode2" ));
+  mode2->setButton(QLatin1String( "2" ));
+  Mode *mode3 = new Mode(QLatin1String( "mode3" ));
+  mode3->setButton(QLatin1String( "1" ));
+  Mode *mode4 = new Mode(QLatin1String( "mode4" ));
+  mode4->setButton(QLatin1String( "2" ));
+  Mode *mode5 = new Mode(QLatin1String( "mode5" ));
+  mode5->setButton(QLatin1String( "3" ));
+  Mode *mode6 = new Mode(QLatin1String( "mode6" ));
+  mode6->setButton(QLatin1String( "1" ));
+  Mode *mode7 = new Mode(QLatin1String( "mode7" ));
+  mode7->setButton(QLatin1String( "1" ));
+  Mode *mode8 = new Mode(QLatin1String( "mode8" ));
+  mode8->setButton(QLatin1String( "2" ));
+  Mode *mode9 = new Mode(QLatin1String( "mode9" ));
+  mode9->setButton(QLatin1String( "2" ));
+  Mode *mode10 = new Mode(QLatin1String( "mode10" ));
+  mode10->setButton(QLatin1String( "2" ));
 
 
 
-  Remote *remote = new Remote("remote1");
+  Remote *remote = new Remote(QLatin1String( "remote1" ));
   QCOMPARE(1, remote->allModes().size());
   remote->addMode(mode1);
   remote->addMode(mode2);
@@ -259,22 +259,22 @@ void RemoteTest::toggleModeChangeHandler() {
   remote->addMode(mode9);
   remote->addMode(mode10);
   QCOMPARE(11, remote->allModes().size());
-  remote->setModeChangeMode(Remote::Cycle);  
+  remote->setModeChangeMode(Remote::Cycle);
   QCOMPARE(11, remote->allModes().size());
-  QCOMPARE(QString("1"),mode1->button());
-  QCOMPARE(QString("2"),mode2->button());
+  QCOMPARE(QLatin1String( "1"),mode1->button());
+  QCOMPARE(QLatin1String( "2"),mode2->button());
   QCOMPARE(QString(),mode3->button());
   QCOMPARE(QString(),mode4->button());
-  QCOMPARE(QString("3"),mode5->button());
+  QCOMPARE(QLatin1String( "3"),mode5->button());
   QCOMPARE(QString(),mode6->button());
   QCOMPARE(QString(),mode7->button());
   QCOMPARE(QString(),mode8->button());
   QCOMPARE(QString(),mode9->button());
   QCOMPARE(QString(),mode10->button());
 
-  remote->setNextModeButton("1");
+  remote->setNextModeButton(QLatin1String( "1" ));
   QCOMPARE(QString(),mode1->button());
-  remote->setPreviousModeButton("2");
+  remote->setPreviousModeButton(QLatin1String( "2" ));
   QCOMPARE(QString(),mode2->button());
 }
 
