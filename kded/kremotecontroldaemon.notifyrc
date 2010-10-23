@@ -2,6 +2,7 @@
 IconName=krcd
 Comment=KRemoteControl Daemon
 Comment[ar]=مراقب KRemoteControl
+Comment[ast]=KRemoteControl Daemon
 Comment[ca]=Dimoni KRemoteControl
 Comment[ca@valencia]=Dimoni KRemoteControl
 Comment[da]=KRemoteControl-dæmonen
@@ -149,6 +150,7 @@ Name[zh_CN]=模式切换事件
 Name[zh_TW]=模式切換事件
 Comment=Mode has changed
 Comment[ar]=غير النمط
+Comment[ast]=El mou camudó
 Comment[ca]=El mode ha canviat
 Comment[ca@valencia]=El mode ha canviat
 Comment[cs]=Režim se změnil
@@ -198,6 +200,7 @@ Action=Popup
 [Event/app_event]
 Name=Application event
 Name[ar]=حدث التطبيق
+Name[ast]=Eventu d'aplicación
 Name[ca]=Esdeveniment d'aplicació
 Name[ca@valencia]=Esdeveniment d'aplicació
 Name[cs]=Událost aplikace
