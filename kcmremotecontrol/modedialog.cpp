@@ -46,7 +46,7 @@ ModeDialog::ModeDialog(Remote *remote, Mode *mode, QWidget *parent): KDialog(par
 
     ui.cbButtons->addItem(i18n("No button"), QString());
     foreach(const QString &button, remote->availableModeSwitchButtons(mode)){
-        ui.cbButtons->addItem(button, button);
+        ui.cbButtons->addItem(Solid::Control::RemoteControlButton(remote->name(), button).description(), button);
     }
 
     if(m_mode){

@@ -1,128 +1,106 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <profile xmlns="urn:org-kde-kremotecontrol" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="urn:org-kde-kremotecontrol file:profile.xsd">
+  xsi:schemaLocation="urn:org-kde-kremotecontrol file:profile.xsd">
+  
+  
     <name>Power management</name>
+    <description>Shutdown, suspend or reboot your computer</description>
     <version>0.1</version>
     <author>Michael Zanetti</author>
-    <description>Shutdown, suspend or reboot</description>
-    <action id="suspend2Ram">
-        <name>Suspend to RAM</name>
-        <description>Suspends your computer to RAM</description>
+    
+    <action id="suspend2Ram" name="Suspend" description="Suspends your computer to RAM (sleep)">
         <prototype>
             <serviceName>org.kde.klauncher</serviceName>
             <node>KLauncher</node>
             <function>kdeinit_exec</function>
             <arguments>
-                <argument type="QString">
-                    <comment>System command to use for suspend</comment>
+                <argument type="QString" comment="System command to use for suspend">
                     <default>solid-powermanagement</default>
                 </argument>
-                <argument type="QStringList">
-                    <comment>Parameters for the suspend commands</comment>
+                <argument type="QStringList" comment="Parameters for the suspend command">
                     <default>suspend, to_ram</default>
                 </argument>
-                <argument type="QStringList">
-                    <comment>Environment variables</comment>
+                <argument type="QStringList" comment="Environment variables">
                 </argument>
-                <argument type="QString">
-                    <comment>Startup ID</comment>
-                </argument>
-            </arguments>
-
-        </prototype>
-    </action>
-    <action id="suspend2Disk">
-        <name>Suspend to disk</name>
-        <description>Suspends your computer disk (hibernate)</description>
-        <prototype>
-            <serviceName>org.kde.klauncher</serviceName>
-            <node>KLauncher</node>
-            <function>kdeinit_exec</function>
-            <arguments>
-                <argument type="QString">
-                    <comment>System command to use for suspend</comment>
-                    <default>solid-powermanagement</default>
-                </argument>
-                <argument type="QStringList">
-                    <comment>Parameters for the suspend commands</comment>
-                    <default>suspend, to_disk</default>
-                </argument>
-                <argument type="QStringList">
-                    <comment>Environment variables</comment>
-                </argument>
-                <argument type="QString">
-                    <comment>Startup ID</comment>
+                <argument type="QString" comment="Startup ID">
                 </argument>
             </arguments>
         </prototype>
     </action>
     
-    <action id="shutdown">
-        <name>Shutdown</name>
-        <description>Logout and shutdown your computer</description>
-        <prototype>                       
-            <serviceName>org.kde.ksmserver</serviceName>
-            <node>KSMServer</node>
-            <function>logout</function>
+    <action id="suspend2Disk" name="Hibernate" description="Suspends your computer disk (deep sleep)">
+        <prototype>
+            <serviceName>org.kde.klauncher</serviceName>
+            <node>KLauncher</node>
+            <function>kdeinit_exec</function>
             <arguments>
-                <argument type="int">
-                    <comment>Ask for confirmation? 1 = No, 2 = Yes</comment>
-                    <default>2</default>
+                <argument type="QString" comment="System command to use for suspend">
+                    <default>solid-powermanagement</default>
                 </argument>
-                <argument type="int">
-                    <comment>Shutdown? 1 = Reboot, 2 = Halt, 3 = Logout</comment>
-                    <default>2</default>
+                <argument type="QStringList" comment="Parameters for the suspend commands">
+                    <default>suspend, to_disk</default>
                 </argument>
-                <argument type="int">
-                    <comment>When? 0 = When ready, 1 = Try now, 2 = Force now, 3 = Interactive</comment>
-                    <default>2</default>
+                <argument type="QStringList" comment="Environment variables">
+                </argument>
+                <argument type="QString" comment="Startup ID">
                 </argument>
             </arguments>
         </prototype>
     </action>
+    
+    <action id="shutdown" name="Shutdown" description="Logout and shutdown your computer">
+        <prototype>
+            <serviceName>org.kde.ksmserver</serviceName>
+            <node>KSMServer</node>
+            <function>logout</function>
+            <arguments>
+                <argument type="int" comment="Ask for confirmation? 1 = No, 2 = Yes">
+                    <default>2</default>
+                </argument>
+                <argument type="int" comment="Shutdown? 1 = Reboot, 2 = Halt, 3 = Logout">
+                    <default>2</default>
+                </argument>
+                <argument type="int" comment="When? 0 = When ready, 1 = Try now, 2 = Force now, 3 = Interactive">
+                    <default>2</default>
+                </argument>
+            </arguments>
+        </prototype>
+        <button>Power</button>
+        <repeat>false</repeat>
+    </action>
 
-    <action id="reboot">
-        <name>Reboot</name>
-        <description>Logout and restart your computer</description>
+    <action id="reboot" name="Reboot" description="Logout and restart your computer">
         <prototype>                       
             <serviceName>org.kde.ksmserver</serviceName>
             <node>KSMServer</node>
             <function>logout</function>
             <arguments>
-                <argument type="int">
-                    <comment>Ask for confirmation? 1 = No, 2 = Yes</comment>
+                <argument type="int" comment="Ask for confirmation? 1 = No, 2 = Yes">
                     <default>2</default>
                 </argument>
-                <argument type="int">
-                    <comment>Shutdown? 1 = Reboot, 2 = Halt, 3 = Logout</comment>
+                <argument type="int" comment="Shutdown? 1 = Reboot, 2 = Halt, 3 = Logout">
                     <default>1</default>
                 </argument>
-                <argument type="int">
-                    <comment>When? 0 = When ready, 1 = Try now, 2 = Force now, 3 = Interactive</comment>
+                <argument type="int" comment="When? 0 = When ready, 1 = Try now, 2 = Force now, 3 = Interactive">
                     <default>2</default>
                 </argument>
             </arguments>
         </prototype>
     </action>
 
-    <action id="logout">
-        <name>Logout</name>
-        <description>Just log out</description>
+    <action id="logout" name="Logout" description="Just log out">
         <prototype>                       
             <serviceName>org.kde.ksmserver</serviceName>
             <node>KSMServer</node>
             <function>logout</function>
             <arguments>
-                <argument type="int">
-                    <comment>Ask for confirmation? 1 = No, 2 = Yes</comment>
+                <argument type="int" comment="Ask for confirmation? 1 = No, 2 = Yes">
                     <default>2</default>
                 </argument>
-                <argument type="int">
-                    <comment>Shutdown? 1 = Reboot, 2 = Halt, 3 = Logout</comment>
+                <argument type="int" comment="Shutdown? 1 = Reboot, 2 = Halt, 3 = Logout">
                     <default>3</default>
                 </argument>
-                <argument type="int">
-                    <comment>When? 0 = When ready, 1 = Try now, 2 = Force now, 3 = Interactive</comment>
+                <argument type="int" comment="When? 0 = When ready, 1 = Try now, 2 = Force now, 3 = Interactive">
                     <default>2</default>
                 </argument>
             </arguments>

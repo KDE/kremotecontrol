@@ -53,7 +53,9 @@ KCMRemoteControl::KCMRemoteControl(QWidget *parent, const QVariantList &args) :
                                 ki18n("Use this to configure KDE's remote control system in order to control any KDE application with your remote control."),
                                 "http://utils.kde.org/projects/kremotecontrol"));
     setQuickHelp(i18n("<h1>Remote Controls</h1><p>This module allows you to configure bindings between your remote controls and KDE applications. Simply select your remote control and click Add next to the Actions/Buttons list to create new action for button presses.</p>"));
+
     KGlobal::locale()->insertCatalog( QLatin1String( "libkremotecontrol" ));
+    KGlobal::locale()->insertCatalog( QLatin1String( "solidcontrol" ));
 
     QHBoxLayout *layout = new QHBoxLayout(this);
     QWidget *widget = new QWidget(this);

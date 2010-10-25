@@ -32,6 +32,7 @@
 #include <QtXml/QXmlSimpleReader>
 #include <QtXmlPatterns/QXmlSchemaValidator>
 #include <QtXmlPatterns/QXmlSchema>
+#include <klocalizedstring.h>
 
 class ProfileServerPrivate
 {
@@ -199,12 +200,15 @@ Profile * ProfileServer::ProfileXmlContentHandler::parseFile(const QString& file
     if(doc.setContent( &file, &errorMsg, &errorLine, &errorColumn)) {
 
         QDomElement rootElement = doc.namedItem(QLatin1String( "profile" )).toElement();
-        QString name = rootElement.namedItem(QLatin1String( "name" )).toElement().text();
-        QString description = rootElement.namedItem(QLatin1String( "description" )).toElement().isNull() ? QString() : rootElement.namedItem(QLatin1String( "description" )).toElement().text().trimmed();
+        QString name = rootElement.namedItem(QLatin1String( "name" )).toElement().text().trimmed();
+        QString description;
+        if(!rootElement.namedItem(QLatin1String( "description" )).isNull()) {
+            description = rootElement.namedItem(QLatin1String( "description" )).toElement().text().trimmed();
+        }
         QString author = rootElement.namedItem(QLatin1String( "author" )).toElement().text().trimmed();
         QString version = rootElement.namedItem(QLatin1String( "version" )).toElement().text().trimmed();
 
-        Profile *profile =  new Profile(profileId, name ,version, author, description);
+        Profile *profile =  new Profile(profileId, i18n(name.toUtf8().data()) ,version, author, i18n(description.toUtf8().data()));
 
         QDomNodeList actionNodeList = rootElement.elementsByTagName(QLatin1String( "action" ));
         for(int count = 0; count < actionNodeList.size(); ++count){
@@ -223,23 +227,20 @@ ProfileActionTemplate ProfileServer::ProfileXmlContentHandler::parseAction(QDomN
     bool autostart = true;
     bool repeat = false;
     QString actionId = actionNode.attributes().namedItem(QLatin1String( "id" )).nodeValue().trimmed();
-    if (actionNode.attributes().contains(QLatin1String( "button" ))){
-        buttonName = actionNode.attributes().namedItem(QLatin1String( "button" )).nodeValue().trimmed();
+    if (!actionNode.namedItem(QLatin1String( "button" )).isNull()){
+        buttonName = actionNode.namedItem(QLatin1String( "button" )).toElement().text().trimmed();
     }
-    if (actionNode.attributes().contains(QLatin1String( "autostart" ))){
-        QString value = actionNode.attributes().namedItem(QLatin1String( "autostart" )).nodeValue().trimmed();
+    if (!actionNode.namedItem(QLatin1String( "autostart" )).isNull()){
+        QString value = actionNode.namedItem(QLatin1String( "autostart" )).toElement().text().trimmed();
         autostart = value == QLatin1String( "true" )? true: false;
     }
-    if (actionNode.attributes().contains(QLatin1String( "repeat" ))){
-        repeat = QVariant(actionNode.attributes().namedItem(QLatin1String( "repeat" )).nodeValue().trimmed()).toBool();
+    if (!actionNode.namedItem(QLatin1String( "repeat" )).isNull()){
+        repeat = QVariant(actionNode.namedItem(QLatin1String( "repeat" )).toElement().text().trimmed()).toBool();
     }
 
-    QString actionName = actionNode.namedItem(QLatin1String( "name" )).toElement().text().trimmed();
+    QString actionName = actionNode.attributes().namedItem(QLatin1String( "name" )).nodeValue().trimmed();
 
-    QString description;
-    if( ! actionNode.namedItem(QLatin1String( "description" )).isNull()) {
-        description = actionNode.namedItem(QLatin1String( "description" )).toElement().text().trimmed();
-    }
+    QString description = actionNode.attributes().namedItem(QLatin1String( "description" )).nodeValue().trimmed();
 
     DBusAction::ActionDestination actionType;
     QString ifMultiTag = actionNode.namedItem(QLatin1String( "ifmulti" )).toElement().text().trimmed();
@@ -266,10 +267,7 @@ ProfileActionTemplate ProfileServer::ProfileXmlContentHandler::parseAction(QDomN
             QDomNode attributeNode = attributeNodes.at(attributeCount);
             QString typeString  = attributeNode.attributes().namedItem(QLatin1String( "type" )).nodeValue().trimmed();
             QVariant argValue(QVariant::nameToType(typeString.toLocal8Bit()));
-            QString description;
-            if(!attributeNode.toElement().namedItem(QLatin1String( "comment")).isNull()){
-                description = attributeNode.toElement().namedItem(QLatin1String( "comment" )).toElement().text();
-            }
+            QString description = attributeNode.toElement().attributes().namedItem(QLatin1String( "comment" )).nodeValue().trimmed();
             if(!attributeNode.toElement().namedItem(QLatin1String( "default" )).isNull()){
                 QVariant qVariant = QVariant::nameToType(typeString.toLocal8Bit());
                 QString value = attributeNode.toElement().namedItem(QLatin1String( "default" )).toElement().text().trimmed();
@@ -284,7 +282,7 @@ ProfileActionTemplate ProfileServer::ProfileXmlContentHandler::parseAction(QDomN
                 }
                 argValue.convert(QVariant::nameToType(typeString.toLocal8Bit()));
             }
-            arguments.append(Argument(argValue, description));
+            arguments.append(Argument(argValue, i18n(description.toUtf8().data())));
         }
     }
 
@@ -292,13 +290,13 @@ ProfileActionTemplate ProfileServer::ProfileXmlContentHandler::parseAction(QDomN
 
     return ProfileActionTemplate(profileId,
                                   actionId,
-                                  actionName,
+                                  i18n(actionName.toUtf8().data()),
                                   serviceName,
                                   nodeName,
                                   function,
                                   actionType,
                                   autostart,
                                   repeat,
-                                  description,
+                                  i18n(description.toUtf8().data()),
                                   buttonName);
 }

@@ -1,34 +1,28 @@
 <?xml version="1.0"?>
 
 <profile xmlns="urn:org-kde-kremotecontrol" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="urn:org-kde-kremotecontrol file:profile.xsd">
+  xsi:schemaLocation="urn:org-kde-kremotecontrol file:profile.xsd">
+  
 	<name>Konqueror</name>
 	<version>0.1</version>
 	<author>Gav Wood</author>
 	
-	<action id="newWindow">
-		<name>Create New Window</name>
-		<description>Creates a new window and loads an arbitrary URL.</description>
-		
+	<action id="newWindow" name="Create New Window" description="Creates a new window and loads an arbitrary URL">
 		<prototype>
 			<serviceName>org.kde.konqueror</serviceName>
 			<node>KonqMain</node>			
 			<function>openBrowserWindow</function>
 			<arguments>
-				<argument type="QString">
-					<comment>The URL to load in the window initially.</comment>
+				<argument type="QString" comment="The URL to load in the window initially">
 				</argument>
-				<argument type="QByteArray">
-					<comment>Startup Id</comment>
-					</argument>
+				<argument type="QByteArray" comment="Startup Id">
+				</argument>
 			</arguments>			
 		</prototype>
 		<ifmulti>sendtotop</ifmulti>
 	</action>
 	
-	<action id="quit">
-		<name>Quit</name>
-		<description>Closes the Konqueror window.</description>
+	<action id="quit" name="Quit" description="Closes the Konqueror window">
 		<prototype>
 			<serviceName>org.kde.konqueror</serviceName>
 			<node>MainApplication</node>

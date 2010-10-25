@@ -1,62 +1,64 @@
 <?xml version="1.0" ?>
 
 <profile xmlns="urn:org-kde-kremotecontrol" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="urn:org-kde-kremotecontrol file:profile.xsd">
+         xsi:schemaLocation="urn:org-kde-kremotecontrol file:profile.xsd">
 
     <name>Dragon Player</name>
     <version>0.1</version>
     <author>Gioacchino Mazzurco [gmazzurco89@gmail.com]</author>
    
     <!-- Playback actions -->
-    <action id="play" button="Play">
-        <name>Start playing</name>
+    <action id="play" name="Play" description="Start playing">
         <prototype>
             <serviceName>org.mpris.dragonplayer</serviceName>
             <node>Player</node>
             <function>Play</function>
         </prototype>
+        <button>Play</button>
         <ifmulti>sendtotop</ifmulti>
     </action>
     
-    <action id="stop" button="Stop">
-        <name>Stop playing</name>
+    <action id="stop" name="Stop" description="Stop playing">
         <prototype>
             <serviceName>org.mpris.dragonplayer</serviceName>
             <node>Player</node>
             <function>Stop</function>
         </prototype>
+        <button>Stop</button>
         <ifmulti>sendtotop</ifmulti>
     </action>
     
-    <action id="pause" button="PlayPause">
-        <name>Pause playing</name>
+    <action id="pause" name="Play/Pause" description="Toggle Play/Pause">
         <prototype>
             <serviceName>org.mpris.dragonplayer</serviceName>
             <node>Player</node>
             <function>Pause</function>
         </prototype>
+        <button>PlayPause</button>
         <ifmulti>sendtotop</ifmulti>
     </action>
     
    <!-- The actions currently have no effekt in dragon player 2.0        
     
-    <action id="skipForward" button="SkipForward" repeat="true">
-        <name>Advance to next track</name>
+    <action id="skipForward" name="Skip Forward" description="Advance to next track">
         <prototype>
             <serviceName>org.mpris.dragonplayer</serviceName>
             <node>Player</node>
             <function>Next</function>
         </prototype>
+        <button>SkipForward</button>
+        <repeat>true</repeat>
         <ifmulti>sendtotop</ifmulti>
     </action>
    
-    <action id="skipBackward" button="SkipBackward" repeat="true">
-        <name>Go to previous track</name>
+    <action id="skipBackward" name="Skip Backward" description="Go to previous track">
         <prototype>
             <serviceName>org.mpris.dragonplayer</serviceName>
             <node>Player</node>
             <function>Prev</function>
         </prototype>
+        <button>SkipBackward</button>
+        <repeat>true</repeat>
         <ifmulti>sendtotop</ifmulti>
     </action>       
    -->

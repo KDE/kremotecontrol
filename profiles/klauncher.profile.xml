@@ -1,55 +1,43 @@
 <?xml version="1.0" ?>
 <profile xmlns="urn:org-kde-kremotecontrol" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="urn:org-kde-kremotecontrol file:profile.xsd">
-
+         xsi:schemaLocation="urn:org-kde-kremotecontrol file:profile.xsd">
+	 
 	<name>KDE Program Launcher</name>
+	<description>Launch programs with klauncher</description>
 	<version>0.1</version>
 	<author>Gav Wood</author>
-	<description>Launch programs with klauncher</description>
 
-	<action id="execute">
-		<name>Execute</name>
-		<description>Runs a program or script</description>
+	<action id="execute" name="Execute" description="Runs a program or script">
 		<prototype>
 			<serviceName>org.kde.klauncher</serviceName>
 			<node>KLauncher</node>
 			<function>kdeinit_exec</function>
 			<arguments>
-				<argument type="QString">
-					<comment>The executable name and path of the program or script to run</comment>
+				<argument type="QString" comment="The executable name and path of the program or script to run">
 				</argument>
-				<argument type="QStringList">
-					<comment>Parameters for the program or script</comment>
+				<argument type="QStringList" comment="Parameters for the program or script">
 				</argument>
-				<argument type="QStringList">
-					<comment>Environment variables</comment>
+				<argument type="QStringList" comment="Environment variables">
 				</argument>
-				<argument type="QString">
-					<comment>Startup ID</comment>
+				<argument type="QString" comment="Startup ID">
 				</argument>
 			</arguments>
 		</prototype>
 	</action>
 
-	<action id="executeWait">
-		<name>Execute and wait</name>
-		<description>Runs a program or script and waits for it to finish</description>
+	<action id="executeWait" name="Execute and wait" description="Runs a program or script and waits for it to finish">
 		<prototype>
 			<serviceName>org.kde.klauncher</serviceName>
 			<node>KLauncher</node>
 			<function>kdeinit_exec_wait</function>
 			<arguments>
-				<argument type="QString">
-					<comment>The executable name and path of the program or script to run</comment>
+				<argument type="QString" comment="The executable name and path of the program or script to run">
 				</argument>
-				<argument type="QStringList">
-					<comment>Parameters for the program or script</comment>
+				<argument type="QStringList" comment="Parameters for the program or script">
 				</argument>
-				<argument type="QStringList">
-					<comment>Environment variables</comment>
+				<argument type="QStringList" comment="Environment variables">
 				</argument>
-				<argument type="QString">
-					<comment>Startup ID</comment>
+				<argument type="QString" comment="Startup ID">
 				</argument>
 			</arguments>
 		</prototype>

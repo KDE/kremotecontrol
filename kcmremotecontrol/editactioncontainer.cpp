@@ -37,9 +37,9 @@ EditActionContainer::EditActionContainer(Action *action, const QString &remote, 
     
     // Init Buttons
     foreach(const Solid::Control::RemoteControlButton &button, Solid::Control::RemoteControl(remote).buttons()){
-        ui.cbButton->addItem(button.name());
+        ui.cbButton->addItem(button.description(), button.name());
     }
-    ui.cbButton->setCurrentIndex(ui.cbButton->findText(action->button()));
+    ui.cbButton->setCurrentIndex(ui.cbButton->findData(action->button()));
     connect(ui.cbButton, SIGNAL(currentIndexChanged(int)), SLOT(checkForComplete()));
     
     m_innerWidget = 0;
@@ -128,7 +128,7 @@ void EditActionContainer::slotButtonClicked(int button) {
             default:
               kDebug() << "Invalid action type! No changes made to action!";
         }
-        m_action->setButton(ui.cbButton->currentText());
+        m_action->setButton(ui.cbButton->itemData(ui.cbButton->currentIndex()).toString());
     } else if(button == KDialog::Try){
         switch(m_action->type()){
             case Action::DBusAction:{
@@ -160,6 +160,6 @@ void EditActionContainer::slotButtonClicked(int button) {
 void EditActionContainer::buttonPressed(const Solid::Control::RemoteControlButton& button) {
     kDebug() << "button event received";
     if(button.remoteName() == m_remote) {
-        ui.cbButton->setCurrentIndex(ui.cbButton->findText(button.name()));
+        ui.cbButton->setCurrentIndex(ui.cbButton->findData(button.name()));
     }
 }

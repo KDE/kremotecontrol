@@ -1,119 +1,112 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <profile xmlns="urn:org-kde-kremotecontrol" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="urn:org-kde-kremotecontrol file:profile.xsd">
-    
+  xsi:schemaLocation="urn:org-kde-kremotecontrol file:profile.xsd">
+  
 	<name>KsCD</name>
 	<version>0.1</version>
 	<author>Aaron J. Seigo</author>
 	
-	<action id="play" button="PlayPause" start="true">
-		<name>Play / Pause</name>
-		<description>Toggles between playing and pausing.</description>
+	<action id="play" name="Play/Pause" description="Toggles between playing and pausing">
 		<prototype>
 			<serviceName>KsCD</serviceName>
 			<node>CDPlayer</node>
 			<function>play</function>
 		</prototype>
+		<button>PlayPause</button>
+		<autostart>true</autostart>
 	</action>
 	
-	<action id="stop" button="Stop">
-		<name>Eject</name>
-		<description>Stops the CD</description>
+	<action id="stop" name="Stop" description="Stops the CD">
 		<prototype>
 			<serviceName>KsCD</serviceName>
 			<node>CDPlayer</node>
 			<function>stop</function>
 		</prototype>
+		<button>Stop</button>
 	</action>
 	
-	<action id="eject" button="Eject" start="true">
-		<name>Stop</name>
-		<description>Ejects the CD</description>
+	<action id="eject" name="Stop" description="Ejects the CD">
 		<prototype>
 			<serviceName>KsCD</serviceName>
 			<node>CDPlayer</node>
 			<function>eject</function>
 		</prototype>
+		<button>Eject</button>
+		<autostart>true</autostart>
 	</action>
 	
-	<action id="fastForward" button="FastForward" repeat="true">
-		<name>Fast Forward</name>
-		<description>Skips forwards in the current track.</description>
+	<action id="fastForward" name="Fast Forward" description="Skips forwards in the current track">
 		<prototype>
 			<serviceName>KsCD</serviceName>
 			<node>CDPlayer</node>
 			<function>forward</function>
 		</prototype>
+		<button>FastForward</button>
+		<repeat>true</repeat>
 	</action>
 	
 	
-	<action id="rewind" button="Rewind" repeat="true">
-		<name>Rewind</name>
-		<description>Skips backwards in the current track</description>
+	<action id="rewind" name="Rewind" description="Skips backwards in the current track">
 		<prototype>
 			<serviceName>KsCD</serviceName>
 			<node>CDPlayer</node>
 			<function>backward</function>
 		</prototype>
+		<button>Rewind</button>
+		<repeat>true</repeat>
 	</action>
 	
 	
 	
-	<action id="previousTrack" button="SkipBackward" repeat="true">
-		<name>Previous</name>
-		<description>Skips to the previous track on the CD</description>
+	<action id="previousTrack" name="Previous" description="Skips to the previous track on the CD">
 		<prototype>
 			<serviceName>KsCD</serviceName>
 			<node>CDPlayer</node>
 			<function>previous</function>
 		</prototype>
+		<button>SkipBackward</button>
+		<repeat>true</repeat>
 	</action>
 	
-	<action id="nextTrack" button="SkipForward" repeat="true"> 
-		<name>Previous</name>
-		<description>Skips to the previous track on the CD</description>
+	<action id="nextTrack" name="Previous" description="Skips to the previous track on the CD">
 		<prototype>
 			<serviceName>KsCD</serviceName>
 			<node>CDPlayer</node>
 			<function>next</function>
 		</prototype>
+		<button>SkipBackward</button>
+		<repeat>true</repeat>
 	</action>
 	
-	<action id="setTrack" start="true">
-		<name>Set Track</name>
-		<description>Skips to a specific track on the CD</description>
+	<action id="setTrack" name="Set Track" description="Skips to a specific track on the CD">
 		<prototype>
 			<serviceName>KsCD</serviceName>
 			<node>CDPlayer</node>
 			<function>setTrack</function>
 			<arguments>
-				<argument type="int">
-					<comment>The number of the track to skip to</comment>				
+				<argument type="int" comment="The number of the track to skip to">
 				</argument>
 			</arguments>			
 		</prototype>
+		<autostart>true</autostart>
 	</action>
 	
 	
-	<action id="setVolume" start="true">
-		<name>Set Volume</name>
-		<description>Sets the play volume.</description>
+	<action id="setVolume" name="Set Volume" description="Sets the play volume">
 		<prototype>
 			<serviceName>KsCD</serviceName>
 			<node>CDPlayer</node>
 			<function>setVolume</function>
 			<arguments>
-				<argument type="int">
-					<comment>The number of the track to skip to</comment>				
+				<argument type="int" comment="The number of the track to skip to">
 				</argument>
 			</arguments>			
 		</prototype>
+		<autostart>true</autostart>
 	</action>
 	
-	<action id="toggleLoop">
-		<name>Loop</name>
-		<description>Toggles looping on and off</description>
+	<action id="toggleLoop" name="Loop" description="Toggles looping on and off">
 		<prototype>
 			<serviceName>KsCD</serviceName>
 			<node>CDPlayer</node>
@@ -121,13 +114,11 @@
 		</prototype>
 	</action>
 	
-	<action id="toggleShuffle">
-		<name>Shuffle</name>
-		<description>Toggles track shuffling on and off</description>
+	<action id="toggleShuffle" name="Shuffle" description="Toggles track shuffling on and off">
 		<prototype>
 			<serviceName>KsCD</serviceName>
 			<node>CDPlayer</node>
 			<function>toggleShuffle</function>
 		</prototype>
-	</action>	
+	</action>
 </profile>

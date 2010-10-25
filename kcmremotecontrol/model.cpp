@@ -670,7 +670,7 @@ QVariant RemoteModel::data(const QModelIndex& index, int role) const {
                 case 0:
                     return mode(index)->name();
                 case 1:
-                    return mode(index)->button();
+                    return Solid::Control::RemoteControlButton(QString(), mode(index)->button()).description();
             }
         }
     } else if(index.isValid()){
@@ -788,7 +788,7 @@ QVariant ActionModel::data(const QModelIndex& index, int role) const {
         Action *action = qVariantValue<Action*>(item(index.row())->data(Qt::UserRole));
         switch(index.column()){
             case 0:
-                return action->button();
+                return Solid::Control::RemoteControlButton(QString(), action->button()).description();
             case 1:
                 return action->name();
             case 2:

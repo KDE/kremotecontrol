@@ -1,106 +1,101 @@
 <?xml version="1.0" ?>
 
 <profile xmlns="urn:org-kde-kremotecontrol" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="urn:org-kde-kremotecontrol file:profile.xsd">
-    
+  xsi:schemaLocation="urn:org-kde-kremotecontrol file:profile.xsd">
+  
     <name>Okular</name>
     <version>0.1</version>
     <author>Pino Toscano</author>
 
-    <action id="previousPage" button="Rewind"  repeat="true">
-        <name>Back</name>
-        <description>Goes to the previous page</description>
+    <action id="previousPage" name="Back" description="Goes to the previous page">
         <prototype>
             <serviceName>org.kde.okular</serviceName>
             <node>okular</node>
             <function>slotPreviousPage</function>
         </prototype>
+        <button>Rewind</button>
+        <repeat>true</repeat>
         <ifmulti>sendtotop</ifmulti>
     </action>
     
-    <action id="nextPage" button="FastForward" repeat="true">
-        <name>Forward</name>
-        <description>Goes to the next page</description>
+    <action id="nextPage" name="Forward" description="Goes to the next page">
         <prototype>
             <serviceName>org.kde.okular</serviceName>
             <node>okular</node>
             <function>slotNextPage</function>
         </prototype>
+        <button>Rewind</button>
+        <repeat>true</repeat>
         <ifmulti>sendtotop</ifmulti>
     </action>
     
-    <action id="firstPage" button="SkipBackward">
-        <name>First</name>
-        <description>Goes to the first page</description>
+    <action id="firstPage" name="First" description="Goes to the first page">
         <prototype>
             <serviceName>org.kde.okular</serviceName>
             <node>okular</node>
             <function>slotGotoFirst</function>
         </prototype>
+        <button>SkipBackward</button>
+        <repeat>false</repeat>
         <ifmulti>sendtotop</ifmulti>
     </action>
     
-    <action id="lastPage" button="SkipForward">
-        <name>Last</name>
-        <description>Goes to the last page</description>
+    <action id="lastPage" name="Last" description="Goes to the last page">
         <prototype>
             <serviceName>org.kde.okular</serviceName>
             <node>okular</node>
             <function>slotGotoLast</function>
         </prototype>
+        <button>SkipForward</button>
+        <repeat>false</repeat>
         <ifmulti>sendtotop</ifmulti>
     </action>
     
-    <action id="pause" button="Pause">
-        <name>Presentation</name>
-        <description>Starts / stops presentation</description>
+    <action id="pause" name="Presentation" description="Starts / stops presentation">
         <prototype>
             <serviceName>org.kde.okular</serviceName>
             <node>okular</node>
             <function>slotTogglePresentation</function>
         </prototype>
+        <button>Pause</button>
+        <repeat>false</repeat>
         <ifmulti>sendtotop</ifmulti>
     </action>
     
-    <action id="reload">
-        <name>Reload</name>
-        <description>Reloads the open document</description>        
-            <prototype>
-                <serviceName>org.kde.okular</serviceName>
-                <node>okular</node>
-                <function>reload</function>
-            </prototype>
+    <action id="reload" name="Reload" description="Reloads the open document">
+        <prototype>
+            <serviceName>org.kde.okular</serviceName>
+            <node>okular</node>
+            <function>reload</function>
+        </prototype>
         <ifmulti>sendtotop</ifmulti>
     </action>
     
-    <action id="goToPage">
-        <name>Go to Page</name>
-        <description>Goes to the specified page</description>        
+    <action id="goToPage" name="Go to Page" description="Goes to the specified page">
         <prototype>
             <serviceName>org.kde.okular</serviceName>
             <node>okular</node>
             <function>goToPage</function>
             <arguments>
-                <argument type="uint">
-                    <comment>The page to choose</comment>
+                <argument type="uint" comment="The page to choose">
                     <default>1</default>
-                </argument>  
-            </arguments>            
+                </argument>
+            </arguments>
         </prototype>
         <ifmulti>sendtotop</ifmulti>
     </action>
     
-    <action id="openFile" start="true">
-        <name>Open document</name>
-        <description>Opens a specific document</description>        
+    <action id="openFile" name="Open document" description="Opens a specific document">
         <prototype>
             <serviceName>org.kde.okular</serviceName>
             <node>okular</node>
             <function>openDocument</function>
             <arguments>
-                <argument type="QString"><comment>The document to be open</comment></argument>
+                <argument type="QString" comment="The document to be open">
+                </argument>
             </arguments>            
         </prototype>
+        <autostart>true</autostart>
         <ifmulti>sendtotop</ifmulti>
     </action>
    
