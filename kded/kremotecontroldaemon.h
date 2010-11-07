@@ -30,8 +30,11 @@
 
 #include <KDEDModule>
 #include <KComponentData>
+#include <KNotification>
 
 #include <QtCore/QVariant>
+#include <QtCore/QPointer>
+#include <QtCore/QTimer>
 
 class KRemoteControlDaemonPrivate;
 
@@ -47,7 +50,8 @@ class KRemoteControlDaemon : public KDEDModule
         RemoteList m_remoteList;
         QStringList m_ignoreNextButtonList;
         KComponentData m_applicationData;
-
+        QPointer<KNotification> m_notification;
+        QTimer m_modeSwitchTimer;
 
     public:
         KRemoteControlDaemon(QObject * parent, const QVariantList&);

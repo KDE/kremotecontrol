@@ -79,6 +79,8 @@ KRemoteControlDaemon::KRemoteControlDaemon(QObject* parent, const QVariantList& 
         connect(rc, SIGNAL(buttonPressed(const Solid::Control::RemoteControlButton &)),
                 this,  SLOT(gotMessage(const Solid::Control::RemoteControlButton &)));
     }
+    
+    m_modeSwitchTimer.setSingleShot(true);
 }
 
 KRemoteControlDaemon::~KRemoteControlDaemon() {
@@ -249,10 +251,19 @@ QStringList KRemoteControlDaemon::configuredRemotes() {
 }
 
 void KRemoteControlDaemon::notifyModeChanged(Remote* remote) {
-    KNotification::event(QLatin1String( "mode_event" ),
-    QLatin1String( "<b>" ) + remote->name() + QLatin1String( ":</b><br>" ) + i18n("Mode switched to %1" , remote->currentMode()->name()),
-    DesktopIcon(remote->currentMode()->iconName().isEmpty() ? QLatin1String( "infrared-remote" ) : remote->currentMode()->iconName())
-    , 0, KNotification::CloseOnTimeout, m_applicationData);
+    if(m_notification) {
+        m_notification->setText(QLatin1String( "<b>" ) + remote->name() + QLatin1String( ":</b><br>" ) + i18n("Mode switched to %1" , remote->currentMode()->name()));
+        m_notification->setPixmap(DesktopIcon(remote->currentMode()->iconName().isEmpty() ? QLatin1String( "infrared-remote" ) : remote->currentMode()->iconName()));
+        m_notification->update();
+        m_modeSwitchTimer.start(5000);
+    } else {
+        m_notification = KNotification::event(QLatin1String( "mode_event" ),
+        QLatin1String( "<b>" ) + remote->name() + QLatin1String( ":</b><br>" ) + i18n("Mode switched to %1" , remote->currentMode()->name()),
+        DesktopIcon(remote->currentMode()->iconName().isEmpty() ? QLatin1String( "infrared-remote" ) : remote->currentMode()->iconName())
+        , 0, KNotification::Persistent, m_applicationData);
+        m_modeSwitchTimer.start(5000);
+        connect(&m_modeSwitchTimer, SIGNAL(timeout()), m_notification, SLOT(close()));
+    }
 }
 
 QString KRemoteControlDaemon::currentMode(const QString& remoteName) {
