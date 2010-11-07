@@ -304,7 +304,7 @@ QWidget *ArgumentDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
         case QVariant::LongLong: {
             QSpinBox *spinBox = new QSpinBox(parent);
             spinBox->setMaximum(maxInt/2);
-            spinBox->setMinimum(-maxInt/2);
+            spinBox->setMinimum(maxInt/2* -1);
             spinBox->setValue(arg.value().toInt());
             editor = spinBox;
             }
