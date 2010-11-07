@@ -342,7 +342,6 @@ void KCMRemoteControl::modeSelectionChanged(const QModelIndex &index) {
 
     Mode *mode = m_remoteModel->mode(index);
     if(mode){
-        updateActions(mode);
 
         Remote *remote = m_remoteModel->remote(index);
         if(mode == remote->masterMode()){
@@ -363,10 +362,8 @@ void KCMRemoteControl::modeSelectionChanged(const QModelIndex &index) {
             ui.pbMoveModeDown->setEnabled(false);
         }
 
+        updateActions(mode);
     }
-
-    actionSelectionChanged(QModelIndex());
-
 }
 
 void KCMRemoteControl::actionSelectionChanged(const QModelIndex& index) {

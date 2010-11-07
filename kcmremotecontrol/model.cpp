@@ -774,8 +774,7 @@ ActionModel::ActionModel(QObject *parent): QStandardItemModel(parent) {
 
 void ActionModel::refresh(Mode* mode) {
     m_mode = mode;
-    clear();
-    setHorizontalHeaderLabels(QStringList() << i18n("Button") << i18n("Application") << i18n("Function"));
+    removeRows(0, rowCount());
     foreach(Action *action, mode->actions()){
         QStandardItem *item = new QStandardItem();
         item->setData(qVariantFromValue(action), Qt::UserRole);
@@ -841,12 +840,6 @@ QMimeData *ActionModel::mimeData(const QModelIndexList &indexes) const {
 
     mimeData->setData(QLatin1String( "kremotecontrol/action" ), encodedData);
     return mimeData;
-}
-
-bool ActionModel::removeRows(int row, int col, const QModelIndex& parent) {
-    kDebug() << "rmove Rows called";
-    m_mode->removeAction(action(index(row, col, parent)));
-    return QStandardItemModel::removeRows(row, col, parent);
 }
 
 Qt::DropActions ActionModel::supportedDragActions() const {

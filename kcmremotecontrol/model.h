@@ -187,7 +187,6 @@ class ActionModel: public QStandardItemModel
         Qt::ItemFlags flags(const QModelIndex &index) const;
         QMimeData *mimeData(const QModelIndexList &indexes) const;
         Qt::DropActions supportedDragActions() const;
-        bool removeRows(int row, int col, const QModelIndex &parent = QModelIndex());
         
     private:
       Mode *m_mode;
