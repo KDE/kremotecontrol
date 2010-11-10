@@ -24,6 +24,7 @@
 
 #include <KSystemTimeZones>
 #include <KDateTime>
+#include <KDebug>
 
 #include <Plasma/DataContainer>
 #include <dbusinterface.h>
