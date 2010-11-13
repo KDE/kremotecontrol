@@ -122,7 +122,7 @@ void KRemoteControlDaemon::gotMessage(const Solid::Control::RemoteControlButton&
             actionList += remote->masterMode()->actionsForButton(button.name());
         }
         actionList += remote->currentMode()->actionsForButton(button.name());
-        if(remote->nextMode(button.name())){
+        if(remote->nextMode(button.name()) && button.repeatCounter() == 0){
             Mode *mode = remote->currentMode();
             notifyModeChanged(remote);
             if(remote->currentMode()-> doAfter()){
