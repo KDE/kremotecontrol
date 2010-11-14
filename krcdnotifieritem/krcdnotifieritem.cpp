@@ -37,6 +37,7 @@ KrcdNotifierItem::KrcdNotifierItem(){
 
     // No need for close button...
     setStandardActionsEnabled(false);
+    setAssociatedWidget(&m_menu);
     updateContextMenu();
     QDBusConnection::sessionBus().connect(QLatin1String( "org.kde.kded" ), QLatin1String( "/modules/kremotecontroldaemon" ), QLatin1String( "org.kde.krcd" ), QLatin1String( "connectionChanged" ),  this, SLOT(updateTray()));
     QDBusConnection::sessionBus().connect(QLatin1String( "org.kde.kded" ), QLatin1String( "/modules/kremotecontroldaemon" ), QLatin1String( "org.kde.krcd" ), QLatin1String( "remoteControlAdded" ),  this, SLOT(updateTray()));
