@@ -102,7 +102,7 @@ void KRemoteControlDaemon::slotStatusChanged(bool connected) {
 }
 
 void KRemoteControlDaemon::gotMessage(const Solid::Control::RemoteControlButton& button) {
-    kDebug()<< "Got message from remote " << button.remoteName() << " button " << button.name();
+    kDebug()<< "Got message from remote " << button.remoteName() << " button " << button.name() << "repeat" << button.repeatCounter();
     Remote *remote = m_remoteList.remote(button.remoteName());
     if(!remote){
         kDebug()<< "No remote found for remote" << button.remoteName();
@@ -122,7 +122,7 @@ void KRemoteControlDaemon::gotMessage(const Solid::Control::RemoteControlButton&
             actionList += remote->masterMode()->actionsForButton(button.name());
         }
         actionList += remote->currentMode()->actionsForButton(button.name());
-        if(remote->nextMode(button.name()) && button.repeatCounter() == 0){
+        if(button.repeatCounter() == 0 && remote->nextMode(button.name())){
             Mode *mode = remote->currentMode();
             notifyModeChanged(remote);
             if(remote->currentMode()-> doAfter()){
@@ -132,8 +132,10 @@ void KRemoteControlDaemon::gotMessage(const Solid::Control::RemoteControlButton&
         }
         foreach(Action *action, actionList){
             if(action->repeat() || (button.repeatCounter() == 0)) {
-                kDebug() << "executing " << action->name() << action->description();
+                kDebug() << "executing " << action->name() << action->description() << "repeat" << action->repeat();
                 ExecutionEngine::executeAction(action);
+            } else {
+                kDebug() << "not executing because of repeatblock. repeat:" << action->repeat() << "counter:" << button.repeatCounter();
             }
         }
     }
