@@ -365,9 +365,7 @@ Remote::ModeChangeMode Remote::modeChangeMode() const {
 }
 
 void Remote::setModeChangeMode(Remote::ModeChangeMode modeChangeMode) {
-    if(m_modechangeHandler){
-        delete m_modechangeHandler;
-    }
+    delete m_modechangeHandler;
     if(modeChangeMode == Remote::Group){
         m_modechangeHandler = new GroupModeChangeHandler(this);
     } else {

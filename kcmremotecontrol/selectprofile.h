@@ -66,7 +66,9 @@ class ProfileWrapper
         ProfileServer::ProfileSupportedByRemote supported;
       
     public:
-        ProfileWrapper(){
+        ProfileWrapper()
+		: profile(0)
+	{
             qRegisterMetaType<ProfileWrapper>("ProfileWrapper");
         }
         
@@ -81,7 +83,7 @@ class ProfileWrapper
             return profile;
         }
         
-        ProfileServer::ProfileSupportedByRemote getSupported() {
+        ProfileServer::ProfileSupportedByRemote getSupported() const {
             return supported;
         }
 };
