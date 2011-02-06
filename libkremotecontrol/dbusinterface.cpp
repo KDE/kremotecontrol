@@ -40,6 +40,7 @@
 #include <QtDBus/QDBusInterface>
 #include <QtDBus/qdbusconnection.h>
 #include <QtXml/QDomDocument>
+#include <QScriptEngine>
 
 static DBusInterface *theInstance = NULL;
 
@@ -385,16 +386,57 @@ void DBusInterface::executeAction(const DBusAction* action) {
         if (dBusIface->isServiceRegistered(program)) {
             kDebug() << "Sending data (" << program << ", " << QLatin1Char( '/' ) + action->node() << ", " << action->function().name();
 
-            QDBusMessage m = QDBusMessage::createMethodCall(program, QLatin1Char( '/' )
+            if(action->function().name().startsWith("script:")) {
+                QString scriptText = action->function().name().remove(0, 7);
+                
+                QScriptEngine scriptEngine;
+                QDBusIfaceWrapper *appIface = new QDBusIfaceWrapper(program, QLatin1Char( '/' ) + action->node());
+                QScriptValue objectValue = scriptEngine.newQObject(appIface);
+                scriptEngine.globalObject().setProperty("dbus", objectValue);
+                int argCount = 1;
+                foreach(const Argument &arg, action->function().args()) {
+                    QScriptValue argValue;
+                    switch(arg.value().type()) {
+                    case QVariant::Int:
+                    case QVariant::LongLong:
+                        argValue = QScriptValue(arg.value().toInt());
+                        break;
+                    case QVariant::UInt:
+                        argValue = QScriptValue(arg.value().toUInt());
+                        break;
+                    case QVariant::Double:
+                        argValue = QScriptValue(arg.value().toDouble());
+                        break;
+                    case QVariant::Bool:
+                        argValue = QScriptValue(arg.value().toBool());
+                        break;
+                    case QVariant::StringList:
+                        argValue = QScriptValue(arg.value().toStringList().join(","));
+                        break;
+                    case QVariant::ByteArray:
+                    case QVariant::String:
+                        argValue = QScriptValue(arg.value().toString());
+                    default:
+                        argValue = QScriptValue(arg.value().toInt());
+                    }
+
+                    scriptEngine.globalObject().setProperty("arg" + QString::number(argCount++), argValue);
+                }
+                qDebug() << "its a script:" << scriptText;
+                scriptEngine.evaluate(scriptText);
+            } else {
+            
+                QDBusMessage m = QDBusMessage::createMethodCall(program, QLatin1Char( '/' )
                              + action->node(), QLatin1String( "" ), action->function().name());
 
-            foreach(const Argument &arg, action->function().args()){
-                kDebug() << "Got argument:" << arg.value().type() << "value" << arg.value();
-                m << arg.value();
-            }
-            QDBusMessage response = QDBusConnection::sessionBus().call(m);
-            if (response.type() == QDBusMessage::ErrorMessage) {
-                kDebug() << response.errorMessage();
+                foreach(const Argument &arg, action->function().args()){
+                    kDebug() << "Got argument:" << arg.value().type() << "value" << arg.value();
+                    m << arg.value();
+                }
+                QDBusMessage response = QDBusConnection::sessionBus().call(m);
+                if (response.type() == QDBusMessage::ErrorMessage) {
+                    kDebug() << response.errorMessage();
+                }
             }
         }
     }
@@ -503,3 +545,36 @@ bool DBusInterface::unloadKdedModule() {
     return true;
 }
 
+QDBusIfaceWrapper::QDBusIfaceWrapper(const QString &program, const QString &path):
+    m_program(program),
+    m_path(path)
+{
+
+}
+
+int QDBusIfaceWrapper::call(const QString& method)
+{
+    QDBusInterface iface(m_program, m_path);
+    qDebug() << "calling" << method;
+    QDBusReply<int> ret = iface.call(method);
+    qDebug() << "return value is" << ret.value();
+    return ret;
+}
+
+int QDBusIfaceWrapper::call(const QString& method, int value)
+{
+    QDBusInterface iface(m_program, m_path);
+    qDebug() << "calling" << method << "with arg" << value;
+    QDBusReply<int> ret = iface.call(method, value);
+    qDebug() << "return value is" << ret.value();
+    return ret;
+}
+
+int QDBusIfaceWrapper::call(const QString& method, const QString &value)
+{
+    QDBusInterface iface(m_program, m_path);
+    qDebug() << "calling" << method << "with arg" << value;
+    QDBusReply<int> ret = iface.call(method, value);
+    qDebug() << "return value is" << ret.value();
+    return ret;
+}

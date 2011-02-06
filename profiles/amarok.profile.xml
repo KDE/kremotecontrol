@@ -110,4 +110,33 @@
         <ifmulti>sendtotop</ifmulti>
     </action>
     
+    <action id="volumeUp" name="Volume Up" description="Increases Volume">
+        <script>
+            <serviceName>org.mpris.amarok</serviceName>            
+            <node>Player</node>
+            <scripttext>dbus.call('VolumeSet', dbus.call('VolumeGet') + arg1);</scripttext>
+            <arguments>
+              <argument type="int" comment="Amount to increase volume in percent">
+                <default>10</default>
+              </argument>
+            </arguments>
+        </script>
+        <repeat>true</repeat>
+        <ifmulti>sendtotop</ifmulti>
+    </action>
+
+    <action id="volumeDown" name="Volume Down" description="Decreases Volume">
+        <script>
+            <serviceName>org.mpris.amarok</serviceName>            
+            <node>Player</node>
+            <scripttext>dbus.call('VolumeSet', dbus.call('VolumeGet') - arg1);</scripttext>
+            <arguments>
+              <argument type="int" comment="Amount to decrease volume in percent">
+                <default>10</default>
+              </argument>
+            </arguments>
+        </script>
+        <repeat>true</repeat>
+        <ifmulti>sendtotop</ifmulti>
+    </action>
 </profile>

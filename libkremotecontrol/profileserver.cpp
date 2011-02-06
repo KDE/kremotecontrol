@@ -256,13 +256,26 @@ ProfileActionTemplate ProfileServer::ProfileXmlContentHandler::parseAction(QDomN
         actionType = DBusAction::Unique;
     }
 
-    QDomElement prototypeNode = actionNode.namedItem(QLatin1String( "prototype" )).toElement();
-    QString serviceName = prototypeNode.namedItem(QLatin1String( "serviceName" )).toElement().text().trimmed();
-    QString nodeName = prototypeNode.namedItem(QLatin1String( "node" )).toElement().text().trimmed();
+    QDomElement execNode;
+    QString serviceName;
+    QString nodeName;
+    QString functionName;
+    if(!actionNode.namedItem(QLatin1String( "prototype" )).isNull()){
+        execNode = actionNode.namedItem(QLatin1String( "prototype" )).toElement();
+        functionName = execNode.namedItem(QLatin1String( "function" )).toElement().text().trimmed();
+    } else if(!actionNode.namedItem(QLatin1String( "script" )).isNull()){
+        execNode = actionNode.namedItem(QLatin1String( "script" )).toElement();
+        functionName = "script:" + execNode.namedItem(QLatin1String( "scripttext" )).toElement().text().trimmed();
+    } else {
+        kDebug() << "neither prototype nor script present... discarding action" << actionName;
+    }
+    serviceName = execNode.namedItem(QLatin1String( "serviceName" )).toElement().text().trimmed();
+    nodeName = execNode.namedItem(QLatin1String( "node" )).toElement().text().trimmed();
+    
 
     QList<Argument> arguments;
-    if(!prototypeNode.namedItem(QLatin1String( "arguments" )).isNull()){
-        QDomNodeList attributeNodes = prototypeNode.namedItem(QLatin1String( "arguments" )).toElement().elementsByTagName(QLatin1String( "argument" ));
+    if(!execNode.namedItem(QLatin1String( "arguments" )).isNull()){
+        QDomNodeList attributeNodes = execNode.namedItem(QLatin1String( "arguments" )).toElement().elementsByTagName(QLatin1String( "argument" ));
         for(int attributeCount = 0; attributeCount < attributeNodes.size(); ++ attributeCount){
             QDomNode attributeNode = attributeNodes.at(attributeCount);
             QString typeString  = attributeNode.attributes().namedItem(QLatin1String( "type" )).nodeValue().trimmed();
@@ -286,7 +299,7 @@ ProfileActionTemplate ProfileServer::ProfileXmlContentHandler::parseAction(QDomN
         }
     }
 
-    Prototype function(prototypeNode.namedItem(QLatin1String( "function" )).toElement().text().trimmed(), arguments);
+    Prototype function(functionName, arguments);
 
     return ProfileActionTemplate(profileId,
                                   actionId,

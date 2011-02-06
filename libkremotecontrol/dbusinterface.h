@@ -30,6 +30,8 @@
 #include "dbusaction.h"
 
 #include <QtCore/QStringList>
+#include <QDBusMessage>
+#include <QDBusInterface>
 
 class KREMOTECONTROL_EXPORT DBusInterface: public QObject
 {
@@ -75,6 +77,24 @@ class KREMOTECONTROL_EXPORT DBusInterface: public QObject
           * Unloads the kremotecontrol kded module and sets autoLoading to false
           */
         bool unloadKdedModule();
+};
+
+class QScriptEngine;
+
+class QDBusIfaceWrapper: public QObject
+{
+    Q_OBJECT
+public:
+    QDBusIfaceWrapper(const QString &program, const QString &path);
+    
+public slots:
+    int call(const QString &method);
+    int call(const QString &method, int);
+    int call(const QString &method, const QString &);
+
+private:
+    QString m_program;
+    QString m_path;
 };
 
 #endif

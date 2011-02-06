@@ -28,7 +28,7 @@ set(libkremotecontrol_LIB_SRCS
 kde4_add_library(libkremotecontrol SHARED ${libkremotecontrol_LIB_SRCS})
 set_target_properties(libkremotecontrol PROPERTIES VERSION 1.0.0 SOVERSION 1)
 
-target_link_libraries(libkremotecontrol ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${KDE4WORKSPACE_SOLIDCONTROL_LIBRARY} ${QT_QTXMLPATTERNS_LIBRARY})
+target_link_libraries(libkremotecontrol ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${KDE4WORKSPACE_SOLIDCONTROL_LIBRARY} ${QT_QTXMLPATTERNS_LIBRARY} ${QT_QTSCRIPT_LIBRARY})
 
 
 install(TARGETS libkremotecontrol ${INSTALL_TARGETS_DEFAULT_ARGS})

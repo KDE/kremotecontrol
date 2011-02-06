@@ -62,7 +62,8 @@
 
   <xs:complexType name="action">
     <xs:sequence>
-      <xs:element name="prototype" type="ps:prototype"/>
+      <xs:element name="prototype" type="ps:prototype" minOccurs="0"/>
+      <xs:element name="script" type="ps:script" minOccurs="0"/>
       <xs:element name="button" type="ps:button" minOccurs="0" maxOccurs="1"/>
       <xs:element name="repeat" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
       <xs:element name="autostart" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
@@ -84,6 +85,22 @@
       <xs:element name="serviceName" type="xs:string"/>
       <xs:element name="node" type="xs:string"/>
       <xs:element name="function" type="xs:string"/>  
+      <xs:element name="return" type="xs:string" default="void" minOccurs="0"/>
+      <xs:element name="arguments" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>            
+            <xs:element name="argument" type="ps:argument" minOccurs="1" maxOccurs="unbounded"/>                        
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  
+  <xs:complexType name="script">
+    <xs:sequence>
+      <xs:element name="serviceName" type="xs:string"/>
+      <xs:element name="node" type="xs:string"/>
+      <xs:element name="scripttext" type="xs:string"/>
       <xs:element name="return" type="xs:string" default="void" minOccurs="0"/>
       <xs:element name="arguments" minOccurs="0">
         <xs:complexType>
