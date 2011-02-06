@@ -425,7 +425,6 @@ void KCMRemoteControl::load() {
     KConfig config(QLatin1String( "kremotecontrolrc" ));
     KConfigGroup globalGroup = KConfigGroup(&config, "Global");
     ui.cbTrayIcon->setChecked(globalGroup.readEntry("ShowTrayIcon", true));
-
 }
 
 void KCMRemoteControl::save() {

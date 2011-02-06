@@ -71,27 +71,6 @@ void DBusAction::saveToConfig(KConfigGroup& config) {
         argumentGroup.writeEntry("Type", arg.value().typeName());
         i++;
     }
-    switch(m_destination){
-        case Unique:
-            config.writeEntry("Destination", "Unique");
-            break;
-        case Top:
-            config.writeEntry("Destination", "Top");
-            break;
-        case Bottom:
-            config.writeEntry("Destination", "Bottom");
-            break;
-        case None:
-            config.writeEntry("Destination", "None");
-            break;
-        case All:
-        default:
-            config.writeEntry("Destination", "All");
-            break;
-    }
-    config.writeEntry("Autostart", m_autostart);
-    config.writeEntry("Repeat", m_repeat);
-
 }
 
 void DBusAction::loadFromConfig(const KConfigGroup& config) {
@@ -111,25 +90,6 @@ void DBusAction::loadFromConfig(const KConfigGroup& config) {
         argList.append(arg);
     }
     m_function.setArgs(argList);
-    QString destination = config.readEntry("Destination");
-    if(destination == QLatin1String( "Unique" )){
-        m_destination = Unique;
-    }
-    else if(destination == QLatin1String( "Top" )){
-        m_destination = Top;
-    }
-    else if(destination == QLatin1String( "Bottom" )){
-        m_destination = Bottom;
-    }
-    else if(destination == QLatin1String( "None" )){
-        m_destination = None;
-    }
-    else if(destination == QLatin1String( "All" )){
-        m_destination = All;
-    }
-    m_autostart = config.readEntry("Autostart", QVariant(false)).toBool();
-    m_repeat = config.readEntry("Repeat", QVariant(false)).toBool();
-
 }
 
 Action* DBusAction::clone() const {

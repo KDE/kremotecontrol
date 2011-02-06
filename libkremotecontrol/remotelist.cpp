@@ -19,6 +19,7 @@
 
 #include "remotelist.h"
 #include "profileaction.h"
+#include "keypressaction.h"
 
 #include <kglobal.h>
 #include <kconfig.h>
@@ -103,6 +104,9 @@ void RemoteList::loadFromConfig(const QString& configName) {
                         break;
                     case Action::ProfileAction:
                         action = new ProfileAction();
+                        break;
+                    case Action::KeypressAction:
+                        action = new KeypressAction();
                         break;
                 }
                 if(!action){

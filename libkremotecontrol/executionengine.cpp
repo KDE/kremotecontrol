@@ -19,6 +19,7 @@
 
 #include "executionengine.h"
 #include "dbusactionexecutor.h"
+#include "keypressactionexecutor.h"
 #include "kremotecontrol_export.h"
 
 #include <kglobal.h>
@@ -42,6 +43,8 @@ ExecutionEnginePrivate::ExecutionEnginePrivate() {
     executors.insert(Action::DBusAction, dbusExecutor);
     // ProfileActions are DBusActions with additional Information. They can be handled by the DBusExecutor
     executors.insert(Action::ProfileAction, dbusExecutor);
+    KeypressActionExecutor *keypressActionExecutor = new KeypressActionExecutor();
+    executors.insert(Action::KeypressAction, keypressActionExecutor);
 }
 
 void KREMOTECONTROL_EXPORT ExecutionEngine::executeAction(Action* action) {

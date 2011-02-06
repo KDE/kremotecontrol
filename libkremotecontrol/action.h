@@ -30,7 +30,7 @@
 class KREMOTECONTROL_EXPORT Action
 {  
     public:
-        enum ActionType {DBusAction, ProfileAction};
+        enum ActionType {DBusAction, ProfileAction, KeypressAction};
         enum ActionDestination {Unique, Top, Bottom, None, All};
       
         Action(ActionType type, const QString &button);

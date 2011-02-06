@@ -20,10 +20,14 @@
 #include "editactioncontainer.h"
 #include "editdbusaction.h"
 #include "editprofileaction.h"
+#include "editkeypressaction.h"
 #include "dbusinterface.h"
 #include "executionengine.h"
 
 #include <kdebug.h>
+
+#include "keypressaction.h"
+
 
 EditActionContainer::EditActionContainer(Action *action, const QString &remote, QWidget* parent, Qt::WFlags flags): KDialog(parent, flags) {
     m_action = action;
@@ -58,6 +62,13 @@ EditActionContainer::EditActionContainer(Action *action, const QString &remote, 
             }
             break;
             }
+        case Action::KeypressAction: {
+            KeypressAction *keypressAction = dynamic_cast<KeypressAction*>(action);
+            if(keypressAction){
+                m_innerWidget = new EditKeypressAction(keypressAction);
+            }
+            break;
+        }
         default:
           kDebug() << "Invalid action type. Not creating inner Widget";
     }
@@ -103,6 +114,15 @@ void EditActionContainer::checkForComplete() {
                 return;
             }
         }
+        case Action::KeypressAction:{
+            EditKeypressAction *keypressActionEditor = dynamic_cast<EditKeypressAction*>(m_innerWidget);
+            if(keypressActionEditor){
+                bool complete = keypressActionEditor->checkForComplete();
+                enableButtonOk(complete);
+                enableButton(Try, complete);
+                return;
+            }
+        }
         default:
           kDebug() << "Invalid action type! Nothing to check for completeness!";
     }
@@ -125,6 +145,13 @@ void EditActionContainer::slotButtonClicked(int button) {
                 }
                 break;
             }
+            case Action::KeypressAction:{
+                EditKeypressAction *keypressActionEditor = dynamic_cast<EditKeypressAction*>(m_innerWidget);
+                if(keypressActionEditor){
+                    keypressActionEditor->applyChanges();
+                }
+                break;
+            }
             default:
               kDebug() << "Invalid action type! No changes made to action!";
         }
@@ -143,6 +170,15 @@ void EditActionContainer::slotButtonClicked(int button) {
                 EditProfileAction *profileActionEditor = dynamic_cast<EditProfileAction*>(m_innerWidget);
                 if(profileActionEditor){
                     ProfileAction action = profileActionEditor->action();
+                    ExecutionEngine::executeAction(&action);
+                }
+                break;
+            }
+            case Action::KeypressAction: {
+                EditKeypressAction *keypressActionEditor = dynamic_cast<EditKeypressAction*>(m_innerWidget);
+                if(keypressActionEditor){
+                    KeypressAction action = keypressActionEditor->action();
+                    kDebug() << action.keySequenceList();
                     ExecutionEngine::executeAction(&action);
                 }
                 break;

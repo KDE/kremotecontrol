@@ -20,6 +20,7 @@
 #include "addaction.h"
 #include "dbusaction.h"
 #include "profileaction.h"
+#include "keypressaction.h"
 #include "editactioncontainer.h"
 
 #include <kdebug.h>
@@ -37,8 +38,10 @@ Action::ActionType AddAction::getType() {
 
     if(ui.rbTemplate->isChecked()){
         return Action::ProfileAction;
-    } else {
+    } else if(ui.rbDBus->isChecked()){
         return Action::DBusAction;
+    } else {
+        return Action::KeypressAction;
     }
 }
 
@@ -51,6 +54,9 @@ Action *AddAction::createAction(const QString &remote) {
                 break;
             case Action::DBusAction:
                 action = new DBusAction();
+                break;
+            case Action::KeypressAction:
+                action = new KeypressAction();
                 break;
         }
         if(action){

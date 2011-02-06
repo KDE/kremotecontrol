@@ -17,12 +17,20 @@ set(kcm_remotecontrol_PART_SRCS
    editactioncontainer.cpp
    editdbusaction.cpp
    editprofileaction.cpp
+   editkeypressaction.cpp
    model.cpp
    modedialog.cpp
    selectprofile.cpp
    )
 
-kde4_add_ui_files(kcm_remotecontrol_PART_SRCS modedialog.ui addaction.ui editactioncontainer.ui editdbusaction.ui configurationwidget.ui )
+kde4_add_ui_files(kcm_remotecontrol_PART_SRCS
+   modedialog.ui
+   addaction.ui
+   editactioncontainer.ui
+   editdbusaction.ui
+   editkeypressaction.ui
+   configurationwidget.ui
+)
 
 kde4_add_plugin(kcm_remotecontrol ${kcm_remotecontrol_PART_SRCS})
 
