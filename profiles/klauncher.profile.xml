@@ -2,12 +2,12 @@
 <profile xmlns="urn:org-kde-kremotecontrol" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="urn:org-kde-kremotecontrol file:profile.xsd">
 	 
-	<name>KDE Program Launcher</name>
-	<description>Launch programs with klauncher</description>
+	<name>Run command</name>
+	<description>Run commands with KLauncher</description>
 	<version>0.1</version>
 	<author>Gav Wood</author>
 
-	<action id="execute" name="Execute" description="Runs a program or script">
+	<action id="execute" name="Run command" description="Runs a command with optional arguments">
 		<prototype>
 			<serviceName>org.kde.klauncher</serviceName>
 			<node>KLauncher</node>
@@ -25,21 +25,4 @@
 		</prototype>
 	</action>
 
-	<action id="executeWait" name="Execute and wait" description="Runs a program or script and waits for it to finish">
-		<prototype>
-			<serviceName>org.kde.klauncher</serviceName>
-			<node>KLauncher</node>
-			<function>kdeinit_exec_wait</function>
-			<arguments>
-				<argument type="QString" comment="The executable name and path of the program or script to run">
-				</argument>
-				<argument type="QStringList" comment="Parameters for the program or script">
-				</argument>
-				<argument type="QStringList" comment="Environment variables">
-				</argument>
-				<argument type="QString" comment="Startup ID">
-				</argument>
-			</arguments>
-		</prototype>
-	</action>
 </profile>
