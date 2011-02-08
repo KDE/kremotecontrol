@@ -25,8 +25,8 @@
 #include "remote.h"
 #include "remotelist.h"
 
-#include <solid/control/remotecontrolmanager.h>
-#include <solid/control/remotecontrol.h>
+#include "remotecontrolmanager.h"
+#include "remotecontrol.h"
 
 #include <KDEDModule>
 #include <KComponentData>
@@ -58,7 +58,7 @@ class KRemoteControlDaemon : public KDEDModule
         virtual ~KRemoteControlDaemon();
 
         bool isConnected() {
-            return Solid::Control::RemoteControlManager::connected();
+            return RemoteControlManager::connected();
         }
         void reloadConfiguration();
 
@@ -85,7 +85,7 @@ class KRemoteControlDaemon : public KDEDModule
         void slotStatusChanged(bool connected);
         void slotRemoteControlAdded(const QString &name);
         void slotRemoteControlRemoved(const QString &name);
-        void gotMessage(const Solid::Control::RemoteControlButton &button);
+        void gotMessage(const RemoteControlButton &button);
 
 };
 #endif // KREMOTECONTROLDAEMON_H

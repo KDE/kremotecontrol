@@ -25,7 +25,7 @@
 #include "kremotecontrol_export.h"
 #include "prototype.h"
 
-#include <solid/control/remotecontrolbutton.h>
+#include <remotecontrolbutton.h>
 
 #include <QtCore/QString>
 

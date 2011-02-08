@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2010 Michael Zanetti <michael_zanetti@gmx.net>
+    Copyright (C) <2009>  Michael Zanetti <michael_zanetti@gmx.net>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,30 +17,10 @@
 
 */
 
-#ifndef ACTIONCONTAINER_H
-#define ACTIONCONTAINER_H
+#include "lircremotecontrolmanager.h"
 
-#include "ui_editactioncontainer.h"
+// KDE includes
+#include <kpluginfactory.h>
 
-#include <kdialog.h>
-#include <action.h>
-
-
-class EditActionContainer : public KDialog {
-    Q_OBJECT
-    public:
-        EditActionContainer(Action *action, const QString &remote, QWidget* parent = 0, Qt::WFlags flags = 0);
-        
-    private:
-        Ui::ActionContainer ui;
-        Action *m_action;
-        QWidget *m_innerWidget;
-        QString m_remote;
-        
-    protected Q_SLOTS:
-        void checkForComplete();
-        virtual void slotButtonClicked(int button);
-        void buttonPressed(const RemoteControlButton &button);
-};
-
-#endif // ACTIONCONTAINER_H
+K_PLUGIN_FACTORY(RemoteControlManagerBackendFactory, registerPlugin<LircRemoteControlManager>();)
+K_EXPORT_PLUGIN(RemoteControlManagerBackendFactory("RemoteControlManagerbackend"))

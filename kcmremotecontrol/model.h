@@ -35,14 +35,11 @@
 #include "profile.h"
 #include "remotelist.h"
 
-#include <solid/control/remotecontrol.h>
+#include "remotecontrol.h"
 
 #include <QtGui/QItemDelegate>
 #include <QtGui/QStandardItem>
 #include <QtGui/QStringListModel>
-
-using namespace Solid::Control;
-
 
 Q_DECLARE_METATYPE(ProfileActionTemplate*)
 Q_DECLARE_METATYPE(RemoteControlButton*)

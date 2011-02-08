@@ -22,7 +22,7 @@
 
 #include "mode.h"
 
-#include <solid/control/remotecontrol.h>
+#include "remotecontrol.h"
 
 #include <QtCore/QSet>
 #include <QtCore/QVector>

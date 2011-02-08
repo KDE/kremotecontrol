@@ -34,7 +34,7 @@ kde4_add_ui_files(kcm_remotecontrol_PART_SRCS
 
 kde4_add_plugin(kcm_remotecontrol ${kcm_remotecontrol_PART_SRCS})
 
-target_link_libraries(kcm_remotecontrol ${KDE4_KIO_LIBS} ${KDE4WORKSPACE_SOLIDCONTROL_LIBRARY} libkremotecontrol)
+target_link_libraries(kcm_remotecontrol ${KDE4_KIO_LIBS} libkremotecontrol)
 
 install(TARGETS kcm_remotecontrol DESTINATION ${PLUGIN_INSTALL_DIR})
 

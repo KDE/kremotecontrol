@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (C) 2010 by Michael Zanetti <michael_zanetti@gmx.net>       *
+ * Copyright (C) 2011 by Michael Zanetti <mzanetti@gmx.net>              *
  *                                                                       *
  * This program is free software; you can redistribute it and/or         *
  * modify it under the terms of the GNU General Public License as        *
@@ -18,65 +18,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  *************************************************************************/
 
+#ifndef REMOTECONTROL_P_H
+#define REMOTECONTROL_P_H
 
-/**
-  * @author Michael Zanetti
-  */
+#include <QObject>
 
-
-#ifndef MODEDIALOG_H
-#define MODEDIALOG_H
-
-#include "KComboBox"
-
-class ButtonComboBox: public KComboBox
+namespace Iface
 {
-    Q_OBJECT
-public:
-    ButtonComboBox(QWidget* parent = 0);
-    void addButtons(const QStringList &buttonList);
+    class RemoteControl;
+}
 
-public Q_SLOTS:
-    void hideButton(const QString &button);
+class RemoteControlPrivate
+{
+public:
+    explicit RemoteControlPrivate(QObject *parent);
+    ~RemoteControlPrivate();
+
+    void setBackendObject(Iface::RemoteControl *object);
+
+    Iface::RemoteControl *backendObject() const;
+
+    QObject *parent() const;
 
 private:
-    int m_hiddenIndex;
-    QString m_hiddenButton;
+    QObject *m_parent;
+    Iface::RemoteControl *m_backendObject;
 };
 
-#include "ui_modedialog.h"
-#include "remote.h"
-
-#include "kcombobox.h"
-
-class ModeDialog : public KDialog
-{
-    Q_OBJECT
-
-public:
-  
-    /**
-      * @brief Creates a ModeDialog for the given Remote.
-      * @param Remote The Remote that owns to Mode to edit or create
-      * @param Mode The Mode to be edited. If 0 a new one will be created and inserted into the Remote
-      */
-    explicit ModeDialog(Remote *remote, Mode *mode = 0, QWidget *parent = 0);
-    ~ModeDialog();
-
-private:
-    Ui::ModeDialog ui;
-    Remote *m_remote;
-    Mode *m_mode;
-
-private Q_SLOTS:
-    void checkForComplete();
-    void slotButtonClicked(int button);
-    void forwardButtonChanged();
-    void backwardButtonChanged();
-    void buttonPressed(const RemoteControlButton &button);
-    void modeHandlerChanged();
-};
-
-
-
-#endif /* NEWMODEDIALOG_H */
+#endif // REMOTECONTROL_P_H

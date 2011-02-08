@@ -23,8 +23,8 @@
 #include "mode.h"
 #include "kremotecontrol_export.h"
 
-#include <solid/control/remotecontrolbutton.h>
-#include <solid/control/remotecontrol.h>
+#include "remotecontrolbutton.h"
+#include "remotecontrol.h"
 #include <kconfiggroup.h>
 
 class KREMOTECONTROL_EXPORT Action

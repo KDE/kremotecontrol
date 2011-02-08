@@ -1,13 +1,21 @@
-
 include_directories(
    ${CMAKE_CURRENT_SOURCE_DIR}
    ${CMAKE_CURRENT_BINARY_DIR}
    ${KDE4_INCLUDES}
    ${QT_INCLUDES}
-   ${KDE4WORKSPACE_INCLUDE_DIR} )
+#   ${KDE4WORKSPACE_INCLUDE_DIR}
+)
 
 
 set(libkremotecontrol_LIB_SRCS
+   ifaces/remotecontrolinterface.cpp
+   ifaces/remotecontrolmanagerinterface.cpp
+#   hw/remotecontrol.cpp
+#   hw/remotecontrolmanager.cpp
+   remotecontrolmanager.cpp
+   remotecontrol.cpp
+   remotecontrolbutton.cpp
+
    remote.cpp
    remotelist.cpp
    mode.cpp
@@ -30,7 +38,10 @@ set(libkremotecontrol_LIB_SRCS
 kde4_add_library(libkremotecontrol SHARED ${libkremotecontrol_LIB_SRCS})
 set_target_properties(libkremotecontrol PROPERTIES VERSION 1.0.0 SOVERSION 1)
 
-target_link_libraries(libkremotecontrol ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${KDE4WORKSPACE_SOLIDCONTROL_LIBRARY} ${QT_QTXMLPATTERNS_LIBRARY} ${QT_QTSCRIPT_LIBRARY} -lX11 -lXtst)
+target_link_libraries(libkremotecontrol ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${QT_QTXMLPATTERNS_LIBRARY} ${QT_QTSCRIPT_LIBRARY} -lX11 -lXtst)
 
 
 install(TARGETS libkremotecontrol ${INSTALL_TARGETS_DEFAULT_ARGS})
+install( FILES kremotecontrolmanager.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR}  )
+
+add_subdirectory(backends)

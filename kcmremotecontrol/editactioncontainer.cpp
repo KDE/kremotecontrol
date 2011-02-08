@@ -40,7 +40,7 @@ EditActionContainer::EditActionContainer(Action *action, const QString &remote, 
     setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Try);
     
     // Init Buttons
-    foreach(const Solid::Control::RemoteControlButton &button, Solid::Control::RemoteControl(remote).buttons()){
+    foreach(const RemoteControlButton &button, RemoteControl(remote).buttons()){
         ui.cbButton->addItem(button.description(), button.name());
     }
     ui.cbButton->setCurrentIndex(ui.cbButton->findData(action->button()));
@@ -85,7 +85,7 @@ EditActionContainer::EditActionContainer(Action *action, const QString &remote, 
     
     // Pause remote to make use of button presses here
     DBusInterface::getInstance()->ignoreButtonEvents(remote);
-    connect(new Solid::Control::RemoteControl(remote), SIGNAL(buttonPressed(const Solid::Control::RemoteControlButton &)), SLOT(buttonPressed(const Solid::Control::RemoteControlButton &)));
+    connect(new RemoteControl(remote), SIGNAL(buttonPressed(const RemoteControlButton &)), SLOT(buttonPressed(const RemoteControlButton &)));
     
 }
 
@@ -193,7 +193,7 @@ void EditActionContainer::slotButtonClicked(int button) {
     KDialog::slotButtonClicked(button);
 }
 
-void EditActionContainer::buttonPressed(const Solid::Control::RemoteControlButton& button) {
+void EditActionContainer::buttonPressed(const RemoteControlButton& button) {
     kDebug() << "button event received";
     if(button.remoteName() == m_remote) {
         ui.cbButton->setCurrentIndex(ui.cbButton->findData(button.name()));

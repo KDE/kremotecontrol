@@ -19,8 +19,8 @@
 
 #include "krcdnotifieritem.h"
 #include "dbusinterface.h"
+#include "remotecontrolmanager.h"
 
-#include <solid/control/remotecontrolmanager.h>
 #include <klocalizedstring.h>
 #include <kicon.h>
 #include <kiconloader.h>
@@ -52,7 +52,7 @@ void KrcdNotifierItem::updateTray() {
     QString toolTipHeader = i18n("Remote Controls\n");
     QString toolTip;
     QString icon = QLatin1String( "krcd" );
-    if (!Solid::Control::RemoteControlManager::connected()) {
+    if (!RemoteControlManager::connected()) {
         toolTipHeader += i18nc("The state of kremotecontrol", "Stopped");
         toolTip += i18n("No Remote Control is currently available.");
         icon = QLatin1String( "krcd_off" );
@@ -74,7 +74,7 @@ void KrcdNotifierItem::updateContextMenu(){
     m_menu.addTitle(KIcon( QLatin1String( "infrared-remote")), i18n( "Remote Controls" ) );
     m_menu.addAction(SmallIcon(QLatin1String( "configure" )), i18n("&Configure..."), this, SLOT(slotConfigure()));
 
-    foreach(const QString &remote, Solid::Control::RemoteControl::allRemoteNames()){
+    foreach(const QString &remote, RemoteControl::allRemoteNames()){
         KMenu *modeMenu = new KMenu(remote, &m_menu);
         QActionGroup *actionGroup = new QActionGroup(modeMenu);
         actionGroup->setExclusive(true);

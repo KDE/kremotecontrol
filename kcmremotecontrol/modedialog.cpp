@@ -46,7 +46,7 @@ ModeDialog::ModeDialog(Remote *remote, Mode *mode, QWidget *parent): KDialog(par
 
     ui.cbButtons->addItem(i18n("No button"), QString());
     foreach(const QString &button, remote->availableModeSwitchButtons(mode)){
-        ui.cbButtons->addItem(Solid::Control::RemoteControlButton(remote->name(), button).description(), button);
+        ui.cbButtons->addItem(RemoteControlButton(remote->name(), button).description(), button);
     }
 
     if(m_mode){
@@ -85,7 +85,7 @@ ModeDialog::ModeDialog(Remote *remote, Mode *mode, QWidget *parent): KDialog(par
 
     // Pause remote to make use of button presses here
     DBusInterface::getInstance()->ignoreButtonEvents(remote->name());
-    connect(new Solid::Control::RemoteControl(remote->name()), SIGNAL(buttonPressed(const Solid::Control::RemoteControlButton &)), SLOT(buttonPressed(const Solid::Control::RemoteControlButton &)));
+    connect(new RemoteControl(remote->name()), SIGNAL(buttonPressed(const RemoteControlButton &)), SLOT(buttonPressed(const RemoteControlButton &)));
 }
 
 ModeDialog::~ModeDialog() {
@@ -145,7 +145,7 @@ void ModeDialog::backwardButtonChanged() {
     connect(ui.cbButtonForward, SIGNAL(currentIndexChanged(int)), this, SLOT(forwardButtonChanged()));
 }
 
-void ModeDialog::buttonPressed(const Solid::Control::RemoteControlButton& button) {
+void ModeDialog::buttonPressed(const RemoteControlButton& button) {
     kDebug() << "button event received";
     if(button.remoteName() == m_remote->name()) {
         if(m_mode != m_remote->masterMode()){

@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2010 Michael Zanetti <michael_zanetti@gmx.net>
+    Copyright (C) <2011>  Michael Zanetti <mzanetti@kde.org>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,30 +17,18 @@
 
 */
 
-#ifndef ACTIONCONTAINER_H
-#define ACTIONCONTAINER_H
+#include "remotecontrolmanagerinterface.h"
 
-#include "ui_editactioncontainer.h"
+namespace Iface
+{
+RemoteControlManager::RemoteControlManager(QObject *parent):
+    QObject(parent){
 
-#include <kdialog.h>
-#include <action.h>
+}
 
+RemoteControlManager::~RemoteControlManager()
+{
 
-class EditActionContainer : public KDialog {
-    Q_OBJECT
-    public:
-        EditActionContainer(Action *action, const QString &remote, QWidget* parent = 0, Qt::WFlags flags = 0);
-        
-    private:
-        Ui::ActionContainer ui;
-        Action *m_action;
-        QWidget *m_innerWidget;
-        QString m_remote;
-        
-    protected Q_SLOTS:
-        void checkForComplete();
-        virtual void slotButtonClicked(int button);
-        void buttonPressed(const RemoteControlButton &button);
-};
+}
 
-#endif // ACTIONCONTAINER_H
+}

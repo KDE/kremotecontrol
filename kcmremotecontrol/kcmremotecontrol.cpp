@@ -29,6 +29,7 @@
 #include "dbusinterface.h"
 #include "model.h"
 #include "remotelist.h"
+#include "remotecontrolmanager.h"
 
 #include <kdeutils-version.h>
 #include <kconfig.h>
@@ -36,7 +37,6 @@
 #include <kgenericfactory.h>
 #include <kaboutdata.h>
 #include <kmessagebox.h>
-#include <solid/control/remotecontrolmanager.h>
 
 #include <QtDBus/QDBusInterface>
 
@@ -55,7 +55,6 @@ KCMRemoteControl::KCMRemoteControl(QWidget *parent, const QVariantList &args) :
     setQuickHelp(i18n("<h1>Remote Controls</h1><p>This module allows you to configure bindings between your remote controls and KDE applications. Simply select your remote control and click Add next to the Actions/Buttons list to create new action for button presses.</p>"));
 
     KGlobal::locale()->insertCatalog( QLatin1String( "libkremotecontrol" ));
-    KGlobal::locale()->insertCatalog( QLatin1String( "solidcontrol" ));
 
     QHBoxLayout *layout = new QHBoxLayout(this);
     QWidget *widget = new QWidget(this);
@@ -116,8 +115,8 @@ KCMRemoteControl::KCMRemoteControl(QWidget *parent, const QVariantList &args) :
     // connect ShowTrayIcon checkbox
     connect(ui.cbTrayIcon, SIGNAL(clicked(bool)), SLOT(changed()));
 
-    connect(Solid::Control::RemoteControlManager::notifier(), SIGNAL(statusChanged(bool)), SLOT(addUnconfiguredRemotes()));
-    connect(Solid::Control::RemoteControlManager::notifier(), SIGNAL(remoteControlAdded(const QString &)), SLOT(addUnconfiguredRemotes()));
+    connect(RemoteControlManager::notifier(), SIGNAL(statusChanged(bool)), SLOT(addUnconfiguredRemotes()));
+    connect(RemoteControlManager::notifier(), SIGNAL(remoteControlAdded(const QString &)), SLOT(addUnconfiguredRemotes()));
 }
 
 KCMRemoteControl::~KCMRemoteControl() {
@@ -194,7 +193,7 @@ void KCMRemoteControl::autoPopulate() {
     QPointer<SelectProfile> autoPopulateDialog = new SelectProfile(remote, this);
     if(autoPopulateDialog->exec()){
         Profile *profile = autoPopulateDialog->getSelectedProfile();
-        foreach(const Solid::Control::RemoteControlButton &button, Solid::Control::RemoteControl(remote->name()).buttons()){
+        foreach(const RemoteControlButton &button, RemoteControl(remote->name()).buttons()){
             ProfileActionTemplate actionTemplate = profile->actionTemplateByButton(button.name());
             if(!actionTemplate.buttonName().isEmpty()){
                 mode->addAction(actionTemplate.createAction(button));
@@ -324,7 +323,7 @@ void KCMRemoteControl::modeSelectionChanged(const QModelIndex &index) {
         ui.pbAutoPopulate->setEnabled(true);
 
         // Only enable the remove mode button if a non-Master mode is selected,
-        // or if the Remote is not available in Solid
+        // or if the Remote is not available in in the system
         if((m_remoteModel->mode(index) != m_remoteModel->remote(index)->masterMode())
             || (!m_remoteModel->remote(index)->isAvailable())){
             ui.pbRemoveMode->setEnabled(true);
@@ -391,8 +390,8 @@ void KCMRemoteControl::actionSelectionChanged(const QModelIndex& index) {
 }
 
 void KCMRemoteControl::addUnconfiguredRemotes() {
-    // Check if there are Remotes available in Solid but not yet in m_remoteList
-    foreach(const QString &remoteName, Solid::Control::RemoteControl::allRemoteNames()){
+    // Check if there are Remotes available in the system but not yet in m_remoteList
+    foreach(const QString &remoteName, RemoteControl::allRemoteNames()){
         if(!m_remoteList.contains(remoteName)){
             Remote *remote = new Remote(remoteName);
             m_remoteList.append(remote);

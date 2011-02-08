@@ -17,8 +17,7 @@ set(krcdnotifieritem_SRCS
 
 kde4_add_executable( krcdnotifieritem ${krcdnotifieritem_SRCS})
 
-target_link_libraries(krcdnotifieritem  ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${KDE4_SOLID_LIBS} 
-                                      ${KDE4WORKSPACE_SOLIDCONTROL_LIBRARY} libkremotecontrol)
+target_link_libraries(krcdnotifieritem  ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} libkremotecontrol)
 
 install(TARGETS krcdnotifieritem ${INSTALL_TARGETS_DEFAULT_ARGS})
 install( PROGRAMS krcdnotifieritem.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})

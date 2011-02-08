@@ -24,7 +24,7 @@
 #include "prototype.h"
 #include "kremotecontrol_export.h"
 
-#include <solid/control/remotecontrolbutton.h>
+#include "remotecontrolbutton.h"
 
 class ProfileActionTemplatePrivate;
 
@@ -57,7 +57,7 @@ class KREMOTECONTROL_EXPORT ProfileActionTemplate
         bool repeat() const;
         QString buttonName() const;
 
-        ProfileAction *createAction(const Solid::Control::RemoteControlButton &button) const;
+        ProfileAction *createAction(const RemoteControlButton &button) const;
         
     private:
         QSharedDataPointer<ProfileActionTemplatePrivate> d;

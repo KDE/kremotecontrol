@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (C) 2010 by Michael Zanetti <michael_zanetti@gmx.net>       *
+ * Copyright (C) 2011 by Michael Zanetti <mzanetti@gmx.net>              *
  *                                                                       *
  * This program is free software; you can redistribute it and/or         *
  * modify it under the terms of the GNU General Public License as        *
@@ -18,65 +18,65 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>. *
  *************************************************************************/
 
+#include "remotecontrol.h"
 
-/**
-  * @author Michael Zanetti
-  */
+#include "ifaces/remotecontrolinterface.h"
 
-
-#ifndef MODEDIALOG_H
-#define MODEDIALOG_H
-
-#include "KComboBox"
-
-class ButtonComboBox: public KComboBox
+RemoteControl::RemoteControl(Iface::RemoteControl *backendObject)
+    : QObject(), d_ptr(new RemoteControlPrivate(this))
 {
-    Q_OBJECT
-public:
-    ButtonComboBox(QWidget* parent = 0);
-    void addButtons(const QStringList &buttonList);
+    Q_D(RemoteControl);
+    d->setBackendObject(backendObject);
+}
 
-public Q_SLOTS:
-    void hideButton(const QString &button);
-
-private:
-    int m_hiddenIndex;
-    QString m_hiddenButton;
-};
-
-#include "ui_modedialog.h"
-#include "remote.h"
-
-#include "kcombobox.h"
-
-class ModeDialog : public KDialog
+RemoteControl::~RemoteControl()
 {
-    Q_OBJECT
 
-public:
-  
-    /**
-      * @brief Creates a ModeDialog for the given Remote.
-      * @param Remote The Remote that owns to Mode to edit or create
-      * @param Mode The Mode to be edited. If 0 a new one will be created and inserted into the Remote
-      */
-    explicit ModeDialog(Remote *remote, Mode *mode = 0, QWidget *parent = 0);
-    ~ModeDialog();
+}
 
-private:
-    Ui::ModeDialog ui;
-    Remote *m_remote;
-    Mode *m_mode;
+QStringList RemoteControl::allRemoteNames()
+{
+    QStringList retList;
+    foreach(RemoteControl* rc, allRemotes()) {
+        retList.append(rc->name());
+    }
+    return retList;
+}
 
-private Q_SLOTS:
-    void checkForComplete();
-    void slotButtonClicked(int button);
-    void forwardButtonChanged();
-    void backwardButtonChanged();
-    void buttonPressed(const RemoteControlButton &button);
-    void modeHandlerChanged();
-};
+QString RemoteControl::name() const
+{
+    return d_ptr->backendObject()->name();
+}
+
+QList<RemoteControlButton> RemoteControl::buttons() const
+{
+    return d_ptr->backendObject()->buttons();
+}
 
 
+RemoteControlPrivate::RemoteControlPrivate(QObject *parent):
+    m_parent(parent)
+{
 
-#endif /* NEWMODEDIALOG_H */
+}
+
+void RemoteControlPrivate::setBackendObject(Iface::RemoteControl *object)
+{
+    m_backendObject = object;
+    if (object) {
+        QObject *tmpObj = dynamic_cast<QObject*>(object);
+        QObject::connect(tmpObj, SIGNAL(buttonPressed(const RemoteControlButton &)),
+                         parent(), SIGNAL(buttonPressed(const RemoteControlButton &)));
+    }
+
+}
+
+Iface::RemoteControl* RemoteControlPrivate::backendObject() const
+{
+    return m_backendObject;
+}
+
+QObject *RemoteControlPrivate::parent() const
+{
+    return m_parent;
+}

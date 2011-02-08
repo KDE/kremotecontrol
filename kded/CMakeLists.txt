@@ -18,8 +18,6 @@ kde4_add_plugin(kded_kremotecontroldaemon ${kded_kremotecontroldaemon_SRCS})
 target_link_libraries(kded_kremotecontroldaemon
    ${KDE4_KDECORE_LIBS}
    ${KDE4_KDEUI_LIBS}
-   ${KDE4_SOLID_LIBS}
-   ${KDE4WORKSPACE_SOLIDCONTROL_LIBRARY}
    libkremotecontrol
 )
 

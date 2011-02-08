@@ -40,8 +40,6 @@
 #include <kremotecontrol/libkremotecontrol/action.h>
 
 
-using namespace Solid::Control;
-
 K_PLUGIN_FACTORY(KRemoteControlDaemonFactory, registerPlugin<KRemoteControlDaemon>();)
 K_EXPORT_PLUGIN(KRemoteControlDaemonFactory("kremotecontroldaemon"))
 
@@ -76,8 +74,8 @@ KRemoteControlDaemon::KRemoteControlDaemon(QObject* parent, const QVariantList& 
     foreach(const QString &remote, RemoteControl::allRemoteNames()){
         RemoteControl *rc = new RemoteControl(remote);
         kDebug() << "connecting to remote" << remote;
-        connect(rc, SIGNAL(buttonPressed(const Solid::Control::RemoteControlButton &)),
-                this,  SLOT(gotMessage(const Solid::Control::RemoteControlButton &)));
+        connect(rc, SIGNAL(buttonPressed(const RemoteControlButton &)),
+                this,  SLOT(gotMessage(const RemoteControlButton &)));
     }
     
     m_modeSwitchTimer.setSingleShot(true);
@@ -93,15 +91,15 @@ void KRemoteControlDaemon::slotStatusChanged(bool connected) {
             RemoteControl *rc = new RemoteControl(remote);
             kDebug() << "connecting to remote" << remote;
             connect(rc,
-                    SIGNAL(buttonPressed(const Solid::Control::RemoteControlButton &)),
+                    SIGNAL(buttonPressed(const RemoteControlButton &)),
                     this,
-                    SLOT(gotMessage(const Solid::Control::RemoteControlButton &)));
+                    SLOT(gotMessage(const RemoteControlButton &)));
         }
     }
     emit connectionChanged(connected);
 }
 
-void KRemoteControlDaemon::gotMessage(const Solid::Control::RemoteControlButton& button) {
+void KRemoteControlDaemon::gotMessage(const RemoteControlButton& button) {
     kDebug()<< "Got message from remote " << button.remoteName() << " button " << button.name() << "repeat" << button.repeatCounter();
     Remote *remote = m_remoteList.remote(button.remoteName());
     if(!remote){

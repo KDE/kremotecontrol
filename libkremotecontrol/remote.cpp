@@ -100,7 +100,7 @@ class GroupModeChangeHandler : public ModeChangeHandler
         QStringList availableModeSwitchButtons() const {
             // GroupModeHandler allows to re-use all buttons
             QStringList retList;
-            foreach(const Solid::Control::RemoteControlButton &button, Solid::Control::RemoteControl(m_remote->name()).buttons()) {
+            foreach(const RemoteControlButton &button, RemoteControl(m_remote->name()).buttons()) {
                 retList.append(button.name());
             }
             return retList;
@@ -141,7 +141,7 @@ class CycleModeChangeHandler : public ModeChangeHandler
 
         QStringList availableModeSwitchButtons() const {
             QStringList retList;
-            foreach(const Solid::Control::RemoteControlButton &button, Solid::Control::RemoteControl(m_remote->name()).buttons()) {
+            foreach(const RemoteControlButton &button, RemoteControl(m_remote->name()).buttons()) {
                 retList << button.name();
             }
             retList.removeAll(m_remote->nextModeButton());
@@ -353,7 +353,7 @@ void Remote::setCurrentMode(Mode* mode) {
 }
 
 bool Remote::isAvailable() const {
-    return Solid::Control::RemoteControl::allRemoteNames().contains(m_remoteName);
+    return RemoteControl::allRemoteNames().contains(m_remoteName);
 }
 
 bool Remote::nextMode(const QString& button) {

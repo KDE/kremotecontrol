@@ -104,7 +104,7 @@ KREMOTECONTROL_EXPORT QList<ProfileActionTemplate> ProfileServer::actionTemplate
     QList<ProfileActionTemplate> retList;
     foreach(const ProfileActionTemplate &actionTemplate, profile->actionTemplates()){
         kDebug() << "got template" << actionTemplate.actionTemplateId() << "with button" << actionTemplate.buttonName();
-        foreach(const Solid::Control::RemoteControlButton &button, Solid::Control::RemoteControl(remote).buttons()){
+        foreach(const RemoteControlButton &button, RemoteControl(remote).buttons()){
             kDebug() << "got button" << button.name();
             if(button.name() == actionTemplate.buttonName()){
                 retList.append(actionTemplate);
@@ -154,7 +154,7 @@ ProfileServer::ProfileSupportedByRemote KREMOTECONTROL_EXPORT ProfileServer::isP
     }
     int found=0;
     foreach(const QString & tProfilActionName, tProfilActionNames) {
-        foreach(const Solid::Control::RemoteControlButton &button, Solid::Control::RemoteControl(remote.name()).buttons()) {
+        foreach(const RemoteControlButton &button, RemoteControl(remote.name()).buttons()) {
             if(button.name() == tProfilActionName){
                 found++;
             }
