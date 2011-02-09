@@ -74,7 +74,7 @@ void RemoteControlManagerPrivate::loadBackends(const char *serviceName)
             } else {
                 kDebug() << "Failed loading:" << error_string;
                 QString error_string = i18n("Backend loaded but wrong type obtained, expected %1",
-                                             "Iface::RemoteControlManager");
+                                             QLatin1String("Iface::RemoteControlManager"));
 
                 kDebug() << "Error loading '" << ptr->name() << "': " << error_string;
                 error_msg.append(error_string);
