@@ -5,7 +5,19 @@ X-KDE-Library=kremotecontrol_lirc
 InitialPreference=80
 
 Name=Lirc
+Name[nl]=Lirc
+Name[pt]=Lirc
+Name[pt_BR]=Lirc
+Name[sv]=Lirc
+Name[uk]=Lirc
+Name[x-test]=xxLircxx
 
 Comment=Linux Infrared Remote Control
+Comment[nl]=Linux infrarood afstandsbediening (lirc)
+Comment[pt]=Comando à Distância por Infravermelhos para Linux
+Comment[pt_BR]=Controle remoto infravermelho no Linux
+Comment[sv]=Linux infraröda fjärrkontroll
+Comment[uk]=Інфрачервоне дистанційне керування для Linux
+Comment[x-test]=xxLinux Infrared Remote Controlxx
 
 Icon=infrared-remote

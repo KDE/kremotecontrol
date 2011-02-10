@@ -2,6 +2,12 @@
 Type=ServiceType
 X-KDE-ServiceType=KRemoteControlManager
 Comment=Remote Control Management Backend
+Comment[nl]=Afstandsbedieningbeheer-backend
+Comment[pt]=Infra-Estrutura de Gestão de Comandos à Distância
+Comment[pt_BR]=Infraestrutura de gerenciamento do controle remoto
+Comment[sv]=Gränssnitt för fjärrkontrollhantering
+Comment[uk]=Сервер керування пристроями дистанційного керування
+Comment[x-test]=xxRemote Control Management Backendxx
 
 [PropertyDef::X-KDE-SolidBackendInfo-Version]
 Type=QString
