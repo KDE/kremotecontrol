@@ -8,6 +8,7 @@ Comment[pt_BR]=Infraestrutura de gerenciamento do controle remoto
 Comment[sv]=Gränssnitt för fjärrkontrollhantering
 Comment[uk]=Сервер керування пристроями дистанційного керування
 Comment[x-test]=xxRemote Control Management Backendxx
+Comment[zh_TW]=遠端控制管理後端介面
 
 [PropertyDef::X-KDE-SolidBackendInfo-Version]
 Type=QString

@@ -11,6 +11,7 @@ Name[pt_BR]=Lirc
 Name[sv]=Lirc
 Name[uk]=Lirc
 Name[x-test]=xxLircxx
+Name[zh_TW]=Lirc
 
 Comment=Linux Infrared Remote Control
 Comment[nl]=Linux infrarood afstandsbediening (lirc)
@@ -19,5 +20,6 @@ Comment[pt_BR]=Controle remoto infravermelho no Linux
 Comment[sv]=Linux infraröda fjärrkontroll
 Comment[uk]=Інфрачервоне дистанційне керування для Linux
 Comment[x-test]=xxLinux Infrared Remote Controlxx
+Comment[zh_TW]=Linux 紅外線遙控
 
 Icon=infrared-remote
