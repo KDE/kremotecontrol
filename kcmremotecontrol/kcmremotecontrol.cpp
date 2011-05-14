@@ -30,7 +30,7 @@
 #include "model.h"
 #include "remotelist.h"
 
-#include <kdeutils-version.h>
+#include "kdeutils-version.h"
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
