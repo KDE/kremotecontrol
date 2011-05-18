@@ -2,6 +2,7 @@
 Type=ServiceType
 X-KDE-ServiceType=KRemoteControlManager
 Comment=Remote Control Management Backend
+Comment[da]=Motor til håndtering af fjernbetjening
 Comment[es]=Motor de gestión de mandos a distancia
 Comment[et]=Kaugjuhtimise haldamise taustaprogramm
 Comment[nb]=Bakgrunnsmotor for kontroll av fjernstyring
