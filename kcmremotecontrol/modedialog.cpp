@@ -39,7 +39,7 @@ ModeDialog::ModeDialog(Remote *remote, Mode *mode, QWidget *parent): KDialog(par
     setButtons( Ok | Cancel);
     setDefaultButton(Ok);
 
-    connect(ui.leName, SIGNAL(textChanged(const QString&)), this, SLOT(checkForComplete()));
+    connect(ui.leName, SIGNAL(textChanged(QString)), this, SLOT(checkForComplete()));
     connect(ui.cbButtonForward, SIGNAL(currentIndexChanged(int)), this, SLOT(forwardButtonChanged()));
     connect(ui.cbButtonBackward, SIGNAL(currentIndexChanged(int)), this, SLOT(backwardButtonChanged()));
     connect(ui.gbModeCycle, SIGNAL(clicked(bool)), this, SLOT(modeHandlerChanged()));
@@ -85,7 +85,7 @@ ModeDialog::ModeDialog(Remote *remote, Mode *mode, QWidget *parent): KDialog(par
 
     // Pause remote to make use of button presses here
     DBusInterface::getInstance()->ignoreButtonEvents(remote->name());
-    connect(new RemoteControl(remote->name()), SIGNAL(buttonPressed(const RemoteControlButton &)), SLOT(buttonPressed(const RemoteControlButton &)));
+    connect(new RemoteControl(remote->name()), SIGNAL(buttonPressed(RemoteControlButton)), SLOT(buttonPressed(RemoteControlButton)));
 }
 
 ModeDialog::~ModeDialog() {

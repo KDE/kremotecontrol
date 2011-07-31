@@ -58,8 +58,8 @@ KRemoteControlDaemon::KRemoteControlDaemon(QObject* parent, const QVariantList& 
     m_applicationData = KComponentData(aboutData);
 
     connect(RemoteControlManager::notifier(), SIGNAL(statusChanged(bool)), this, SLOT(slotStatusChanged(bool)));
-    connect(RemoteControlManager::notifier(), SIGNAL(remoteControlAdded(const QString&)), this, SLOT(slotRemoteControlAdded(const QString&)));
-    connect(RemoteControlManager::notifier(), SIGNAL(remoteControlRemoved(const QString&)), this, SLOT(slotRemoteControlRemoved(const QString&)));
+    connect(RemoteControlManager::notifier(), SIGNAL(remoteControlAdded(QString)), this, SLOT(slotRemoteControlAdded(QString)));
+    connect(RemoteControlManager::notifier(), SIGNAL(remoteControlRemoved(QString)), this, SLOT(slotRemoteControlRemoved(QString)));
 
     m_remoteList.loadFromConfig(QLatin1String( "kremotecontrolrc" ));
     KConfig config(QLatin1String( "kremotecontrolrc" ));
@@ -74,8 +74,8 @@ KRemoteControlDaemon::KRemoteControlDaemon(QObject* parent, const QVariantList& 
     foreach(const QString &remote, RemoteControl::allRemoteNames()){
         RemoteControl *rc = new RemoteControl(remote);
         kDebug() << "connecting to remote" << remote;
-        connect(rc, SIGNAL(buttonPressed(const RemoteControlButton &)),
-                this,  SLOT(gotMessage(const RemoteControlButton &)));
+        connect(rc, SIGNAL(buttonPressed(RemoteControlButton)),
+                this,  SLOT(gotMessage(RemoteControlButton)));
     }
     
     m_modeSwitchTimer.setSingleShot(true);
@@ -91,9 +91,9 @@ void KRemoteControlDaemon::slotStatusChanged(bool connected) {
             RemoteControl *rc = new RemoteControl(remote);
             kDebug() << "connecting to remote" << remote;
             connect(rc,
-                    SIGNAL(buttonPressed(const RemoteControlButton &)),
+                    SIGNAL(buttonPressed(RemoteControlButton)),
                     this,
-                    SLOT(gotMessage(const RemoteControlButton &)));
+                    SLOT(gotMessage(RemoteControlButton)));
         }
     }
     emit connectionChanged(connected);
@@ -202,7 +202,7 @@ void KRemoteControlDaemon::slotRemoteControlAdded(const QString& name) {
         KNotification *notification = KNotification::event(QLatin1String( "global_event" ), i18n("An unconfigured remote control %1 is now available.", name),
                   DesktopIcon(QLatin1String( "infrared-remote" )), 0, KNotification::Persistant, m_applicationData);
         notification->setActions(QStringList() << i18nc("Configure the remote", "Configure remote"));
-        connect(notification, SIGNAL(activated(unsigned int)), SLOT(lauchKcmShell()));
+        connect(notification, SIGNAL(activated(uint)), SLOT(lauchKcmShell()));
     }
     emit remoteControlAdded(name);
 }

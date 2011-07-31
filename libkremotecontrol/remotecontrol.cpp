@@ -65,8 +65,8 @@ void RemoteControlPrivate::setBackendObject(Iface::RemoteControl *object)
     m_backendObject = object;
     if (object) {
         QObject *tmpObj = dynamic_cast<QObject*>(object);
-        QObject::connect(tmpObj, SIGNAL(buttonPressed(const RemoteControlButton &)),
-                         parent(), SIGNAL(buttonPressed(const RemoteControlButton &)));
+        QObject::connect(tmpObj, SIGNAL(buttonPressed(RemoteControlButton)),
+                         parent(), SIGNAL(buttonPressed(RemoteControlButton)));
     }
 
 }

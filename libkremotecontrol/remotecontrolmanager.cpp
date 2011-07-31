@@ -213,8 +213,8 @@ RemoteControlManagerPrivate::findRegisteredRemoteControl(const QString &remote)
             }
             if (device != 0) {
                 QPair<RemoteControl *, Iface::RemoteControl *> pair(device, iface);
-                connect(dynamic_cast<QObject*>(iface), SIGNAL(destroyed(QObject *)),
-                        this, SLOT(_k_destroyed(QObject *)));
+                connect(dynamic_cast<QObject*>(iface), SIGNAL(destroyed(QObject*)),
+                        this, SLOT(_k_destroyed(QObject*)));
                 m_remoteControlMap[remote] = pair;
                 return pair;
             } else {

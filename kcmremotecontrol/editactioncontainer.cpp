@@ -85,7 +85,7 @@ EditActionContainer::EditActionContainer(Action *action, const QString &remote, 
     
     // Pause remote to make use of button presses here
     DBusInterface::getInstance()->ignoreButtonEvents(remote);
-    connect(new RemoteControl(remote), SIGNAL(buttonPressed(const RemoteControlButton &)), SLOT(buttonPressed(const RemoteControlButton &)));
+    connect(new RemoteControl(remote), SIGNAL(buttonPressed(RemoteControlButton)), SLOT(buttonPressed(RemoteControlButton)));
     
 }
 

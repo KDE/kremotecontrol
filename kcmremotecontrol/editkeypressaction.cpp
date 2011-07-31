@@ -37,7 +37,7 @@ EditKeypressAction::EditKeypressAction(KeypressAction *action, QWidget* parent, 
     ui.keySequenceWidget->setModifierlessAllowed(true);
     ui.keySequenceWidget->setClearButtonShown(false);
 
-    connect(ui.keySequenceWidget, SIGNAL(keySequenceChanged(const QKeySequence &)), SLOT(setKeySequence(const QKeySequence &)));
+    connect(ui.keySequenceWidget, SIGNAL(keySequenceChanged(QKeySequence)), SLOT(setKeySequence(QKeySequence)));
     connect(ui.pbAdd, SIGNAL(clicked()), SLOT(keySequenceChanged()));
     connect(ui.pbRemove, SIGNAL(clicked()), SLOT(keySequenceChanged()));
     connect(ui.leKeySequence, SIGNAL(textChanged(QString)), SLOT(activateButtons()));

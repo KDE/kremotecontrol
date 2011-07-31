@@ -42,7 +42,7 @@ LircRemoteControlPrivate::LircRemoteControlPrivate(const QString &n)
 LircRemoteControl::LircRemoteControl(const QString &name)
         : RemoteControl(), d(new LircRemoteControlPrivate(name))
 {
-    connect(d->m_client, SIGNAL(commandReceived(const QString &, const QString &, int)), this, SLOT(commandReceived(const QString &, const QString &, int)));
+    connect(d->m_client, SIGNAL(commandReceived(QString,QString,int)), this, SLOT(commandReceived(QString,QString,int)));
 }
 
 LircRemoteControl::~LircRemoteControl()

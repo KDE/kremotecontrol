@@ -32,14 +32,14 @@ EditDBusAction::EditDBusAction(DBusAction *action, QWidget* parent, Qt::WFlags f
     //Init DBus functions
     m_dbusFunctionModel = new DBusFunctionModel(ui.tvDBusFunctions);
     ui.tvDBusFunctions->setModel(m_dbusFunctionModel);
-    connect(ui.tvDBusApps->selectionModel(), SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), SLOT(refreshDBusFunctions(const QModelIndex &)));
+    connect(ui.tvDBusApps->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(refreshDBusFunctions(QModelIndex)));
     
 
     // Init Arguments View
     m_argumentsModel = new ArgumentsModel(ui.tvArguments);
     ui.tvArguments->setModel(m_argumentsModel);
     ui.tvArguments->setItemDelegate(new ArgumentDelegate(ui.tvArguments));
-    connect(ui.tvDBusFunctions->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(refreshArguments(const QModelIndex &)));
+    connect(ui.tvDBusFunctions->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(refreshArguments(QModelIndex)));
     
 
     // Load our action here

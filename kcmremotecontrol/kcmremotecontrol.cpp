@@ -101,22 +101,22 @@ KCMRemoteControl::KCMRemoteControl(QWidget *parent, const QVariantList &args) :
     // Create RemoteModel
     m_remoteModel = new RemoteModel(m_remoteList, ui.tvRemotes);
     ui.tvRemotes->setModel(m_remoteModel);
-    connect(ui.tvRemotes->selectionModel(), SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), SLOT(modeSelectionChanged(const QModelIndex &)));
+    connect(ui.tvRemotes->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(modeSelectionChanged(QModelIndex)));
     connect(ui.tvRemotes, SIGNAL(doubleClicked(QModelIndex)), SLOT(editMode()));
     // QueuedConnection needed because the model itself may has some slots queded and refreshing the model before that breaks logic
-    connect(m_remoteModel, SIGNAL(modeChanged(Mode *)), SLOT(actionDropped(Mode*)), Qt::QueuedConnection);
+    connect(m_remoteModel, SIGNAL(modeChanged(Mode*)), SLOT(actionDropped(Mode*)), Qt::QueuedConnection);
 
     // Create ActionModel
     m_actionModel = new ActionModel(ui.tvActions);
     ui.tvActions->setModel(m_actionModel);
-    connect(ui.tvActions->selectionModel(), SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), SLOT(actionSelectionChanged(const QModelIndex &)));
+    connect(ui.tvActions->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(actionSelectionChanged(QModelIndex)));
     connect(ui.tvActions, SIGNAL(doubleClicked(QModelIndex)), SLOT(editAction()));
 
     // connect ShowTrayIcon checkbox
     connect(ui.cbTrayIcon, SIGNAL(clicked(bool)), SLOT(changed()));
 
     connect(RemoteControlManager::notifier(), SIGNAL(statusChanged(bool)), SLOT(addUnconfiguredRemotes()));
-    connect(RemoteControlManager::notifier(), SIGNAL(remoteControlAdded(const QString &)), SLOT(addUnconfiguredRemotes()));
+    connect(RemoteControlManager::notifier(), SIGNAL(remoteControlAdded(QString)), SLOT(addUnconfiguredRemotes()));
 }
 
 KCMRemoteControl::~KCMRemoteControl() {

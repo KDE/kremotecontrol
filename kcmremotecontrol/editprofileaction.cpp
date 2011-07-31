@@ -36,14 +36,14 @@ EditProfileAction::EditProfileAction(ProfileAction *action, QWidget* parent, Qt:
     ui.lFunctions->setText(i18n("Action templates:"));
     m_templateModel = new ActionTemplateModel(ui.tvDBusFunctions);
     ui.tvDBusFunctions->setModel(m_templateModel);
-    connect(ui.tvDBusApps->selectionModel(), SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), SLOT(refreshTemplates(const QModelIndex &)));
+    connect(ui.tvDBusApps->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(refreshTemplates(QModelIndex)));
     
 
     // Init Arguments View
     m_argumentsModel = new ArgumentsModel(ui.tvArguments);
     ui.tvArguments->setModel(m_argumentsModel);
     ui.tvArguments->setItemDelegate(new ArgumentDelegate(ui.tvArguments));
-    connect(ui.tvDBusFunctions->selectionModel(), SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)), SLOT(refreshArguments(const QModelIndex &)));
+    connect(ui.tvDBusFunctions->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(refreshArguments(QModelIndex)));
     
 
     // Load our action here
