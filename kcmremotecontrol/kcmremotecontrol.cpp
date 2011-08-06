@@ -31,7 +31,7 @@
 #include "remotelist.h"
 #include "remotecontrolmanager.h"
 
-#include <kdeutils-version.h>
+#include "kdeutils-version.h"
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
