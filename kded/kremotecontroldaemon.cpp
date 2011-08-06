@@ -37,7 +37,7 @@
 #include <KToolInvocation>
 
 #include <QtGui/QPixmap>
-#include <kremotecontrol/libkremotecontrol/action.h>
+#include <libkremotecontrol/action.h>
 
 
 K_PLUGIN_FACTORY(KRemoteControlDaemonFactory, registerPlugin<KRemoteControlDaemon>();)
