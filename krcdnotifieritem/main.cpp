@@ -64,7 +64,7 @@ class KrcdNotifierApp : public KUniqueApplication
 
 int main( int argc, char **argv ) {
 
-    KAboutData aboutData("krcdnotifieritem", 0, ki18n("Remote Control"), KDEUTILS_VERSION_STRING, ki18n("The KDE Infrared Remote Control Server"), KAboutData::License_GPL, ki18n("(c) 2010 Michael Zanetti, (c) 2010 Frank Scheffold"), ki18n("Control your desktop with your remote."), "http://utils.kde.org/projects/kremotecontrol");
+    KAboutData aboutData("krcdnotifieritem", 0, ki18n("Remote Control"), KREMOTECONTROL_VERSION_STRING, ki18n("The KDE Infrared Remote Control Server"), KAboutData::License_GPL, ki18n("(c) 2010 Michael Zanetti, (c) 2010 Frank Scheffold"), ki18n("Control your desktop with your remote."), "http://utils.kde.org/projects/kremotecontrol");
     aboutData.addAuthor(ki18n("Michael Zanetti"), ki18n("Maintainer"), "michael_zanetti@gmx.net");
     aboutData.addAuthor(ki18n("Frank Scheffold"), ki18n("KDeveloper"), "fscheffold@googlemail.com");
     aboutData.addCredit(ki18n("Gav Wood"), ki18n("Original KDELirc Author"), "gav@kde.org");
