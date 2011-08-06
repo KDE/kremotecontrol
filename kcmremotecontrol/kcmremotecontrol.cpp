@@ -31,7 +31,7 @@
 #include "remotelist.h"
 #include "remotecontrolmanager.h"
 
-#include "kdeutils-version.h"
+#include <kremotecontrol-version.h>
 #include <kconfig.h>
 #include <kdebug.h>
 #include <kgenericfactory.h>
@@ -47,7 +47,7 @@ KCMRemoteControl::KCMRemoteControl(QWidget *parent, const QVariantList &args) :
         KCModule(KCMLircFactory::componentData(), parent, args)
 {
 
-    setAboutData(new KAboutData("kcm_remotecontrol", 0, ki18n("KRemoteControl"), KDEUTILS_VERSION_STRING,
+    setAboutData(new KAboutData("kcm_remotecontrol", 0, ki18n("KRemoteControl"), KREMOTECONTROL_VERSION_STRING,
                                 ki18n("The KDE Remote Control System"), KAboutData::License_GPL_V2,
                                 ki18n("2010 Michael Zanetti, 2010 Frank Scheffold"),
                                 ki18n("Use this to configure KDE's remote control system in order to control any KDE application with your remote control."),

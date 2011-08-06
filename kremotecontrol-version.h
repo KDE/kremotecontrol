@@ -27,8 +27,8 @@
   build against older or newer kdelibs releases.
 */
 
-#ifndef KDEUTILS_VERSION_H
-#define KDEUTILS_VERSION_H
+#ifndef KREMOTECONTROL_VERSION_H
+#define KREMOTECONTROL_VERSION_H
 
 /*
   Version scheme: "x.y.z build".
@@ -58,6 +58,6 @@
     3.2 alpha1
 */
 
-#define KDEUTILS_VERSION_STRING "4.6.4"
+#define KREMOTECONTROL_VERSION_STRING "4.6.4"
 
 #endif

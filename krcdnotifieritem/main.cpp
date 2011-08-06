@@ -22,7 +22,7 @@
 
 #include "krcdnotifieritem.h"
 
-#include <kdeutils-version.h>
+#include <kremotecontrol-version.h>
 #include <KAboutData>
 #include <KCmdLineArgs>
 #include <KUniqueApplication>
