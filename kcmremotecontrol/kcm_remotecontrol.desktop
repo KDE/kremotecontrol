@@ -12,11 +12,6 @@ X-DocPath=kcontrol/kremotecontrol/index.html
 Categories=Qt;KDE;X-KDE-settings-system;
 
 X-KDE-Keywords=KCMRemoteControl,remote control
-X-KDE-Keywords[nl]=kcmlirc,linux infrarood,infrarood,afstandsbediening
-X-KDE-Keywords[pl]=KCMLirc,kcmlirc,piloty,podczerwień
-X-KDE-Keywords[ta]= KCMLirc,kcmlirc
-X-KDE-Keywords[uz]=KCMLirc,kcmlirc,инфрақизил нур
-X-KDE-Keywords[x-test]=xxKCMLirc,kcmlircxx
 
 
 Name=Remote Controls
