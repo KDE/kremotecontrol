@@ -12,6 +12,12 @@ X-DocPath=kcontrol/kremotecontrol/index.html
 Categories=Qt;KDE;X-KDE-settings-system;
 
 X-KDE-Keywords=KCMRemoteControl,remote control
+X-KDE-Keywords[kk]=KCMRemoteControl,remote control
+X-KDE-Keywords[nl]=KCMRemoteControl,besturing op afstand
+X-KDE-Keywords[pt_BR]=KCMRemoteControl,controle remoto
+X-KDE-Keywords[sv]=KCMRemoteControl,fjärrkontroll
+X-KDE-Keywords[uk]=KCMRemoteControl,віддалене керування,пульт,керування
+X-KDE-Keywords[x-test]=xxKCMRemoteControl,remote controlxx
 
 
 Name=Remote Controls
