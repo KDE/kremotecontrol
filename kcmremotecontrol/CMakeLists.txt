@@ -7,7 +7,7 @@ include_directories(
    ${CMAKE_CURRENT_BINARY_DIR}/../libkremotecontrol
    ${KDE4_INCLUDES}
    ${QT_INCLUDES}
-   ${KDE4WORKSPACE_INCLUDE_DIR} )
+)
 
 ########### next target ###############
 

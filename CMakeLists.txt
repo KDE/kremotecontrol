@@ -21,11 +21,9 @@ else()
     set(STUFF_REQUIRED FALSE)
 endif()
 
-find_package( KDE4Workspace )
-macro_log_feature( KDE4Workspace_FOUND "KDE4Workspace" "KDE Workspace library, part of kdebase-workspace" "http://www.kde.org" ${STUFF_REQUIRED} "" "Required to build kremotecontrol." )
 macro_log_feature( QT_QTXMLPATTERNS_FOUND "QtXmlPatterns" "Qt support for XPath, XQuery, XSLT and XML Schema validation" "http://doc.trolltech.com/latest/qtxmlpatterns.html" ${STUFF_REQUIRED} "" "Required to build kremotecontrol." )
 
-if(NOT KDE4Workspace_FOUND OR NOT QT_QTXMLPATTERNS_FOUND)
+if(NOT QT_QTXMLPATTERNS_FOUND)
     if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
         macro_display_feature_log()
     else()

@@ -6,7 +6,7 @@ include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     ${KDE4_INCLUDES}
     ${QT_INCLUDES}
-    ${KDE4WORKSPACE_INCLUDE_DIR} )
+)
 
 set(krcdnotifieritem_SRCS
     main.cpp

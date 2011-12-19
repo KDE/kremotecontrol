@@ -1,7 +1,6 @@
 
 include_directories(
    ${CMAKE_CURRENT_SOURCE_DIR}/../libkremotecontrol
-   ${KDE4WORKSPACE_INCLUDE_DIR}
    )
 
 set(kded_kremotecontroldaemon_SRCS

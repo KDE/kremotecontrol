@@ -8,7 +8,6 @@ include_directories(
   ${CMAKE_BINARY_DIR} 
   ${KDE4_INCLUDES} 
   ${PLASMA_INCLUDE_DIR}
-  ${KDE4WORKSPACE_INCLUDE_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}/../libkremotecontrol
 )
 

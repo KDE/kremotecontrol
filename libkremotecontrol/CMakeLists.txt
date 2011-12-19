@@ -4,7 +4,6 @@ include_directories(
    ${KDE4_INCLUDES}
    ${QT_INCLUDES}
    ${X11_INCLUDE_DIR}
-#   ${KDE4WORKSPACE_INCLUDE_DIR}
 )
 
 
