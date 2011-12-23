@@ -47,7 +47,7 @@ KRemoteControlDaemon::KRemoteControlDaemon(QObject* parent, const QVariantList& 
 
     new KrcdAdaptor(this);
     KAboutData aboutData("kremotecontroldaemon", "kremotecontroldaemon", ki18n("K Remote Control Daemon"),
-                          "0.4", ki18n("Remote Control Daemon for KDE4"),
+                          "0.5", ki18n("Remote Control Daemon for KDE4"),
                           KAboutData::License_GPL, ki18n("(c) 2010 Frank Scheffold"),
                           KLocalizedString(), "http://www.kde.org");
 
