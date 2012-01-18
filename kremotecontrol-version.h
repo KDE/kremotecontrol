@@ -58,6 +58,6 @@
     3.2 alpha1
 */
 
-#define KREMOTECONTROL_VERSION_STRING "4.8 rc2"
+#define KREMOTECONTROL_VERSION_STRING "4.9 pre"
 
 #endif
