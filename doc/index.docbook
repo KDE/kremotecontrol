@@ -6,8 +6,8 @@
   <!ENTITY % addindex "IGNORE">
 ]>
 
-<book lang="&language;">
-  <bookinfo>
+<book id="kremotecontrol" lang="&language;">
+  <book id="kremotecontrol"info>
     <title>KDE Remote Control Configuration</title>
 
     <authorgroup>
