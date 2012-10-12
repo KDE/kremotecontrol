@@ -7,7 +7,7 @@
 ]>
 
 <book id="kremotecontrol" lang="&language;">
-  <book id="kremotecontrol"info>
+  <bookinfo>
     <title>KDE Remote Control Configuration</title>
 
     <authorgroup>
