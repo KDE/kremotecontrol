@@ -1,58 +1,78 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 
-<profile xmlns="urn:org-kde-kremotecontrol" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="urn:org-kde-kremotecontrol file:profile.xsd">
-  
-    <name>VLC videolan player</name>
-    <description>This profile works only if VLC is configured for single instance running</description>
-    <version>0.1</version>
-    <author>Gioacchino Mazzurco [gmazzurco89@gmail.com]</author>
+   <profile
+		xmlns="urn:org-kde-kremotecontrol"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="urn:org-kde-kremotecontrol file:profile.xsd"
+	>
 
-    <!-- Playback actions -->
-    <action id="play" name="Play" description="Start playing">
-        <prototype>
-            <serviceName>org.mpris.vlc</serviceName>
-            <node>Player</node>
-            <function>Play</function>
-        </prototype>
-        <button>Play</button>
-    </action>
+
+	<name>VLC media player</name>
+	<description>
+		This KRemoteControl template provide easy setup for VLC 2 mediaplayer.
+		Enable VLC D-Bus control interface in order to use KRemoteControl to control it.
+		If having problem with this profile try configuring it for single instance running.
+	</description>
+	<version>0.2</version>
+	<author>Gioacchino Mazzurco [gio@eigenlab.org]</author>
+	
+
+	<!-- VLC 2 impements mpris 2 interface specification, the D-Bus name is org.mpris.MediaPlayer2.vlc -->
+
+	<action id="play" name="Play" description="Start playing">
+		<prototype>
+			<serviceName>org.mpris.MediaPlayer2.vlc</serviceName>
+			<node>org/mpris/MediaPlayer2</node>
+			<function>Play</function>
+		</prototype>
+		<button>Play</button>
+	</action>
+
+	<action id="pause" name="Pause" description="Pause playing">
+		<prototype>
+			<serviceName>org.mpris.MediaPlayer2.vlc</serviceName>
+			<node>org/mpris/MediaPlayer2</node>
+			<function>Pause</function>
+		</prototype>
+		<button>Pause</button>
+	</action>
+	
+	<action id="playpause" name="Play Pause" description="Toggle Play/Pause">
+		<prototype>
+			<serviceName>org.mpris.MediaPlayer2.vlc</serviceName>
+			<node>org/mpris/MediaPlayer2</node>
+			<function>org.mpris.MediaPlayer2.Player.PlayPause</function>
+		</prototype>
+		<button>PlayPause</button>
+		<ifmulti>sendtoall</ifmulti>
+	</action>
     
-    <action id="stop" name="Stop" description="Stop playing">
-        <prototype>
-            <serviceName>org.mpris.vlc</serviceName>
-            <node>Player</node>
-            <function>Stop</function>
-        </prototype>        
-        <button>Stop</button>
-    </action>
+	<action id="stop" name="Stop" description="Stop playing">
+		<prototype>
+			<serviceName>org.mpris.MediaPlayer2.vlc</serviceName>
+			<node>org/mpris/MediaPlayer2</node>
+			<function>Stop</function>
+		</prototype>        
+		<button>Stop</button>
+	</action>
     
-    <action id="pause" name="Pause" description="Pause playing">
-        <prototype>
-            <serviceName>org.mpris.vlc</serviceName>
-            <node>Player</node>
-            <function>Pause</function>
-        </prototype>
-        <button>Pause</button>
-    </action>
-    
-    <action id="skipForward" name="Skip Forward" description="Advance to next track">
-        <prototype>
-            <serviceName>org.mpris.vlc</serviceName>
-            <node>Player</node>
-            <function>Next</function>
-        </prototype>
-        <button>SkipForward</button>
-        <repeat>true</repeat>
-    </action>
-    
-    <action id="skipBackward" name="Skip Backward" description="Go to previous track">
-        <prototype>
-            <serviceName>org.mpris.vlc</serviceName>
-            <node>Player</node>
-            <function>Prev</function>
-        </prototype>
-        <button>SkipBackward</button>
-        <repeat>true</repeat>
-    </action>            
+	<action id="skipForward" name="Skip Forward" description="Advance to next track">
+		<prototype>
+			<serviceName>org.mpris.MediaPlayer2.vlc</serviceName>
+			<node>org/mpris/MediaPlayer2</node>
+			<function>Next</function>
+		</prototype>
+		<button>SkipForward</button>
+		<repeat>true</repeat>
+	</action>
+
+	<action id="skipBackward" name="Skip Backward" description="Go to previous track">
+		<prototype>
+			<serviceName>org.mpris.MediaPlayer2.vlc</serviceName>
+			<node>org/mpris/MediaPlayer2</node>
+			<function>Prev</function>
+		</prototype>
+		<button>SkipBackward</button>
+		<repeat>true</repeat>
+	</action>            
 </profile>
