@@ -97,6 +97,7 @@ void EditDBusAction::applyChanges(){
     Prototype prototype = m_dbusFunctionModel->getPrototype(ui.tvDBusFunctions->selectionModel()->currentIndex().row());
     prototype.setArgs(m_argumentsModel->arguments());
     m_action->setFunction(prototype);
+    m_action->setInterface(m_dbusFunctionModel->getInterface(ui.tvDBusFunctions->selectionModel()->currentIndex().row()));
     
     m_action->setAutostart(ui.cbAutostart->isChecked());
     m_action->setRepeat(ui.cbRepeat->isChecked());
