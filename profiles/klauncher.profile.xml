@@ -10,7 +10,7 @@
 	<action id="execute" name="Run command" description="Runs a command with optional arguments">
 		<prototype>
 			<serviceName>org.kde.klauncher</serviceName>
-			<node>KLauncher</node>
+                        <node>/KLauncher</node>
 			<function>kdeinit_exec</function>
 			<arguments>
 				<argument type="QString" comment="The executable name and path of the program or script to run">

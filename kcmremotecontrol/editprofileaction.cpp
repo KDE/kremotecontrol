@@ -96,6 +96,7 @@ void EditProfileAction::applyChanges(){
     ProfileActionTemplate actionTemplate = m_templateModel->actionTemplate(ui.tvDBusFunctions->selectionModel()->currentIndex());
     kDebug() << "applyChanges to action:" << actionTemplate.profileId();
     m_action->setApplication(actionTemplate.service());
+    m_action->setInterface(actionTemplate.interface());
     m_action->setNode(actionTemplate.node());
     Prototype prototype = actionTemplate.function();
     prototype.setArgs(m_argumentsModel->arguments());
@@ -127,6 +128,7 @@ ProfileAction EditProfileAction::action() const {
     action.setNode(actionTemplate.node());
     Prototype prototype = actionTemplate.function();
     prototype.setArgs(m_argumentsModel->arguments());
+    action.setInterface(actionTemplate.interface());
     action.setFunction(prototype);
     action.setActionTemplateId(actionTemplate.actionTemplateId());
     action.setProfileId(actionTemplate.profileId());

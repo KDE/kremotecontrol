@@ -19,6 +19,8 @@
 
 #include "profileactiontemplate.h"
 
+#include <KDebug>
+
 
 ProfileActionTemplate::ProfileActionTemplate() {
   d = new ProfileActionTemplatePrivate;
@@ -30,6 +32,7 @@ ProfileActionTemplate::ProfileActionTemplate( const QString &profileId,
                                               const QString &actionName,
                                               const QString &serviceName,
                                               const QString &node,
+                                              const QString &interface,
                                               const Prototype &function,
                                               const ProfileAction::ActionDestination destination,
                                               bool autostart,
@@ -43,6 +46,7 @@ ProfileActionTemplate::ProfileActionTemplate( const QString &profileId,
     d->m_actionName = actionName;
     d->m_node = node;
     d->m_serviceName = serviceName;
+    d->m_interface = interface;
     d->m_function = function;
     d->m_description = description;
     d->m_destination= destination;
@@ -75,6 +79,11 @@ QString ProfileActionTemplate::description() const {
     return d->m_description;
 }
 
+QString ProfileActionTemplate::interface() const
+{
+    return d->m_interface;
+}
+
 Prototype ProfileActionTemplate::function() const {
     return d->m_function;
 }
@@ -99,9 +108,11 @@ ProfileAction *ProfileActionTemplate::createAction(const RemoteControlButton& bu
     ProfileAction *action = new ProfileAction(button.name(), d->m_profileId, d->m_actionTemplateId);
     action->setApplication(d->m_serviceName);
     action->setNode(d->m_node);
+    action->setInterface(d->m_interface);
     action->setFunction(d->m_function);
     action->setDestination(d->m_destination);
     action->setAutostart(d->m_autostart);
     action->setRepeat(d->m_repeat);
+    kDebug() << "creating action from template:" << d->m_serviceName << d->m_node << d->m_interface << d->m_function.name();
     return action;
 }

@@ -36,6 +36,7 @@ class KREMOTECONTROL_EXPORT ProfileActionTemplate
                               const QString &actionName,
                               const QString &serviceName,
                               const QString &node,
+                              const QString &interface,
                               const Prototype &function,
                               const ProfileAction::ActionDestination,
                               bool autostart,
@@ -50,6 +51,7 @@ class KREMOTECONTROL_EXPORT ProfileActionTemplate
         QString actionName() const;
         QString service() const;
         QString node() const;
+        QString interface() const;
         Prototype function() const;
         QString description() const;
         ProfileAction::ActionDestination destination() const;
@@ -75,6 +77,7 @@ class ProfileActionTemplatePrivate: public QSharedData
                                       m_actionName(other.m_actionName),
                                       m_serviceName(other.m_serviceName),
                                       m_node(other.m_node),
+                                      m_interface(other.m_interface),
                                       m_function(other.m_function),
                                       m_description(other.m_description),
                                       m_destination(other.m_destination),
@@ -87,6 +90,7 @@ class ProfileActionTemplatePrivate: public QSharedData
         QString m_actionName; // e.g. Play
         QString m_serviceName; // e.g. org.kde.amarok
         QString m_node; // e.g. Player
+        QString m_interface; // e.g. org.mpris.Player
         Prototype m_function; // play
         QString m_description; // e.g. Start playing
         ProfileAction::ActionDestination m_destination;

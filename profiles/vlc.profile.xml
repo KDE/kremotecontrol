@@ -12,7 +12,7 @@
     <action id="play" name="Play" description="Start playing">
         <prototype>
             <serviceName>org.mpris.vlc</serviceName>
-            <node>Player</node>
+            <node>/Player</node>
             <function>Play</function>
         </prototype>
         <button>Play</button>
@@ -21,7 +21,7 @@
     <action id="stop" name="Stop" description="Stop playing">
         <prototype>
             <serviceName>org.mpris.vlc</serviceName>
-            <node>Player</node>
+            <node>/Player</node>
             <function>Stop</function>
         </prototype>        
         <button>Stop</button>
@@ -30,7 +30,7 @@
     <action id="pause" name="Pause" description="Pause playing">
         <prototype>
             <serviceName>org.mpris.vlc</serviceName>
-            <node>Player</node>
+            <node>/Player</node>
             <function>Pause</function>
         </prototype>
         <button>Pause</button>
@@ -39,7 +39,7 @@
     <action id="skipForward" name="Skip Forward" description="Advance to next track">
         <prototype>
             <serviceName>org.mpris.vlc</serviceName>
-            <node>Player</node>
+            <node>/Player</node>
             <function>Next</function>
         </prototype>
         <button>SkipForward</button>
@@ -49,7 +49,7 @@
     <action id="skipBackward" name="Skip Backward" description="Go to previous track">
         <prototype>
             <serviceName>org.mpris.vlc</serviceName>
-            <node>Player</node>
+            <node>/Player</node>
             <function>Prev</function>
         </prototype>
         <button>SkipBackward</button>

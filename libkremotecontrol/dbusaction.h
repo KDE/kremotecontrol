@@ -42,6 +42,9 @@ class KREMOTECONTROL_EXPORT DBusAction : public Action
         QString node() const;
         void setNode(const QString &node);
         
+        QString interface() const;
+        void setInterface(const QString &interface);
+        
         Prototype function() const;
         void setFunction(const Prototype &function);
         
@@ -56,6 +59,7 @@ class KREMOTECONTROL_EXPORT DBusAction : public Action
     protected:
         QString m_application;
         QString m_node;
+        QString m_interface;
         Prototype m_function;
 };
 

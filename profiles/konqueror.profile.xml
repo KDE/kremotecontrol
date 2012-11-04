@@ -10,7 +10,7 @@
 	<action id="newWindow" name="Create New Window" description="Creates a new window and loads an arbitrary URL">
 		<prototype>
 			<serviceName>org.kde.konqueror</serviceName>
-			<node>KonqMain</node>			
+                        <node>/KonqMain</node>			
 			<function>openBrowserWindow</function>
 			<arguments>
 				<argument type="QString" comment="The URL to load in the window initially">
@@ -25,7 +25,7 @@
 	<action id="quit" name="Quit" description="Closes the Konqueror window">
 		<prototype>
 			<serviceName>org.kde.konqueror</serviceName>
-			<node>MainApplication</node>
+                        <node>/MainApplication</node>
 			<function>quit</function>
 		</prototype>
 		<ifmulti>sendtotop</ifmulti>

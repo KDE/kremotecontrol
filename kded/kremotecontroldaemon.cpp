@@ -96,6 +96,7 @@ void KRemoteControlDaemon::slotStatusChanged(bool connected) {
                     SLOT(gotMessage(RemoteControlButton)));
         }
     }
+    kDebug() << "connection changed" << connected;
     emit connectionChanged(connected);
 }
 

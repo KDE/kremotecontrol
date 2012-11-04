@@ -42,6 +42,16 @@ void DBusAction::setNode(const QString& node) {
     m_node = node;
 }
 
+QString DBusAction::interface() const
+{
+    return m_interface;
+}
+
+void DBusAction::setInterface(const QString& interface)
+{
+    m_interface = interface;
+}
+
 Prototype DBusAction::function() const {
     return m_function;
 }
@@ -62,6 +72,7 @@ void DBusAction::saveToConfig(KConfigGroup& config) {
     Action::saveToConfig(config);
     config.writeEntry("Application", m_application);
     config.writeEntry("Node", m_node);
+    config.writeEntry("Interface", m_interface);
     config.writeEntry("Function", m_function.name());
     int i = 0; // GroupID for arguments
     foreach(const Argument &arg, m_function.args()){
@@ -77,6 +88,10 @@ void DBusAction::loadFromConfig(const KConfigGroup& config) {
     Action::loadFromConfig(config);
     m_application = config.readEntry("Application");
     m_node = config.readEntry("Node");
+    if (!m_node.startsWith(QLatin1String("/"))) {
+        m_node.prepend(QLatin1String("/"));
+    }
+    m_interface = config.readEntry("Interface");
     m_function = Prototype(config.readEntry("Function"));
     QStringList argGroupList = config.groupList();
     argGroupList.sort();
@@ -97,6 +112,7 @@ Action* DBusAction::clone() const {
     action->setApplication(m_application);
     action->setAutostart(m_autostart);
     action->setDestination(m_destination);
+    action->setInterface(m_interface);
     action->setFunction(m_function);
     action->setNode(m_node);
     action->setRepeat(m_repeat);

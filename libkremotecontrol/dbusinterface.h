@@ -42,6 +42,7 @@ class KREMOTECONTROL_EXPORT DBusInterface: public QObject
 
         QStringList allRegisteredPrograms();
         bool searchForProgram(const DBusAction *action, QStringList &programs);
+        QStringList getNodes(const QString &interface, const QString &node);
     public:
 
         static DBusInterface *getInstance();
@@ -52,7 +53,7 @@ class KREMOTECONTROL_EXPORT DBusInterface: public QObject
 
         QStringList registeredPrograms();
         QStringList nodes(const QString &program);
-        QList<Prototype> functions(const QString &program, const QString &object);
+        QMultiMap<QString, Prototype> functions(const QString &program, const QString &object);
 	
         QStringList configuredRemotes();
         void ignoreButtonEvents(const QString &remoteName);

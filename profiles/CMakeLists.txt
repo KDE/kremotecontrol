@@ -5,6 +5,7 @@ install( FILES
     amarok.profile.xml
     dragonplayer.profile.xml
     vlc.profile.xml
+    vlc2.profile.xml
     kmix.profile.xml
     okular.profile.xml
     klauncher.profile.xml

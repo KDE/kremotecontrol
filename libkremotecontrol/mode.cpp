@@ -20,6 +20,8 @@
 #include "mode.h"
 #include "action.h"
 
+#include <KDebug>
+
 Mode::Mode(const QString &name, const QString &iconName): m_name(name), m_iconName(iconName) {
 }
 
@@ -91,7 +93,9 @@ QVector<Action* > Mode::actions() const {
 QVector<Action*> Mode::actionsForButton(const QString &button) const {
     QVector<Action*> retList;
     foreach(Action *action, m_actionList){
+        kDebug() << "checking action:" << action->name() << action->button();
         if(action->button() == button){
+            kDebug() << "Found action for button:" << action->name();
             retList.append(action);
         }
     }

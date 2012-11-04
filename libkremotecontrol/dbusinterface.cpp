@@ -73,7 +73,7 @@ QStringList DBusInterface::registeredPrograms() {
     for (int i = 0; i < allServices.size(); ++i) {
         QString tmp = allServices.at(i);
 
-        QRegExp r1( QLatin1String( "[a-zA-Z]{1,3}\\.[a-zA-Z0-9-]+\\.[a-zA-Z0-9_-]+" ));
+        QRegExp r1( QLatin1String( "[a-zA-Z]{1,3}\\.[a-zA-Z0-9-]+\\.[a-zA-Z0-9_-\\.]+" ));
         if (!r1.exactMatch(tmp)) {
             continue;
         }
@@ -94,6 +94,7 @@ QStringList DBusInterface::registeredPrograms() {
 }
 
 QStringList DBusInterface::nodes(const QString &program) {
+    return getNodes(program, QLatin1String("/"));
     kDebug() << "getting Nodes of" << program;
     QDBusInterface dBusIface(program, QLatin1String( "/" ), QLatin1String( "org.freedesktop.DBus.Introspectable" ));
     QDBusMessage msg = QDBusMessage::createMethodCall(program, QLatin1String( "/" ), QLatin1String( "org.freedesktop.DBus.Introspectable" ), QLatin1String( "Introspect" ));
@@ -130,8 +131,47 @@ QStringList DBusInterface::nodes(const QString &program) {
     return returnList;
 }
 
-QList<Prototype> DBusInterface::functions(const QString &program, const QString &object) {
-    QDBusInterface dBusIface(program, QLatin1Char( '/' ) + object, QLatin1String( "org.freedesktop.DBus.Introspectable" ));
+QStringList DBusInterface::getNodes(const QString& service, const QString& node)
+{
+    QStringList nodes;
+    QDBusMessage msg = QDBusMessage::createMethodCall(service, node, QLatin1String( "org.freedesktop.DBus.Introspectable" ), QLatin1String( "Introspect" ));
+    QDBusReply<QString> response = QDBusConnection::sessionBus().call(msg, QDBus::Block, 1);
+
+    QDomDocument domDoc;
+    domDoc.setContent(response);
+    if (domDoc.toString().isEmpty()) { // No reply... perhaps a multi-instance...
+        kDebug() << "no reply from" << service;
+        QStringList instances = allRegisteredPrograms().filter(service);
+        if (!instances.isEmpty()) {
+            QDBusMessage msg = QDBusMessage::createMethodCall(instances.first(), node, QLatin1String( "org.freedesktop.DBus.Introspectable" ), QLatin1String( "Introspect" ));
+            QDBusReply<QString> response = QDBusConnection::sessionBus().call(msg, QDBus::Block, 1);
+//            response = iFace.call("Introspect");
+            domDoc.setContent(response);
+        }
+    }
+    
+    QDomElement child = domDoc.documentElement().firstChildElement();
+    while (!child.isNull()) {
+        if (child.tagName() == QLatin1String("node")) {
+            QString name = child.attribute(QLatin1String("name"));
+            kDebug() << "got node:" << service << node + name;
+            if (node.endsWith("/")) {
+                name = node + name;
+            } else {
+                name = node + QLatin1String("/") + name;
+            }
+            nodes << name;
+            nodes << getNodes(service, name);
+        }
+        child = child.nextSiblingElement();
+    }
+    return nodes;
+}
+
+
+QMultiMap<QString, Prototype> DBusInterface::functions(const QString &program, const QString &object) {
+    //return QList<Prototype>();
+    QDBusInterface dBusIface(program, object, QLatin1String( "org.freedesktop.DBus.Introspectable" ));
     QDBusReply<QString> response = dBusIface.call(QLatin1String( "Introspect" ));
 
     QDomDocument domDoc;
@@ -149,7 +189,7 @@ QList<Prototype> DBusInterface::functions(const QString &program, const QString 
     QDomElement node = domDoc.documentElement();
     QDomElement child = node.firstChildElement();
 
-    QList<Prototype> funcList;
+    QMultiMap<QString, Prototype> funcList;
 
     while (!child.isNull()) {
         if (child.tagName() == QLatin1String("interface")) {
@@ -158,6 +198,7 @@ QList<Prototype> DBusInterface::functions(const QString &program, const QString 
                 child = child.nextSiblingElement();
                 continue;
             }
+            QString interface = child.attribute(QLatin1String("name"));
             QDomElement subChild = child.firstChildElement();
             while (!subChild.isNull()) {
                 if (subChild.tagName() == QLatin1String("method")) {
@@ -201,8 +242,8 @@ QList<Prototype> DBusInterface::functions(const QString &program, const QString 
                         argDom = argDom.nextSiblingElement();
                     }
                     Prototype function(functionName, argList);
-                    if(!funcList.contains(function)){
-                        funcList.append(function);
+                    if(!funcList.contains(interface, function)){
+                        funcList.insertMulti(interface, function);
                     }
                 }
                 subChild = subChild.nextSiblingElement();
@@ -384,13 +425,13 @@ void DBusInterface::executeAction(const DBusAction* action) {
         const QString &program = *i;
         kDebug() << "Searching DBus for program:" << program;
         if (dBusIface->isServiceRegistered(program)) {
-            kDebug() << "Sending data (" << program << ", " << QLatin1Char( '/' ) + action->node() << ", " << action->function().name();
+            kDebug() << "Sending data (" << program << ", " << action->node() << ", " << action->interface() << ". " << action->function().name();
 
             if(action->function().name().startsWith("script:")) {
                 QString scriptText = action->function().name().remove(0, 7);
                 
                 QScriptEngine scriptEngine;
-                QDBusIfaceWrapper *appIface = new QDBusIfaceWrapper(program, QLatin1Char( '/' ) + action->node());
+                QDBusIfaceWrapper *appIface = new QDBusIfaceWrapper(program, action->node());
                 QScriptValue objectValue = scriptEngine.newQObject(appIface);
                 scriptEngine.globalObject().setProperty("dbus", objectValue);
                 int argCount = 1;
@@ -426,8 +467,7 @@ void DBusInterface::executeAction(const DBusAction* action) {
                 scriptEngine.evaluate(scriptText);
             } else {
             
-                QDBusMessage m = QDBusMessage::createMethodCall(program, QLatin1Char( '/' )
-                             + action->node(), QLatin1String( "" ), action->function().name());
+                QDBusMessage m = QDBusMessage::createMethodCall(program, action->node(), action->interface(), action->function().name());
 
                 foreach(const Argument &arg, action->function().args()){
                     kDebug() << "Got argument:" << arg.value().type() << "value" << arg.value();

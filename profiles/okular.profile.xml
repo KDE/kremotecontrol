@@ -10,7 +10,7 @@
     <action id="previousPage" name="Back" description="Goes to the previous page">
         <prototype>
             <serviceName>org.kde.okular</serviceName>
-            <node>okular</node>
+            <node>/okular</node>
             <function>slotPreviousPage</function>
         </prototype>
         <button>Rewind</button>
@@ -21,7 +21,7 @@
     <action id="nextPage" name="Forward" description="Goes to the next page">
         <prototype>
             <serviceName>org.kde.okular</serviceName>
-            <node>okular</node>
+            <node>/okular</node>
             <function>slotNextPage</function>
         </prototype>
         <button>Rewind</button>
@@ -32,7 +32,7 @@
     <action id="firstPage" name="First" description="Goes to the first page">
         <prototype>
             <serviceName>org.kde.okular</serviceName>
-            <node>okular</node>
+            <node>/okular</node>
             <function>slotGotoFirst</function>
         </prototype>
         <button>SkipBackward</button>
@@ -43,7 +43,7 @@
     <action id="lastPage" name="Last" description="Goes to the last page">
         <prototype>
             <serviceName>org.kde.okular</serviceName>
-            <node>okular</node>
+            <node>/okular</node>
             <function>slotGotoLast</function>
         </prototype>
         <button>SkipForward</button>
@@ -54,7 +54,7 @@
     <action id="pause" name="Presentation" description="Starts / stops presentation">
         <prototype>
             <serviceName>org.kde.okular</serviceName>
-            <node>okular</node>
+            <node>/okular</node>
             <function>slotTogglePresentation</function>
         </prototype>
         <button>Pause</button>
@@ -65,7 +65,7 @@
     <action id="reload" name="Reload" description="Reloads the open document">
         <prototype>
             <serviceName>org.kde.okular</serviceName>
-            <node>okular</node>
+            <node>/okular</node>
             <function>reload</function>
         </prototype>
         <ifmulti>sendtotop</ifmulti>
@@ -74,7 +74,7 @@
     <action id="goToPage" name="Go to Page" description="Goes to the specified page">
         <prototype>
             <serviceName>org.kde.okular</serviceName>
-            <node>okular</node>
+            <node>/okular</node>
             <function>goToPage</function>
             <arguments>
                 <argument type="uint" comment="The page to choose">
@@ -88,7 +88,7 @@
     <action id="openFile" name="Open document" description="Opens a specific document">
         <prototype>
             <serviceName>org.kde.okular</serviceName>
-            <node>okular</node>
+            <node>/okular</node>
             <function>openDocument</function>
             <arguments>
                 <argument type="QString" comment="The document to be open">

@@ -84,7 +84,8 @@
     <xs:sequence>
       <xs:element name="serviceName" type="xs:string"/>
       <xs:element name="node" type="xs:string"/>
-      <xs:element name="function" type="xs:string"/>  
+      <xs:element name="interface" type="xs:string" minOccurs="0"/>
+      <xs:element name="function" type="xs:string"/>
       <xs:element name="return" type="xs:string" default="void" minOccurs="0"/>
       <xs:element name="arguments" minOccurs="0">
         <xs:complexType>

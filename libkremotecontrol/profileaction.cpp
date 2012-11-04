@@ -89,6 +89,7 @@ Action* ProfileAction::clone() const {
     action->setAutostart(m_autostart);
     action->setDestination(m_destination);
     action->setFunction(m_function);
+    action->setInterface(m_interface);
     action->setNode(m_node);
     action->setRepeat(m_repeat);
     action->setButton(m_button);

@@ -163,18 +163,20 @@ void DBusFunctionModel::refresh(const QString &app, const QString &node) {
         return;
     }
 
-    foreach(const Prototype &prototype, DBusInterface::getInstance()->functions(app, node)){
-        appendRow(prototype);
+    QMultiMap<QString, Prototype> functionMap = DBusInterface::getInstance()->functions(app, node);
+    for (QMultiMap<QString, Prototype>::const_iterator i = functionMap.constBegin(); i != functionMap.constEnd(); ++i){
+        appendRow(i.key(), i.value());
     }
 
     sort(0, Qt::AscendingOrder);
 
 }
 
-void DBusFunctionModel::appendRow(Prototype prototype) {
+void DBusFunctionModel::appendRow(const QString &interface, Prototype prototype) {
     QList<QStandardItem*> itemList;
     QStandardItem *item = new QStandardItem(prototype.name());
     item->setData(qVariantFromValue(prototype), Qt::UserRole);
+    item->setData(interface, Qt::UserRole + 1);
     itemList.append(item);
     QString argString;
     foreach(const Argument &arg, prototype.args()){
@@ -193,6 +195,11 @@ void DBusFunctionModel::appendRow(Prototype prototype) {
 
 Prototype DBusFunctionModel::getPrototype(int index) const {
     return QStandardItemModel::item(index)->data(Qt::UserRole).value<Prototype>();
+}
+
+QString DBusFunctionModel::getInterface(int index) const
+{
+    return QStandardItemModel::item(index)->data(Qt::UserRole+1).toString();
 }
 
 QModelIndex DBusFunctionModel::findOrInsert(const DBusAction* action, bool insert) {

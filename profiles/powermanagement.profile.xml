@@ -11,7 +11,7 @@
     <action id="suspend2Ram" name="Suspend" description="Suspends your computer to RAM (sleep)">
         <prototype>
             <serviceName>org.kde.klauncher</serviceName>
-            <node>KLauncher</node>
+            <node>/KLauncher</node>
             <function>kdeinit_exec</function>
             <arguments>
                 <argument type="QString" comment="System command to use for suspend">
@@ -31,7 +31,7 @@
     <action id="suspend2Disk" name="Hibernate" description="Suspends your computer disk (deep sleep)">
         <prototype>
             <serviceName>org.kde.klauncher</serviceName>
-            <node>KLauncher</node>
+            <node>/KLauncher</node>
             <function>kdeinit_exec</function>
             <arguments>
                 <argument type="QString" comment="System command to use for suspend">
@@ -51,7 +51,7 @@
     <action id="shutdown" name="Shutdown" description="Logout and shutdown your computer">
         <prototype>
             <serviceName>org.kde.ksmserver</serviceName>
-            <node>KSMServer</node>
+            <node>/KSMServer</node>
             <function>logout</function>
             <arguments>
                 <argument type="int" comment="Ask for confirmation? 1 = No, 2 = Yes">
@@ -72,7 +72,7 @@
     <action id="reboot" name="Reboot" description="Logout and restart your computer">
         <prototype>                       
             <serviceName>org.kde.ksmserver</serviceName>
-            <node>KSMServer</node>
+            <node>/KSMServer</node>
             <function>logout</function>
             <arguments>
                 <argument type="int" comment="Ask for confirmation? 1 = No, 2 = Yes">
@@ -91,7 +91,7 @@
     <action id="logout" name="Logout" description="Just log out">
         <prototype>                       
             <serviceName>org.kde.ksmserver</serviceName>
-            <node>KSMServer</node>
+            <node>/KSMServer</node>
             <function>logout</function>
             <arguments>
                 <argument type="int" comment="Ask for confirmation? 1 = No, 2 = Yes">

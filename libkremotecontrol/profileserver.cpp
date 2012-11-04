@@ -259,9 +259,11 @@ ProfileActionTemplate ProfileServer::ProfileXmlContentHandler::parseAction(QDomN
     QDomElement execNode;
     QString serviceName;
     QString nodeName;
+    QString interfaceName;
     QString functionName;
     if(!actionNode.namedItem(QLatin1String( "prototype" )).isNull()){
         execNode = actionNode.namedItem(QLatin1String( "prototype" )).toElement();
+        interfaceName = execNode.namedItem(QLatin1String( "interface" )).toElement().text().trimmed();
         functionName = execNode.namedItem(QLatin1String( "function" )).toElement().text().trimmed();
     } else if(!actionNode.namedItem(QLatin1String( "script" )).isNull()){
         execNode = actionNode.namedItem(QLatin1String( "script" )).toElement();
@@ -300,12 +302,15 @@ ProfileActionTemplate ProfileServer::ProfileXmlContentHandler::parseAction(QDomN
     }
 
     Prototype function(functionName, arguments);
+    
+    kDebug() << "creating action template" << actionName << serviceName << nodeName << interfaceName << functionName;
 
     return ProfileActionTemplate(profileId,
                                   actionId,
                                   i18n(actionName.toUtf8().data()),
                                   serviceName,
                                   nodeName,
+                                  interfaceName,
                                   function,
                                   actionType,
                                   autostart,

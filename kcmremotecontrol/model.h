@@ -75,12 +75,13 @@ class DBusFunctionModel: public QStandardItemModel
         void refresh(const QString &app, const QString &node);
 
         Prototype getPrototype( int index ) const;
+        QString getInterface( int index ) const;
         QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
         QModelIndex findOrInsert(const DBusAction *action, bool insert = false);
         
     private:
-        void appendRow(Prototype item);
+        void appendRow(const QString &interface, Prototype item);
 
 };
 

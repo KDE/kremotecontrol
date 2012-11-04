@@ -13,13 +13,9 @@
     <action id="volUp" name="Volume Up" description="Increase Volume">
         <prototype>
             <serviceName>org.kde.kmix</serviceName>
-            <node>Mixer0</node>
-            <function>increaseVolume</function>
-            <arguments>
-                <argument type="QString" comment="Name of the slider to move and its index separated by a colon (eg. Master:0)">
-                    <default>Master:0</default>
-                </argument>
-            </arguments>
+            <node>/kmix/KMixWindow/actions/increase_volume</node>
+            <interface>org.qtproject.Qt.QAction</interface>
+            <function>trigger</function>
         </prototype>
         <button>VolumeUp</button>
         <repeat>true</repeat>
@@ -28,13 +24,9 @@
     <action id="volDown" name="Volume Down" description="Decrease Volume">
         <prototype>
             <serviceName>org.kde.kmix</serviceName>
-            <node>Mixer0</node>
-            <function>decreaseVolume</function>
-            <arguments>
-                <argument type="QString" comment="Name of the slider to move and its index separated by a colon (eg. Master:0)">
-                    <default>Master:0</default>
-                </argument>
-            </arguments>
+            <node>/kmix/KMixWindow/actions/decrease_volume</node>
+            <interface>org.qtproject.Qt.QAction</interface>
+            <function>trigger</function>
         </prototype>
         <button>VolumeDown</button> 
         <repeat>true</repeat>
@@ -43,13 +35,9 @@
     <action id="toggleMute" name="Mute" description="Toggle Mute">
         <prototype>
             <serviceName>org.kde.kmix</serviceName>
-            <node>Mixer0</node>            
-            <function>toggleMute</function>
-            <arguments>
-                <argument type="QString" comment="Name of the slider to mute and its index separated by a colon (eg. Master:0)">
-                    <default>Master:0</default>
-                </argument>
-            </arguments>
+            <node>/kmix/KMixWindow/actions/mute</node>
+            <interface>org.qtproject.Qt.QAction</interface>
+            <function>trigger</function>
         </prototype>
         <button>Mute</button>
         <repeat>false</repeat>

@@ -12,7 +12,7 @@
     <action id="play" name="Play" description="Start playing">
         <prototype>
             <serviceName>org.mpris.amarok</serviceName>
-            <node>Player</node>
+            <node>/Player</node>
             <function>Play</function>
         </prototype>
         <button>Play</button>
@@ -22,7 +22,7 @@
     <action id="stop" name="Stop" description="Stop playing">
         <prototype>
             <serviceName>org.mpris.amarok</serviceName>
-            <node>Player</node>
+            <node>/Player</node>
             <function>Stop</function>
         </prototype>
         <button>Stop</button>
@@ -33,7 +33,7 @@
     <action id="pause" name="Pause" description="Pause playing">
         <prototype>
             <serviceName>org.mpris.amarok</serviceName>
-            <node>Player</node>
+            <node>/Player</node>
             <function>Pause</function>
         </prototype>
         <button>Pause</button>
@@ -43,7 +43,7 @@
     <action id="playpause" name="Play Pause" description="Toggle Play/Pause">
         <prototype>
             <serviceName>org.mpris.amarok</serviceName>
-            <node>Player</node>
+            <node>/Player</node>
             <function>PlayPause</function>
         </prototype>
         <button>PlayPause</button>
@@ -53,7 +53,7 @@
     <action id="skipForward" name="Skip Forward" description="Advance to next track">
         <prototype>
             <serviceName>org.mpris.amarok</serviceName>
-            <node>Player</node>
+            <node>/Player</node>
             <function>Next</function>
         </prototype>
         <button>SkipForward</button>
@@ -63,7 +63,7 @@
     <action id="skipBackWard" name="Skip Backward" description="Go to previous track">
         <prototype>
             <serviceName>org.mpris.amarok</serviceName>
-            <node>Player</node>
+            <node>/Player</node>
             <function>Prev</function>
         </prototype>
         <button>SkipBackward</button>
@@ -73,7 +73,7 @@
     <action id="fastForward" name="Fast Forward" description="Seek forward">
         <prototype>
             <serviceName>org.mpris.amarok</serviceName>
-            <node>Player</node>
+            <node>/Player</node>
             <function>Forward</function>
             <arguments>
                 <argument type="int" comment="Amount to fast forward in ms">
@@ -88,7 +88,7 @@
     <action id="rewind" name="Backward" description="Seek backward">
         <prototype>
             <serviceName>org.mpris.amarok</serviceName>
-            <node>Player</node>
+            <node>/Player</node>
             <function>Backward</function>
             <arguments>
                 <argument type="int" comment="Amount to rewind in ms">
@@ -103,7 +103,7 @@
     <action id="fullscreen" name="Fullscreen" description="Toggle fullscreen mode">
         <prototype>
             <serviceName>org.mpris.amarok</serviceName>            
-            <node>amarok/MainWindow</node>
+            <node>/amarok/MainWindow</node>
             <function>slotFullScreen</function>
         </prototype>
         <repeat>false</repeat>
@@ -113,7 +113,7 @@
     <action id="volumeUp" name="Volume Up" description="Increases Volume">
         <script>
             <serviceName>org.mpris.amarok</serviceName>            
-            <node>Player</node>
+            <node>/Player</node>
             <scripttext>dbus.call('VolumeSet', dbus.call('VolumeGet') + arg1);</scripttext>
             <arguments>
               <argument type="int" comment="Amount to increase volume in percent">
@@ -128,7 +128,7 @@
     <action id="volumeDown" name="Volume Down" description="Decreases Volume">
         <script>
             <serviceName>org.mpris.amarok</serviceName>            
-            <node>Player</node>
+            <node>/Player</node>
             <scripttext>dbus.call('VolumeSet', dbus.call('VolumeGet') - arg1);</scripttext>
             <arguments>
               <argument type="int" comment="Amount to decrease volume in percent">

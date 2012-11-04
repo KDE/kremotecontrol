@@ -10,7 +10,7 @@
 	<action id="play" name="Play" description="Start playing the CD">
 		<prototype>
 			<serviceName>org.kde.kscd</serviceName>
-			<node>Player</node>
+                        <node>/Player</node>
 			<function>Play</function>
 		</prototype>
 		<button>Play</button>
@@ -20,7 +20,7 @@
 	<action id="stop" name="Stop" description="Stops the CD">
 		<prototype>
 			<serviceName>org.kde.kscd</serviceName>
-			<node>Player</node>
+                        <node>/Player</node>
 			<function>Stop</function>
 		</prototype>
 		<button>Stop</button>
@@ -29,7 +29,7 @@
 	<action id="eject" name="Eject" description="Ejects the CD">
 		<prototype>
 			<serviceName>org.kde.kscd</serviceName>
-			<node>CDPlayer</node>
+                        <node>/CDPlayer</node>
 			<function>ejectShortcut</function>
 		</prototype>
 		<button>Eject</button>
@@ -39,7 +39,7 @@
 	<action id="previousTrack" name="Previous" description="Skips to the previous track on the CD">
 		<prototype>
 			<serviceName>org.kde.kscd</serviceName>
-			<node>Player</node>
+                        <node>/Player</node>
 			<function>Prev</function>
 		</prototype>
 		<button>SkipBackward</button>
@@ -49,7 +49,7 @@
 	<action id="nextTrack" name="Next" description="Skips to the next track on the CD">
 		<prototype>
 			<serviceName>org.kde.kscd</serviceName>
-			<node>Player</node>
+                        <node>/Player</node>
 			<function>Next</function>
 		</prototype>
 		<button>SkipForward</button>
@@ -59,7 +59,7 @@
 	<action id="playTrack" name="Play Track" description="Skips to a specific track on the CD">
 		<prototype>
 			<serviceName>org.kde.kscd</serviceName>
-			<node>CDPlayer</node>
+                        <node>/CDPlayer</node>
 			<function>playTrack</function>
 			<arguments>
 				<argument type="int" comment="The number of the track to skip to">
@@ -73,7 +73,7 @@
 	<action id="setVolume" name="Set Volume" description="Sets the play volume">
 		<prototype>
 			<serviceName>org.kde.kscd</serviceName>
-			<node>Player</node>
+                        <node>/Player</node>
 			<function>VolumeSet</function>
 			<arguments>
 				<argument type="int" comment="The new value for the volume">
@@ -86,7 +86,7 @@
 	<action id="randomShortcut" name="Shuffle" description="Toggles track shuffling on and off">
 		<prototype>
 			<serviceName>org.kde.kscd</serviceName>
-			<node>CDPlayer</node>
+                        <node>/CDPlayer</node>
 			<function>randomShortcut</function>
 		</prototype>
 	</action>

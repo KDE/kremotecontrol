@@ -6,60 +6,70 @@
     <name>Dragon Player</name>
     <version>0.1</version>
     <author>Gioacchino Mazzurco [gmazzurco89@gmail.com]</author>
-   
+
     <!-- Playback actions -->
     <action id="play" name="Play" description="Start playing">
         <prototype>
-            <serviceName>org.mpris.dragonplayer</serviceName>
-            <node>Player</node>
+            <serviceName>org.mpris.MediaPlayer2.dragonplayer</serviceName>
+            <node>/org/mpris/MediaPlayer2</node>
             <function>Play</function>
         </prototype>
         <button>Play</button>
         <ifmulti>sendtotop</ifmulti>
     </action>
-    
+
     <action id="stop" name="Stop" description="Stop playing">
         <prototype>
-            <serviceName>org.mpris.dragonplayer</serviceName>
-            <node>Player</node>
+            <serviceName>org.mpris.MediaPlayer2.dragonplayer</serviceName>
+            <node>/org/mpris/MediaPlayer2</node>
             <function>Stop</function>
         </prototype>
         <button>Stop</button>
         <ifmulti>sendtotop</ifmulti>
     </action>
-    
-    <action id="pause" name="Play/Pause" description="Toggle Play/Pause">
+
+    <action id="pause" name="Pause" description="Pause playing">
         <prototype>
-            <serviceName>org.mpris.dragonplayer</serviceName>
-            <node>Player</node>
+            <serviceName>org.mpris.MediaPlayer2.dragonplayer</serviceName>
+            <node>/org/mpris/MediaPlayer2</node>
             <function>Pause</function>
         </prototype>
         <button>PlayPause</button>
         <ifmulti>sendtotop</ifmulti>
     </action>
-    
-   <!-- The actions currently have no effekt in dragon player 2.0        
-    
-    <action id="skipForward" name="Skip Forward" description="Advance to next track">
+
+    <action id="playPause" name="Play/Pause" description="Toggle Play/Pause">
         <prototype>
-            <serviceName>org.mpris.dragonplayer</serviceName>
-            <node>Player</node>
+            <serviceName>org.mpris.MediaPlayer2.dragonplayer</serviceName>
+            <node>/org/mpris/MediaPlayer2</node>
+            <function>PlayPause</function>
+        </prototype>
+        <button>PlayPause</button>
+        <ifmulti>sendtotop</ifmulti>
+    </action>
+
+   <!-- The actions currently have no effekt in dragon player 2.0
+
+   <action id="skipForward" name="Skip Forward" description="Advance to next track">
+        <prototype>
+            <serviceName>org.mpris.MediaPlayer2.dragonplayer</serviceName>
+            <node>/org/mpris/MediaPlayer2</node>
             <function>Next</function>
         </prototype>
         <button>SkipForward</button>
         <repeat>true</repeat>
         <ifmulti>sendtotop</ifmulti>
     </action>
-   
+
     <action id="skipBackward" name="Skip Backward" description="Go to previous track">
         <prototype>
-            <serviceName>org.mpris.dragonplayer</serviceName>
-            <node>Player</node>
+            <serviceName>org.mpris.MediaPlayer2.dragonplayer</serviceName>
+            <node>/org/mpris/MediaPlayer2</node>
             <function>Prev</function>
         </prototype>
         <button>SkipBackward</button>
         <repeat>true</repeat>
         <ifmulti>sendtotop</ifmulti>
-    </action>       
-   -->
+    </action>
+    -->
 </profile>

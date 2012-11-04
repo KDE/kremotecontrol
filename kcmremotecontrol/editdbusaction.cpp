@@ -122,6 +122,7 @@ DBusAction EditDBusAction::action() const {
     Prototype prototype = m_dbusFunctionModel->getPrototype(ui.tvDBusFunctions->selectionModel()->currentIndex().row());
     prototype.setArgs(m_argumentsModel->arguments());
     action.setFunction(prototype);
+    action.setInterface(m_dbusFunctionModel->getInterface(ui.tvDBusFunctions->selectionModel()->currentIndex().row()));
     
     action.setAutostart(ui.cbAutostart->isChecked());
     action.setRepeat(ui.cbRepeat->isChecked());
