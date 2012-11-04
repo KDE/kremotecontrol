@@ -172,5 +172,12 @@ void EditProfileAction::refreshArguments(const QModelIndex &index) {
         ui.gbUnique->setEnabled(true);
     }
     emit formComplete(index.isValid());
+    
+    ui.cbAutostart->setChecked(actionTemplate.autostart());
+    ui.cbRepeat->setChecked(actionTemplate.repeat());
+    ui.rbAll->setChecked(actionTemplate.destination() == Action::All);
+    ui.rbNone->setChecked(actionTemplate.destination() == Action::None);
+    ui.rbTop->setChecked(actionTemplate.destination() == Action::Top);
+    ui.rbBottom->setChecked(actionTemplate.destination() == Action::Bottom);
 }
 

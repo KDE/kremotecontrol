@@ -303,7 +303,7 @@ ProfileActionTemplate ProfileServer::ProfileXmlContentHandler::parseAction(QDomN
 
     Prototype function(functionName, arguments);
     
-    kDebug() << "creating action template" << actionName << serviceName << nodeName << interfaceName << functionName;
+    kDebug() << "creating action template" << actionName << serviceName << nodeName << interfaceName << functionName << actionType;
 
     return ProfileActionTemplate(profileId,
                                   actionId,
