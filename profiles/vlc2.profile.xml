@@ -7,22 +7,22 @@
 	>
 
 
-	<name>VLC media player</name>
+	<name>VLC mediaplayer 2</name>
 	<description>
 		This KRemoteControl template provide easy setup for VLC 2 mediaplayer.
 		Enable VLC D-Bus control interface in order to use KRemoteControl to control it.
-		If having problem with this profile try configuring it for single instance running.
 	</description>
-	<version>0.2</version>
+	<version>0.3</version>
 	<author>Gioacchino Mazzurco [gio@eigenlab.org]</author>
 	
 
-	<!-- VLC 2 impements mpris 2 interface specification, the D-Bus name is org.mpris.MediaPlayer2.vlc -->
+	<!-- VLC 2 implements mpris 2 interface specification, the D-Bus name is org.mpris.MediaPlayer2.vlc -->
 
-<!--	<action id="play" name="Play" description="Start playing">
+	<action id="play" name="Play" description="Start playing">
 		<prototype>
 			<serviceName>org.mpris.MediaPlayer2.vlc</serviceName>
-                        <node>/org/mpris/MediaPlayer2</node>
+			<node>/org/mpris/MediaPlayer2</node>
+			<interface>org.mpris.MediaPlayer2.Player</interface>
 			<function>Play</function>
 		</prototype>
 		<button>Play</button>
@@ -31,27 +31,29 @@
 	<action id="pause" name="Pause" description="Pause playing">
 		<prototype>
 			<serviceName>org.mpris.MediaPlayer2.vlc</serviceName>
-                        <node>/org/mpris/MediaPlayer2</node>
+			<node>/org/mpris/MediaPlayer2</node>
+			<interface>org.mpris.MediaPlayer2.Player</interface>
 			<function>Pause</function>
 		</prototype>
 		<button>Pause</button>
-	</action>-->
+	</action>
 	
 	<action id="playpause" name="Play Pause" description="Toggle Play/Pause">
 		<prototype>
 			<serviceName>org.mpris.MediaPlayer2.vlc</serviceName>
-                        <node>/org/mpris/MediaPlayer2</node>
-                        <interface>org.mpris.MediaPlayer2.Player</interface>
-                        <function>PlayPause</function>
+			<node>/org/mpris/MediaPlayer2</node>
+			<interface>org.mpris.MediaPlayer2.Player</interface>
+			<function>PlayPause</function>
 		</prototype>
 		<button>PlayPause</button>
-		<ifmulti>sendtoall</ifmulti>
+		<ifmulti>sendtotop</ifmulti>
 	</action>
     
-<!--	<action id="stop" name="Stop" description="Stop playing">
+	<action id="stop" name="Stop" description="Stop playing">
 		<prototype>
 			<serviceName>org.mpris.MediaPlayer2.vlc</serviceName>
 			<node>org/mpris/MediaPlayer2</node>
+			<interface>org.mpris.MediaPlayer2.Player</interface>
 			<function>Stop</function>
 		</prototype>        
 		<button>Stop</button>
@@ -61,6 +63,7 @@
 		<prototype>
 			<serviceName>org.mpris.MediaPlayer2.vlc</serviceName>
 			<node>org/mpris/MediaPlayer2</node>
+			<interface>org.mpris.MediaPlayer2.Player</interface>
 			<function>Next</function>
 		</prototype>
 		<button>SkipForward</button>
@@ -71,9 +74,10 @@
 		<prototype>
 			<serviceName>org.mpris.MediaPlayer2.vlc</serviceName>
 			<node>org/mpris/MediaPlayer2</node>
+			<interface>org.mpris.MediaPlayer2.Player</interface>
 			<function>Prev</function>
 		</prototype>
 		<button>SkipBackward</button>
 		<repeat>true</repeat>
-	</action>            -->
+	</action>
 </profile>

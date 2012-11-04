@@ -3,7 +3,7 @@
 <profile xmlns="urn:org-kde-kremotecontrol" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="urn:org-kde-kremotecontrol file:profile.xsd">
   
-    <name>VLC videolan player</name>
+    <name>VLC mediaplayer 1</name>
     <description>This profile works only if VLC is configured for single instance running</description>
     <version>0.1</version>
     <author>Gioacchino Mazzurco [gmazzurco89@gmail.com]</author>
