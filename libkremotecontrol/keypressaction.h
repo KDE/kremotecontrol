@@ -29,7 +29,6 @@ class KREMOTECONTROL_EXPORT KeypressAction: public Action
     public:
         KeypressAction(const QString &button);
         KeypressAction();
-        KeypressAction(const KeypressAction &action);
         virtual ~KeypressAction(){};
 
         virtual QString name() const;
