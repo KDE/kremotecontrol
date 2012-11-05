@@ -317,10 +317,12 @@ void KCMRemoteControl::updateActions(Mode *mode) {
 
 void KCMRemoteControl::modeSelectionChanged(const QModelIndex &index) {
     if(index.isValid()){
-        ui.pbAddMode->setEnabled(true);
-        ui.pbEditMode->setEnabled(true);
-        ui.pbAddAction->setEnabled(true);
-        ui.pbAutoPopulate->setEnabled(true);
+        // Enable Add and Edit buttons only if remote is available
+        bool selectedRemoteAvailable = m_remoteModel->remote(index)->isAvailable();
+        ui.pbAddMode->setEnabled(selectedRemoteAvailable);
+        ui.pbEditMode->setEnabled(selectedRemoteAvailable);
+        ui.pbAddAction->setEnabled(selectedRemoteAvailable);
+        ui.pbAutoPopulate->setEnabled(selectedRemoteAvailable);
 
         // Only enable the remove mode button if a non-Master mode is selected,
         // or if the Remote is not available in in the system

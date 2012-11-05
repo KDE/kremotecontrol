@@ -770,7 +770,16 @@ QVariant RemoteItem::data(int role) const {
         return remote->name();
     }
     if(role == Qt::DecorationRole){
-        return KIcon(remote->masterMode()->iconName());
+        if(remote->isAvailable()) {
+            return KIcon(remote->masterMode()->iconName());
+        } else {
+            return KIcon(remote->masterMode()->iconName(), 0, QStringList() << QLatin1String("emblem-important"));
+        }
+    }
+    if(role == Qt::ToolTipRole) {
+        if(!remote->isAvailable()) {
+            return i18n("This remote control is currently not available.");
+        }
     }
     return QStandardItem::data(role);
 }
