@@ -7,14 +7,14 @@
 >
 
 
-	<name>VLC mediaplayer 2</name>
+	<name>VLC Media Player (Version 2)</name>
 	<description>
 		This KRemoteControl template provide easy setup for VLC 2 mediaplayer.
 		Enable VLC D-Bus control interface in order to use KRemoteControl to control it.
 	</description>
 	<version>0.3</version>
 	<author>Gioacchino Mazzurco [gio@eigenlab.org]</author>
-	
+
 
 	<!-- VLC 2 implements mpris 2 interface specification, the D-Bus name is org.mpris.MediaPlayer2.vlc -->
 
@@ -39,7 +39,7 @@
 		<button>Pause</button>
 		<ifmulti>sendtotop</ifmulti>
 	</action>
-	
+
 	<action id="playpause" name="Play Pause" description="Toggle Play/Pause">
 		<prototype>
 			<serviceName>org.mpris.MediaPlayer2.vlc</serviceName>
@@ -50,22 +50,22 @@
 		<button>PlayPause</button>
 		<ifmulti>sendtotop</ifmulti>
 	</action>
-    
+
 	<action id="stop" name="Stop" description="Stop playing">
 		<prototype>
 			<serviceName>org.mpris.MediaPlayer2.vlc</serviceName>
-			<node>org/mpris/MediaPlayer2</node>
+			<node>/org/mpris/MediaPlayer2</node>
 			<interface>org.mpris.MediaPlayer2.Player</interface>
 			<function>Stop</function>
-		</prototype>        
+		</prototype>
 		<button>Stop</button>
 		<ifmulti>sendtotop</ifmulti>
 	</action>
-    
+
 	<action id="skipForward" name="Skip Forward" description="Advance to next track">
 		<prototype>
 			<serviceName>org.mpris.MediaPlayer2.vlc</serviceName>
-			<node>org/mpris/MediaPlayer2</node>
+			<node>/org/mpris/MediaPlayer2</node>
 			<interface>org.mpris.MediaPlayer2.Player</interface>
 			<function>Next</function>
 		</prototype>
@@ -77,7 +77,7 @@
 	<action id="skipBackward" name="Skip Backward" description="Go to previous track">
 		<prototype>
 			<serviceName>org.mpris.MediaPlayer2.vlc</serviceName>
-			<node>org/mpris/MediaPlayer2</node>
+			<node>/org/mpris/MediaPlayer2</node>
 			<interface>org.mpris.MediaPlayer2.Player</interface>
 			<function>Previous</function>
 		</prototype>
