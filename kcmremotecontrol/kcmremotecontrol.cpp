@@ -369,9 +369,11 @@ void KCMRemoteControl::modeSelectionChanged(const QModelIndex &index) {
 
 void KCMRemoteControl::actionSelectionChanged(const QModelIndex& index) {
     if(index.isValid()){
-        ui.pbRemoveAction->setEnabled(true);
-        ui.pbEditAction->setEnabled(true);
-        ui.pbCopyAction->setEnabled(true);
+        // Enable Add and Edit buttons only if remote is available
+        bool selectedRemoteAvailable = m_remoteModel->remote(ui.tvRemotes->selectionModel()->currentIndex())->isAvailable();
+        ui.pbRemoveAction->setEnabled(selectedRemoteAvailable);
+        ui.pbEditAction->setEnabled(selectedRemoteAvailable);
+        ui.pbCopyAction->setEnabled(selectedRemoteAvailable);
         if(index.row() > 0){
             ui.pbMoveActionUp->setEnabled(true);
         } else {
