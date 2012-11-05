@@ -26,6 +26,7 @@
 			<function>Play</function>
 		</prototype>
 		<button>Play</button>
+		<ifmulti>sendtotop</ifmulti>
 	</action>
 
 	<action id="pause" name="Pause" description="Pause playing">
@@ -36,6 +37,7 @@
 			<function>Pause</function>
 		</prototype>
 		<button>Pause</button>
+		<ifmulti>sendtotop</ifmulti>
 	</action>
 	
 	<action id="playpause" name="Play Pause" description="Toggle Play/Pause">
@@ -57,6 +59,7 @@
 			<function>Stop</function>
 		</prototype>        
 		<button>Stop</button>
+		<ifmulti>sendtotop</ifmulti>
 	</action>
     
 	<action id="skipForward" name="Skip Forward" description="Advance to next track">
@@ -68,6 +71,7 @@
 		</prototype>
 		<button>SkipForward</button>
 		<repeat>true</repeat>
+		<ifmulti>sendtotop</ifmulti>
 	</action>
 
 	<action id="skipBackward" name="Skip Backward" description="Go to previous track">
@@ -79,5 +83,6 @@
 		</prototype>
 		<button>SkipBackward</button>
 		<repeat>true</repeat>
+		<ifmulti>sendtotop</ifmulti>
 	</action>
 </profile>
