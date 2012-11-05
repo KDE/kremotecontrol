@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-   <profile
-		xmlns="urn:org-kde-kremotecontrol"
-		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xsi:schemaLocation="urn:org-kde-kremotecontrol file:profile.xsd"
-	>
+<profile
+	xmlns="urn:org-kde-kremotecontrol"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="urn:org-kde-kremotecontrol file:profile.xsd"
+>
 
 
 	<name>VLC mediaplayer 2</name>
