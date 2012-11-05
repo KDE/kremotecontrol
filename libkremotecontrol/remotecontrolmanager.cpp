@@ -70,6 +70,9 @@ void RemoteControlManagerPrivate::loadBackends(const char *serviceName)
             if(backend->inherits("Iface::RemoteControlManager")) {
                 kDebug() << "Backend loaded: " << ptr->name();
                 m_backendList.append(qobject_cast<Iface::RemoteControlManager*>(backend));
+                connect(backend, SIGNAL(remoteControlAdded(QString)), this, SLOT(_k_remoteControlAdded(QString)));
+                connect(backend, SIGNAL(remoteControlRemoved(QString)), this, SLOT(_k_remoteControlRemoved(QString)));
+                connect(backend, SIGNAL(statusChanged(bool)), this, SLOT(_k_statusChanged(bool)));
                 break;
             } else {
                 kDebug() << "Failed loading:" << error_string;
