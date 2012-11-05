@@ -79,7 +79,7 @@
 			<serviceName>org.mpris.MediaPlayer2.vlc</serviceName>
 			<node>org/mpris/MediaPlayer2</node>
 			<interface>org.mpris.MediaPlayer2.Player</interface>
-			<function>Prev</function>
+			<function>Previous</function>
 		</prototype>
 		<button>SkipBackward</button>
 		<repeat>true</repeat>
