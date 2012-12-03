@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<profile
+	xmlns="urn:org-kde-kremotecontrol"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="urn:org-kde-kremotecontrol file:profile.xsd"
+>
+
+
+	<name>Tomahawk</name>
+	<description>
+		This KRemoteControl template provide easy setup for Tomahawk.
+	</description>
+	<version>0.1</version>
+	<author>Gioacchino Mazzurco [gio@eigenlab.org]</author>
+
+
+	<!-- Tomahawk implements mpris 2 interface specification, the D-Bus name is org.mpris.MediaPlayer2.tomahawk -->
+
+	<action id="play" name="Play" description="Start playing">
+		<prototype>
+			<serviceName>org.mpris.MediaPlayer2.tomahawk</serviceName>
+			<node>/org/mpris/MediaPlayer2</node>
+			<interface>org.mpris.MediaPlayer2.Player</interface>
+			<function>Play</function>
+		</prototype>
+		<button>Play</button>
+		<ifmulti>unique</ifmulti>
+	</action>
+
+	<action id="pause" name="Pause" description="Pause playing">
+		<prototype>
+			<serviceName>org.mpris.MediaPlayer2.tomahawk</serviceName>
+			<node>/org/mpris/MediaPlayer2</node>
+			<interface>org.mpris.MediaPlayer2.Player</interface>
+			<function>Pause</function>
+		</prototype>
+		<button>Pause</button>
+		<ifmulti>unique</ifmulti>
+	</action>
+
+	<action id="playpause" name="Play Pause" description="Toggle Play/Pause">
+		<prototype>
+			<serviceName>org.mpris.MediaPlayer2.tomahawk</serviceName>
+			<node>/org/mpris/MediaPlayer2</node>
+			<interface>org.mpris.MediaPlayer2.Player</interface>
+			<function>PlayPause</function>
+		</prototype>
+		<button>PlayPause</button>
+		<ifmulti>unique</ifmulti>
+	</action>
+
+	<action id="stop" name="Stop" description="Stop playing">
+		<prototype>
+			<serviceName>org.mpris.MediaPlayer2.tomahawk</serviceName>
+			<node>/org/mpris/MediaPlayer2</node>
+			<interface>org.mpris.MediaPlayer2.Player</interface>
+			<function>Stop</function>
+		</prototype>
+		<button>Stop</button>
+		<ifmulti>unique</ifmulti>
+	</action>
+
+	<action id="skipForward" name="Skip Forward" description="Advance to next track">
+		<prototype>
+			<serviceName>org.mpris.MediaPlayer2.tomahawk</serviceName>
+			<node>/org/mpris/MediaPlayer2</node>
+			<interface>org.mpris.MediaPlayer2.Player</interface>
+			<function>Next</function>
+		</prototype>
+		<button>SkipForward</button>
+		<repeat>true</repeat>
+		<ifmulti>unique</ifmulti>
+	</action>
+
+	<action id="skipBackward" name="Skip Backward" description="Go to previous track">
+		<prototype>
+			<serviceName>org.mpris.MediaPlayer2.tomahawk</serviceName>
+			<node>/org/mpris/MediaPlayer2</node>
+			<interface>org.mpris.MediaPlayer2.Player</interface>
+			<function>Previous</function>
+		</prototype>
+		<button>SkipBackward</button>
+		<repeat>true</repeat>
+		<ifmulti>unique</ifmulti>
+	</action>
+</profile>
