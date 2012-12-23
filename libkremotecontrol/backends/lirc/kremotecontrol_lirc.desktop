@@ -5,7 +5,6 @@ X-KDE-Library=kremotecontrol_lirc
 InitialPreference=80
 
 Name=Lirc
-Name[bs]=Lirc
 Name[ca]=LIRC
 Name[ca@valencia]=LIRC
 Name[cs]=Lirc
@@ -48,7 +47,6 @@ Name[zh_CN]=Lirc
 Name[zh_TW]=Lirc
 
 Comment=Linux Infrared Remote Control
-Comment[bs]=Linux Daljinski upravljači
 Comment[ca]=Control remot per infraroigs del Linux
 Comment[ca@valencia]=Control remot per infraroigs del Linux
 Comment[cs]=Linuxové infračervené dálkové ovládání

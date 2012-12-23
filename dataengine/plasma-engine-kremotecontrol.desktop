@@ -1,7 +1,6 @@
 [Desktop Entry]
 Name=Remote Control Data Engine
 Name[ar]=محرك بيانات التحكّم عن بعد
-Name[bs]=Pogon podataka daljinskih upravljača
 Name[ca]=Motor de dades de comandament a distància
 Name[ca@valencia]=Motor de dades de comandament a distància
 Name[cs]=Datový nástroj pro dálkové ovládání
@@ -51,7 +50,6 @@ Name[zh_CN]=远程控制数据引擎
 Name[zh_TW]=遠端遙控資料引擎
 Comment=Data engine for kremotecontrol
 Comment[ar]=محرك بيانات لkremotecontrol
-Comment[bs]=Pogon podataka za kremotecontrol
 Comment[ca]=Motor de dades pel kremotecontrol
 Comment[ca@valencia]=Motor de dades pel kremotecontrol
 Comment[cs]=Datový nástroj pro kremotecontrol
