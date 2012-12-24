@@ -2,6 +2,7 @@
 Type=ServiceType
 X-KDE-ServiceType=KRemoteControlManager
 Comment=Remote Control Management Backend
+Comment[bs]=Pozadina daljinskih upravljača
 Comment[ca]=Dorsal de gestió del comandament a distància
 Comment[ca@valencia]=Dorsal de gestió del comandament a distància
 Comment[cs]=Podpůrná vrstva pro vzdálenou správu
