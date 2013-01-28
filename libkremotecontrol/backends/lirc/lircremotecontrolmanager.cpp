@@ -71,7 +71,6 @@ LircRemoteControlManager::LircRemoteControlManager(QObject * parent, const QVari
 
     m_dirWatch.addFile("/var/run/lirc/lircd");
     m_dirWatch.addFile("/dev/lircd");
-    m_dirWatch.addFile("/tmp/.lircd");
     connect(&m_dirWatch, SIGNAL(created(QString)), this, SLOT(reconnect()));
     
     if(d->recacheState()){

@@ -74,16 +74,8 @@ bool LircClient::connectToLirc()
         strcpy(addr.sun_path, "/dev/lircd");
         if (::connect(sock, (struct sockaddr *)(&addr), sizeof(addr)) == -1) {
             ::close(sock);
-            // in case of mandrake...
-            sock = ::socket(PF_UNIX, SOCK_STREAM, 0);
-            strcpy(addr.sun_path, "/tmp/.lircd");
-            if (::connect(sock, (struct sockaddr *)(&addr), sizeof(addr)) == -1) {
-                ::close(sock);
-                kDebug() << "no lircd socket found...";
-                return false;
-            } else {
-                kDebug() << "Mandrake lircd socket found...";
-            }
+            kDebug() << "no lircd socket found...";
+            return false;
         } else {
             kDebug() << "lircd < 0.8.6 socket found...";
         }
