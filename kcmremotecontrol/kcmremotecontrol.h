@@ -68,8 +68,8 @@ private Q_SLOTS:
     
     void updateModes();
     void updateActions(Mode *mode);
-    void modeSelectionChanged(const QModelIndex &index);
-    void actionSelectionChanged(const QModelIndex &index);
+    void modeSelectionChanged(const QItemSelection &selection);
+    void actionSelectionChanged(const QItemSelection &selection);
     void addUnconfiguredRemotes();
 
     void autoPopulate();

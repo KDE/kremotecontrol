@@ -101,7 +101,7 @@ KCMRemoteControl::KCMRemoteControl(QWidget *parent, const QVariantList &args) :
     // Create RemoteModel
     m_remoteModel = new RemoteModel(m_remoteList, ui.tvRemotes);
     ui.tvRemotes->setModel(m_remoteModel);
-    connect(ui.tvRemotes->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(modeSelectionChanged(QModelIndex)));
+    connect(ui.tvRemotes->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(modeSelectionChanged(QItemSelection)));
     connect(ui.tvRemotes, SIGNAL(doubleClicked(QModelIndex)), SLOT(editMode()));
     // QueuedConnection needed because the model itself may has some slots queded and refreshing the model before that breaks logic
     connect(m_remoteModel, SIGNAL(modeChanged(Mode*)), SLOT(actionDropped(Mode*)), Qt::QueuedConnection);
@@ -109,7 +109,7 @@ KCMRemoteControl::KCMRemoteControl(QWidget *parent, const QVariantList &args) :
     // Create ActionModel
     m_actionModel = new ActionModel(ui.tvActions);
     ui.tvActions->setModel(m_actionModel);
-    connect(ui.tvActions->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(actionSelectionChanged(QModelIndex)));
+    connect(ui.tvActions->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(actionSelectionChanged(QItemSelection)));
     connect(ui.tvActions, SIGNAL(doubleClicked(QModelIndex)), SLOT(editAction()));
 
     // connect ShowTrayIcon checkbox
@@ -290,7 +290,7 @@ void KCMRemoteControl::updateModes() {
     if(mode){
         ui.tvRemotes->selectionModel()->setCurrentIndex(m_remoteModel->find(mode), QItemSelectionModel::Rows | QItemSelectionModel::SelectCurrent);
     }
-    modeSelectionChanged(ui.tvRemotes->selectionModel()->currentIndex());
+    modeSelectionChanged(ui.tvRemotes->selectionModel()->selection());
 
     if(!m_remoteList.isEmpty()){
         ui.lNoRemotesWarning->setMaximumSize(0,0);
@@ -312,10 +312,15 @@ void KCMRemoteControl::updateActions(Mode *mode) {
     if(oldAction){
         ui.tvActions->selectionModel()->setCurrentIndex(m_actionModel->find(oldAction), QItemSelectionModel::Rows | QItemSelectionModel::SelectCurrent);
     }
-    actionSelectionChanged(ui.tvActions->selectionModel()->currentIndex());
+    actionSelectionChanged(ui.tvActions->selectionModel()->selection());
 }
 
-void KCMRemoteControl::modeSelectionChanged(const QModelIndex &index) {
+void KCMRemoteControl::modeSelectionChanged(const QItemSelection& selection) {
+    const QModelIndexList indexes = selection.indexes();
+    QModelIndex index;
+    if(!indexes.isEmpty()) {
+        index = indexes.at(0);
+    }
     if(index.isValid()){
         // Enable Add and Edit buttons only if remote is available
         bool selectedRemoteAvailable = m_remoteModel->remote(index)->isAvailable();
@@ -367,7 +372,12 @@ void KCMRemoteControl::modeSelectionChanged(const QModelIndex &index) {
     }
 }
 
-void KCMRemoteControl::actionSelectionChanged(const QModelIndex& index) {
+void KCMRemoteControl::actionSelectionChanged(const QItemSelection& selection) {
+    const QModelIndexList indexes = selection.indexes();
+    QModelIndex index;
+    if(!indexes.isEmpty()) {
+        index = indexes.at(0);
+    }
     if(index.isValid()){
         // Enable Add and Edit buttons only if remote is available
         bool selectedRemoteAvailable = m_remoteModel->remote(ui.tvRemotes->selectionModel()->currentIndex())->isAvailable();
