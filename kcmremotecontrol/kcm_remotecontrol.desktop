@@ -52,7 +52,6 @@ X-KDE-Keywords[sr@latin]=KCMRemoteControl,remote control,daljinski upravljač
 X-KDE-Keywords[sv]=KCMRemoteControl,fjärrkontroll
 X-KDE-Keywords[tr]=KCMRemoteControl,uzaktan denetim
 X-KDE-Keywords[uk]=KCMRemoteControl,віддалене керування,пульт,керування
-X-KDE-Keywords[x-test]=xxKCMRemoteControl,remote controlxx
 X-KDE-Keywords[zh_CN]=KCMRemoteControl,remote control,远程控制
 X-KDE-Keywords[zh_TW]=KCMRemoteControl,remote control
 
@@ -119,7 +118,6 @@ Name[ug]=يىراقتىن تىزگىنلەش
 Name[uk]=Дистанційне керування
 Name[vi]=Các Điều Khiển Từ Xa
 Name[wa]=Controles då lon
-Name[x-test]=xxRemote Controlsxx
 Name[zh_CN]=远程控制
 Name[zh_TW]=遙控鍵
 
@@ -181,6 +179,5 @@ Comment[th]=ปรับแต่งตัวควบคุมระยะไ�
 Comment[tr]=Uygulamalarla kullanmak istediğiniz uzaktan kumandaları yapılandırın.
 Comment[uk]=Налаштування елементів дистанційного керування для використання з програмами
 Comment[vi]=Cấu hình điều khiển từ xa để dùng với các ứng dụng 
-Comment[x-test]=xxConfigure your remote controls for use with applicationsxx
 Comment[zh_CN]=配置您的远程遥控使之与应用程序协作
 Comment[zh_TW]=設定您要啟動應用程式的遙控鍵

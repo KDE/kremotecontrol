@@ -49,7 +49,6 @@ Name[th]=รายการตัวแจ้งให้ทราบของ�
 Name[tr]=KRemoteControl Bildirim Ögesi
 Name[ug]=KRemoteControl بىلدۈرگۈ تۇرى
 Name[uk]=Пункт сповіщення KRemoteControl
-Name[x-test]=xxKRemoteControl Notifier Itemxx
 Name[zh_CN]=KRemoteControl 通知项
 Name[zh_TW]=KRemoteControl 通知項目
 Exec=krcdnotifieritem
