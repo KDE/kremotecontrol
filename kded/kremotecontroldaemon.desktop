@@ -50,6 +50,7 @@ Name[th]=ดีมอนตัวควบคุมระยะไกล-K
 Name[tr]=KRemote Denetim Hizmeti
 Name[ug]=K يىراقتىن تىزگىنلەش مۇئەككىلى
 Name[uk]=Фонова служба дистанційного керування
+Name[x-test]=xxK Remote Control Daemonxx
 Name[zh_CN]=K 远程控制守护程序
 Name[zh_TW]=KDE 遠端遙控守護程式
 Type=Service

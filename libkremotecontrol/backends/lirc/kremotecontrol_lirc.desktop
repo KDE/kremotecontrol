@@ -47,6 +47,7 @@ Name[sr@latin]=LIRC
 Name[sv]=Lirc
 Name[tr]=Lirc
 Name[uk]=Lirc
+Name[x-test]=xxLircxx
 Name[zh_CN]=Lirc
 Name[zh_TW]=Lirc
 
@@ -94,6 +95,7 @@ Comment[sv]=Linux infraröda fjärrkontroll
 Comment[tr]=Linux Kızılötesi Uzaktan Denetim
 Comment[ug]=Linux ئىنفرا قىزىل نۇرلۇق تىزگىنلەش
 Comment[uk]=Інфрачервоне дистанційне керування для Linux
+Comment[x-test]=xxLinux Infrared Remote Controlxx
 Comment[zh_CN]=Linux 红外遥控
 Comment[zh_TW]=Linux 紅外線遙控
 
