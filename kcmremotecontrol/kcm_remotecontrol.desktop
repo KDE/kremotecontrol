@@ -12,7 +12,7 @@ X-DocPath=kcontrol/kremotecontrol/index.html
 Categories=Qt;KDE;X-KDE-settings-system;
 
 X-KDE-Keywords=KCMRemoteControl,remote control
-X-KDE-Keywords[bs]=KCMRemoteControl,remote control;daljinsko upravljanje
+X-KDE-Keywords[bs]=KCMRemoteControl,remote control,daljinsko upravljanje
 X-KDE-Keywords[ca]=KCMRemoteControl,comandament a distància
 X-KDE-Keywords[ca@valencia]=KCMRemoteControl,comandament a distància
 X-KDE-Keywords[cs]=KRemoteControl,dálkové ovládání
@@ -42,7 +42,7 @@ X-KDE-Keywords[pl]=KCMRemoteControl,pilot,sterowanie zdalne
 X-KDE-Keywords[pt]=KCMRemoteControl,comando à distância
 X-KDE-Keywords[pt_BR]=KCMRemoteControl,controle remoto
 X-KDE-Keywords[ro]=KCMRemoteControl,remote control,telecomandă
-X-KDE-Keywords[ru]=KCMRemoteControl;удалённое управление;удаленное управление;дистанционное управление;пульты
+X-KDE-Keywords[ru]=KCMRemoteControl,удалённое управление,удаленное управление,дистанционное управление,пульты
 X-KDE-Keywords[sk]=KCMRemoteControl,diaľkové ovládanie
 X-KDE-Keywords[sl]=KCMRemoteControl,daljinec,daljinski upravljalnik
 X-KDE-Keywords[sr]=KCMRemoteControl,remote control,даљински управљач
