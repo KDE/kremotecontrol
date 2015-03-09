@@ -131,7 +131,7 @@ public:
     * Retrieves the ID of the Button.
     * If the ID is ButtonID::Unknown name() will still contain the name of the button.
     *
-    * @returns Returns the the ID of the button
+    * @returns Returns the ID of the button
     */
     ButtonId id() const;
 
@@ -158,7 +158,7 @@ public:
     * Retrieves the repeat count for the buttonpress. If this is greater 0 the button is held down. This can be
     * useful to prevent accidental navigation through menus while still being able to navigate fast through long playlists.
     *
-    * @returns Returns the the ID of the Button
+    * @returns Returns the ID of the Button
     */
     int repeatCounter() const;
 
